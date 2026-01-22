@@ -238,10 +238,10 @@ export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.PaymentClabeAccountInfo
     | PaymentInstructions.PaymentUsAccountInfo
-    | PaymentInstructions.PaymentPixAccountInfo
+    | ExternalAccountsAPI.PixAccountInfo
     | PaymentInstructions.PaymentIbanAccountInfo
     | PaymentInstructions.PaymentFboAccountInfo
-    | PaymentInstructions.PaymentUpiAccountInfo
+    | ExternalAccountsAPI.UpiAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -256,9 +256,7 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.ClabeAccountInfo {
+  export interface PaymentClabeAccountInfo extends ExternalAccountsAPI.ClabeAccountInfo {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
@@ -266,9 +264,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentUsAccountInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.UsAccountInfo {
+  export interface PaymentUsAccountInfo extends ExternalAccountsAPI.UsAccountInfo {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
@@ -276,13 +272,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentPixAccountInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.PixAccountInfo {}
-
-  export interface PaymentIbanAccountInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.IbanAccountInfo {
+  export interface PaymentIbanAccountInfo extends ExternalAccountsAPI.IbanAccountInfo {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
@@ -290,7 +280,9 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentFboAccountInfo extends QuotesAPI.PaymentAccountOrWalletInfo {
+  export interface PaymentFboAccountInfo {
+    accountType: 'FBO';
+
     /**
      * The HTTP method to use for confirming the payment
      */
@@ -302,13 +294,7 @@ export namespace PaymentInstructions {
     paymentUrl: string;
   }
 
-  export interface PaymentUpiAccountInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.UpiAccountInfo {}
-
-  export interface PaymentSparkWalletInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.SparkWalletInfo {
+  export interface PaymentSparkWalletInfo extends ExternalAccountsAPI.SparkWalletInfo {
     /**
      * Type of asset
      */
@@ -330,36 +316,28 @@ export namespace PaymentInstructions {
     invoice: string;
   }
 
-  export interface PaymentSolanaWalletInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.SolanaWalletInfo {
+  export interface PaymentSolanaWalletInfo extends ExternalAccountsAPI.SolanaWalletInfo {
     /**
      * Type of asset
      */
     assetType?: 'USDC' | 'USDT';
   }
 
-  export interface PaymentTronWalletInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.TronWalletInfo {
+  export interface PaymentTronWalletInfo extends ExternalAccountsAPI.TronWalletInfo {
     /**
      * Type of asset
      */
     assetType?: 'USDT';
   }
 
-  export interface PaymentPolygonWalletInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.PolygonWalletInfo {
+  export interface PaymentPolygonWalletInfo extends ExternalAccountsAPI.PolygonWalletInfo {
     /**
      * Type of asset
      */
     assetType?: 'USDC';
   }
 
-  export interface PaymentBaseWalletInfo
-    extends QuotesAPI.PaymentAccountOrWalletInfo,
-      ExternalAccountsAPI.BaseWalletInfo {
+  export interface PaymentBaseWalletInfo extends ExternalAccountsAPI.BaseWalletInfo {
     /**
      * Type of asset
      */
