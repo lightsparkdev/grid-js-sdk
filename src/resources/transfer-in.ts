@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
+import { DefaultPagination } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 export class TransferIn extends APIResource {
@@ -31,6 +32,8 @@ export class TransferIn extends APIResource {
     return this._client.post('/transfer-in', { body, ...options });
   }
 }
+
+export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
 
 export interface Transaction {
   /**

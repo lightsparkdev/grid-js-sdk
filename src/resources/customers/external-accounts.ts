@@ -4,6 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as ExternalAccountsAPI from './external-accounts';
 import * as CustomersAPI from './customers';
 import { APIPromise } from '../../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 
 export class ExternalAccounts extends APIResource {
@@ -69,17 +70,24 @@ export class ExternalAccounts extends APIResource {
    *
    * @example
    * ```ts
-   * const externalAccounts =
-   *   await client.customers.externalAccounts.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const externalAccount of client.customers.externalAccounts.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: ExternalAccountListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ExternalAccountListResponse> {
-    return this._client.get('/customers/external-accounts', { query, ...options });
+  ): PagePromise<ExternalAccountsDefaultPagination, ExternalAccount> {
+    return this._client.getAPIList('/customers/external-accounts', DefaultPagination<ExternalAccount>, {
+      query,
+      ...options,
+    });
   }
 }
+
+export type ExternalAccountsDefaultPagination = DefaultPagination<ExternalAccount>;
 
 export interface BaseWalletInfo {
   accountType: 'BASE_WALLET';
@@ -453,28 +461,6 @@ export interface UsAccountInfo {
   bankName?: string;
 }
 
-export interface ExternalAccountListResponse {
-  /**
-   * List of external accounts matching the filter criteria
-   */
-  data: Array<ExternalAccount>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of external accounts matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
-}
-
 export interface ExternalAccountCreateParams {
   accountInfo: ExternalAccountInfo;
 
@@ -508,16 +494,11 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
-export interface ExternalAccountListParams {
+export interface ExternalAccountListParams extends DefaultPaginationParams {
   /**
    * Filter by currency code
    */
   currency?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Filter by external accounts associated with a specific customer
@@ -547,7 +528,7 @@ export declare namespace ExternalAccounts {
     type TronWalletInfo as TronWalletInfo,
     type UpiAccountInfo as UpiAccountInfo,
     type UsAccountInfo as UsAccountInfo,
-    type ExternalAccountListResponse as ExternalAccountListResponse,
+    type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };

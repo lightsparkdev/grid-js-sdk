@@ -3,7 +3,9 @@
 import { APIResource } from '../core/resource';
 import * as InvitationsAPI from './invitations';
 import * as TransferInAPI from './transfer-in';
+import { TransactionsDefaultPagination } from './transfer-in';
 import { APIPromise } from '../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -29,14 +31,20 @@ export class Transactions extends APIResource {
    *
    * @example
    * ```ts
-   * const transactions = await client.transactions.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const transaction of client.transactions.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: TransactionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<TransactionListResponse> {
-    return this._client.get('/transactions', { query, ...options });
+  ): PagePromise<TransactionsDefaultPagination, TransferInAPI.Transaction> {
+    return this._client.getAPIList('/transactions', DefaultPagination<TransferInAPI.Transaction>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -204,34 +212,7 @@ export type TransactionStatus =
  */
 export type TransactionType = 'INCOMING' | 'OUTGOING';
 
-export interface TransactionListResponse {
-  /**
-   * List of transactions matching the criteria
-   */
-  data: Array<TransferInAPI.Transaction>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of transactions matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
-}
-
-export interface TransactionListParams {
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
-
+export interface TransactionListParams extends DefaultPaginationParams {
   /**
    * Filter by system customer ID
    */
@@ -309,9 +290,10 @@ export declare namespace Transactions {
     type IncomingTransaction as IncomingTransaction,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
-    type TransactionListResponse as TransactionListResponse,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
   };
 }
+
+export { type TransactionsDefaultPagination };

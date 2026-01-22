@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -93,14 +94,17 @@ export class Quotes extends APIResource {
    *
    * @example
    * ```ts
-   * const quotes = await client.quotes.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const quote of client.quotes.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: QuoteListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<QuoteListResponse> {
-    return this._client.get('/quotes', { query, ...options });
+  ): PagePromise<QuotesDefaultPagination, Quote> {
+    return this._client.getAPIList('/quotes', DefaultPagination<Quote>, { query, ...options });
   }
 
   /**
@@ -148,6 +152,8 @@ export class Quotes extends APIResource {
     return this._client.post(path`/quotes/${quoteID}/retry`, { body, ...options });
   }
 }
+
+export type QuotesDefaultPagination = DefaultPagination<Quote>;
 
 export interface Currency {
   /**
@@ -516,28 +522,6 @@ export namespace QuoteSource {
   }
 }
 
-export interface QuoteListResponse {
-  /**
-   * List of quotes matching the criteria
-   */
-  data: Array<Quote>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of quotes matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
-}
-
 export interface QuoteCreateParams {
   /**
    * Destination account details
@@ -646,7 +630,7 @@ export namespace QuoteCreateParams {
   }
 }
 
-export interface QuoteListParams {
+export interface QuoteListParams extends DefaultPaginationParams {
   /**
    * Filter quotes created after this timestamp (inclusive)
    */
@@ -656,11 +640,6 @@ export interface QuoteListParams {
    * Filter quotes created before this timestamp (inclusive)
    */
   createdBefore?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Filter by sending customer ID
@@ -723,7 +702,7 @@ export declare namespace Quotes {
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteSource as QuoteSource,
-    type QuoteListResponse as QuoteListResponse,
+    type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
     type QuoteRetryParams as QuoteRetryParams,

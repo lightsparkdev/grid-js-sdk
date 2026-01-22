@@ -29,17 +29,16 @@ Types:
 - <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerDeleteResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerGetKYCLinkResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerListInternalAccountsResponse</a></code>
 
 Methods:
 
 - <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
 - <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerRetrieveResponse</code>
 - <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
-- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerListResponse</code>
+- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerListResponsesDefaultPagination</code>
 - <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerDeleteResponse</code>
 - <code title="get /customers/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">getKYCLink</a>({ ...params }) -> CustomerGetKYCLinkResponse</code>
-- <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> CustomerListInternalAccountsResponse</code>
+- <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 
 ## ExternalAccounts
 
@@ -60,12 +59,11 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">TronWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">UpiAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">UsAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountListResponse</a></code>
 
 Methods:
 
 - <code title="post /customers/external-accounts">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">create</a>({ ...params }) -> ExternalAccount</code>
-- <code title="get /customers/external-accounts">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountListResponse</code>
+- <code title="get /customers/external-accounts">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
 
 ## Bulk
 
@@ -151,13 +149,12 @@ Types:
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteSource</a></code>
-- <code><a href="./src/resources/quotes.ts">QuoteListResponse</a></code>
 
 Methods:
 
 - <code title="post /quotes">client.quotes.<a href="./src/resources/quotes.ts">create</a>({ ...params }) -> Quote</code>
 - <code title="get /quotes/{quoteId}">client.quotes.<a href="./src/resources/quotes.ts">retrieve</a>(quoteID) -> Quote</code>
-- <code title="get /quotes">client.quotes.<a href="./src/resources/quotes.ts">list</a>({ ...params }) -> QuoteListResponse</code>
+- <code title="get /quotes">client.quotes.<a href="./src/resources/quotes.ts">list</a>({ ...params }) -> QuotesDefaultPagination</code>
 - <code title="post /quotes/{quoteId}/execute">client.quotes.<a href="./src/resources/quotes.ts">execute</a>(quoteID) -> Quote</code>
 - <code title="post /quotes/{quoteId}/retry">client.quotes.<a href="./src/resources/quotes.ts">retry</a>(quoteID, { ...params }) -> Quote</code>
 
@@ -168,12 +165,11 @@ Types:
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionListResponse</a></code>
 
 Methods:
 
 - <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/resources/transactions.ts">retrieve</a>(transactionID) -> Transaction</code>
-- <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionListResponse</code>
+- <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionsDefaultPagination</code>
 - <code title="post /transactions/{transactionId}/approve">client.transactions.<a href="./src/resources/transactions.ts">approve</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 - <code title="post /transactions/{transactionId}/reject">client.transactions.<a href="./src/resources/transactions.ts">reject</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 
@@ -235,7 +231,7 @@ Types:
 
 Methods:
 
-- <code title="get /uma-providers">client.umaProviders.<a href="./src/resources/uma-providers.ts">list</a>({ ...params }) -> UmaProviderListResponse</code>
+- <code title="get /uma-providers">client.umaProviders.<a href="./src/resources/uma-providers.ts">list</a>({ ...params }) -> UmaProviderListResponsesDefaultPagination</code>
 
 # Tokens
 
@@ -243,11 +239,10 @@ Types:
 
 - <code><a href="./src/resources/tokens.ts">APIToken</a></code>
 - <code><a href="./src/resources/tokens.ts">Permission</a></code>
-- <code><a href="./src/resources/tokens.ts">TokenListResponse</a></code>
 
 Methods:
 
 - <code title="post /tokens">client.tokens.<a href="./src/resources/tokens.ts">create</a>({ ...params }) -> APIToken</code>
 - <code title="get /tokens/{tokenId}">client.tokens.<a href="./src/resources/tokens.ts">retrieve</a>(tokenID) -> APIToken</code>
-- <code title="get /tokens">client.tokens.<a href="./src/resources/tokens.ts">list</a>({ ...params }) -> TokenListResponse</code>
+- <code title="get /tokens">client.tokens.<a href="./src/resources/tokens.ts">list</a>({ ...params }) -> APITokensDefaultPagination</code>
 - <code title="delete /tokens/{tokenId}">client.tokens.<a href="./src/resources/tokens.ts">delete</a>(tokenID) -> void</code>
