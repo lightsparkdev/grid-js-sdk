@@ -146,7 +146,7 @@ export interface ClientOptions {
    * If the signature verification succeeds, the webhook is authentic. If not, it should be rejected.
    *
    */
-  webhookSignature?: string | undefined;
+  webhookSignature?: string | null | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
@@ -223,7 +223,7 @@ export interface ClientOptions {
 export class Grid {
   username: string;
   password: string;
-  webhookSignature: string;
+  webhookSignature: string | null;
 
   baseURL: string;
   maxRetries: number;
@@ -242,7 +242,7 @@ export class Grid {
    *
    * @param {string | undefined} [opts.username=process.env['GRID_USERNAME'] ?? undefined]
    * @param {string | undefined} [opts.password=process.env['GRID_PASSWORD'] ?? undefined]
-   * @param {string | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_SIGNATURE'] ?? undefined]
+   * @param {string | null | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_SIGNATURE'] ?? null]
    * @param {string} [opts.baseURL=process.env['GRID_BASE_URL'] ?? https://api.lightspark.com/grid/2025-10-13] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -255,7 +255,7 @@ export class Grid {
     baseURL = readEnv('GRID_BASE_URL'),
     username = readEnv('GRID_USERNAME'),
     password = readEnv('GRID_PASSWORD'),
-    webhookSignature = readEnv('GRID_WEBHOOK_SIGNATURE'),
+    webhookSignature = readEnv('GRID_WEBHOOK_SIGNATURE') ?? null,
     ...opts
   }: ClientOptions = {}) {
     if (username === undefined) {
@@ -266,11 +266,6 @@ export class Grid {
     if (password === undefined) {
       throw new Errors.GridError(
         "The GRID_PASSWORD environment variable is missing or empty; either provide it, or instantiate the Grid client with an password option, like new Grid({ password: 'My Password' }).",
-      );
-    }
-    if (webhookSignature === undefined) {
-      throw new Errors.GridError(
-        "The GRID_WEBHOOK_SIGNATURE environment variable is missing or empty; either provide it, or instantiate the Grid client with an webhookSignature option, like new Grid({ webhookSignature: 'My Webhook Signature' }).",
       );
     }
 
@@ -359,6 +354,9 @@ export class Grid {
   }
 
   protected async webhookSignatureAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.webhookSignature == null) {
+      return undefined;
+    }
     return buildHeaders([{ 'X-Grid-Signature': this.webhookSignature }]);
   }
 
