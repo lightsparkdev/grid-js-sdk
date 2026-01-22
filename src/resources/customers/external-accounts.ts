@@ -279,6 +279,8 @@ export namespace ExternalAccountInfo {
   }
 
   export interface LightningInvoice {
+    destinationType: 'INVOICE';
+
     /**
      * 1-time use lightning bolt11 invoice payout destination
      */
@@ -293,10 +295,14 @@ export namespace ExternalAccountInfo {
      */
     bolt12: string;
 
+    destinationType: 'BOLT12';
+
     accountType?: 'LIGHTNING';
   }
 
   export interface LightningAddress {
+    destinationType: 'LIGHTNING_ADDRESS';
+
     /**
      * A lightning address which can be used as a payment destination. Note that for
      * UMA addresses, no external account is needed. You can use the UMA address

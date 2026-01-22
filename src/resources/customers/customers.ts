@@ -303,13 +303,6 @@ export interface Customer {
   id?: string;
 
   /**
-   * Your public identifier for the customer for example `@alice` or `650-555-1234`.
-   * This value can be used to enable payments to your existing customer public
-   * identifiers on the UMA network.
-   */
-  alias?: string;
-
-  /**
    * Creation timestamp
    */
   createdAt?: string;
