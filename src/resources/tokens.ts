@@ -2,6 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
@@ -41,14 +42,17 @@ export class Tokens extends APIResource {
    *
    * @example
    * ```ts
-   * const tokens = await client.tokens.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const apiToken of client.tokens.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: TokenListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<TokenListResponse> {
-    return this._client.get('/tokens', { query, ...options });
+  ): PagePromise<APITokensDefaultPagination, APIToken> {
+    return this._client.getAPIList('/tokens', DefaultPagination<APIToken>, { query, ...options });
   }
 
   /**
@@ -66,6 +70,8 @@ export class Tokens extends APIResource {
     });
   }
 }
+
+export type APITokensDefaultPagination = DefaultPagination<APIToken>;
 
 export interface APIToken {
   /**
@@ -115,28 +121,6 @@ export interface APIToken {
  */
 export type Permission = 'VIEW' | 'TRANSACT' | 'MANAGE';
 
-export interface TokenListResponse {
-  /**
-   * List of tokens matching the filter criteria
-   */
-  data: Array<APIToken>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of tokens matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
-}
-
 export interface TokenCreateParams {
   /**
    * Name of the token to help identify it
@@ -149,7 +133,7 @@ export interface TokenCreateParams {
   permissions: Array<Permission>;
 }
 
-export interface TokenListParams {
+export interface TokenListParams extends DefaultPaginationParams {
   /**
    * Filter customers created after this timestamp (inclusive)
    */
@@ -159,11 +143,6 @@ export interface TokenListParams {
    * Filter customers created before this timestamp (inclusive)
    */
   createdBefore?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Maximum number of results to return (default 20, max 100)
@@ -190,7 +169,7 @@ export declare namespace Tokens {
   export {
     type APIToken as APIToken,
     type Permission as Permission,
-    type TokenListResponse as TokenListResponse,
+    type APITokensDefaultPagination as APITokensDefaultPagination,
     type TokenCreateParams as TokenCreateParams,
     type TokenListParams as TokenListParams,
   };

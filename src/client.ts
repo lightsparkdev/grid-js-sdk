@@ -13,6 +13,8 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type DefaultPaginationParams, DefaultPaginationResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -44,10 +46,10 @@ import {
   Quote,
   QuoteCreateParams,
   QuoteListParams,
-  QuoteListResponse,
   QuoteRetryParams,
   QuoteSource,
   Quotes,
+  QuotesDefaultPagination,
 } from './resources/quotes';
 import {
   CounterpartyFieldDefinition,
@@ -60,17 +62,16 @@ import {
 } from './resources/receiver';
 import {
   APIToken,
+  APITokensDefaultPagination,
   Permission,
   TokenCreateParams,
   TokenListParams,
-  TokenListResponse,
   Tokens,
 } from './resources/tokens';
 import {
   IncomingTransaction,
   TransactionApproveParams,
   TransactionListParams,
-  TransactionListResponse,
   TransactionRejectParams,
   TransactionStatus,
   TransactionType,
@@ -78,7 +79,12 @@ import {
 } from './resources/transactions';
 import { Transaction, TransferIn, TransferInCreateParams } from './resources/transfer-in';
 import { TransferOut, TransferOutCreateParams } from './resources/transfer-out';
-import { UmaProviderListParams, UmaProviderListResponse, UmaProviders } from './resources/uma-providers';
+import {
+  UmaProviderListParams,
+  UmaProviderListResponse,
+  UmaProviderListResponsesDefaultPagination,
+  UmaProviders,
+} from './resources/uma-providers';
 import { WebhookSendTestResponse, Webhooks } from './resources/webhooks';
 import {
   Address,
@@ -91,9 +97,9 @@ import {
   CustomerGetKYCLinkParams,
   CustomerGetKYCLinkResponse,
   CustomerListInternalAccountsParams,
-  CustomerListInternalAccountsResponse,
   CustomerListParams,
   CustomerListResponse,
+  CustomerListResponsesDefaultPagination,
   CustomerRetrieveResponse,
   CustomerType,
   CustomerUpdateParams,
@@ -632,6 +638,25 @@ export class Grid {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: RequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: FinalRequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Grid, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -898,6 +923,12 @@ Grid.Tokens = Tokens;
 export declare namespace Grid {
   export type RequestOptions = Opts.RequestOptions;
 
+  export import DefaultPagination = Pagination.DefaultPagination;
+  export {
+    type DefaultPaginationParams as DefaultPaginationParams,
+    type DefaultPaginationResponse as DefaultPaginationResponse,
+  };
+
   export {
     Config as Config,
     type CustomerInfoFieldName as CustomerInfoFieldName,
@@ -922,7 +953,7 @@ export declare namespace Grid {
     type CustomerListResponse as CustomerListResponse,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
-    type CustomerListInternalAccountsResponse as CustomerListInternalAccountsResponse,
+    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -969,7 +1000,7 @@ export declare namespace Grid {
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteSource as QuoteSource,
-    type QuoteListResponse as QuoteListResponse,
+    type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
     type QuoteRetryParams as QuoteRetryParams,
@@ -980,7 +1011,6 @@ export declare namespace Grid {
     type IncomingTransaction as IncomingTransaction,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
-    type TransactionListResponse as TransactionListResponse,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
@@ -1005,6 +1035,7 @@ export declare namespace Grid {
   export {
     UmaProviders as UmaProviders,
     type UmaProviderListResponse as UmaProviderListResponse,
+    type UmaProviderListResponsesDefaultPagination as UmaProviderListResponsesDefaultPagination,
     type UmaProviderListParams as UmaProviderListParams,
   };
 
@@ -1012,7 +1043,7 @@ export declare namespace Grid {
     Tokens as Tokens,
     type APIToken as APIToken,
     type Permission as Permission,
-    type TokenListResponse as TokenListResponse,
+    type APITokensDefaultPagination as APITokensDefaultPagination,
     type TokenCreateParams as TokenCreateParams,
     type TokenListParams as TokenListParams,
   };

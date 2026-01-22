@@ -2,7 +2,7 @@
 
 import { APIResource } from '../core/resource';
 import * as QuotesAPI from './quotes';
-import { APIPromise } from '../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 
 export class UmaProviders extends APIResource {
@@ -16,73 +16,54 @@ export class UmaProviders extends APIResource {
   list(
     query: UmaProviderListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<UmaProviderListResponse> {
-    return this._client.get('/uma-providers', { query, ...options });
+  ): PagePromise<UmaProviderListResponsesDefaultPagination, UmaProviderListResponse> {
+    return this._client.getAPIList('/uma-providers', DefaultPagination<UmaProviderListResponse>, {
+      query,
+      ...options,
+    });
   }
 }
+
+export type UmaProviderListResponsesDefaultPagination = DefaultPagination<UmaProviderListResponse>;
 
 export interface UmaProviderListResponse {
   /**
-   * List of available UMA Providers using Grid
+   * Whether this UMA Provider is on your allow list
    */
-  data?: Array<UmaProviderListResponse.Data>;
+  allowListStatus?: boolean;
 
   /**
-   * Indicates if more results are available beyond this page
+   * Domain this VASP uses for UMA addresses
    */
-  hasMore?: boolean;
+  domain?: string;
 
   /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   * Legal Entity Identifier for the UMA Provider
    */
-  nextCursor?: string;
+  lei?: string;
 
   /**
-   * Total number of transactions matching the criteria (excluding pagination)
+   * Logo URL for the VASP
    */
-  totalCount?: number;
+  logoUrl?: string;
+
+  /**
+   * Name of the UMA Provider
+   */
+  name?: string;
+
+  /**
+   * List of currencies supported by this UMA Provider
+   */
+  supportedCurrencies?: Array<QuotesAPI.Currency>;
+
+  /**
+   * Region(s) this UMA Provider operates in
+   */
+  supportedRegions?: Array<string>;
 }
 
-export namespace UmaProviderListResponse {
-  export interface Data {
-    /**
-     * Whether this UMA Provider is on your allow list
-     */
-    allowListStatus?: boolean;
-
-    /**
-     * Domain this VASP uses for UMA addresses
-     */
-    domain?: string;
-
-    /**
-     * Legal Entity Identifier for the UMA Provider
-     */
-    lei?: string;
-
-    /**
-     * Logo URL for the VASP
-     */
-    logoUrl?: string;
-
-    /**
-     * Name of the UMA Provider
-     */
-    name?: string;
-
-    /**
-     * List of currencies supported by this UMA Provider
-     */
-    supportedCurrencies?: Array<QuotesAPI.Currency>;
-
-    /**
-     * Region(s) this UMA Provider operates in
-     */
-    supportedRegions?: Array<string>;
-  }
-}
-
-export interface UmaProviderListParams {
+export interface UmaProviderListParams extends DefaultPaginationParams {
   /**
    * The alpha-2 representation of a country, as defined by the ISO 3166-1 standard.
    */
@@ -92,11 +73,6 @@ export interface UmaProviderListParams {
    * The ISO 4217 currency code to filter providers by supported currency.
    */
   currencyCode?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Whether to include providers which are not on your allowlist in the response. By
@@ -118,6 +94,7 @@ export interface UmaProviderListParams {
 export declare namespace UmaProviders {
   export {
     type UmaProviderListResponse as UmaProviderListResponse,
+    type UmaProviderListResponsesDefaultPagination as UmaProviderListResponsesDefaultPagination,
     type UmaProviderListParams as UmaProviderListParams,
   };
 }

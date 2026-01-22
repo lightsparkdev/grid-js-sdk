@@ -13,8 +13,8 @@ import {
   ExternalAccountCreateParams,
   ExternalAccountInfo,
   ExternalAccountListParams,
-  ExternalAccountListResponse,
   ExternalAccounts,
+  ExternalAccountsDefaultPagination,
   IbanAccountInfo,
   IndividualBeneficiary,
   PixAccountInfo,
@@ -26,7 +26,9 @@ import {
   UsAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
+import { InternalAccountsDefaultPagination } from '../sandbox/internal-accounts';
 import { APIPromise } from '../../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -114,14 +116,20 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const customers = await client.customers.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const customerListResponse of client.customers.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomerListResponse> {
-    return this._client.get('/customers', { query, ...options });
+  ): PagePromise<CustomerListResponsesDefaultPagination, CustomerListResponse> {
+    return this._client.getAPIList('/customers', DefaultPagination<CustomerListResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -165,17 +173,25 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.customers.listInternalAccounts();
+   * // Automatically fetches more pages as needed.
+   * for await (const internalAccount of client.customers.listInternalAccounts()) {
+   *   // ...
+   * }
    * ```
    */
   listInternalAccounts(
     query: CustomerListInternalAccountsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomerListInternalAccountsResponse> {
-    return this._client.get('/customers/internal-accounts', { query, ...options });
+  ): PagePromise<InternalAccountsDefaultPagination, InternalAccountsAPI.InternalAccount> {
+    return this._client.getAPIList(
+      '/customers/internal-accounts',
+      DefaultPagination<InternalAccountsAPI.InternalAccount>,
+      { query, ...options },
+    );
   }
 }
+
+export type CustomerListResponsesDefaultPagination = DefaultPagination<CustomerListResponse>;
 
 export interface Address {
   /**
@@ -449,27 +465,7 @@ export type CustomerRetrieveResponse = IndividualCustomer | BusinessCustomer;
 
 export type CustomerUpdateResponse = IndividualCustomer | BusinessCustomer;
 
-export interface CustomerListResponse {
-  /**
-   * List of customers matching the filter criteria
-   */
-  data: Array<IndividualCustomer | BusinessCustomer>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of customers matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
-}
+export type CustomerListResponse = IndividualCustomer | BusinessCustomer;
 
 export type CustomerDeleteResponse = IndividualCustomer | BusinessCustomer;
 
@@ -488,28 +484,6 @@ export interface CustomerGetKYCLinkResponse {
    * The platform id of the customer to onboard
    */
   platformCustomerId?: string;
-}
-
-export interface CustomerListInternalAccountsResponse {
-  /**
-   * List of internal accounts matching the filter criteria
-   */
-  data: Array<InternalAccountsAPI.InternalAccount>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of customers matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
 }
 
 export type CustomerCreateParams =
@@ -685,7 +659,7 @@ export declare namespace CustomerUpdateParams {
   }
 }
 
-export interface CustomerListParams {
+export interface CustomerListParams extends DefaultPaginationParams {
   /**
    * Filter customers created after this timestamp (inclusive)
    */
@@ -695,11 +669,6 @@ export interface CustomerListParams {
    * Filter customers created before this timestamp (inclusive)
    */
   createdBefore?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Filter by customer type
@@ -750,16 +719,11 @@ export interface CustomerGetKYCLinkParams {
   redirectUri?: string;
 }
 
-export interface CustomerListInternalAccountsParams {
+export interface CustomerListInternalAccountsParams extends DefaultPaginationParams {
   /**
    * Filter by currency code
    */
   currency?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Filter by internal accounts associated with a specific customer
@@ -791,7 +755,7 @@ export declare namespace Customers {
     type CustomerListResponse as CustomerListResponse,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
-    type CustomerListInternalAccountsResponse as CustomerListInternalAccountsResponse,
+    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -816,7 +780,7 @@ export declare namespace Customers {
     type TronWalletInfo as TronWalletInfo,
     type UpiAccountInfo as UpiAccountInfo,
     type UsAccountInfo as UsAccountInfo,
-    type ExternalAccountListResponse as ExternalAccountListResponse,
+    type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
@@ -828,3 +792,5 @@ export declare namespace Customers {
     type BulkUploadCsvParams as BulkUploadCsvParams,
   };
 }
+
+export { type InternalAccountsDefaultPagination };

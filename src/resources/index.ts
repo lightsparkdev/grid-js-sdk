@@ -23,12 +23,12 @@ export {
   type CustomerListResponse,
   type CustomerDeleteResponse,
   type CustomerGetKYCLinkResponse,
-  type CustomerListInternalAccountsResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
   type CustomerGetKYCLinkParams,
   type CustomerListInternalAccountsParams,
+  type CustomerListResponsesDefaultPagination,
 } from './customers/customers';
 export {
   Invitations,
@@ -56,10 +56,10 @@ export {
   type PaymentInstructions,
   type Quote,
   type QuoteSource,
-  type QuoteListResponse,
   type QuoteCreateParams,
   type QuoteListParams,
   type QuoteRetryParams,
+  type QuotesDefaultPagination,
 } from './quotes';
 export {
   Receiver,
@@ -75,21 +75,30 @@ export {
   Tokens,
   type APIToken,
   type Permission,
-  type TokenListResponse,
   type TokenCreateParams,
   type TokenListParams,
+  type APITokensDefaultPagination,
 } from './tokens';
 export {
   Transactions,
   type IncomingTransaction,
   type TransactionStatus,
   type TransactionType,
-  type TransactionListResponse,
   type TransactionListParams,
   type TransactionApproveParams,
   type TransactionRejectParams,
 } from './transactions';
-export { TransferIn, type Transaction, type TransferInCreateParams } from './transfer-in';
+export {
+  TransferIn,
+  type Transaction,
+  type TransferInCreateParams,
+  type TransactionsDefaultPagination,
+} from './transfer-in';
 export { TransferOut, type TransferOutCreateParams } from './transfer-out';
-export { UmaProviders, type UmaProviderListResponse, type UmaProviderListParams } from './uma-providers';
+export {
+  UmaProviders,
+  type UmaProviderListResponse,
+  type UmaProviderListParams,
+  type UmaProviderListResponsesDefaultPagination,
+} from './uma-providers';
 export { Webhooks, type WebhookSendTestResponse } from './webhooks';

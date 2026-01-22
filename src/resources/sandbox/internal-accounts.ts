@@ -4,6 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
 import { APIPromise } from '../../core/api-promise';
+import { DefaultPagination } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
@@ -32,6 +33,8 @@ export class InternalAccounts extends APIResource {
     return this._client.post(path`/sandbox/internal-accounts/${accountID}/fund`, { body, ...options });
   }
 }
+
+export type InternalAccountsDefaultPagination = DefaultPagination<InternalAccount>;
 
 export interface InternalAccount {
   /**

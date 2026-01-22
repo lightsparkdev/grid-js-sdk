@@ -22,12 +22,12 @@ export {
   type CustomerListResponse,
   type CustomerDeleteResponse,
   type CustomerGetKYCLinkResponse,
-  type CustomerListInternalAccountsResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
   type CustomerGetKYCLinkParams,
   type CustomerListInternalAccountsParams,
+  type CustomerListResponsesDefaultPagination,
 } from './customers';
 export {
   ExternalAccounts,
@@ -46,7 +46,7 @@ export {
   type TronWalletInfo,
   type UpiAccountInfo,
   type UsAccountInfo,
-  type ExternalAccountListResponse,
   type ExternalAccountCreateParams,
   type ExternalAccountListParams,
+  type ExternalAccountsDefaultPagination,
 } from './external-accounts';
