@@ -113,12 +113,22 @@ export namespace SandboxSendFundsResponse {
      * Currency code for the source account
      */
     currency: string;
+
+    /**
+     * Source type identifier
+     */
+    sourceType: 'ACCOUNT';
   }
 
   /**
    * UMA address source details
    */
   export interface UmaAddressSource {
+    /**
+     * Source type identifier
+     */
+    sourceType: 'UMA_ADDRESS';
+
     /**
      * UMA address of the sender
      */

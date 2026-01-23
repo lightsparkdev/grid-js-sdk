@@ -259,6 +259,11 @@ export interface PaymentInstructions {
    * Additional human-readable instructions for making the payment
    */
   instructionsNotes?: string;
+
+  /**
+   * Indicates whether the account is a platform account or a customer account.
+   */
+  isPlatformAccount?: boolean;
 }
 
 export namespace PaymentInstructions {
@@ -504,13 +509,6 @@ export namespace QuoteSource {
      * Source type identifier
      */
     sourceType: 'ACCOUNT';
-
-    /**
-     * Currency code for the funding source. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency?: string;
   }
 
   /**
