@@ -11,10 +11,7 @@ const client = new Grid({
 describe('resource customers', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.customers.create({
-      customerType: 'INDIVIDUAL',
-      platformCustomerId: '9f84e0c2a72c4fa',
-    });
+    const responsePromise = client.customers.create({ customerType: 'INDIVIDUAL' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -28,7 +25,6 @@ describe('resource customers', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.create({
       customerType: 'INDIVIDUAL',
-      platformCustomerId: '9f84e0c2a72c4fa',
       address: {
         country: 'US',
         line1: '123 Main Street',
@@ -39,8 +35,8 @@ describe('resource customers', () => {
       },
       birthDate: '1990-01-15',
       fullName: 'John Michael Doe',
-      kycUrl: 'https://example.com/kyc',
       nationality: 'US',
+      platformCustomerId: '9f84e0c2a72c4fa',
       umaAddress: '$john.doe@uma.domain.com',
     });
   });
@@ -84,6 +80,7 @@ describe('resource customers', () => {
       birthDate: '1990-01-15',
       fullName: 'John Michael Doe',
       nationality: 'US',
+      platformCustomerId: '9f84e0c2a72c4fa',
       umaAddress: '$john.doe@uma.domain.com',
     });
   });
