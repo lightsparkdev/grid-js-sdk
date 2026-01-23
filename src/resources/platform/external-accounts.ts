@@ -84,7 +84,7 @@ export interface ExternalAccountListResponse {
   /**
    * List of external accounts matching the filter criteria
    */
-  accounts: Array<ExternalAccountsAPI.ExternalAccount>;
+  data: Array<ExternalAccountsAPI.ExternalAccount>;
 }
 
 export interface ExternalAccountCreateParams {

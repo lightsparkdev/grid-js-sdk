@@ -153,35 +153,26 @@ export namespace BulkGetJobStatusResponse {
     total: number;
   }
 
-  /**
-   * Error information for a failed bulk import entry
-   */
   export interface Error {
     /**
      * Platform customer ID or row number for the failed entry
      */
     correlationId: string;
 
-    error: Error.Error;
-  }
+    /**
+     * Error code
+     */
+    code?: string;
 
-  export namespace Error {
-    export interface Error {
-      /**
-       * Error code
-       */
-      code?: string;
+    /**
+     * Additional error details
+     */
+    details?: unknown;
 
-      /**
-       * Additional error details
-       */
-      details?: unknown;
-
-      /**
-       * Error message
-       */
-      message?: string;
-    }
+    /**
+     * Error message
+     */
+    message?: string;
   }
 }
 
