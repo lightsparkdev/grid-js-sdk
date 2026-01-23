@@ -360,7 +360,7 @@ export interface Quote {
   /**
    * Destination account details
    */
-  destination: Quote.AccountDestination | Quote.UmaAddressDestination;
+  destination: Quote.QuoteAccountDestination | Quote.QuoteUmaAddressDestination;
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -441,11 +441,16 @@ export namespace Quote {
   /**
    * Destination account details
    */
-  export interface AccountDestination {
+  export interface QuoteAccountDestination {
     /**
      * Destination account identifier
      */
     accountId: string;
+
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'ACCOUNT';
 
     /**
      * Currency code for the destination account
@@ -456,7 +461,12 @@ export namespace Quote {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressDestination {
+  export interface QuoteUmaAddressDestination {
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'UMA_ADDRESS';
+
     /**
      * UMA address of the recipient
      */
@@ -478,17 +488,22 @@ export namespace Quote {
 /**
  * Source account details
  */
-export type QuoteSource = QuoteSource.Account | QuoteSource.RealTimeFunding;
+export type QuoteSource = QuoteSource.QuoteAccountSource | QuoteSource.QuoteRealtimeFundingSource;
 
 export namespace QuoteSource {
   /**
    * Source account details
    */
-  export interface Account {
+  export interface QuoteAccountSource {
     /**
      * Source account identifier
      */
     accountId: string;
+
+    /**
+     * Source type identifier
+     */
+    sourceType: 'ACCOUNT';
 
     /**
      * Currency code for the funding source. See
@@ -505,7 +520,7 @@ export namespace QuoteSource {
    * option is only valid for instant payment methods. Do not try to fund a quote
    * with a non-instant payment method (ACH, etc.).
    */
-  export interface RealTimeFunding {
+  export interface QuoteRealtimeFundingSource {
     /**
      * Currency code for the funding source. See
      * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
@@ -519,6 +534,11 @@ export namespace QuoteSource {
      * created on behalf of the platform itself.
      */
     customerId: string;
+
+    /**
+     * Source type identifier
+     */
+    sourceType: 'REALTIME_FUNDING';
   }
 }
 
