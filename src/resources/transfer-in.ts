@@ -109,9 +109,22 @@ export namespace Transaction {
      * Currency code for the destination account
      */
     currency: string;
+
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'ACCOUNT';
   }
 
+  /**
+   * UMA address destination details
+   */
   export interface UmaAddressDestination {
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'UMA_ADDRESS';
+
     /**
      * UMA address of the recipient
      */
