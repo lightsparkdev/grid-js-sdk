@@ -15,7 +15,7 @@ describe('resource quotes', () => {
       destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', currency: 'EUR' },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
-      source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },
+      source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -32,7 +32,11 @@ describe('resource quotes', () => {
       destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', currency: 'EUR' },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
-      source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', currency: 'USD' },
+      source: {
+        accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+        sourceType: 'ACCOUNT',
+        currency: 'USD',
+      },
       description: 'Transfer between accounts, either internal or external.',
       immediatelyExecute: false,
       lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
