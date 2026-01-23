@@ -30,9 +30,8 @@ const client = new Grid({
   password: process.env['GRID_PASSWORD'], // This is the default and can be omitted
 });
 
-const platformConfig = await client.config.retrieve();
-
-console.log(platformConfig.id);
+const page = await client.customers.list();
+const customerListResponse = page.data[0];
 ```
 
 ### Request & Response types
@@ -48,7 +47,8 @@ const client = new Grid({
   password: process.env['GRID_PASSWORD'], // This is the default and can be omitted
 });
 
-const platformConfig: Grid.PlatformConfig = await client.config.retrieve();
+const params: Grid.CustomerCreateParams = { CreateCustomerRequest: { customerType: 'INDIVIDUAL' } };
+const customer: Grid.CustomerCreateResponse = await client.customers.create(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -90,15 +90,17 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const platformConfig = await client.config.retrieve().catch(async (err) => {
-  if (err instanceof Grid.APIError) {
-    console.log(err.status); // 400
-    console.log(err.name); // BadRequestError
-    console.log(err.headers); // {server: 'nginx', ...}
-  } else {
-    throw err;
-  }
-});
+const customer = await client.customers
+  .create({ CreateCustomerRequest: { customerType: 'INDIVIDUAL' } })
+  .catch(async (err) => {
+    if (err instanceof Grid.APIError) {
+      console.log(err.status); // 400
+      console.log(err.name); // BadRequestError
+      console.log(err.headers); // {server: 'nginx', ...}
+    } else {
+      throw err;
+    }
+  });
 ```
 
 Error codes are as follows:
@@ -130,7 +132,7 @@ const client = new Grid({
 });
 
 // Or, configure per-request:
-await client.config.retrieve({
+await client.customers.create({ CreateCustomerRequest: { customerType: 'INDIVIDUAL' } }, {
   maxRetries: 5,
 });
 ```
@@ -147,7 +149,7 @@ const client = new Grid({
 });
 
 // Override per-request:
-await client.config.retrieve({
+await client.customers.create({ CreateCustomerRequest: { customerType: 'INDIVIDUAL' } }, {
   timeout: 5 * 1000,
 });
 ```
@@ -201,13 +203,17 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Grid();
 
-const response = await client.config.retrieve().asResponse();
+const response = await client.customers
+  .create({ CreateCustomerRequest: { customerType: 'INDIVIDUAL' } })
+  .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: platformConfig, response: raw } = await client.config.retrieve().withResponse();
+const { data: customer, response: raw } = await client.customers
+  .create({ CreateCustomerRequest: { customerType: 'INDIVIDUAL' } })
+  .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(platformConfig.id);
+console.log(customer);
 ```
 
 ### Logging
@@ -287,7 +293,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.config.retrieve({
+client.customers.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
