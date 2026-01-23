@@ -167,7 +167,7 @@ export namespace BulkGetJobStatusResponse {
     /**
      * Additional error details
      */
-    details?: unknown;
+    details?: { [key: string]: unknown };
 
     /**
      * Error message
