@@ -545,9 +545,9 @@ export interface QuoteCreateParams {
    * Destination account details
    */
   destination:
-    | QuoteCreateParams.Account
-    | QuoteCreateParams.UmaAddress
-    | QuoteCreateParams.ExternalAccountDetails;
+    | QuoteCreateParams.QuoteRequestAccountDestination
+    | QuoteCreateParams.QuoteRequestUmaAddressDestination
+    | QuoteCreateParams.QuoteRequestExternalAccountDetailsDestination;
 
   /**
    * The amount to send/receive in the smallest unit of the locked currency (eg.
@@ -606,7 +606,7 @@ export namespace QuoteCreateParams {
   /**
    * Destination account details
    */
-  export interface Account {
+  export interface QuoteRequestAccountDestination {
     /**
      * Destination account identifier
      */
@@ -618,18 +618,28 @@ export namespace QuoteCreateParams {
      * for the full list of supported fiat and crypto currencies.
      */
     currency: string;
+
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'ACCOUNT';
   }
 
   /**
    * UMA address destination details
    */
-  export interface UmaAddress {
+  export interface QuoteRequestUmaAddressDestination {
     /**
      * Currency code for the destination. See
      * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
      * for the full list of supported fiat and crypto currencies.
      */
     currency: string;
+
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'UMA_ADDRESS';
 
     /**
      * UMA address of the recipient
@@ -643,7 +653,12 @@ export namespace QuoteCreateParams {
    * the account. Useful for one-off payments to some destination. See the external
    * accounts endpoints for test values in sandbox mode.
    */
-  export interface ExternalAccountDetails {
+  export interface QuoteRequestExternalAccountDetailsDestination {
+    /**
+     * Destination type identifier
+     */
+    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
+
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
 }
