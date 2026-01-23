@@ -45,8 +45,8 @@ export {
 } from './plaid';
 export {
   Platform,
-  type PlatformInternalAccountsResponse,
-  type PlatformInternalAccountsParams,
+  type PlatformListInternalAccountsResponse,
+  type PlatformListInternalAccountsParams,
 } from './platform/platform';
 export {
   Quotes,
