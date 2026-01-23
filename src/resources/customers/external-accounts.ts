@@ -210,9 +210,7 @@ export type ExternalAccountInfo =
   | ExternalAccountInfo.UpiAccountExternalAccountInfo
   | ExternalAccountInfo.NgnAccountExternalAccountInfo
   | ExternalAccountInfo.SparkWalletExternalAccountInfo
-  | ExternalAccountInfo.LightningInvoiceExternalAccountInfo
-  | ExternalAccountInfo.LightningBolt12ExternalAccountInfo
-  | ExternalAccountInfo.LightningAddressExternalAccountInfo
+  | ExternalAccountInfo.LightningExternalAccountInfo
   | ExternalAccountInfo.SolanaWalletExternalAccountInfo
   | ExternalAccountInfo.TronWalletExternalAccountInfo
   | ExternalAccountInfo.PolygonWalletExternalAccountInfo
@@ -286,39 +284,25 @@ export namespace ExternalAccountInfo {
     accountType: 'SPARK_WALLET';
   }
 
-  export interface LightningInvoiceExternalAccountInfo {
-    destinationType: 'INVOICE';
+  export interface LightningExternalAccountInfo {
+    accountType: 'LIGHTNING';
+
+    /**
+     * A bolt12 offer which can be reused as a payment destination
+     */
+    bolt12?: string;
 
     /**
      * 1-time use lightning bolt11 invoice payout destination
      */
-    invoice: string;
-
-    accountType?: 'LIGHTNING';
-  }
-
-  export interface LightningBolt12ExternalAccountInfo {
-    /**
-     * A bolt12 offer which can be reused as a payment destination
-     */
-    bolt12: string;
-
-    destinationType: 'BOLT12';
-
-    accountType?: 'LIGHTNING';
-  }
-
-  export interface LightningAddressExternalAccountInfo {
-    destinationType: 'LIGHTNING_ADDRESS';
+    invoice?: string;
 
     /**
      * A lightning address which can be used as a payment destination. Note that for
      * UMA addresses, no external account is needed. You can use the UMA address
      * directly as a destination.
      */
-    lightningAddress: string;
-
-    accountType?: 'LIGHTNING';
+    lightningAddress?: string;
   }
 
   export interface SolanaWalletExternalAccountInfo extends ExternalAccountsAPI.SolanaWalletInfo {
