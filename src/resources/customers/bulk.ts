@@ -153,6 +153,9 @@ export namespace BulkGetJobStatusResponse {
     total: number;
   }
 
+  /**
+   * Error information for a failed bulk import entry
+   */
   export interface Error {
     /**
      * Platform customer ID or row number for the failed entry
