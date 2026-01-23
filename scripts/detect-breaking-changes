@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+echo "==> Detecting breaking changes"
+
+TEST_PATHS=(
+	tests/api-resources/config.test.ts
+	tests/api-resources/customers/customers.test.ts
+	tests/api-resources/customers/external-accounts.test.ts
+	tests/api-resources/customers/bulk.test.ts
+	tests/api-resources/platform/platform.test.ts
+	tests/api-resources/platform/external-accounts.test.ts
+	tests/api-resources/plaid.test.ts
+	tests/api-resources/transfer-in.test.ts
+	tests/api-resources/transfer-out.test.ts
+	tests/api-resources/receiver.test.ts
+	tests/api-resources/quotes.test.ts
+	tests/api-resources/transactions.test.ts
+	tests/api-resources/webhooks.test.ts
+	tests/api-resources/invitations.test.ts
+	tests/api-resources/sandbox/sandbox.test.ts
+	tests/api-resources/sandbox/uma.test.ts
+	tests/api-resources/sandbox/internal-accounts.test.ts
+	tests/api-resources/uma-providers.test.ts
+	tests/api-resources/tokens.test.ts
+	tests/index.test.ts
+)
+
+for PATHSPEC in "${TEST_PATHS[@]}"; do
+    # Try to check out previous versions of the test files
+    # with the current SDK.
+    git checkout "$1" -- "${PATHSPEC}" 2>/dev/null || true
+done
+
+# Instead of running the tests, use the linter to check if an
+# older test is no longer compatible with the latest SDK.
+./scripts/lint
