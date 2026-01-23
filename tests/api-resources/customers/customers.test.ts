@@ -11,7 +11,9 @@ const client = new Grid({
 describe('resource customers', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.customers.create({ customerType: 'INDIVIDUAL' });
+    const responsePromise = client.customers.create({
+      CreateCustomerRequest: { customerType: 'INDIVIDUAL' },
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -24,20 +26,22 @@ describe('resource customers', () => {
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.create({
-      customerType: 'INDIVIDUAL',
-      address: {
-        country: 'US',
-        line1: '123 Main Street',
-        postalCode: '94105',
-        city: 'San Francisco',
-        line2: 'Apt 4B',
-        state: 'CA',
+      CreateCustomerRequest: {
+        customerType: 'INDIVIDUAL',
+        address: {
+          country: 'US',
+          line1: '123 Pine Street',
+          postalCode: '98101',
+          city: 'Seattle',
+          line2: 'Unit 501',
+          state: 'WA',
+        },
+        birthDate: '1992-03-25',
+        fullName: 'Jane Doe',
+        nationality: 'US',
+        platformCustomerId: '7b3c5a89d2f1e0',
+        umaAddress: '$jane.doe@uma.domain.com',
       },
-      birthDate: '1990-01-15',
-      fullName: 'John Michael Doe',
-      nationality: 'US',
-      platformCustomerId: '9f84e0c2a72c4fa',
-      umaAddress: '$john.doe@uma.domain.com',
     });
   });
 
@@ -55,7 +59,9 @@ describe('resource customers', () => {
 
   // Prism tests are disabled
   test.skip('update: only required params', async () => {
-    const responsePromise = client.customers.update('customerId', { customerType: 'INDIVIDUAL' });
+    const responsePromise = client.customers.update('customerId', {
+      UpdateCustomerRequest: { customerType: 'INDIVIDUAL' },
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -68,20 +74,22 @@ describe('resource customers', () => {
   // Prism tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.update('customerId', {
-      customerType: 'INDIVIDUAL',
-      address: {
-        country: 'US',
-        line1: '123 Main Street',
-        postalCode: '94105',
-        city: 'San Francisco',
-        line2: 'Apt 4B',
-        state: 'CA',
+      UpdateCustomerRequest: {
+        customerType: 'INDIVIDUAL',
+        address: {
+          country: 'US',
+          line1: '456 Market St',
+          postalCode: '94103',
+          city: 'San Francisco',
+          line2: 'Apt 4B',
+          state: 'CA',
+        },
+        birthDate: '1985-06-15',
+        fullName: 'John Smith',
+        nationality: 'US',
+        platformCustomerId: '9f84e0c2a72c4fa',
+        umaAddress: '$john.doe@uma.domain.com',
       },
-      birthDate: '1990-01-15',
-      fullName: 'John Michael Doe',
-      nationality: 'US',
-      platformCustomerId: '9f84e0c2a72c4fa',
-      umaAddress: '$john.doe@uma.domain.com',
     });
   });
 
