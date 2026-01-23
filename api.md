@@ -81,11 +81,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/platform/platform.ts">PlatformInternalAccountsResponse</a></code>
+- <code><a href="./src/resources/platform/platform.ts">PlatformListInternalAccountsResponse</a></code>
 
 Methods:
 
-- <code title="get /platform/internal-accounts">client.platform.<a href="./src/resources/platform/platform.ts">internalAccounts</a>({ ...params }) -> PlatformInternalAccountsResponse</code>
+- <code title="get /platform/internal-accounts">client.platform.<a href="./src/resources/platform/platform.ts">listInternalAccounts</a>({ ...params }) -> PlatformListInternalAccountsResponse</code>
 
 ## ExternalAccounts
 

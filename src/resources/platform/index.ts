@@ -8,6 +8,6 @@ export {
 } from './external-accounts';
 export {
   Platform,
-  type PlatformInternalAccountsResponse,
-  type PlatformInternalAccountsParams,
+  type PlatformListInternalAccountsResponse,
+  type PlatformListInternalAccountsParams,
 } from './platform';
