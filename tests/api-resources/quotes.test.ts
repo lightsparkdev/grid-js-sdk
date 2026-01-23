@@ -12,7 +12,11 @@ describe('resource quotes', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.quotes.create({
-      destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', currency: 'EUR' },
+      destination: {
+        accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+        currency: 'EUR',
+        destinationType: 'ACCOUNT',
+      },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
       source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
@@ -29,7 +33,11 @@ describe('resource quotes', () => {
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.quotes.create({
-      destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', currency: 'EUR' },
+      destination: {
+        accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+        currency: 'EUR',
+        destinationType: 'ACCOUNT',
+      },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
       source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
