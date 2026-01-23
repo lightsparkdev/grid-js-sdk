@@ -27,26 +27,25 @@ export class Platform extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.platform.listInternalAccounts();
+   * const response = await client.platform.internalAccounts();
    * ```
    */
-  listInternalAccounts(
-    query: PlatformListInternalAccountsParams | null | undefined = {},
+  internalAccounts(
+    query: PlatformInternalAccountsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PlatformListInternalAccountsResponse> {
+  ): APIPromise<PlatformInternalAccountsResponse> {
     return this._client.get('/platform/internal-accounts', { query, ...options });
   }
 }
 
-export interface PlatformListInternalAccountsResponse {
+export interface PlatformInternalAccountsResponse {
   /**
    * List of internal accounts matching the filter criteria
    */
   data: Array<InternalAccountsAPI.InternalAccount>;
 }
 
-export interface PlatformListInternalAccountsParams {
+export interface PlatformInternalAccountsParams {
   /**
    * Filter by currency code
    */
@@ -57,8 +56,8 @@ Platform.ExternalAccounts = ExternalAccounts;
 
 export declare namespace Platform {
   export {
-    type PlatformListInternalAccountsResponse as PlatformListInternalAccountsResponse,
-    type PlatformListInternalAccountsParams as PlatformListInternalAccountsParams,
+    type PlatformInternalAccountsResponse as PlatformInternalAccountsResponse,
+    type PlatformInternalAccountsParams as PlatformInternalAccountsParams,
   };
 
   export {

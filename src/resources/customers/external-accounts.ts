@@ -210,9 +210,9 @@ export type ExternalAccountInfo =
   | ExternalAccountInfo.UpiAccountExternalAccountInfo
   | ExternalAccountInfo.NgnAccountExternalAccountInfo
   | ExternalAccountInfo.SparkWalletExternalAccountInfo
-  | ExternalAccountInfo.LightningInvoice
-  | ExternalAccountInfo.LightningBolt12Offer
-  | ExternalAccountInfo.LightningAddress
+  | ExternalAccountInfo.LightningInvoiceExternalAccountInfo
+  | ExternalAccountInfo.LightningBolt12ExternalAccountInfo
+  | ExternalAccountInfo.LightningAddressExternalAccountInfo
   | ExternalAccountInfo.SolanaWalletExternalAccountInfo
   | ExternalAccountInfo.TronWalletExternalAccountInfo
   | ExternalAccountInfo.PolygonWalletExternalAccountInfo
@@ -286,7 +286,7 @@ export namespace ExternalAccountInfo {
     accountType: 'SPARK_WALLET';
   }
 
-  export interface LightningInvoice {
+  export interface LightningInvoiceExternalAccountInfo {
     destinationType: 'INVOICE';
 
     /**
@@ -297,7 +297,7 @@ export namespace ExternalAccountInfo {
     accountType?: 'LIGHTNING';
   }
 
-  export interface LightningBolt12Offer {
+  export interface LightningBolt12ExternalAccountInfo {
     /**
      * A bolt12 offer which can be reused as a payment destination
      */
@@ -308,7 +308,7 @@ export namespace ExternalAccountInfo {
     accountType?: 'LIGHTNING';
   }
 
-  export interface LightningAddress {
+  export interface LightningAddressExternalAccountInfo {
     destinationType: 'LIGHTNING_ADDRESS';
 
     /**

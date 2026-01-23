@@ -10,8 +10,8 @@ const client = new Grid({
 
 describe('resource platform', () => {
   // Prism tests are disabled
-  test.skip('listInternalAccounts', async () => {
-    const responsePromise = client.platform.listInternalAccounts();
+  test.skip('internalAccounts', async () => {
+    const responsePromise = client.platform.internalAccounts();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,10 +22,10 @@ describe('resource platform', () => {
   });
 
   // Prism tests are disabled
-  test.skip('listInternalAccounts: request options and params are passed correctly', async () => {
+  test.skip('internalAccounts: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.platform.listInternalAccounts({ currency: 'currency' }, { path: '/_stainless_unknown_path' }),
+      client.platform.internalAccounts({ currency: 'currency' }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Grid.NotFoundError);
   });
 });

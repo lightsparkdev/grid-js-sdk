@@ -111,8 +111,8 @@ import {
 } from './resources/customers/customers';
 import {
   Platform,
-  PlatformListInternalAccountsParams,
-  PlatformListInternalAccountsResponse,
+  PlatformInternalAccountsParams,
+  PlatformInternalAccountsResponse,
 } from './resources/platform/platform';
 import { Sandbox, SandboxSendFundsParams, SandboxSendFundsResponse } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
@@ -963,8 +963,8 @@ export declare namespace Grid {
 
   export {
     Platform as Platform,
-    type PlatformListInternalAccountsResponse as PlatformListInternalAccountsResponse,
-    type PlatformListInternalAccountsParams as PlatformListInternalAccountsParams,
+    type PlatformInternalAccountsResponse as PlatformInternalAccountsResponse,
+    type PlatformInternalAccountsParams as PlatformInternalAccountsParams,
   };
 
   export {
