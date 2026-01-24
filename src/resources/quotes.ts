@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
@@ -126,30 +125,6 @@ export class Quotes extends APIResource {
   execute(quoteID: string, options?: RequestOptions): APIPromise<Quote> {
     return this._client.post(path`/quotes/${quoteID}/execute`, options);
   }
-
-  /**
-   * In the case where a customer is debited but the Lightning payment fails to
-   * complete, integrators can retry the payment using this endpoint.
-   *
-   * Payments retried with this endpoint will debit from the sender and deliver to
-   * the recipient the same amount as the original quote. As the Grid API does not
-   * persist customer PII, retries need to start with a lookup request to retrieve
-   * the original quote's recipient counter party data requirements then pass that
-   * sender information in the request body. Before calling this endpoint, you should
-   * reach out to the Lightspark team to investigate the underlying issue. As part of
-   * resolution, they'll update the transaction to the appropriate state. The quote /
-   * transaction to retry must be in a `FAILED` or `REFUNDED` state.
-   *
-   * @example
-   * ```ts
-   * const quote = await client.quotes.retry('quoteId', {
-   *   lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
-   * });
-   * ```
-   */
-  retry(quoteID: string, body: QuoteRetryParams, options?: RequestOptions): APIPromise<Quote> {
-    return this._client.post(path`/quotes/${quoteID}/retry`, { body, ...options });
-  }
 }
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
@@ -217,26 +192,6 @@ export interface OutgoingRateDetails {
    * percentage of the sending currency amount.
    */
   gridApiVariableFeeRate: number;
-}
-
-export interface PaymentAccountOrWalletInfo {
-  /**
-   * Type of account or wallet information
-   */
-  accountType:
-    | 'CLABE'
-    | 'US_ACCOUNT'
-    | 'PIX'
-    | 'IBAN'
-    | 'FBO'
-    | 'UPI'
-    | 'NGN_ACCOUNT'
-    | 'SPARK_WALLET'
-    | 'LIGHTNING'
-    | 'SOLANA_WALLET'
-    | 'TRON_WALLET'
-    | 'POLYGON_WALLET'
-    | 'BASE_WALLET';
 }
 
 export interface PaymentInstructions {
@@ -316,8 +271,7 @@ export namespace PaymentInstructions {
     invoice?: string;
   }
 
-  export interface PaymentLightningInvoiceInfo
-    extends Omit<QuotesAPI.PaymentAccountOrWalletInfo, 'accountType'> {
+  export interface PaymentLightningInvoiceInfo {
     accountType: 'LIGHTNING';
 
     /**
@@ -709,34 +663,15 @@ export interface QuoteListParams extends DefaultPaginationParams {
   status?: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
 }
 
-export interface QuoteRetryParams {
-  /**
-   * Unique identifier for the prior receiver uma address lookup request.
-   */
-  lookupId: string;
-
-  /**
-   * Key-value pairs of information about the sender which was requested by the
-   * counterparty (recipient) institution. Any fields specified in
-   * `requiredPayerDataFields` from the response of the
-   * `/receiver/{receiverUmaAddress}` (lookupUma) endpoint MUST be provided here if
-   * they were requested. If the counterparty (recipient) institution did not request
-   * any information, this field can be omitted.
-   */
-  senderCustomerInfo?: { [key: string]: unknown };
-}
-
 export declare namespace Quotes {
   export {
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
-    type PaymentAccountOrWalletInfo as PaymentAccountOrWalletInfo,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteSource as QuoteSource,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
-    type QuoteRetryParams as QuoteRetryParams,
   };
 }

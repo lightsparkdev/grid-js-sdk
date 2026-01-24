@@ -52,13 +52,11 @@ export {
   Quotes,
   type Currency,
   type OutgoingRateDetails,
-  type PaymentAccountOrWalletInfo,
   type PaymentInstructions,
   type Quote,
   type QuoteSource,
   type QuoteCreateParams,
   type QuoteListParams,
-  type QuoteRetryParams,
   type QuotesDefaultPagination,
 } from './quotes';
 export {
