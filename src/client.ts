@@ -69,6 +69,7 @@ import {
   Tokens,
 } from './resources/tokens';
 import {
+  AccountSource,
   IncomingTransaction,
   TransactionApproveParams,
   TransactionListParams,
@@ -76,6 +77,7 @@ import {
   TransactionStatus,
   TransactionType,
   Transactions,
+  UmaAddressSource,
 } from './resources/transactions';
 import { Transaction, TransferIn, TransferInCreateParams } from './resources/transfer-in';
 import { TransferOut, TransferOutCreateParams } from './resources/transfer-out';
@@ -1060,9 +1062,11 @@ export declare namespace Grid {
 
   export {
     Transactions as Transactions,
+    type AccountSource as AccountSource,
     type IncomingTransaction as IncomingTransaction,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
+    type UmaAddressSource as UmaAddressSource,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,

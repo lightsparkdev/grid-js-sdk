@@ -86,6 +86,26 @@ export class Transactions extends APIResource {
   }
 }
 
+/**
+ * Source account details
+ */
+export interface AccountSource {
+  /**
+   * Source account identifier
+   */
+  accountId: string;
+
+  /**
+   * Currency code for the source account
+   */
+  currency: string;
+
+  /**
+   * Source type identifier
+   */
+  sourceType: 'ACCOUNT';
+}
+
 export interface IncomingTransaction extends TransferInAPI.Transaction {
   /**
    * Amount received in the recipient's currency
@@ -118,7 +138,7 @@ export interface IncomingTransaction extends TransferInAPI.Transaction {
   /**
    * Source account details
    */
-  source?: IncomingTransaction.AccountSource | IncomingTransaction.UmaAddressSource;
+  source?: AccountSource | UmaAddressSource;
 }
 
 export namespace IncomingTransaction {
@@ -162,46 +182,6 @@ export namespace IncomingTransaction {
      */
     reference: string;
   }
-
-  /**
-   * Source account details
-   */
-  export interface AccountSource {
-    /**
-     * Source account identifier
-     */
-    accountId: string;
-
-    /**
-     * Currency code for the source account
-     */
-    currency: string;
-
-    /**
-     * Source type identifier
-     */
-    sourceType: 'ACCOUNT';
-  }
-
-  /**
-   * UMA address source details
-   */
-  export interface UmaAddressSource {
-    /**
-     * Source type identifier
-     */
-    sourceType: 'UMA_ADDRESS';
-
-    /**
-     * UMA address of the sender
-     */
-    umaAddress: string;
-
-    /**
-     * Currency code for the source
-     */
-    currency?: string;
-  }
 }
 
 /**
@@ -221,6 +201,26 @@ export type TransactionStatus =
  * Type of transaction (incoming payment or outgoing payment)
  */
 export type TransactionType = 'INCOMING' | 'OUTGOING';
+
+/**
+ * UMA address source details
+ */
+export interface UmaAddressSource {
+  /**
+   * Source type identifier
+   */
+  sourceType: 'UMA_ADDRESS';
+
+  /**
+   * UMA address of the sender
+   */
+  umaAddress: string;
+
+  /**
+   * Currency code for the source
+   */
+  currency?: string;
+}
 
 export interface TransactionListParams extends DefaultPaginationParams {
   /**
@@ -297,9 +297,11 @@ export interface TransactionRejectParams {
 
 export declare namespace Transactions {
   export {
+    type AccountSource as AccountSource,
     type IncomingTransaction as IncomingTransaction,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
+    type UmaAddressSource as UmaAddressSource,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,

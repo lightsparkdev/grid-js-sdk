@@ -208,9 +208,9 @@ export type ExternalAccountInfo =
   | ExternalAccountInfo.PixAccountExternalAccountInfo
   | ExternalAccountInfo.IbanAccountExternalAccountInfo
   | ExternalAccountInfo.UpiAccountExternalAccountInfo
-  | ExternalAccountInfo.NgnAccountExternalAccountInfo
+  | NgnAccountExternalAccountInfo
   | ExternalAccountInfo.SparkWalletExternalAccountInfo
-  | ExternalAccountInfo.LightningExternalAccountInfo
+  | LightningExternalAccountInfo
   | ExternalAccountInfo.SolanaWalletExternalAccountInfo
   | ExternalAccountInfo.TronWalletExternalAccountInfo
   | ExternalAccountInfo.PolygonWalletExternalAccountInfo
@@ -247,62 +247,8 @@ export namespace ExternalAccountInfo {
     beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
   }
 
-  export interface NgnAccountExternalAccountInfo {
-    /**
-     * Nigerian bank account number
-     */
-    accountNumber: string;
-
-    accountType: 'NGN_ACCOUNT';
-
-    /**
-     * Name of the bank
-     */
-    bankName: string;
-
-    beneficiary: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * Purpose of payment
-     */
-    purposeOfPayment:
-      | 'GIFT'
-      | 'SELF'
-      | 'GOODS_OR_SERVICES'
-      | 'EDUCATION'
-      | 'HEALTH_OR_MEDICAL'
-      | 'REAL_ESTATE_PURCHASE'
-      | 'LOAN_PAYMENT'
-      | 'TAX_PAYMENT'
-      | 'UTILITY_BILL'
-      | 'DONATION'
-      | 'TRAVEL'
-      | 'OTHER';
-  }
-
   export interface SparkWalletExternalAccountInfo extends ExternalAccountsAPI.SparkWalletInfo {
     accountType: 'SPARK_WALLET';
-  }
-
-  export interface LightningExternalAccountInfo {
-    accountType: 'LIGHTNING';
-
-    /**
-     * A bolt12 offer which can be reused as a payment destination
-     */
-    bolt12?: string;
-
-    /**
-     * 1-time use lightning bolt11 invoice payout destination
-     */
-    invoice?: string;
-
-    /**
-     * A lightning address which can be used as a payment destination. Note that for
-     * UMA addresses, no external account is needed. You can use the UMA address
-     * directly as a destination.
-     */
-    lightningAddress?: string;
   }
 
   export interface SolanaWalletExternalAccountInfo extends ExternalAccountsAPI.SolanaWalletInfo {
@@ -355,6 +301,60 @@ export interface IndividualBeneficiary {
   nationality: string;
 
   address?: CustomersAPI.Address;
+}
+
+export interface LightningExternalAccountInfo {
+  accountType: 'LIGHTNING';
+
+  /**
+   * A bolt12 offer which can be reused as a payment destination
+   */
+  bolt12?: string;
+
+  /**
+   * 1-time use lightning bolt11 invoice payout destination
+   */
+  invoice?: string;
+
+  /**
+   * A lightning address which can be used as a payment destination. Note that for
+   * UMA addresses, no external account is needed. You can use the UMA address
+   * directly as a destination.
+   */
+  lightningAddress?: string;
+}
+
+export interface NgnAccountExternalAccountInfo {
+  /**
+   * Nigerian bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'NGN_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  beneficiary: IndividualBeneficiary | BusinessBeneficiary;
+
+  /**
+   * Purpose of payment
+   */
+  purposeOfPayment:
+    | 'GIFT'
+    | 'SELF'
+    | 'GOODS_OR_SERVICES'
+    | 'EDUCATION'
+    | 'HEALTH_OR_MEDICAL'
+    | 'REAL_ESTATE_PURCHASE'
+    | 'LOAN_PAYMENT'
+    | 'TAX_PAYMENT'
+    | 'UTILITY_BILL'
+    | 'DONATION'
+    | 'TRAVEL'
+    | 'OTHER';
 }
 
 export interface PixAccountInfo {
@@ -505,6 +505,8 @@ export declare namespace ExternalAccounts {
     type ExternalAccountInfo as ExternalAccountInfo,
     type IbanAccountInfo as IbanAccountInfo,
     type IndividualBeneficiary as IndividualBeneficiary,
+    type LightningExternalAccountInfo as LightningExternalAccountInfo,
+    type NgnAccountExternalAccountInfo as NgnAccountExternalAccountInfo,
     type PixAccountInfo as PixAccountInfo,
     type PolygonWalletInfo as PolygonWalletInfo,
     type SolanaWalletInfo as SolanaWalletInfo,

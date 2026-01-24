@@ -81,9 +81,11 @@ export {
 } from './tokens';
 export {
   Transactions,
+  type AccountSource,
   type IncomingTransaction,
   type TransactionStatus,
   type TransactionType,
+  type UmaAddressSource,
   type TransactionListParams,
   type TransactionApproveParams,
   type TransactionRejectParams,

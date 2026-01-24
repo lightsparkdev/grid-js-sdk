@@ -54,18 +54,17 @@ export class Quotes extends APIResource {
    * ```ts
    * const quote = await client.quotes.create({
    *   destination: {
-   *     accountId:
-   *       'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+   *     accountId: 'a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
    *     currency: 'EUR',
+   *     destinationType: 'ACCOUNT',
    *   },
-   *   lockedCurrencyAmount: 10000,
+   *   lockedCurrencyAmount: 1000,
    *   lockedCurrencySide: 'SENDING',
    *   source: {
    *     accountId:
-   *       'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *       'InternalAccount:85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *     sourceType: 'ACCOUNT',
    *   },
-   *   description:
-   *     'Transfer between accounts, either internal or external.',
    * });
    * ```
    */
@@ -527,16 +526,16 @@ export namespace QuoteSource {
     currency: string;
 
     /**
+     * Source type identifier
+     */
+    sourceType: 'REALTIME_FUNDING';
+
+    /**
      * Source customer ID. If this transaction is being initiated on behalf of a
      * customer, this is required. If customerId is not provided, the quote will be
      * created on behalf of the platform itself.
      */
-    customerId: string;
-
-    /**
-     * Source type identifier
-     */
-    sourceType: 'REALTIME_FUNDING';
+    customerId?: string;
   }
 }
 
