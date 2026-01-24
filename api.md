@@ -147,7 +147,6 @@ Types:
 
 - <code><a href="./src/resources/quotes.ts">Currency</a></code>
 - <code><a href="./src/resources/quotes.ts">OutgoingRateDetails</a></code>
-- <code><a href="./src/resources/quotes.ts">PaymentAccountOrWalletInfo</a></code>
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteSource</a></code>
@@ -158,7 +157,6 @@ Methods:
 - <code title="get /quotes/{quoteId}">client.quotes.<a href="./src/resources/quotes.ts">retrieve</a>(quoteID) -> Quote</code>
 - <code title="get /quotes">client.quotes.<a href="./src/resources/quotes.ts">list</a>({ ...params }) -> QuotesDefaultPagination</code>
 - <code title="post /quotes/{quoteId}/execute">client.quotes.<a href="./src/resources/quotes.ts">execute</a>(quoteID) -> Quote</code>
-- <code title="post /quotes/{quoteId}/retry">client.quotes.<a href="./src/resources/quotes.ts">retry</a>(quoteID, { ...params }) -> Quote</code>
 
 # Transactions
 

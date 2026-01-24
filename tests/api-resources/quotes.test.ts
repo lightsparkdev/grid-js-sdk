@@ -105,26 +105,4 @@ describe('resource quotes', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
-
-  // Prism tests are disabled
-  test.skip('retry: only required params', async () => {
-    const responsePromise = client.quotes.retry('quoteId', {
-      lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
-    });
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
-  test.skip('retry: required and optional params', async () => {
-    const response = await client.quotes.retry('quoteId', {
-      lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
-      senderCustomerInfo: { FULL_NAME: 'bar', NATIONALITY: 'bar' },
-    });
-  });
 });

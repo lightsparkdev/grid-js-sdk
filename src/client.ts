@@ -41,12 +41,10 @@ import {
 import {
   Currency,
   OutgoingRateDetails,
-  PaymentAccountOrWalletInfo,
   PaymentInstructions,
   Quote,
   QuoteCreateParams,
   QuoteListParams,
-  QuoteRetryParams,
   QuoteSource,
   Quotes,
   QuotesDefaultPagination,
@@ -1050,14 +1048,12 @@ export declare namespace Grid {
     Quotes as Quotes,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
-    type PaymentAccountOrWalletInfo as PaymentAccountOrWalletInfo,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteSource as QuoteSource,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
-    type QuoteRetryParams as QuoteRetryParams,
   };
 
   export {
