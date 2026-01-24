@@ -52,6 +52,8 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">IbanAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">IndividualBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">LightningExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">NgnAccountExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PixAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PolygonWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">SolanaWalletInfo</a></code>
@@ -162,9 +164,11 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/transactions.ts">AccountSource</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
+- <code><a href="./src/resources/transactions.ts">UmaAddressSource</a></code>
 
 Methods:
 

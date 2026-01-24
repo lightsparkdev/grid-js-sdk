@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
+import * as TransactionsAPI from '../transactions';
 import * as TransferInAPI from '../transfer-in';
 import * as InternalAccountsAPI from './internal-accounts';
 import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
@@ -49,7 +50,7 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
   /**
    * Source account details
    */
-  source: SandboxSendFundsResponse.AccountSource | SandboxSendFundsResponse.UmaAddressSource;
+  source: TransactionsAPI.AccountSource | TransactionsAPI.UmaAddressSource;
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -100,46 +101,6 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
 }
 
 export namespace SandboxSendFundsResponse {
-  /**
-   * Source account details
-   */
-  export interface AccountSource {
-    /**
-     * Source account identifier
-     */
-    accountId: string;
-
-    /**
-     * Currency code for the source account
-     */
-    currency: string;
-
-    /**
-     * Source type identifier
-     */
-    sourceType: 'ACCOUNT';
-  }
-
-  /**
-   * UMA address source details
-   */
-  export interface UmaAddressSource {
-    /**
-     * Source type identifier
-     */
-    sourceType: 'UMA_ADDRESS';
-
-    /**
-     * UMA address of the sender
-     */
-    umaAddress: string;
-
-    /**
-     * Currency code for the source
-     */
-    currency?: string;
-  }
-
   /**
    * The refund if transaction was refunded.
    */

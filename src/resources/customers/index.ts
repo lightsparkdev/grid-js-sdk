@@ -39,6 +39,8 @@ export {
   type ExternalAccountInfo,
   type IbanAccountInfo,
   type IndividualBeneficiary,
+  type LightningExternalAccountInfo,
+  type NgnAccountExternalAccountInfo,
   type PixAccountInfo,
   type PolygonWalletInfo,
   type SolanaWalletInfo,
