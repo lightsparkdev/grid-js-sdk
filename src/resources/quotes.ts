@@ -200,7 +200,6 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentUsAccountInfo
     | PaymentInstructions.PaymentPixAccountInfo
     | PaymentInstructions.PaymentIbanAccountInfo
-    | PaymentInstructions.FboAccount
     | PaymentInstructions.PaymentUpiAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
@@ -285,21 +284,6 @@ export namespace PaymentInstructions {
      */
     reference: string;
 
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-  }
-
-  export interface FboAccount {
     accountType?:
       | 'CLABE'
       | 'US_ACCOUNT'
