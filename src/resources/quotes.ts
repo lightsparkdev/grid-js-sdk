@@ -198,10 +198,10 @@ export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.PaymentClabeAccountInfo
     | PaymentInstructions.PaymentUsAccountInfo
-    | ExternalAccountsAPI.PixAccountInfo
+    | PaymentInstructions.PaymentPixAccountInfo
     | PaymentInstructions.PaymentIbanAccountInfo
-    | PaymentInstructions.PaymentFboAccountInfo
-    | ExternalAccountsAPI.UpiAccountInfo
+    | PaymentInstructions.UnionMember4
+    | PaymentInstructions.PaymentUpiAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -221,32 +221,98 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo extends ExternalAccountsAPI.ClabeAccountInfo {
+  export interface PaymentClabeAccountInfo extends Omit<ExternalAccountsAPI.ClabeAccountInfo, 'accountType'> {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
   }
 
-  export interface PaymentUsAccountInfo extends ExternalAccountsAPI.UsAccountInfo {
+  export interface PaymentUsAccountInfo extends Omit<ExternalAccountsAPI.UsAccountInfo, 'accountType'> {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
   }
 
-  export interface PaymentIbanAccountInfo extends ExternalAccountsAPI.IbanAccountInfo {
+  export interface PaymentPixAccountInfo extends Omit<ExternalAccountsAPI.PixAccountInfo, 'accountType'> {
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+  }
+
+  export interface PaymentIbanAccountInfo extends Omit<ExternalAccountsAPI.IbanAccountInfo, 'accountType'> {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
   }
 
-  export interface PaymentFboAccountInfo {
-    accountType: 'FBO';
+  export interface UnionMember4 {
+    accountType:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET'
+      | 'FBO';
 
     /**
      * The HTTP method to use for confirming the payment
@@ -259,11 +325,39 @@ export namespace PaymentInstructions {
     paymentUrl: string;
   }
 
-  export interface PaymentSparkWalletInfo extends ExternalAccountsAPI.SparkWalletInfo {
+  export interface PaymentUpiAccountInfo extends Omit<ExternalAccountsAPI.UpiAccountInfo, 'accountType'> {
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+  }
+
+  export interface PaymentSparkWalletInfo extends Omit<ExternalAccountsAPI.SparkWalletInfo, 'accountType'> {
     /**
      * Type of asset
      */
     assetType: 'BTC' | 'USDB';
+
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
     /**
      * Invoice for the payment
@@ -280,28 +374,81 @@ export namespace PaymentInstructions {
     invoice: string;
   }
 
-  export interface PaymentSolanaWalletInfo extends ExternalAccountsAPI.SolanaWalletInfo {
+  export interface PaymentSolanaWalletInfo extends Omit<ExternalAccountsAPI.SolanaWalletInfo, 'accountType'> {
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     /**
      * Type of asset
      */
     assetType?: 'USDC' | 'USDT';
   }
 
-  export interface PaymentTronWalletInfo extends ExternalAccountsAPI.TronWalletInfo {
+  export interface PaymentTronWalletInfo extends Omit<ExternalAccountsAPI.TronWalletInfo, 'accountType'> {
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     /**
      * Type of asset
      */
     assetType?: 'USDT';
   }
 
-  export interface PaymentPolygonWalletInfo extends ExternalAccountsAPI.PolygonWalletInfo {
+  export interface PaymentPolygonWalletInfo
+    extends Omit<ExternalAccountsAPI.PolygonWalletInfo, 'accountType'> {
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     /**
      * Type of asset
      */
     assetType?: 'USDC';
   }
 
-  export interface PaymentBaseWalletInfo extends ExternalAccountsAPI.BaseWalletInfo {
+  export interface PaymentBaseWalletInfo extends Omit<ExternalAccountsAPI.BaseWalletInfo, 'accountType'> {
+    accountType?:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     /**
      * Type of asset
      */
