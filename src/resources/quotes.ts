@@ -200,7 +200,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentUsAccountInfo
     | PaymentInstructions.PaymentPixAccountInfo
     | PaymentInstructions.PaymentIbanAccountInfo
-    | PaymentInstructions.UnionMember4
+    | PaymentInstructions.FboAccount
     | PaymentInstructions.PaymentUpiAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
@@ -299,8 +299,8 @@ export namespace PaymentInstructions {
       | 'BASE_WALLET';
   }
 
-  export interface UnionMember4 {
-    accountType:
+  export interface FboAccount {
+    accountType?:
       | 'CLABE'
       | 'US_ACCOUNT'
       | 'PIX'
@@ -311,18 +311,7 @@ export namespace PaymentInstructions {
       | 'SOLANA_WALLET'
       | 'TRON_WALLET'
       | 'POLYGON_WALLET'
-      | 'BASE_WALLET'
-      | 'FBO';
-
-    /**
-     * The HTTP method to use for confirming the payment
-     */
-    paymentMethod: 'POST' | 'GET';
-
-    /**
-     * The URL to make a request to in order to confirm payment
-     */
-    paymentUrl: string;
+      | 'BASE_WALLET';
   }
 
   export interface PaymentUpiAccountInfo extends Omit<ExternalAccountsAPI.UpiAccountInfo, 'accountType'> {
