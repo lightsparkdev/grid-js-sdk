@@ -203,208 +203,68 @@ export interface ExternalAccountCreate {
 }
 
 export type ExternalAccountInfo =
-  | ExternalAccountInfo.UsAccount
-  | ExternalAccountInfo.ClabeAccount
-  | ExternalAccountInfo.PixAccount
-  | ExternalAccountInfo.IbanAccount
-  | ExternalAccountInfo.UpiAccount
-  | ExternalAccountInfo.NgnAccount
-  | ExternalAccountInfo.SparkWallet
-  | ExternalAccountInfo.Lightning
-  | ExternalAccountInfo.SolanaWallet
-  | ExternalAccountInfo.TronWallet
-  | ExternalAccountInfo.PolygonWallet
-  | ExternalAccountInfo.BaseWallet;
+  | ExternalAccountInfo.UsAccountExternalAccountInfo
+  | ExternalAccountInfo.ClabeAccountExternalAccountInfo
+  | ExternalAccountInfo.PixAccountExternalAccountInfo
+  | ExternalAccountInfo.IbanAccountExternalAccountInfo
+  | ExternalAccountInfo.UpiAccountExternalAccountInfo
+  | NgnAccountExternalAccountInfo
+  | ExternalAccountInfo.SparkWalletExternalAccountInfo
+  | LightningExternalAccountInfo
+  | ExternalAccountInfo.SolanaWalletExternalAccountInfo
+  | ExternalAccountInfo.TronWalletExternalAccountInfo
+  | ExternalAccountInfo.PolygonWalletExternalAccountInfo
+  | ExternalAccountInfo.BaseWalletExternalAccountInfo;
 
 export namespace ExternalAccountInfo {
-  export interface UsAccount extends Omit<ExternalAccountsAPI.UsAccountInfo, 'accountType'> {
-    accountType:
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface UsAccountExternalAccountInfo extends ExternalAccountsAPI.UsAccountInfo {
+    accountType: 'US_ACCOUNT';
 
     beneficiary: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
   }
 
-  export interface ClabeAccount extends Omit<ExternalAccountsAPI.ClabeAccountInfo, 'accountType'> {
-    accountType:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface ClabeAccountExternalAccountInfo extends ExternalAccountsAPI.ClabeAccountInfo {
+    accountType: 'CLABE';
 
     beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
   }
 
-  export interface PixAccount extends Omit<ExternalAccountsAPI.PixAccountInfo, 'accountType'> {
-    accountType:
-      | 'PIX'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface PixAccountExternalAccountInfo extends ExternalAccountsAPI.PixAccountInfo {
+    accountType: 'PIX';
 
     beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
   }
 
-  export interface IbanAccount extends Omit<ExternalAccountsAPI.IbanAccountInfo, 'accountType'> {
-    accountType:
-      | 'IBAN'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface IbanAccountExternalAccountInfo extends ExternalAccountsAPI.IbanAccountInfo {
+    accountType: 'IBAN';
 
     beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
   }
 
-  export interface UpiAccount extends Omit<ExternalAccountsAPI.UpiAccountInfo, 'accountType'> {
-    accountType:
-      | 'UPI'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface UpiAccountExternalAccountInfo extends ExternalAccountsAPI.UpiAccountInfo {
+    accountType: 'UPI';
 
     beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
   }
 
-  export interface NgnAccount extends Omit<ExternalAccountsAPI.NgnAccountExternalAccountInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface SparkWalletExternalAccountInfo extends ExternalAccountsAPI.SparkWalletInfo {
+    accountType: 'SPARK_WALLET';
   }
 
-  export interface SparkWallet extends Omit<ExternalAccountsAPI.SparkWalletInfo, 'accountType'> {
-    accountType:
-      | 'SPARK_WALLET'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface SolanaWalletExternalAccountInfo extends ExternalAccountsAPI.SolanaWalletInfo {
+    accountType: 'SOLANA_WALLET';
   }
 
-  export interface Lightning extends Omit<ExternalAccountsAPI.LightningExternalAccountInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface TronWalletExternalAccountInfo extends ExternalAccountsAPI.TronWalletInfo {
+    accountType: 'TRON_WALLET';
   }
 
-  export interface SolanaWallet extends Omit<ExternalAccountsAPI.SolanaWalletInfo, 'accountType'> {
-    accountType:
-      | 'SOLANA_WALLET'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+  export interface PolygonWalletExternalAccountInfo extends ExternalAccountsAPI.PolygonWalletInfo {
+    accountType: 'POLYGON_WALLET';
   }
 
-  export interface TronWallet extends Omit<ExternalAccountsAPI.TronWalletInfo, 'accountType'> {
-    accountType:
-      | 'TRON_WALLET'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-  }
-
-  export interface PolygonWallet extends Omit<ExternalAccountsAPI.PolygonWalletInfo, 'accountType'> {
-    accountType:
-      | 'POLYGON_WALLET'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'BASE_WALLET';
-  }
-
-  export interface BaseWallet extends Omit<ExternalAccountsAPI.BaseWalletInfo, 'accountType'> {
-    accountType:
-      | 'BASE_WALLET'
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET';
+  export interface BaseWalletExternalAccountInfo extends ExternalAccountsAPI.BaseWalletInfo {
+    accountType: 'BASE_WALLET';
   }
 }
 
