@@ -35,11 +35,11 @@ const quote = await client.quotes.create({
     destinationType: 'ACCOUNT',
     accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
   },
-  lockedCurrencyAmount: 10000,
+  lockedCurrencyAmount: 1000,
   lockedCurrencySide: 'SENDING',
   source: {
     sourceType: 'ACCOUNT',
-    accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+    accountId: 'InternalAccount:85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
   },
 });
 
