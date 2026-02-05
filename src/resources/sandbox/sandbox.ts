@@ -50,7 +50,7 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
   /**
    * Source account details
    */
-  source: TransactionsAPI.AccountSource | TransactionsAPI.UmaAddressSource;
+  source: TransactionsAPI.TransactionSourceOneOf;
 
   /**
    * Number of sending currency units per receiving currency unit.

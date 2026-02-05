@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as TransferInAPI from './transfer-in';
 import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 export class TransferOut extends APIResource {
@@ -25,27 +26,41 @@ export class TransferOut extends APIResource {
    * });
    * ```
    */
-  create(body: TransferOutCreateParams, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
-    return this._client.post('/transfer-out', { body, ...options });
+  create(params: TransferOutCreateParams, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/transfer-out', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
 export interface TransferOutCreateParams {
   /**
-   * Destination external account details
+   * Body param: Destination external account details
    */
   destination: TransferOutCreateParams.Destination;
 
   /**
-   * Source internal account details
+   * Body param: Source internal account details
    */
   source: TransferOutCreateParams.Source;
 
   /**
-   * Amount in the smallest unit of the currency (e.g., cents for USD/EUR, satoshis
-   * for BTC)
+   * Body param: Amount in the smallest unit of the currency (e.g., cents for
+   * USD/EUR, satoshis for BTC)
    */
   amount?: number;
+
+  /**
+   * Header param: A unique identifier for the request. If the same key is sent
+   * multiple times, the server will return the same response as the first request.
+   */
+  'Idempotency-Key'?: string;
 }
 
 export namespace TransferOutCreateParams {

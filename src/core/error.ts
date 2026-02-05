@@ -230,6 +230,10 @@ export class APIError<
       return new UmaAddressExists(status, error, message, headers);
     }
 
+    if (code === 'CUSTOMER_DELETED' && status === 410) {
+      return new CustomerDeleted(status, error, message, headers);
+    }
+
     if (code === 'UNSUPPORTED_UMA_VERSION' && status === 412) {
       return new UnsupportedUmaVersion(status, error, message, headers);
     }
@@ -2565,6 +2569,40 @@ export class UmaAddressExists extends ConflictError {
   details?: { [key: string]: unknown };
 
   constructor(status: 409, error: Object, message: string | undefined, headers: Headers) {
+    const data = error as Record<string, any>;
+    super(status, error, message, headers);
+
+    this.code = data?.['code'];
+    this.message = data?.['message'];
+    this.status = data?.['status'];
+    this.details = data?.['details'];
+  }
+}
+
+export class CustomerDeleted extends APIError {
+  /**
+   * | Error Code       | Description                           |
+   * | ---------------- | ------------------------------------- |
+   * | CUSTOMER_DELETED | Customer has been permanently deleted |
+   */
+  code: 'CUSTOMER_DELETED';
+
+  /**
+   * Error message
+   */
+  override message: string;
+
+  /**
+   * HTTP status code
+   */
+  override status: 410;
+
+  /**
+   * Additional error details
+   */
+  details?: { [key: string]: unknown };
+
+  constructor(status: 410, error: Object, message: string | undefined, headers: Headers) {
     const data = error as Record<string, any>;
     super(status, error, message, headers);
 

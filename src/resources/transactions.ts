@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as TransactionsAPI from './transactions';
 import * as InvitationsAPI from './invitations';
 import * as TransferInAPI from './transfer-in';
 import { TransactionsDefaultPagination } from './transfer-in';
@@ -86,24 +87,16 @@ export class Transactions extends APIResource {
   }
 }
 
-/**
- * Source account details
- */
-export interface AccountSource {
+export interface BaseTransactionSource {
   /**
-   * Source account identifier
+   * Type of transaction source
    */
-  accountId: string;
+  sourceType: 'ACCOUNT' | 'UMA_ADDRESS' | 'REALTIME_FUNDING';
 
   /**
-   * Currency code for the source account
+   * Currency code for the source
    */
-  currency: string;
-
-  /**
-   * Source type identifier
-   */
-  sourceType: 'ACCOUNT';
+  currency?: string;
 }
 
 export interface IncomingTransaction extends TransferInAPI.Transaction {
@@ -138,7 +131,7 @@ export interface IncomingTransaction extends TransferInAPI.Transaction {
   /**
    * Source account details
    */
-  source?: AccountSource | UmaAddressSource;
+  source?: TransactionSourceOneOf;
 }
 
 export namespace IncomingTransaction {
@@ -185,6 +178,41 @@ export namespace IncomingTransaction {
 }
 
 /**
+ * Source account details
+ */
+export type TransactionSourceOneOf =
+  | TransactionSourceOneOf.AccountTransactionSource
+  | TransactionSourceOneOf.UmaAddressTransactionSource;
+
+export namespace TransactionSourceOneOf {
+  /**
+   * Source account details
+   */
+  export interface AccountTransactionSource
+    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+    /**
+     * Source account identifier
+     */
+    accountId: string;
+
+    sourceType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address source details
+   */
+  export interface UmaAddressTransactionSource
+    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+    sourceType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the sender
+     */
+    umaAddress: string;
+  }
+}
+
+/**
  * Status of a payment transaction
  */
 export type TransactionStatus =
@@ -201,26 +229,6 @@ export type TransactionStatus =
  * Type of transaction (incoming payment or outgoing payment)
  */
 export type TransactionType = 'INCOMING' | 'OUTGOING';
-
-/**
- * UMA address source details
- */
-export interface UmaAddressSource {
-  /**
-   * Source type identifier
-   */
-  sourceType: 'UMA_ADDRESS';
-
-  /**
-   * UMA address of the sender
-   */
-  umaAddress: string;
-
-  /**
-   * Currency code for the source
-   */
-  currency?: string;
-}
 
 export interface TransactionListParams extends DefaultPaginationParams {
   /**
@@ -297,11 +305,11 @@ export interface TransactionRejectParams {
 
 export declare namespace Transactions {
   export {
-    type AccountSource as AccountSource,
+    type BaseTransactionSource as BaseTransactionSource,
     type IncomingTransaction as IncomingTransaction,
+    type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
-    type UmaAddressSource as UmaAddressSource,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
