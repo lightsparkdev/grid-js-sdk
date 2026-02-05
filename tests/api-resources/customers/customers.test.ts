@@ -12,7 +12,7 @@ describe('resource customers', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.customers.create({
-      CreateCustomerRequest: { customerType: 'INDIVIDUAL' },
+      CreateCustomerRequest: { customerType: 'INDIVIDUAL', platformCustomerId: '9f84e0c2a72c4fa' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -28,6 +28,8 @@ describe('resource customers', () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
         customerType: 'INDIVIDUAL',
+        platformCustomerId: '9f84e0c2a72c4fa',
+        umaAddress: '$john.doe@uma.domain.com',
         address: {
           country: 'US',
           line1: '123 Main Street',
@@ -39,8 +41,6 @@ describe('resource customers', () => {
         birthDate: '1990-01-15',
         fullName: 'John Michael Doe',
         nationality: 'US',
-        platformCustomerId: '9f84e0c2a72c4fa',
-        umaAddress: '$john.doe@uma.domain.com',
       },
     });
   });
@@ -76,19 +76,18 @@ describe('resource customers', () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
         customerType: 'INDIVIDUAL',
+        umaAddress: '$john.doe@uma.domain.com',
         address: {
           country: 'US',
-          line1: '123 Main Street',
-          postalCode: '94105',
+          line1: '456 Market St',
+          postalCode: '94103',
           city: 'San Francisco',
           line2: 'Apt 4B',
           state: 'CA',
         },
-        birthDate: '1990-01-15',
-        fullName: 'John Michael Doe',
+        birthDate: '1985-06-15',
+        fullName: 'John Smith',
         nationality: 'US',
-        platformCustomerId: '9f84e0c2a72c4fa',
-        umaAddress: '$john.doe@uma.domain.com',
       },
     });
   });

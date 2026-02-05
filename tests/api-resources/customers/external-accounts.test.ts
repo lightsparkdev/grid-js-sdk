@@ -13,9 +13,9 @@ describe('resource externalAccounts', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.customers.externalAccounts.create({
       accountInfo: {
+        accountType: 'US_ACCOUNT',
         accountCategory: 'CHECKING',
         accountNumber: '12345678901',
-        accountType: 'US_ACCOUNT',
         routingNumber: '123456789',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
@@ -39,16 +39,13 @@ describe('resource externalAccounts', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.externalAccounts.create({
       accountInfo: {
+        accountType: 'US_ACCOUNT',
         accountCategory: 'CHECKING',
         accountNumber: '12345678901',
-        accountType: 'US_ACCOUNT',
         routingNumber: '123456789',
         bankName: 'Chase Bank',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
-          fullName: 'John Doe',
-          nationality: 'US',
           address: {
             country: 'US',
             line1: '123 Main Street',
@@ -57,6 +54,9 @@ describe('resource externalAccounts', () => {
             line2: 'Apt 4B',
             state: 'CA',
           },
+          birthDate: '1990-01-15',
+          fullName: 'John Doe',
+          nationality: 'US',
         },
       },
       currency: 'USD',

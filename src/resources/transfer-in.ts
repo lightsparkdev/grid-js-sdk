@@ -1,9 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as TransferInAPI from './transfer-in';
 import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 export class TransferIn extends APIResource {
@@ -28,12 +30,32 @@ export class TransferIn extends APIResource {
    * });
    * ```
    */
-  create(body: TransferInCreateParams, options?: RequestOptions): APIPromise<Transaction> {
-    return this._client.post('/transfer-in', { body, ...options });
+  create(params: TransferInCreateParams, options?: RequestOptions): APIPromise<Transaction> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/transfer-in', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
 export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
+
+export interface BaseTransactionDestination {
+  /**
+   * Type of transaction destination
+   */
+  destinationType: 'ACCOUNT' | 'UMA_ADDRESS';
+
+  /**
+   * Currency code for the destination
+   */
+  currency?: string;
+}
 
 export interface Transaction {
   /**
@@ -49,7 +71,7 @@ export interface Transaction {
   /**
    * Destination account details
    */
-  destination: Transaction.AccountDestination | Transaction.UmaAddressDestination;
+  destination: Transaction.AccountTransactionDestination | Transaction.UmaAddressTransactionDestination;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -99,60 +121,52 @@ export namespace Transaction {
   /**
    * Destination account details
    */
-  export interface AccountDestination {
+  export interface AccountTransactionDestination
+    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
     /**
      * Destination account identifier
      */
     accountId: string;
 
-    /**
-     * Currency code for the destination account
-     */
-    currency: string;
-
-    /**
-     * Destination type identifier
-     */
     destinationType: 'ACCOUNT';
   }
 
   /**
    * UMA address destination details
    */
-  export interface UmaAddressDestination {
-    /**
-     * Destination type identifier
-     */
+  export interface UmaAddressTransactionDestination
+    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
     destinationType: 'UMA_ADDRESS';
 
     /**
      * UMA address of the recipient
      */
     umaAddress: string;
-
-    /**
-     * Currency code for the destination
-     */
-    currency?: string;
   }
 }
 
 export interface TransferInCreateParams {
   /**
-   * Destination internal account details
+   * Body param: Destination internal account details
    */
   destination: TransferInCreateParams.Destination;
 
   /**
-   * Source external account details
+   * Body param: Source external account details
    */
   source: TransferInCreateParams.Source;
 
   /**
-   * Amount in the smallest unit of the currency (e.g., cents for USD/EUR, satoshis
-   * for BTC)
+   * Body param: Amount in the smallest unit of the currency (e.g., cents for
+   * USD/EUR, satoshis for BTC)
    */
   amount?: number;
+
+  /**
+   * Header param: A unique identifier for the request. If the same key is sent
+   * multiple times, the server will return the same response as the first request.
+   */
+  'Idempotency-Key'?: string;
 }
 
 export namespace TransferInCreateParams {
@@ -178,5 +192,9 @@ export namespace TransferInCreateParams {
 }
 
 export declare namespace TransferIn {
-  export { type Transaction as Transaction, type TransferInCreateParams as TransferInCreateParams };
+  export {
+    type BaseTransactionDestination as BaseTransactionDestination,
+    type Transaction as Transaction,
+    type TransferInCreateParams as TransferInCreateParams,
+  };
 }

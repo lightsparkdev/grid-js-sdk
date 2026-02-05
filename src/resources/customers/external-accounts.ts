@@ -89,6 +89,38 @@ export class ExternalAccounts extends APIResource {
 
 export type ExternalAccountsDefaultPagination = DefaultPagination<ExternalAccount>;
 
+export interface BaseBeneficiary {
+  /**
+   * Whether the beneficiary is an individual or a business entity
+   */
+  beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
+
+  address?: CustomersAPI.Address;
+}
+
+export interface BaseExternalAccountInfo {
+  /**
+   * Type of external account or wallet
+   */
+  accountType:
+    | 'US_ACCOUNT'
+    | 'CLABE'
+    | 'PIX'
+    | 'IBAN'
+    | 'UPI'
+    | 'NGN_ACCOUNT'
+    | 'CAD_ACCOUNT'
+    | 'GBP_ACCOUNT'
+    | 'PHP_ACCOUNT'
+    | 'SGD_ACCOUNT'
+    | 'SPARK_WALLET'
+    | 'LIGHTNING'
+    | 'SOLANA_WALLET'
+    | 'TRON_WALLET'
+    | 'POLYGON_WALLET'
+    | 'BASE_WALLET';
+}
+
 export interface BaseWalletInfo {
   accountType: 'BASE_WALLET';
 
@@ -98,15 +130,15 @@ export interface BaseWalletInfo {
   address: string;
 }
 
-export interface BusinessBeneficiary {
+export type BeneficiaryOneOf = IndividualBeneficiary | BusinessBeneficiary;
+
+export interface BusinessBeneficiary extends Omit<BaseBeneficiary, 'beneficiaryType'> {
   beneficiaryType: 'BUSINESS';
 
   /**
    * Legal name of the business
    */
   legalName: string;
-
-  address?: CustomersAPI.Address;
 
   /**
    * Business registration number
@@ -134,7 +166,11 @@ export interface ExternalAccount {
    */
   id: string;
 
-  accountInfo: ExternalAccountInfo;
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
+  accountInfo: ExternalAccountInfoOneOf;
 
   /**
    * The ISO 4217 currency code
@@ -170,7 +206,11 @@ export interface ExternalAccount {
 }
 
 export interface ExternalAccountCreate {
-  accountInfo: ExternalAccountInfo;
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
+  accountInfo: ExternalAccountInfoOneOf;
 
   /**
    * The ISO 4217 currency code
@@ -202,70 +242,156 @@ export interface ExternalAccountCreate {
   platformAccountId?: string;
 }
 
-export type ExternalAccountInfo =
-  | ExternalAccountInfo.UsAccountExternalAccountInfo
-  | ExternalAccountInfo.ClabeAccountExternalAccountInfo
-  | ExternalAccountInfo.PixAccountExternalAccountInfo
-  | ExternalAccountInfo.IbanAccountExternalAccountInfo
-  | ExternalAccountInfo.UpiAccountExternalAccountInfo
+/**
+ * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+ * `lightningAddress` must be provided.
+ */
+export type ExternalAccountInfoOneOf =
+  | ExternalAccountInfoOneOf.UsAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.ClabeAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.PixAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.IbanAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.UpiAccountExternalAccountInfo
   | NgnAccountExternalAccountInfo
-  | ExternalAccountInfo.SparkWalletExternalAccountInfo
+  | ExternalAccountInfoOneOf.CadAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.GbpAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.PhpAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.SgdAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.SparkWalletExternalAccountInfo
   | LightningExternalAccountInfo
-  | ExternalAccountInfo.SolanaWalletExternalAccountInfo
-  | ExternalAccountInfo.TronWalletExternalAccountInfo
-  | ExternalAccountInfo.PolygonWalletExternalAccountInfo
-  | ExternalAccountInfo.BaseWalletExternalAccountInfo;
+  | ExternalAccountInfoOneOf.SolanaWalletExternalAccountInfo
+  | ExternalAccountInfoOneOf.TronWalletExternalAccountInfo
+  | ExternalAccountInfoOneOf.PolygonWalletExternalAccountInfo
+  | ExternalAccountInfoOneOf.BaseWalletExternalAccountInfo;
 
-export namespace ExternalAccountInfo {
-  export interface UsAccountExternalAccountInfo extends ExternalAccountsAPI.UsAccountInfo {
-    accountType: 'US_ACCOUNT';
-
-    beneficiary: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+export namespace ExternalAccountInfoOneOf {
+  export interface UsAccountExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.UsAccountInfo {
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface ClabeAccountExternalAccountInfo extends ExternalAccountsAPI.ClabeAccountInfo {
-    accountType: 'CLABE';
-
-    beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  export interface ClabeAccountExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.ClabeAccountInfo {
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface PixAccountExternalAccountInfo extends ExternalAccountsAPI.PixAccountInfo {
-    accountType: 'PIX';
-
-    beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  export interface PixAccountExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.PixAccountInfo {
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface IbanAccountExternalAccountInfo extends ExternalAccountsAPI.IbanAccountInfo {
-    accountType: 'IBAN';
-
-    beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  export interface IbanAccountExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.IbanAccountInfo {
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface UpiAccountExternalAccountInfo extends ExternalAccountsAPI.UpiAccountInfo {
-    accountType: 'UPI';
-
-    beneficiary?: ExternalAccountsAPI.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  export interface UpiAccountExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.UpiAccountInfo {
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface SparkWalletExternalAccountInfo extends ExternalAccountsAPI.SparkWalletInfo {
-    accountType: 'SPARK_WALLET';
+  export interface CadAccountExternalAccountInfo
+    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+    /**
+     * Bank account number (7-12 digits)
+     */
+    accountNumber: string;
+
+    accountType: 'CAD_ACCOUNT';
+
+    /**
+     * Canadian financial institution number (3 digits)
+     */
+    bankCode: string;
+
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * Transit number identifying the branch (5 digits)
+     */
+    branchCode: string;
   }
 
-  export interface SolanaWalletExternalAccountInfo extends ExternalAccountsAPI.SolanaWalletInfo {
-    accountType: 'SOLANA_WALLET';
+  export interface GbpAccountExternalAccountInfo
+    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+    /**
+     * UK bank account number (8 digits)
+     */
+    accountNumber: string;
+
+    accountType: 'GBP_ACCOUNT';
+
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * UK bank sort code (6 digits, may include hyphens)
+     */
+    sortCode: string;
   }
 
-  export interface TronWalletExternalAccountInfo extends ExternalAccountsAPI.TronWalletInfo {
-    accountType: 'TRON_WALLET';
+  export interface PhpAccountExternalAccountInfo
+    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+    /**
+     * Bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'PHP_ACCOUNT';
+
+    /**
+     * Name of the beneficiary's bank
+     */
+    bankName: string;
+
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface PolygonWalletExternalAccountInfo extends ExternalAccountsAPI.PolygonWalletInfo {
-    accountType: 'POLYGON_WALLET';
+  export interface SgdAccountExternalAccountInfo
+    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+    /**
+     * Bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'SGD_ACCOUNT';
+
+    /**
+     * Name of the beneficiary's bank
+     */
+    bankName: string;
+
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
-  export interface BaseWalletExternalAccountInfo extends ExternalAccountsAPI.BaseWalletInfo {
-    accountType: 'BASE_WALLET';
-  }
+  export interface SparkWalletExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.SparkWalletInfo {}
+
+  export interface SolanaWalletExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.SolanaWalletInfo {}
+
+  export interface TronWalletExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.TronWalletInfo {}
+
+  export interface PolygonWalletExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.PolygonWalletInfo {}
+
+  export interface BaseWalletExternalAccountInfo
+    extends ExternalAccountsAPI.BaseExternalAccountInfo,
+      ExternalAccountsAPI.BaseWalletInfo {}
 }
 
 export interface IbanAccountInfo {
@@ -282,7 +408,7 @@ export interface IbanAccountInfo {
   swiftBic: string;
 }
 
-export interface IndividualBeneficiary {
+export interface IndividualBeneficiary extends Omit<BaseBeneficiary, 'beneficiaryType'> {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
@@ -299,11 +425,13 @@ export interface IndividualBeneficiary {
    * Country code (ISO 3166-1 alpha-2)
    */
   nationality: string;
-
-  address?: CustomersAPI.Address;
 }
 
-export interface LightningExternalAccountInfo {
+/**
+ * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+ * `lightningAddress` must be provided.
+ */
+export interface LightningExternalAccountInfo extends Omit<BaseExternalAccountInfo, 'accountType'> {
   accountType: 'LIGHTNING';
 
   /**
@@ -324,7 +452,7 @@ export interface LightningExternalAccountInfo {
   lightningAddress?: string;
 }
 
-export interface NgnAccountExternalAccountInfo {
+export interface NgnAccountExternalAccountInfo extends Omit<BaseExternalAccountInfo, 'accountType'> {
   /**
    * Nigerian bank account number
    */
@@ -337,7 +465,7 @@ export interface NgnAccountExternalAccountInfo {
    */
   bankName: string;
 
-  beneficiary: IndividualBeneficiary | BusinessBeneficiary;
+  beneficiary: BeneficiaryOneOf;
 
   /**
    * Purpose of payment
@@ -446,7 +574,11 @@ export interface UsAccountInfo {
 }
 
 export interface ExternalAccountCreateParams {
-  accountInfo: ExternalAccountInfo;
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
+  accountInfo: ExternalAccountInfoOneOf;
 
   /**
    * The ISO 4217 currency code
@@ -497,12 +629,15 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
 
 export declare namespace ExternalAccounts {
   export {
+    type BaseBeneficiary as BaseBeneficiary,
+    type BaseExternalAccountInfo as BaseExternalAccountInfo,
     type BaseWalletInfo as BaseWalletInfo,
+    type BeneficiaryOneOf as BeneficiaryOneOf,
     type BusinessBeneficiary as BusinessBeneficiary,
     type ClabeAccountInfo as ClabeAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
-    type ExternalAccountInfo as ExternalAccountInfo,
+    type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
     type IbanAccountInfo as IbanAccountInfo,
     type IndividualBeneficiary as IndividualBeneficiary,
     type LightningExternalAccountInfo as LightningExternalAccountInfo,

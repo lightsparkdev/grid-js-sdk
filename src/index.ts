@@ -30,6 +30,7 @@ export {
   BadRequestError,
   InvalidReceiver,
   InvalidCurrency,
+  CustomerDeleted,
   GridSwitchError,
   CertChainInvalid,
   CertChainExpired,

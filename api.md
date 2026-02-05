@@ -17,25 +17,27 @@ Types:
 
 - <code><a href="./src/resources/customers/customers.ts">Address</a></code>
 - <code><a href="./src/resources/customers/customers.ts">BusinessCustomer</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerUpdate</a></code>
+- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerFields</a></code>
+- <code><a href="./src/resources/customers/customers.ts">BusinessInfo</a></code>
 - <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerCreate</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerType</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerUpdate</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomer</a></code>
-- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerUpdate</a></code>
+- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
 - <code><a href="./src/resources/customers/customers.ts">UltimateBeneficialOwner</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerCreateResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerRetrieveResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdateResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerDeleteResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerGetKYCLinkResponse</a></code>
 
 Methods:
 
-- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
+- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerOneOf</code>
 - <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerRetrieveResponse</code>
 - <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
-- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerListResponsesDefaultPagination</code>
+- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
 - <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerDeleteResponse</code>
 - <code title="get /customers/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">getKYCLink</a>({ ...params }) -> CustomerGetKYCLinkResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
@@ -44,12 +46,15 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/customers/external-accounts.ts">BaseBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BaseExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryOneOf</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BusinessBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ClabeAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">IbanAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">IndividualBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">LightningExternalAccountInfo</a></code>
@@ -115,6 +120,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/transfer-in.ts">BaseTransactionDestination</a></code>
 - <code><a href="./src/resources/transfer-in.ts">Transaction</a></code>
 
 Methods:
@@ -145,11 +151,15 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/quotes.ts">BaseDestination</a></code>
+- <code><a href="./src/resources/quotes.ts">BasePaymentAccountInfo</a></code>
+- <code><a href="./src/resources/quotes.ts">BaseQuoteSource</a></code>
 - <code><a href="./src/resources/quotes.ts">Currency</a></code>
 - <code><a href="./src/resources/quotes.ts">OutgoingRateDetails</a></code>
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
-- <code><a href="./src/resources/quotes.ts">QuoteSource</a></code>
+- <code><a href="./src/resources/quotes.ts">QuoteDestinationOneOf</a></code>
+- <code><a href="./src/resources/quotes.ts">QuoteSourceOneOf</a></code>
 
 Methods:
 
@@ -162,11 +172,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/transactions.ts">AccountSource</a></code>
+- <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
-- <code><a href="./src/resources/transactions.ts">UmaAddressSource</a></code>
 
 Methods:
 

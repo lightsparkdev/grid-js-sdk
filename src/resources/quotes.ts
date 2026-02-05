@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
@@ -53,17 +54,17 @@ export class Quotes extends APIResource {
    * ```ts
    * const quote = await client.quotes.create({
    *   destination: {
-   *     accountId: 'a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-   *     currency: 'EUR',
-   *     destinationType: 'ACCOUNT',
+   *     accountId:
+   *       'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
    *   },
-   *   lockedCurrencyAmount: 1000,
+   *   lockedCurrencyAmount: 10000,
    *   lockedCurrencySide: 'SENDING',
    *   source: {
    *     accountId:
-   *       'InternalAccount:85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
-   *     sourceType: 'ACCOUNT',
+   *       'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
    *   },
+   *   description:
+   *     'Transfer between accounts, either internal or external.',
    * });
    * ```
    */
@@ -128,6 +129,39 @@ export class Quotes extends APIResource {
 }
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
+
+export interface BaseDestination {
+  /**
+   * Type of payment destination
+   */
+  destinationType: 'ACCOUNT' | 'UMA_ADDRESS' | 'EXTERNAL_ACCOUNT_DETAILS';
+}
+
+export interface BasePaymentAccountInfo {
+  /**
+   * Type of payment account or wallet
+   */
+  accountType:
+    | 'CLABE'
+    | 'US_ACCOUNT'
+    | 'PIX'
+    | 'IBAN'
+    | 'UPI'
+    | 'NGN_ACCOUNT'
+    | 'SPARK_WALLET'
+    | 'LIGHTNING'
+    | 'SOLANA_WALLET'
+    | 'TRON_WALLET'
+    | 'POLYGON_WALLET'
+    | 'BASE_WALLET';
+}
+
+export interface BaseQuoteSource {
+  /**
+   * Type of quote funding source
+   */
+  sourceType: 'ACCOUNT' | 'REALTIME_FUNDING';
+}
 
 export interface Currency {
   /**
@@ -220,117 +254,51 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo extends Omit<ExternalAccountsAPI.ClabeAccountInfo, 'accountType'> {
+  export interface PaymentClabeAccountInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.ClabeAccountInfo {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
-
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
   }
 
-  export interface PaymentUsAccountInfo extends Omit<ExternalAccountsAPI.UsAccountInfo, 'accountType'> {
+  export interface PaymentUsAccountInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.UsAccountInfo {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
-
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
   }
 
-  export interface PaymentPixAccountInfo extends Omit<ExternalAccountsAPI.PixAccountInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-  }
+  export interface PaymentPixAccountInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.PixAccountInfo {}
 
-  export interface PaymentIbanAccountInfo extends Omit<ExternalAccountsAPI.IbanAccountInfo, 'accountType'> {
+  export interface PaymentIbanAccountInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.IbanAccountInfo {
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
-
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
   }
 
-  export interface PaymentUpiAccountInfo extends Omit<ExternalAccountsAPI.UpiAccountInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-  }
+  export interface PaymentUpiAccountInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.UpiAccountInfo {}
 
-  export interface PaymentSparkWalletInfo extends Omit<ExternalAccountsAPI.SparkWalletInfo, 'accountType'> {
+  export interface PaymentSparkWalletInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.SparkWalletInfo {
     /**
      * Type of asset
      */
     assetType: 'BTC' | 'USDB';
-
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
 
     /**
      * Invoice for the payment
@@ -338,49 +306,25 @@ export namespace PaymentInstructions {
     invoice?: string;
   }
 
-  export interface PaymentLightningInvoiceInfo {
-    accountType: 'LIGHTNING';
-
+  export interface PaymentLightningInvoiceInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * Invoice for the payment
      */
     invoice: string;
   }
 
-  export interface PaymentSolanaWalletInfo extends Omit<ExternalAccountsAPI.SolanaWalletInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-
+  export interface PaymentSolanaWalletInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.SolanaWalletInfo {
     /**
      * Type of asset
      */
     assetType?: 'USDC' | 'USDT';
   }
 
-  export interface PaymentTronWalletInfo extends Omit<ExternalAccountsAPI.TronWalletInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-
+  export interface PaymentTronWalletInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.TronWalletInfo {
     /**
      * Type of asset
      */
@@ -388,40 +332,17 @@ export namespace PaymentInstructions {
   }
 
   export interface PaymentPolygonWalletInfo
-    extends Omit<ExternalAccountsAPI.PolygonWalletInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.PolygonWalletInfo {
     /**
      * Type of asset
      */
     assetType?: 'USDC';
   }
 
-  export interface PaymentBaseWalletInfo extends Omit<ExternalAccountsAPI.BaseWalletInfo, 'accountType'> {
-    accountType?:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
-
+  export interface PaymentBaseWalletInfo
+    extends QuotesAPI.BasePaymentAccountInfo,
+      ExternalAccountsAPI.BaseWalletInfo {
     /**
      * Type of asset
      */
@@ -438,7 +359,7 @@ export interface Quote {
   /**
    * Destination account details
    */
-  destination: Quote.QuoteAccountDestination | Quote.QuoteUmaAddressDestination;
+  destination: QuoteDestinationOneOf;
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -474,7 +395,7 @@ export interface Quote {
   /**
    * Source account details
    */
-  source: QuoteSource;
+  source: QuoteSourceOneOf;
 
   /**
    * Current status of the quote
@@ -515,34 +436,31 @@ export interface Quote {
   rateDetails?: OutgoingRateDetails;
 }
 
-export namespace Quote {
+/**
+ * Destination account details
+ */
+export type QuoteDestinationOneOf =
+  | QuoteDestinationOneOf.AccountDestination
+  | QuoteDestinationOneOf.UmaAddressDestination
+  | QuoteDestinationOneOf.ExternalAccountDetailsDestination;
+
+export namespace QuoteDestinationOneOf {
   /**
    * Destination account details
    */
-  export interface QuoteAccountDestination {
+  export interface AccountDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
     /**
      * Destination account identifier
      */
     accountId: string;
 
-    /**
-     * Destination type identifier
-     */
     destinationType: 'ACCOUNT';
-
-    /**
-     * Currency code for the destination account
-     */
-    currency?: string;
   }
 
   /**
    * UMA address destination details
    */
-  export interface QuoteUmaAddressDestination {
-    /**
-     * Destination type identifier
-     */
+  export interface UmaAddressDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -557,31 +475,52 @@ export namespace Quote {
     counterpartyInformation?: { [key: string]: unknown };
 
     /**
-     * Currency code for the destination
+     * Currency code for the destination. See
+     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
+     * for the full list of supported fiat and crypto currencies.
      */
     currency?: string;
+  }
+
+  /**
+   * A convenient destination option which adds the external account and creates the
+   * quote in one step rather than first needing to call /external-accounts to add
+   * the account. Useful for one-off payments to some destination. See the external
+   * accounts endpoints for test values in sandbox mode.
+   */
+  export interface ExternalAccountDetailsDestination
+    extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
+    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
+
+    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
 }
 
 /**
  * Source account details
  */
-export type QuoteSource = QuoteSource.QuoteAccountSource | QuoteSource.QuoteRealtimeFundingSource;
+export type QuoteSourceOneOf =
+  | QuoteSourceOneOf.AccountQuoteSource
+  | QuoteSourceOneOf.RealtimeFundingQuoteSource;
 
-export namespace QuoteSource {
+export namespace QuoteSourceOneOf {
   /**
    * Source account details
    */
-  export interface QuoteAccountSource {
+  export interface AccountQuoteSource extends Omit<QuotesAPI.BaseQuoteSource, 'sourceType'> {
     /**
      * Source account identifier
      */
     accountId: string;
 
-    /**
-     * Source type identifier
-     */
     sourceType: 'ACCOUNT';
+
+    /**
+     * Required when funding from an FBO account to identify the customer on whose
+     * behalf the transaction is being initiated. Otherwise, will default to the
+     * customerId of the account owner.
+     */
+    customerId?: string;
   }
 
   /**
@@ -591,7 +530,7 @@ export namespace QuoteSource {
    * option is only valid for instant payment methods. Do not try to fund a quote
    * with a non-instant payment method (ACH, etc.).
    */
-  export interface QuoteRealtimeFundingSource {
+  export interface RealtimeFundingQuoteSource extends Omit<QuotesAPI.BaseQuoteSource, 'sourceType'> {
     /**
      * Currency code for the funding source. See
      * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
@@ -599,9 +538,6 @@ export namespace QuoteSource {
      */
     currency: string;
 
-    /**
-     * Source type identifier
-     */
     sourceType: 'REALTIME_FUNDING';
 
     /**
@@ -617,10 +553,7 @@ export interface QuoteCreateParams {
   /**
    * Destination account details
    */
-  destination:
-    | QuoteCreateParams.QuoteRequestAccountDestination
-    | QuoteCreateParams.QuoteRequestUmaAddressDestination
-    | QuoteCreateParams.QuoteRequestExternalAccountDetailsDestination;
+  destination: QuoteDestinationOneOf;
 
   /**
    * The amount to send/receive in the smallest unit of the locked currency (eg.
@@ -640,7 +573,7 @@ export interface QuoteCreateParams {
   /**
    * Source account details
    */
-  source: QuoteSource;
+  source: QuoteSourceOneOf;
 
   /**
    * Optional description/memo for the transfer
@@ -673,67 +606,6 @@ export interface QuoteCreateParams {
    * request any information, this field can be omitted.
    */
   senderCustomerInfo?: { [key: string]: unknown };
-}
-
-export namespace QuoteCreateParams {
-  /**
-   * Destination account details
-   */
-  export interface QuoteRequestAccountDestination {
-    /**
-     * Destination account identifier
-     */
-    accountId: string;
-
-    /**
-     * Currency code for the destination account. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency: string;
-
-    /**
-     * Destination type identifier
-     */
-    destinationType: 'ACCOUNT';
-  }
-
-  /**
-   * UMA address destination details
-   */
-  export interface QuoteRequestUmaAddressDestination {
-    /**
-     * Currency code for the destination. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency: string;
-
-    /**
-     * Destination type identifier
-     */
-    destinationType: 'UMA_ADDRESS';
-
-    /**
-     * UMA address of the recipient
-     */
-    umaAddress: string;
-  }
-
-  /**
-   * A convenient destination option which adds the external account and creates the
-   * quote in one step rather than first needing to call /external-accounts to add
-   * the account. Useful for one-off payments to some destination. See the external
-   * accounts endpoints for test values in sandbox mode.
-   */
-  export interface QuoteRequestExternalAccountDetailsDestination {
-    /**
-     * Destination type identifier
-     */
-    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
-
-    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
-  }
 }
 
 export interface QuoteListParams extends DefaultPaginationParams {
@@ -785,11 +657,15 @@ export interface QuoteListParams extends DefaultPaginationParams {
 
 export declare namespace Quotes {
   export {
+    type BaseDestination as BaseDestination,
+    type BasePaymentAccountInfo as BasePaymentAccountInfo,
+    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
-    type QuoteSource as QuoteSource,
+    type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,

@@ -30,6 +30,7 @@ describe('resource transferOut', () => {
       destination: { accountId: 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },
       source: { accountId: 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123' },
       amount: 12550,
+      'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',
     });
   });
 });

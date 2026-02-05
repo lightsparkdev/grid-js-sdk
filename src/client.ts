@@ -39,13 +39,17 @@ import {
   PlaidSubmitPublicTokenParams,
 } from './resources/plaid';
 import {
+  BaseDestination,
+  BasePaymentAccountInfo,
+  BaseQuoteSource,
   Currency,
   OutgoingRateDetails,
   PaymentInstructions,
   Quote,
   QuoteCreateParams,
+  QuoteDestinationOneOf,
   QuoteListParams,
-  QuoteSource,
+  QuoteSourceOneOf,
   Quotes,
   QuotesDefaultPagination,
 } from './resources/quotes';
@@ -67,17 +71,22 @@ import {
   Tokens,
 } from './resources/tokens';
 import {
-  AccountSource,
+  BaseTransactionSource,
   IncomingTransaction,
   TransactionApproveParams,
   TransactionListParams,
   TransactionRejectParams,
+  TransactionSourceOneOf,
   TransactionStatus,
   TransactionType,
   Transactions,
-  UmaAddressSource,
 } from './resources/transactions';
-import { Transaction, TransferIn, TransferInCreateParams } from './resources/transfer-in';
+import {
+  BaseTransactionDestination,
+  Transaction,
+  TransferIn,
+  TransferInCreateParams,
+} from './resources/transfer-in';
 import { TransferOut, TransferOutCreateParams } from './resources/transfer-out';
 import {
   UmaProviderListParams,
@@ -89,24 +98,26 @@ import { WebhookSendTestResponse, Webhooks } from './resources/webhooks';
 import {
   Address,
   BusinessCustomer,
-  BusinessCustomerUpdate,
+  BusinessCustomerFields,
+  BusinessInfo,
   Customer,
+  CustomerCreate,
   CustomerCreateParams,
-  CustomerCreateResponse,
   CustomerDeleteResponse,
   CustomerGetKYCLinkParams,
   CustomerGetKYCLinkResponse,
   CustomerListInternalAccountsParams,
   CustomerListParams,
-  CustomerListResponse,
-  CustomerListResponsesDefaultPagination,
+  CustomerOneOf,
+  CustomerOneovesDefaultPagination,
   CustomerRetrieveResponse,
   CustomerType,
+  CustomerUpdate,
   CustomerUpdateParams,
   CustomerUpdateResponse,
   Customers,
   IndividualCustomer,
-  IndividualCustomerUpdate,
+  IndividualCustomerFields,
   UltimateBeneficialOwner,
 } from './resources/customers/customers';
 import {
@@ -904,6 +915,7 @@ export class Grid {
   static BadRequestError = Errors.BadRequestError;
   static InvalidReceiver = Errors.InvalidReceiver;
   static InvalidCurrency = Errors.InvalidCurrency;
+  static CustomerDeleted = Errors.CustomerDeleted;
   static GridSwitchError = Errors.GridSwitchError;
   static CertChainInvalid = Errors.CertChainInvalid;
   static CertChainExpired = Errors.CertChainExpired;
@@ -1001,19 +1013,21 @@ export declare namespace Grid {
     Customers as Customers,
     type Address as Address,
     type BusinessCustomer as BusinessCustomer,
-    type BusinessCustomerUpdate as BusinessCustomerUpdate,
+    type BusinessCustomerFields as BusinessCustomerFields,
+    type BusinessInfo as BusinessInfo,
     type Customer as Customer,
+    type CustomerCreate as CustomerCreate,
+    type CustomerOneOf as CustomerOneOf,
     type CustomerType as CustomerType,
+    type CustomerUpdate as CustomerUpdate,
     type IndividualCustomer as IndividualCustomer,
-    type IndividualCustomerUpdate as IndividualCustomerUpdate,
+    type IndividualCustomerFields as IndividualCustomerFields,
     type UltimateBeneficialOwner as UltimateBeneficialOwner,
-    type CustomerCreateResponse as CustomerCreateResponse,
     type CustomerRetrieveResponse as CustomerRetrieveResponse,
     type CustomerUpdateResponse as CustomerUpdateResponse,
-    type CustomerListResponse as CustomerListResponse,
     type CustomerDeleteResponse as CustomerDeleteResponse,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
-    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
+    type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -1036,6 +1050,7 @@ export declare namespace Grid {
 
   export {
     TransferIn as TransferIn,
+    type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
     type TransferInCreateParams as TransferInCreateParams,
   };
@@ -1054,11 +1069,15 @@ export declare namespace Grid {
 
   export {
     Quotes as Quotes,
+    type BaseDestination as BaseDestination,
+    type BasePaymentAccountInfo as BasePaymentAccountInfo,
+    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
-    type QuoteSource as QuoteSource,
+    type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
@@ -1066,11 +1085,11 @@ export declare namespace Grid {
 
   export {
     Transactions as Transactions,
-    type AccountSource as AccountSource,
+    type BaseTransactionSource as BaseTransactionSource,
     type IncomingTransaction as IncomingTransaction,
+    type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
-    type UmaAddressSource as UmaAddressSource,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,

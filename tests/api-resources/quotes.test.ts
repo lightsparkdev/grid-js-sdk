@@ -13,13 +13,12 @@ describe('resource quotes', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.quotes.create({
       destination: {
-        accountId: 'a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-        currency: 'EUR',
         destinationType: 'ACCOUNT',
+        accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
       },
-      lockedCurrencyAmount: 1000,
+      lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
-      source: { accountId: 'InternalAccount:85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
+      source: { sourceType: 'ACCOUNT', accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -34,14 +33,17 @@ describe('resource quotes', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.quotes.create({
       destination: {
-        accountId: 'a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-        currency: 'EUR',
         destinationType: 'ACCOUNT',
+        accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
       },
-      lockedCurrencyAmount: 1000,
+      lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
-      source: { accountId: 'InternalAccount:85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
-      description: 'Invoice #1234 payment',
+      source: {
+        sourceType: 'ACCOUNT',
+        accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+        customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
+      },
+      description: 'Transfer between accounts, either internal or external.',
       immediatelyExecute: false,
       lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
       senderCustomerInfo: { FULL_NAME: 'bar', NATIONALITY: 'bar' },

@@ -88,7 +88,11 @@ export interface ExternalAccountListResponse {
 }
 
 export interface ExternalAccountCreateParams {
-  accountInfo: ExternalAccountsAPI.ExternalAccountInfo;
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
+  accountInfo: ExternalAccountsAPI.ExternalAccountInfoOneOf;
 
   /**
    * The ISO 4217 currency code
