@@ -341,7 +341,7 @@ export interface CustomerCreate {
    * route payments to the customer. This is an optional identifier to route payments
    * to the customer.
    */
-  umaAddress?: unknown;
+  umaAddress?: string;
 }
 
 export type CustomerOneOf = IndividualCustomer | BusinessCustomer;
