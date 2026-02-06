@@ -12,7 +12,7 @@ import { path } from '../internal/utils/path';
 
 export class Transactions extends APIResource {
   /**
-   * Retrieve detailed information about a specific transaction.
+   * Retrieve detailed information about a specific transaction
    *
    * @example
    * ```ts
@@ -195,7 +195,7 @@ export namespace TransactionSourceOneOf {
      */
     accountId: string;
 
-    sourceType: 'ACCOUNT';
+    sourceType?: 'ACCOUNT';
   }
 
   /**
@@ -203,12 +203,12 @@ export namespace TransactionSourceOneOf {
    */
   export interface UmaAddressTransactionSource
     extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
-    sourceType: 'UMA_ADDRESS';
-
     /**
      * UMA address of the sender
      */
     umaAddress: string;
+
+    sourceType?: 'UMA_ADDRESS';
   }
 }
 

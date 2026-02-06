@@ -46,26 +46,10 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/customers/external-accounts.ts">BaseBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">BaseExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryOneOf</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">BusinessBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ClabeAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">IbanAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">IndividualBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">LightningExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">NgnAccountExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">PixAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">PolygonWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">SolanaWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">SparkWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">TronWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">UpiAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">UsAccountInfo</a></code>
 
 Methods:
 
@@ -258,3 +242,13 @@ Methods:
 - <code title="get /tokens/{tokenId}">client.tokens.<a href="./src/resources/tokens.ts">retrieve</a>(tokenID) -> APIToken</code>
 - <code title="get /tokens">client.tokens.<a href="./src/resources/tokens.ts">list</a>({ ...params }) -> APITokensDefaultPagination</code>
 - <code title="delete /tokens/{tokenId}">client.tokens.<a href="./src/resources/tokens.ts">delete</a>(tokenID) -> void</code>
+
+# ExchangeRates
+
+Types:
+
+- <code><a href="./src/resources/exchange-rates.ts">ExchangeRateListResponse</a></code>
+
+Methods:
+
+- <code title="get /exchange-rates">client.exchangeRates.<a href="./src/resources/exchange-rates.ts">list</a>({ ...params }) -> ExchangeRateListResponse</code>

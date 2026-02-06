@@ -254,51 +254,111 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.ClabeAccountInfo {
+  export interface PaymentClabeAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * 18-digit CLABE number (Mexican banking standard)
+     */
+    clabeNumber: string;
+
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    accountType?: 'CLABE';
   }
 
-  export interface PaymentUsAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.UsAccountInfo {
+  export interface PaymentUsAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Type of account (checking or savings)
+     */
+    accountCategory: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * US bank account number
+     */
+    accountNumber: string;
+
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    /**
+     * ACH routing number (9 digits)
+     */
+    routingNumber: string;
+
+    accountType?: 'US_ACCOUNT';
+
+    /**
+     * Name of the bank
+     */
+    bankName?: string;
   }
 
-  export interface PaymentPixAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.PixAccountInfo {}
+  export interface PaymentPixAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * PIX key for Brazilian instant payments
+     */
+    pixKey: string;
 
-  export interface PaymentIbanAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.IbanAccountInfo {
+    /**
+     * Type of PIX key being used
+     */
+    pixKeyType: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
+
+    /**
+     * Tax ID of the account holder
+     */
+    taxId: string;
+
+    accountType?: 'PIX';
+  }
+
+  export interface PaymentIbanAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * International Bank Account Number
+     */
+    iban: string;
+
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftBic: string;
+
+    accountType?: 'IBAN';
   }
 
-  export interface PaymentUpiAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.UpiAccountInfo {}
+  export interface PaymentUpiAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Virtual Payment Address for UPI payments
+     */
+    vpa: string;
 
-  export interface PaymentSparkWalletInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.SparkWalletInfo {
+    accountType?: 'UPI';
+  }
+
+  export interface PaymentSparkWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Spark wallet address
+     */
+    address: string;
+
     /**
      * Type of asset
      */
     assetType: 'BTC' | 'USDB';
+
+    accountType?: 'SPARK_WALLET';
 
     /**
      * Invoice for the payment
@@ -313,36 +373,56 @@ export namespace PaymentInstructions {
     invoice: string;
   }
 
-  export interface PaymentSolanaWalletInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.SolanaWalletInfo {
+  export interface PaymentSolanaWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Solana wallet address
+     */
+    address: string;
+
+    accountType?: 'SOLANA_WALLET';
+
     /**
      * Type of asset
      */
     assetType?: 'USDC' | 'USDT';
   }
 
-  export interface PaymentTronWalletInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.TronWalletInfo {
+  export interface PaymentTronWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Tron wallet address
+     */
+    address: string;
+
+    accountType?: 'TRON_WALLET';
+
     /**
      * Type of asset
      */
     assetType?: 'USDT';
   }
 
-  export interface PaymentPolygonWalletInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.PolygonWalletInfo {
+  export interface PaymentPolygonWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Polygon eth wallet address
+     */
+    address: string;
+
+    accountType?: 'POLYGON_WALLET';
+
     /**
      * Type of asset
      */
     assetType?: 'USDC';
   }
 
-  export interface PaymentBaseWalletInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      ExternalAccountsAPI.BaseWalletInfo {
+  export interface PaymentBaseWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+    /**
+     * Base eth wallet address
+     */
+    address: string;
+
+    accountType?: 'BASE_WALLET';
+
     /**
      * Type of asset
      */
@@ -454,15 +534,13 @@ export namespace QuoteDestinationOneOf {
      */
     accountId: string;
 
-    destinationType: 'ACCOUNT';
+    destinationType?: 'ACCOUNT';
   }
 
   /**
    * UMA address destination details
    */
   export interface UmaAddressDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
-    destinationType: 'UMA_ADDRESS';
-
     /**
      * UMA address of the recipient
      */
@@ -480,6 +558,8 @@ export namespace QuoteDestinationOneOf {
      * for the full list of supported fiat and crypto currencies.
      */
     currency?: string;
+
+    destinationType?: 'UMA_ADDRESS';
   }
 
   /**
@@ -490,9 +570,9 @@ export namespace QuoteDestinationOneOf {
    */
   export interface ExternalAccountDetailsDestination
     extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
-    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
-
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
+
+    destinationType?: 'EXTERNAL_ACCOUNT_DETAILS';
   }
 }
 
@@ -513,14 +593,14 @@ export namespace QuoteSourceOneOf {
      */
     accountId: string;
 
-    sourceType: 'ACCOUNT';
-
     /**
      * Required when funding from an FBO account to identify the customer on whose
      * behalf the transaction is being initiated. Otherwise, will default to the
      * customerId of the account owner.
      */
     customerId?: string;
+
+    sourceType?: 'ACCOUNT';
   }
 
   /**
@@ -538,14 +618,14 @@ export namespace QuoteSourceOneOf {
      */
     currency: string;
 
-    sourceType: 'REALTIME_FUNDING';
-
     /**
      * Source customer ID. If this transaction is being initiated on behalf of a
      * customer, this is required. If customerId is not provided, the quote will be
      * created on behalf of the platform itself.
      */
     customerId?: string;
+
+    sourceType?: 'REALTIME_FUNDING';
   }
 }
 
