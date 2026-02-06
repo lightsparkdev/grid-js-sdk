@@ -11,6 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
+import * as qs from './internal/qs';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
@@ -25,6 +26,7 @@ import {
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
+import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
   CurrencyAmount,
   InvitationClaimParams,
@@ -377,24 +379,8 @@ export class Grid {
     return buildHeaders([{ 'X-Grid-Signature': this.webhookSignature }]);
   }
 
-  /**
-   * Basic re-implementation of `qs.stringify` for primitive types.
-   */
   protected stringifyQuery(query: Record<string, unknown>): string {
-    return Object.entries(query)
-      .filter(([_, value]) => typeof value !== 'undefined')
-      .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-          return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-          return `${encodeURIComponent(key)}=`;
-        }
-        throw new Errors.GridError(
-          `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
-        );
-      })
-      .join('&');
+    return qs.stringify(query, { arrayFormat: 'comma' });
   }
 
   private getUserAgent(): string {
@@ -979,6 +965,7 @@ export class Grid {
   sandbox: API.Sandbox = new API.Sandbox(this);
   umaProviders: API.UmaProviders = new API.UmaProviders(this);
   tokens: API.Tokens = new API.Tokens(this);
+  exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
 }
 
 Grid.Config = Config;
@@ -995,6 +982,7 @@ Grid.Invitations = Invitations;
 Grid.Sandbox = Sandbox;
 Grid.UmaProviders = UmaProviders;
 Grid.Tokens = Tokens;
+Grid.ExchangeRates = ExchangeRates;
 
 export declare namespace Grid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1129,5 +1117,11 @@ export declare namespace Grid {
     type APITokensDefaultPagination as APITokensDefaultPagination,
     type TokenCreateParams as TokenCreateParams,
     type TokenListParams as TokenListParams,
+  };
+
+  export {
+    ExchangeRates as ExchangeRates,
+    type ExchangeRateListResponse as ExchangeRateListResponse,
+    type ExchangeRateListParams as ExchangeRateListParams,
   };
 }

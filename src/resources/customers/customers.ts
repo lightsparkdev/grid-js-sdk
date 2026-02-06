@@ -6,12 +6,7 @@ import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
-  BaseBeneficiary,
-  BaseExternalAccountInfo,
-  BaseWalletInfo,
   BeneficiaryOneOf,
-  BusinessBeneficiary,
-  ClabeAccountInfo,
   ExternalAccount,
   ExternalAccountCreate,
   ExternalAccountCreateParams,
@@ -19,17 +14,6 @@ import {
   ExternalAccountListParams,
   ExternalAccounts,
   ExternalAccountsDefaultPagination,
-  IbanAccountInfo,
-  IndividualBeneficiary,
-  LightningExternalAccountInfo,
-  NgnAccountExternalAccountInfo,
-  PixAccountInfo,
-  PolygonWalletInfo,
-  SolanaWalletInfo,
-  SparkWalletInfo,
-  TronWalletInfo,
-  UpiAccountInfo,
-  UsAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { InternalAccountsDefaultPagination } from '../sandbox/internal-accounts';
@@ -218,8 +202,6 @@ export interface BusinessCustomer extends Customer, Omit<BusinessCustomerFields,
 }
 
 export interface BusinessCustomerFields {
-  customerType: 'BUSINESS';
-
   address?: Address;
 
   beneficialOwners?: Array<UltimateBeneficialOwner>;
@@ -228,6 +210,8 @@ export interface BusinessCustomerFields {
    * Additional information for business entities
    */
   businessInfo?: BusinessCustomerFields.BusinessInfo;
+
+  customerType?: 'BUSINESS';
 }
 
 export namespace BusinessCustomerFields {
@@ -367,14 +351,14 @@ export interface CustomerUpdate {
 export interface IndividualCustomer extends Customer, IndividualCustomerFields {}
 
 export interface IndividualCustomerFields {
-  customerType: 'INDIVIDUAL';
-
   address?: Address;
 
   /**
    * Date of birth in ISO 8601 format (YYYY-MM-DD)
    */
   birthDate?: string;
+
+  customerType?: 'INDIVIDUAL';
 
   /**
    * Individual's full name
@@ -612,26 +596,10 @@ export declare namespace Customers {
 
   export {
     ExternalAccounts as ExternalAccounts,
-    type BaseBeneficiary as BaseBeneficiary,
-    type BaseExternalAccountInfo as BaseExternalAccountInfo,
-    type BaseWalletInfo as BaseWalletInfo,
     type BeneficiaryOneOf as BeneficiaryOneOf,
-    type BusinessBeneficiary as BusinessBeneficiary,
-    type ClabeAccountInfo as ClabeAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
-    type IbanAccountInfo as IbanAccountInfo,
-    type IndividualBeneficiary as IndividualBeneficiary,
-    type LightningExternalAccountInfo as LightningExternalAccountInfo,
-    type NgnAccountExternalAccountInfo as NgnAccountExternalAccountInfo,
-    type PixAccountInfo as PixAccountInfo,
-    type PolygonWalletInfo as PolygonWalletInfo,
-    type SolanaWalletInfo as SolanaWalletInfo,
-    type SparkWalletInfo as SparkWalletInfo,
-    type TronWalletInfo as TronWalletInfo,
-    type UpiAccountInfo as UpiAccountInfo,
-    type UsAccountInfo as UsAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

@@ -22,7 +22,7 @@ export class Invitations extends APIResource {
   }
 
   /**
-   * Retrieve details about an UMA invitation by its invitation code.
+   * Get a specific UMA invitation by code.
    *
    * @example
    * ```ts

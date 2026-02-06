@@ -88,10 +88,6 @@ export interface ExternalAccountListResponse {
 }
 
 export interface ExternalAccountCreateParams {
-  /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
-   */
   accountInfo: ExternalAccountsAPI.ExternalAccountInfoOneOf;
 
   /**

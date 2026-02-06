@@ -89,75 +89,50 @@ export class ExternalAccounts extends APIResource {
 
 export type ExternalAccountsDefaultPagination = DefaultPagination<ExternalAccount>;
 
-export interface BaseBeneficiary {
-  /**
-   * Whether the beneficiary is an individual or a business entity
-   */
-  beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
+export type BeneficiaryOneOf = BeneficiaryOneOf.IndividualBeneficiary | BeneficiaryOneOf.BusinessBeneficiary;
 
-  address?: CustomersAPI.Address;
-}
+export namespace BeneficiaryOneOf {
+  export interface IndividualBeneficiary {
+    beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
 
-export interface BaseExternalAccountInfo {
-  /**
-   * Type of external account or wallet
-   */
-  accountType:
-    | 'US_ACCOUNT'
-    | 'CLABE'
-    | 'PIX'
-    | 'IBAN'
-    | 'UPI'
-    | 'NGN_ACCOUNT'
-    | 'CAD_ACCOUNT'
-    | 'GBP_ACCOUNT'
-    | 'PHP_ACCOUNT'
-    | 'SGD_ACCOUNT'
-    | 'SPARK_WALLET'
-    | 'LIGHTNING'
-    | 'SOLANA_WALLET'
-    | 'TRON_WALLET'
-    | 'POLYGON_WALLET'
-    | 'BASE_WALLET';
-}
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate: string;
 
-export interface BaseWalletInfo {
-  accountType: 'BASE_WALLET';
+    /**
+     * Individual's full name
+     */
+    fullName: string;
 
-  /**
-   * Base eth wallet address
-   */
-  address: string;
-}
+    /**
+     * Country code (ISO 3166-1 alpha-2)
+     */
+    nationality: string;
 
-export type BeneficiaryOneOf = IndividualBeneficiary | BusinessBeneficiary;
+    address?: CustomersAPI.Address;
+  }
 
-export interface BusinessBeneficiary extends Omit<BaseBeneficiary, 'beneficiaryType'> {
-  beneficiaryType: 'BUSINESS';
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS' | 'INDIVIDUAL';
 
-  /**
-   * Legal name of the business
-   */
-  legalName: string;
+    /**
+     * Legal name of the business
+     */
+    legalName: string;
 
-  /**
-   * Business registration number
-   */
-  registrationNumber?: string;
+    address?: CustomersAPI.Address;
 
-  /**
-   * Tax identification number
-   */
-  taxId?: string;
-}
+    /**
+     * Business registration number
+     */
+    registrationNumber?: string;
 
-export interface ClabeAccountInfo {
-  accountType: 'CLABE';
-
-  /**
-   * 18-digit CLABE number (Mexican banking standard)
-   */
-  clabeNumber: string;
+    /**
+     * Tax identification number
+     */
+    taxId?: string;
+  }
 }
 
 export interface ExternalAccount {
@@ -166,10 +141,6 @@ export interface ExternalAccount {
    */
   id: string;
 
-  /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
-   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**
@@ -206,10 +177,6 @@ export interface ExternalAccount {
 }
 
 export interface ExternalAccountCreate {
-  /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
-   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**
@@ -242,67 +209,262 @@ export interface ExternalAccountCreate {
   platformAccountId?: string;
 }
 
-/**
- * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
- * `lightningAddress` must be provided.
- */
 export type ExternalAccountInfoOneOf =
   | ExternalAccountInfoOneOf.UsAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.ClabeAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.PixAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.IbanAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.UpiAccountExternalAccountInfo
-  | NgnAccountExternalAccountInfo
+  | ExternalAccountInfoOneOf.NgnAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.CadAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.GbpAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.PhpAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.SgdAccountExternalAccountInfo
   | ExternalAccountInfoOneOf.SparkWalletExternalAccountInfo
-  | LightningExternalAccountInfo
+  | ExternalAccountInfoOneOf.LightningExternalAccountInfo
   | ExternalAccountInfoOneOf.SolanaWalletExternalAccountInfo
   | ExternalAccountInfoOneOf.TronWalletExternalAccountInfo
   | ExternalAccountInfoOneOf.PolygonWalletExternalAccountInfo
   | ExternalAccountInfoOneOf.BaseWalletExternalAccountInfo;
 
 export namespace ExternalAccountInfoOneOf {
-  export interface UsAccountExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.UsAccountInfo {
+  export interface UsAccountExternalAccountInfo {
+    /**
+     * Type of account (checking or savings)
+     */
+    accountCategory: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * US bank account number
+     */
+    accountNumber: string;
+
+    accountType:
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * ACH routing number (9 digits)
+     */
+    routingNumber: string;
+
+    /**
+     * Name of the bank
+     */
+    bankName?: string;
   }
 
-  export interface ClabeAccountExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.ClabeAccountInfo {
+  export interface ClabeAccountExternalAccountInfo {
+    accountType:
+      | 'CLABE'
+      | 'US_ACCOUNT'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * 18-digit CLABE number (Mexican banking standard)
+     */
+    clabeNumber: string;
   }
 
-  export interface PixAccountExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.PixAccountInfo {
+  export interface PixAccountExternalAccountInfo {
+    accountType:
+      | 'PIX'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * PIX key for Brazilian instant payments
+     */
+    pixKey: string;
+
+    /**
+     * Type of PIX key being used
+     */
+    pixKeyType: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
+
+    /**
+     * Tax ID of the account holder
+     */
+    taxId: string;
   }
 
-  export interface IbanAccountExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.IbanAccountInfo {
+  export interface IbanAccountExternalAccountInfo {
+    accountType:
+      | 'IBAN'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * International Bank Account Number
+     */
+    iban: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftBic: string;
   }
 
-  export interface UpiAccountExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.UpiAccountInfo {
+  export interface UpiAccountExternalAccountInfo {
+    accountType:
+      | 'UPI'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * Virtual Payment Address for UPI payments
+     */
+    vpa: string;
   }
 
-  export interface CadAccountExternalAccountInfo
-    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+  export interface NgnAccountExternalAccountInfo {
+    /**
+     * Nigerian bank account number
+     */
+    accountNumber: string;
+
+    accountType:
+      | 'NGN_ACCOUNT'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
+
+    /**
+     * Name of the bank
+     */
+    bankName: string;
+
+    beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
+
+    /**
+     * Purpose of payment
+     */
+    purposeOfPayment:
+      | 'GIFT'
+      | 'SELF'
+      | 'GOODS_OR_SERVICES'
+      | 'EDUCATION'
+      | 'HEALTH_OR_MEDICAL'
+      | 'REAL_ESTATE_PURCHASE'
+      | 'LOAN_PAYMENT'
+      | 'TAX_PAYMENT'
+      | 'UTILITY_BILL'
+      | 'DONATION'
+      | 'TRAVEL'
+      | 'OTHER';
+  }
+
+  export interface CadAccountExternalAccountInfo {
     /**
      * Bank account number (7-12 digits)
      */
     accountNumber: string;
 
-    accountType: 'CAD_ACCOUNT';
+    accountType:
+      | 'CAD_ACCOUNT'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
     /**
      * Canadian financial institution number (3 digits)
@@ -317,14 +479,29 @@ export namespace ExternalAccountInfoOneOf {
     branchCode: string;
   }
 
-  export interface GbpAccountExternalAccountInfo
-    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+  export interface GbpAccountExternalAccountInfo {
     /**
      * UK bank account number (8 digits)
      */
     accountNumber: string;
 
-    accountType: 'GBP_ACCOUNT';
+    accountType:
+      | 'GBP_ACCOUNT'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -334,14 +511,29 @@ export namespace ExternalAccountInfoOneOf {
     sortCode: string;
   }
 
-  export interface PhpAccountExternalAccountInfo
-    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+  export interface PhpAccountExternalAccountInfo {
     /**
      * Bank account number
      */
     accountNumber: string;
 
-    accountType: 'PHP_ACCOUNT';
+    accountType:
+      | 'PHP_ACCOUNT'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
     /**
      * Name of the beneficiary's bank
@@ -351,14 +543,29 @@ export namespace ExternalAccountInfoOneOf {
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
   }
 
-  export interface SgdAccountExternalAccountInfo
-    extends Omit<ExternalAccountsAPI.BaseExternalAccountInfo, 'accountType'> {
+  export interface SgdAccountExternalAccountInfo {
     /**
      * Bank account number
      */
     accountNumber: string;
 
-    accountType: 'SGD_ACCOUNT';
+    accountType:
+      | 'SGD_ACCOUNT'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
     /**
      * Name of the beneficiary's bank
@@ -373,211 +580,170 @@ export namespace ExternalAccountInfoOneOf {
     swiftCode: string;
   }
 
-  export interface SparkWalletExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.SparkWalletInfo {}
+  export interface SparkWalletExternalAccountInfo {
+    accountType:
+      | 'SPARK_WALLET'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
-  export interface SolanaWalletExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.SolanaWalletInfo {}
+    /**
+     * Spark wallet address
+     */
+    address: string;
+  }
 
-  export interface TronWalletExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.TronWalletInfo {}
+  export interface LightningExternalAccountInfo {
+    accountType:
+      | 'LIGHTNING'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
-  export interface PolygonWalletExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.PolygonWalletInfo {}
+    /**
+     * A bolt12 offer which can be reused as a payment destination
+     */
+    bolt12?: string;
 
-  export interface BaseWalletExternalAccountInfo
-    extends ExternalAccountsAPI.BaseExternalAccountInfo,
-      ExternalAccountsAPI.BaseWalletInfo {}
-}
+    /**
+     * 1-time use lightning bolt11 invoice payout destination
+     */
+    invoice?: string;
 
-export interface IbanAccountInfo {
-  accountType: 'IBAN';
+    /**
+     * A lightning address which can be used as a payment destination. Note that for
+     * UMA addresses, no external account is needed. You can use the UMA address
+     * directly as a destination.
+     */
+    lightningAddress?: string;
+  }
 
-  /**
-   * International Bank Account Number
-   */
-  iban: string;
+  export interface SolanaWalletExternalAccountInfo {
+    accountType:
+      | 'SOLANA_WALLET'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftBic: string;
-}
+    /**
+     * Solana wallet address
+     */
+    address: string;
+  }
 
-export interface IndividualBeneficiary extends Omit<BaseBeneficiary, 'beneficiaryType'> {
-  beneficiaryType: 'INDIVIDUAL';
+  export interface TronWalletExternalAccountInfo {
+    accountType:
+      | 'TRON_WALLET'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'POLYGON_WALLET'
+      | 'BASE_WALLET';
 
-  /**
-   * Date of birth in ISO 8601 format (YYYY-MM-DD)
-   */
-  birthDate: string;
+    /**
+     * Tron wallet address
+     */
+    address: string;
+  }
 
-  /**
-   * Individual's full name
-   */
-  fullName: string;
+  export interface PolygonWalletExternalAccountInfo {
+    accountType:
+      | 'POLYGON_WALLET'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'BASE_WALLET';
 
-  /**
-   * Country code (ISO 3166-1 alpha-2)
-   */
-  nationality: string;
-}
+    /**
+     * Polygon eth wallet address
+     */
+    address: string;
+  }
 
-/**
- * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
- * `lightningAddress` must be provided.
- */
-export interface LightningExternalAccountInfo extends Omit<BaseExternalAccountInfo, 'accountType'> {
-  accountType: 'LIGHTNING';
+  export interface BaseWalletExternalAccountInfo {
+    accountType:
+      | 'BASE_WALLET'
+      | 'US_ACCOUNT'
+      | 'CLABE'
+      | 'PIX'
+      | 'IBAN'
+      | 'UPI'
+      | 'NGN_ACCOUNT'
+      | 'CAD_ACCOUNT'
+      | 'GBP_ACCOUNT'
+      | 'PHP_ACCOUNT'
+      | 'SGD_ACCOUNT'
+      | 'SPARK_WALLET'
+      | 'LIGHTNING'
+      | 'SOLANA_WALLET'
+      | 'TRON_WALLET'
+      | 'POLYGON_WALLET';
 
-  /**
-   * A bolt12 offer which can be reused as a payment destination
-   */
-  bolt12?: string;
-
-  /**
-   * 1-time use lightning bolt11 invoice payout destination
-   */
-  invoice?: string;
-
-  /**
-   * A lightning address which can be used as a payment destination. Note that for
-   * UMA addresses, no external account is needed. You can use the UMA address
-   * directly as a destination.
-   */
-  lightningAddress?: string;
-}
-
-export interface NgnAccountExternalAccountInfo extends Omit<BaseExternalAccountInfo, 'accountType'> {
-  /**
-   * Nigerian bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'NGN_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
-  beneficiary: BeneficiaryOneOf;
-
-  /**
-   * Purpose of payment
-   */
-  purposeOfPayment:
-    | 'GIFT'
-    | 'SELF'
-    | 'GOODS_OR_SERVICES'
-    | 'EDUCATION'
-    | 'HEALTH_OR_MEDICAL'
-    | 'REAL_ESTATE_PURCHASE'
-    | 'LOAN_PAYMENT'
-    | 'TAX_PAYMENT'
-    | 'UTILITY_BILL'
-    | 'DONATION'
-    | 'TRAVEL'
-    | 'OTHER';
-}
-
-export interface PixAccountInfo {
-  accountType: 'PIX';
-
-  /**
-   * PIX key for Brazilian instant payments
-   */
-  pixKey: string;
-
-  /**
-   * Type of PIX key being used
-   */
-  pixKeyType: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
-
-  /**
-   * Tax ID of the account holder
-   */
-  taxId: string;
-}
-
-export interface PolygonWalletInfo {
-  accountType: 'POLYGON_WALLET';
-
-  /**
-   * Polygon eth wallet address
-   */
-  address: string;
-}
-
-export interface SolanaWalletInfo {
-  accountType: 'SOLANA_WALLET';
-
-  /**
-   * Solana wallet address
-   */
-  address: string;
-}
-
-export interface SparkWalletInfo {
-  accountType: 'SPARK_WALLET';
-
-  /**
-   * Spark wallet address
-   */
-  address: string;
-}
-
-export interface TronWalletInfo {
-  accountType: 'TRON_WALLET';
-
-  /**
-   * Tron wallet address
-   */
-  address: string;
-}
-
-export interface UpiAccountInfo {
-  accountType: 'UPI';
-
-  /**
-   * Virtual Payment Address for UPI payments
-   */
-  vpa: string;
-}
-
-export interface UsAccountInfo {
-  /**
-   * Type of account (checking or savings)
-   */
-  accountCategory: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * US bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'US_ACCOUNT';
-
-  /**
-   * ACH routing number (9 digits)
-   */
-  routingNumber: string;
-
-  /**
-   * Name of the bank
-   */
-  bankName?: string;
+    /**
+     * Base eth wallet address
+     */
+    address: string;
+  }
 }
 
 export interface ExternalAccountCreateParams {
-  /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
-   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**
@@ -629,26 +795,10 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
 
 export declare namespace ExternalAccounts {
   export {
-    type BaseBeneficiary as BaseBeneficiary,
-    type BaseExternalAccountInfo as BaseExternalAccountInfo,
-    type BaseWalletInfo as BaseWalletInfo,
     type BeneficiaryOneOf as BeneficiaryOneOf,
-    type BusinessBeneficiary as BusinessBeneficiary,
-    type ClabeAccountInfo as ClabeAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
-    type IbanAccountInfo as IbanAccountInfo,
-    type IndividualBeneficiary as IndividualBeneficiary,
-    type LightningExternalAccountInfo as LightningExternalAccountInfo,
-    type NgnAccountExternalAccountInfo as NgnAccountExternalAccountInfo,
-    type PixAccountInfo as PixAccountInfo,
-    type PolygonWalletInfo as PolygonWalletInfo,
-    type SolanaWalletInfo as SolanaWalletInfo,
-    type SparkWalletInfo as SparkWalletInfo,
-    type TronWalletInfo as TronWalletInfo,
-    type UpiAccountInfo as UpiAccountInfo,
-    type UsAccountInfo as UsAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

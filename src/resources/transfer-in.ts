@@ -128,7 +128,7 @@ export namespace Transaction {
      */
     accountId: string;
 
-    destinationType: 'ACCOUNT';
+    destinationType?: 'ACCOUNT';
   }
 
   /**
@@ -136,12 +136,12 @@ export namespace Transaction {
    */
   export interface UmaAddressTransactionDestination
     extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
-    destinationType: 'UMA_ADDRESS';
-
     /**
      * UMA address of the recipient
      */
     umaAddress: string;
+
+    destinationType?: 'UMA_ADDRESS';
   }
 }
 

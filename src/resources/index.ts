@@ -32,6 +32,7 @@ export {
   type CustomerListInternalAccountsParams,
   type CustomerOneovesDefaultPagination,
 } from './customers/customers';
+export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
 export {
   Invitations,
   type CurrencyAmount,
