@@ -7,11 +7,9 @@ import { RequestOptions } from '../internal/request-options';
 
 export class UmaProviders extends APIResource {
   /**
-   * This endpoint provides a list of Counterparty Providers that are available.
-   *
-   * The response includes basic information about each provider, such as its UMA
-   * address, name, and supported currencies. This can be used to determine which
-   * providers are available for sending or receiving payments.
+   * Retrieve a list of available Counterparty Providers. The response includes basic
+   * information about each provider, such as its UMA address, name, and supported
+   * currencies.
    */
   list(
     query: UmaProviderListParams | null | undefined = {},
