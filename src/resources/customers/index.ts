@@ -8,18 +8,10 @@ export {
 } from './bulk';
 export {
   Customers,
-  type Address,
-  type BusinessCustomer,
-  type BusinessCustomerFields,
-  type BusinessInfo,
   type Customer,
   type CustomerCreate,
   type CustomerOneOf,
-  type CustomerType,
   type CustomerUpdate,
-  type IndividualCustomer,
-  type IndividualCustomerFields,
-  type UltimateBeneficialOwner,
   type CustomerRetrieveResponse,
   type CustomerUpdateResponse,
   type CustomerDeleteResponse,

@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../core/resource';
 import * as ExternalAccountsAPI from './external-accounts';
-import * as CustomersAPI from './customers';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -93,7 +92,7 @@ export type BeneficiaryOneOf = BeneficiaryOneOf.IndividualBeneficiary | Benefici
 
 export namespace BeneficiaryOneOf {
   export interface IndividualBeneficiary {
-    beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
+    beneficiaryType: 'INDIVIDUAL';
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -110,18 +109,52 @@ export namespace BeneficiaryOneOf {
      */
     nationality: string;
 
-    address?: CustomersAPI.Address;
+    address?: IndividualBeneficiary.Address;
+  }
+
+  export namespace IndividualBeneficiary {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
   }
 
   export interface BusinessBeneficiary {
-    beneficiaryType: 'BUSINESS' | 'INDIVIDUAL';
+    beneficiaryType: 'BUSINESS';
 
     /**
      * Legal name of the business
      */
     legalName: string;
 
-    address?: CustomersAPI.Address;
+    address?: BusinessBeneficiary.Address;
 
     /**
      * Business registration number
@@ -132,6 +165,40 @@ export namespace BeneficiaryOneOf {
      * Tax identification number
      */
     taxId?: string;
+  }
+
+  export namespace BusinessBeneficiary {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
   }
 }
 
@@ -239,23 +306,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     accountNumber: string;
 
-    accountType:
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'US_ACCOUNT';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -271,23 +322,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface ClabeAccountExternalAccountInfo {
-    accountType:
-      | 'CLABE'
-      | 'US_ACCOUNT'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'CLABE';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -298,23 +333,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface PixAccountExternalAccountInfo {
-    accountType:
-      | 'PIX'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'PIX';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -335,23 +354,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface IbanAccountExternalAccountInfo {
-    accountType:
-      | 'IBAN'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'IBAN';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -367,23 +370,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface UpiAccountExternalAccountInfo {
-    accountType:
-      | 'UPI'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'UPI';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -399,23 +386,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     accountNumber: string;
 
-    accountType:
-      | 'NGN_ACCOUNT'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'NGN_ACCOUNT';
 
     /**
      * Name of the bank
@@ -448,23 +419,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     accountNumber: string;
 
-    accountType:
-      | 'CAD_ACCOUNT'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'CAD_ACCOUNT';
 
     /**
      * Canadian financial institution number (3 digits)
@@ -485,23 +440,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     accountNumber: string;
 
-    accountType:
-      | 'GBP_ACCOUNT'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'GBP_ACCOUNT';
 
     beneficiary: ExternalAccountsAPI.BeneficiaryOneOf;
 
@@ -517,23 +456,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     accountNumber: string;
 
-    accountType:
-      | 'PHP_ACCOUNT'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'PHP_ACCOUNT';
 
     /**
      * Name of the beneficiary's bank
@@ -549,23 +472,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     accountNumber: string;
 
-    accountType:
-      | 'SGD_ACCOUNT'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'SGD_ACCOUNT';
 
     /**
      * Name of the beneficiary's bank
@@ -581,23 +488,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface SparkWalletExternalAccountInfo {
-    accountType:
-      | 'SPARK_WALLET'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'SPARK_WALLET';
 
     /**
      * Spark wallet address
@@ -606,23 +497,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface LightningExternalAccountInfo {
-    accountType:
-      | 'LIGHTNING'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'LIGHTNING';
 
     /**
      * A bolt12 offer which can be reused as a payment destination
@@ -643,23 +518,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface SolanaWalletExternalAccountInfo {
-    accountType:
-      | 'SOLANA_WALLET'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'SOLANA_WALLET';
 
     /**
      * Solana wallet address
@@ -668,23 +527,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface TronWalletExternalAccountInfo {
-    accountType:
-      | 'TRON_WALLET'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'POLYGON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'TRON_WALLET';
 
     /**
      * Tron wallet address
@@ -693,23 +536,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface PolygonWalletExternalAccountInfo {
-    accountType:
-      | 'POLYGON_WALLET'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'BASE_WALLET';
+    accountType: 'POLYGON_WALLET';
 
     /**
      * Polygon eth wallet address
@@ -718,23 +545,7 @@ export namespace ExternalAccountInfoOneOf {
   }
 
   export interface BaseWalletExternalAccountInfo {
-    accountType:
-      | 'BASE_WALLET'
-      | 'US_ACCOUNT'
-      | 'CLABE'
-      | 'PIX'
-      | 'IBAN'
-      | 'UPI'
-      | 'NGN_ACCOUNT'
-      | 'CAD_ACCOUNT'
-      | 'GBP_ACCOUNT'
-      | 'PHP_ACCOUNT'
-      | 'SGD_ACCOUNT'
-      | 'SPARK_WALLET'
-      | 'LIGHTNING'
-      | 'SOLANA_WALLET'
-      | 'TRON_WALLET'
-      | 'POLYGON_WALLET';
+    accountType: 'BASE_WALLET';
 
     /**
      * Base eth wallet address

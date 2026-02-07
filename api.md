@@ -15,18 +15,10 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/customers/customers.ts">Address</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessCustomer</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerFields</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessInfo</a></code>
 - <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerCreate</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdate</a></code>
-- <code><a href="./src/resources/customers/customers.ts">IndividualCustomer</a></code>
-- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
-- <code><a href="./src/resources/customers/customers.ts">UltimateBeneficialOwner</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerRetrieveResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdateResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerDeleteResponse</a></code>

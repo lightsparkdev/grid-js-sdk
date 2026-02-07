@@ -13,12 +13,12 @@ describe('resource quotes', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.quotes.create({
       destination: {
-        destinationType: 'ACCOUNT',
         accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+        destinationType: 'ACCOUNT',
       },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
-      source: { sourceType: 'ACCOUNT', accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },
+      source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -33,14 +33,14 @@ describe('resource quotes', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.quotes.create({
       destination: {
-        destinationType: 'ACCOUNT',
         accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+        destinationType: 'ACCOUNT',
       },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
       source: {
-        sourceType: 'ACCOUNT',
         accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+        sourceType: 'ACCOUNT',
         customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       },
       description: 'Transfer between accounts, either internal or external.',

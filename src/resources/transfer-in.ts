@@ -47,11 +47,6 @@ export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
 
 export interface BaseTransactionDestination {
   /**
-   * Type of transaction destination
-   */
-  destinationType: 'ACCOUNT' | 'UMA_ADDRESS';
-
-  /**
    * Currency code for the destination
    */
   currency?: string;
@@ -121,27 +116,25 @@ export namespace Transaction {
   /**
    * Destination account details
    */
-  export interface AccountTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
     /**
      * Destination account identifier
      */
     accountId: string;
 
-    destinationType?: 'ACCOUNT';
+    destinationType: 'ACCOUNT';
   }
 
   /**
    * UMA address destination details
    */
-  export interface UmaAddressTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
     /**
      * UMA address of the recipient
      */
     umaAddress: string;
-
-    destinationType?: 'UMA_ADDRESS';
   }
 }
 
