@@ -98,10 +98,6 @@ import {
 } from './resources/uma-providers';
 import { WebhookSendTestResponse, Webhooks } from './resources/webhooks';
 import {
-  Address,
-  BusinessCustomer,
-  BusinessCustomerFields,
-  BusinessInfo,
   Customer,
   CustomerCreate,
   CustomerCreateParams,
@@ -113,14 +109,10 @@ import {
   CustomerOneOf,
   CustomerOneovesDefaultPagination,
   CustomerRetrieveResponse,
-  CustomerType,
   CustomerUpdate,
   CustomerUpdateParams,
   CustomerUpdateResponse,
   Customers,
-  IndividualCustomer,
-  IndividualCustomerFields,
-  UltimateBeneficialOwner,
 } from './resources/customers/customers';
 import {
   Platform,
@@ -1003,18 +995,10 @@ export declare namespace Grid {
 
   export {
     Customers as Customers,
-    type Address as Address,
-    type BusinessCustomer as BusinessCustomer,
-    type BusinessCustomerFields as BusinessCustomerFields,
-    type BusinessInfo as BusinessInfo,
     type Customer as Customer,
     type CustomerCreate as CustomerCreate,
     type CustomerOneOf as CustomerOneOf,
-    type CustomerType as CustomerType,
     type CustomerUpdate as CustomerUpdate,
-    type IndividualCustomer as IndividualCustomer,
-    type IndividualCustomerFields as IndividualCustomerFields,
-    type UltimateBeneficialOwner as UltimateBeneficialOwner,
     type CustomerRetrieveResponse as CustomerRetrieveResponse,
     type CustomerUpdateResponse as CustomerUpdateResponse,
     type CustomerDeleteResponse as CustomerDeleteResponse,

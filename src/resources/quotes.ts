@@ -130,38 +130,11 @@ export class Quotes extends APIResource {
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
 
-export interface BaseDestination {
-  /**
-   * Type of payment destination
-   */
-  destinationType: 'ACCOUNT' | 'UMA_ADDRESS' | 'EXTERNAL_ACCOUNT_DETAILS';
-}
+export type BaseDestination = unknown;
 
-export interface BasePaymentAccountInfo {
-  /**
-   * Type of payment account or wallet
-   */
-  accountType:
-    | 'CLABE'
-    | 'US_ACCOUNT'
-    | 'PIX'
-    | 'IBAN'
-    | 'UPI'
-    | 'NGN_ACCOUNT'
-    | 'SPARK_WALLET'
-    | 'LIGHTNING'
-    | 'SOLANA_WALLET'
-    | 'TRON_WALLET'
-    | 'POLYGON_WALLET'
-    | 'BASE_WALLET';
-}
+export type BasePaymentAccountInfo = unknown;
 
-export interface BaseQuoteSource {
-  /**
-   * Type of quote funding source
-   */
-  sourceType: 'ACCOUNT' | 'REALTIME_FUNDING';
-}
+export type BaseQuoteSource = unknown;
 
 export interface Currency {
   /**
@@ -254,7 +227,9 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentClabeAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'CLABE';
+
     /**
      * 18-digit CLABE number (Mexican banking standard)
      */
@@ -265,11 +240,9 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
-
-    accountType?: 'CLABE';
   }
 
-  export interface PaymentUsAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentUsAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * Type of account (checking or savings)
      */
@@ -279,6 +252,8 @@ export namespace PaymentInstructions {
      * US bank account number
      */
     accountNumber: string;
+
+    accountType: 'US_ACCOUNT';
 
     /**
      * Unique reference code that must be included with the payment to properly credit
@@ -291,15 +266,15 @@ export namespace PaymentInstructions {
      */
     routingNumber: string;
 
-    accountType?: 'US_ACCOUNT';
-
     /**
      * Name of the bank
      */
     bankName?: string;
   }
 
-  export interface PaymentPixAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentPixAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'PIX';
+
     /**
      * PIX key for Brazilian instant payments
      */
@@ -314,11 +289,11 @@ export namespace PaymentInstructions {
      * Tax ID of the account holder
      */
     taxId: string;
-
-    accountType?: 'PIX';
   }
 
-  export interface PaymentIbanAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentIbanAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'IBAN';
+
     /**
      * International Bank Account Number
      */
@@ -334,20 +309,20 @@ export namespace PaymentInstructions {
      * SWIFT/BIC code (8 or 11 characters)
      */
     swiftBic: string;
-
-    accountType?: 'IBAN';
   }
 
-  export interface PaymentUpiAccountInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentUpiAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'UPI';
+
     /**
      * Virtual Payment Address for UPI payments
      */
     vpa: string;
-
-    accountType?: 'UPI';
   }
 
-  export interface PaymentSparkWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentSparkWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'SPARK_WALLET';
+
     /**
      * Spark wallet address
      */
@@ -357,8 +332,6 @@ export namespace PaymentInstructions {
      * Type of asset
      */
     assetType: 'BTC' | 'USDB';
-
-    accountType?: 'SPARK_WALLET';
 
     /**
      * Invoice for the payment
@@ -371,15 +344,17 @@ export namespace PaymentInstructions {
      * Invoice for the payment
      */
     invoice: string;
+
+    accountType?: 'LIGHTNING';
   }
 
-  export interface PaymentSolanaWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentSolanaWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'SOLANA_WALLET';
+
     /**
      * Solana wallet address
      */
     address: string;
-
-    accountType?: 'SOLANA_WALLET';
 
     /**
      * Type of asset
@@ -387,13 +362,13 @@ export namespace PaymentInstructions {
     assetType?: 'USDC' | 'USDT';
   }
 
-  export interface PaymentTronWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentTronWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'TRON_WALLET';
+
     /**
      * Tron wallet address
      */
     address: string;
-
-    accountType?: 'TRON_WALLET';
 
     /**
      * Type of asset
@@ -401,13 +376,13 @@ export namespace PaymentInstructions {
     assetType?: 'USDT';
   }
 
-  export interface PaymentPolygonWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentPolygonWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'POLYGON_WALLET';
+
     /**
      * Polygon eth wallet address
      */
     address: string;
-
-    accountType?: 'POLYGON_WALLET';
 
     /**
      * Type of asset
@@ -415,13 +390,13 @@ export namespace PaymentInstructions {
     assetType?: 'USDC';
   }
 
-  export interface PaymentBaseWalletInfo extends Omit<QuotesAPI.BasePaymentAccountInfo, 'accountType'> {
+  export interface PaymentBaseWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+    accountType: 'BASE_WALLET';
+
     /**
      * Base eth wallet address
      */
     address: string;
-
-    accountType?: 'BASE_WALLET';
 
     /**
      * Type of asset
@@ -528,19 +503,21 @@ export namespace QuoteDestinationOneOf {
   /**
    * Destination account details
    */
-  export interface AccountDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
+  export interface AccountDestination extends QuotesAPI.BaseDestination {
     /**
      * Destination account identifier
      */
     accountId: string;
 
-    destinationType?: 'ACCOUNT';
+    destinationType: 'ACCOUNT';
   }
 
   /**
    * UMA address destination details
    */
-  export interface UmaAddressDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
+  export interface UmaAddressDestination extends QuotesAPI.BaseDestination {
+    destinationType: 'UMA_ADDRESS';
+
     /**
      * UMA address of the recipient
      */
@@ -558,8 +535,6 @@ export namespace QuoteDestinationOneOf {
      * for the full list of supported fiat and crypto currencies.
      */
     currency?: string;
-
-    destinationType?: 'UMA_ADDRESS';
   }
 
   /**
@@ -568,11 +543,10 @@ export namespace QuoteDestinationOneOf {
    * the account. Useful for one-off payments to some destination. See the external
    * accounts endpoints for test values in sandbox mode.
    */
-  export interface ExternalAccountDetailsDestination
-    extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
-    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
+  export interface ExternalAccountDetailsDestination extends QuotesAPI.BaseDestination {
+    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
-    destinationType?: 'EXTERNAL_ACCOUNT_DETAILS';
+    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
 }
 
@@ -587,11 +561,13 @@ export namespace QuoteSourceOneOf {
   /**
    * Source account details
    */
-  export interface AccountQuoteSource extends Omit<QuotesAPI.BaseQuoteSource, 'sourceType'> {
+  export interface AccountQuoteSource extends QuotesAPI.BaseQuoteSource {
     /**
      * Source account identifier
      */
     accountId: string;
+
+    sourceType: 'ACCOUNT';
 
     /**
      * Required when funding from an FBO account to identify the customer on whose
@@ -599,8 +575,6 @@ export namespace QuoteSourceOneOf {
      * customerId of the account owner.
      */
     customerId?: string;
-
-    sourceType?: 'ACCOUNT';
   }
 
   /**
@@ -610,7 +584,7 @@ export namespace QuoteSourceOneOf {
    * option is only valid for instant payment methods. Do not try to fund a quote
    * with a non-instant payment method (ACH, etc.).
    */
-  export interface RealtimeFundingQuoteSource extends Omit<QuotesAPI.BaseQuoteSource, 'sourceType'> {
+  export interface RealtimeFundingQuoteSource extends QuotesAPI.BaseQuoteSource {
     /**
      * Currency code for the funding source. See
      * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
@@ -618,14 +592,14 @@ export namespace QuoteSourceOneOf {
      */
     currency: string;
 
+    sourceType: 'REALTIME_FUNDING';
+
     /**
      * Source customer ID. If this transaction is being initiated on behalf of a
      * customer, this is required. If customerId is not provided, the quote will be
      * created on behalf of the platform itself.
      */
     customerId?: string;
-
-    sourceType?: 'REALTIME_FUNDING';
   }
 }
 

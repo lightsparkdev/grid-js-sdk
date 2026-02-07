@@ -89,11 +89,6 @@ export class Transactions extends APIResource {
 
 export interface BaseTransactionSource {
   /**
-   * Type of transaction source
-   */
-  sourceType: 'ACCOUNT' | 'UMA_ADDRESS' | 'REALTIME_FUNDING';
-
-  /**
    * Currency code for the source
    */
   currency?: string;
@@ -188,27 +183,25 @@ export namespace TransactionSourceOneOf {
   /**
    * Source account details
    */
-  export interface AccountTransactionSource
-    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+  export interface AccountTransactionSource extends TransactionsAPI.BaseTransactionSource {
     /**
      * Source account identifier
      */
     accountId: string;
 
-    sourceType?: 'ACCOUNT';
+    sourceType: 'ACCOUNT';
   }
 
   /**
    * UMA address source details
    */
-  export interface UmaAddressTransactionSource
-    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+  export interface UmaAddressTransactionSource extends TransactionsAPI.BaseTransactionSource {
+    sourceType: 'UMA_ADDRESS';
+
     /**
      * UMA address of the sender
      */
     umaAddress: string;
-
-    sourceType?: 'UMA_ADDRESS';
   }
 }
 
