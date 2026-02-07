@@ -59,10 +59,19 @@ const client = new Grid({
   password: process.env['GRID_PASSWORD'], // This is the default and can be omitted
 });
 
-const params: Grid.CustomerCreateParams = {
-  CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' },
+const params: Grid.QuoteCreateParams = {
+  destination: {
+    accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+    destinationType: 'ACCOUNT',
+  },
+  lockedCurrencyAmount: 10000,
+  lockedCurrencySide: 'SENDING',
+  source: {
+    accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+    sourceType: 'ACCOUNT',
+  },
 };
-const customerOneOf: Grid.CustomerOneOf = await client.customers.create(params);
+const quote: Grid.Quote = await client.quotes.create(params);
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -104,9 +113,18 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const customerOneOf = await client.customers
+const quote = await client.quotes
   .create({
-    CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' },
+    destination: {
+      accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+      destinationType: 'ACCOUNT',
+    },
+    lockedCurrencyAmount: 10000,
+    lockedCurrencySide: 'SENDING',
+    source: {
+      accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+      sourceType: 'ACCOUNT',
+    },
   })
   .catch(async (err) => {
     if (err instanceof Grid.APIError) {
@@ -148,7 +166,12 @@ const client = new Grid({
 });
 
 // Or, configure per-request:
-await client.customers.create({ CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' } }, {
+await client.quotes.create({
+  destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
+  lockedCurrencyAmount: 10000,
+  lockedCurrencySide: 'SENDING',
+  source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
+}, {
   maxRetries: 5,
 });
 ```
@@ -165,7 +188,12 @@ const client = new Grid({
 });
 
 // Override per-request:
-await client.customers.create({ CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' } }, {
+await client.quotes.create({
+  destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
+  lockedCurrencyAmount: 10000,
+  lockedCurrencySide: 'SENDING',
+  source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
+}, {
   timeout: 5 * 1000,
 });
 ```
@@ -219,21 +247,39 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Grid();
 
-const response = await client.customers
+const response = await client.quotes
   .create({
-    CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' },
+    destination: {
+      accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+      destinationType: 'ACCOUNT',
+    },
+    lockedCurrencyAmount: 10000,
+    lockedCurrencySide: 'SENDING',
+    source: {
+      accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+      sourceType: 'ACCOUNT',
+    },
   })
   .asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: customerOneOf, response: raw } = await client.customers
+const { data: quote, response: raw } = await client.quotes
   .create({
-    CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' },
+    destination: {
+      accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+      destinationType: 'ACCOUNT',
+    },
+    lockedCurrencyAmount: 10000,
+    lockedCurrencySide: 'SENDING',
+    source: {
+      accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+      sourceType: 'ACCOUNT',
+    },
   })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(customerOneOf);
+console.log(quote.createdAt);
 ```
 
 ### Logging
