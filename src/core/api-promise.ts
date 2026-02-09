@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { type Grid } from '../client';
+import { type LightsparkGrid } from '../client';
 
 import { type PromiseOrValue } from '../internal/types';
 import { APIResponseProps, defaultParseResponse } from '../internal/parse';
@@ -11,13 +11,13 @@ import { APIResponseProps, defaultParseResponse } from '../internal/parse';
  */
 export class APIPromise<T> extends Promise<T> {
   private parsedPromise: Promise<T> | undefined;
-  #client: Grid;
+  #client: LightsparkGrid;
 
   constructor(
-    client: Grid,
+    client: LightsparkGrid,
     private responsePromise: Promise<APIResponseProps>,
     private parseResponse: (
-      client: Grid,
+      client: LightsparkGrid,
       props: APIResponseProps,
     ) => PromiseOrValue<T> = defaultParseResponse,
   ) {

@@ -16,9 +16,9 @@ before making any information public.
 ## Reporting Non-SDK Related Security Issues
 
 If you encounter security issues that are not directly related to SDKs but pertain to the services
-or products provided by Grid, please follow the respective company's security reporting guidelines.
+or products provided by Lightspark Grid, please follow the respective company's security reporting guidelines.
 
-### Grid Terms and Policies
+### Lightspark Grid Terms and Policies
 
 Please contact support@lightspark.com for any questions or concerns regarding the security of our services.
 

@@ -1,7 +1,7 @@
 import iconv from 'iconv-lite';
-import { stringify } from 'grid/internal/qs';
-import { encode } from 'grid/internal/qs/utils';
-import { StringifyOptions } from 'grid/internal/qs/types';
+import { stringify } from 'lightspark-grid/internal/qs';
+import { encode } from 'lightspark-grid/internal/qs/utils';
+import { StringifyOptions } from 'lightspark-grid/internal/qs/types';
 import { empty_test_cases } from './empty-keys-cases';
 import assert from 'assert';
 

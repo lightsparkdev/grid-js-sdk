@@ -1,4 +1,4 @@
-import { GridError } from '../../core/error';
+import { LightsparkGridError } from '../../core/error';
 
 /**
  * Percent-encode everything that isn't safe to have in a path without encoding safe chars.
@@ -72,7 +72,7 @@ export const createPathTagFunction = (pathEncoder = encodeURIPath) =>
         return acc + spaces + arrows;
       }, '');
 
-      throw new GridError(
+      throw new LightsparkGridError(
         `Path parameters result in path with invalid segments:\n${invalidSegments
           .map((e) => e.error)
           .join('\n')}\n${path}\n${underline}`,
