@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "grid/*": ["./dist/src/*"],
-      "grid": ["./dist/src/index.ts"]
+      "lightspark-grid/*": ["./dist/src/*"],
+      "lightspark-grid": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,

@@ -162,7 +162,7 @@ export interface ClientOptions {
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['GRID_BASE_URL'].
+   * Defaults to process.env['LIGHTSPARK_GRID_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -216,7 +216,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['GRID_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['LIGHTSPARK_GRID_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -229,9 +229,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Grid API.
+ * API Client for interfacing with the Lightspark Grid API.
  */
-export class Grid {
+export class LightsparkGrid {
   username: string;
   password: string;
   webhookSignature: string | null;
@@ -249,12 +249,12 @@ export class Grid {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Grid API.
+   * API Client for interfacing with the Lightspark Grid API.
    *
    * @param {string | undefined} [opts.username=process.env['GRID_USERNAME'] ?? undefined]
    * @param {string | undefined} [opts.password=process.env['GRID_PASSWORD'] ?? undefined]
    * @param {string | null | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_SIGNATURE'] ?? null]
-   * @param {string} [opts.baseURL=process.env['GRID_BASE_URL'] ?? https://api.lightspark.com/grid/2025-10-13] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['LIGHTSPARK_GRID_BASE_URL'] ?? https://api.lightspark.com/grid/2025-10-13] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -263,20 +263,20 @@ export class Grid {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('GRID_BASE_URL'),
+    baseURL = readEnv('LIGHTSPARK_GRID_BASE_URL'),
     username = readEnv('GRID_USERNAME'),
     password = readEnv('GRID_PASSWORD'),
     webhookSignature = readEnv('GRID_WEBHOOK_SIGNATURE') ?? null,
     ...opts
   }: ClientOptions = {}) {
     if (username === undefined) {
-      throw new Errors.GridError(
-        "The GRID_USERNAME environment variable is missing or empty; either provide it, or instantiate the Grid client with an username option, like new Grid({ username: 'My Username' }).",
+      throw new Errors.LightsparkGridError(
+        "The GRID_USERNAME environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an username option, like new LightsparkGrid({ username: 'My Username' }).",
       );
     }
     if (password === undefined) {
-      throw new Errors.GridError(
-        "The GRID_PASSWORD environment variable is missing or empty; either provide it, or instantiate the Grid client with an password option, like new Grid({ password: 'My Password' }).",
+      throw new Errors.LightsparkGridError(
+        "The GRID_PASSWORD environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an password option, like new LightsparkGrid({ password: 'My Password' }).",
       );
     }
 
@@ -289,14 +289,14 @@ export class Grid {
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Grid.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? LightsparkGrid.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('GRID_LOG'), "process.env['GRID_LOG']", this) ??
+      parseLogLevel(readEnv('LIGHTSPARK_GRID_LOG'), "process.env['LIGHTSPARK_GRID_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -648,7 +648,7 @@ export class Grid {
     options: PromiseOrValue<FinalRequestOptions>,
   ): Pagination.PagePromise<PageClass, Item> {
     const request = this.makeRequest(options, null, undefined);
-    return new Pagination.PagePromise<PageClass, Item>(this as any as Grid, request, Page);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as LightsparkGrid, request, Page);
   }
 
   async fetchWithTimeout(
@@ -871,10 +871,10 @@ export class Grid {
     }
   }
 
-  static Grid = this;
+  static LightsparkGrid = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static GridError = Errors.GridError;
+  static LightsparkGridError = Errors.LightsparkGridError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -960,23 +960,23 @@ export class Grid {
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
 }
 
-Grid.Config = Config;
-Grid.Customers = Customers;
-Grid.Platform = Platform;
-Grid.Plaid = Plaid;
-Grid.TransferIn = TransferIn;
-Grid.TransferOut = TransferOut;
-Grid.Receiver = Receiver;
-Grid.Quotes = Quotes;
-Grid.Transactions = Transactions;
-Grid.Webhooks = Webhooks;
-Grid.Invitations = Invitations;
-Grid.Sandbox = Sandbox;
-Grid.UmaProviders = UmaProviders;
-Grid.Tokens = Tokens;
-Grid.ExchangeRates = ExchangeRates;
+LightsparkGrid.Config = Config;
+LightsparkGrid.Customers = Customers;
+LightsparkGrid.Platform = Platform;
+LightsparkGrid.Plaid = Plaid;
+LightsparkGrid.TransferIn = TransferIn;
+LightsparkGrid.TransferOut = TransferOut;
+LightsparkGrid.Receiver = Receiver;
+LightsparkGrid.Quotes = Quotes;
+LightsparkGrid.Transactions = Transactions;
+LightsparkGrid.Webhooks = Webhooks;
+LightsparkGrid.Invitations = Invitations;
+LightsparkGrid.Sandbox = Sandbox;
+LightsparkGrid.UmaProviders = UmaProviders;
+LightsparkGrid.Tokens = Tokens;
+LightsparkGrid.ExchangeRates = ExchangeRates;
 
-export declare namespace Grid {
+export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
 
   export import DefaultPagination = Pagination.DefaultPagination;

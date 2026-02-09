@@ -1,9 +1,9 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { GridError } from './error';
+import { LightsparkGridError } from './error';
 import { FinalRequestOptions } from '../internal/request-options';
 import { defaultParseResponse } from '../internal/parse';
-import { type Grid } from '../client';
+import { type LightsparkGrid } from '../client';
 import { APIPromise } from './api-promise';
 import { type APIResponseProps } from '../internal/parse';
 import { maybeObj } from '../internal/utils/values';
@@ -11,13 +11,13 @@ import { maybeObj } from '../internal/utils/values';
 export type PageRequestOptions = Pick<FinalRequestOptions, 'query' | 'headers' | 'body' | 'path' | 'method'>;
 
 export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
-  #client: Grid;
+  #client: LightsparkGrid;
   protected options: FinalRequestOptions;
 
   protected response: Response;
   protected body: unknown;
 
-  constructor(client: Grid, response: Response, body: unknown, options: FinalRequestOptions) {
+  constructor(client: LightsparkGrid, response: Response, body: unknown, options: FinalRequestOptions) {
     this.#client = client;
     this.options = options;
     this.response = response;
@@ -37,7 +37,7 @@ export abstract class AbstractPage<Item> implements AsyncIterable<Item> {
   async getNextPage(): Promise<this> {
     const nextOptions = this.nextPageRequestOptions();
     if (!nextOptions) {
-      throw new GridError(
+      throw new LightsparkGridError(
         'No next page expected; please check `.hasNextPage()` before calling `.getNextPage()`.',
       );
     }
@@ -80,7 +80,7 @@ export class PagePromise<
   implements AsyncIterable<Item>
 {
   constructor(
-    client: Grid,
+    client: LightsparkGrid,
     request: Promise<APIResponseProps>,
     Page: new (...args: ConstructorParameters<typeof AbstractPage>) => PageClass,
   ) {
@@ -131,7 +131,7 @@ export class DefaultPagination<Item> extends AbstractPage<Item> implements Defau
   totalCount: number;
 
   constructor(
-    client: Grid,
+    client: LightsparkGrid,
     response: Response,
     body: DefaultPaginationResponse<Item>,
     options: FinalRequestOptions,

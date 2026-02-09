@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'grid/core/api-promise';
+import { APIPromise } from 'lightspark-grid/core/api-promise';
 
 import util from 'node:util';
-import Grid from 'grid';
-import { APIUserAbortError } from 'grid';
+import LightsparkGrid from 'lightspark-grid';
+import { APIUserAbortError } from 'lightspark-grid';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -20,7 +20,7 @@ describe('instantiate client', () => {
   });
 
   describe('defaultHeaders', () => {
-    const client = new Grid({
+    const client = new LightsparkGrid({
       baseURL: 'http://localhost:5000/',
       defaultHeaders: { 'X-My-Default-Header': '2' },
       username: 'My Username',
@@ -55,14 +55,14 @@ describe('instantiate client', () => {
 
     beforeEach(() => {
       process.env = { ...env };
-      process.env['GRID_LOG'] = undefined;
+      process.env['LIGHTSPARK_GRID_LOG'] = undefined;
     });
 
     afterEach(() => {
       process.env = env;
     });
 
-    const forceAPIResponseForClient = async (client: Grid) => {
+    const forceAPIResponseForClient = async (client: LightsparkGrid) => {
       await new APIPromise(
         client,
         Promise.resolve({
@@ -88,7 +88,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Grid({
+      const client = new LightsparkGrid({
         logger: logger,
         logLevel: 'debug',
         username: 'My Username',
@@ -100,7 +100,7 @@ describe('instantiate client', () => {
     });
 
     test('default logLevel is warn', async () => {
-      const client = new Grid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
       expect(client.logLevel).toBe('warn');
     });
 
@@ -113,7 +113,7 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      const client = new Grid({
+      const client = new LightsparkGrid({
         logger: logger,
         logLevel: 'info',
         username: 'My Username',
@@ -133,8 +133,8 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['GRID_LOG'] = 'debug';
-      const client = new Grid({
+      process.env['LIGHTSPARK_GRID_LOG'] = 'debug';
+      const client = new LightsparkGrid({
         logger: logger,
         username: 'My Username',
         password: 'My Password',
@@ -154,15 +154,15 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['GRID_LOG'] = 'not a log level';
-      const client = new Grid({
+      process.env['LIGHTSPARK_GRID_LOG'] = 'not a log level';
+      const client = new LightsparkGrid({
         logger: logger,
         username: 'My Username',
         password: 'My Password',
       });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
-        'process.env[\'GRID_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
+        'process.env[\'LIGHTSPARK_GRID_LOG\'] was set to "not a log level", expected one of ["off","error","warn","info","debug"]',
       );
     });
 
@@ -175,8 +175,8 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['GRID_LOG'] = 'debug';
-      const client = new Grid({
+      process.env['LIGHTSPARK_GRID_LOG'] = 'debug';
+      const client = new LightsparkGrid({
         logger: logger,
         logLevel: 'off',
         username: 'My Username',
@@ -196,8 +196,8 @@ describe('instantiate client', () => {
         error: jest.fn(),
       };
 
-      process.env['GRID_LOG'] = 'not a log level';
-      const client = new Grid({
+      process.env['LIGHTSPARK_GRID_LOG'] = 'not a log level';
+      const client = new LightsparkGrid({
         logger: logger,
         logLevel: 'debug',
         username: 'My Username',
@@ -210,7 +210,7 @@ describe('instantiate client', () => {
 
   describe('defaultQuery', () => {
     test('with null query params given', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo' },
         username: 'My Username',
@@ -220,7 +220,7 @@ describe('instantiate client', () => {
     });
 
     test('multiple default query params', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         username: 'My Username',
@@ -230,7 +230,7 @@ describe('instantiate client', () => {
     });
 
     test('overriding with `undefined`', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/',
         defaultQuery: { hello: 'world' },
         username: 'My Username',
@@ -241,7 +241,7 @@ describe('instantiate client', () => {
   });
 
   test('custom fetch', async () => {
-    const client = new Grid({
+    const client = new LightsparkGrid({
       baseURL: 'http://localhost:5000/',
       username: 'My Username',
       password: 'My Password',
@@ -260,7 +260,7 @@ describe('instantiate client', () => {
 
   test('explicit global fetch', async () => {
     // make sure the global fetch type is assignable to our Fetch type
-    const client = new Grid({
+    const client = new LightsparkGrid({
       baseURL: 'http://localhost:5000/',
       username: 'My Username',
       password: 'My Password',
@@ -269,7 +269,7 @@ describe('instantiate client', () => {
   });
 
   test('custom signal', async () => {
-    const client = new Grid({
+    const client = new LightsparkGrid({
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       username: 'My Username',
       password: 'My Password',
@@ -302,7 +302,7 @@ describe('instantiate client', () => {
       return new Response(JSON.stringify({}), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Grid({
+    const client = new LightsparkGrid({
       baseURL: 'http://localhost:5000/',
       username: 'My Username',
       password: 'My Password',
@@ -315,7 +315,7 @@ describe('instantiate client', () => {
 
   describe('baseUrl', () => {
     test('trailing slash', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/custom/path/',
         username: 'My Username',
         password: 'My Password',
@@ -324,7 +324,7 @@ describe('instantiate client', () => {
     });
 
     test('no trailing slash', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/custom/path',
         username: 'My Username',
         password: 'My Password',
@@ -333,11 +333,11 @@ describe('instantiate client', () => {
     });
 
     afterEach(() => {
-      process.env['GRID_BASE_URL'] = undefined;
+      process.env['LIGHTSPARK_GRID_BASE_URL'] = undefined;
     });
 
     test('explicit option', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'https://example.com',
         username: 'My Username',
         password: 'My Password',
@@ -346,32 +346,32 @@ describe('instantiate client', () => {
     });
 
     test('env variable', () => {
-      process.env['GRID_BASE_URL'] = 'https://example.com/from_env';
-      const client = new Grid({ username: 'My Username', password: 'My Password' });
+      process.env['LIGHTSPARK_GRID_BASE_URL'] = 'https://example.com/from_env';
+      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
-      process.env['GRID_BASE_URL'] = ''; // empty
-      const client = new Grid({ username: 'My Username', password: 'My Password' });
+      process.env['LIGHTSPARK_GRID_BASE_URL'] = ''; // empty
+      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
       expect(client.baseURL).toEqual('https://api.lightspark.com/grid/2025-10-13');
     });
 
     test('blank env variable', () => {
-      process.env['GRID_BASE_URL'] = '  '; // blank
-      const client = new Grid({ username: 'My Username', password: 'My Password' });
+      process.env['LIGHTSPARK_GRID_BASE_URL'] = '  '; // blank
+      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
       expect(client.baseURL).toEqual('https://api.lightspark.com/grid/2025-10-13');
     });
 
     test('in request options', () => {
-      const client = new Grid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/option/foo',
       );
     });
 
     test('in request options overridden by client options', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         username: 'My Username',
         password: 'My Password',
         baseURL: 'http://localhost:5000/client',
@@ -382,8 +382,8 @@ describe('instantiate client', () => {
     });
 
     test('in request options overridden by env variable', () => {
-      process.env['GRID_BASE_URL'] = 'http://localhost:5000/env';
-      const client = new Grid({ username: 'My Username', password: 'My Password' });
+      process.env['LIGHTSPARK_GRID_BASE_URL'] = 'http://localhost:5000/env';
+      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/env/foo',
       );
@@ -391,7 +391,7 @@ describe('instantiate client', () => {
   });
 
   test('maxRetries option is correctly set', () => {
-    const client = new Grid({
+    const client = new LightsparkGrid({
       maxRetries: 4,
       username: 'My Username',
       password: 'My Password',
@@ -399,13 +399,13 @@ describe('instantiate client', () => {
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new Grid({ username: 'My Username', password: 'My Password' });
+    const client2 = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
     expect(client2.maxRetries).toEqual(2);
   });
 
   describe('withOptions', () => {
     test('creates a new client with overridden options', async () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/',
         maxRetries: 3,
         username: 'My Username',
@@ -431,7 +431,7 @@ describe('instantiate client', () => {
     });
 
     test('inherits options from the parent client', async () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/',
         defaultHeaders: { 'X-Test-Header': 'test-value' },
         defaultQuery: { 'test-param': 'test-value' },
@@ -451,7 +451,7 @@ describe('instantiate client', () => {
     });
 
     test('respects runtime property changes when creating new client', () => {
-      const client = new Grid({
+      const client = new LightsparkGrid({
         baseURL: 'http://localhost:5000/',
         timeout: 1000,
         username: 'My Username',
@@ -486,7 +486,7 @@ describe('instantiate client', () => {
     // set options via env var
     process.env['GRID_USERNAME'] = 'My Username';
     process.env['GRID_PASSWORD'] = 'My Password';
-    const client = new Grid();
+    const client = new LightsparkGrid();
     expect(client.username).toBe('My Username');
     expect(client.password).toBe('My Password');
   });
@@ -495,14 +495,14 @@ describe('instantiate client', () => {
     // set options via env var
     process.env['GRID_USERNAME'] = 'another My Username';
     process.env['GRID_PASSWORD'] = 'another My Password';
-    const client = new Grid({ username: 'My Username', password: 'My Password' });
+    const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
     expect(client.username).toBe('My Username');
     expect(client.password).toBe('My Password');
   });
 });
 
 describe('request building', () => {
-  const client = new Grid({ username: 'My Username', password: 'My Password' });
+  const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
 
   describe('custom headers', () => {
     test('handles undefined', async () => {
@@ -521,7 +521,7 @@ describe('request building', () => {
 });
 
 describe('default encoder', () => {
-  const client = new Grid({ username: 'My Username', password: 'My Password' });
+  const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
 
   class Serializable {
     toJSON() {
@@ -606,7 +606,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       timeout: 10,
@@ -641,7 +641,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       fetch: testFetch,
@@ -670,7 +670,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       fetch: testFetch,
@@ -704,7 +704,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       fetch: testFetch,
@@ -738,7 +738,7 @@ describe('retries', () => {
       capturedRequest = init;
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       fetch: testFetch,
@@ -773,7 +773,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       fetch: testFetch,
@@ -807,7 +807,7 @@ describe('retries', () => {
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });
     };
 
-    const client = new Grid({
+    const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
       fetch: testFetch,

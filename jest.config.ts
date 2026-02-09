@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^grid$': '<rootDir>/src/index.ts',
-    '^grid/(.*)$': '<rootDir>/src/$1',
+    '^lightspark-grid$': '<rootDir>/src/index.ts',
+    '^lightspark-grid/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: [
     '<rootDir>/ecosystem-tests/',

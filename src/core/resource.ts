@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { Grid } from '../client';
+import type { LightsparkGrid } from '../client';
 
 export abstract class APIResource {
-  protected _client: Grid;
+  protected _client: LightsparkGrid;
 
-  constructor(client: Grid) {
+  constructor(client: LightsparkGrid) {
     this._client = client;
   }
 }
