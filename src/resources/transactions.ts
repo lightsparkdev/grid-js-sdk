@@ -12,7 +12,7 @@ import { path } from '../internal/utils/path';
 
 export class Transactions extends APIResource {
   /**
-   * Retrieve detailed information about a specific transaction
+   * Retrieve detailed information about a specific transaction.
    *
    * @example
    * ```ts
