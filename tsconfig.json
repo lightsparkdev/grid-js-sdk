@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "grid/*": ["./src/*"],
-      "grid": ["./src/index.ts"]
+      "lightspark-grid/*": ["./src/*"],
+      "lightspark-grid": ["./src/index.ts"]
     },
     "noEmit": true,
 

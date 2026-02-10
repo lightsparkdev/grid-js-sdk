@@ -6,7 +6,10 @@ import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
+  BaseWalletInfo,
   BeneficiaryOneOf,
+  CadAccountInfo,
+  ClabeAccountInfo,
   ExternalAccount,
   ExternalAccountCreate,
   ExternalAccountCreateParams,
@@ -14,6 +17,19 @@ import {
   ExternalAccountListParams,
   ExternalAccounts,
   ExternalAccountsDefaultPagination,
+  GbpAccountInfo,
+  IbanAccountInfo,
+  LightningWalletInfo,
+  NgnAccountInfo,
+  PhpAccountInfo,
+  PixAccountInfo,
+  PolygonWalletInfo,
+  SgdAccountInfo,
+  SolanaWalletInfo,
+  SparkWalletInfo,
+  TronWalletInfo,
+  UpiAccountInfo,
+  UsAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { InternalAccountsDefaultPagination } from '../sandbox/internal-accounts';
@@ -1635,10 +1651,26 @@ export declare namespace Customers {
 
   export {
     ExternalAccounts as ExternalAccounts,
+    type BaseWalletInfo as BaseWalletInfo,
     type BeneficiaryOneOf as BeneficiaryOneOf,
+    type CadAccountInfo as CadAccountInfo,
+    type ClabeAccountInfo as ClabeAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
+    type GbpAccountInfo as GbpAccountInfo,
+    type IbanAccountInfo as IbanAccountInfo,
+    type LightningWalletInfo as LightningWalletInfo,
+    type NgnAccountInfo as NgnAccountInfo,
+    type PhpAccountInfo as PhpAccountInfo,
+    type PixAccountInfo as PixAccountInfo,
+    type PolygonWalletInfo as PolygonWalletInfo,
+    type SgdAccountInfo as SgdAccountInfo,
+    type SolanaWalletInfo as SolanaWalletInfo,
+    type SparkWalletInfo as SparkWalletInfo,
+    type TronWalletInfo as TronWalletInfo,
+    type UpiAccountInfo as UpiAccountInfo,
+    type UsAccountInfo as UsAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

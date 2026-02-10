@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Grid from 'grid';
+import LightsparkGrid from 'lightspark-grid';
 
-const client = new Grid({
+const client = new LightsparkGrid({
   username: 'My Username',
   password: 'My Password',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
@@ -54,7 +54,7 @@ describe('resource transactions', () => {
         },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Grid.NotFoundError);
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
   // Prism tests are disabled
@@ -78,7 +78,7 @@ describe('resource transactions', () => {
         { receiverCustomerInfo: { foo: 'bar' } },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Grid.NotFoundError);
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
   // Prism tests are disabled
@@ -102,6 +102,6 @@ describe('resource transactions', () => {
         { reason: 'RESTRICTED_JURISDICTION' },
         { path: '/_stainless_unknown_path' },
       ),
-    ).rejects.toThrow(Grid.NotFoundError);
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 });
