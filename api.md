@@ -38,10 +38,26 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryOneOf</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">CadAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">ClabeAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">GbpAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">IbanAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">LightningWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">NgnAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">PhpAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">PixAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">PolygonWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">SgdAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">SolanaWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">SparkWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">TronWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">UpiAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">UsAccountInfo</a></code>
 
 Methods:
 
