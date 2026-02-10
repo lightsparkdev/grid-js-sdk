@@ -95,15 +95,15 @@ export function codeTool(params: { blockedMethods: SdkMethod[] | undefined }): M
         ...(stainlessAPIKey && { Authorization: stainlessAPIKey }),
         'Content-Type': 'application/json',
         client_envs: JSON.stringify({
-          GRID_USERNAME: requireValue(
-            readEnv('GRID_USERNAME') ?? client.username,
-            'set GRID_USERNAME environment variable or provide username client option',
+          GRID_CLIENT_ID: requireValue(
+            readEnv('GRID_CLIENT_ID') ?? client.username,
+            'set GRID_CLIENT_ID environment variable or provide username client option',
           ),
-          GRID_PASSWORD: requireValue(
-            readEnv('GRID_PASSWORD') ?? client.password,
-            'set GRID_PASSWORD environment variable or provide password client option',
+          GRID_CLIENT_SECRET: requireValue(
+            readEnv('GRID_CLIENT_SECRET') ?? client.password,
+            'set GRID_CLIENT_SECRET environment variable or provide password client option',
           ),
-          GRID_WEBHOOK_SIGNATURE: readEnv('GRID_WEBHOOK_SIGNATURE') ?? client.webhookSignature ?? undefined,
+          GRID_WEBHOOK_PUBKEY: readEnv('GRID_WEBHOOK_PUBKEY') ?? client.webhookSignature ?? undefined,
           LIGHTSPARK_GRID_BASE_URL: readEnv('LIGHTSPARK_GRID_BASE_URL') ?? client.baseURL ?? undefined,
         }),
       },
