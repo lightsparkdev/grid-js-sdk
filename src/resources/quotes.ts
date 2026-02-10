@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
@@ -205,9 +204,9 @@ export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.PaymentClabeAccountInfo
     | PaymentInstructions.PaymentUsAccountInfo
-    | PaymentInstructions.PaymentPixAccountInfo
+    | PaymentInstructions.PixAccountInfo
     | PaymentInstructions.PaymentIbanAccountInfo
-    | PaymentInstructions.PaymentUpiAccountInfo
+    | PaymentInstructions.UpiAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -227,7 +226,7 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentClabeAccountInfo {
     accountType: 'CLABE';
 
     /**
@@ -242,7 +241,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentUsAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentUsAccountInfo {
     /**
      * Type of account (checking or savings)
      */
@@ -272,7 +271,7 @@ export namespace PaymentInstructions {
     bankName?: string;
   }
 
-  export interface PaymentPixAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PixAccountInfo {
     accountType: 'PIX';
 
     /**
@@ -291,7 +290,7 @@ export namespace PaymentInstructions {
     taxId: string;
   }
 
-  export interface PaymentIbanAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentIbanAccountInfo {
     accountType: 'IBAN';
 
     /**
@@ -311,7 +310,7 @@ export namespace PaymentInstructions {
     swiftBic: string;
   }
 
-  export interface PaymentUpiAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface UpiAccountInfo {
     accountType: 'UPI';
 
     /**
@@ -320,7 +319,7 @@ export namespace PaymentInstructions {
     vpa: string;
   }
 
-  export interface PaymentSparkWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentSparkWalletInfo {
     accountType: 'SPARK_WALLET';
 
     /**
@@ -339,7 +338,7 @@ export namespace PaymentInstructions {
     invoice?: string;
   }
 
-  export interface PaymentLightningInvoiceInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentLightningInvoiceInfo {
     /**
      * Invoice for the payment
      */
@@ -348,7 +347,7 @@ export namespace PaymentInstructions {
     accountType?: 'LIGHTNING';
   }
 
-  export interface PaymentSolanaWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentSolanaWalletInfo {
     accountType: 'SOLANA_WALLET';
 
     /**
@@ -362,7 +361,7 @@ export namespace PaymentInstructions {
     assetType?: 'USDC' | 'USDT';
   }
 
-  export interface PaymentTronWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentTronWalletInfo {
     accountType: 'TRON_WALLET';
 
     /**
@@ -376,7 +375,7 @@ export namespace PaymentInstructions {
     assetType?: 'USDT';
   }
 
-  export interface PaymentPolygonWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentPolygonWalletInfo {
     accountType: 'POLYGON_WALLET';
 
     /**
@@ -390,7 +389,7 @@ export namespace PaymentInstructions {
     assetType?: 'USDC';
   }
 
-  export interface PaymentBaseWalletInfo extends QuotesAPI.BasePaymentAccountInfo {
+  export interface PaymentBaseWalletInfo {
     accountType: 'BASE_WALLET';
 
     /**
@@ -503,7 +502,7 @@ export namespace QuoteDestinationOneOf {
   /**
    * Destination account details
    */
-  export interface AccountDestination extends QuotesAPI.BaseDestination {
+  export interface AccountDestination {
     /**
      * Destination account identifier
      */
@@ -515,7 +514,7 @@ export namespace QuoteDestinationOneOf {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressDestination extends QuotesAPI.BaseDestination {
+  export interface UmaAddressDestination {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -543,7 +542,7 @@ export namespace QuoteDestinationOneOf {
    * the account. Useful for one-off payments to some destination. See the external
    * accounts endpoints for test values in sandbox mode.
    */
-  export interface ExternalAccountDetailsDestination extends QuotesAPI.BaseDestination {
+  export interface ExternalAccountDetailsDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
@@ -561,7 +560,7 @@ export namespace QuoteSourceOneOf {
   /**
    * Source account details
    */
-  export interface AccountQuoteSource extends QuotesAPI.BaseQuoteSource {
+  export interface AccountQuoteSource {
     /**
      * Source account identifier
      */
@@ -584,7 +583,7 @@ export namespace QuoteSourceOneOf {
    * option is only valid for instant payment methods. Do not try to fund a quote
    * with a non-instant payment method (ACH, etc.).
    */
-  export interface RealtimeFundingQuoteSource extends QuotesAPI.BaseQuoteSource {
+  export interface RealtimeFundingQuoteSource {
     /**
      * Currency code for the funding source. See
      * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
