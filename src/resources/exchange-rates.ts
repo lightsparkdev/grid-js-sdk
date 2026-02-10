@@ -46,7 +46,7 @@ export namespace ExchangeRateListResponse {
     destinationPaymentRail: string;
 
     /**
-     * Number of destination currency units per sending currency unit
+     * Number of sending currency units per receiving currency unit.
      */
     exchangeRate: number;
 
@@ -56,9 +56,27 @@ export namespace ExchangeRateListResponse {
     fees: Data.Fees;
 
     /**
+     * The maximum supported sending amount in the smallest unit of the source
+     * currency.
+     */
+    maxSendingAmount: number;
+
+    /**
+     * The minimum supported sending amount in the smallest unit of the source
+     * currency.
+     */
+    minSendingAmount: number;
+
+    /**
      * The receiving amount in the smallest unit of the destination currency
      */
     receivingAmount: number;
+
+    /**
+     * The sending amount in the smallest unit of the source currency (e.g., cents for
+     * USD). Echoed back from the request if provided.
+     */
+    sendingAmount: number;
 
     sourceCurrency: QuotesAPI.Currency;
 
@@ -66,17 +84,6 @@ export namespace ExchangeRateListResponse {
      * Timestamp when this exchange rate was last refreshed
      */
     updatedAt: string;
-
-    /**
-     * The sending amount in the smallest unit of the source currency (e.g., cents for
-     * USD). Echoed back from the request if provided.
-     */
-    sendingAmount?: number;
-
-    /**
-     * The payment rail used for the source (e.g., ACCOUNT, RTP)
-     */
-    sourcePaymentRail?: string;
   }
 
   export namespace Data {
