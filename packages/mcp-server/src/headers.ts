@@ -24,13 +24,13 @@ export const parseAuthHeaders = (req: IncomingMessage, required?: boolean): Part
   }
 
   const username =
-    Array.isArray(req.headers['x-grid-username']) ?
-      req.headers['x-grid-username'][0]
-    : req.headers['x-grid-username'];
+    Array.isArray(req.headers['x-grid-client-id']) ?
+      req.headers['x-grid-client-id'][0]
+    : req.headers['x-grid-client-id'];
   const password =
-    Array.isArray(req.headers['x-grid-password']) ?
-      req.headers['x-grid-password'][0]
-    : req.headers['x-grid-password'];
+    Array.isArray(req.headers['x-grid-client-secret']) ?
+      req.headers['x-grid-client-secret'][0]
+    : req.headers['x-grid-client-secret'];
   const webhookSignature =
     Array.isArray(req.headers['x-grid-signature']) ?
       req.headers['x-grid-signature'][0]

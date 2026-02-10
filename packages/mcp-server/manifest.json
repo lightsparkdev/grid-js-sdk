@@ -19,26 +19,26 @@
       "command": "node",
       "args": ["${__dirname}/index.js"],
       "env": {
-        "GRID_USERNAME": "${user_config.GRID_USERNAME}",
-        "GRID_PASSWORD": "${user_config.GRID_PASSWORD}",
-        "GRID_WEBHOOK_SIGNATURE": "${user_config.GRID_WEBHOOK_SIGNATURE}"
+        "GRID_CLIENT_ID": "${user_config.GRID_CLIENT_ID}",
+        "GRID_CLIENT_SECRET": "${user_config.GRID_CLIENT_SECRET}",
+        "GRID_WEBHOOK_PUBKEY": "${user_config.GRID_WEBHOOK_PUBKEY}"
       }
     }
   },
   "user_config": {
-    "GRID_USERNAME": {
+    "GRID_CLIENT_ID": {
       "title": "username",
       "description": "API token authentication using format `<api token id>:<api client secret>`",
       "required": true,
       "type": "string"
     },
-    "GRID_PASSWORD": {
+    "GRID_CLIENT_SECRET": {
       "title": "password",
       "description": "API token authentication using format `<api token id>:<api client secret>`",
       "required": true,
       "type": "string"
     },
-    "GRID_WEBHOOK_SIGNATURE": {
+    "GRID_WEBHOOK_PUBKEY": {
       "title": "webhook_signature",
       "description": "Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.\n\nTo verify the signature:\n1. Get the Grid public key provided to you during integration\n2. Decode the base64 signature from the header\n3. Create a SHA-256 hash of the request body\n4. Verify the signature using the public key and the hash\n\nIf the signature verification succeeds, the webhook is authentic. If not, it should be rejected.\n",
       "required": false,

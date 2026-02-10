@@ -9,9 +9,9 @@ It is generated with [Stainless](https://www.stainless.com/).
 You can run the MCP Server directly via `npx`:
 
 ```sh
-export GRID_USERNAME="My Username"
-export GRID_PASSWORD="My Password"
-export GRID_WEBHOOK_SIGNATURE="My Webhook Signature"
+export GRID_CLIENT_ID="My Username"
+export GRID_CLIENT_SECRET="My Password"
+export GRID_WEBHOOK_PUBKEY="My Webhook Signature"
 npx -y lightspark-grid-mcp@latest
 ```
 
@@ -29,9 +29,9 @@ For clients with a configuration JSON, it might look something like this:
       "command": "npx",
       "args": ["-y", "lightspark-grid-mcp"],
       "env": {
-        "GRID_USERNAME": "My Username",
-        "GRID_PASSWORD": "My Password",
-        "GRID_WEBHOOK_SIGNATURE": "My Webhook Signature"
+        "GRID_CLIENT_ID": "My Username",
+        "GRID_CLIENT_SECRET": "My Password",
+        "GRID_WEBHOOK_PUBKEY": "My Webhook Signature"
       }
     }
   }
@@ -43,14 +43,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=lightspark-grid-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImxpZ2h0c3BhcmstZ3JpZC1tY3AiXSwiZW52Ijp7IkdSSURfVVNFUk5BTUUiOiJNeSBVc2VybmFtZSIsIkdSSURfUEFTU1dPUkQiOiJNeSBQYXNzd29yZCIsIkdSSURfV0VCSE9PS19TSUdOQVRVUkUiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=lightspark-grid-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImxpZ2h0c3BhcmstZ3JpZC1tY3AiXSwiZW52Ijp7IkdSSURfQ0xJRU5UX0lEIjoiTXkgVXNlcm5hbWUiLCJHUklEX0NMSUVOVF9TRUNSRVQiOiJNeSBQYXNzd29yZCIsIkdSSURfV0VCSE9PS19QVUJLRVkiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22lightspark-grid-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22lightspark-grid-mcp%22%5D%2C%22env%22%3A%7B%22GRID_USERNAME%22%3A%22My%20Username%22%2C%22GRID_PASSWORD%22%3A%22My%20Password%22%2C%22GRID_WEBHOOK_SIGNATURE%22%3A%22My%20Webhook%20Signature%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22lightspark-grid-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22lightspark-grid-mcp%22%5D%2C%22env%22%3A%7B%22GRID_CLIENT_ID%22%3A%22My%20Username%22%2C%22GRID_CLIENT_SECRET%22%3A%22My%20Password%22%2C%22GRID_WEBHOOK_PUBKEY%22%3A%22My%20Webhook%20Signature%22%7D%7D)
 
 ### Claude Code
 
@@ -58,7 +58,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add lightspark_grid_mcp_api --env GRID_USERNAME="My Username" GRID_PASSWORD="My Password" GRID_WEBHOOK_SIGNATURE="My Webhook Signature" -- npx -y lightspark-grid-mcp
+claude mcp add lightspark_grid_mcp_api --env GRID_CLIENT_ID="My Username" GRID_CLIENT_SECRET="My Password" GRID_WEBHOOK_PUBKEY="My Webhook Signature" -- npx -y lightspark-grid-mcp
 ```
 
 ## Code Mode
@@ -86,9 +86,9 @@ Authorization can be provided via the `Authorization` header using the Basic sch
 
 Additionally, authorization can be provided via the following headers:
 | Header | Equivalent client option | Security scheme |
-| ------------------ | ------------------------ | ---------------- |
-| `x-grid-username` | `username` | BasicAuth |
-| `x-grid-password` | `password` | BasicAuth |
+| ---------------------- | ------------------------ | ---------------- |
+| `x-grid-client-id` | `username` | BasicAuth |
+| `x-grid-client-secret` | `password` | BasicAuth |
 | `X-Grid-Signature` | `webhookSignature` | WebhookSignature |
 
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:
