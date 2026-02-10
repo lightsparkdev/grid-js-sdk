@@ -1,6 +1,6 @@
 # Lightspark Grid TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/lightspark-grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/lightspark-grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lightspark-grid)
+[![NPM version](<https://img.shields.io/npm/v/lightspark-grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/lightspark-grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lightspark-grid) [![JSR Version](https://jsr.io/badges/@lightspark/grid)](https://jsr.io/@lightspark/grid)
 
 This library provides convenient access to the Lightspark Grid REST API from server-side TypeScript or JavaScript.
 
@@ -11,11 +11,23 @@ It is generated with [Stainless](https://www.stainless.com/).
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:lightsparkdev/grid-js-sdk.git
+npm install lightspark-grid
 ```
 
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install lightspark-grid`
+### Installation from JSR
+
+```sh
+deno add jsr:@lightspark/grid
+npx jsr add @lightspark/grid
+```
+
+These commands will make the module importable from the `@lightspark/grid` scope:
+
+You can also [import directly from JSR](https://jsr.io/docs/using-packages#importing-with-jsr-specifiers) without an install step if you're using the Deno JavaScript runtime:
+
+```ts
+import LightsparkGrid from 'jsr:@lightspark/grid';
+```
 
 ## Usage
 
@@ -447,7 +459,7 @@ const client = new LightsparkGrid({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import LightsparkGrid from 'npm:lightspark-grid';
+import LightsparkGrid from 'jsr:@lightspark/grid';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new LightsparkGrid({
