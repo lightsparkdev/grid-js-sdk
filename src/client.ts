@@ -251,9 +251,9 @@ export class LightsparkGrid {
   /**
    * API Client for interfacing with the Lightspark Grid API.
    *
-   * @param {string | undefined} [opts.username=process.env['GRID_USERNAME'] ?? undefined]
-   * @param {string | undefined} [opts.password=process.env['GRID_PASSWORD'] ?? undefined]
-   * @param {string | null | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_SIGNATURE'] ?? null]
+   * @param {string | undefined} [opts.username=process.env['GRID_CLIENT_ID'] ?? undefined]
+   * @param {string | undefined} [opts.password=process.env['GRID_CLIENT_SECRET'] ?? undefined]
+   * @param {string | null | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_PUBKEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['LIGHTSPARK_GRID_BASE_URL'] ?? https://api.lightspark.com/grid/2025-10-13] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
@@ -264,19 +264,19 @@ export class LightsparkGrid {
    */
   constructor({
     baseURL = readEnv('LIGHTSPARK_GRID_BASE_URL'),
-    username = readEnv('GRID_USERNAME'),
-    password = readEnv('GRID_PASSWORD'),
-    webhookSignature = readEnv('GRID_WEBHOOK_SIGNATURE') ?? null,
+    username = readEnv('GRID_CLIENT_ID'),
+    password = readEnv('GRID_CLIENT_SECRET'),
+    webhookSignature = readEnv('GRID_WEBHOOK_PUBKEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
     if (username === undefined) {
       throw new Errors.LightsparkGridError(
-        "The GRID_USERNAME environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an username option, like new LightsparkGrid({ username: 'My Username' }).",
+        "The GRID_CLIENT_ID environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an username option, like new LightsparkGrid({ username: 'My Username' }).",
       );
     }
     if (password === undefined) {
       throw new Errors.LightsparkGridError(
-        "The GRID_PASSWORD environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an password option, like new LightsparkGrid({ password: 'My Password' }).",
+        "The GRID_CLIENT_SECRET environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an password option, like new LightsparkGrid({ password: 'My Password' }).",
       );
     }
 

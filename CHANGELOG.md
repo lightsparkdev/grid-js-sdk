@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 (2026-02-10)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** add min/max sending amounts to exchange rates response ([a0d56be](https://github.com/lightsparkdev/grid-js-sdk/commit/a0d56be39f9b9ae4ff9bedb73fd640e53f8d06fd))
+* **api:** Adding typescript publishing ([73d596e](https://github.com/lightsparkdev/grid-js-sdk/commit/73d596e63ea1ce0d232243758b4f67aec1699bb5))
+* **api:** manual updates ([4546a50](https://github.com/lightsparkdev/grid-js-sdk/commit/4546a501f61fd5378871ff14c8314fee6de833cf))
+
+
+### Chores
+
+* configure new SDK language ([0acc81a](https://github.com/lightsparkdev/grid-js-sdk/commit/0acc81a02bf1ba36d26349c17ca00024c658b518))
+
 ## 0.1.0 (2026-02-10)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.0.1...v0.1.0)

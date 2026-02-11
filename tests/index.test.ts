@@ -484,8 +484,8 @@ describe('instantiate client', () => {
 
   test('with environment variable arguments', () => {
     // set options via env var
-    process.env['GRID_USERNAME'] = 'My Username';
-    process.env['GRID_PASSWORD'] = 'My Password';
+    process.env['GRID_CLIENT_ID'] = 'My Username';
+    process.env['GRID_CLIENT_SECRET'] = 'My Password';
     const client = new LightsparkGrid();
     expect(client.username).toBe('My Username');
     expect(client.password).toBe('My Password');
@@ -493,8 +493,8 @@ describe('instantiate client', () => {
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
-    process.env['GRID_USERNAME'] = 'another My Username';
-    process.env['GRID_PASSWORD'] = 'another My Password';
+    process.env['GRID_CLIENT_ID'] = 'another My Username';
+    process.env['GRID_CLIENT_SECRET'] = 'another My Password';
     const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
     expect(client.username).toBe('My Username');
     expect(client.password).toBe('My Password');

@@ -1,6 +1,6 @@
 # Lightspark Grid TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/lightspark-grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/lightspark-grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lightspark-grid)
+[![NPM version](<https://img.shields.io/npm/v/lightspark-grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/lightspark-grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lightspark-grid) [![JSR Version](https://jsr.io/badges/@lightspark/grid)](https://jsr.io/@lightspark/grid)
 
 This library provides convenient access to the Lightspark Grid REST API from server-side TypeScript or JavaScript.
 
@@ -8,14 +8,35 @@ The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
+## MCP Server
+
+Use the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.
+
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=lightspark-grid-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsImxpZ2h0c3BhcmstZ3JpZC1tY3AiXSwiZW52Ijp7IkdSSURfQ0xJRU5UX0lEIjoiTXkgVXNlcm5hbWUiLCJHUklEX0NMSUVOVF9TRUNSRVQiOiJNeSBQYXNzd29yZCIsIkdSSURfV0VCSE9PS19QVUJLRVkiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)
+[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22lightspark-grid-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22lightspark-grid-mcp%22%5D%2C%22env%22%3A%7B%22GRID_CLIENT_ID%22%3A%22My%20Username%22%2C%22GRID_CLIENT_SECRET%22%3A%22My%20Password%22%2C%22GRID_WEBHOOK_PUBKEY%22%3A%22My%20Webhook%20Signature%22%7D%7D)
+
+> Note: You may need to set environment variables in your MCP client.
+
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:lightsparkdev/grid-js-sdk.git
+npm install lightspark-grid
 ```
 
-> [!NOTE]
-> Once this package is [published to npm](https://www.stainless.com/docs/guides/publish), this will become: `npm install lightspark-grid`
+### Installation from JSR
+
+```sh
+deno add jsr:@lightspark/grid
+npx jsr add @lightspark/grid
+```
+
+These commands will make the module importable from the `@lightspark/grid` scope:
+
+You can also [import directly from JSR](https://jsr.io/docs/using-packages#importing-with-jsr-specifiers) without an install step if you're using the Deno JavaScript runtime:
+
+```ts
+import LightsparkGrid from 'jsr:@lightspark/grid';
+```
 
 ## Usage
 
@@ -26,8 +47,8 @@ The full API of this library can be found in [api.md](api.md).
 import LightsparkGrid from 'lightspark-grid';
 
 const client = new LightsparkGrid({
-  username: process.env['GRID_USERNAME'], // This is the default and can be omitted
-  password: process.env['GRID_PASSWORD'], // This is the default and can be omitted
+  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted
+  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted
 });
 
 const quote = await client.quotes.create({
@@ -55,8 +76,8 @@ This library includes TypeScript definitions for all request params and response
 import LightsparkGrid from 'lightspark-grid';
 
 const client = new LightsparkGrid({
-  username: process.env['GRID_USERNAME'], // This is the default and can be omitted
-  password: process.env['GRID_PASSWORD'], // This is the default and can be omitted
+  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted
+  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted
 });
 
 const params: LightsparkGrid.QuoteCreateParams = {
@@ -447,7 +468,7 @@ const client = new LightsparkGrid({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import LightsparkGrid from 'npm:lightspark-grid';
+import LightsparkGrid from 'jsr:@lightspark/grid';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new LightsparkGrid({
