@@ -5,7 +5,7 @@ import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { readEnv, requireValue } from './server';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { SdkMethod } from './methods';
-import { LightsparkGrid } from 'lightspark-grid';
+import { LightsparkGrid } from '@lightsparkdev/grid';
 
 const prompt = `Runs JavaScript code to interact with the Lightspark Grid API.
 

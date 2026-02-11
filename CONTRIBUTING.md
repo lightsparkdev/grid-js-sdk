@@ -55,12 +55,12 @@ $ cd grid-js-sdk
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link lightspark-grid
+$ yarn link @lightsparkdev/grid
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global lightspark-grid
+$ pnpm link -—global @lightsparkdev/grid
 ```
 
 ## Running tests
