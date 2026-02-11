@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { ClientOptions } from 'lightspark-grid';
+import { ClientOptions } from '@lightsparkdev/grid';
 
 export type WorkerInput = {
   project_name: string;

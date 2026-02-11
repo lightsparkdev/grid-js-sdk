@@ -1,6 +1,6 @@
 # Lightspark Grid TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/lightspark-grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/lightspark-grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/lightspark-grid) [![JSR Version](https://jsr.io/badges/@lightspark/grid)](https://jsr.io/@lightspark/grid)
+[![NPM version](<https://img.shields.io/npm/v/@lightsparkdev/grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/@lightsparkdev/grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@lightsparkdev/grid) [![JSR Version](https://jsr.io/badges/@lightspark/grid)](https://jsr.io/@lightspark/grid)
 
 This library provides convenient access to the Lightspark Grid REST API from server-side TypeScript or JavaScript.
 
@@ -20,7 +20,7 @@ Use the Lightspark Grid MCP Server to enable AI assistants to interact with this
 ## Installation
 
 ```sh
-npm install lightspark-grid
+npm install @lightsparkdev/grid
 ```
 
 ### Installation from JSR
@@ -44,7 +44,7 @@ The full API of this library can be found in [api.md](api.md).
 
 <!-- prettier-ignore -->
 ```js
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 
 const client = new LightsparkGrid({
   username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted
@@ -73,7 +73,7 @@ This library includes TypeScript definitions for all request params and response
 
 <!-- prettier-ignore -->
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 
 const client = new LightsparkGrid({
   username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted
@@ -108,7 +108,7 @@ Request parameters that correspond to file uploads can be passed in many differe
 
 ```ts
 import fs from 'fs';
-import LightsparkGrid, { toFile } from 'lightspark-grid';
+import LightsparkGrid, { toFile } from '@lightsparkdev/grid';
 
 const client = new LightsparkGrid();
 
@@ -317,7 +317,7 @@ The log level can be configured in two ways:
 2. Using the `logLevel` client option (overrides the environment variable if set)
 
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 
 const client = new LightsparkGrid({
   logLevel: 'debug', // Show all log messages
@@ -345,7 +345,7 @@ When providing a custom logger, the `logLevel` option still controls which messa
 below the configured level will not be sent to your logger.
 
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 import pino from 'pino';
 
 const logger = pino();
@@ -414,7 +414,7 @@ globalThis.fetch = fetch;
 Or pass it to the client:
 
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 import fetch from 'my-fetch';
 
 const client = new LightsparkGrid({ fetch });
@@ -425,7 +425,7 @@ const client = new LightsparkGrid({ fetch });
 If you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)
 
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 
 const client = new LightsparkGrid({
   fetchOptions: {
@@ -442,7 +442,7 @@ options to requests:
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg" align="top" width="18" height="21"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>
 
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 import * as undici from 'undici';
 
 const proxyAgent = new undici.ProxyAgent('http://localhost:8888');
@@ -456,7 +456,7 @@ const client = new LightsparkGrid({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg" align="top" width="18" height="21"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>
 
 ```ts
-import LightsparkGrid from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 
 const client = new LightsparkGrid({
   fetchOptions: {

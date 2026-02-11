@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from 'lightspark-grid/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@lightsparkdev/grid/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 

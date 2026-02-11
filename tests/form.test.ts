@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'lightspark-grid/internal/uploads';
-import { toFile } from 'lightspark-grid/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@lightsparkdev/grid/internal/uploads';
+import { toFile } from '@lightsparkdev/grid/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

@@ -25,7 +25,7 @@ For clients with a configuration JSON, it might look something like this:
 ```json
 {
   "mcpServers": {
-    "lightspark_grid_api": {
+    "lightsparkdev_grid_api": {
       "command": "npx",
       "args": ["-y", "lightspark-grid-mcp"],
       "env": {
@@ -96,7 +96,7 @@ A configuration JSON for this server might look like this, assuming the server i
 ```json
 {
   "mcpServers": {
-    "lightspark_grid_api": {
+    "lightsparkdev_grid_api": {
       "url": "http://localhost:3000",
       "headers": {
         "Authorization": "Basic <auth value>"
