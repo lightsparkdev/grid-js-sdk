@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^lightspark-grid(/.*)?',
+              regex: '^@lightsparkdev/grid(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

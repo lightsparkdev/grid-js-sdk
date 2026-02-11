@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'lightspark-grid/core/api-promise';
+import { APIPromise } from '@lightsparkdev/grid/core/api-promise';
 
 import util from 'node:util';
-import LightsparkGrid from 'lightspark-grid';
-import { APIUserAbortError } from 'lightspark-grid';
+import LightsparkGrid from '@lightsparkdev/grid';
+import { APIUserAbortError } from '@lightsparkdev/grid';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

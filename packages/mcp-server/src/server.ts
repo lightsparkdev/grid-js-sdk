@@ -7,8 +7,8 @@ import {
   ListToolsRequestSchema,
   SetLevelRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
-import { ClientOptions } from 'lightspark-grid';
-import LightsparkGrid from 'lightspark-grid';
+import { ClientOptions } from '@lightsparkdev/grid';
+import LightsparkGrid from '@lightsparkdev/grid';
 import { codeTool } from './code-tool';
 import docsSearchTool from './docs-search-tool';
 import { McpOptions } from './options';
@@ -16,7 +16,7 @@ import { blockedMethodsForCodeTool } from './methods';
 import { HandlerFunction, McpTool } from './types';
 
 export { McpOptions } from './options';
-export { ClientOptions } from 'lightspark-grid';
+export { ClientOptions } from '@lightsparkdev/grid';
 
 async function getInstructions() {
   // This API key is optional; providing it allows the server to fetch instructions for unreleased versions.
@@ -57,8 +57,8 @@ async function getInstructions() {
 export const newMcpServer = async () =>
   new McpServer(
     {
-      name: 'lightspark_grid_api',
-      version: '0.2.0',
+      name: 'lightsparkdev_grid_api',
+      version: '0.2.1',
     },
     {
       instructions: await getInstructions(),

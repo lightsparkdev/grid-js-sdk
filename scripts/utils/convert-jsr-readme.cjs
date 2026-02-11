@@ -133,7 +133,7 @@ function processReadme(config, file) {
 }
 
 const config = {
-  npm: 'lightspark-grid',
+  npm: '@lightsparkdev/grid',
   jsr: '@lightspark/grid',
 };
 

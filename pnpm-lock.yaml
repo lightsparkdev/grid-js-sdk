@@ -80,6 +80,9 @@ importers:
       '@cloudflare/cabidela':
         specifier: ^0.2.4
         version: 0.2.4
+      '@lightsparkdev/grid':
+        specifier: workspace:*
+        version: link:../..
       '@modelcontextprotocol/sdk':
         specifier: ^1.25.2
         version: 1.25.2(hono@4.11.4)(zod@3.25.76)
@@ -101,9 +104,6 @@ importers:
       jq-web:
         specifier: https://github.com/stainless-api/jq-web/releases/download/v0.8.8/jq-web.tar.gz
         version: https://github.com/stainless-api/jq-web/releases/download/v0.8.8/jq-web.tar.gz
-      lightspark-grid:
-        specifier: workspace:*
-        version: link:../..
       morgan:
         specifier: ^1.10.0
         version: 1.10.1
