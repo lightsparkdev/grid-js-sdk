@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.2 (2026-02-11)
+
+Full Changelog: [v0.2.1...v0.2.2](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.2.1...v0.2.2)
+
+### Chores
+
+* update SDK settings ([44ab01f](https://github.com/lightsparkdev/grid-js-sdk/commit/44ab01f25cd0664e183a2e99a3c3911371f63541))
+* update SDK settings ([14ad16c](https://github.com/lightsparkdev/grid-js-sdk/commit/14ad16cc0ede8daa2700d6d2edba22954643f731))
+
 ## 0.2.1 (2026-02-11)
 
 Full Changelog: [v0.2.0...v0.2.1](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.2.0...v0.2.1)
