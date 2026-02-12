@@ -7,8 +7,8 @@ const config: JestConfigWithTsJest = {
     '^.+\\.(t|j)sx?$': ['@swc/jest', { sourceMaps: 'inline' }],
   },
   moduleNameMapper: {
-    '^lightspark-grid-mcp$': '<rootDir>/src/index.ts',
-    '^lightspark-grid-mcp/(.*)$': '<rootDir>/src/$1',
+    '^@lightsparkdev/grid-mcp$': '<rootDir>/src/index.ts',
+    '^@lightsparkdev/grid-mcp/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   testPathIgnorePatterns: ['scripts'],
