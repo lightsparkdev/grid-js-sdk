@@ -12,7 +12,7 @@ You can run the MCP Server directly via `npx`:
 export GRID_CLIENT_ID="My Username"
 export GRID_CLIENT_SECRET="My Password"
 export GRID_WEBHOOK_PUBKEY="My Webhook Signature"
-npx -y lightspark-grid-mcp@latest
+npx -y @lightsparkdev/grid-mcp@latest
 ```
 
 ### Via MCP Client
@@ -27,7 +27,7 @@ For clients with a configuration JSON, it might look something like this:
   "mcpServers": {
     "lightsparkdev_grid_api": {
       "command": "npx",
-      "args": ["-y", "lightspark-grid-mcp"],
+      "args": ["-y", "@lightsparkdev/grid-mcp"],
       "env": {
         "GRID_CLIENT_ID": "My Username",
         "GRID_CLIENT_SECRET": "My Password",
@@ -43,14 +43,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=lightspark-grid-mcp&config=eyJuYW1lIjoibGlnaHRzcGFyay1ncmlkLW1jcCIsInRyYW5zcG9ydCI6Imh0dHAiLCJ1cmwiOiJodHRwczovL2dyaWQtbWNwLnN0bG1jcC5jb20iLCJoZWFkZXJzIjp7IngtZ3JpZC1jbGllbnQtaWQiOiJNeSBVc2VybmFtZSIsIngtZ3JpZC1jbGllbnQtc2VjcmV0IjoiTXkgUGFzc3dvcmQiLCJYLUdyaWQtU2lnbmF0dXJlIjoiTXkgV2ViaG9vayBTaWduYXR1cmUifX0)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBsaWdodHNwYXJrZGV2L2dyaWQtbWNwIl0sImVudiI6eyJHUklEX0NMSUVOVF9JRCI6Ik15IFVzZXJuYW1lIiwiR1JJRF9DTElFTlRfU0VDUkVUIjoiTXkgUGFzc3dvcmQiLCJHUklEX1dFQkhPT0tfUFVCS0VZIjoiTXkgV2ViaG9vayBTaWduYXR1cmUifX0)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22lightspark-grid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40lightsparkdev%2Fgrid-mcp%22%5D%2C%22env%22%3A%7B%22GRID_CLIENT_ID%22%3A%22My%20Username%22%2C%22GRID_CLIENT_SECRET%22%3A%22My%20Password%22%2C%22GRID_WEBHOOK_PUBKEY%22%3A%22My%20Webhook%20Signature%22%7D%7D)
 
 ### Claude Code
 
@@ -58,7 +58,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add lightspark_grid_mcp_api --header "x-grid-client-id: My Username" --header "x-grid-client-secret: My Password" --header "X-Grid-Signature: My Webhook Signature" --transport http https://grid-mcp.stlmcp.com
+claude mcp add lightsparkdev_grid_mcp_api --env GRID_CLIENT_ID="My Username" GRID_CLIENT_SECRET="My Password" GRID_WEBHOOK_PUBKEY="My Webhook Signature" -- npx -y @lightsparkdev/grid-mcp
 ```
 
 ## Code Mode

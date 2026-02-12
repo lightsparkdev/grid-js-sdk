@@ -1,6 +1,6 @@
 {
-  "name": "@lightspark/grid",
-  "version": "0.2.3",
+  "name": "@lightsparkdev/grid",
+  "version": "0.3.0",
   "exports": "./index.ts",
   "publish": {
     "exclude": [
