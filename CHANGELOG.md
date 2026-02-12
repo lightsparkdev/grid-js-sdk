@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.4.0 (2026-02-12)
+
+Full Changelog: [v0.3.1...v0.4.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.3.1...v0.4.0)
+
+### Features
+
+* **api:** fix package names ([bdd4272](https://github.com/lightsparkdev/grid-js-sdk/commit/bdd4272f2dd2c317db39d40202b5e49ce0485b30))
+* **api:** set release_environment to npm ([2dcf624](https://github.com/lightsparkdev/grid-js-sdk/commit/2dcf624388ee4ff25204e5ef49b330ca24d1432c))
+
+
+### Chores
+
+* update SDK settings ([f7cdb81](https://github.com/lightsparkdev/grid-js-sdk/commit/f7cdb81fc3bddcf986b11c0164e61d53ef1da30b))
+
 ## 0.3.1 (2026-02-12)
 
 Full Changelog: [v0.3.0...v0.3.1](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.3.0...v0.3.1)
