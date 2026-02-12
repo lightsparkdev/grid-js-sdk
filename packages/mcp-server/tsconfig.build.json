@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "@lightsparkdev/grid-mcp/*": ["./dist/src/*"],
-      "@lightsparkdev/grid-mcp": ["./dist/src/index.ts"]
+      "lightspark-grid-mcp/*": ["./dist/src/*"],
+      "lightspark-grid-mcp": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
