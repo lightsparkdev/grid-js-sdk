@@ -34,6 +34,18 @@ export class Sandbox extends APIResource {
   sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<SandboxSendFundsResponse> {
     return this._client.post('/sandbox/send', { body, ...options });
   }
+
+  /**
+   * Send a test webhook to the configured endpoint
+   *
+   * @example
+   * ```ts
+   * const response = await client.sandbox.sendTestWebhook();
+   * ```
+   */
+  sendTestWebhook(options?: RequestOptions): APIPromise<SandboxSendTestWebhookResponse> {
+    return this._client.post('/webhooks/test', options);
+  }
 }
 
 export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
@@ -122,6 +134,23 @@ export namespace SandboxSendFundsResponse {
   }
 }
 
+export interface SandboxSendTestWebhookResponse {
+  /**
+   * The HTTP status code returned by the webhook endpoint
+   */
+  response_status: number;
+
+  /**
+   * The raw body content returned by the webhook endpoint in response to the request
+   */
+  response_body?: string;
+
+  /**
+   * URL where the webhook was sent
+   */
+  url?: string;
+}
+
 export interface SandboxSendFundsParams {
   /**
    * Currency code for the funds to be sent
@@ -146,6 +175,7 @@ Sandbox.InternalAccounts = InternalAccounts;
 export declare namespace Sandbox {
   export {
     type SandboxSendFundsResponse as SandboxSendFundsResponse,
+    type SandboxSendTestWebhookResponse as SandboxSendTestWebhookResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
