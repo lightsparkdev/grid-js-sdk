@@ -165,7 +165,9 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
+- <code><a href="./src/resources/transactions.ts">CounterpartyInformation</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionDestinationOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
@@ -181,11 +183,18 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/webhooks.ts">WebhookSendTestResponse</a></code>
+- <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">TestWebhookWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">KYCStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">AccountStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 
 Methods:
 
-- <code title="post /webhooks/test">client.webhooks.<a href="./src/resources/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
 
 # Invitations
 
@@ -206,10 +215,12 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendFundsResponse</a></code>
+- <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendTestWebhookResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> SandboxSendFundsResponse</code>
+- <code title="post /webhooks/test">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendTestWebhook</a>() -> SandboxSendTestWebhookResponse</code>
 
 ## Uma
 

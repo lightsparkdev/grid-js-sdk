@@ -188,12 +188,7 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'post',
     httpPath: '/transactions/{transactionId}/reject',
   },
-  {
-    clientCallName: 'client.webhooks.sendTest',
-    fullyQualifiedName: 'webhooks.sendTest',
-    httpMethod: 'post',
-    httpPath: '/webhooks/test',
-  },
+  { clientCallName: 'client.webhooks.unwrap', fullyQualifiedName: 'webhooks.unwrap' },
   {
     clientCallName: 'client.invitations.create',
     fullyQualifiedName: 'invitations.create',
@@ -223,6 +218,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'sandbox.sendFunds',
     httpMethod: 'post',
     httpPath: '/sandbox/send',
+  },
+  {
+    clientCallName: 'client.sandbox.sendTestWebhook',
+    fullyQualifiedName: 'sandbox.sendTestWebhook',
+    httpMethod: 'post',
+    httpPath: '/webhooks/test',
   },
   {
     clientCallName: 'client.sandbox.uma.receivePayment',
