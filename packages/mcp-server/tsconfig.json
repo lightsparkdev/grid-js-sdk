@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "lightspark-grid-mcp/*": ["./src/*"],
-      "lightspark-grid-mcp": ["./src/index.ts"]
+      "@lightsparkdev/grid-mcp/*": ["./src/*"],
+      "@lightsparkdev/grid-mcp": ["./src/index.ts"]
     },
     "noEmit": true,
 
