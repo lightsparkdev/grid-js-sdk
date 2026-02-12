@@ -1,5 +1,5 @@
 {
-  "name": "@lightspark/grid",
+  "name": "@lightsparkdev/grid",
   "version": "0.3.1",
   "exports": "./index.ts",
   "publish": {

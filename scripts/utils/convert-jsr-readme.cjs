@@ -134,7 +134,7 @@ function processReadme(config, file) {
 
 const config = {
   npm: '@lightsparkdev/grid',
-  jsr: '@lightspark/grid',
+  jsr: '@lightsparkdev/grid',
 };
 
 processReadme(config, process.argv[2]);
