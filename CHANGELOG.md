@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0 (2026-02-12)
+
+Full Changelog: [v0.2.3...v0.3.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.2.3...v0.3.0)
+
+### Features
+
+* **api:** manual updates ([692b68c](https://github.com/lightsparkdev/grid-js-sdk/commit/692b68c315cbc443bc5c36ff5fde3022d2f24f95))
+
+
+### Chores
+
+* **internal:** unconfigure MCP Server hosting ([c432380](https://github.com/lightsparkdev/grid-js-sdk/commit/c4323809c7a9d88917971c7da309e13c09016fbb))
+* update SDK settings ([c63dfda](https://github.com/lightsparkdev/grid-js-sdk/commit/c63dfda61dfe159b170d18041969e0d35d32fdb8))
+* update SDK settings ([0c23696](https://github.com/lightsparkdev/grid-js-sdk/commit/0c23696fbacb4c66598fd6ef6f03bcbae23a4d59))
+* update SDK settings ([e72880d](https://github.com/lightsparkdev/grid-js-sdk/commit/e72880def0f4113f22a155cdd1448a0c0f7c3563))
+* update SDK settings ([ffcd34d](https://github.com/lightsparkdev/grid-js-sdk/commit/ffcd34db5fdf948150a356af256a93b036ac66d1))
+* update SDK settings ([3cc37ad](https://github.com/lightsparkdev/grid-js-sdk/commit/3cc37ad43c2f99ce077e59c717c0181bbd78eea4))
+* update SDK settings ([a3cba95](https://github.com/lightsparkdev/grid-js-sdk/commit/a3cba95fcd8ab3ee853463c83721e81f593a2136))
+
 ## 0.2.3 (2026-02-12)
 
 Full Changelog: [v0.2.2...v0.2.3](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.2.2...v0.2.3)
