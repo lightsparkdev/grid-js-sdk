@@ -40,41 +40,15 @@ Types:
 
 - <code><a href="./src/resources/customers/external-accounts.ts">Address</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">BrlBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">BrlExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BusinessBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">DkkBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">DkkExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">GbpBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">GbpExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">HkdBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">HkdExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">IdrBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">IdrExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">InrBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">InrExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">LightningWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">MxnBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">MxnExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">MyrBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">MyrExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">PhpBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">PhpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PolygonWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">SgdBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">SgdExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">SolanaWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">SparkWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ThbBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ThbExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">TronWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">UsdBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">UsdExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">VndBeneficiary</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">VndExternalAccountInfo</a></code>
 
 Methods:
 
