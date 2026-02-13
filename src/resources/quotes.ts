@@ -53,14 +53,12 @@ export class Quotes extends APIResource {
    * ```ts
    * const quote = await client.quotes.create({
    *   destination: {
-   *     destinationType: 'ACCOUNT',
    *     accountId:
    *       'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
    *   },
    *   lockedCurrencyAmount: 10000,
    *   lockedCurrencySide: 'SENDING',
    *   source: {
-   *     sourceType: 'ACCOUNT',
    *     accountId:
    *       'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
    *   },
@@ -130,12 +128,6 @@ export class Quotes extends APIResource {
 }
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
-
-export type BaseDestination = unknown;
-
-export type BasePaymentAccountInfo = unknown;
-
-export type BaseQuoteSource = unknown;
 
 export interface Currency {
   /**
@@ -451,7 +443,7 @@ export interface Quote {
   /**
    * Source account details
    */
-  source: QuoteSourceOneOf;
+  source: Quote.AccountQuoteSource | Quote.RealtimeFundingQuoteSource;
 
   /**
    * Current status of the quote
@@ -490,6 +482,52 @@ export interface Quote {
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: OutgoingRateDetails;
+}
+
+export namespace Quote {
+  /**
+   * Source account details
+   */
+  export interface AccountQuoteSource {
+    /**
+     * Source account identifier
+     */
+    accountId: string;
+
+    sourceType: 'ACCOUNT';
+
+    /**
+     * Required when funding from an FBO account to identify the customer on whose
+     * behalf the transaction is being initiated. Otherwise, will default to the
+     * customerId of the account owner.
+     */
+    customerId?: string;
+  }
+
+  /**
+   * Fund the quote using a real-time funding source (RTP, SEPA Instant, Spark,
+   * Stables, etc.). This will require manual just-in-time funding using
+   * `paymentInstructions` in the response. Because quotes expire quickly, this
+   * option is only valid for instant payment methods. Do not try to fund a quote
+   * with a non-instant payment method (ACH, etc.).
+   */
+  export interface RealtimeFundingQuoteSource {
+    /**
+     * Currency code for the funding source. See
+     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
+     * for the full list of supported fiat and crypto currencies.
+     */
+    currency: string;
+
+    sourceType: 'REALTIME_FUNDING';
+
+    /**
+     * Source customer ID. If this transaction is being initiated on behalf of a
+     * customer, this is required. If customerId is not provided, the quote will be
+     * created on behalf of the platform itself.
+     */
+    customerId?: string;
+  }
 }
 
 /**
@@ -551,14 +589,66 @@ export namespace QuoteDestinationOneOf {
   }
 }
 
-/**
- * Source account details
- */
-export type QuoteSourceOneOf =
-  | QuoteSourceOneOf.AccountQuoteSource
-  | QuoteSourceOneOf.RealtimeFundingQuoteSource;
+export interface QuoteCreateParams {
+  /**
+   * Destination account details
+   */
+  destination: QuoteDestinationOneOf;
 
-export namespace QuoteSourceOneOf {
+  /**
+   * The amount to send/receive in the smallest unit of the locked currency (eg.
+   * cents). See `lockedCurrencySide` for more information.
+   */
+  lockedCurrencyAmount: number;
+
+  /**
+   * The side of the quote which should be locked and specified in the
+   * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
+   * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
+   * cents). If I want the receiver to receive exactly $10 USD, I would set this to
+   * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
+   */
+  lockedCurrencySide: 'SENDING' | 'RECEIVING';
+
+  /**
+   * Source account details
+   */
+  source: QuoteCreateParams.AccountQuoteSource | QuoteCreateParams.RealtimeFundingQuoteSource;
+
+  /**
+   * Optional description/memo for the transfer
+   */
+  description?: string;
+
+  /**
+   * Whether to immediately execute the quote after creation. If true, the quote will
+   * be executed and the transaction will be created at the current exchange rate. It
+   * should only be used if you don't want to lock and view rate details before
+   * executing the quote. If you are executing a pre-existing quote, use the
+   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default.
+   */
+  immediatelyExecute?: boolean;
+
+  /**
+   * Lookup ID from a previous receiver lookup request. If provided, this can make
+   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
+   * required for UMA destinations due to counterparty institution requirements. See
+   * `senderCustomerInfo` for more information.
+   */
+  lookupId?: string;
+
+  /**
+   * Only relevant for UMA destinations. Key-value pairs of information about the
+   * sender which was requested by the counterparty (recipient) institution. Any
+   * fields specified in `requiredPayerDataFields` from the response of the
+   * `/receiver/uma/{receiverUmaAddress}` (lookupUma) endpoint MUST be provided here
+   * if they were requested. If the counterparty (recipient) institution did not
+   * request any information, this field can be omitted.
+   */
+  senderCustomerInfo?: { [key: string]: unknown };
+}
+
+export namespace QuoteCreateParams {
   /**
    * Source account details
    */
@@ -602,65 +692,6 @@ export namespace QuoteSourceOneOf {
      */
     customerId?: string;
   }
-}
-
-export interface QuoteCreateParams {
-  /**
-   * Destination account details
-   */
-  destination: QuoteDestinationOneOf;
-
-  /**
-   * The amount to send/receive in the smallest unit of the locked currency (eg.
-   * cents). See `lockedCurrencySide` for more information.
-   */
-  lockedCurrencyAmount: number;
-
-  /**
-   * The side of the quote which should be locked and specified in the
-   * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
-   * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
-   * cents). If I want the receiver to receive exactly $10 USD, I would set this to
-   * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
-   */
-  lockedCurrencySide: 'SENDING' | 'RECEIVING';
-
-  /**
-   * Source account details
-   */
-  source: QuoteSourceOneOf;
-
-  /**
-   * Optional description/memo for the transfer
-   */
-  description?: string;
-
-  /**
-   * Whether to immediately execute the quote after creation. If true, the quote will
-   * be executed and the transaction will be created at the current exchange rate. It
-   * should only be used if you don't want to lock and view rate details before
-   * executing the quote. If you are executing a pre-existing quote, use the
-   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default.
-   */
-  immediatelyExecute?: boolean;
-
-  /**
-   * Lookup ID from a previous receiver lookup request. If provided, this can make
-   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
-   * required for UMA destinations due to counterparty institution requirements. See
-   * `senderCustomerInfo` for more information.
-   */
-  lookupId?: string;
-
-  /**
-   * Only relevant for UMA destinations. Key-value pairs of information about the
-   * sender which was requested by the counterparty (recipient) institution. Any
-   * fields specified in `requiredPayerDataFields` from the response of the
-   * `/receiver/uma/{receiverUmaAddress}` (lookupUma) endpoint MUST be provided here
-   * if they were requested. If the counterparty (recipient) institution did not
-   * request any information, this field can be omitted.
-   */
-  senderCustomerInfo?: { [key: string]: unknown };
 }
 
 export interface QuoteListParams extends DefaultPaginationParams {
@@ -712,15 +743,11 @@ export interface QuoteListParams extends DefaultPaginationParams {
 
 export declare namespace Quotes {
   export {
-    type BaseDestination as BaseDestination,
-    type BasePaymentAccountInfo as BasePaymentAccountInfo,
-    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
-    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
