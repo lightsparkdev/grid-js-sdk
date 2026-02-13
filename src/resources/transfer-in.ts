@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as TransferInAPI from './transfer-in';
 import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination } from '../core/pagination';
@@ -65,7 +66,7 @@ export interface Transaction {
   /**
    * Destination account details
    */
-  destination: TransactionsAPI.TransactionDestinationOneOf;
+  destination: Transaction.AccountTransactionDestination | Transaction.UmaAddressTransactionDestination;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -88,7 +89,7 @@ export interface Transaction {
    * transaction and platform. Only applicable for transactions to/from UMA
    * addresses.
    */
-  counterpartyInformation?: TransactionsAPI.CounterpartyInformation;
+  counterpartyInformation?: { [key: string]: unknown };
 
   /**
    * When the transaction was created
@@ -109,6 +110,32 @@ export interface Transaction {
    * When the transaction was last updated
    */
   updatedAt?: string;
+}
+
+export namespace Transaction {
+  /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
+  }
 }
 
 export interface TransferInCreateParams {
