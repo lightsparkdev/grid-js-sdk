@@ -74,8 +74,10 @@ import {
 } from './resources/tokens';
 import {
   BaseTransactionSource,
+  CounterpartyInformation,
   IncomingTransaction,
   TransactionApproveParams,
+  TransactionDestinationOneOf,
   TransactionListParams,
   TransactionRejectParams,
   TransactionSourceOneOf,
@@ -96,7 +98,17 @@ import {
   UmaProviderListResponsesDefaultPagination,
   UmaProviders,
 } from './resources/uma-providers';
-import { WebhookSendTestResponse, Webhooks } from './resources/webhooks';
+import {
+  AccountStatusWebhookEvent,
+  BulkUploadWebhookEvent,
+  IncomingPaymentWebhookEvent,
+  InvitationClaimedWebhookEvent,
+  KYCStatusWebhookEvent,
+  OutgoingPaymentWebhookEvent,
+  TestWebhookWebhookEvent,
+  UnwrapWebhookEvent,
+  Webhooks,
+} from './resources/webhooks';
 import {
   Customer,
   CustomerCreate,
@@ -119,7 +131,12 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { Sandbox, SandboxSendFundsParams, SandboxSendFundsResponse } from './resources/sandbox/sandbox';
+import {
+  Sandbox,
+  SandboxSendFundsParams,
+  SandboxSendFundsResponse,
+  SandboxSendTestWebhookResponse,
+} from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -593,7 +610,7 @@ export class LightsparkGrid {
       loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
 
       const errText = await response.text().catch((err: any) => castToError(err).message);
-      const errJSON = safeJSON(errText);
+      const errJSON = safeJSON(errText) as any;
       const errMessage = errJSON ? undefined : errText;
 
       loggerFor(this).debug(
@@ -879,67 +896,14 @@ export class LightsparkGrid {
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
   static APIUserAbortError = Errors.APIUserAbortError;
-  static Forbidden = Errors.Forbidden;
-  static SelfPayment = Errors.SelfPayment;
-  static InvalidInput = Errors.InvalidInput;
-  static InvalidNonce = Errors.InvalidNonce;
-  static Unauthorized = Errors.Unauthorized;
-  static UserNotReady = Errors.UserNotReady;
-  static UserNotFound = Errors.UserNotFound;
   static NotFoundError = Errors.NotFoundError;
   static ConflictError = Errors.ConflictError;
-  static InvalidAmount = Errors.InvalidAmount;
-  static QuoteNotFound = Errors.QuoteNotFound;
-  static TokenNotFound = Errors.TokenNotFound;
-  static InternalError = Errors.InternalError;
   static RateLimitError = Errors.RateLimitError;
-  static NotImplemented = Errors.NotImplemented;
   static BadRequestError = Errors.BadRequestError;
-  static InvalidReceiver = Errors.InvalidReceiver;
-  static InvalidCurrency = Errors.InvalidCurrency;
-  static CustomerDeleted = Errors.CustomerDeleted;
-  static GridSwitchError = Errors.GridSwitchError;
-  static CertChainInvalid = Errors.CertChainInvalid;
-  static CertChainExpired = Errors.CertChainExpired;
-  static AmountOutOfRange = Errors.AmountOutOfRange;
-  static InvalidTimestamp = Errors.InvalidTimestamp;
-  static InvalidSignature = Errors.InvalidSignature;
-  static UmaAddressExists = Errors.UmaAddressExists;
-  static InvalidUmaAddress = Errors.InvalidUmaAddress;
-  static SenderNotAccepted = Errors.SenderNotAccepted;
-  static ReferenceNotFound = Errors.ReferenceNotFound;
-  static QuoteRequestFailed = Errors.QuoteRequestFailed;
-  static InvalidBankAccount = Errors.InvalidBankAccount;
-  static InvitationNotFound = Errors.InvitationNotFound;
   static AuthenticationError = Errors.AuthenticationError;
   static InternalServerError = Errors.InternalServerError;
-  static InvitationCancelled = Errors.InvitationCancelled;
-  static InvalidPubkeyFormat = Errors.InvalidPubkeyFormat;
-  static LookupRequestFailed = Errors.LookupRequestFailed;
-  static TransactionNotFound = Errors.TransactionNotFound;
-  static PayreqRequestFailed = Errors.PayreqRequestFailed;
-  static LnurlpRequestFailed = Errors.LnurlpRequestFailed;
-  static InvalidRequestFormat = Errors.InvalidRequestFormat;
-  static WebhookDeliveryError = Errors.WebhookDeliveryError;
   static PermissionDeniedError = Errors.PermissionDeniedError;
-  static InvalidPayreqResponse = Errors.InvalidPayreqResponse;
-  static WebhookEndpointNotSet = Errors.WebhookEndpointNotSet;
-  static VelocityLimitExceeded = Errors.VelocityLimitExceeded;
-  static LookupRequestNotFound = Errors.LookupRequestNotFound;
-  static BulkUploadJobNotFound = Errors.BulkUploadJobNotFound;
-  static UnsupportedUmaVersion = Errors.UnsupportedUmaVersion;
-  static CounterpartyNotAllowed = Errors.CounterpartyNotAllowed;
-  static NoCompatibleUmaVersion = Errors.NoCompatibleUmaVersion;
   static UnprocessableEntityError = Errors.UnprocessableEntityError;
-  static MissingMandatoryUserInfo = Errors.MissingMandatoryUserInfo;
-  static InvitationAlreadyClaimed = Errors.InvitationAlreadyClaimed;
-  static InvitationsNotConfigured = Errors.InvitationsNotConfigured;
-  static ParsePayreqResponseError = Errors.ParsePayreqResponseError;
-  static ParseLnurlpResponseError = Errors.ParseLnurlpResponseError;
-  static MissingRequiredUmaParameters = Errors.MissingRequiredUmaParameters;
-  static CounterpartyPubkeyFetchError = Errors.CounterpartyPubkeyFetchError;
-  static UnrecognizedMandatoryPayeeDataKey = Errors.UnrecognizedMandatoryPayeeDataKey;
-  static TransactionNotPendingPlatformApproval = Errors.TransactionNotPendingPlatformApproval;
 
   static toFile = Uploads.toFile;
 
@@ -1062,7 +1026,9 @@ export declare namespace LightsparkGrid {
   export {
     Transactions as Transactions,
     type BaseTransactionSource as BaseTransactionSource,
+    type CounterpartyInformation as CounterpartyInformation,
     type IncomingTransaction as IncomingTransaction,
+    type TransactionDestinationOneOf as TransactionDestinationOneOf,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
@@ -1071,7 +1037,17 @@ export declare namespace LightsparkGrid {
     type TransactionRejectParams as TransactionRejectParams,
   };
 
-  export { Webhooks as Webhooks, type WebhookSendTestResponse as WebhookSendTestResponse };
+  export {
+    Webhooks as Webhooks,
+    type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
+    type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
+    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
+    type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
+    type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
+    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
+    type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
+    type UnwrapWebhookEvent as UnwrapWebhookEvent,
+  };
 
   export {
     Invitations as Invitations,
@@ -1084,6 +1060,7 @@ export declare namespace LightsparkGrid {
   export {
     Sandbox as Sandbox,
     type SandboxSendFundsResponse as SandboxSendFundsResponse,
+    type SandboxSendTestWebhookResponse as SandboxSendTestWebhookResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
