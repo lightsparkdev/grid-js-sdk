@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.5.0 (2026-02-13)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** add webhook events/unwrap, move webhook test to sandbox, update transaction types ([2422746](https://github.com/lightsparkdev/grid-js-sdk/commit/2422746260e9329b23a055cf7dd3c38cf85416f3))
+
+
+### Chores
+
+* **internal:** avoid type checking errors with ts-reset ([7f0c7d2](https://github.com/lightsparkdev/grid-js-sdk/commit/7f0c7d239a1e73d80833e425348fcbf29d973c64))
+* remove custom code ([f50afd6](https://github.com/lightsparkdev/grid-js-sdk/commit/f50afd6c3ae901b81e296f1ad3e195c62f5a144a))
+
 ## 0.4.0 (2026-02-12)
 
 Full Changelog: [v0.3.1...v0.4.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.3.1...v0.4.0)
