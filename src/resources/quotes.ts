@@ -470,11 +470,6 @@ export interface Quote {
   transactionId: string;
 
   /**
-   * ID of the quote that is being retried
-   */
-  originalQuoteId?: string;
-
-  /**
    * Payment instructions for executing the payment. This is not required when using
    * an internal account source.
    */
