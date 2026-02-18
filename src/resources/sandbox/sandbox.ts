@@ -75,11 +75,6 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
   fees?: number;
 
   /**
-   * ID of the original transaction that this transaction is retrying, if applicable
-   */
-  originalTransactionId?: string;
-
-  /**
    * The ID of the quote that was used to trigger this payment
    */
   quoteId?: string;
