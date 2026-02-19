@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.6.0 (2026-02-19)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** add beneficiary verification fields to ExternalAccount ([aa989be](https://github.com/lightsparkdev/grid-js-sdk/commit/aa989be100d6b6920ab11121b3ee55291e7c8c3f))
+* **api:** manual updates ([b2465e3](https://github.com/lightsparkdev/grid-js-sdk/commit/b2465e34f18d64b79b5823a4b812f58a1403f20f))
+* **api:** manual updates ([7fac5ee](https://github.com/lightsparkdev/grid-js-sdk/commit/7fac5ee05345d1dc003f53ed185ca21a2ea87cd9))
+* **api:** manual updates ([66e96dd](https://github.com/lightsparkdev/grid-js-sdk/commit/66e96dd633c290f28e6750c9f11f2c40d6d461b0))
+* **api:** manual updates ([a73f73f](https://github.com/lightsparkdev/grid-js-sdk/commit/a73f73fe3438683bb3dcfb295f7d86afebebac8a))
+* Revert main to af3a51a ([bc6c9e5](https://github.com/lightsparkdev/grid-js-sdk/commit/bc6c9e56b7568a61c9fae20789a126b898d73896))
+
+
+### Bug Fixes
+
+* **api:** remove originalQuoteId field from Quote ([afdf12f](https://github.com/lightsparkdev/grid-js-sdk/commit/afdf12f9d0001062b021a2b93531b0c560389d31))
+* **types:** remove counterpartyInformation field from quotes destination ([701e407](https://github.com/lightsparkdev/grid-js-sdk/commit/701e407c46d3d5101426afd436608a5db6d311da))
+* **types:** remove originalTransactionId field from SandboxSendFundsResponse ([574282c](https://github.com/lightsparkdev/grid-js-sdk/commit/574282c2ecf511702336fbdebdb04fc799a1a312))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([b239f07](https://github.com/lightsparkdev/grid-js-sdk/commit/b239f072ca1f07b4703fbc79b0c45ebf23d8f7b4))
+* **internal:** allow setting x-stainless-api-key header on mcp server requests ([8f2913c](https://github.com/lightsparkdev/grid-js-sdk/commit/8f2913ceb2658836df222dd5697253b1569bf143))
+* **internal:** improve layout of generated MCP server files ([37f0c7c](https://github.com/lightsparkdev/grid-js-sdk/commit/37f0c7c7495d20ab41a371d17d3ce49c8e15ff16))
+* **internal:** improve reliability of MCP servers when using local code mode execution ([8773471](https://github.com/lightsparkdev/grid-js-sdk/commit/8773471c7db98972ee23262831b312ef5fae93a6))
+* **mcp:** forward STAINLESS_API_KEY to docs search endpoint ([198f88d](https://github.com/lightsparkdev/grid-js-sdk/commit/198f88dab4010c91a871dc83be7d22781ac7cd57))
+* remove custom code ([54b0242](https://github.com/lightsparkdev/grid-js-sdk/commit/54b02424fcf626d7ae3647a987caa6d0d23bc763))
+
 ## 0.5.0 (2026-02-13)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.4.0...v0.5.0)
