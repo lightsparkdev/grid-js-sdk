@@ -94,6 +94,13 @@ export interface BaseTransactionSource {
   currency?: string;
 }
 
+/**
+ * Additional information about the counterparty, if available and relevant to the
+ * transaction and platform. Only applicable for transactions to/from UMA
+ * addresses.
+ */
+export type CounterpartyInformation = { [key: string]: unknown };
+
 export interface IncomingTransaction extends TransferInAPI.Transaction {
   /**
    * Amount received in the recipient's currency
@@ -169,6 +176,39 @@ export namespace IncomingTransaction {
      * the correct incoming transaction
      */
     reference: string;
+  }
+}
+
+/**
+ * Destination account details
+ */
+export type TransactionDestinationOneOf =
+  | TransactionDestinationOneOf.AccountTransactionDestination
+  | TransactionDestinationOneOf.UmaAddressTransactionDestination;
+
+export namespace TransactionDestinationOneOf {
+  /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
   }
 }
 
@@ -299,7 +339,9 @@ export interface TransactionRejectParams {
 export declare namespace Transactions {
   export {
     type BaseTransactionSource as BaseTransactionSource,
+    type CounterpartyInformation as CounterpartyInformation,
     type IncomingTransaction as IncomingTransaction,
+    type TransactionDestinationOneOf as TransactionDestinationOneOf,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,

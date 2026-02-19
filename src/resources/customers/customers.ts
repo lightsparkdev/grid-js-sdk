@@ -6,9 +6,10 @@ import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
-  Address,
   BaseWalletInfo,
-  BusinessBeneficiary,
+  BeneficiaryOneOf,
+  CadAccountInfo,
+  ClabeAccountInfo,
   ExternalAccount,
   ExternalAccountCreate,
   ExternalAccountCreateParams,
@@ -16,11 +17,19 @@ import {
   ExternalAccountListParams,
   ExternalAccounts,
   ExternalAccountsDefaultPagination,
+  GbpAccountInfo,
+  IbanAccountInfo,
   LightningWalletInfo,
+  NgnAccountInfo,
+  PhpAccountInfo,
+  PixAccountInfo,
   PolygonWalletInfo,
+  SgdAccountInfo,
   SolanaWalletInfo,
   SparkWalletInfo,
   TronWalletInfo,
+  UpiAccountInfo,
+  UsAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { InternalAccountsDefaultPagination } from '../sandbox/internal-accounts';
@@ -237,7 +246,7 @@ export namespace CustomerOneOf {
   export interface IndividualCustomer extends CustomersAPI.Customer {
     customerType: 'INDIVIDUAL';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: IndividualCustomer.Address;
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -255,10 +264,44 @@ export namespace CustomerOneOf {
     nationality?: string;
   }
 
+  export namespace IndividualCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+  }
+
   export interface BusinessCustomer extends CustomersAPI.Customer {
     customerType: 'BUSINESS';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: BusinessCustomer.Address;
 
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
@@ -266,6 +309,38 @@ export namespace CustomerOneOf {
   }
 
   export namespace BusinessCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+
     export interface BeneficialOwner {
       /**
        * Individual's full name
@@ -283,7 +358,7 @@ export namespace CustomerOneOf {
         | 'SETTLOR'
         | 'GENERAL_PARTNER';
 
-      address?: ExternalAccountsAPI.Address;
+      address?: BeneficialOwner.Address;
 
       /**
        * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -321,6 +396,40 @@ export namespace CustomerOneOf {
        * Title at company
        */
       title?: string;
+    }
+
+    export namespace BeneficialOwner {
+      export interface Address {
+        /**
+         * Country code (ISO 3166-1 alpha-2)
+         */
+        country: string;
+
+        /**
+         * Street address line 1
+         */
+        line1: string;
+
+        /**
+         * Postal/ZIP code
+         */
+        postalCode: string;
+
+        /**
+         * City
+         */
+        city?: string;
+
+        /**
+         * Street address line 2
+         */
+        line2?: string;
+
+        /**
+         * State/Province/Region
+         */
+        state?: string;
+      }
     }
 
     export interface BusinessInfo {
@@ -358,7 +467,7 @@ export namespace CustomerRetrieveResponse {
   export interface IndividualCustomer extends CustomersAPI.Customer {
     customerType: 'INDIVIDUAL';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: IndividualCustomer.Address;
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -376,10 +485,44 @@ export namespace CustomerRetrieveResponse {
     nationality?: string;
   }
 
+  export namespace IndividualCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+  }
+
   export interface BusinessCustomer extends CustomersAPI.Customer {
     customerType: 'BUSINESS';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: BusinessCustomer.Address;
 
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
@@ -387,6 +530,38 @@ export namespace CustomerRetrieveResponse {
   }
 
   export namespace BusinessCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+
     export interface BeneficialOwner {
       /**
        * Individual's full name
@@ -404,7 +579,7 @@ export namespace CustomerRetrieveResponse {
         | 'SETTLOR'
         | 'GENERAL_PARTNER';
 
-      address?: ExternalAccountsAPI.Address;
+      address?: BeneficialOwner.Address;
 
       /**
        * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -442,6 +617,40 @@ export namespace CustomerRetrieveResponse {
        * Title at company
        */
       title?: string;
+    }
+
+    export namespace BeneficialOwner {
+      export interface Address {
+        /**
+         * Country code (ISO 3166-1 alpha-2)
+         */
+        country: string;
+
+        /**
+         * Street address line 1
+         */
+        line1: string;
+
+        /**
+         * Postal/ZIP code
+         */
+        postalCode: string;
+
+        /**
+         * City
+         */
+        city?: string;
+
+        /**
+         * Street address line 2
+         */
+        line2?: string;
+
+        /**
+         * State/Province/Region
+         */
+        state?: string;
+      }
     }
 
     export interface BusinessInfo {
@@ -471,7 +680,7 @@ export namespace CustomerUpdateResponse {
   export interface IndividualCustomer extends CustomersAPI.Customer {
     customerType: 'INDIVIDUAL';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: IndividualCustomer.Address;
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -489,10 +698,44 @@ export namespace CustomerUpdateResponse {
     nationality?: string;
   }
 
+  export namespace IndividualCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+  }
+
   export interface BusinessCustomer extends CustomersAPI.Customer {
     customerType: 'BUSINESS';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: BusinessCustomer.Address;
 
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
@@ -500,6 +743,38 @@ export namespace CustomerUpdateResponse {
   }
 
   export namespace BusinessCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+
     export interface BeneficialOwner {
       /**
        * Individual's full name
@@ -517,7 +792,7 @@ export namespace CustomerUpdateResponse {
         | 'SETTLOR'
         | 'GENERAL_PARTNER';
 
-      address?: ExternalAccountsAPI.Address;
+      address?: BeneficialOwner.Address;
 
       /**
        * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -555,6 +830,40 @@ export namespace CustomerUpdateResponse {
        * Title at company
        */
       title?: string;
+    }
+
+    export namespace BeneficialOwner {
+      export interface Address {
+        /**
+         * Country code (ISO 3166-1 alpha-2)
+         */
+        country: string;
+
+        /**
+         * Street address line 1
+         */
+        line1: string;
+
+        /**
+         * Postal/ZIP code
+         */
+        postalCode: string;
+
+        /**
+         * City
+         */
+        city?: string;
+
+        /**
+         * Street address line 2
+         */
+        line2?: string;
+
+        /**
+         * State/Province/Region
+         */
+        state?: string;
+      }
     }
 
     export interface BusinessInfo {
@@ -584,7 +893,7 @@ export namespace CustomerDeleteResponse {
   export interface IndividualCustomer extends CustomersAPI.Customer {
     customerType: 'INDIVIDUAL';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: IndividualCustomer.Address;
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -602,10 +911,44 @@ export namespace CustomerDeleteResponse {
     nationality?: string;
   }
 
+  export namespace IndividualCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+  }
+
   export interface BusinessCustomer extends CustomersAPI.Customer {
     customerType: 'BUSINESS';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: BusinessCustomer.Address;
 
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
@@ -613,6 +956,38 @@ export namespace CustomerDeleteResponse {
   }
 
   export namespace BusinessCustomer {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+
     export interface BeneficialOwner {
       /**
        * Individual's full name
@@ -630,7 +1005,7 @@ export namespace CustomerDeleteResponse {
         | 'SETTLOR'
         | 'GENERAL_PARTNER';
 
-      address?: ExternalAccountsAPI.Address;
+      address?: BeneficialOwner.Address;
 
       /**
        * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -668,6 +1043,40 @@ export namespace CustomerDeleteResponse {
        * Title at company
        */
       title?: string;
+    }
+
+    export namespace BeneficialOwner {
+      export interface Address {
+        /**
+         * Country code (ISO 3166-1 alpha-2)
+         */
+        country: string;
+
+        /**
+         * Street address line 1
+         */
+        line1: string;
+
+        /**
+         * Postal/ZIP code
+         */
+        postalCode: string;
+
+        /**
+         * City
+         */
+        city?: string;
+
+        /**
+         * Street address line 2
+         */
+        line2?: string;
+
+        /**
+         * State/Province/Region
+         */
+        state?: string;
+      }
     }
 
     export interface BusinessInfo {
@@ -716,7 +1125,7 @@ export namespace CustomerCreateParams {
   export interface IndividualCustomerCreateRequest extends CustomersAPI.CustomerCreate {
     customerType: 'INDIVIDUAL';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: IndividualCustomerCreateRequest.Address;
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -734,10 +1143,44 @@ export namespace CustomerCreateParams {
     nationality?: string;
   }
 
+  export namespace IndividualCustomerCreateRequest {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+  }
+
   export interface BusinessCustomerCreateRequest extends CustomersAPI.CustomerCreate {
     customerType: 'BUSINESS';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: BusinessCustomerCreateRequest.Address;
 
     beneficialOwners?: Array<BusinessCustomerCreateRequest.BeneficialOwner>;
 
@@ -745,6 +1188,38 @@ export namespace CustomerCreateParams {
   }
 
   export namespace BusinessCustomerCreateRequest {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+
     export interface BeneficialOwner {
       /**
        * Individual's full name
@@ -762,7 +1237,7 @@ export namespace CustomerCreateParams {
         | 'SETTLOR'
         | 'GENERAL_PARTNER';
 
-      address?: ExternalAccountsAPI.Address;
+      address?: BeneficialOwner.Address;
 
       /**
        * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -800,6 +1275,40 @@ export namespace CustomerCreateParams {
        * Title at company
        */
       title?: string;
+    }
+
+    export namespace BeneficialOwner {
+      export interface Address {
+        /**
+         * Country code (ISO 3166-1 alpha-2)
+         */
+        country: string;
+
+        /**
+         * Street address line 1
+         */
+        line1: string;
+
+        /**
+         * Postal/ZIP code
+         */
+        postalCode: string;
+
+        /**
+         * City
+         */
+        city?: string;
+
+        /**
+         * Street address line 2
+         */
+        line2?: string;
+
+        /**
+         * State/Province/Region
+         */
+        state?: string;
+      }
     }
 
     export interface BusinessInfo {
@@ -831,7 +1340,7 @@ export namespace CustomerUpdateParams {
   export interface IndividualCustomerUpdateRequest extends CustomersAPI.CustomerUpdate {
     customerType: 'INDIVIDUAL';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: IndividualCustomerUpdateRequest.Address;
 
     /**
      * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -849,10 +1358,44 @@ export namespace CustomerUpdateParams {
     nationality?: string;
   }
 
+  export namespace IndividualCustomerUpdateRequest {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+  }
+
   export interface BusinessCustomerUpdateRequest extends CustomersAPI.CustomerUpdate {
     customerType: 'BUSINESS';
 
-    address?: ExternalAccountsAPI.Address;
+    address?: BusinessCustomerUpdateRequest.Address;
 
     beneficialOwners?: Array<BusinessCustomerUpdateRequest.BeneficialOwner>;
 
@@ -863,6 +1406,38 @@ export namespace CustomerUpdateParams {
   }
 
   export namespace BusinessCustomerUpdateRequest {
+    export interface Address {
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      country: string;
+
+      /**
+       * Street address line 1
+       */
+      line1: string;
+
+      /**
+       * Postal/ZIP code
+       */
+      postalCode: string;
+
+      /**
+       * City
+       */
+      city?: string;
+
+      /**
+       * Street address line 2
+       */
+      line2?: string;
+
+      /**
+       * State/Province/Region
+       */
+      state?: string;
+    }
+
     export interface BeneficialOwner {
       /**
        * Individual's full name
@@ -880,7 +1455,7 @@ export namespace CustomerUpdateParams {
         | 'SETTLOR'
         | 'GENERAL_PARTNER';
 
-      address?: ExternalAccountsAPI.Address;
+      address?: BeneficialOwner.Address;
 
       /**
        * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -918,6 +1493,40 @@ export namespace CustomerUpdateParams {
        * Title at company
        */
       title?: string;
+    }
+
+    export namespace BeneficialOwner {
+      export interface Address {
+        /**
+         * Country code (ISO 3166-1 alpha-2)
+         */
+        country: string;
+
+        /**
+         * Street address line 1
+         */
+        line1: string;
+
+        /**
+         * Postal/ZIP code
+         */
+        postalCode: string;
+
+        /**
+         * City
+         */
+        city?: string;
+
+        /**
+         * Street address line 2
+         */
+        line2?: string;
+
+        /**
+         * State/Province/Region
+         */
+        state?: string;
+      }
     }
 
     /**
@@ -1042,17 +1651,26 @@ export declare namespace Customers {
 
   export {
     ExternalAccounts as ExternalAccounts,
-    type Address as Address,
     type BaseWalletInfo as BaseWalletInfo,
-    type BusinessBeneficiary as BusinessBeneficiary,
+    type BeneficiaryOneOf as BeneficiaryOneOf,
+    type CadAccountInfo as CadAccountInfo,
+    type ClabeAccountInfo as ClabeAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
+    type GbpAccountInfo as GbpAccountInfo,
+    type IbanAccountInfo as IbanAccountInfo,
     type LightningWalletInfo as LightningWalletInfo,
+    type NgnAccountInfo as NgnAccountInfo,
+    type PhpAccountInfo as PhpAccountInfo,
+    type PixAccountInfo as PixAccountInfo,
     type PolygonWalletInfo as PolygonWalletInfo,
+    type SgdAccountInfo as SgdAccountInfo,
     type SolanaWalletInfo as SolanaWalletInfo,
     type SparkWalletInfo as SparkWalletInfo,
     type TronWalletInfo as TronWalletInfo,
+    type UpiAccountInfo as UpiAccountInfo,
+    type UsAccountInfo as UsAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

@@ -41,6 +41,9 @@ import {
   PlaidSubmitPublicTokenParams,
 } from './resources/plaid';
 import {
+  BaseDestination,
+  BasePaymentAccountInfo,
+  BaseQuoteSource,
   Currency,
   OutgoingRateDetails,
   PaymentInstructions,
@@ -48,6 +51,7 @@ import {
   QuoteCreateParams,
   QuoteDestinationOneOf,
   QuoteListParams,
+  QuoteSourceOneOf,
   Quotes,
   QuotesDefaultPagination,
 } from './resources/quotes';
@@ -70,8 +74,10 @@ import {
 } from './resources/tokens';
 import {
   BaseTransactionSource,
+  CounterpartyInformation,
   IncomingTransaction,
   TransactionApproveParams,
+  TransactionDestinationOneOf,
   TransactionListParams,
   TransactionRejectParams,
   TransactionSourceOneOf,
@@ -92,7 +98,17 @@ import {
   UmaProviderListResponsesDefaultPagination,
   UmaProviders,
 } from './resources/uma-providers';
-import { WebhookSendTestResponse, Webhooks } from './resources/webhooks';
+import {
+  AccountStatusWebhookEvent,
+  BulkUploadWebhookEvent,
+  IncomingPaymentWebhookEvent,
+  InvitationClaimedWebhookEvent,
+  KYCStatusWebhookEvent,
+  OutgoingPaymentWebhookEvent,
+  TestWebhookWebhookEvent,
+  UnwrapWebhookEvent,
+  Webhooks,
+} from './resources/webhooks';
 import {
   Customer,
   CustomerCreate,
@@ -115,7 +131,12 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { Sandbox, SandboxSendFundsParams, SandboxSendFundsResponse } from './resources/sandbox/sandbox';
+import {
+  Sandbox,
+  SandboxSendFundsParams,
+  SandboxSendFundsResponse,
+  SandboxSendTestWebhookResponse,
+} from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -996,11 +1017,15 @@ export declare namespace LightsparkGrid {
 
   export {
     Quotes as Quotes,
+    type BaseDestination as BaseDestination,
+    type BasePaymentAccountInfo as BasePaymentAccountInfo,
+    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,
@@ -1009,7 +1034,9 @@ export declare namespace LightsparkGrid {
   export {
     Transactions as Transactions,
     type BaseTransactionSource as BaseTransactionSource,
+    type CounterpartyInformation as CounterpartyInformation,
     type IncomingTransaction as IncomingTransaction,
+    type TransactionDestinationOneOf as TransactionDestinationOneOf,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
@@ -1018,7 +1045,17 @@ export declare namespace LightsparkGrid {
     type TransactionRejectParams as TransactionRejectParams,
   };
 
-  export { Webhooks as Webhooks, type WebhookSendTestResponse as WebhookSendTestResponse };
+  export {
+    Webhooks as Webhooks,
+    type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
+    type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
+    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
+    type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
+    type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
+    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
+    type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
+    type UnwrapWebhookEvent as UnwrapWebhookEvent,
+  };
 
   export {
     Invitations as Invitations,
@@ -1031,6 +1068,7 @@ export declare namespace LightsparkGrid {
   export {
     Sandbox as Sandbox,
     type SandboxSendFundsResponse as SandboxSendFundsResponse,
+    type SandboxSendTestWebhookResponse as SandboxSendTestWebhookResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
