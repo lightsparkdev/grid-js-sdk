@@ -261,6 +261,22 @@ export interface ExternalAccount {
   status: 'PENDING' | 'ACTIVE' | 'UNDER_REVIEW' | 'INACTIVE';
 
   /**
+   * The result of verifying the beneficiary name against the account holder name
+   */
+  beneficiaryVerificationStatus?:
+    | 'MATCHED'
+    | 'PARTIAL_MATCH'
+    | 'NOT_MATCHED'
+    | 'UNSUPPORTED'
+    | 'CHECKED_BY_RECEIVING_FI'
+    | 'PENDING';
+
+  /**
+   * Verified beneficiary data returned by the payment rail, if available
+   */
+  beneficiaryVerifiedData?: ExternalAccount.BeneficiaryVerifiedData;
+
+  /**
    * The customer this account is tied to, or null if the account is on behalf of the
    * platform.
    */
@@ -281,6 +297,18 @@ export interface ExternalAccount {
    * Optional platform-specific identifier for this account
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccount {
+  /**
+   * Verified beneficiary data returned by the payment rail, if available
+   */
+  export interface BeneficiaryVerifiedData {
+    /**
+     * The verified full name of the account holder as returned by the payment rail
+     */
+    fullName?: string;
+  }
 }
 
 export interface ExternalAccountCreate {
