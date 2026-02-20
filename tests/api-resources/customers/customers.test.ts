@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource customers', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.customers.create({
       CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' },
@@ -23,7 +23,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
@@ -45,7 +45,7 @@ describe('resource customers', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.customers.retrieve('customerId');
     const rawResponse = await responsePromise.asResponse();
@@ -57,7 +57,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: only required params', async () => {
     const responsePromise = client.customers.update('customerId', {
       UpdateCustomerRequest: { customerType: 'INDIVIDUAL' },
@@ -71,7 +71,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
@@ -92,7 +92,7 @@ describe('resource customers', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.customers.list();
     const rawResponse = await responsePromise.asResponse();
@@ -104,7 +104,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -126,7 +126,7 @@ describe('resource customers', () => {
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.customers.delete('customerId');
     const rawResponse = await responsePromise.asResponse();
@@ -138,7 +138,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getKYCLink: only required params', async () => {
     const responsePromise = client.customers.getKYCLink({ platformCustomerId: 'platformCustomerId' });
     const rawResponse = await responsePromise.asResponse();
@@ -150,7 +150,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getKYCLink: required and optional params', async () => {
     const response = await client.customers.getKYCLink({
       platformCustomerId: 'platformCustomerId',
@@ -158,7 +158,7 @@ describe('resource customers', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listInternalAccounts', async () => {
     const responsePromise = client.customers.listInternalAccounts();
     const rawResponse = await responsePromise.asResponse();
@@ -170,7 +170,7 @@ describe('resource customers', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listInternalAccounts: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(

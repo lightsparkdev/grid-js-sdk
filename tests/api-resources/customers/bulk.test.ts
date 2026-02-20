@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource bulk', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('getJobStatus', async () => {
     const responsePromise = client.customers.bulk.getJobStatus('jobId');
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource bulk', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('uploadCsv: only required params', async () => {
     const responsePromise = client.customers.bulk.uploadCsv({
       file: await toFile(Buffer.from('# my file contents'), 'README.md'),
@@ -35,7 +35,7 @@ describe('resource bulk', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('uploadCsv: required and optional params', async () => {
     const response = await client.customers.bulk.uploadCsv({
       file: await toFile(Buffer.from('# my file contents'), 'README.md'),

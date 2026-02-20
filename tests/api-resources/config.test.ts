@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource config', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.config.retrieve();
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource config', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.config.update({});
     const rawResponse = await responsePromise.asResponse();
