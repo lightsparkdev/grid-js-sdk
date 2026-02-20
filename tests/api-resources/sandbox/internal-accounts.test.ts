@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource internalAccounts', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('fund: only required params', async () => {
     const responsePromise = client.sandbox.internalAccounts.fund(
       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
@@ -24,7 +24,7 @@ describe('resource internalAccounts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('fund: required and optional params', async () => {
     const response = await client.sandbox.internalAccounts.fund(
       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',

@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource invitations', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.invitations.create({ inviterUma: '$inviter@uma.domain' });
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource invitations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.invitations.create({
       inviterUma: '$inviter@uma.domain',
@@ -31,7 +31,7 @@ describe('resource invitations', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('retrieve', async () => {
     const responsePromise = client.invitations.retrieve('invitationCode');
     const rawResponse = await responsePromise.asResponse();
@@ -43,7 +43,7 @@ describe('resource invitations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('cancel', async () => {
     const responsePromise = client.invitations.cancel('invitationCode');
     const rawResponse = await responsePromise.asResponse();
@@ -55,7 +55,7 @@ describe('resource invitations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('claim: only required params', async () => {
     const responsePromise = client.invitations.claim('invitationCode', { inviteeUma: '$invitee@uma.domain' });
     const rawResponse = await responsePromise.asResponse();
@@ -67,7 +67,7 @@ describe('resource invitations', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('claim: required and optional params', async () => {
     const response = await client.invitations.claim('invitationCode', { inviteeUma: '$invitee@uma.domain' });
   });

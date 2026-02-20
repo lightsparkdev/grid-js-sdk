@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource plaid', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createLinkToken: only required params', async () => {
     const responsePromise = client.plaid.createLinkToken({
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
@@ -23,14 +23,14 @@ describe('resource plaid', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('createLinkToken: required and optional params', async () => {
     const response = await client.plaid.createLinkToken({
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('submitPublicToken: only required params', async () => {
     const responsePromise = client.plaid.submitPublicToken('link-sandbox-abc123xyz-1234-5678', {
       publicToken: 'public-sandbox-12345678-1234-1234-1234-123456789012',
@@ -44,7 +44,7 @@ describe('resource plaid', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('submitPublicToken: required and optional params', async () => {
     const response = await client.plaid.submitPublicToken('link-sandbox-abc123xyz-1234-5678', {
       publicToken: 'public-sandbox-12345678-1234-1234-1234-123456789012',

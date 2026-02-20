@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource platform', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listInternalAccounts', async () => {
     const responsePromise = client.platform.listInternalAccounts();
     const rawResponse = await responsePromise.asResponse();
@@ -21,7 +21,7 @@ describe('resource platform', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('listInternalAccounts: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(

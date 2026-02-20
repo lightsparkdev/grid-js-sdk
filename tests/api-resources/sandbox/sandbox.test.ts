@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource sandbox', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('sendFunds: only required params', async () => {
     const responsePromise = client.sandbox.sendFunds({
       currencyCode: 'USD',
@@ -24,7 +24,7 @@ describe('resource sandbox', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('sendFunds: required and optional params', async () => {
     const response = await client.sandbox.sendFunds({
       currencyCode: 'USD',
@@ -33,7 +33,7 @@ describe('resource sandbox', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('sendTestWebhook', async () => {
     const responsePromise = client.sandbox.sendTestWebhook();
     const rawResponse = await responsePromise.asResponse();
