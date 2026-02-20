@@ -75,12 +75,7 @@ export interface OutgoingPaymentWebhookEvent {
 }
 
 export namespace OutgoingPaymentWebhookEvent {
-  export interface Transaction extends TransferInAPI.Transaction {
-    /**
-     * Payment instructions for executing the payment.
-     */
-    paymentInstructions: Array<QuotesAPI.PaymentInstructions>;
-
+  export interface Transaction extends Omit<TransferInAPI.Transaction, 'type'> {
     /**
      * Amount sent in the sender's currency
      */
@@ -90,6 +85,8 @@ export namespace OutgoingPaymentWebhookEvent {
      * Source account details
      */
     source: TransactionsAPI.TransactionSourceOneOf;
+
+    type: 'OUTGOING';
 
     /**
      * Number of sending currency units per receiving currency unit.
@@ -112,6 +109,11 @@ export namespace OutgoingPaymentWebhookEvent {
      * (eg. cents).
      */
     fees?: number;
+
+    /**
+     * Payment instructions for executing the payment.
+     */
+    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
 
     /**
      * The ID of the quote that was used to trigger this payment

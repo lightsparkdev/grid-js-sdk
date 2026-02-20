@@ -48,12 +48,7 @@ export class Sandbox extends APIResource {
   }
 }
 
-export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
-  /**
-   * Payment instructions for executing the payment.
-   */
-  paymentInstructions: Array<QuotesAPI.PaymentInstructions>;
-
+export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction, 'type'> {
   /**
    * Amount sent in the sender's currency
    */
@@ -63,6 +58,8 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
    * Source account details
    */
   source: TransactionsAPI.TransactionSourceOneOf;
+
+  type: 'OUTGOING';
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -85,6 +82,11 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
    * (eg. cents).
    */
   fees?: number;
+
+  /**
+   * Payment instructions for executing the payment.
+   */
+  paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
 
   /**
    * The ID of the quote that was used to trigger this payment
