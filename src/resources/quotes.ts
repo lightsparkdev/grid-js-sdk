@@ -650,6 +650,24 @@ export interface QuoteCreateParams {
   lookupId?: string;
 
   /**
+   * The purpose of the payment. This may be required when sending to certain
+   * geographies such as India.
+   */
+  purposeOfPayment?:
+    | 'GIFT'
+    | 'SELF'
+    | 'GOODS_OR_SERVICES'
+    | 'EDUCATION'
+    | 'HEALTH_OR_MEDICAL'
+    | 'REAL_ESTATE_PURCHASE'
+    | 'TAX_PAYMENT'
+    | 'LOAN_PAYMENT'
+    | 'UTILITY_BILL'
+    | 'DONATION'
+    | 'TRAVEL'
+    | 'OTHER';
+
+  /**
    * Only relevant for UMA destinations. Key-value pairs of information about the
    * sender which was requested by the counterparty (recipient) institution. Any
    * fields specified in `requiredPayerDataFields` from the response of the
