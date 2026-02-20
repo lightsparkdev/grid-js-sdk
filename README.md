@@ -49,7 +49,7 @@ const quote = await client.quotes.create({
   },
 });
 
-console.log(quote.createdAt);
+console.log(quote.id);
 ```
 
 ### Request & Response types
@@ -285,7 +285,7 @@ const { data: quote, response: raw } = await client.quotes
   })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(quote.createdAt);
+console.log(quote.id);
 ```
 
 ### Logging

@@ -28,7 +28,7 @@ async function run(client) {
     source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
   });
 
-  console.log(quote.createdAt);
+  console.log(quote.id);
 }
 \`\`\`
 
