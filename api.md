@@ -114,16 +114,21 @@ Types:
 
 - <code><a href="./src/resources/transfer-in.ts">BaseTransactionDestination</a></code>
 - <code><a href="./src/resources/transfer-in.ts">Transaction</a></code>
+- <code><a href="./src/resources/transfer-in.ts">TransferInCreateResponse</a></code>
 
 Methods:
 
-- <code title="post /transfer-in">client.transferIn.<a href="./src/resources/transfer-in.ts">create</a>({ ...params }) -> Transaction</code>
+- <code title="post /transfer-in">client.transferIn.<a href="./src/resources/transfer-in.ts">create</a>({ ...params }) -> TransferInCreateResponse</code>
 
 # TransferOut
 
+Types:
+
+- <code><a href="./src/resources/transfer-out.ts">TransferOutCreateResponse</a></code>
+
 Methods:
 
-- <code title="post /transfer-out">client.transferOut.<a href="./src/resources/transfer-out.ts">create</a>({ ...params }) -> Transaction</code>
+- <code title="post /transfer-out">client.transferOut.<a href="./src/resources/transfer-out.ts">create</a>({ ...params }) -> TransferOutCreateResponse</code>
 
 # Receiver
 
@@ -171,11 +176,13 @@ Types:
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionRetrieveResponse</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionListResponse</a></code>
 
 Methods:
 
-- <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/resources/transactions.ts">retrieve</a>(transactionID) -> Transaction</code>
-- <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionsDefaultPagination</code>
+- <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/resources/transactions.ts">retrieve</a>(transactionID) -> TransactionRetrieveResponse</code>
+- <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionListResponsesDefaultPagination</code>
 - <code title="post /transactions/{transactionId}/approve">client.transactions.<a href="./src/resources/transactions.ts">approve</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 - <code title="post /transactions/{transactionId}/reject">client.transactions.<a href="./src/resources/transactions.ts">reject</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 

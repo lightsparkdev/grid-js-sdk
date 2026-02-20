@@ -79,7 +79,10 @@ import {
   TransactionApproveParams,
   TransactionDestinationOneOf,
   TransactionListParams,
+  TransactionListResponse,
+  TransactionListResponsesDefaultPagination,
   TransactionRejectParams,
+  TransactionRetrieveResponse,
   TransactionSourceOneOf,
   TransactionStatus,
   TransactionType,
@@ -90,8 +93,9 @@ import {
   Transaction,
   TransferIn,
   TransferInCreateParams,
+  TransferInCreateResponse,
 } from './resources/transfer-in';
-import { TransferOut, TransferOutCreateParams } from './resources/transfer-out';
+import { TransferOut, TransferOutCreateParams, TransferOutCreateResponse } from './resources/transfer-out';
 import {
   UmaProviderListParams,
   UmaProviderListResponse,
@@ -1000,10 +1004,15 @@ export declare namespace LightsparkGrid {
     TransferIn as TransferIn,
     type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
+    type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,
   };
 
-  export { TransferOut as TransferOut, type TransferOutCreateParams as TransferOutCreateParams };
+  export {
+    TransferOut as TransferOut,
+    type TransferOutCreateResponse as TransferOutCreateResponse,
+    type TransferOutCreateParams as TransferOutCreateParams,
+  };
 
   export {
     Receiver as Receiver,
@@ -1040,6 +1049,9 @@ export declare namespace LightsparkGrid {
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
+    type TransactionRetrieveResponse as TransactionRetrieveResponse,
+    type TransactionListResponse as TransactionListResponse,
+    type TransactionListResponsesDefaultPagination as TransactionListResponsesDefaultPagination,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,

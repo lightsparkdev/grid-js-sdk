@@ -1,9 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as TransferInAPI from './transfer-in';
+import * as InvitationsAPI from './invitations';
+import * as QuotesAPI from './quotes';
 import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
-import { DefaultPagination } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
@@ -16,7 +18,7 @@ export class TransferIn extends APIResource {
    *
    * @example
    * ```ts
-   * const transaction = await client.transferIn.create({
+   * const transferIn = await client.transferIn.create({
    *   destination: {
    *     accountId:
    *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
@@ -29,7 +31,7 @@ export class TransferIn extends APIResource {
    * });
    * ```
    */
-  create(params: TransferInCreateParams, options?: RequestOptions): APIPromise<Transaction> {
+  create(params: TransferInCreateParams, options?: RequestOptions): APIPromise<TransferInCreateResponse> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/transfer-in', {
       body,
@@ -41,8 +43,6 @@ export class TransferIn extends APIResource {
     });
   }
 }
-
-export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
 
 export interface BaseTransactionDestination {
   /**
@@ -74,7 +74,19 @@ export interface Transaction {
   platformCustomerId: string;
 
   /**
-   * Status of a payment transaction
+   * Status of a payment transaction.
+   *
+   * | Status       | Description                                                                                        |
+   * | ------------ | -------------------------------------------------------------------------------------------------- |
+   * | `CREATED`    | Initial lookup has been created                                                                    |
+   * | `PENDING`    | Quote has been created                                                                             |
+   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
+   * | `SENT`       | Cross border settlement has been initiated                                                         |
+   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
+   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
+   * | `FAILED`     | An error occurred during payment                                                                   |
+   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
+   * | `EXPIRED`    | Quote has expired                                                                                  |
    */
   status: TransactionsAPI.TransactionStatus;
 
@@ -109,6 +121,95 @@ export interface Transaction {
    * When the transaction was last updated
    */
   updatedAt?: string;
+}
+
+export type TransferInCreateResponse =
+  | TransactionsAPI.IncomingTransaction
+  | TransferInCreateResponse.OutgoingTransaction;
+
+export namespace TransferInCreateResponse {
+  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
+    /**
+     * Amount sent in the sender's currency
+     */
+    sentAmount: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Source account details
+     */
+    source: TransactionsAPI.TransactionSourceOneOf;
+
+    type: 'OUTGOING';
+
+    /**
+     * Number of sending currency units per receiving currency unit.
+     */
+    exchangeRate?: number;
+
+    /**
+     * If the transaction failed, this field provides the reason for failure.
+     */
+    failureReason?:
+      | 'QUOTE_EXPIRED'
+      | 'QUOTE_EXECUTION_FAILED'
+      | 'LIGHTNING_PAYMENT_FAILED'
+      | 'FUNDING_AMOUNT_MISMATCH'
+      | 'COUNTERPARTY_POST_TX_FAILED'
+      | 'TIMEOUT';
+
+    /**
+     * The fees associated with the quote in the smallest unit of the sending currency
+     * (eg. cents).
+     */
+    fees?: number;
+
+    /**
+     * Payment instructions for executing the payment.
+     */
+    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
+
+    /**
+     * The ID of the quote that was used to trigger this payment
+     */
+    quoteId?: string;
+
+    /**
+     * Details about the rate and fees for the transaction.
+     */
+    rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+    /**
+     * Amount to be received by recipient in the recipient's currency
+     */
+    receivedAmount?: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * The refund if transaction was refunded.
+     */
+    refund?: OutgoingTransaction.Refund;
+  }
+
+  export namespace OutgoingTransaction {
+    /**
+     * The refund if transaction was refunded.
+     */
+    export interface Refund {
+      /**
+       * When the refund was initiated
+       */
+      initiatedAt: string;
+
+      /**
+       * The unique reference code of the refund
+       */
+      reference: string;
+
+      /**
+       * When the refund was or will be settled
+       */
+      settledAt?: string;
+    }
+  }
 }
 
 export interface TransferInCreateParams {
@@ -161,6 +262,7 @@ export declare namespace TransferIn {
   export {
     type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
+    type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,
   };
 }

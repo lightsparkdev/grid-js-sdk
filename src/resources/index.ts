@@ -90,18 +90,21 @@ export {
   type TransactionSourceOneOf,
   type TransactionStatus,
   type TransactionType,
+  type TransactionRetrieveResponse,
+  type TransactionListResponse,
   type TransactionListParams,
   type TransactionApproveParams,
   type TransactionRejectParams,
+  type TransactionListResponsesDefaultPagination,
 } from './transactions';
 export {
   TransferIn,
   type BaseTransactionDestination,
   type Transaction,
+  type TransferInCreateResponse,
   type TransferInCreateParams,
-  type TransactionsDefaultPagination,
 } from './transfer-in';
-export { TransferOut, type TransferOutCreateParams } from './transfer-out';
+export { TransferOut, type TransferOutCreateResponse, type TransferOutCreateParams } from './transfer-out';
 export {
   UmaProviders,
   type UmaProviderListResponse,
