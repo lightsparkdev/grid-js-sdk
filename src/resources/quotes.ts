@@ -408,6 +408,11 @@ export namespace PaymentInstructions {
 
 export interface Quote {
   /**
+   * Unique identifier for this quote
+   */
+  id: string;
+
+  /**
    * When this quote was created
    */
   createdAt: string;
@@ -432,11 +437,6 @@ export interface Quote {
    * (eg. cents).
    */
   feesIncluded: number;
-
-  /**
-   * Unique identifier for this quote
-   */
-  quoteId: string;
 
   /**
    * Currency for the receiving amount

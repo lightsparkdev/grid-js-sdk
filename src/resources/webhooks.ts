@@ -15,6 +15,11 @@ export class Webhooks extends APIResource {
 
 export interface IncomingPaymentWebhookEvent {
   /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  /**
    * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
    * attacks)
    */
@@ -35,11 +40,6 @@ export interface IncomingPaymentWebhookEvent {
     | 'ACCOUNT_STATUS';
 
   /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
-
-  /**
    * Information required by the sender's VASP about the recipient. Platform must
    * provide these in the 200 OK response if approving. Note that this only includes
    * fields which Grid does not already have from initial customer registration.
@@ -48,6 +48,11 @@ export interface IncomingPaymentWebhookEvent {
 }
 
 export interface OutgoingPaymentWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
   /**
    * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
    * attacks)
@@ -67,11 +72,6 @@ export interface OutgoingPaymentWebhookEvent {
     | 'INVITATION_CLAIMED'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
-
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
 }
 
 export namespace OutgoingPaymentWebhookEvent {
@@ -161,6 +161,11 @@ export namespace OutgoingPaymentWebhookEvent {
 
 export interface TestWebhookWebhookEvent {
   /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  /**
    * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
    * attacks)
    */
@@ -177,14 +182,14 @@ export interface TestWebhookWebhookEvent {
     | 'INVITATION_CLAIMED'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
-
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
 }
 
 export interface BulkUploadWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
   bulkCustomerImportJob: BulkUploadWebhookEvent.BulkCustomerImportJob;
 
   /**
@@ -204,11 +209,6 @@ export interface BulkUploadWebhookEvent {
     | 'INVITATION_CLAIMED'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
-
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
 }
 
 export namespace BulkUploadWebhookEvent {
@@ -216,7 +216,7 @@ export namespace BulkUploadWebhookEvent {
     /**
      * Unique identifier for the bulk import job
      */
-    jobId: string;
+    id: string;
 
     progress: BulkCustomerImportJob.Progress;
 
@@ -284,6 +284,11 @@ export namespace BulkUploadWebhookEvent {
 }
 
 export interface InvitationClaimedWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
   invitation: InvitationsAPI.UmaInvitation;
 
   /**
@@ -303,14 +308,14 @@ export interface InvitationClaimedWebhookEvent {
     | 'BULK_UPLOAD'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
-
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
 }
 
 export interface KYCStatusWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
   /**
    * System generated id of the customer
    */
@@ -345,14 +350,14 @@ export interface KYCStatusWebhookEvent {
     | 'INVITATION_CLAIMED'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
-
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
 }
 
 export interface AccountStatusWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
   /**
    * The id of the account whose balance has changed
    */
@@ -375,11 +380,6 @@ export interface AccountStatusWebhookEvent {
     | 'INVITATION_CLAIMED'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
-
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  webhookId: string;
 
   /**
    * The ID of the customer associated with the internal account
