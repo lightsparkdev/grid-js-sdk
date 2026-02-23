@@ -38,26 +38,43 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/customers/external-accounts.ts">Address</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryOneOf</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">CadAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ClabeAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BrlBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BrlExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BusinessBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">DkkBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">DkkExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">GbpAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">IbanAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">GbpBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">GbpExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">HkdBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">HkdExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">IdrBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">IdrExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">InrBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">InrExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">LightningWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">NgnAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">PhpAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">PixAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">MxnBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">MxnExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">MyrBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">MyrExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">PhpBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">PhpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PolygonWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">SgdAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">SgdBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">SgdExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">SolanaWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">SparkWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">ThbBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">ThbExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">TronWalletInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">UpiAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">UsAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">UsdBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">UsdExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">VndBeneficiary</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">VndExternalAccountInfo</a></code>
 
 Methods:
 
@@ -148,15 +165,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/quotes.ts">BaseDestination</a></code>
-- <code><a href="./src/resources/quotes.ts">BasePaymentAccountInfo</a></code>
-- <code><a href="./src/resources/quotes.ts">BaseQuoteSource</a></code>
 - <code><a href="./src/resources/quotes.ts">Currency</a></code>
 - <code><a href="./src/resources/quotes.ts">OutgoingRateDetails</a></code>
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteDestinationOneOf</a></code>
-- <code><a href="./src/resources/quotes.ts">QuoteSourceOneOf</a></code>
 
 Methods:
 
@@ -170,9 +183,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
-- <code><a href="./src/resources/transactions.ts">CounterpartyInformation</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionDestinationOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
@@ -190,18 +201,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">TestWebhookWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">KYCStatusWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">AccountStatusWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">WebhookSendTestResponse</a></code>
 
 Methods:
 
-- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
+- <code title="post /webhooks/test">client.webhooks.<a href="./src/resources/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
 
 # Invitations
 
@@ -222,12 +226,10 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendFundsResponse</a></code>
-- <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendTestWebhookResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> SandboxSendFundsResponse</code>
-- <code title="post /webhooks/test">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendTestWebhook</a>() -> SandboxSendTestWebhookResponse</code>
 
 ## Uma
 
