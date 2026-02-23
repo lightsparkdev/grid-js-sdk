@@ -30,10 +30,6 @@ export class ExternalAccounts extends APIResource {
    *   await client.platform.externalAccounts.create({
    *     accountInfo: {
    *       accountType: 'US_ACCOUNT',
-   *       accountNumber: '12345678901',
-   *       routingNumber: '123456789',
-   *       accountCategory: 'CHECKING',
-   *       bankName: 'Chase Bank',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
