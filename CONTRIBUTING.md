@@ -60,7 +60,7 @@ $ yarn link @lightsparkdev/grid
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @lightsparkdev/grid
+$ pnpm link --global @lightsparkdev/grid
 ```
 
 ## Running tests
