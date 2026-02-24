@@ -92,24 +92,6 @@ export interface ExternalAccountCreateParams {
   currency: string;
 
   /**
-   * The ID of the customer for whom to create the external account. If not provided,
-   * the external account will be created on behalf of the platform.
-   */
-  customerId?: string;
-
-  /**
-   * Whether to set the external account as the default UMA deposit account. When set
-   * to true, incoming payments to this customer's UMA address will be automatically
-   * deposited into this external account. False if not provided. Note that only one
-   * external account can be set as the default UMA deposit account for a customer,
-   * so if there is already a default UMA deposit account, this will override the
-   * existing default UMA deposit account. If there is no default UMA deposit
-   * account, incoming UMA payments will be deposited into the primary internal
-   * account for the customer.
-   */
-  defaultUmaDepositAccount?: boolean;
-
-  /**
    * Your platform's identifier for the account in your system. This can be used to
    * reference the account by your own identifier.
    */
