@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
@@ -131,6 +132,12 @@ export class Quotes extends APIResource {
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
 
+export type BaseDestination = unknown;
+
+export type BasePaymentAccountInfo = unknown;
+
+export type BaseQuoteSource = unknown;
+
 export interface Currency {
   /**
    * Three-letter currency code (ISO 4217) for fiat currencies. Some cryptocurrencies
@@ -233,7 +240,7 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentUsdAccountInfo {
+  export interface PaymentUsdAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * The account number of the bank
      */
@@ -257,7 +264,7 @@ export namespace PaymentInstructions {
     routingNumber: string;
   }
 
-  export interface PaymentBrlAccountInfo {
+  export interface PaymentBrlAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     accountType: 'BRL_ACCOUNT';
 
     countries: Array<'BR'>;
@@ -280,7 +287,7 @@ export namespace PaymentInstructions {
     taxId: string;
   }
 
-  export interface PaymentMxnAccountInfo {
+  export interface PaymentMxnAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     accountType: 'MXN_ACCOUNT';
 
     /**
@@ -299,7 +306,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentDkkAccountInfo {
+  export interface PaymentDkkAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     accountType: 'DKK_ACCOUNT';
 
     countries: Array<'DK'>;
@@ -323,7 +330,7 @@ export namespace PaymentInstructions {
     swiftBic?: string;
   }
 
-  export interface PaymentEurAccountInfo {
+  export interface PaymentEurAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     accountType: 'EUR_ACCOUNT';
 
     countries: Array<
@@ -368,7 +375,7 @@ export namespace PaymentInstructions {
     swiftBic?: string;
   }
 
-  export interface PaymentInrAccountInfo {
+  export interface PaymentInrAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     accountType: 'INR_ACCOUNT';
 
     countries: Array<'IN'>;
@@ -405,7 +412,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentCadAccountInfo {
+  export interface PaymentCadAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * Bank account number (7-12 digits)
      */
@@ -434,7 +441,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentGbpAccountInfo {
+  export interface PaymentGbpAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * UK bank account number (8 digits)
      */
@@ -458,7 +465,7 @@ export namespace PaymentInstructions {
     sortCode: string;
   }
 
-  export interface PaymentHkdAccountInfo {
+  export interface PaymentHkdAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * The account number of the bank
      */
@@ -482,7 +489,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentIdrAccountInfo {
+  export interface PaymentIdrAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * The account number of the bank
      */
@@ -506,7 +513,7 @@ export namespace PaymentInstructions {
     sortCode: string;
   }
 
-  export interface PaymentMyrAccountInfo {
+  export interface PaymentMyrAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * The account number of the bank
      */
@@ -530,7 +537,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentPhpAccountInfo {
+  export interface PaymentPhpAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * Bank account number
      */
@@ -554,7 +561,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentSgdAccountInfo {
+  export interface PaymentSgdAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * Bank account number
      */
@@ -583,7 +590,7 @@ export namespace PaymentInstructions {
     swiftCode: string;
   }
 
-  export interface PaymentThbAccountInfo {
+  export interface PaymentThbAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * The account number of the bank
      */
@@ -607,7 +614,7 @@ export namespace PaymentInstructions {
     reference: string;
   }
 
-  export interface PaymentVndAccountInfo {
+  export interface PaymentVndAccountInfo extends QuotesAPI.BasePaymentAccountInfo {
     /**
      * The account number of the bank
      */
@@ -761,7 +768,7 @@ export interface Quote {
   /**
    * Source account details
    */
-  source: Quote.AccountQuoteSource | Quote.RealtimeFundingQuoteSource;
+  source: QuoteSourceOneOf;
 
   /**
    * Current status of the quote
@@ -795,52 +802,6 @@ export interface Quote {
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: OutgoingRateDetails;
-}
-
-export namespace Quote {
-  /**
-   * Source account details
-   */
-  export interface AccountQuoteSource {
-    /**
-     * Source account identifier
-     */
-    accountId: string;
-
-    sourceType: 'ACCOUNT';
-
-    /**
-     * Required when funding from an FBO account to identify the customer on whose
-     * behalf the transaction is being initiated. Otherwise, will default to the
-     * customerId of the account owner.
-     */
-    customerId?: string;
-  }
-
-  /**
-   * Fund the quote using a real-time funding source (RTP, SEPA Instant, Spark,
-   * Stables, etc.). This will require manual just-in-time funding using
-   * `paymentInstructions` in the response. Because quotes expire quickly, this
-   * option is only valid for instant payment methods. Do not try to fund a quote
-   * with a non-instant payment method (ACH, etc.).
-   */
-  export interface RealtimeFundingQuoteSource {
-    /**
-     * Currency code for the funding source. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency: string;
-
-    sourceType: 'REALTIME_FUNDING';
-
-    /**
-     * Source customer ID. If this transaction is being initiated on behalf of a
-     * customer, this is required. If customerId is not provided, the quote will be
-     * created on behalf of the platform itself.
-     */
-    customerId?: string;
-  }
 }
 
 /**
@@ -902,6 +863,59 @@ export namespace QuoteDestinationOneOf {
   }
 }
 
+/**
+ * Source account details
+ */
+export type QuoteSourceOneOf =
+  | QuoteSourceOneOf.AccountQuoteSource
+  | QuoteSourceOneOf.RealtimeFundingQuoteSource;
+
+export namespace QuoteSourceOneOf {
+  /**
+   * Source account details
+   */
+  export interface AccountQuoteSource {
+    /**
+     * Source account identifier
+     */
+    accountId: string;
+
+    sourceType: 'ACCOUNT';
+
+    /**
+     * Required when funding from an FBO account to identify the customer on whose
+     * behalf the transaction is being initiated. Otherwise, will default to the
+     * customerId of the account owner.
+     */
+    customerId?: string;
+  }
+
+  /**
+   * Fund the quote using a real-time funding source (RTP, SEPA Instant, Spark,
+   * Stables, etc.). This will require manual just-in-time funding using
+   * `paymentInstructions` in the response. Because quotes expire quickly, this
+   * option is only valid for instant payment methods. Do not try to fund a quote
+   * with a non-instant payment method (ACH, etc.).
+   */
+  export interface RealtimeFundingQuoteSource {
+    /**
+     * Currency code for the funding source. See
+     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
+     * for the full list of supported fiat and crypto currencies.
+     */
+    currency: string;
+
+    sourceType: 'REALTIME_FUNDING';
+
+    /**
+     * Source customer ID. If this transaction is being initiated on behalf of a
+     * customer, this is required. If customerId is not provided, the quote will be
+     * created on behalf of the platform itself.
+     */
+    customerId?: string;
+  }
+}
+
 export interface QuoteCreateParams {
   /**
    * Destination account details
@@ -926,7 +940,7 @@ export interface QuoteCreateParams {
   /**
    * Source account details
    */
-  source: QuoteCreateParams.AccountQuoteSource | QuoteCreateParams.RealtimeFundingQuoteSource;
+  source: QuoteSourceOneOf;
 
   /**
    * Optional description/memo for the transfer
@@ -981,52 +995,6 @@ export interface QuoteCreateParams {
   senderCustomerInfo?: { [key: string]: unknown };
 }
 
-export namespace QuoteCreateParams {
-  /**
-   * Source account details
-   */
-  export interface AccountQuoteSource {
-    /**
-     * Source account identifier
-     */
-    accountId: string;
-
-    sourceType: 'ACCOUNT';
-
-    /**
-     * Required when funding from an FBO account to identify the customer on whose
-     * behalf the transaction is being initiated. Otherwise, will default to the
-     * customerId of the account owner.
-     */
-    customerId?: string;
-  }
-
-  /**
-   * Fund the quote using a real-time funding source (RTP, SEPA Instant, Spark,
-   * Stables, etc.). This will require manual just-in-time funding using
-   * `paymentInstructions` in the response. Because quotes expire quickly, this
-   * option is only valid for instant payment methods. Do not try to fund a quote
-   * with a non-instant payment method (ACH, etc.).
-   */
-  export interface RealtimeFundingQuoteSource {
-    /**
-     * Currency code for the funding source. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency: string;
-
-    sourceType: 'REALTIME_FUNDING';
-
-    /**
-     * Source customer ID. If this transaction is being initiated on behalf of a
-     * customer, this is required. If customerId is not provided, the quote will be
-     * created on behalf of the platform itself.
-     */
-    customerId?: string;
-  }
-}
-
 export interface QuoteListParams extends DefaultPaginationParams {
   /**
    * Filter quotes created after this timestamp (inclusive)
@@ -1076,11 +1044,15 @@ export interface QuoteListParams extends DefaultPaginationParams {
 
 export declare namespace Quotes {
   export {
+    type BaseDestination as BaseDestination,
+    type BasePaymentAccountInfo as BasePaymentAccountInfo,
+    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,

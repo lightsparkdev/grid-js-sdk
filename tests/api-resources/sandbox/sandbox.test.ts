@@ -32,4 +32,16 @@ describe('resource sandbox', () => {
       currencyAmount: 1000,
     });
   });
+
+  // Mock server tests are disabled
+  test.skip('sendTestWebhook', async () => {
+    const responsePromise = client.sandbox.sendTestWebhook();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
 });
