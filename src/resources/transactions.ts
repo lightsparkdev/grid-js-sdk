@@ -5,6 +5,7 @@ import * as TransactionsAPI from './transactions';
 import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
+import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -96,6 +97,13 @@ export interface BaseTransactionSource {
   currency?: string;
 }
 
+/**
+ * Additional information about the counterparty, if available and relevant to the
+ * transaction and platform. Only applicable for transactions to/from UMA
+ * addresses.
+ */
+export type CounterpartyInformation = { [key: string]: unknown };
+
 export interface IncomingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
   /**
    * Amount received in the recipient's currency
@@ -173,6 +181,51 @@ export namespace IncomingTransaction {
      * the correct incoming transaction
      */
     reference: string;
+  }
+}
+
+/**
+ * Destination account details
+ */
+export type TransactionDestinationOneOf =
+  | TransactionDestinationOneOf.AccountTransactionDestination
+  | TransactionDestinationOneOf.UmaAddressTransactionDestination
+  | TransactionDestinationOneOf.ExternalAccountDetailsTransactionDestination;
+
+export namespace TransactionDestinationOneOf {
+  /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
+  }
+
+  /**
+   * Transaction destination where external account details were provided inline at
+   * quote creation rather than using a pre-registered external account.
+   */
+  export interface ExternalAccountDetailsTransactionDestination
+    extends TransferInAPI.BaseTransactionDestination {
+    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
+
+    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
 }
 
@@ -511,7 +564,9 @@ export interface TransactionRejectParams {
 export declare namespace Transactions {
   export {
     type BaseTransactionSource as BaseTransactionSource,
+    type CounterpartyInformation as CounterpartyInformation,
     type IncomingTransaction as IncomingTransaction,
+    type TransactionDestinationOneOf as TransactionDestinationOneOf,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,

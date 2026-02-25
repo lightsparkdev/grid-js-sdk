@@ -72,11 +72,6 @@
       "type": "json",
       "path": "packages/mcp-server/manifest.json",
       "jsonpath": "$.version"
-    },
-    {
-      "type": "json",
-      "path": "jsr.json",
-      "jsonpath": "$.version"
     }
   ]
 }
