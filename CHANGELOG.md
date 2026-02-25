@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.7.0 (2026-02-25)
+
+Full Changelog: [v0.6.0...v0.7.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.6.0...v0.7.0)
+
+### Features
+
+* **api:** add BRL/DKK/GBP/HKD/IDR/INR/MXN/MYR/PHP/SGD/THB/USD/VND account types ([ab875a8](https://github.com/lightsparkdev/grid-js-sdk/commit/ab875a8f7c2996eeb963511f37d2190782353498))
+* **api:** add CAD and NGN account types to external accounts ([ec58891](https://github.com/lightsparkdev/grid-js-sdk/commit/ec58891a5b1855b44fcabbddc027c2f8dcef7abb))
+* **api:** add purposeOfPayment parameter to quotes create ([276ab08](https://github.com/lightsparkdev/grid-js-sdk/commit/276ab08f050996fa228bca5fa61967cd173f099e))
+* **api:** add response types to transferIn/transferOut/transactions methods ([4fc5674](https://github.com/lightsparkdev/grid-js-sdk/commit/4fc56740809d983455cf819dbffba458357fc8f5))
+
+
+### Bug Fixes
+
+* **api:** remove customerId, defaultUmaDepositAccount from external accounts create ([f75819a](https://github.com/lightsparkdev/grid-js-sdk/commit/f75819a102942478ec98ea24bf66c494e1ba6a43))
+* **api:** rename ID fields to id in quotes, bulk status, and webhook events ([5bcd4c9](https://github.com/lightsparkdev/grid-js-sdk/commit/5bcd4c9b599445c2eaab628a780b76c0d2b7b463))
+* **docs/contributing:** correct pnpm link command ([6c958b1](https://github.com/lightsparkdev/grid-js-sdk/commit/6c958b1ddd0843524cebe7f07f57561066425b2a))
+* **mcp:** initialize SDK lazily to avoid failing the connection on init errors ([7f3dfba](https://github.com/lightsparkdev/grid-js-sdk/commit/7f3dfbade0657f27c165b94da44c078d7bc02fc0))
+* **types:** standardize customers retrieve/update/delete return types to CustomerOneOf ([e8759c8](https://github.com/lightsparkdev/grid-js-sdk/commit/e8759c855de91ef8c39a22ed4fccaf399a716a34))
+
+
+### Chores
+
+* **internal:** cache fetch instruction calls in MCP server ([6f862a1](https://github.com/lightsparkdev/grid-js-sdk/commit/6f862a1fc663380572e5279f665a2c04c2c0c51c))
+* **internal:** make MCP code execution location configurable via a flag ([4beed6a](https://github.com/lightsparkdev/grid-js-sdk/commit/4beed6a1f017b430667cb806acda404b3acaa0e6))
+* **internal:** remove mock server code ([903ac44](https://github.com/lightsparkdev/grid-js-sdk/commit/903ac444c0c5100e4a6b92798ad5729a6ac66558))
+* **internal:** upgrade @modelcontextprotocol/sdk and hono ([1a99495](https://github.com/lightsparkdev/grid-js-sdk/commit/1a994952a2e184c13e3cb032cec22ee5807b90f4))
+* **internal:** upgrade pnpm version ([5ca7861](https://github.com/lightsparkdev/grid-js-sdk/commit/5ca78613e8ba357a685a85d2c1909a107c002581))
+* **mcp:** correctly update version in sync with sdk ([37235f0](https://github.com/lightsparkdev/grid-js-sdk/commit/37235f0792d795a1826265b638660fe4095896d1))
+* update mock server docs ([8d27681](https://github.com/lightsparkdev/grid-js-sdk/commit/8d276815e14d5e44e668ecf045f4e60acc833df4))
+
+
+### Documentation
+
+* **api:** clarify immediatelyExecute parameter requirements in quotes ([795e0b9](https://github.com/lightsparkdev/grid-js-sdk/commit/795e0b9493f11e9e63576b63095c8339f79f9f40))
+
 ## 0.6.0 (2026-02-19)
 
 Full Changelog: [v0.5.0...v0.6.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.5.0...v0.6.0)
