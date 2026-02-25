@@ -13,9 +13,6 @@ export {
   type CustomerCreate,
   type CustomerOneOf,
   type CustomerUpdate,
-  type CustomerRetrieveResponse,
-  type CustomerUpdateResponse,
-  type CustomerDeleteResponse,
   type CustomerGetKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
@@ -45,15 +42,11 @@ export {
 } from './platform/platform';
 export {
   Quotes,
-  type BaseDestination,
-  type BasePaymentAccountInfo,
-  type BaseQuoteSource,
   type Currency,
   type OutgoingRateDetails,
   type PaymentInstructions,
   type Quote,
   type QuoteDestinationOneOf,
-  type QuoteSourceOneOf,
   type QuoteCreateParams,
   type QuoteListParams,
   type QuotesDefaultPagination,
@@ -67,12 +60,7 @@ export {
   type ReceiverLookupExternalAccountParams,
   type ReceiverLookupUmaParams,
 } from './receiver';
-export {
-  Sandbox,
-  type SandboxSendFundsResponse,
-  type SandboxSendTestWebhookResponse,
-  type SandboxSendFundsParams,
-} from './sandbox/sandbox';
+export { Sandbox, type SandboxSendFundsResponse, type SandboxSendFundsParams } from './sandbox/sandbox';
 export {
   Tokens,
   type APIToken,
@@ -84,38 +72,29 @@ export {
 export {
   Transactions,
   type BaseTransactionSource,
-  type CounterpartyInformation,
   type IncomingTransaction,
-  type TransactionDestinationOneOf,
   type TransactionSourceOneOf,
   type TransactionStatus,
   type TransactionType,
+  type TransactionRetrieveResponse,
+  type TransactionListResponse,
   type TransactionListParams,
   type TransactionApproveParams,
   type TransactionRejectParams,
+  type TransactionListResponsesDefaultPagination,
 } from './transactions';
 export {
   TransferIn,
   type BaseTransactionDestination,
   type Transaction,
+  type TransferInCreateResponse,
   type TransferInCreateParams,
-  type TransactionsDefaultPagination,
 } from './transfer-in';
-export { TransferOut, type TransferOutCreateParams } from './transfer-out';
+export { TransferOut, type TransferOutCreateResponse, type TransferOutCreateParams } from './transfer-out';
 export {
   UmaProviders,
   type UmaProviderListResponse,
   type UmaProviderListParams,
   type UmaProviderListResponsesDefaultPagination,
 } from './uma-providers';
-export {
-  Webhooks,
-  type IncomingPaymentWebhookEvent,
-  type OutgoingPaymentWebhookEvent,
-  type TestWebhookWebhookEvent,
-  type BulkUploadWebhookEvent,
-  type InvitationClaimedWebhookEvent,
-  type KYCStatusWebhookEvent,
-  type AccountStatusWebhookEvent,
-  type UnwrapWebhookEvent,
-} from './webhooks';
+export { Webhooks, type WebhookSendTestResponse } from './webhooks';

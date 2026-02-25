@@ -131,12 +131,6 @@ export class Quotes extends APIResource {
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
 
-export type BaseDestination = unknown;
-
-export type BasePaymentAccountInfo = unknown;
-
-export type BaseQuoteSource = unknown;
-
 export interface Currency {
   /**
    * Three-letter currency code (ISO 4217) for fiat currencies. Some cryptocurrencies
@@ -204,11 +198,22 @@ export interface OutgoingRateDetails {
 
 export interface PaymentInstructions {
   accountOrWalletInfo:
-    | PaymentInstructions.PaymentClabeAccountInfo
-    | PaymentInstructions.PaymentUsAccountInfo
-    | PaymentInstructions.PixAccountInfo
-    | PaymentInstructions.PaymentIbanAccountInfo
-    | PaymentInstructions.UpiAccountInfo
+    | PaymentInstructions.PaymentUsdAccountInfo
+    | PaymentInstructions.PaymentBrlAccountInfo
+    | PaymentInstructions.PaymentMxnAccountInfo
+    | PaymentInstructions.PaymentDkkAccountInfo
+    | PaymentInstructions.PaymentEurAccountInfo
+    | PaymentInstructions.PaymentInrAccountInfo
+    | PaymentInstructions.PaymentNgnAccountInfo
+    | PaymentInstructions.PaymentCadAccountInfo
+    | PaymentInstructions.PaymentGbpAccountInfo
+    | PaymentInstructions.PaymentHkdAccountInfo
+    | PaymentInstructions.PaymentIdrAccountInfo
+    | PaymentInstructions.PaymentMyrAccountInfo
+    | PaymentInstructions.PaymentPhpAccountInfo
+    | PaymentInstructions.PaymentSgdAccountInfo
+    | PaymentInstructions.PaymentThbAccountInfo
+    | PaymentInstructions.PaymentVndAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -228,33 +233,17 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentClabeAccountInfo {
-    accountType: 'CLABE';
-
+  export interface PaymentUsdAccountInfo {
     /**
-     * 18-digit CLABE number (Mexican banking standard)
-     */
-    clabeNumber: string;
-
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
-
-  export interface PaymentUsAccountInfo {
-    /**
-     * Type of account (checking or savings)
-     */
-    accountCategory: 'CHECKING' | 'SAVINGS';
-
-    /**
-     * US bank account number
+     * The account number of the bank
      */
     accountNumber: string;
 
-    accountType: 'US_ACCOUNT';
+    accountType: 'USD_ACCOUNT';
+
+    countries: Array<'US'>;
+
+    paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
     /**
      * Unique reference code that must be included with the payment to properly credit
@@ -263,42 +252,324 @@ export namespace PaymentInstructions {
     reference: string;
 
     /**
-     * ACH routing number (9 digits)
+     * The routing number of the bank
      */
     routingNumber: string;
-
-    /**
-     * Name of the bank
-     */
-    bankName?: string;
   }
 
-  export interface PixAccountInfo {
-    accountType: 'PIX';
+  export interface PaymentBrlAccountInfo {
+    accountType: 'BRL_ACCOUNT';
+
+    countries: Array<'BR'>;
+
+    paymentRails: Array<'PIX'>;
 
     /**
-     * PIX key for Brazilian instant payments
+     * The PIX key of the bank
      */
     pixKey: string;
 
     /**
-     * Type of PIX key being used
+     * The type of PIX key of the bank
      */
-    pixKeyType: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
+    pixKeyType: string;
 
     /**
-     * Tax ID of the account holder
+     * The tax ID of the bank account
      */
     taxId: string;
   }
 
-  export interface PaymentIbanAccountInfo {
-    accountType: 'IBAN';
+  export interface PaymentMxnAccountInfo {
+    accountType: 'MXN_ACCOUNT';
 
     /**
-     * International Bank Account Number
+     * The CLABE number of the bank
+     */
+    clabeNumber: string;
+
+    countries: Array<'MX'>;
+
+    paymentRails: Array<'SPEI'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentDkkAccountInfo {
+    accountType: 'DKK_ACCOUNT';
+
+    countries: Array<'DK'>;
+
+    /**
+     * The IBAN of the bank
      */
     iban: string;
+
+    paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The SWIFT BIC of the bank
+     */
+    swiftBic?: string;
+  }
+
+  export interface PaymentEurAccountInfo {
+    accountType: 'EUR_ACCOUNT';
+
+    countries: Array<
+      | 'AT'
+      | 'BE'
+      | 'CY'
+      | 'DE'
+      | 'EE'
+      | 'ES'
+      | 'FI'
+      | 'FR'
+      | 'GR'
+      | 'HR'
+      | 'IE'
+      | 'IT'
+      | 'LT'
+      | 'LU'
+      | 'LV'
+      | 'MT'
+      | 'NL'
+      | 'PT'
+      | 'SI'
+      | 'SK'
+    >;
+
+    /**
+     * The IBAN of the bank
+     */
+    iban: string;
+
+    paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The SWIFT BIC of the bank
+     */
+    swiftBic?: string;
+  }
+
+  export interface PaymentInrAccountInfo {
+    accountType: 'INR_ACCOUNT';
+
+    countries: Array<'IN'>;
+
+    paymentRails: Array<'UPI' | 'IMPS'>;
+
+    /**
+     * The VPA of the bank
+     */
+    vpa: string;
+  }
+
+  export interface PaymentNgnAccountInfo {
+    /**
+     * Nigerian bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'NGN_ACCOUNT';
+
+    /**
+     * Name of the bank
+     */
+    bankName: string;
+
+    countries: Array<'NG'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentCadAccountInfo {
+    /**
+     * Bank account number (7-12 digits)
+     */
+    accountNumber: string;
+
+    accountType: 'CAD_ACCOUNT';
+
+    /**
+     * Canadian financial institution number (3 digits)
+     */
+    bankCode: string;
+
+    /**
+     * Transit number identifying the branch (5 digits)
+     */
+    branchCode: string;
+
+    countries: Array<'CA'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentGbpAccountInfo {
+    /**
+     * UK bank account number (8 digits)
+     */
+    accountNumber: string;
+
+    accountType: 'GBP_ACCOUNT';
+
+    countries: Array<'GB'>;
+
+    paymentRails: Array<'FASTER_PAYMENTS'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * UK bank sort code (6 digits, may include hyphens)
+     */
+    sortCode: string;
+  }
+
+  export interface PaymentHkdAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'HKD_ACCOUNT';
+
+    /**
+     * The bank name of the bank
+     */
+    bankName: string;
+
+    countries: Array<'HK'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentIdrAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'IDR_ACCOUNT';
+
+    countries: Array<'ID'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The sort code of the bank
+     */
+    sortCode: string;
+  }
+
+  export interface PaymentMyrAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'MYR_ACCOUNT';
+
+    /**
+     * The bank name of the bank
+     */
+    bankName: string;
+
+    countries: Array<'MY'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentPhpAccountInfo {
+    /**
+     * Bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'PHP_ACCOUNT';
+
+    /**
+     * Name of the beneficiary's bank
+     */
+    bankName: string;
+
+    countries: Array<'PH'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentSgdAccountInfo {
+    /**
+     * Bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'SGD_ACCOUNT';
+
+    /**
+     * Name of the beneficiary's bank
+     */
+    bankName: string;
+
+    countries: Array<'SG'>;
+
+    paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
     /**
      * Unique reference code that must be included with the payment to properly credit
@@ -309,16 +580,55 @@ export namespace PaymentInstructions {
     /**
      * SWIFT/BIC code (8 or 11 characters)
      */
-    swiftBic: string;
+    swiftCode: string;
   }
 
-  export interface UpiAccountInfo {
-    accountType: 'UPI';
+  export interface PaymentThbAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'THB_ACCOUNT';
 
     /**
-     * Virtual Payment Address for UPI payments
+     * The bank name of the bank
      */
-    vpa: string;
+    bankName: string;
+
+    countries: Array<'TH'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentVndAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'VND_ACCOUNT';
+
+    /**
+     * The bank name of the bank
+     */
+    bankName: string;
+
+    countries: Array<'VN'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
   }
 
   export interface PaymentSparkWalletInfo {
@@ -408,6 +718,11 @@ export namespace PaymentInstructions {
 
 export interface Quote {
   /**
+   * Unique identifier for this quote
+   */
+  id: string;
+
+  /**
    * When this quote was created
    */
   createdAt: string;
@@ -434,11 +749,6 @@ export interface Quote {
   feesIncluded: number;
 
   /**
-   * Unique identifier for this quote
-   */
-  quoteId: string;
-
-  /**
    * Currency for the receiving amount
    */
   receivingCurrency: Currency;
@@ -451,7 +761,7 @@ export interface Quote {
   /**
    * Source account details
    */
-  source: QuoteSourceOneOf;
+  source: Quote.AccountQuoteSource | Quote.RealtimeFundingQuoteSource;
 
   /**
    * Current status of the quote
@@ -485,6 +795,52 @@ export interface Quote {
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: OutgoingRateDetails;
+}
+
+export namespace Quote {
+  /**
+   * Source account details
+   */
+  export interface AccountQuoteSource {
+    /**
+     * Source account identifier
+     */
+    accountId: string;
+
+    sourceType: 'ACCOUNT';
+
+    /**
+     * Required when funding from an FBO account to identify the customer on whose
+     * behalf the transaction is being initiated. Otherwise, will default to the
+     * customerId of the account owner.
+     */
+    customerId?: string;
+  }
+
+  /**
+   * Fund the quote using a real-time funding source (RTP, SEPA Instant, Spark,
+   * Stables, etc.). This will require manual just-in-time funding using
+   * `paymentInstructions` in the response. Because quotes expire quickly, this
+   * option is only valid for instant payment methods. Do not try to fund a quote
+   * with a non-instant payment method (ACH, etc.).
+   */
+  export interface RealtimeFundingQuoteSource {
+    /**
+     * Currency code for the funding source. See
+     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
+     * for the full list of supported fiat and crypto currencies.
+     */
+    currency: string;
+
+    sourceType: 'REALTIME_FUNDING';
+
+    /**
+     * Source customer ID. If this transaction is being initiated on behalf of a
+     * customer, this is required. If customerId is not provided, the quote will be
+     * created on behalf of the platform itself.
+     */
+    customerId?: string;
+  }
 }
 
 /**
@@ -546,14 +902,86 @@ export namespace QuoteDestinationOneOf {
   }
 }
 
-/**
- * Source account details
- */
-export type QuoteSourceOneOf =
-  | QuoteSourceOneOf.AccountQuoteSource
-  | QuoteSourceOneOf.RealtimeFundingQuoteSource;
+export interface QuoteCreateParams {
+  /**
+   * Destination account details
+   */
+  destination: QuoteDestinationOneOf;
 
-export namespace QuoteSourceOneOf {
+  /**
+   * The amount to send/receive in the smallest unit of the locked currency (eg.
+   * cents). See `lockedCurrencySide` for more information.
+   */
+  lockedCurrencyAmount: number;
+
+  /**
+   * The side of the quote which should be locked and specified in the
+   * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
+   * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
+   * cents). If I want the receiver to receive exactly $10 USD, I would set this to
+   * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
+   */
+  lockedCurrencySide: 'SENDING' | 'RECEIVING';
+
+  /**
+   * Source account details
+   */
+  source: QuoteCreateParams.AccountQuoteSource | QuoteCreateParams.RealtimeFundingQuoteSource;
+
+  /**
+   * Optional description/memo for the transfer
+   */
+  description?: string;
+
+  /**
+   * Whether to immediately execute the quote after creation. If true, the quote will
+   * be executed and the transaction will be created at the current exchange rate. It
+   * should only be used if you don't want to lock and view rate details before
+   * executing the quote. If you are executing a pre-existing quote, use the
+   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default. This can
+   * only be used for quotes with a `source` which is either an internal account, or
+   * has direct pull functionality (e.g. ACH pull with an external account).
+   */
+  immediatelyExecute?: boolean;
+
+  /**
+   * Lookup ID from a previous receiver lookup request. If provided, this can make
+   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
+   * required for UMA destinations due to counterparty institution requirements. See
+   * `senderCustomerInfo` for more information.
+   */
+  lookupId?: string;
+
+  /**
+   * The purpose of the payment. This may be required when sending to certain
+   * geographies such as India.
+   */
+  purposeOfPayment?:
+    | 'GIFT'
+    | 'SELF'
+    | 'GOODS_OR_SERVICES'
+    | 'EDUCATION'
+    | 'HEALTH_OR_MEDICAL'
+    | 'REAL_ESTATE_PURCHASE'
+    | 'TAX_PAYMENT'
+    | 'LOAN_PAYMENT'
+    | 'UTILITY_BILL'
+    | 'DONATION'
+    | 'TRAVEL'
+    | 'OTHER';
+
+  /**
+   * Only relevant for UMA destinations. Key-value pairs of information about the
+   * sender which was requested by the counterparty (recipient) institution. Any
+   * fields specified in `requiredPayerDataFields` from the response of the
+   * `/receiver/uma/{receiverUmaAddress}` (lookupUma) endpoint MUST be provided here
+   * if they were requested. If the counterparty (recipient) institution did not
+   * request any information, this field can be omitted.
+   */
+  senderCustomerInfo?: { [key: string]: unknown };
+}
+
+export namespace QuoteCreateParams {
   /**
    * Source account details
    */
@@ -597,65 +1025,6 @@ export namespace QuoteSourceOneOf {
      */
     customerId?: string;
   }
-}
-
-export interface QuoteCreateParams {
-  /**
-   * Destination account details
-   */
-  destination: QuoteDestinationOneOf;
-
-  /**
-   * The amount to send/receive in the smallest unit of the locked currency (eg.
-   * cents). See `lockedCurrencySide` for more information.
-   */
-  lockedCurrencyAmount: number;
-
-  /**
-   * The side of the quote which should be locked and specified in the
-   * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
-   * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
-   * cents). If I want the receiver to receive exactly $10 USD, I would set this to
-   * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
-   */
-  lockedCurrencySide: 'SENDING' | 'RECEIVING';
-
-  /**
-   * Source account details
-   */
-  source: QuoteSourceOneOf;
-
-  /**
-   * Optional description/memo for the transfer
-   */
-  description?: string;
-
-  /**
-   * Whether to immediately execute the quote after creation. If true, the quote will
-   * be executed and the transaction will be created at the current exchange rate. It
-   * should only be used if you don't want to lock and view rate details before
-   * executing the quote. If you are executing a pre-existing quote, use the
-   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default.
-   */
-  immediatelyExecute?: boolean;
-
-  /**
-   * Lookup ID from a previous receiver lookup request. If provided, this can make
-   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
-   * required for UMA destinations due to counterparty institution requirements. See
-   * `senderCustomerInfo` for more information.
-   */
-  lookupId?: string;
-
-  /**
-   * Only relevant for UMA destinations. Key-value pairs of information about the
-   * sender which was requested by the counterparty (recipient) institution. Any
-   * fields specified in `requiredPayerDataFields` from the response of the
-   * `/receiver/uma/{receiverUmaAddress}` (lookupUma) endpoint MUST be provided here
-   * if they were requested. If the counterparty (recipient) institution did not
-   * request any information, this field can be omitted.
-   */
-  senderCustomerInfo?: { [key: string]: unknown };
 }
 
 export interface QuoteListParams extends DefaultPaginationParams {
@@ -707,15 +1076,11 @@ export interface QuoteListParams extends DefaultPaginationParams {
 
 export declare namespace Quotes {
   export {
-    type BaseDestination as BaseDestination,
-    type BasePaymentAccountInfo as BasePaymentAccountInfo,
-    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
-    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteListParams as QuoteListParams,

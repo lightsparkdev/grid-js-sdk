@@ -34,26 +34,9 @@ export class Sandbox extends APIResource {
   sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<SandboxSendFundsResponse> {
     return this._client.post('/sandbox/send', { body, ...options });
   }
-
-  /**
-   * Send a test webhook to the configured endpoint
-   *
-   * @example
-   * ```ts
-   * const response = await client.sandbox.sendTestWebhook();
-   * ```
-   */
-  sendTestWebhook(options?: RequestOptions): APIPromise<SandboxSendTestWebhookResponse> {
-    return this._client.post('/webhooks/test', options);
-  }
 }
 
-export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
-  /**
-   * Payment instructions for executing the payment.
-   */
-  paymentInstructions: Array<QuotesAPI.PaymentInstructions>;
-
+export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction, 'type'> {
   /**
    * Amount sent in the sender's currency
    */
@@ -63,6 +46,8 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
    * Source account details
    */
   source: TransactionsAPI.TransactionSourceOneOf;
+
+  type: 'OUTGOING';
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -85,6 +70,11 @@ export interface SandboxSendFundsResponse extends TransferInAPI.Transaction {
    * (eg. cents).
    */
   fees?: number;
+
+  /**
+   * Payment instructions for executing the payment.
+   */
+  paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
 
   /**
    * The ID of the quote that was used to trigger this payment
@@ -129,23 +119,6 @@ export namespace SandboxSendFundsResponse {
   }
 }
 
-export interface SandboxSendTestWebhookResponse {
-  /**
-   * The HTTP status code returned by the webhook endpoint
-   */
-  response_status: number;
-
-  /**
-   * The raw body content returned by the webhook endpoint in response to the request
-   */
-  response_body?: string;
-
-  /**
-   * URL where the webhook was sent
-   */
-  url?: string;
-}
-
 export interface SandboxSendFundsParams {
   /**
    * Currency code for the funds to be sent
@@ -170,7 +143,6 @@ Sandbox.InternalAccounts = InternalAccounts;
 export declare namespace Sandbox {
   export {
     type SandboxSendFundsResponse as SandboxSendFundsResponse,
-    type SandboxSendTestWebhookResponse as SandboxSendTestWebhookResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 

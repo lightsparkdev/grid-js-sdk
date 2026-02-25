@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ExternalAccountsAPI from './external-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -30,10 +31,6 @@ export class ExternalAccounts extends APIResource {
    *   await client.customers.externalAccounts.create({
    *     accountInfo: {
    *       accountType: 'US_ACCOUNT',
-   *       accountNumber: '12345678901',
-   *       routingNumber: '123456789',
-   *       accountCategory: 'CHECKING',
-   *       bankName: 'Chase Bank',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
@@ -87,6 +84,38 @@ export class ExternalAccounts extends APIResource {
 
 export type ExternalAccountsDefaultPagination = DefaultPagination<ExternalAccount>;
 
+export interface Address {
+  /**
+   * Country code (ISO 3166-1 alpha-2)
+   */
+  country: string;
+
+  /**
+   * Street address line 1
+   */
+  line1: string;
+
+  /**
+   * Postal/ZIP code
+   */
+  postalCode: string;
+
+  /**
+   * City
+   */
+  city?: string;
+
+  /**
+   * Street address line 2
+   */
+  line2?: string;
+
+  /**
+   * State/Province/Region
+   */
+  state?: string;
+}
+
 export interface BaseWalletInfo {
   accountType: 'BASE_WALLET';
 
@@ -96,150 +125,167 @@ export interface BaseWalletInfo {
   address: string;
 }
 
-export type BeneficiaryOneOf = BeneficiaryOneOf.IndividualBeneficiary | BeneficiaryOneOf.BusinessBeneficiary;
+export interface BrlBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
 
-export namespace BeneficiaryOneOf {
-  export interface IndividualBeneficiary {
-    beneficiaryType: 'INDIVIDUAL';
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
 
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
+  address?: Address;
 
-    /**
-     * Individual's full name
-     */
-    fullName: string;
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
 
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
-    address?: IndividualBeneficiary.Address;
-  }
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
 
-  export namespace IndividualBeneficiary {
-    export interface Address {
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      country: string;
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
 
-      /**
-       * Street address line 1
-       */
-      line1: string;
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
 
-      /**
-       * Postal/ZIP code
-       */
-      postalCode: string;
-
-      /**
-       * City
-       */
-      city?: string;
-
-      /**
-       * Street address line 2
-       */
-      line2?: string;
-
-      /**
-       * State/Province/Region
-       */
-      state?: string;
-    }
-  }
-
-  export interface BusinessBeneficiary {
-    beneficiaryType: 'BUSINESS';
-
-    /**
-     * Legal name of the business
-     */
-    legalName: string;
-
-    address?: BusinessBeneficiary.Address;
-
-    /**
-     * Business registration number
-     */
-    registrationNumber?: string;
-
-    /**
-     * Tax identification number
-     */
-    taxId?: string;
-  }
-
-  export namespace BusinessBeneficiary {
-    export interface Address {
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      country: string;
-
-      /**
-       * Street address line 1
-       */
-      line1: string;
-
-      /**
-       * Postal/ZIP code
-       */
-      postalCode: string;
-
-      /**
-       * City
-       */
-      city?: string;
-
-      /**
-       * Street address line 2
-       */
-      line2?: string;
-
-      /**
-       * State/Province/Region
-       */
-      state?: string;
-    }
-  }
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
 }
 
-export interface CadAccountInfo {
-  /**
-   * Bank account number (7-12 digits)
-   */
-  accountNumber: string;
+export interface BrlExternalAccountInfo {
+  accountType: 'BRL_ACCOUNT';
 
-  accountType: 'CAD_ACCOUNT';
+  beneficiary: BrlBeneficiary | BusinessBeneficiary;
 
-  /**
-   * Canadian financial institution number (3 digits)
-   */
-  bankCode: string;
+  countries: Array<'BR'>;
 
-  beneficiary: BeneficiaryOneOf;
+  paymentRails: Array<'PIX'>;
 
   /**
-   * Transit number identifying the branch (5 digits)
+   * The PIX key of the bank
    */
-  branchCode: string;
+  pixKey: string;
+
+  /**
+   * The type of PIX key of the bank
+   */
+  pixKeyType: string;
+
+  /**
+   * The tax ID of the bank account
+   */
+  taxId: string;
 }
 
-export interface ClabeAccountInfo {
-  accountType: 'CLABE';
-
-  beneficiary: BeneficiaryOneOf;
+export interface BusinessBeneficiary {
+  beneficiaryType: 'BUSINESS';
 
   /**
-   * 18-digit CLABE number (Mexican banking standard)
+   * The legal name of the business
    */
-  clabeNumber: string;
+  legalName: string;
+
+  address?: Address;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the business
+   */
+  registrationNumber?: string;
+
+  /**
+   * The tax identification number of the business
+   */
+  taxId?: string;
+}
+
+export interface DkkBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface DkkExternalAccountInfo {
+  accountType: 'DKK_ACCOUNT';
+
+  beneficiary: DkkBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'DK'>;
+
+  /**
+   * The IBAN of the bank
+   */
+  iban: string;
+
+  paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+  /**
+   * The SWIFT BIC of the bank
+   */
+  swiftBic?: string;
 }
 
 export interface ExternalAccount {
@@ -345,16 +391,22 @@ export interface ExternalAccountCreate {
 }
 
 export type ExternalAccountInfoOneOf =
-  | UsAccountInfo
-  | ClabeAccountInfo
-  | PixAccountInfo
-  | IbanAccountInfo
-  | UpiAccountInfo
-  | NgnAccountInfo
-  | CadAccountInfo
-  | GbpAccountInfo
-  | PhpAccountInfo
-  | SgdAccountInfo
+  | BrlExternalAccountInfo
+  | ExternalAccountInfoOneOf.CadExternalAccountInfo
+  | DkkExternalAccountInfo
+  | ExternalAccountInfoOneOf.EurExternalAccountInfo
+  | GbpExternalAccountInfo
+  | HkdExternalAccountInfo
+  | IdrExternalAccountInfo
+  | InrExternalAccountInfo
+  | MxnExternalAccountInfo
+  | MyrExternalAccountInfo
+  | ExternalAccountInfoOneOf.NgnExternalAccountInfo
+  | PhpExternalAccountInfo
+  | SgdExternalAccountInfo
+  | ThbExternalAccountInfo
+  | UsdExternalAccountInfo
+  | VndExternalAccountInfo
   | SparkWalletInfo
   | LightningWalletInfo
   | SolanaWalletInfo
@@ -362,7 +414,265 @@ export type ExternalAccountInfoOneOf =
   | PolygonWalletInfo
   | BaseWalletInfo;
 
-export interface GbpAccountInfo {
+export namespace ExternalAccountInfoOneOf {
+  export interface CadExternalAccountInfo {
+    /**
+     * Bank account number (7-12 digits)
+     */
+    accountNumber: string;
+
+    accountType: 'CAD_ACCOUNT';
+
+    /**
+     * Canadian financial institution number (3 digits)
+     */
+    bankCode: string;
+
+    beneficiary: CadExternalAccountInfo.CadBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * Transit number identifying the branch (5 digits)
+     */
+    branchCode: string;
+
+    countries: Array<'CA'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+  }
+
+  export namespace CadExternalAccountInfo {
+    export interface CadBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface EurExternalAccountInfo {
+    accountType: 'EUR_ACCOUNT';
+
+    beneficiary: EurExternalAccountInfo.EurBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    countries: Array<
+      | 'AT'
+      | 'BE'
+      | 'CY'
+      | 'DE'
+      | 'EE'
+      | 'ES'
+      | 'FI'
+      | 'FR'
+      | 'GR'
+      | 'HR'
+      | 'IE'
+      | 'IT'
+      | 'LT'
+      | 'LU'
+      | 'LV'
+      | 'MT'
+      | 'NL'
+      | 'PT'
+      | 'SI'
+      | 'SK'
+    >;
+
+    /**
+     * The IBAN of the bank
+     */
+    iban: string;
+
+    paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+    /**
+     * The SWIFT BIC of the bank
+     */
+    swiftBic?: string;
+  }
+
+  export namespace EurExternalAccountInfo {
+    export interface EurBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface NgnExternalAccountInfo {
+    /**
+     * Nigerian bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'NGN_ACCOUNT';
+
+    /**
+     * Name of the bank
+     */
+    bankName: string;
+
+    beneficiary: NgnExternalAccountInfo.NgnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    countries: Array<'NG'>;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+  }
+
+  export namespace NgnExternalAccountInfo {
+    export interface NgnBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+}
+
+export interface GbpBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface GbpExternalAccountInfo {
   /**
    * UK bank account number (8 digits)
    */
@@ -370,7 +680,11 @@ export interface GbpAccountInfo {
 
   accountType: 'GBP_ACCOUNT';
 
-  beneficiary: BeneficiaryOneOf;
+  beneficiary: GbpBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'GB'>;
+
+  paymentRails: Array<'FASTER_PAYMENTS'>;
 
   /**
    * UK bank sort code (6 digits, may include hyphens)
@@ -378,20 +692,182 @@ export interface GbpAccountInfo {
   sortCode: string;
 }
 
-export interface IbanAccountInfo {
-  accountType: 'IBAN';
-
-  beneficiary: BeneficiaryOneOf;
+export interface HkdBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * International Bank Account Number
+   * The full name of the beneficiary
    */
-  iban: string;
+  fullName: string;
+
+  address?: Address;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The birth date of the beneficiary
    */
-  swiftBic: string;
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface HkdExternalAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'HKD_ACCOUNT';
+
+  /**
+   * The bank name of the bank
+   */
+  bankName: string;
+
+  beneficiary: HkdBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'HK'>;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
+export interface IdrBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface IdrExternalAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'IDR_ACCOUNT';
+
+  beneficiary: IdrBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'ID'>;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * The sort code of the bank
+   */
+  sortCode: string;
+}
+
+export interface InrBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface InrExternalAccountInfo {
+  accountType: 'INR_ACCOUNT';
+
+  beneficiary: InrBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'IN'>;
+
+  paymentRails: Array<'UPI' | 'IMPS'>;
+
+  /**
+   * The VPA of the bank
+   */
+  vpa: string;
 }
 
 export interface LightningWalletInfo {
@@ -415,40 +891,165 @@ export interface LightningWalletInfo {
   lightningAddress?: string;
 }
 
-export interface NgnAccountInfo {
+export interface MxnBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
   /**
-   * Nigerian bank account number
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface MxnExternalAccountInfo {
+  accountType: 'MXN_ACCOUNT';
+
+  beneficiary: MxnBeneficiary | BusinessBeneficiary;
+
+  /**
+   * The CLABE number of the bank
+   */
+  clabeNumber: string;
+
+  countries: Array<'MX'>;
+
+  paymentRails: Array<'SPEI'>;
+}
+
+export interface MyrBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface MyrExternalAccountInfo {
+  /**
+   * The account number of the bank
    */
   accountNumber: string;
 
-  accountType: 'NGN_ACCOUNT';
+  accountType: 'MYR_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The bank name of the bank
    */
   bankName: string;
 
-  beneficiary: BeneficiaryOneOf;
+  beneficiary: MyrBeneficiary | BusinessBeneficiary;
 
-  /**
-   * Purpose of payment
-   */
-  purposeOfPayment:
-    | 'GIFT'
-    | 'SELF'
-    | 'GOODS_OR_SERVICES'
-    | 'EDUCATION'
-    | 'HEALTH_OR_MEDICAL'
-    | 'REAL_ESTATE_PURCHASE'
-    | 'LOAN_PAYMENT'
-    | 'TAX_PAYMENT'
-    | 'UTILITY_BILL'
-    | 'DONATION'
-    | 'TRAVEL'
-    | 'OTHER';
+  countries: Array<'MY'>;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
 }
 
-export interface PhpAccountInfo {
+export interface PhpBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface PhpExternalAccountInfo {
   /**
    * Bank account number
    */
@@ -461,28 +1062,11 @@ export interface PhpAccountInfo {
    */
   bankName: string;
 
-  beneficiary: BeneficiaryOneOf;
-}
+  beneficiary: PhpBeneficiary | BusinessBeneficiary;
 
-export interface PixAccountInfo {
-  accountType: 'PIX';
+  countries: Array<'PH'>;
 
-  beneficiary: BeneficiaryOneOf;
-
-  /**
-   * PIX key for Brazilian instant payments
-   */
-  pixKey: string;
-
-  /**
-   * Type of PIX key being used
-   */
-  pixKeyType: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
-
-  /**
-   * Tax ID of the account holder
-   */
-  taxId: string;
+  paymentRails: Array<'BANK_TRANSFER'>;
 }
 
 export interface PolygonWalletInfo {
@@ -494,7 +1078,48 @@ export interface PolygonWalletInfo {
   address: string;
 }
 
-export interface SgdAccountInfo {
+export interface SgdBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface SgdExternalAccountInfo {
   /**
    * Bank account number
    */
@@ -507,7 +1132,11 @@ export interface SgdAccountInfo {
    */
   bankName: string;
 
-  beneficiary: BeneficiaryOneOf;
+  beneficiary: SgdBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'SG'>;
+
+  paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
   /**
    * SWIFT/BIC code (8 or 11 characters)
@@ -533,6 +1162,67 @@ export interface SparkWalletInfo {
   address: string;
 }
 
+export interface ThbBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface ThbExternalAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'THB_ACCOUNT';
+
+  /**
+   * The bank name of the bank
+   */
+  bankName: string;
+
+  beneficiary: ThbBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'TH'>;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
 export interface TronWalletInfo {
   accountType: 'TRON_WALLET';
 
@@ -542,41 +1232,126 @@ export interface TronWalletInfo {
   address: string;
 }
 
-export interface UpiAccountInfo {
-  accountType: 'UPI';
-
-  beneficiary: BeneficiaryOneOf;
+export interface UsdBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * Virtual Payment Address for UPI payments
+   * The birth date of the beneficiary
    */
-  vpa: string;
+  birthDate: string;
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality: string;
+
+  address?: Address;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
 }
 
-export interface UsAccountInfo {
+export interface UsdExternalAccountInfo {
   /**
-   * Type of account (checking or savings)
-   */
-  accountCategory: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * US bank account number
+   * The account number of the bank
    */
   accountNumber: string;
 
-  accountType: 'US_ACCOUNT';
+  accountType: 'USD_ACCOUNT';
 
-  beneficiary: BeneficiaryOneOf;
+  beneficiary: UsdBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'US'>;
+
+  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
   /**
-   * ACH routing number (9 digits)
+   * The routing number of the bank
    */
   routingNumber: string;
+}
+
+export interface VndBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * Name of the bank
+   * The full name of the beneficiary
    */
-  bankName?: string;
+  fullName: string;
+
+  address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+
+  /**
+   * The registration number of the beneficiary
+   */
+  registrationNumber?: string;
+}
+
+export interface VndExternalAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'VND_ACCOUNT';
+
+  /**
+   * The bank name of the bank
+   */
+  bankName: string;
+
+  beneficiary: VndBeneficiary | BusinessBeneficiary;
+
+  countries: Array<'VN'>;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
 }
 
 export interface ExternalAccountCreateParams {
@@ -631,26 +1406,43 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
 
 export declare namespace ExternalAccounts {
   export {
+    type Address as Address,
     type BaseWalletInfo as BaseWalletInfo,
-    type BeneficiaryOneOf as BeneficiaryOneOf,
-    type CadAccountInfo as CadAccountInfo,
-    type ClabeAccountInfo as ClabeAccountInfo,
+    type BrlBeneficiary as BrlBeneficiary,
+    type BrlExternalAccountInfo as BrlExternalAccountInfo,
+    type BusinessBeneficiary as BusinessBeneficiary,
+    type DkkBeneficiary as DkkBeneficiary,
+    type DkkExternalAccountInfo as DkkExternalAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
-    type GbpAccountInfo as GbpAccountInfo,
-    type IbanAccountInfo as IbanAccountInfo,
+    type GbpBeneficiary as GbpBeneficiary,
+    type GbpExternalAccountInfo as GbpExternalAccountInfo,
+    type HkdBeneficiary as HkdBeneficiary,
+    type HkdExternalAccountInfo as HkdExternalAccountInfo,
+    type IdrBeneficiary as IdrBeneficiary,
+    type IdrExternalAccountInfo as IdrExternalAccountInfo,
+    type InrBeneficiary as InrBeneficiary,
+    type InrExternalAccountInfo as InrExternalAccountInfo,
     type LightningWalletInfo as LightningWalletInfo,
-    type NgnAccountInfo as NgnAccountInfo,
-    type PhpAccountInfo as PhpAccountInfo,
-    type PixAccountInfo as PixAccountInfo,
+    type MxnBeneficiary as MxnBeneficiary,
+    type MxnExternalAccountInfo as MxnExternalAccountInfo,
+    type MyrBeneficiary as MyrBeneficiary,
+    type MyrExternalAccountInfo as MyrExternalAccountInfo,
+    type PhpBeneficiary as PhpBeneficiary,
+    type PhpExternalAccountInfo as PhpExternalAccountInfo,
     type PolygonWalletInfo as PolygonWalletInfo,
-    type SgdAccountInfo as SgdAccountInfo,
+    type SgdBeneficiary as SgdBeneficiary,
+    type SgdExternalAccountInfo as SgdExternalAccountInfo,
     type SolanaWalletInfo as SolanaWalletInfo,
     type SparkWalletInfo as SparkWalletInfo,
+    type ThbBeneficiary as ThbBeneficiary,
+    type ThbExternalAccountInfo as ThbExternalAccountInfo,
     type TronWalletInfo as TronWalletInfo,
-    type UpiAccountInfo as UpiAccountInfo,
-    type UsAccountInfo as UsAccountInfo,
+    type UsdBeneficiary as UsdBeneficiary,
+    type UsdExternalAccountInfo as UsdExternalAccountInfo,
+    type VndBeneficiary as VndBeneficiary,
+    type VndExternalAccountInfo as VndExternalAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

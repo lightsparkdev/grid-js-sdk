@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource uma', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('receivePayment: only required params', async () => {
     const responsePromise = client.sandbox.uma.receivePayment({
       receivingCurrencyAmount: 1000,
@@ -25,7 +25,7 @@ describe('resource uma', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('receivePayment: required and optional params', async () => {
     const response = await client.sandbox.uma.receivePayment({
       receivingCurrencyAmount: 1000,

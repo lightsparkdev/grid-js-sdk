@@ -110,7 +110,7 @@ export interface BulkGetJobStatusResponse {
   /**
    * Unique identifier for the bulk import job
    */
-  jobId: string;
+  id: string;
 
   progress: BulkGetJobStatusResponse.Progress;
 

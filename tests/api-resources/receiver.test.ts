@@ -9,7 +9,7 @@ const client = new LightsparkGrid({
 });
 
 describe('resource receiver', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('lookupExternalAccount', async () => {
     const responsePromise = client.receiver.lookupExternalAccount(
       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -23,7 +23,7 @@ describe('resource receiver', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('lookupExternalAccount: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
@@ -35,7 +35,7 @@ describe('resource receiver', () => {
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('lookupUma', async () => {
     const responsePromise = client.receiver.lookupUma('receiverUmaAddress');
     const rawResponse = await responsePromise.asResponse();
@@ -47,7 +47,7 @@ describe('resource receiver', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('lookupUma: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(

@@ -1,6 +1,6 @@
 # Lightspark Grid TypeScript API Library
 
-[![NPM version](<https://img.shields.io/npm/v/@lightsparkdev/grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/@lightsparkdev/grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@lightsparkdev/grid)
+[![NPM version](<https://img.shields.io/npm/v/@lightsparkdev/grid.svg?label=npm%20(stable)>)](https://npmjs.org/package/@lightsparkdev/grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@lightsparkdev/grid) [![JSR Version](https://jsr.io/badges/@lightsparkdev/grid)](https://jsr.io/@lightsparkdev/grid)
 
 This library provides convenient access to the Lightspark Grid REST API from server-side TypeScript or JavaScript.
 
@@ -21,6 +21,21 @@ Use the Lightspark Grid MCP Server to enable AI assistants to interact with this
 
 ```sh
 npm install @lightsparkdev/grid
+```
+
+### Installation from JSR
+
+```sh
+deno add jsr:@lightsparkdev/grid
+npx jsr add @lightsparkdev/grid
+```
+
+These commands will make the module importable from the `@lightsparkdev/grid` scope:
+
+You can also [import directly from JSR](https://jsr.io/docs/using-packages#importing-with-jsr-specifiers) without an install step if you're using the Deno JavaScript runtime:
+
+```ts
+import LightsparkGrid from 'jsr:@lightsparkdev/grid';
 ```
 
 ## Usage
@@ -49,7 +64,7 @@ const quote = await client.quotes.create({
   },
 });
 
-console.log(quote.createdAt);
+console.log(quote.id);
 ```
 
 ### Request & Response types
@@ -285,7 +300,7 @@ const { data: quote, response: raw } = await client.quotes
   })
   .withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(quote.createdAt);
+console.log(quote.id);
 ```
 
 ### Logging
@@ -453,7 +468,7 @@ const client = new LightsparkGrid({
 <img src="https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg" align="top" width="18" height="21"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>
 
 ```ts
-import LightsparkGrid from 'npm:@lightsparkdev/grid';
+import LightsparkGrid from 'jsr:@lightsparkdev/grid';
 
 const httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });
 const client = new LightsparkGrid({

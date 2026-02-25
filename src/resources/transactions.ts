@@ -3,8 +3,8 @@
 import { APIResource } from '../core/resource';
 import * as TransactionsAPI from './transactions';
 import * as InvitationsAPI from './invitations';
+import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
-import { TransactionsDefaultPagination } from './transfer-in';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -21,7 +21,7 @@ export class Transactions extends APIResource {
    * );
    * ```
    */
-  retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
+  retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransactionRetrieveResponse> {
     return this._client.get(path`/transactions/${transactionID}`, options);
   }
 
@@ -33,7 +33,7 @@ export class Transactions extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const transaction of client.transactions.list()) {
+   * for await (const transactionListResponse of client.transactions.list()) {
    *   // ...
    * }
    * ```
@@ -41,8 +41,8 @@ export class Transactions extends APIResource {
   list(
     query: TransactionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<TransactionsDefaultPagination, TransferInAPI.Transaction> {
-    return this._client.getAPIList('/transactions', DefaultPagination<TransferInAPI.Transaction>, {
+  ): PagePromise<TransactionListResponsesDefaultPagination, TransactionListResponse> {
+    return this._client.getAPIList('/transactions', DefaultPagination<TransactionListResponse>, {
       query,
       ...options,
     });
@@ -87,6 +87,8 @@ export class Transactions extends APIResource {
   }
 }
 
+export type TransactionListResponsesDefaultPagination = DefaultPagination<TransactionListResponse>;
+
 export interface BaseTransactionSource {
   /**
    * Currency code for the source
@@ -94,18 +96,13 @@ export interface BaseTransactionSource {
   currency?: string;
 }
 
-/**
- * Additional information about the counterparty, if available and relevant to the
- * transaction and platform. Only applicable for transactions to/from UMA
- * addresses.
- */
-export type CounterpartyInformation = { [key: string]: unknown };
-
-export interface IncomingTransaction extends TransferInAPI.Transaction {
+export interface IncomingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
   /**
    * Amount received in the recipient's currency
    */
   receivedAmount: InvitationsAPI.CurrencyAmount;
+
+  type: 'INCOMING';
 
   /**
    * If the transaction failed, this field provides the reason for failure.
@@ -180,44 +177,12 @@ export namespace IncomingTransaction {
 }
 
 /**
- * Destination account details
- */
-export type TransactionDestinationOneOf =
-  | TransactionDestinationOneOf.AccountTransactionDestination
-  | TransactionDestinationOneOf.UmaAddressTransactionDestination;
-
-export namespace TransactionDestinationOneOf {
-  /**
-   * Destination account details
-   */
-  export interface AccountTransactionDestination {
-    /**
-     * Destination account identifier
-     */
-    accountId: string;
-
-    destinationType: 'ACCOUNT';
-  }
-
-  /**
-   * UMA address destination details
-   */
-  export interface UmaAddressTransactionDestination {
-    destinationType: 'UMA_ADDRESS';
-
-    /**
-     * UMA address of the recipient
-     */
-    umaAddress: string;
-  }
-}
-
-/**
  * Source account details
  */
 export type TransactionSourceOneOf =
   | TransactionSourceOneOf.AccountTransactionSource
-  | TransactionSourceOneOf.UmaAddressTransactionSource;
+  | TransactionSourceOneOf.UmaAddressTransactionSource
+  | TransactionSourceOneOf.RealtimeFundingTransactionSource;
 
 export namespace TransactionSourceOneOf {
   /**
@@ -243,15 +208,46 @@ export namespace TransactionSourceOneOf {
      */
     umaAddress: string;
   }
+
+  /**
+   * Transaction was funded using a real-time funding source (RTP, SEPA Instant,
+   * Spark, Stables, etc.).
+   */
+  export interface RealtimeFundingTransactionSource extends TransactionsAPI.BaseTransactionSource {
+    /**
+     * Currency code for the funding source
+     */
+    currency: string;
+
+    sourceType: 'REALTIME_FUNDING';
+
+    /**
+     * The customer on whose behalf the transaction was initiated.
+     */
+    customerId?: string;
+  }
 }
 
 /**
- * Status of a payment transaction
+ * Status of a payment transaction.
+ *
+ * | Status       | Description                                                                                        |
+ * | ------------ | -------------------------------------------------------------------------------------------------- |
+ * | `CREATED`    | Initial lookup has been created                                                                    |
+ * | `PENDING`    | Quote has been created                                                                             |
+ * | `PROCESSING` | Funding has been received and payment initiated                                                    |
+ * | `SENT`       | Cross border settlement has been initiated                                                         |
+ * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
+ * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
+ * | `FAILED`     | An error occurred during payment                                                                   |
+ * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
+ * | `EXPIRED`    | Quote has expired                                                                                  |
  */
 export type TransactionStatus =
   | 'CREATED'
   | 'PENDING'
   | 'PROCESSING'
+  | 'SENT'
   | 'COMPLETED'
   | 'REJECTED'
   | 'FAILED'
@@ -262,6 +258,182 @@ export type TransactionStatus =
  * Type of transaction (incoming payment or outgoing payment)
  */
 export type TransactionType = 'INCOMING' | 'OUTGOING';
+
+export type TransactionRetrieveResponse =
+  | IncomingTransaction
+  | TransactionRetrieveResponse.OutgoingTransaction;
+
+export namespace TransactionRetrieveResponse {
+  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
+    /**
+     * Amount sent in the sender's currency
+     */
+    sentAmount: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Source account details
+     */
+    source: TransactionsAPI.TransactionSourceOneOf;
+
+    type: 'OUTGOING';
+
+    /**
+     * Number of sending currency units per receiving currency unit.
+     */
+    exchangeRate?: number;
+
+    /**
+     * If the transaction failed, this field provides the reason for failure.
+     */
+    failureReason?:
+      | 'QUOTE_EXPIRED'
+      | 'QUOTE_EXECUTION_FAILED'
+      | 'LIGHTNING_PAYMENT_FAILED'
+      | 'FUNDING_AMOUNT_MISMATCH'
+      | 'COUNTERPARTY_POST_TX_FAILED'
+      | 'TIMEOUT';
+
+    /**
+     * The fees associated with the quote in the smallest unit of the sending currency
+     * (eg. cents).
+     */
+    fees?: number;
+
+    /**
+     * Payment instructions for executing the payment.
+     */
+    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
+
+    /**
+     * The ID of the quote that was used to trigger this payment
+     */
+    quoteId?: string;
+
+    /**
+     * Details about the rate and fees for the transaction.
+     */
+    rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+    /**
+     * Amount to be received by recipient in the recipient's currency
+     */
+    receivedAmount?: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * The refund if transaction was refunded.
+     */
+    refund?: OutgoingTransaction.Refund;
+  }
+
+  export namespace OutgoingTransaction {
+    /**
+     * The refund if transaction was refunded.
+     */
+    export interface Refund {
+      /**
+       * When the refund was initiated
+       */
+      initiatedAt: string;
+
+      /**
+       * The unique reference code of the refund
+       */
+      reference: string;
+
+      /**
+       * When the refund was or will be settled
+       */
+      settledAt?: string;
+    }
+  }
+}
+
+export type TransactionListResponse = IncomingTransaction | TransactionListResponse.OutgoingTransaction;
+
+export namespace TransactionListResponse {
+  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
+    /**
+     * Amount sent in the sender's currency
+     */
+    sentAmount: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Source account details
+     */
+    source: TransactionsAPI.TransactionSourceOneOf;
+
+    type: 'OUTGOING';
+
+    /**
+     * Number of sending currency units per receiving currency unit.
+     */
+    exchangeRate?: number;
+
+    /**
+     * If the transaction failed, this field provides the reason for failure.
+     */
+    failureReason?:
+      | 'QUOTE_EXPIRED'
+      | 'QUOTE_EXECUTION_FAILED'
+      | 'LIGHTNING_PAYMENT_FAILED'
+      | 'FUNDING_AMOUNT_MISMATCH'
+      | 'COUNTERPARTY_POST_TX_FAILED'
+      | 'TIMEOUT';
+
+    /**
+     * The fees associated with the quote in the smallest unit of the sending currency
+     * (eg. cents).
+     */
+    fees?: number;
+
+    /**
+     * Payment instructions for executing the payment.
+     */
+    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
+
+    /**
+     * The ID of the quote that was used to trigger this payment
+     */
+    quoteId?: string;
+
+    /**
+     * Details about the rate and fees for the transaction.
+     */
+    rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+    /**
+     * Amount to be received by recipient in the recipient's currency
+     */
+    receivedAmount?: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * The refund if transaction was refunded.
+     */
+    refund?: OutgoingTransaction.Refund;
+  }
+
+  export namespace OutgoingTransaction {
+    /**
+     * The refund if transaction was refunded.
+     */
+    export interface Refund {
+      /**
+       * When the refund was initiated
+       */
+      initiatedAt: string;
+
+      /**
+       * The unique reference code of the refund
+       */
+      reference: string;
+
+      /**
+       * When the refund was or will be settled
+       */
+      settledAt?: string;
+    }
+  }
+}
 
 export interface TransactionListParams extends DefaultPaginationParams {
   /**
@@ -339,16 +511,15 @@ export interface TransactionRejectParams {
 export declare namespace Transactions {
   export {
     type BaseTransactionSource as BaseTransactionSource,
-    type CounterpartyInformation as CounterpartyInformation,
     type IncomingTransaction as IncomingTransaction,
-    type TransactionDestinationOneOf as TransactionDestinationOneOf,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
+    type TransactionRetrieveResponse as TransactionRetrieveResponse,
+    type TransactionListResponse as TransactionListResponse,
+    type TransactionListResponsesDefaultPagination as TransactionListResponsesDefaultPagination,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
   };
 }
-
-export { type TransactionsDefaultPagination };

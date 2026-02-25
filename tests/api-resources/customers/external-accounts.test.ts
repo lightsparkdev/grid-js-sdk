@@ -9,20 +9,17 @@ const client = new LightsparkGrid({
 });
 
 describe('resource externalAccounts', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.customers.externalAccounts.create({
       accountInfo: {
-        accountCategory: 'CHECKING',
-        accountNumber: '12345678901',
-        accountType: 'US_ACCOUNT',
-        beneficiary: {
-          beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
-          fullName: 'John Doe',
-          nationality: 'US',
-        },
-        routingNumber: '123456789',
+        accountType: 'BRL_ACCOUNT',
+        beneficiary: { beneficiaryType: 'INDIVIDUAL', fullName: 'John Doe' },
+        countries: ['BR'],
+        paymentRails: ['PIX'],
+        pixKey: 'pixKey',
+        pixKeyType: 'pixKeyType',
+        taxId: 'taxId',
       },
       currency: 'USD',
     });
@@ -35,18 +32,14 @@ describe('resource externalAccounts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.externalAccounts.create({
       accountInfo: {
-        accountCategory: 'CHECKING',
-        accountNumber: '12345678901',
-        accountType: 'US_ACCOUNT',
+        accountType: 'BRL_ACCOUNT',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
           fullName: 'John Doe',
-          nationality: 'US',
           address: {
             country: 'US',
             line1: '123 Main Street',
@@ -55,9 +48,18 @@ describe('resource externalAccounts', () => {
             line2: 'Apt 4B',
             state: 'CA',
           },
+          birthDate: '1990-01-15',
+          countryOfResidence: 'countryOfResidence',
+          email: 'email',
+          nationality: 'US',
+          phoneNumber: 'phoneNumber',
+          registrationNumber: 'registrationNumber',
         },
-        routingNumber: '123456789',
-        bankName: 'Chase Bank',
+        countries: ['BR'],
+        paymentRails: ['PIX'],
+        pixKey: 'pixKey',
+        pixKeyType: 'pixKeyType',
+        taxId: 'taxId',
       },
       currency: 'USD',
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
@@ -66,7 +68,7 @@ describe('resource externalAccounts', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.customers.externalAccounts.list();
     const rawResponse = await responsePromise.asResponse();
@@ -78,7 +80,7 @@ describe('resource externalAccounts', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
