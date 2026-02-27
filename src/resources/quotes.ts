@@ -241,8 +241,6 @@ export namespace PaymentInstructions {
 
     accountType: 'USD_ACCOUNT';
 
-    countries: Array<'US'>;
-
     paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
     /**
@@ -259,8 +257,6 @@ export namespace PaymentInstructions {
 
   export interface PaymentBrlAccountInfo {
     accountType: 'BRL_ACCOUNT';
-
-    countries: Array<'BR'>;
 
     paymentRails: Array<'PIX'>;
 
@@ -288,8 +284,6 @@ export namespace PaymentInstructions {
      */
     clabeNumber: string;
 
-    countries: Array<'MX'>;
-
     paymentRails: Array<'SPEI'>;
 
     /**
@@ -301,8 +295,6 @@ export namespace PaymentInstructions {
 
   export interface PaymentDkkAccountInfo {
     accountType: 'DKK_ACCOUNT';
-
-    countries: Array<'DK'>;
 
     /**
      * The IBAN of the bank
@@ -326,29 +318,6 @@ export namespace PaymentInstructions {
   export interface PaymentEurAccountInfo {
     accountType: 'EUR_ACCOUNT';
 
-    countries: Array<
-      | 'AT'
-      | 'BE'
-      | 'CY'
-      | 'DE'
-      | 'EE'
-      | 'ES'
-      | 'FI'
-      | 'FR'
-      | 'GR'
-      | 'HR'
-      | 'IE'
-      | 'IT'
-      | 'LT'
-      | 'LU'
-      | 'LV'
-      | 'MT'
-      | 'NL'
-      | 'PT'
-      | 'SI'
-      | 'SK'
-    >;
-
     /**
      * The IBAN of the bank
      */
@@ -371,8 +340,6 @@ export namespace PaymentInstructions {
   export interface PaymentInrAccountInfo {
     accountType: 'INR_ACCOUNT';
 
-    countries: Array<'IN'>;
-
     paymentRails: Array<'UPI' | 'IMPS'>;
 
     /**
@@ -393,8 +360,6 @@ export namespace PaymentInstructions {
      * Name of the bank
      */
     bankName: string;
-
-    countries: Array<'NG'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -423,8 +388,6 @@ export namespace PaymentInstructions {
      */
     branchCode: string;
 
-    countries: Array<'CA'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
 
     /**
@@ -442,8 +405,6 @@ export namespace PaymentInstructions {
 
     accountType: 'GBP_ACCOUNT';
 
-    countries: Array<'GB'>;
-
     paymentRails: Array<'FASTER_PAYMENTS'>;
 
     /**
@@ -460,18 +421,16 @@ export namespace PaymentInstructions {
 
   export interface PaymentHkdAccountInfo {
     /**
-     * The account number of the bank
+     * Hong Kong bank account number
      */
     accountNumber: string;
 
     accountType: 'HKD_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
-
-    countries: Array<'HK'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -480,19 +439,32 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentIdrAccountInfo {
     /**
-     * The account number of the bank
+     * Indonesian bank account number
      */
     accountNumber: string;
 
     accountType: 'IDR_ACCOUNT';
 
-    countries: Array<'ID'>;
+    /**
+     * Name of the bank
+     */
+    bankName: string;
 
     paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Indonesian phone number for e-wallet payments
+     */
+    phoneNumber: string;
 
     /**
      * Unique reference code that must be included with the payment to properly credit
@@ -501,25 +473,23 @@ export namespace PaymentInstructions {
     reference: string;
 
     /**
-     * The sort code of the bank
+     * SWIFT/BIC code (8 or 11 characters)
      */
-    sortCode: string;
+    swiftCode: string;
   }
 
   export interface PaymentMyrAccountInfo {
     /**
-     * The account number of the bank
+     * Malaysian bank account number
      */
     accountNumber: string;
 
     accountType: 'MYR_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
-
-    countries: Array<'MY'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -528,6 +498,11 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentPhpAccountInfo {
@@ -542,8 +517,6 @@ export namespace PaymentInstructions {
      * Name of the beneficiary's bank
      */
     bankName: string;
-
-    countries: Array<'PH'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -567,8 +540,6 @@ export namespace PaymentInstructions {
      */
     bankName: string;
 
-    countries: Array<'SG'>;
-
     paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
     /**
@@ -585,18 +556,16 @@ export namespace PaymentInstructions {
 
   export interface PaymentThbAccountInfo {
     /**
-     * The account number of the bank
+     * Thai bank account number
      */
     accountNumber: string;
 
     accountType: 'THB_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
-
-    countries: Array<'TH'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -605,22 +574,25 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentVndAccountInfo {
     /**
-     * The account number of the bank
+     * Vietnamese bank account number
      */
     accountNumber: string;
 
     accountType: 'VND_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
-
-    countries: Array<'VN'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -629,6 +601,11 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentSparkWalletInfo {

@@ -29,7 +29,10 @@ export class ExternalAccounts extends APIResource {
    * const externalAccount =
    *   await client.platform.externalAccounts.create({
    *     accountInfo: {
-   *       accountType: 'US_ACCOUNT',
+   *       accountType: 'USD_ACCOUNT',
+   *       paymentRails: ['ACH'],
+   *       accountNumber: '12345678901',
+   *       routingNumber: '123456789',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
