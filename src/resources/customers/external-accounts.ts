@@ -31,7 +31,6 @@ export class ExternalAccounts extends APIResource {
    *   await client.customers.externalAccounts.create({
    *     accountInfo: {
    *       accountType: 'USD_ACCOUNT',
-   *       countries: ['US'],
    *       paymentRails: ['ACH'],
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
@@ -175,8 +174,6 @@ export interface BrlExternalAccountInfo {
 
   beneficiary: BrlBeneficiary | BusinessBeneficiary;
 
-  countries: Array<'BR'>;
-
   paymentRails: Array<'PIX'>;
 
   /**
@@ -276,8 +273,6 @@ export interface DkkExternalAccountInfo {
   accountType: 'DKK_ACCOUNT';
 
   beneficiary: DkkBeneficiary | BusinessBeneficiary;
-
-  countries: Array<'DK'>;
 
   /**
    * The IBAN of the bank
@@ -444,8 +439,6 @@ export namespace ExternalAccountInfoOneOf {
      */
     branchCode: string;
 
-    countries: Array<'CA'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
   }
 
@@ -496,29 +489,6 @@ export namespace ExternalAccountInfoOneOf {
     accountType: 'EUR_ACCOUNT';
 
     beneficiary: EurExternalAccountInfo.EurBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    countries: Array<
-      | 'AT'
-      | 'BE'
-      | 'CY'
-      | 'DE'
-      | 'EE'
-      | 'ES'
-      | 'FI'
-      | 'FR'
-      | 'GR'
-      | 'HR'
-      | 'IE'
-      | 'IT'
-      | 'LT'
-      | 'LU'
-      | 'LV'
-      | 'MT'
-      | 'NL'
-      | 'PT'
-      | 'SI'
-      | 'SK'
-    >;
 
     /**
      * The IBAN of the bank
@@ -580,8 +550,6 @@ export namespace ExternalAccountInfoOneOf {
     accountType: 'KES_ACCOUNT';
 
     beneficiary: KesExternalAccountInfo.KesBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    countries: Array<'KE'>;
 
     paymentRails: Array<'MOBILE_MONEY'>;
 
@@ -654,8 +622,6 @@ export namespace ExternalAccountInfoOneOf {
 
     beneficiary: NgnExternalAccountInfo.NgnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
-    countries: Array<'NG'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
   }
 
@@ -706,8 +672,6 @@ export namespace ExternalAccountInfoOneOf {
     accountType: 'RWF_ACCOUNT';
 
     beneficiary: RwfExternalAccountInfo.RwfBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    countries: Array<'RW'>;
 
     paymentRails: Array<'MOBILE_MONEY'>;
 
@@ -769,8 +733,6 @@ export namespace ExternalAccountInfoOneOf {
     accountType: 'TZS_ACCOUNT';
 
     beneficiary: TzsExternalAccountInfo.TzsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    countries: Array<'TZ'>;
 
     paymentRails: Array<'MOBILE_MONEY'>;
 
@@ -843,8 +805,6 @@ export namespace ExternalAccountInfoOneOf {
 
     beneficiary: ZarExternalAccountInfo.ZarBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
-    countries: Array<'ZA'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
   }
 
@@ -895,8 +855,6 @@ export namespace ExternalAccountInfoOneOf {
     accountType: 'ZMW_ACCOUNT';
 
     beneficiary: ZmwExternalAccountInfo.ZmwBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    countries: Array<'ZM'>;
 
     paymentRails: Array<'MOBILE_MONEY'>;
 
@@ -1006,8 +964,6 @@ export interface GbpExternalAccountInfo {
 
   beneficiary: GbpBeneficiary | BusinessBeneficiary;
 
-  countries: Array<'GB'>;
-
   paymentRails: Array<'FASTER_PAYMENTS'>;
 
   /**
@@ -1072,8 +1028,6 @@ export interface HkdExternalAccountInfo {
 
   beneficiary: HkdBeneficiary | BusinessBeneficiary;
 
-  countries: Array<'HK'>;
-
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
@@ -1128,8 +1082,6 @@ export interface IdrExternalAccountInfo {
 
   beneficiary: IdrBeneficiary | BusinessBeneficiary;
 
-  countries: Array<'ID'>;
-
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
@@ -1183,8 +1135,6 @@ export interface InrExternalAccountInfo {
   accountType: 'INR_ACCOUNT';
 
   beneficiary: InrBeneficiary | BusinessBeneficiary;
-
-  countries: Array<'IN'>;
 
   paymentRails: Array<'UPI' | 'IMPS'>;
 
@@ -1266,8 +1216,6 @@ export interface MxnExternalAccountInfo {
    */
   clabeNumber: string;
 
-  countries: Array<'MX'>;
-
   paymentRails: Array<'SPEI'>;
 }
 
@@ -1327,8 +1275,6 @@ export interface MyrExternalAccountInfo {
 
   beneficiary: MyrBeneficiary | BusinessBeneficiary;
 
-  countries: Array<'MY'>;
-
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
@@ -1387,8 +1333,6 @@ export interface PhpExternalAccountInfo {
   bankName: string;
 
   beneficiary: PhpBeneficiary | BusinessBeneficiary;
-
-  countries: Array<'PH'>;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 }
@@ -1457,8 +1401,6 @@ export interface SgdExternalAccountInfo {
   bankName: string;
 
   beneficiary: SgdBeneficiary | BusinessBeneficiary;
-
-  countries: Array<'SG'>;
 
   paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
@@ -1542,8 +1484,6 @@ export interface ThbExternalAccountInfo {
 
   beneficiary: ThbBeneficiary | BusinessBeneficiary;
 
-  countries: Array<'TH'>;
-
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
@@ -1606,8 +1546,6 @@ export interface UsdExternalAccountInfo {
   accountType: 'USD_ACCOUNT';
 
   beneficiary: UsdBeneficiary | BusinessBeneficiary;
-
-  countries: Array<'US'>;
 
   paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
@@ -1672,8 +1610,6 @@ export interface VndExternalAccountInfo {
   bankName: string;
 
   beneficiary: VndBeneficiary | BusinessBeneficiary;
-
-  countries: Array<'VN'>;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 }
