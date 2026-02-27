@@ -1015,20 +1015,25 @@ export interface HkdBeneficiary {
 
 export interface HkdExternalAccountInfo {
   /**
-   * The account number of the bank
+   * Hong Kong bank account number
    */
   accountNumber: string;
 
   accountType: 'HKD_ACCOUNT';
 
   /**
-   * The bank name of the bank
+   * Name of the bank
    */
   bankName: string;
 
   beneficiary: HkdBeneficiary | BusinessBeneficiary;
 
   paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
 }
 
 export interface IdrBeneficiary {
@@ -1074,20 +1079,30 @@ export interface IdrBeneficiary {
 
 export interface IdrExternalAccountInfo {
   /**
-   * The account number of the bank
+   * Indonesian bank account number
    */
   accountNumber: string;
 
   accountType: 'IDR_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
 
   beneficiary: IdrBeneficiary | BusinessBeneficiary;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
-   * The sort code of the bank
+   * Indonesian phone number for e-wallet payments
    */
-  sortCode: string;
+  phoneNumber: string;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
 }
 
 export interface InrBeneficiary {
@@ -1262,20 +1277,25 @@ export interface MyrBeneficiary {
 
 export interface MyrExternalAccountInfo {
   /**
-   * The account number of the bank
+   * Malaysian bank account number
    */
   accountNumber: string;
 
   accountType: 'MYR_ACCOUNT';
 
   /**
-   * The bank name of the bank
+   * Name of the bank
    */
   bankName: string;
 
   beneficiary: MyrBeneficiary | BusinessBeneficiary;
 
   paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
 }
 
 export interface PhpBeneficiary {
@@ -1471,20 +1491,25 @@ export interface ThbBeneficiary {
 
 export interface ThbExternalAccountInfo {
   /**
-   * The account number of the bank
+   * Thai bank account number
    */
   accountNumber: string;
 
   accountType: 'THB_ACCOUNT';
 
   /**
-   * The bank name of the bank
+   * Name of the bank
    */
   bankName: string;
 
   beneficiary: ThbBeneficiary | BusinessBeneficiary;
 
   paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
 }
 
 export interface TronWalletInfo {
@@ -1598,20 +1623,25 @@ export interface VndBeneficiary {
 
 export interface VndExternalAccountInfo {
   /**
-   * The account number of the bank
+   * Vietnamese bank account number
    */
   accountNumber: string;
 
   accountType: 'VND_ACCOUNT';
 
   /**
-   * The bank name of the bank
+   * Name of the bank
    */
   bankName: string;
 
   beneficiary: VndBeneficiary | BusinessBeneficiary;
 
   paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
 }
 
 export interface ExternalAccountCreateParams {
