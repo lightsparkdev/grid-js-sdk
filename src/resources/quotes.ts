@@ -421,14 +421,14 @@ export namespace PaymentInstructions {
 
   export interface PaymentHkdAccountInfo {
     /**
-     * The account number of the bank
+     * Hong Kong bank account number
      */
     accountNumber: string;
 
     accountType: 'HKD_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
 
@@ -439,17 +439,32 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentIdrAccountInfo {
     /**
-     * The account number of the bank
+     * Indonesian bank account number
      */
     accountNumber: string;
 
     accountType: 'IDR_ACCOUNT';
 
+    /**
+     * Name of the bank
+     */
+    bankName: string;
+
     paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Indonesian phone number for e-wallet payments
+     */
+    phoneNumber: string;
 
     /**
      * Unique reference code that must be included with the payment to properly credit
@@ -458,21 +473,21 @@ export namespace PaymentInstructions {
     reference: string;
 
     /**
-     * The sort code of the bank
+     * SWIFT/BIC code (8 or 11 characters)
      */
-    sortCode: string;
+    swiftCode: string;
   }
 
   export interface PaymentMyrAccountInfo {
     /**
-     * The account number of the bank
+     * Malaysian bank account number
      */
     accountNumber: string;
 
     accountType: 'MYR_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
 
@@ -483,6 +498,11 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentPhpAccountInfo {
@@ -536,14 +556,14 @@ export namespace PaymentInstructions {
 
   export interface PaymentThbAccountInfo {
     /**
-     * The account number of the bank
+     * Thai bank account number
      */
     accountNumber: string;
 
     accountType: 'THB_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
 
@@ -554,18 +574,23 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentVndAccountInfo {
     /**
-     * The account number of the bank
+     * Vietnamese bank account number
      */
     accountNumber: string;
 
     accountType: 'VND_ACCOUNT';
 
     /**
-     * The bank name of the bank
+     * Name of the bank
      */
     bankName: string;
 
@@ -576,6 +601,11 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * SWIFT/BIC code (8 or 11 characters)
+     */
+    swiftCode: string;
   }
 
   export interface PaymentSparkWalletInfo {
