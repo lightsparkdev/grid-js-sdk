@@ -30,7 +30,6 @@ export class ExternalAccounts extends APIResource {
    *   await client.platform.externalAccounts.create({
    *     accountInfo: {
    *       accountType: 'USD_ACCOUNT',
-   *       countries: ['US'],
    *       paymentRails: ['ACH'],
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',

@@ -241,8 +241,6 @@ export namespace PaymentInstructions {
 
     accountType: 'USD_ACCOUNT';
 
-    countries: Array<'US'>;
-
     paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
     /**
@@ -259,8 +257,6 @@ export namespace PaymentInstructions {
 
   export interface PaymentBrlAccountInfo {
     accountType: 'BRL_ACCOUNT';
-
-    countries: Array<'BR'>;
 
     paymentRails: Array<'PIX'>;
 
@@ -288,8 +284,6 @@ export namespace PaymentInstructions {
      */
     clabeNumber: string;
 
-    countries: Array<'MX'>;
-
     paymentRails: Array<'SPEI'>;
 
     /**
@@ -301,8 +295,6 @@ export namespace PaymentInstructions {
 
   export interface PaymentDkkAccountInfo {
     accountType: 'DKK_ACCOUNT';
-
-    countries: Array<'DK'>;
 
     /**
      * The IBAN of the bank
@@ -326,29 +318,6 @@ export namespace PaymentInstructions {
   export interface PaymentEurAccountInfo {
     accountType: 'EUR_ACCOUNT';
 
-    countries: Array<
-      | 'AT'
-      | 'BE'
-      | 'CY'
-      | 'DE'
-      | 'EE'
-      | 'ES'
-      | 'FI'
-      | 'FR'
-      | 'GR'
-      | 'HR'
-      | 'IE'
-      | 'IT'
-      | 'LT'
-      | 'LU'
-      | 'LV'
-      | 'MT'
-      | 'NL'
-      | 'PT'
-      | 'SI'
-      | 'SK'
-    >;
-
     /**
      * The IBAN of the bank
      */
@@ -371,8 +340,6 @@ export namespace PaymentInstructions {
   export interface PaymentInrAccountInfo {
     accountType: 'INR_ACCOUNT';
 
-    countries: Array<'IN'>;
-
     paymentRails: Array<'UPI' | 'IMPS'>;
 
     /**
@@ -393,8 +360,6 @@ export namespace PaymentInstructions {
      * Name of the bank
      */
     bankName: string;
-
-    countries: Array<'NG'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -423,8 +388,6 @@ export namespace PaymentInstructions {
      */
     branchCode: string;
 
-    countries: Array<'CA'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
 
     /**
@@ -441,8 +404,6 @@ export namespace PaymentInstructions {
     accountNumber: string;
 
     accountType: 'GBP_ACCOUNT';
-
-    countries: Array<'GB'>;
 
     paymentRails: Array<'FASTER_PAYMENTS'>;
 
@@ -471,8 +432,6 @@ export namespace PaymentInstructions {
      */
     bankName: string;
 
-    countries: Array<'HK'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
 
     /**
@@ -489,8 +448,6 @@ export namespace PaymentInstructions {
     accountNumber: string;
 
     accountType: 'IDR_ACCOUNT';
-
-    countries: Array<'ID'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -519,8 +476,6 @@ export namespace PaymentInstructions {
      */
     bankName: string;
 
-    countries: Array<'MY'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
 
     /**
@@ -543,8 +498,6 @@ export namespace PaymentInstructions {
      */
     bankName: string;
 
-    countries: Array<'PH'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
 
     /**
@@ -566,8 +519,6 @@ export namespace PaymentInstructions {
      * Name of the beneficiary's bank
      */
     bankName: string;
-
-    countries: Array<'SG'>;
 
     paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
@@ -596,8 +547,6 @@ export namespace PaymentInstructions {
      */
     bankName: string;
 
-    countries: Array<'TH'>;
-
     paymentRails: Array<'BANK_TRANSFER'>;
 
     /**
@@ -619,8 +568,6 @@ export namespace PaymentInstructions {
      * The bank name of the bank
      */
     bankName: string;
-
-    countries: Array<'VN'>;
 
     paymentRails: Array<'BANK_TRANSFER'>;
 
