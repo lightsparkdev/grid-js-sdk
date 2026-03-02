@@ -60,7 +60,12 @@ export {
   type ReceiverLookupExternalAccountParams,
   type ReceiverLookupUmaParams,
 } from './receiver';
-export { Sandbox, type SandboxSendFundsResponse, type SandboxSendFundsParams } from './sandbox/sandbox';
+export {
+  Sandbox,
+  type SandboxSendFundsResponse,
+  type SandboxSendTestResponse,
+  type SandboxSendFundsParams,
+} from './sandbox/sandbox';
 export {
   Tokens,
   type APIToken,
@@ -97,4 +102,14 @@ export {
   type UmaProviderListParams,
   type UmaProviderListResponsesDefaultPagination,
 } from './uma-providers';
-export { Webhooks, type WebhookSendTestResponse } from './webhooks';
+export {
+  Webhooks,
+  type IncomingPaymentWebhookEvent,
+  type OutgoingPaymentWebhookEvent,
+  type TestWebhookWebhookEvent,
+  type BulkUploadWebhookEvent,
+  type InvitationClaimedWebhookEvent,
+  type KYCStatusWebhookEvent,
+  type AccountStatusWebhookEvent,
+  type UnwrapWebhookEvent,
+} from './webhooks';
