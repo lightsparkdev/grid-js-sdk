@@ -340,7 +340,7 @@ export namespace PaymentInstructions {
   export interface PaymentInrAccountInfo {
     accountType: 'INR_ACCOUNT';
 
-    paymentRails: Array<'UPI' | 'IMPS'>;
+    paymentRails: Array<'UPI'>;
 
     /**
      * The VPA of the bank

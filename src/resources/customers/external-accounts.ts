@@ -1151,7 +1151,7 @@ export interface InrExternalAccountInfo {
 
   beneficiary: InrBeneficiary | BusinessBeneficiary;
 
-  paymentRails: Array<'UPI' | 'IMPS'>;
+  paymentRails: Array<'UPI'>;
 
   /**
    * The VPA of the bank
