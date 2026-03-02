@@ -194,16 +194,6 @@ Methods:
 - <code title="post /transactions/{transactionId}/approve">client.transactions.<a href="./src/resources/transactions.ts">approve</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 - <code title="post /transactions/{transactionId}/reject">client.transactions.<a href="./src/resources/transactions.ts">reject</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 
-# Webhooks
-
-Types:
-
-- <code><a href="./src/resources/webhooks.ts">WebhookSendTestResponse</a></code>
-
-Methods:
-
-- <code title="post /webhooks/test">client.webhooks.<a href="./src/resources/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
-
 # Invitations
 
 Types:
@@ -223,10 +213,12 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendFundsResponse</a></code>
+- <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendTestResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> SandboxSendFundsResponse</code>
+- <code title="post /webhooks/test">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendTest</a>() -> SandboxSendTestResponse</code>
 
 ## Uma
 
@@ -277,3 +269,20 @@ Types:
 Methods:
 
 - <code title="get /exchange-rates">client.exchangeRates.<a href="./src/resources/exchange-rates.ts">list</a>({ ...params }) -> ExchangeRateListResponse</code>
+
+# Webhooks
+
+Types:
+
+- <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">TestWebhookWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">KYCStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">AccountStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
+
+Methods:
+
+- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
