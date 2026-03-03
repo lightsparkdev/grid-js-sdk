@@ -11,7 +11,7 @@ import type { APIResponseProps } from './internal/parse';
 import { getPlatformHeaders } from './internal/detect-platform';
 import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
-import * as qs from './internal/qs';
+import { stringifyQuery } from './internal/utils/query';
 import { VERSION } from './version';
 import * as Errors from './core/error';
 import * as Pagination from './core/pagination';
@@ -69,8 +69,8 @@ import {
   Tokens,
 } from './resources/tokens';
 import {
-  BaseTransactionSource,
   IncomingTransaction,
+  OutgoingTransaction,
   TransactionApproveParams,
   TransactionListParams,
   TransactionListResponse,
@@ -83,7 +83,6 @@ import {
   Transactions,
 } from './resources/transactions';
 import {
-  BaseTransactionDestination,
   Transaction,
   TransferIn,
   TransferInCreateParams,
@@ -96,7 +95,17 @@ import {
   UmaProviderListResponsesDefaultPagination,
   UmaProviders,
 } from './resources/uma-providers';
-import { WebhookSendTestResponse, Webhooks } from './resources/webhooks';
+import {
+  AccountStatusWebhookEvent,
+  BulkUploadWebhookEvent,
+  IncomingPaymentWebhookEvent,
+  InvitationClaimedWebhookEvent,
+  KYCStatusWebhookEvent,
+  OutgoingPaymentWebhookEvent,
+  TestWebhookWebhookEvent,
+  UnwrapWebhookEvent,
+  Webhooks,
+} from './resources/webhooks';
 import {
   Customer,
   CustomerCreate,
@@ -116,7 +125,7 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { Sandbox, SandboxSendFundsParams, SandboxSendFundsResponse } from './resources/sandbox/sandbox';
+import { Sandbox, SandboxSendFundsParams, SandboxSendTestResponse } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -368,8 +377,8 @@ export class LightsparkGrid {
     return buildHeaders([{ 'X-Grid-Signature': this.webhookSignature }]);
   }
 
-  protected stringifyQuery(query: Record<string, unknown>): string {
-    return qs.stringify(query, { arrayFormat: 'comma' });
+  protected stringifyQuery(query: object | Record<string, unknown>): string {
+    return stringifyQuery(query);
   }
 
   private getUserAgent(): string {
@@ -406,7 +415,7 @@ export class LightsparkGrid {
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
-      url.search = this.stringifyQuery(query as Record<string, unknown>);
+      url.search = this.stringifyQuery(query);
     }
 
     return url.toString();
@@ -869,7 +878,7 @@ export class LightsparkGrid {
     ) {
       return {
         bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
-        body: this.stringifyQuery(body as Record<string, unknown>),
+        body: this.stringifyQuery(body),
       };
     } else {
       return this.#encoder({ body, headers });
@@ -904,12 +913,12 @@ export class LightsparkGrid {
   receiver: API.Receiver = new API.Receiver(this);
   quotes: API.Quotes = new API.Quotes(this);
   transactions: API.Transactions = new API.Transactions(this);
-  webhooks: API.Webhooks = new API.Webhooks(this);
   invitations: API.Invitations = new API.Invitations(this);
   sandbox: API.Sandbox = new API.Sandbox(this);
   umaProviders: API.UmaProviders = new API.UmaProviders(this);
   tokens: API.Tokens = new API.Tokens(this);
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -921,12 +930,12 @@ LightsparkGrid.TransferOut = TransferOut;
 LightsparkGrid.Receiver = Receiver;
 LightsparkGrid.Quotes = Quotes;
 LightsparkGrid.Transactions = Transactions;
-LightsparkGrid.Webhooks = Webhooks;
 LightsparkGrid.Invitations = Invitations;
 LightsparkGrid.Sandbox = Sandbox;
 LightsparkGrid.UmaProviders = UmaProviders;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
+LightsparkGrid.Webhooks = Webhooks;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -975,7 +984,6 @@ export declare namespace LightsparkGrid {
 
   export {
     TransferIn as TransferIn,
-    type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
     type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,
@@ -1011,8 +1019,8 @@ export declare namespace LightsparkGrid {
 
   export {
     Transactions as Transactions,
-    type BaseTransactionSource as BaseTransactionSource,
     type IncomingTransaction as IncomingTransaction,
+    type OutgoingTransaction as OutgoingTransaction,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
@@ -1024,8 +1032,6 @@ export declare namespace LightsparkGrid {
     type TransactionRejectParams as TransactionRejectParams,
   };
 
-  export { Webhooks as Webhooks, type WebhookSendTestResponse as WebhookSendTestResponse };
-
   export {
     Invitations as Invitations,
     type CurrencyAmount as CurrencyAmount,
@@ -1036,7 +1042,7 @@ export declare namespace LightsparkGrid {
 
   export {
     Sandbox as Sandbox,
-    type SandboxSendFundsResponse as SandboxSendFundsResponse,
+    type SandboxSendTestResponse as SandboxSendTestResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
@@ -1061,4 +1067,18 @@ export declare namespace LightsparkGrid {
     type ExchangeRateListResponse as ExchangeRateListResponse,
     type ExchangeRateListParams as ExchangeRateListParams,
   };
+
+  export {
+    Webhooks as Webhooks,
+    type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
+    type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
+    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
+    type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
+    type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
+    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
+    type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
+    type UnwrapWebhookEvent as UnwrapWebhookEvent,
+  };
+
+  export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
 }

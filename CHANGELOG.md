@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.8.0 (2026-03-03)
+
+Full Changelog: [v0.7.0...v0.8.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.7.0...v0.8.0)
+
+### Features
+
+* **api:** add KES/RWF/TZS/ZAR/ZMW account types to external-accounts ([8752928](https://github.com/lightsparkdev/grid-js-sdk/commit/8752928d5772fd7302e4612de7650a271d4cbb35))
+* **api:** add swiftCode to HKD/IDR/MYR/THB/VND, bankName/phoneNumber to IDR, remove sortCode ([87f0c96](https://github.com/lightsparkdev/grid-js-sdk/commit/87f0c966797c82e08c70b36a0058bbb64eab0175))
+* **api:** manual updates ([dc14920](https://github.com/lightsparkdev/grid-js-sdk/commit/dc1492033e34d6882d0c449e566817c2b3bf4d46))
+* **api:** manual updates ([57ac800](https://github.com/lightsparkdev/grid-js-sdk/commit/57ac80086922934982bb66f6e9908286aeab8a71))
+* **api:** manual updates ([f5d1c74](https://github.com/lightsparkdev/grid-js-sdk/commit/f5d1c74ea481ebfa2f5e4adf2c72e4a504c41d54))
+* **api:** manual updates ([082433e](https://github.com/lightsparkdev/grid-js-sdk/commit/082433ea85b3b6806028958e62faae5bb84652a8))
+* **mcp:** add an option to disable code tool ([fee8724](https://github.com/lightsparkdev/grid-js-sdk/commit/fee87243739a77e26c6f6b38206386ab024af081))
+
+
+### Bug Fixes
+
+* **mcp:** update prompt ([dd2714f](https://github.com/lightsparkdev/grid-js-sdk/commit/dd2714f04c8c625a1fbd196fd85c868842c46df7))
+* **types:** remove countries field from external account types ([efe76f8](https://github.com/lightsparkdev/grid-js-sdk/commit/efe76f84e0f6be34b880c14b59dfc8e25977e55e))
+* **types:** remove IMPS from paymentRails in external-accounts and quotes ([85a6d9c](https://github.com/lightsparkdev/grid-js-sdk/commit/85a6d9c66b1de6e631abc8514e213a54f43a52f6))
+
+
+### Chores
+
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([f709aa8](https://github.com/lightsparkdev/grid-js-sdk/commit/f709aa8d3d6df14786141b4a6e1eeb8e8982e426))
+* **internal:** fix MCP Dockerfiles so they can be built without buildkit ([ab62051](https://github.com/lightsparkdev/grid-js-sdk/commit/ab6205154401d6f229fca8825f4824b804ea27a4))
+* **internal:** move stringifyQuery implementation to internal function ([6ca7335](https://github.com/lightsparkdev/grid-js-sdk/commit/6ca733599397fc30daf7415c4add396b3ada8f3b))
+* **internal:** update external accounts examples and test fixtures ([56867d5](https://github.com/lightsparkdev/grid-js-sdk/commit/56867d5bc8af9d906f094b8abac549038811db34))
+
 ## 0.7.0 (2026-02-25)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.6.0...v0.7.0)

@@ -1,9 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as TransferInAPI from './transfer-in';
-import * as InvitationsAPI from './invitations';
-import * as QuotesAPI from './quotes';
 import * as TransactionsAPI from './transactions';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
@@ -45,13 +42,6 @@ export class TransferIn extends APIResource {
   }
 }
 
-export interface BaseTransactionDestination {
-  /**
-   * Currency code for the destination
-   */
-  currency?: string;
-}
-
 export interface Transaction {
   /**
    * Unique identifier for the transaction
@@ -63,9 +53,6 @@ export interface Transaction {
    */
   customerId: string;
 
-  /**
-   * Destination account details
-   */
   destination:
     | Transaction.AccountTransactionDestination
     | Transaction.UmaAddressTransactionDestination
@@ -128,130 +115,49 @@ export interface Transaction {
 }
 
 export namespace Transaction {
-  /**
-   * Destination account details
-   */
-  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+  export interface AccountTransactionDestination {
     /**
      * Destination account identifier
      */
     accountId: string;
 
     destinationType: 'ACCOUNT';
+
+    /**
+     * Currency code for the destination
+     */
+    currency?: string;
   }
 
-  /**
-   * UMA address destination details
-   */
-  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+  export interface UmaAddressTransactionDestination {
     destinationType: 'UMA_ADDRESS';
 
     /**
      * UMA address of the recipient
      */
     umaAddress: string;
+
+    /**
+     * Currency code for the destination
+     */
+    currency?: string;
   }
 
-  /**
-   * Transaction destination where external account details were provided inline at
-   * quote creation rather than using a pre-registered external account.
-   */
-  export interface ExternalAccountDetailsTransactionDestination
-    extends TransferInAPI.BaseTransactionDestination {
+  export interface ExternalAccountDetailsTransactionDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
+
+    /**
+     * Currency code for the destination
+     */
+    currency?: string;
   }
 }
 
 export type TransferInCreateResponse =
   | TransactionsAPI.IncomingTransaction
-  | TransferInCreateResponse.OutgoingTransaction;
-
-export namespace TransferInCreateResponse {
-  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
-    /**
-     * Amount sent in the sender's currency
-     */
-    sentAmount: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * Source account details
-     */
-    source: TransactionsAPI.TransactionSourceOneOf;
-
-    type: 'OUTGOING';
-
-    /**
-     * Number of sending currency units per receiving currency unit.
-     */
-    exchangeRate?: number;
-
-    /**
-     * If the transaction failed, this field provides the reason for failure.
-     */
-    failureReason?:
-      | 'QUOTE_EXPIRED'
-      | 'QUOTE_EXECUTION_FAILED'
-      | 'LIGHTNING_PAYMENT_FAILED'
-      | 'FUNDING_AMOUNT_MISMATCH'
-      | 'COUNTERPARTY_POST_TX_FAILED'
-      | 'TIMEOUT';
-
-    /**
-     * The fees associated with the quote in the smallest unit of the sending currency
-     * (eg. cents).
-     */
-    fees?: number;
-
-    /**
-     * Payment instructions for executing the payment.
-     */
-    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
-
-    /**
-     * The ID of the quote that was used to trigger this payment
-     */
-    quoteId?: string;
-
-    /**
-     * Details about the rate and fees for the transaction.
-     */
-    rateDetails?: QuotesAPI.OutgoingRateDetails;
-
-    /**
-     * Amount to be received by recipient in the recipient's currency
-     */
-    receivedAmount?: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * The refund if transaction was refunded.
-     */
-    refund?: OutgoingTransaction.Refund;
-  }
-
-  export namespace OutgoingTransaction {
-    /**
-     * The refund if transaction was refunded.
-     */
-    export interface Refund {
-      /**
-       * When the refund was initiated
-       */
-      initiatedAt: string;
-
-      /**
-       * The unique reference code of the refund
-       */
-      reference: string;
-
-      /**
-       * When the refund was or will be settled
-       */
-      settledAt?: string;
-    }
-  }
-}
+  | TransactionsAPI.OutgoingTransaction;
 
 export interface TransferInCreateParams {
   /**
@@ -301,7 +207,6 @@ export namespace TransferInCreateParams {
 
 export declare namespace TransferIn {
   export {
-    type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
     type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,

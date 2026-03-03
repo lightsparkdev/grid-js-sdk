@@ -19,7 +19,6 @@ TEST_PATHS=(
 	tests/api-resources/receiver.test.ts
 	tests/api-resources/quotes.test.ts
 	tests/api-resources/transactions.test.ts
-	tests/api-resources/webhooks.test.ts
 	tests/api-resources/invitations.test.ts
 	tests/api-resources/sandbox/sandbox.test.ts
 	tests/api-resources/sandbox/uma.test.ts

@@ -13,13 +13,16 @@ describe('resource externalAccounts', () => {
   test.skip('create: only required params', async () => {
     const responsePromise = client.platform.externalAccounts.create({
       accountInfo: {
-        accountType: 'BRL_ACCOUNT',
-        beneficiary: { beneficiaryType: 'INDIVIDUAL', fullName: 'John Doe' },
-        countries: ['BR'],
-        paymentRails: ['PIX'],
-        pixKey: 'pixKey',
-        pixKeyType: 'pixKeyType',
-        taxId: 'taxId',
+        accountNumber: '12345678901',
+        accountType: 'USD_ACCOUNT',
+        beneficiary: {
+          beneficiaryType: 'INDIVIDUAL',
+          birthDate: '1990-01-15',
+          fullName: 'John Doe',
+          nationality: 'US',
+        },
+        paymentRails: ['ACH'],
+        routingNumber: '123456789',
       },
       currency: 'USD',
     });
@@ -36,10 +39,13 @@ describe('resource externalAccounts', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.platform.externalAccounts.create({
       accountInfo: {
-        accountType: 'BRL_ACCOUNT',
+        accountNumber: '12345678901',
+        accountType: 'USD_ACCOUNT',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
+          birthDate: '1990-01-15',
           fullName: 'John Doe',
+          nationality: 'US',
           address: {
             country: 'US',
             line1: '123 Main Street',
@@ -48,18 +54,13 @@ describe('resource externalAccounts', () => {
             line2: 'Apt 4B',
             state: 'CA',
           },
-          birthDate: '1990-01-15',
           countryOfResidence: 'countryOfResidence',
           email: 'email',
-          nationality: 'US',
           phoneNumber: 'phoneNumber',
           registrationNumber: 'registrationNumber',
         },
-        countries: ['BR'],
-        paymentRails: ['PIX'],
-        pixKey: 'pixKey',
-        pixKeyType: 'pixKeyType',
-        taxId: 'taxId',
+        paymentRails: ['ACH'],
+        routingNumber: '123456789',
       },
       currency: 'USD',
       platformAccountId: 'ext_acc_123456',
