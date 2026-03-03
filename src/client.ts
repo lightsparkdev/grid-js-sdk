@@ -69,8 +69,8 @@ import {
   Tokens,
 } from './resources/tokens';
 import {
-  BaseTransactionSource,
   IncomingTransaction,
+  OutgoingTransaction,
   TransactionApproveParams,
   TransactionListParams,
   TransactionListResponse,
@@ -125,12 +125,7 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import {
-  Sandbox,
-  SandboxSendFundsParams,
-  SandboxSendFundsResponse,
-  SandboxSendTestResponse,
-} from './resources/sandbox/sandbox';
+import { Sandbox, SandboxSendFundsParams, SandboxSendTestResponse } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -1024,8 +1019,8 @@ export declare namespace LightsparkGrid {
 
   export {
     Transactions as Transactions,
-    type BaseTransactionSource as BaseTransactionSource,
     type IncomingTransaction as IncomingTransaction,
+    type OutgoingTransaction as OutgoingTransaction,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
@@ -1047,7 +1042,6 @@ export declare namespace LightsparkGrid {
 
   export {
     Sandbox as Sandbox,
-    type SandboxSendFundsResponse as SandboxSendFundsResponse,
     type SandboxSendTestResponse as SandboxSendTestResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
