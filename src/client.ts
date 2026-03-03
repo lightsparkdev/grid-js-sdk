@@ -69,8 +69,8 @@ import {
   Tokens,
 } from './resources/tokens';
 import {
+  BaseTransactionSource,
   IncomingTransaction,
-  OutgoingTransaction,
   TransactionApproveParams,
   TransactionListParams,
   TransactionListResponse,
@@ -83,6 +83,7 @@ import {
   Transactions,
 } from './resources/transactions';
 import {
+  BaseTransactionDestination,
   Transaction,
   TransferIn,
   TransferInCreateParams,
@@ -125,7 +126,12 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { Sandbox, SandboxSendFundsParams, SandboxSendTestResponse } from './resources/sandbox/sandbox';
+import {
+  Sandbox,
+  SandboxSendFundsParams,
+  SandboxSendFundsResponse,
+  SandboxSendTestResponse,
+} from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -1017,6 +1023,7 @@ export declare namespace LightsparkGrid {
 
   export {
     TransferIn as TransferIn,
+    type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
     type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,
@@ -1052,8 +1059,8 @@ export declare namespace LightsparkGrid {
 
   export {
     Transactions as Transactions,
+    type BaseTransactionSource as BaseTransactionSource,
     type IncomingTransaction as IncomingTransaction,
-    type OutgoingTransaction as OutgoingTransaction,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
@@ -1075,6 +1082,7 @@ export declare namespace LightsparkGrid {
 
   export {
     Sandbox as Sandbox,
+    type SandboxSendFundsResponse as SandboxSendFundsResponse,
     type SandboxSendTestResponse as SandboxSendTestResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
@@ -1112,6 +1120,4 @@ export declare namespace LightsparkGrid {
     type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
-
-  export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
 }

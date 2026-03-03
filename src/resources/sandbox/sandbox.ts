@@ -1,7 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as InvitationsAPI from '../invitations';
+import * as QuotesAPI from '../quotes';
 import * as TransactionsAPI from '../transactions';
+import * as TransferInAPI from '../transfer-in';
 import * as InternalAccountsAPI from './internal-accounts';
 import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
 import * as UmaAPI from './uma';
@@ -22,16 +25,13 @@ export class Sandbox extends APIResource {
    *
    * @example
    * ```ts
-   * const outgoingTransaction = await client.sandbox.sendFunds({
+   * const response = await client.sandbox.sendFunds({
    *   currencyCode: 'USD',
    *   quoteId: 'Quote:019542f5-b3e7-1d02-0000-000000000006',
    * });
    * ```
    */
-  sendFunds(
-    body: SandboxSendFundsParams,
-    options?: RequestOptions,
-  ): APIPromise<TransactionsAPI.OutgoingTransaction> {
+  sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<SandboxSendFundsResponse> {
     return this._client.post('/sandbox/send', { body, ...options });
   }
 
@@ -45,6 +45,89 @@ export class Sandbox extends APIResource {
    */
   sendTest(options?: RequestOptions): APIPromise<SandboxSendTestResponse> {
     return this._client.post('/webhooks/test', options);
+  }
+}
+
+export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction, 'type'> {
+  /**
+   * Amount sent in the sender's currency
+   */
+  sentAmount: InvitationsAPI.CurrencyAmount;
+
+  /**
+   * Source account details
+   */
+  source: TransactionsAPI.TransactionSourceOneOf;
+
+  type: 'OUTGOING';
+
+  /**
+   * Number of sending currency units per receiving currency unit.
+   */
+  exchangeRate?: number;
+
+  /**
+   * If the transaction failed, this field provides the reason for failure.
+   */
+  failureReason?:
+    | 'QUOTE_EXPIRED'
+    | 'QUOTE_EXECUTION_FAILED'
+    | 'LIGHTNING_PAYMENT_FAILED'
+    | 'FUNDING_AMOUNT_MISMATCH'
+    | 'COUNTERPARTY_POST_TX_FAILED'
+    | 'TIMEOUT';
+
+  /**
+   * The fees associated with the quote in the smallest unit of the sending currency
+   * (eg. cents).
+   */
+  fees?: number;
+
+  /**
+   * Payment instructions for executing the payment.
+   */
+  paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
+
+  /**
+   * The ID of the quote that was used to trigger this payment
+   */
+  quoteId?: string;
+
+  /**
+   * Details about the rate and fees for the transaction.
+   */
+  rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+  /**
+   * Amount to be received by recipient in the recipient's currency
+   */
+  receivedAmount?: InvitationsAPI.CurrencyAmount;
+
+  /**
+   * The refund if transaction was refunded.
+   */
+  refund?: SandboxSendFundsResponse.Refund;
+}
+
+export namespace SandboxSendFundsResponse {
+  /**
+   * The refund if transaction was refunded.
+   */
+  export interface Refund {
+    /**
+     * When the refund was initiated
+     */
+    initiatedAt: string;
+
+    /**
+     * The unique reference code of the refund
+     */
+    reference: string;
+
+    /**
+     * When the refund was or will be settled
+     */
+    settledAt?: string;
   }
 }
 
@@ -88,6 +171,7 @@ Sandbox.InternalAccounts = InternalAccounts;
 
 export declare namespace Sandbox {
   export {
+    type SandboxSendFundsResponse as SandboxSendFundsResponse,
     type SandboxSendTestResponse as SandboxSendTestResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
