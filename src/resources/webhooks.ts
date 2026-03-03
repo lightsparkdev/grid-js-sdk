@@ -2,9 +2,10 @@
 
 import { APIResource } from '../core/resource';
 import * as InvitationsAPI from './invitations';
+import * as QuotesAPI from './quotes';
 import * as ReceiverAPI from './receiver';
-import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
+import * as TransferInAPI from './transfer-in';
 
 export class Webhooks extends APIResource {
   unwrap(body: string): UnwrapWebhookEvent {
@@ -58,7 +59,7 @@ export interface OutgoingPaymentWebhookEvent {
    */
   timestamp: string;
 
-  transaction: TransactionsAPI.OutgoingTransaction;
+  transaction: OutgoingPaymentWebhookEvent.Transaction;
 
   /**
    * Type of webhook event
@@ -71,6 +72,91 @@ export interface OutgoingPaymentWebhookEvent {
     | 'INVITATION_CLAIMED'
     | 'KYC_STATUS'
     | 'ACCOUNT_STATUS';
+}
+
+export namespace OutgoingPaymentWebhookEvent {
+  export interface Transaction extends Omit<TransferInAPI.Transaction, 'type'> {
+    /**
+     * Amount sent in the sender's currency
+     */
+    sentAmount: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Source account details
+     */
+    source: TransactionsAPI.TransactionSourceOneOf;
+
+    type: 'OUTGOING';
+
+    /**
+     * Number of sending currency units per receiving currency unit.
+     */
+    exchangeRate?: number;
+
+    /**
+     * If the transaction failed, this field provides the reason for failure.
+     */
+    failureReason?:
+      | 'QUOTE_EXPIRED'
+      | 'QUOTE_EXECUTION_FAILED'
+      | 'LIGHTNING_PAYMENT_FAILED'
+      | 'FUNDING_AMOUNT_MISMATCH'
+      | 'COUNTERPARTY_POST_TX_FAILED'
+      | 'TIMEOUT';
+
+    /**
+     * The fees associated with the quote in the smallest unit of the sending currency
+     * (eg. cents).
+     */
+    fees?: number;
+
+    /**
+     * Payment instructions for executing the payment.
+     */
+    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
+
+    /**
+     * The ID of the quote that was used to trigger this payment
+     */
+    quoteId?: string;
+
+    /**
+     * Details about the rate and fees for the transaction.
+     */
+    rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+    /**
+     * Amount to be received by recipient in the recipient's currency
+     */
+    receivedAmount?: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * The refund if transaction was refunded.
+     */
+    refund?: Transaction.Refund;
+  }
+
+  export namespace Transaction {
+    /**
+     * The refund if transaction was refunded.
+     */
+    export interface Refund {
+      /**
+       * When the refund was initiated
+       */
+      initiatedAt: string;
+
+      /**
+       * The unique reference code of the refund
+       */
+      reference: string;
+
+      /**
+       * When the refund was or will be settled
+       */
+      settledAt?: string;
+    }
+  }
 }
 
 export interface TestWebhookWebhookEvent {
@@ -147,7 +233,7 @@ export namespace BulkUploadWebhookEvent {
     /**
      * Detailed error information for failed entries
      */
-    errors?: Array<Shared.BulkCustomerImportErrorEntry>;
+    errors?: Array<BulkCustomerImportJob.Error>;
   }
 
   export namespace BulkCustomerImportJob {
@@ -171,6 +257,28 @@ export namespace BulkUploadWebhookEvent {
        * Total number of customers to process
        */
       total: number;
+    }
+
+    export interface Error {
+      /**
+       * Platform customer ID or row number for the failed entry
+       */
+      correlationId: string;
+
+      /**
+       * Error code
+       */
+      code?: string;
+
+      /**
+       * Additional error details
+       */
+      details?: { [key: string]: unknown };
+
+      /**
+       * Error message
+       */
+      message?: string;
     }
   }
 }

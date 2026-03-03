@@ -131,13 +131,6 @@ export interface BaseWalletInfo {
   address: string;
 }
 
-export interface BeneficiaryVerifiedData {
-  /**
-   * The verified full name of the account holder as returned by the payment rail
-   */
-  fullName?: string;
-}
-
 export interface BrlBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
@@ -329,7 +322,7 @@ export interface ExternalAccount {
   /**
    * Verified beneficiary data returned by the payment rail, if available
    */
-  beneficiaryVerifiedData?: BeneficiaryVerifiedData;
+  beneficiaryVerifiedData?: ExternalAccount.BeneficiaryVerifiedData;
 
   /**
    * The customer this account is tied to, or null if the account is on behalf of the
@@ -352,6 +345,18 @@ export interface ExternalAccount {
    * Optional platform-specific identifier for this account
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccount {
+  /**
+   * Verified beneficiary data returned by the payment rail, if available
+   */
+  export interface BeneficiaryVerifiedData {
+    /**
+     * The verified full name of the account holder as returned by the payment rail
+     */
+    fullName?: string;
+  }
 }
 
 export interface ExternalAccountCreate {
@@ -397,6 +402,7 @@ export type ExternalAccountInfoOneOf =
   | IdrExternalAccountInfo
   | InrExternalAccountInfo
   | ExternalAccountInfoOneOf.KesExternalAccountInfo
+  | ExternalAccountInfoOneOf.MwkExternalAccountInfo
   | MxnExternalAccountInfo
   | MyrExternalAccountInfo
   | ExternalAccountInfoOneOf.NgnExternalAccountInfo
@@ -405,8 +411,10 @@ export type ExternalAccountInfoOneOf =
   | SgdExternalAccountInfo
   | ThbExternalAccountInfo
   | ExternalAccountInfoOneOf.TzsExternalAccountInfo
+  | ExternalAccountInfoOneOf.UgxExternalAccountInfo
   | UsdExternalAccountInfo
   | VndExternalAccountInfo
+  | ExternalAccountInfoOneOf.XofExternalAccountInfo
   | ExternalAccountInfoOneOf.ZarExternalAccountInfo
   | ExternalAccountInfoOneOf.ZmwExternalAccountInfo
   | SparkWalletInfo
@@ -559,11 +567,74 @@ export namespace ExternalAccountInfoOneOf {
     /**
      * Mobile money provider
      */
-    provider: 'M-PESA';
+    provider: string;
   }
 
   export namespace KesExternalAccountInfo {
     export interface KesBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface MwkExternalAccountInfo {
+    accountType: 'MWK_ACCOUNT';
+
+    beneficiary: MwkExternalAccountInfo.MwkBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    countries: Array<'MW'>;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Malawian mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * Mobile money provider
+     */
+    provider: string;
+  }
+
+  export namespace MwkExternalAccountInfo {
+    export interface MwkBeneficiary {
       beneficiaryType: 'INDIVIDUAL';
 
       /**
@@ -681,7 +752,7 @@ export namespace ExternalAccountInfoOneOf {
     /**
      * Mobile money provider
      */
-    provider: 'MTN' | 'AIRTEL';
+    provider: string;
   }
 
   export namespace RwfExternalAccountInfo {
@@ -742,11 +813,137 @@ export namespace ExternalAccountInfoOneOf {
     /**
      * Mobile money provider
      */
-    provider: 'AIRTEL' | 'VODACOM';
+    provider: string;
   }
 
   export namespace TzsExternalAccountInfo {
     export interface TzsBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface UgxExternalAccountInfo {
+    accountType: 'UGX_ACCOUNT';
+
+    beneficiary: UgxExternalAccountInfo.UgxBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    countries: Array<'UG'>;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Ugandan mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * Mobile money provider
+     */
+    provider: string;
+  }
+
+  export namespace UgxExternalAccountInfo {
+    export interface UgxBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface XofExternalAccountInfo {
+    accountType: 'XOF_ACCOUNT';
+
+    beneficiary: XofExternalAccountInfo.XofBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    countries: Array<'SN' | 'BJ' | 'CI'>;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * West African mobile money phone number (Senegal, Benin, or Ivory Coast)
+     */
+    phoneNumber: string;
+
+    /**
+     * Mobile money provider
+     */
+    provider: string;
+  }
+
+  export namespace XofExternalAccountInfo {
+    export interface XofBeneficiary {
       beneficiaryType: 'INDIVIDUAL';
 
       /**
@@ -864,7 +1061,7 @@ export namespace ExternalAccountInfoOneOf {
     /**
      * Mobile money provider
      */
-    provider: 'TNM' | 'AIRTEL' | 'ZAMTEL' | 'MTN';
+    provider: string;
   }
 
   export namespace ZmwExternalAccountInfo {
@@ -1696,7 +1893,6 @@ export declare namespace ExternalAccounts {
   export {
     type Address as Address,
     type BaseWalletInfo as BaseWalletInfo,
-    type BeneficiaryVerifiedData as BeneficiaryVerifiedData,
     type BrlBeneficiary as BrlBeneficiary,
     type BrlExternalAccountInfo as BrlExternalAccountInfo,
     type BusinessBeneficiary as BusinessBeneficiary,

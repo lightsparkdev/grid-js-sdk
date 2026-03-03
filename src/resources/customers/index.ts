@@ -24,7 +24,6 @@ export {
   ExternalAccounts,
   type Address,
   type BaseWalletInfo,
-  type BeneficiaryVerifiedData,
   type BrlBeneficiary,
   type BrlExternalAccountInfo,
   type BusinessBeneficiary,

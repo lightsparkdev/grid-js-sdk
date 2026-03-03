@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as Shared from '../shared';
 import { APIPromise } from '../../core/api-promise';
 import { type Uploadable } from '../../core/uploads';
 import { RequestOptions } from '../../internal/request-options';
@@ -131,7 +130,7 @@ export interface BulkGetJobStatusResponse {
   /**
    * Detailed error information for failed entries
    */
-  errors?: Array<Shared.BulkCustomerImportErrorEntry>;
+  errors?: Array<BulkGetJobStatusResponse.Error>;
 }
 
 export namespace BulkGetJobStatusResponse {
@@ -155,6 +154,28 @@ export namespace BulkGetJobStatusResponse {
      * Total number of customers to process
      */
     total: number;
+  }
+
+  export interface Error {
+    /**
+     * Platform customer ID or row number for the failed entry
+     */
+    correlationId: string;
+
+    /**
+     * Error code
+     */
+    code?: string;
+
+    /**
+     * Additional error details
+     */
+    details?: { [key: string]: unknown };
+
+    /**
+     * Error message
+     */
+    message?: string;
   }
 }
 
