@@ -904,19 +904,52 @@ export class LightsparkGrid {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Platform configuration endpoints for managing global settings. You can also configure these settings in the Grid dashboard.
+   */
   config: API.Config = new API.Config(this);
   customers: API.Customers = new API.Customers(this);
+  /**
+   * Internal account management endpoints for creating and managing internal accounts
+   */
   platform: API.Platform = new API.Platform(this);
+  /**
+   * External account management endpoints for creating and managing external bank accounts
+   */
   plaid: API.Plaid = new API.Plaid(this);
+  /**
+   * Endpoints for transferring funds between internal and external accounts with the same currency
+   */
   transferIn: API.TransferIn = new API.TransferIn(this);
+  /**
+   * Endpoints for transferring funds between internal and external accounts with the same currency
+   */
   transferOut: API.TransferOut = new API.TransferOut(this);
+  /**
+   * Endpoints for creating and confirming quotes for cross-currency transfers
+   */
   receiver: API.Receiver = new API.Receiver(this);
+  /**
+   * Endpoints for creating and confirming quotes for cross-currency transfers
+   */
   quotes: API.Quotes = new API.Quotes(this);
+  /**
+   * Endpoints for retrieving transaction information
+   */
   transactions: API.Transactions = new API.Transactions(this);
+  /**
+   * Endpoints for creating, claiming and managing UMA invitations
+   */
   invitations: API.Invitations = new API.Invitations(this);
   sandbox: API.Sandbox = new API.Sandbox(this);
   umaProviders: API.UmaProviders = new API.UmaProviders(this);
+  /**
+   * Endpoints to programmatically manage API tokens
+   */
   tokens: API.Tokens = new API.Tokens(this);
+  /**
+   * Endpoints for retrieving cached foreign exchange rates. Rates are cached for approximately 5 minutes and include platform-specific fees.
+   */
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
 }

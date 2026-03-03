@@ -5,6 +5,9 @@ import * as QuotesAPI from './quotes';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * Endpoints for retrieving cached foreign exchange rates. Rates are cached for approximately 5 minutes and include platform-specific fees.
+ */
 export class ExchangeRates extends APIResource {
   /**
    * Retrieve cached exchange rates for currency corridors. Returns FX rates that are

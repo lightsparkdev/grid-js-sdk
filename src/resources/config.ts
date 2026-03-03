@@ -6,6 +6,9 @@ import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * Platform configuration endpoints for managing global settings. You can also configure these settings in the Grid dashboard.
+ */
 export class Config extends APIResource {
   /**
    * Retrieve the current platform configuration

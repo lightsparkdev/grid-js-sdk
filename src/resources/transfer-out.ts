@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * Endpoints for transferring funds between internal and external accounts with the same currency
+ */
 export class TransferOut extends APIResource {
   /**
    * Transfer funds from an internal account to an external account for a specific

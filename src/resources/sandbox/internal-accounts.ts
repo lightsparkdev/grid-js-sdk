@@ -8,6 +8,9 @@ import { DefaultPagination } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Endpoints to trigger test cases in sandbox
+ */
 export class InternalAccounts extends APIResource {
   /**
    * Simulate receiving funds into an internal account in the sandbox environment.

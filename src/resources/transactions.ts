@@ -9,6 +9,9 @@ import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '..
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Endpoints for retrieving transaction information
+ */
 export class Transactions extends APIResource {
   /**
    * Retrieve detailed information about a specific transaction.

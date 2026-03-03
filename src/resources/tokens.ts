@@ -7,6 +7,9 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Endpoints to programmatically manage API tokens
+ */
 export class Tokens extends APIResource {
   /**
    * Create a new API token to access the Grid APIs.
