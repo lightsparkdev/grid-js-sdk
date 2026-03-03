@@ -133,7 +133,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/transfer-in.ts">BaseTransactionDestination</a></code>
 - <code><a href="./src/resources/transfer-in.ts">Transaction</a></code>
 - <code><a href="./src/resources/transfer-in.ts">TransferInCreateResponse</a></code>
 
