@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Endpoints for creating, claiming and managing UMA invitations
+ */
 export class Invitations extends APIResource {
   /**
    * Create an UMA invitation from a given platform customer.

@@ -7,6 +7,9 @@ import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '..
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Endpoints for creating and confirming quotes for cross-currency transfers
+ */
 export class Quotes extends APIResource {
   /**
    * Generate a quote for a cross-currency transfer between any combination of

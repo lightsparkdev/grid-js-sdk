@@ -7,6 +7,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Endpoints for creating and confirming quotes for cross-currency transfers
+ */
 export class Receiver extends APIResource {
   /**
    * Lookup an external account by ID to determine supported currencies and exchange

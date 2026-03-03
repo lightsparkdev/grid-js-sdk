@@ -5,6 +5,9 @@ import * as ExternalAccountsAPI from '../customers/external-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * External account management endpoints for creating and managing external bank accounts
+ */
 export class ExternalAccounts extends APIResource {
   /**
    * Register a new external bank account for the platform.

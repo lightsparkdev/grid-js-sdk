@@ -12,6 +12,9 @@ import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Internal account management endpoints for creating and managing internal accounts
+ */
 export class Platform extends APIResource {
   externalAccounts: ExternalAccountsAPI.ExternalAccounts = new ExternalAccountsAPI.ExternalAccounts(
     this._client,

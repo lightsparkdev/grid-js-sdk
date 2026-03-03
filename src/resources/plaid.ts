@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * External account management endpoints for creating and managing external bank accounts
+ */
 export class Plaid extends APIResource {
   /**
    * Creates a Plaid Link token that can be used to initialize Plaid Link in your

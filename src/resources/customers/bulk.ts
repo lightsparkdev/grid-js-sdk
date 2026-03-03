@@ -8,6 +8,9 @@ import { RequestOptions } from '../../internal/request-options';
 import { multipartFormRequestOptions } from '../../internal/uploads';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Customer management endpoints for creating and updating customer information
+ */
 export class Bulk extends APIResource {
   /**
    * Retrieve the current status and results of a bulk customer import job. This
