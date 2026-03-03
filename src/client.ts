@@ -1087,4 +1087,6 @@ export declare namespace LightsparkGrid {
     type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
+
+  export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
 }

@@ -1,3 +1,9 @@
+# Shared
+
+Types:
+
+- <code><a href="./src/resources/shared.ts">BulkCustomerImportErrorEntry</a></code>
+
 # Config
 
 Types:
@@ -37,6 +43,7 @@ Types:
 
 - <code><a href="./src/resources/customers/external-accounts.ts">Address</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryVerifiedData</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BrlBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BrlExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BusinessBeneficiary</a></code>
