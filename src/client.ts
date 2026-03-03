@@ -83,7 +83,6 @@ import {
   Transactions,
 } from './resources/transactions';
 import {
-  BaseTransactionDestination,
   Transaction,
   TransferIn,
   TransferInCreateParams,
@@ -990,7 +989,6 @@ export declare namespace LightsparkGrid {
 
   export {
     TransferIn as TransferIn,
-    type BaseTransactionDestination as BaseTransactionDestination,
     type Transaction as Transaction,
     type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,

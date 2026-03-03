@@ -91,7 +91,6 @@ export {
 } from './transactions';
 export {
   TransferIn,
-  type BaseTransactionDestination,
   type Transaction,
   type TransferInCreateResponse,
   type TransferInCreateParams,
