@@ -61,12 +61,7 @@ export {
   type ReceiverLookupExternalAccountParams,
   type ReceiverLookupUmaParams,
 } from './receiver';
-export {
-  Sandbox,
-  type SandboxSendFundsResponse,
-  type SandboxSendTestResponse,
-  type SandboxSendFundsParams,
-} from './sandbox/sandbox';
+export { Sandbox, type SandboxSendTestResponse, type SandboxSendFundsParams } from './sandbox/sandbox';
 export {
   Tokens,
   type APIToken,
@@ -77,8 +72,8 @@ export {
 } from './tokens';
 export {
   Transactions,
-  type BaseTransactionSource,
   type IncomingTransaction,
+  type OutgoingTransaction,
   type TransactionSourceOneOf,
   type TransactionStatus,
   type TransactionType,

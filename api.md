@@ -185,8 +185,8 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
+- <code><a href="./src/resources/transactions.ts">OutgoingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
@@ -218,12 +218,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendFundsResponse</a></code>
 - <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendTestResponse</a></code>
 
 Methods:
 
-- <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> SandboxSendFundsResponse</code>
+- <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> OutgoingTransaction</code>
 - <code title="post /webhooks/test">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendTest</a>() -> SandboxSendTestResponse</code>
 
 ## Uma
