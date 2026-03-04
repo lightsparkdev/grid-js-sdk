@@ -160,7 +160,7 @@ const remoteStainlessHandler = async ({
     headers: {
       ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
       'Content-Type': 'application/json',
-      client_envs: JSON.stringify({
+      'x-stainless-mcp-client-envs': JSON.stringify({
         GRID_CLIENT_ID: requireValue(
           readEnv('GRID_CLIENT_ID') ?? client.username,
           'set GRID_CLIENT_ID environment variable or provide username client option',
