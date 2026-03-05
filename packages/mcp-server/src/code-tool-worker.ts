@@ -148,6 +148,7 @@ const fuse = new Fuse(
     'client.tokens.list',
     'client.tokens.retrieve',
     'client.exchangeRates.list',
+    'client.webhooks.unwrap',
   ],
   { threshold: 1, shouldSort: true },
 );

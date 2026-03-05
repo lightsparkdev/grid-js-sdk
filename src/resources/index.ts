@@ -97,3 +97,14 @@ export {
   type UmaProviderListParams,
   type UmaProviderListResponsesDefaultPagination,
 } from './uma-providers';
+export {
+  Webhooks,
+  type IncomingPaymentWebhookEvent,
+  type OutgoingPaymentWebhookEvent,
+  type TestWebhookWebhookEvent,
+  type BulkUploadWebhookEvent,
+  type InvitationClaimedWebhookEvent,
+  type KYCStatusWebhookEvent,
+  type InternalAccountStatusWebhookEvent,
+  type UnwrapWebhookEvent,
+} from './webhooks';
