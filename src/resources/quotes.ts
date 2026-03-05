@@ -934,7 +934,7 @@ export interface QuoteCreateParams {
 
   /**
    * The purpose of the payment. This may be required when sending to certain
-   * geographies such as India.
+   * geographies (e.g. India).
    */
   purposeOfPayment?:
     | 'GIFT'

@@ -172,7 +172,7 @@ export type TransferInCreateResponse =
   | TransferInCreateResponse.OutgoingTransaction;
 
 export namespace TransferInCreateResponse {
-  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
+  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'status' | 'type'> {
     /**
      * Amount sent in the sender's currency
      */
@@ -231,6 +231,19 @@ export namespace TransferInCreateResponse {
      * The refund if transaction was refunded.
      */
     refund?: OutgoingTransaction.Refund;
+
+    /**
+     * Status of an outgoing payment transaction.
+     *
+     * | Status       | Description                                             |
+     * | ------------ | ------------------------------------------------------- |
+     * | `PENDING`    | Quote is pending confirmation                           |
+     * | `EXPIRED`    | Quote wasn't executed before expiry window              |
+     * | `PROCESSING` | Executing the quote after receiving funds               |
+     * | `COMPLETED`  | Payout successfully reached the destination             |
+     * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+     */
+    status?: 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
   }
 
   export namespace OutgoingTransaction {
@@ -244,12 +257,22 @@ export namespace TransferInCreateResponse {
       initiatedAt: string;
 
       /**
-       * The unique reference code of the refund
+       * The unique reference ID of the refund
        */
       reference: string;
 
       /**
-       * When the refund was or will be settled
+       * Current status of the refund
+       */
+      status: 'PENDING' | 'COMPLETED' | 'FAILED';
+
+      /**
+       * Reason for the refund
+       */
+      reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION';
+
+      /**
+       * When the refund was settled
        */
       settledAt?: string;
     }
