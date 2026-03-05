@@ -97,17 +97,6 @@ import {
   UmaProviders,
 } from './resources/uma-providers';
 import {
-  AccountStatusWebhookEvent,
-  BulkUploadWebhookEvent,
-  IncomingPaymentWebhookEvent,
-  InvitationClaimedWebhookEvent,
-  KYCStatusWebhookEvent,
-  OutgoingPaymentWebhookEvent,
-  TestWebhookWebhookEvent,
-  UnwrapWebhookEvent,
-  Webhooks,
-} from './resources/webhooks';
-import {
   Customer,
   CustomerCreate,
   CustomerCreateParams,
@@ -126,12 +115,7 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import {
-  Sandbox,
-  SandboxSendFundsParams,
-  SandboxSendFundsResponse,
-  SandboxSendTestResponse,
-} from './resources/sandbox/sandbox';
+import { Sandbox, SandboxSendFundsParams, SandboxSendFundsResponse } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -947,6 +931,9 @@ export class LightsparkGrid {
    * Endpoints for creating, claiming and managing UMA invitations
    */
   invitations: API.Invitations = new API.Invitations(this);
+  /**
+   * Endpoints to trigger test cases in sandbox
+   */
   sandbox: API.Sandbox = new API.Sandbox(this);
   umaProviders: API.UmaProviders = new API.UmaProviders(this);
   /**
@@ -957,7 +944,6 @@ export class LightsparkGrid {
    * Endpoints for retrieving cached foreign exchange rates. Rates are cached for approximately 5 minutes and include platform-specific fees.
    */
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
-  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -974,7 +960,6 @@ LightsparkGrid.Sandbox = Sandbox;
 LightsparkGrid.UmaProviders = UmaProviders;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
-LightsparkGrid.Webhooks = Webhooks;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1083,7 +1068,6 @@ export declare namespace LightsparkGrid {
   export {
     Sandbox as Sandbox,
     type SandboxSendFundsResponse as SandboxSendFundsResponse,
-    type SandboxSendTestResponse as SandboxSendTestResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
@@ -1107,17 +1091,5 @@ export declare namespace LightsparkGrid {
     ExchangeRates as ExchangeRates,
     type ExchangeRateListResponse as ExchangeRateListResponse,
     type ExchangeRateListParams as ExchangeRateListParams,
-  };
-
-  export {
-    Webhooks as Webhooks,
-    type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
-    type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
-    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
-    type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
-    type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
-    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
-    type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
-    type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }

@@ -9,14 +9,20 @@ import * as InternalAccountsAPI from './internal-accounts';
 import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
 import * as UmaAPI from './uma';
 import { Uma, UmaReceivePaymentParams } from './uma';
+import * as WebhooksAPI from './webhooks';
+import { WebhookSendTestResponse, Webhooks } from './webhooks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Endpoints to trigger test cases in sandbox
+ */
 export class Sandbox extends APIResource {
   uma: UmaAPI.Uma = new UmaAPI.Uma(this._client);
   internalAccounts: InternalAccountsAPI.InternalAccounts = new InternalAccountsAPI.InternalAccounts(
     this._client,
   );
+  webhooks: WebhooksAPI.Webhooks = new WebhooksAPI.Webhooks(this._client);
 
   /**
    * Simulate sending funds to the bank account as instructed in the quote. This
@@ -34,21 +40,9 @@ export class Sandbox extends APIResource {
   sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<SandboxSendFundsResponse> {
     return this._client.post('/sandbox/send', { body, ...options });
   }
-
-  /**
-   * Send a test webhook to the configured endpoint
-   *
-   * @example
-   * ```ts
-   * const response = await client.sandbox.sendTest();
-   * ```
-   */
-  sendTest(options?: RequestOptions): APIPromise<SandboxSendTestResponse> {
-    return this._client.post('/webhooks/test', options);
-  }
 }
 
-export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction, 'type'> {
+export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction, 'status' | 'type'> {
   /**
    * Amount sent in the sender's currency
    */
@@ -107,6 +101,19 @@ export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction
    * The refund if transaction was refunded.
    */
   refund?: SandboxSendFundsResponse.Refund;
+
+  /**
+   * Status of an outgoing payment transaction.
+   *
+   * | Status       | Description                                             |
+   * | ------------ | ------------------------------------------------------- |
+   * | `PENDING`    | Quote is pending confirmation                           |
+   * | `EXPIRED`    | Quote wasn't executed before expiry window              |
+   * | `PROCESSING` | Executing the quote after receiving funds               |
+   * | `COMPLETED`  | Payout successfully reached the destination             |
+   * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+   */
+  status?: 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
 }
 
 export namespace SandboxSendFundsResponse {
@@ -120,32 +127,25 @@ export namespace SandboxSendFundsResponse {
     initiatedAt: string;
 
     /**
-     * The unique reference code of the refund
+     * The unique reference ID of the refund
      */
     reference: string;
 
     /**
-     * When the refund was or will be settled
+     * Current status of the refund
+     */
+    status: 'PENDING' | 'COMPLETED' | 'FAILED';
+
+    /**
+     * Reason for the refund
+     */
+    reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION';
+
+    /**
+     * When the refund was settled
      */
     settledAt?: string;
   }
-}
-
-export interface SandboxSendTestResponse {
-  /**
-   * The HTTP status code returned by the webhook endpoint
-   */
-  response_status: number;
-
-  /**
-   * The raw body content returned by the webhook endpoint in response to the request
-   */
-  response_body?: string;
-
-  /**
-   * URL where the webhook was sent
-   */
-  url?: string;
 }
 
 export interface SandboxSendFundsParams {
@@ -168,11 +168,11 @@ export interface SandboxSendFundsParams {
 
 Sandbox.Uma = Uma;
 Sandbox.InternalAccounts = InternalAccounts;
+Sandbox.Webhooks = Webhooks;
 
 export declare namespace Sandbox {
   export {
     type SandboxSendFundsResponse as SandboxSendFundsResponse,
-    type SandboxSendTestResponse as SandboxSendTestResponse,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
@@ -183,4 +183,6 @@ export declare namespace Sandbox {
     type InternalAccount as InternalAccount,
     type InternalAccountFundParams as InternalAccountFundParams,
   };
+
+  export { Webhooks as Webhooks, type WebhookSendTestResponse as WebhookSendTestResponse };
 }

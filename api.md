@@ -213,12 +213,10 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendFundsResponse</a></code>
-- <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendTestResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> SandboxSendFundsResponse</code>
-- <code title="post /webhooks/test">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendTest</a>() -> SandboxSendTestResponse</code>
 
 ## Uma
 
@@ -235,6 +233,16 @@ Types:
 Methods:
 
 - <code title="post /sandbox/internal-accounts/{accountId}/fund">client.sandbox.internalAccounts.<a href="./src/resources/sandbox/internal-accounts.ts">fund</a>(accountID, { ...params }) -> InternalAccount</code>
+
+## Webhooks
+
+Types:
+
+- <code><a href="./src/resources/sandbox/webhooks.ts">WebhookSendTestResponse</a></code>
+
+Methods:
+
+- <code title="post /sandbox/webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
 
 # UmaProviders
 
@@ -269,20 +277,3 @@ Types:
 Methods:
 
 - <code title="get /exchange-rates">client.exchangeRates.<a href="./src/resources/exchange-rates.ts">list</a>({ ...params }) -> ExchangeRateListResponse</code>
-
-# Webhooks
-
-Types:
-
-- <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">TestWebhookWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">KYCStatusWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">AccountStatusWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
-
-Methods:
-
-- <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
