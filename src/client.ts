@@ -97,6 +97,17 @@ import {
   UmaProviders,
 } from './resources/uma-providers';
 import {
+  BulkUploadWebhookEvent,
+  IncomingPaymentWebhookEvent,
+  InternalAccountStatusWebhookEvent,
+  InvitationClaimedWebhookEvent,
+  KYCStatusWebhookEvent,
+  OutgoingPaymentWebhookEvent,
+  TestWebhookWebhookEvent,
+  UnwrapWebhookEvent,
+  Webhooks,
+} from './resources/webhooks';
+import {
   Customer,
   CustomerCreate,
   CustomerCreateParams,
@@ -944,6 +955,7 @@ export class LightsparkGrid {
    * Endpoints for retrieving cached foreign exchange rates. Rates are cached for approximately 5 minutes and include platform-specific fees.
    */
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
+  webhooks: API.Webhooks = new API.Webhooks(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -960,6 +972,7 @@ LightsparkGrid.Sandbox = Sandbox;
 LightsparkGrid.UmaProviders = UmaProviders;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
+LightsparkGrid.Webhooks = Webhooks;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1091,5 +1104,17 @@ export declare namespace LightsparkGrid {
     ExchangeRates as ExchangeRates,
     type ExchangeRateListResponse as ExchangeRateListResponse,
     type ExchangeRateListParams as ExchangeRateListParams,
+  };
+
+  export {
+    Webhooks as Webhooks,
+    type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
+    type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
+    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
+    type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
+    type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
+    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
+    type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
+    type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }
