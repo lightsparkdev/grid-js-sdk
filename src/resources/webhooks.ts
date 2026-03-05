@@ -4,6 +4,7 @@ import { APIResource } from '../core/resource';
 import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as ReceiverAPI from './receiver';
+import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
 import * as TransferInAPI from './transfer-in';
 import * as CustomersAPI from './customers/customers';
@@ -308,7 +309,7 @@ export namespace BulkUploadWebhookEvent {
     /**
      * Detailed error information for failed entries
      */
-    errors?: Array<Data.Error>;
+    errors?: Array<Shared.BulkCustomerImportErrorEntry>;
   }
 
   export namespace Data {
@@ -332,28 +333,6 @@ export namespace BulkUploadWebhookEvent {
        * Total number of customers to process
        */
       total: number;
-    }
-
-    export interface Error {
-      /**
-       * Platform customer ID or row number for the failed entry
-       */
-      correlationId: string;
-
-      /**
-       * Error code
-       */
-      code?: string;
-
-      /**
-       * Additional error details
-       */
-      details?: { [key: string]: unknown };
-
-      /**
-       * Error message
-       */
-      message?: string;
     }
   }
 }
