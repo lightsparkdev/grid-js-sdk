@@ -40,7 +40,6 @@ describe('resource customers', () => {
         },
         birthDate: '1990-01-15',
         fullName: 'John Michael Doe',
-        kycStatus: 'APPROVED',
         nationality: 'US',
       },
     });
@@ -88,7 +87,6 @@ describe('resource customers', () => {
         },
         birthDate: '1985-06-15',
         fullName: 'John Smith',
-        kycStatus: 'APPROVED',
         nationality: 'US',
       },
     });
