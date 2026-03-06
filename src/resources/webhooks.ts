@@ -7,7 +7,6 @@ import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
 import * as CustomersAPI from './customers/customers';
 import * as InternalAccountsAPI from './sandbox/internal-accounts';
-import * as SandboxAPI from './sandbox/sandbox';
 
 export class Webhooks extends APIResource {
   unwrap(body: string): UnwrapWebhookEvent {
@@ -74,7 +73,7 @@ export interface OutgoingPaymentWebhookEvent {
    */
   id: string;
 
-  data: SandboxAPI.OutgoingTransaction;
+  data: TransactionsAPI.OutgoingTransaction;
 
   /**
    * ISO 8601 timestamp of when the webhook was sent
