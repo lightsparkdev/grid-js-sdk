@@ -103,10 +103,10 @@ import {
 } from './resources/uma-providers';
 import {
   BulkUploadWebhookEvent,
+  CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
   InternalAccountStatusWebhookEvent,
   InvitationClaimedWebhookEvent,
-  KYCStatusWebhookEvent,
   OutgoingPaymentWebhookEvent,
   TestWebhookWebhookEvent,
   UnwrapWebhookEvent,
@@ -1123,7 +1123,7 @@ export declare namespace LightsparkGrid {
     type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
     type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
-    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
+    type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };

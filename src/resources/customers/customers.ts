@@ -207,6 +207,19 @@ export interface BusinessCustomerFields {
    * Additional information for business entities
    */
   businessInfo?: BusinessCustomerFields.BusinessInfo;
+
+  /**
+   * The current KYB status of a business customer
+   */
+  kybStatus?:
+    | 'AWAITING_SUBMISSION'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'PENDING_REVIEW'
+    | 'EXPIRED'
+    | 'CANCELED'
+    | 'MANUALLY_APPROVED'
+    | 'MANUALLY_REJECTED';
 }
 
 export namespace BusinessCustomerFields {
@@ -336,18 +349,6 @@ export interface Customer {
   isDeleted?: boolean;
 
   /**
-   * The current KYC status of a customer
-   */
-  kycStatus?:
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'PENDING_REVIEW'
-    | 'EXPIRED'
-    | 'CANCELED'
-    | 'MANUALLY_APPROVED'
-    | 'MANUALLY_REJECTED';
-
-  /**
    * Last update timestamp
    */
   updatedAt?: string;
@@ -412,6 +413,18 @@ export interface IndividualCustomerFields {
    * Individual's full name
    */
   fullName?: string;
+
+  /**
+   * The current KYC status of a customer
+   */
+  kycStatus?:
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'PENDING_REVIEW'
+    | 'EXPIRED'
+    | 'CANCELED'
+    | 'MANUALLY_APPROVED'
+    | 'MANUALLY_REJECTED';
 
   /**
    * Country code (ISO 3166-1 alpha-2)
