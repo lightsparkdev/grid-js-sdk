@@ -2,14 +2,12 @@
 
 import { APIResource } from '../core/resource';
 import * as InvitationsAPI from './invitations';
-import * as QuotesAPI from './quotes';
 import * as ReceiverAPI from './receiver';
 import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
-import * as TransferInAPI from './transfer-in';
 import * as CustomersAPI from './customers/customers';
-import * as ExternalAccountsAPI from './customers/external-accounts';
 import * as InternalAccountsAPI from './sandbox/internal-accounts';
+import * as SandboxAPI from './sandbox/sandbox';
 
 export class Webhooks extends APIResource {
   unwrap(body: string): UnwrapWebhookEvent {
@@ -76,7 +74,7 @@ export interface OutgoingPaymentWebhookEvent {
    */
   id: string;
 
-  data: OutgoingPaymentWebhookEvent.Data;
+  data: SandboxAPI.OutgoingTransaction;
 
   /**
    * ISO 8601 timestamp of when the webhook was sent
@@ -110,114 +108,6 @@ export interface OutgoingPaymentWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'TEST';
-}
-
-export namespace OutgoingPaymentWebhookEvent {
-  export interface Data extends Omit<TransferInAPI.Transaction, 'status' | 'type'> {
-    /**
-     * Amount sent in the sender's currency
-     */
-    sentAmount: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * Source account details
-     */
-    source: TransactionsAPI.TransactionSourceOneOf;
-
-    type: 'OUTGOING';
-
-    /**
-     * Number of sending currency units per receiving currency unit.
-     */
-    exchangeRate?: number;
-
-    /**
-     * If the transaction failed, this field provides the reason for failure.
-     */
-    failureReason?:
-      | 'QUOTE_EXPIRED'
-      | 'QUOTE_EXECUTION_FAILED'
-      | 'LIGHTNING_PAYMENT_FAILED'
-      | 'FUNDING_AMOUNT_MISMATCH'
-      | 'COUNTERPARTY_POST_TX_FAILED'
-      | 'TIMEOUT';
-
-    /**
-     * The fees associated with the quote in the smallest unit of the sending currency
-     * (eg. cents).
-     */
-    fees?: number;
-
-    /**
-     * Payment instructions for executing the payment.
-     */
-    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
-
-    /**
-     * The ID of the quote that was used to trigger this payment
-     */
-    quoteId?: string;
-
-    /**
-     * Details about the rate and fees for the transaction.
-     */
-    rateDetails?: QuotesAPI.OutgoingRateDetails;
-
-    /**
-     * Amount to be received by recipient in the recipient's currency
-     */
-    receivedAmount?: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * The refund if transaction was refunded.
-     */
-    refund?: Data.Refund;
-
-    /**
-     * Status of an outgoing payment transaction.
-     *
-     * | Status       | Description                                             |
-     * | ------------ | ------------------------------------------------------- |
-     * | `PENDING`    | Quote is pending confirmation                           |
-     * | `EXPIRED`    | Quote wasn't executed before expiry window              |
-     * | `PROCESSING` | Executing the quote after receiving funds               |
-     * | `COMPLETED`  | Payout successfully reached the destination             |
-     * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
-     */
-    status?: 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
-  }
-
-  export namespace Data {
-    /**
-     * The refund if transaction was refunded.
-     */
-    export interface Refund {
-      /**
-       * When the refund was initiated
-       */
-      initiatedAt: string;
-
-      /**
-       * The unique reference ID of the refund
-       */
-      reference: string;
-
-      /**
-       * Current status of the refund
-       */
-      status: 'PENDING' | 'COMPLETED' | 'FAILED';
-
-      /**
-       * Reason for the refund
-       */
-      reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION';
-
-      /**
-       * When the refund was settled
-       */
-      settledAt?: string;
-    }
-  }
 }
 
 export interface TestWebhookWebhookEvent {
@@ -437,38 +327,7 @@ export interface KYCStatusWebhookEvent {
 }
 
 export namespace KYCStatusWebhookEvent {
-  export interface Data extends CustomersAPI.Customer {
-    customerType: 'INDIVIDUAL';
-
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * The current KYC status of a customer
-     */
-    kycStatus?:
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
+  export interface Data extends CustomersAPI.Customer, CustomersAPI.IndividualCustomerFields {}
 }
 
 export interface KYBStatusWebhookEvent {
@@ -514,103 +373,13 @@ export interface KYBStatusWebhookEvent {
 }
 
 export namespace KYBStatusWebhookEvent {
-  export interface Data extends CustomersAPI.Customer {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    beneficialOwners?: Array<Data.BeneficialOwner>;
-
-    businessInfo?: Data.BusinessInfo;
-
+  export interface Data
+    extends CustomersAPI.Customer,
+      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     /**
-     * The current KYB status of a business customer
+     * Additional information required for business entities
      */
-    kybStatus?:
-      | 'AWAITING_SUBMISSION'
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-  }
-
-  export namespace Data {
-    export interface BeneficialOwner {
-      /**
-       * Individual's full name
-       */
-      fullName: string;
-
-      /**
-       * Type of individual in the corporation
-       */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
-       */
-      birthDate?: string;
-
-      /**
-       * Email address of the individual
-       */
-      emailAddress?: string;
-
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      nationality?: string;
-
-      /**
-       * Percent of ownership when individual type is beneficial owner
-       */
-      percentageOwnership?: number;
-
-      /**
-       * Phone number of the individual in E.164 format
-       */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
-    }
+    businessInfo?: CustomersAPI.BusinessInfo;
   }
 }
 

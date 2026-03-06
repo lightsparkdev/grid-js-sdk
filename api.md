@@ -21,10 +21,14 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerFields</a></code>
+- <code><a href="./src/resources/customers/customers.ts">BusinessInfo</a></code>
 - <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerCreate</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdate</a></code>
+- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerGetKYCLinkResponse</a></code>
 
 Methods:
@@ -110,6 +114,23 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/platform/external-accounts.ts">BaseExternalAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">BrlAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">CadAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">DkkAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">EurAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">GbpAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">HkdAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">IdrAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">InrAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">MxnAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">MyrAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">NgnAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">PhpAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">SgdAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">ThbAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">UsdAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">VndAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">ExternalAccountListResponse</a></code>
 
 Methods:
@@ -133,22 +154,19 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/transfer-in.ts">BaseTransactionDestination</a></code>
+- <code><a href="./src/resources/transfer-in.ts">ExternalAccountReference</a></code>
+- <code><a href="./src/resources/transfer-in.ts">InternalAccountReference</a></code>
 - <code><a href="./src/resources/transfer-in.ts">Transaction</a></code>
-- <code><a href="./src/resources/transfer-in.ts">TransferInCreateResponse</a></code>
 
 Methods:
 
-- <code title="post /transfer-in">client.transferIn.<a href="./src/resources/transfer-in.ts">create</a>({ ...params }) -> TransferInCreateResponse</code>
+- <code title="post /transfer-in">client.transferIn.<a href="./src/resources/transfer-in.ts">create</a>({ ...params }) -> Transaction</code>
 
 # TransferOut
 
-Types:
-
-- <code><a href="./src/resources/transfer-out.ts">TransferOutCreateResponse</a></code>
-
 Methods:
 
-- <code title="post /transfer-out">client.transferOut.<a href="./src/resources/transfer-out.ts">create</a>({ ...params }) -> TransferOutCreateResponse</code>
+- <code title="post /transfer-out">client.transferOut.<a href="./src/resources/transfer-out.ts">create</a>({ ...params }) -> Transaction</code>
 
 # Receiver
 
@@ -168,11 +186,15 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/quotes.ts">BaseDestination</a></code>
+- <code><a href="./src/resources/quotes.ts">BasePaymentAccountInfo</a></code>
+- <code><a href="./src/resources/quotes.ts">BaseQuoteSource</a></code>
 - <code><a href="./src/resources/quotes.ts">Currency</a></code>
 - <code><a href="./src/resources/quotes.ts">OutgoingRateDetails</a></code>
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteDestinationOneOf</a></code>
+- <code><a href="./src/resources/quotes.ts">QuoteSourceOneOf</a></code>
 
 Methods:
 
@@ -190,13 +212,11 @@ Types:
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionRetrieveResponse</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionListResponse</a></code>
 
 Methods:
 
-- <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/resources/transactions.ts">retrieve</a>(transactionID) -> TransactionRetrieveResponse</code>
-- <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionListResponsesDefaultPagination</code>
+- <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/resources/transactions.ts">retrieve</a>(transactionID) -> Transaction</code>
+- <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionsDefaultPagination</code>
 - <code title="post /transactions/{transactionId}/approve">client.transactions.<a href="./src/resources/transactions.ts">approve</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 - <code title="post /transactions/{transactionId}/reject">client.transactions.<a href="./src/resources/transactions.ts">reject</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 
@@ -218,11 +238,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sandbox/sandbox.ts">SandboxSendFundsResponse</a></code>
+- <code><a href="./src/resources/sandbox/sandbox.ts">OutgoingTransaction</a></code>
 
 Methods:
 
-- <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> SandboxSendFundsResponse</code>
+- <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> OutgoingTransaction</code>
 
 ## Uma
 

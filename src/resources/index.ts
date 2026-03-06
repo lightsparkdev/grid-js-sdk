@@ -10,10 +10,14 @@ export {
 } from './config';
 export {
   Customers,
+  type BusinessCustomerFields,
+  type BusinessInfo,
   type Customer,
   type CustomerCreate,
   type CustomerOneOf,
+  type CustomerType,
   type CustomerUpdate,
+  type IndividualCustomerFields,
   type CustomerGetKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
@@ -43,11 +47,15 @@ export {
 } from './platform/platform';
 export {
   Quotes,
+  type BaseDestination,
+  type BasePaymentAccountInfo,
+  type BaseQuoteSource,
   type Currency,
   type OutgoingRateDetails,
   type PaymentInstructions,
   type Quote,
   type QuoteDestinationOneOf,
+  type QuoteSourceOneOf,
   type QuoteCreateParams,
   type QuoteListParams,
   type QuotesDefaultPagination,
@@ -61,7 +69,7 @@ export {
   type ReceiverLookupExternalAccountParams,
   type ReceiverLookupUmaParams,
 } from './receiver';
-export { Sandbox, type SandboxSendFundsResponse, type SandboxSendFundsParams } from './sandbox/sandbox';
+export { Sandbox, type OutgoingTransaction, type SandboxSendFundsParams } from './sandbox/sandbox';
 export {
   Tokens,
   type APIToken,
@@ -77,21 +85,20 @@ export {
   type TransactionSourceOneOf,
   type TransactionStatus,
   type TransactionType,
-  type TransactionRetrieveResponse,
-  type TransactionListResponse,
   type TransactionListParams,
   type TransactionApproveParams,
   type TransactionRejectParams,
-  type TransactionListResponsesDefaultPagination,
 } from './transactions';
 export {
   TransferIn,
   type BaseTransactionDestination,
+  type ExternalAccountReference,
+  type InternalAccountReference,
   type Transaction,
-  type TransferInCreateResponse,
   type TransferInCreateParams,
+  type TransactionsDefaultPagination,
 } from './transfer-in';
-export { TransferOut, type TransferOutCreateResponse, type TransferOutCreateParams } from './transfer-out';
+export { TransferOut, type TransferOutCreateParams } from './transfer-out';
 export {
   UmaProviders,
   type UmaProviderListResponse,

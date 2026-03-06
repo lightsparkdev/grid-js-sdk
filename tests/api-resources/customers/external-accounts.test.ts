@@ -15,14 +15,14 @@ describe('resource externalAccounts', () => {
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
+        paymentRails: ['ACH'],
+        routingNumber: '123456789',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
           birthDate: '1990-01-15',
           fullName: 'John Doe',
           nationality: 'US',
         },
-        paymentRails: ['ACH'],
-        routingNumber: '123456789',
       },
       currency: 'USD',
     });
@@ -41,6 +41,8 @@ describe('resource externalAccounts', () => {
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
+        paymentRails: ['ACH'],
+        routingNumber: '123456789',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
           birthDate: '1990-01-15',
@@ -59,8 +61,6 @@ describe('resource externalAccounts', () => {
           phoneNumber: 'phoneNumber',
           registrationNumber: 'registrationNumber',
         },
-        paymentRails: ['ACH'],
-        routingNumber: '123456789',
       },
       currency: 'USD',
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',

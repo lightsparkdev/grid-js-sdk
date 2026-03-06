@@ -195,6 +195,131 @@ export class Customers extends APIResource {
 
 export type CustomerOneovesDefaultPagination = DefaultPagination<CustomerOneOf>;
 
+export interface BusinessCustomerFields {
+  customerType: 'BUSINESS';
+
+  address?: ExternalAccountsAPI.Address;
+
+  beneficialOwners?: Array<BusinessCustomerFields.BeneficialOwner>;
+
+  /**
+   * Additional information for business entities
+   */
+  businessInfo?: BusinessCustomerFields.BusinessInfo;
+
+  /**
+   * The current KYB status of a business customer
+   */
+  kybStatus?:
+    | 'AWAITING_SUBMISSION'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'PENDING_REVIEW'
+    | 'EXPIRED'
+    | 'CANCELED'
+    | 'MANUALLY_APPROVED'
+    | 'MANUALLY_REJECTED';
+}
+
+export namespace BusinessCustomerFields {
+  export interface BeneficialOwner {
+    /**
+     * Individual's full name
+     */
+    fullName: string;
+
+    /**
+     * Type of individual in the corporation
+     */
+    individualType:
+      | 'DIRECTOR'
+      | 'CONTROL_PERSON'
+      | 'BUSINESS_POINT_OF_CONTACT'
+      | 'TRUSTEE'
+      | 'SETTLOR'
+      | 'GENERAL_PARTNER';
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate?: string;
+
+    /**
+     * Email address of the individual
+     */
+    emailAddress?: string;
+
+    /**
+     * Country code (ISO 3166-1 alpha-2)
+     */
+    nationality?: string;
+
+    /**
+     * Percent of ownership when individual type is beneficial owner
+     */
+    percentageOwnership?: number;
+
+    /**
+     * Phone number of the individual in E.164 format
+     */
+    phoneNumber?: string;
+
+    /**
+     * Tax identification number of the individual. This could be a Social Security
+     * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
+     * individuals, or a Passport Number.
+     */
+    taxId?: string;
+
+    /**
+     * Title at company
+     */
+    title?: string;
+  }
+
+  /**
+   * Additional information for business entities
+   */
+  export interface BusinessInfo {
+    /**
+     * Legal name of the business
+     */
+    legalName?: string;
+
+    /**
+     * Business registration number
+     */
+    registrationNumber?: string;
+
+    /**
+     * Tax identification number
+     */
+    taxId?: string;
+  }
+}
+
+/**
+ * Additional information required for business entities
+ */
+export interface BusinessInfo {
+  /**
+   * Legal name of the business
+   */
+  legalName: string;
+
+  /**
+   * Business registration number
+   */
+  registrationNumber?: string;
+
+  /**
+   * Tax identification number
+   */
+  taxId?: string;
+}
+
 export interface Customer {
   /**
    * Platform-specific customer identifier
@@ -248,138 +373,22 @@ export interface CustomerCreate {
 export type CustomerOneOf = CustomerOneOf.IndividualCustomer | CustomerOneOf.BusinessCustomer;
 
 export namespace CustomerOneOf {
-  export interface IndividualCustomer extends CustomersAPI.Customer {
-    customerType: 'INDIVIDUAL';
+  export interface IndividualCustomer extends CustomersAPI.Customer, CustomersAPI.IndividualCustomerFields {}
 
-    address?: ExternalAccountsAPI.Address;
-
+  export interface BusinessCustomer
+    extends CustomersAPI.Customer,
+      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     * Additional information required for business entities
      */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * The current KYC status of a customer
-     */
-    kycStatus?:
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
-
-  export interface BusinessCustomer extends CustomersAPI.Customer {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
-
-    businessInfo?: BusinessCustomer.BusinessInfo;
-
-    /**
-     * The current KYB status of a business customer
-     */
-    kybStatus?:
-      | 'AWAITING_SUBMISSION'
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-  }
-
-  export namespace BusinessCustomer {
-    export interface BeneficialOwner {
-      /**
-       * Individual's full name
-       */
-      fullName: string;
-
-      /**
-       * Type of individual in the corporation
-       */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
-       */
-      birthDate?: string;
-
-      /**
-       * Email address of the individual
-       */
-      emailAddress?: string;
-
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      nationality?: string;
-
-      /**
-       * Percent of ownership when individual type is beneficial owner
-       */
-      percentageOwnership?: number;
-
-      /**
-       * Phone number of the individual in E.164 format
-       */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
-    }
+    businessInfo?: CustomersAPI.BusinessInfo;
   }
 }
+
+/**
+ * Whether the customer is an individual or a business entity
+ */
+export type CustomerType = 'INDIVIDUAL' | 'BUSINESS';
 
 export interface CustomerUpdate {
   /**
@@ -387,6 +396,39 @@ export interface CustomerUpdate {
    * updated. This is an optional identifier to route payments to the customer.
    */
   umaAddress?: string;
+}
+
+export interface IndividualCustomerFields {
+  customerType: 'INDIVIDUAL';
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Date of birth in ISO 8601 format (YYYY-MM-DD)
+   */
+  birthDate?: string;
+
+  /**
+   * Individual's full name
+   */
+  fullName?: string;
+
+  /**
+   * The current KYC status of a customer
+   */
+  kycStatus?:
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'PENDING_REVIEW'
+    | 'EXPIRED'
+    | 'CANCELED'
+    | 'MANUALLY_APPROVED'
+    | 'MANUALLY_REJECTED';
+
+  /**
+   * Country code (ISO 3166-1 alpha-2)
+   */
+  nationality?: string;
 }
 
 export interface CustomerGetKYCLinkResponse {
@@ -413,136 +455,17 @@ export interface CustomerCreateParams {
 }
 
 export namespace CustomerCreateParams {
-  export interface IndividualCustomerCreateRequest extends CustomersAPI.CustomerCreate {
-    customerType: 'INDIVIDUAL';
+  export interface IndividualCustomerCreateRequest
+    extends CustomersAPI.CustomerCreate,
+      CustomersAPI.IndividualCustomerFields {}
 
-    address?: ExternalAccountsAPI.Address;
-
+  export interface BusinessCustomerCreateRequest
+    extends CustomersAPI.CustomerCreate,
+      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     * Additional information required for business entities
      */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * The current KYC status of a customer
-     */
-    kycStatus?:
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
-
-  export interface BusinessCustomerCreateRequest extends CustomersAPI.CustomerCreate {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    beneficialOwners?: Array<BusinessCustomerCreateRequest.BeneficialOwner>;
-
-    businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
-
-    /**
-     * The current KYB status of a business customer
-     */
-    kybStatus?:
-      | 'AWAITING_SUBMISSION'
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-  }
-
-  export namespace BusinessCustomerCreateRequest {
-    export interface BeneficialOwner {
-      /**
-       * Individual's full name
-       */
-      fullName: string;
-
-      /**
-       * Type of individual in the corporation
-       */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
-       */
-      birthDate?: string;
-
-      /**
-       * Email address of the individual
-       */
-      emailAddress?: string;
-
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      nationality?: string;
-
-      /**
-       * Percent of ownership when individual type is beneficial owner
-       */
-      percentageOwnership?: number;
-
-      /**
-       * Phone number of the individual in E.164 format
-       */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
-    }
+    businessInfo?: CustomersAPI.BusinessInfo;
   }
 }
 
@@ -553,143 +476,13 @@ export interface CustomerUpdateParams {
 }
 
 export namespace CustomerUpdateParams {
-  export interface IndividualCustomerUpdateRequest extends CustomersAPI.CustomerUpdate {
-    customerType: 'INDIVIDUAL';
+  export interface IndividualCustomerUpdateRequest
+    extends CustomersAPI.CustomerUpdate,
+      CustomersAPI.IndividualCustomerFields {}
 
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * The current KYC status of a customer
-     */
-    kycStatus?:
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
-
-  export interface BusinessCustomerUpdateRequest extends CustomersAPI.CustomerUpdate {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    beneficialOwners?: Array<BusinessCustomerUpdateRequest.BeneficialOwner>;
-
-    /**
-     * Additional information for business entities
-     */
-    businessInfo?: BusinessCustomerUpdateRequest.BusinessInfo;
-
-    /**
-     * The current KYB status of a business customer
-     */
-    kybStatus?:
-      | 'AWAITING_SUBMISSION'
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'PENDING_REVIEW'
-      | 'EXPIRED'
-      | 'CANCELED'
-      | 'MANUALLY_APPROVED'
-      | 'MANUALLY_REJECTED';
-  }
-
-  export namespace BusinessCustomerUpdateRequest {
-    export interface BeneficialOwner {
-      /**
-       * Individual's full name
-       */
-      fullName: string;
-
-      /**
-       * Type of individual in the corporation
-       */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
-       */
-      birthDate?: string;
-
-      /**
-       * Email address of the individual
-       */
-      emailAddress?: string;
-
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      nationality?: string;
-
-      /**
-       * Percent of ownership when individual type is beneficial owner
-       */
-      percentageOwnership?: number;
-
-      /**
-       * Phone number of the individual in E.164 format
-       */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    /**
-     * Additional information for business entities
-     */
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName?: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
-    }
-  }
+  export interface BusinessCustomerUpdateRequest
+    extends CustomersAPI.CustomerUpdate,
+      CustomersAPI.BusinessCustomerFields {}
 }
 
 export interface CustomerListParams extends DefaultPaginationParams {
@@ -706,7 +499,7 @@ export interface CustomerListParams extends DefaultPaginationParams {
   /**
    * Filter by customer type
    */
-  customerType?: 'INDIVIDUAL' | 'BUSINESS';
+  customerType?: CustomerType;
 
   /**
    * Whether to include deleted customers in the results. Default is false.
@@ -774,10 +567,14 @@ Customers.Bulk = Bulk;
 
 export declare namespace Customers {
   export {
+    type BusinessCustomerFields as BusinessCustomerFields,
+    type BusinessInfo as BusinessInfo,
     type Customer as Customer,
     type CustomerCreate as CustomerCreate,
     type CustomerOneOf as CustomerOneOf,
+    type CustomerType as CustomerType,
     type CustomerUpdate as CustomerUpdate,
+    type IndividualCustomerFields as IndividualCustomerFields,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
