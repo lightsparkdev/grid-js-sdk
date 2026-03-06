@@ -4,7 +4,6 @@ import { APIResource } from '../../core/resource';
 import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
 import * as TransactionsAPI from '../transactions';
-import * as TransferInAPI from '../transfer-in';
 import * as ExternalAccountsAPI from '../customers/external-accounts';
 import * as InternalAccountsAPI from './internal-accounts';
 import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
@@ -181,7 +180,7 @@ export namespace OutgoingTransaction {
   /**
    * Destination account details
    */
-  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+  export interface AccountTransactionDestination {
     /**
      * Destination account identifier
      */
@@ -193,7 +192,7 @@ export namespace OutgoingTransaction {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+  export interface UmaAddressTransactionDestination {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -206,8 +205,7 @@ export namespace OutgoingTransaction {
    * Transaction destination where external account details were provided inline at
    * quote creation rather than using a pre-registered external account.
    */
-  export interface ExternalAccountDetailsTransactionDestination
-    extends TransferInAPI.BaseTransactionDestination {
+  export interface ExternalAccountDetailsTransactionDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;

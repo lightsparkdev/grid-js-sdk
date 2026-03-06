@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as TransactionsAPI from './transactions';
 import * as InvitationsAPI from './invitations';
 import * as TransferInAPI from './transfer-in';
 import { TransactionsDefaultPagination } from './transfer-in';
@@ -98,6 +97,36 @@ export interface BaseTransactionSource {
   currency?: string;
 }
 
+/**
+ * Details about the rate and fees for an incoming transaction.
+ */
+export interface IncomingRateDetails {
+  /**
+   * The fixed fee charged by the Grid product to execute the quote in the smallest
+   * unit of the receiving currency (eg. cents).
+   */
+  gridApiFixedFee: number;
+
+  /**
+   * The underlying multiplier from the mSATS to the receiving currency, including
+   * variable fees.
+   */
+  gridApiMultiplier: number;
+
+  /**
+   * The variable fee amount charged by the Grid product to execute the quote in the
+   * smallest unit of the receiving currency (eg. cents). This is the receiving
+   * amount times gridApiVariableFeeRate.
+   */
+  gridApiVariableFeeAmount: number;
+
+  /**
+   * The variable fee rate charged by the Grid product to execute the quote as a
+   * percentage of the receiving currency amount.
+   */
+  gridApiVariableFeeRate: number;
+}
+
 export interface IncomingTransaction {
   /**
    * Unique identifier for the transaction
@@ -180,12 +209,12 @@ export interface IncomingTransaction {
   /**
    * Details about the rate and fees for the transaction.
    */
-  rateDetails?: IncomingTransaction.RateDetails;
+  rateDetails?: IncomingRateDetails;
 
   /**
    * Included for all transactions except those with "CREATED" status
    */
-  reconciliationInstructions?: IncomingTransaction.ReconciliationInstructions;
+  reconciliationInstructions?: ReconciliationInstructions;
 
   /**
    * When the payment was or will be settled
@@ -207,7 +236,7 @@ export namespace IncomingTransaction {
   /**
    * Destination account details
    */
-  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+  export interface AccountTransactionDestination {
     /**
      * Destination account identifier
      */
@@ -219,7 +248,7 @@ export namespace IncomingTransaction {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+  export interface UmaAddressTransactionDestination {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -232,53 +261,19 @@ export namespace IncomingTransaction {
    * Transaction destination where external account details were provided inline at
    * quote creation rather than using a pre-registered external account.
    */
-  export interface ExternalAccountDetailsTransactionDestination
-    extends TransferInAPI.BaseTransactionDestination {
+  export interface ExternalAccountDetailsTransactionDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
+}
 
+export interface ReconciliationInstructions {
   /**
-   * Details about the rate and fees for the transaction.
+   * Unique reference code that must be included with the payment to match it with
+   * the correct incoming transaction
    */
-  export interface RateDetails {
-    /**
-     * The fixed fee charged by the Grid product to execute the quote in the smallest
-     * unit of the receiving currency (eg. cents).
-     */
-    gridApiFixedFee: number;
-
-    /**
-     * The underlying multiplier from the mSATS to the receiving currency, including
-     * variable fees.
-     */
-    gridApiMultiplier: number;
-
-    /**
-     * The variable fee amount charged by the Grid product to execute the quote in the
-     * smallest unit of the receiving currency (eg. cents). This is the receiving
-     * amount times gridApiVariableFeeRate.
-     */
-    gridApiVariableFeeAmount: number;
-
-    /**
-     * The variable fee rate charged by the Grid product to execute the quote as a
-     * percentage of the receiving currency amount.
-     */
-    gridApiVariableFeeRate: number;
-  }
-
-  /**
-   * Included for all transactions except those with "CREATED" status
-   */
-  export interface ReconciliationInstructions {
-    /**
-     * Unique reference code that must be included with the payment to match it with
-     * the correct incoming transaction
-     */
-    reference: string;
-  }
+  reference: string;
 }
 
 /**
@@ -293,7 +288,7 @@ export namespace TransactionSourceOneOf {
   /**
    * Source account details
    */
-  export interface AccountTransactionSource extends TransactionsAPI.BaseTransactionSource {
+  export interface AccountTransactionSource {
     /**
      * Source account identifier
      */
@@ -305,7 +300,7 @@ export namespace TransactionSourceOneOf {
   /**
    * UMA address source details
    */
-  export interface UmaAddressTransactionSource extends TransactionsAPI.BaseTransactionSource {
+  export interface UmaAddressTransactionSource {
     sourceType: 'UMA_ADDRESS';
 
     /**
@@ -318,7 +313,7 @@ export namespace TransactionSourceOneOf {
    * Transaction was funded using a real-time funding source (RTP, SEPA Instant,
    * Spark, Stables, etc.).
    */
-  export interface RealtimeFundingTransactionSource extends TransactionsAPI.BaseTransactionSource {
+  export interface RealtimeFundingTransactionSource {
     /**
      * Currency code for the funding source
      */
@@ -440,7 +435,9 @@ export interface TransactionRejectParams {
 export declare namespace Transactions {
   export {
     type BaseTransactionSource as BaseTransactionSource,
+    type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
+    type ReconciliationInstructions as ReconciliationInstructions,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,

@@ -208,7 +208,9 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
+- <code><a href="./src/resources/transactions.ts">IncomingRateDetails</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
+- <code><a href="./src/resources/transactions.ts">ReconciliationInstructions</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>

@@ -123,7 +123,7 @@ export interface Address {
   state?: string;
 }
 
-export interface BaseWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+export interface BaseWalletInfo {
   accountType: 'BASE_WALLET';
 
   /**
@@ -173,11 +173,7 @@ export interface BrlBeneficiary {
   registrationNumber?: string;
 }
 
-export interface BrlExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.BrlAccountInfo {
-  beneficiary: BrlBeneficiary | BusinessBeneficiary;
-}
+export interface BrlExternalAccountInfo extends PlatformExternalAccountsAPI.BrlAccountInfo {}
 
 export interface BusinessBeneficiary {
   beneficiaryType: 'BUSINESS';
@@ -256,11 +252,7 @@ export interface DkkBeneficiary {
   registrationNumber?: string;
 }
 
-export interface DkkExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.DkkAccountInfo {
-  beneficiary: DkkBeneficiary | BusinessBeneficiary;
-}
+export interface DkkExternalAccountInfo extends PlatformExternalAccountsAPI.DkkAccountInfo {}
 
 export interface ExternalAccount {
   /**
@@ -409,105 +401,11 @@ export type ExternalAccountInfoOneOf =
   | BaseWalletInfo;
 
 export namespace ExternalAccountInfoOneOf {
-  export interface CadExternalAccountInfo
-    extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-      PlatformExternalAccountsAPI.CadAccountInfo {
-    beneficiary: CadExternalAccountInfo.CadBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-  }
+  export interface CadExternalAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
 
-  export namespace CadExternalAccountInfo {
-    export interface CadBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
+  export interface EurExternalAccountInfo extends PlatformExternalAccountsAPI.EurAccountInfo {}
 
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface EurExternalAccountInfo
-    extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-      PlatformExternalAccountsAPI.EurAccountInfo {
-    beneficiary: EurExternalAccountInfo.EurBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-  }
-
-  export namespace EurExternalAccountInfo {
-    export interface EurBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface KesExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface KesExternalAccountInfo {
     accountType: 'KES_ACCOUNT';
 
     beneficiary: KesExternalAccountInfo.KesBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -568,7 +466,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface MwkExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface MwkExternalAccountInfo {
     accountType: 'MWK_ACCOUNT';
 
     beneficiary: MwkExternalAccountInfo.MwkBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -631,56 +529,9 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface NgnExternalAccountInfo
-    extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-      PlatformExternalAccountsAPI.NgnAccountInfo {
-    beneficiary: NgnExternalAccountInfo.NgnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-  }
+  export interface NgnExternalAccountInfo extends PlatformExternalAccountsAPI.NgnAccountInfo {}
 
-  export namespace NgnExternalAccountInfo {
-    export interface NgnBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface RwfExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface RwfExternalAccountInfo {
     accountType: 'RWF_ACCOUNT';
 
     beneficiary: RwfExternalAccountInfo.RwfBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -741,7 +592,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface TzsExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface TzsExternalAccountInfo {
     accountType: 'TZS_ACCOUNT';
 
     beneficiary: TzsExternalAccountInfo.TzsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -802,7 +653,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface UgxExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface UgxExternalAccountInfo {
     accountType: 'UGX_ACCOUNT';
 
     beneficiary: UgxExternalAccountInfo.UgxBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -865,7 +716,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface XofExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface XofExternalAccountInfo {
     accountType: 'XOF_ACCOUNT';
 
     beneficiary: XofExternalAccountInfo.XofBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -928,7 +779,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface ZarExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface ZarExternalAccountInfo {
     /**
      * South African bank account number
      */
@@ -989,7 +840,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface ZmwExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+  export interface ZmwExternalAccountInfo {
     accountType: 'ZMW_ACCOUNT';
 
     beneficiary: ZmwExternalAccountInfo.ZmwBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -1092,11 +943,7 @@ export interface GbpBeneficiary {
   registrationNumber?: string;
 }
 
-export interface GbpExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.GbpAccountInfo {
-  beneficiary: GbpBeneficiary | BusinessBeneficiary;
-}
+export interface GbpExternalAccountInfo extends PlatformExternalAccountsAPI.GbpAccountInfo {}
 
 export interface HkdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1139,11 +986,7 @@ export interface HkdBeneficiary {
   registrationNumber?: string;
 }
 
-export interface HkdExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.HkdAccountInfo {
-  beneficiary: HkdBeneficiary | BusinessBeneficiary;
-}
+export interface HkdExternalAccountInfo extends PlatformExternalAccountsAPI.HkdAccountInfo {}
 
 export interface IdrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1186,11 +1029,7 @@ export interface IdrBeneficiary {
   registrationNumber?: string;
 }
 
-export interface IdrExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.IdrAccountInfo {
-  beneficiary: IdrBeneficiary | BusinessBeneficiary;
-}
+export interface IdrExternalAccountInfo extends PlatformExternalAccountsAPI.IdrAccountInfo {}
 
 export interface InrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1233,17 +1072,13 @@ export interface InrBeneficiary {
   registrationNumber?: string;
 }
 
-export interface InrExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.InrAccountInfo {
-  beneficiary: InrBeneficiary | BusinessBeneficiary;
-}
+export interface InrExternalAccountInfo extends PlatformExternalAccountsAPI.InrAccountInfo {}
 
 /**
  * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
  * `lightningAddress` must be provided.
  */
-export interface LightningWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+export interface LightningWalletInfo {
   accountType: 'LIGHTNING';
 
   /**
@@ -1305,11 +1140,7 @@ export interface MxnBeneficiary {
   registrationNumber?: string;
 }
 
-export interface MxnExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.MxnAccountInfo {
-  beneficiary: MxnBeneficiary | BusinessBeneficiary;
-}
+export interface MxnExternalAccountInfo extends PlatformExternalAccountsAPI.MxnAccountInfo {}
 
 export interface MyrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1352,11 +1183,7 @@ export interface MyrBeneficiary {
   registrationNumber?: string;
 }
 
-export interface MyrExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.MyrAccountInfo {
-  beneficiary: MyrBeneficiary | BusinessBeneficiary;
-}
+export interface MyrExternalAccountInfo extends PlatformExternalAccountsAPI.MyrAccountInfo {}
 
 export interface PhpBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1399,13 +1226,9 @@ export interface PhpBeneficiary {
   registrationNumber?: string;
 }
 
-export interface PhpExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.PhpAccountInfo {
-  beneficiary: PhpBeneficiary | BusinessBeneficiary;
-}
+export interface PhpExternalAccountInfo extends PlatformExternalAccountsAPI.PhpAccountInfo {}
 
-export interface PolygonWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+export interface PolygonWalletInfo {
   accountType: 'POLYGON_WALLET';
 
   /**
@@ -1455,13 +1278,9 @@ export interface SgdBeneficiary {
   registrationNumber?: string;
 }
 
-export interface SgdExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.SgdAccountInfo {
-  beneficiary: SgdBeneficiary | BusinessBeneficiary;
-}
+export interface SgdExternalAccountInfo extends PlatformExternalAccountsAPI.SgdAccountInfo {}
 
-export interface SolanaWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+export interface SolanaWalletInfo {
   accountType: 'SOLANA_WALLET';
 
   /**
@@ -1470,7 +1289,7 @@ export interface SolanaWalletInfo extends PlatformExternalAccountsAPI.BaseExtern
   address: string;
 }
 
-export interface SparkWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+export interface SparkWalletInfo {
   accountType: 'SPARK_WALLET';
 
   /**
@@ -1520,13 +1339,9 @@ export interface ThbBeneficiary {
   registrationNumber?: string;
 }
 
-export interface ThbExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.ThbAccountInfo {
-  beneficiary: ThbBeneficiary | BusinessBeneficiary;
-}
+export interface ThbExternalAccountInfo extends PlatformExternalAccountsAPI.ThbAccountInfo {}
 
-export interface TronWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
+export interface TronWalletInfo {
   accountType: 'TRON_WALLET';
 
   /**
@@ -1576,11 +1391,7 @@ export interface UsdBeneficiary {
   registrationNumber?: string;
 }
 
-export interface UsdExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.UsdAccountInfo {
-  beneficiary: UsdBeneficiary | BusinessBeneficiary;
-}
+export interface UsdExternalAccountInfo extends PlatformExternalAccountsAPI.UsdAccountInfo {}
 
 export interface VndBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1623,11 +1434,7 @@ export interface VndBeneficiary {
   registrationNumber?: string;
 }
 
-export interface VndExternalAccountInfo
-  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
-    PlatformExternalAccountsAPI.VndAccountInfo {
-  beneficiary: VndBeneficiary | BusinessBeneficiary;
-}
+export interface VndExternalAccountInfo extends PlatformExternalAccountsAPI.VndAccountInfo {}
 
 export interface ExternalAccountCreateParams {
   /**
