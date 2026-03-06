@@ -6,6 +6,6 @@ export {
   type InternalAccountFundParams,
   type InternalAccountsDefaultPagination,
 } from './internal-accounts';
-export { Sandbox, type SandboxSendFundsResponse, type SandboxSendFundsParams } from './sandbox';
+export { Sandbox, type OutgoingTransaction, type SandboxSendFundsParams } from './sandbox';
 export { Uma, type UmaReceivePaymentParams } from './uma';
 export { Webhooks, type WebhookSendTestResponse } from './webhooks';

@@ -8,10 +8,14 @@ export {
 } from './bulk';
 export {
   Customers,
+  type BusinessCustomerFields,
+  type BusinessInfo,
   type Customer,
   type CustomerCreate,
   type CustomerOneOf,
+  type CustomerType,
   type CustomerUpdate,
+  type IndividualCustomerFields,
   type CustomerGetKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,

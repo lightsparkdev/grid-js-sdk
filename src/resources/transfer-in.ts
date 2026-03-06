@@ -1,12 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as TransferInAPI from './transfer-in';
-import * as InvitationsAPI from './invitations';
-import * as QuotesAPI from './quotes';
 import * as TransactionsAPI from './transactions';
-import * as ExternalAccountsAPI from './customers/external-accounts';
+import * as SandboxAPI from './sandbox/sandbox';
 import { APIPromise } from '../core/api-promise';
+import { DefaultPagination } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
@@ -22,7 +20,7 @@ export class TransferIn extends APIResource {
    *
    * @example
    * ```ts
-   * const transferIn = await client.transferIn.create({
+   * const transaction = await client.transferIn.create({
    *   destination: {
    *     accountId:
    *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
@@ -35,7 +33,7 @@ export class TransferIn extends APIResource {
    * });
    * ```
    */
-  create(params: TransferInCreateParams, options?: RequestOptions): APIPromise<TransferInCreateResponse> {
+  create(params: TransferInCreateParams, options?: RequestOptions): APIPromise<Transaction> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/transfer-in', {
       body,
@@ -48,6 +46,8 @@ export class TransferIn extends APIResource {
   }
 }
 
+export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
+
 export interface BaseTransactionDestination {
   /**
    * Currency code for the destination
@@ -55,240 +55,32 @@ export interface BaseTransactionDestination {
   currency?: string;
 }
 
-export interface Transaction {
+export interface ExternalAccountReference {
   /**
-   * Unique identifier for the transaction
+   * Reference to an external account ID
    */
-  id: string;
-
-  /**
-   * System ID of the customer (sender for outgoing, recipient for incoming)
-   */
-  customerId: string;
-
-  /**
-   * Destination account details
-   */
-  destination:
-    | Transaction.AccountTransactionDestination
-    | Transaction.UmaAddressTransactionDestination
-    | Transaction.ExternalAccountDetailsTransactionDestination;
-
-  /**
-   * Platform-specific ID of the customer (sender for outgoing, recipient for
-   * incoming)
-   */
-  platformCustomerId: string;
-
-  /**
-   * Status of a payment transaction.
-   *
-   * | Status       | Description                                                                                        |
-   * | ------------ | -------------------------------------------------------------------------------------------------- |
-   * | `CREATED`    | Initial lookup has been created                                                                    |
-   * | `PENDING`    | Quote has been created                                                                             |
-   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
-   * | `SENT`       | Cross border settlement has been initiated                                                         |
-   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
-   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
-   * | `FAILED`     | An error occurred during payment                                                                   |
-   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
-   * | `EXPIRED`    | Quote has expired                                                                                  |
-   */
-  status: TransactionsAPI.TransactionStatus;
-
-  /**
-   * Type of transaction (incoming payment or outgoing payment)
-   */
-  type: TransactionsAPI.TransactionType;
-
-  /**
-   * Additional information about the counterparty, if available and relevant to the
-   * transaction and platform. Only applicable for transactions to/from UMA
-   * addresses.
-   */
-  counterpartyInformation?: { [key: string]: unknown };
-
-  /**
-   * When the transaction was created
-   */
-  createdAt?: string;
-
-  /**
-   * Optional memo or description for the payment
-   */
-  description?: string;
-
-  /**
-   * When the payment was or will be settled
-   */
-  settledAt?: string;
-
-  /**
-   * When the transaction was last updated
-   */
-  updatedAt?: string;
+  accountId: string;
 }
 
-export namespace Transaction {
+export interface InternalAccountReference {
   /**
-   * Destination account details
+   * Reference to an internal account ID
    */
-  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
-    /**
-     * Destination account identifier
-     */
-    accountId: string;
-
-    destinationType: 'ACCOUNT';
-  }
-
-  /**
-   * UMA address destination details
-   */
-  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
-    destinationType: 'UMA_ADDRESS';
-
-    /**
-     * UMA address of the recipient
-     */
-    umaAddress: string;
-  }
-
-  /**
-   * Transaction destination where external account details were provided inline at
-   * quote creation rather than using a pre-registered external account.
-   */
-  export interface ExternalAccountDetailsTransactionDestination
-    extends TransferInAPI.BaseTransactionDestination {
-    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
-
-    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
-  }
+  accountId: string;
 }
 
-export type TransferInCreateResponse =
-  | TransactionsAPI.IncomingTransaction
-  | TransferInCreateResponse.OutgoingTransaction;
-
-export namespace TransferInCreateResponse {
-  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'status' | 'type'> {
-    /**
-     * Amount sent in the sender's currency
-     */
-    sentAmount: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * Source account details
-     */
-    source: TransactionsAPI.TransactionSourceOneOf;
-
-    type: 'OUTGOING';
-
-    /**
-     * Number of sending currency units per receiving currency unit.
-     */
-    exchangeRate?: number;
-
-    /**
-     * If the transaction failed, this field provides the reason for failure.
-     */
-    failureReason?:
-      | 'QUOTE_EXPIRED'
-      | 'QUOTE_EXECUTION_FAILED'
-      | 'LIGHTNING_PAYMENT_FAILED'
-      | 'FUNDING_AMOUNT_MISMATCH'
-      | 'COUNTERPARTY_POST_TX_FAILED'
-      | 'TIMEOUT';
-
-    /**
-     * The fees associated with the quote in the smallest unit of the sending currency
-     * (eg. cents).
-     */
-    fees?: number;
-
-    /**
-     * Payment instructions for executing the payment.
-     */
-    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
-
-    /**
-     * The ID of the quote that was used to trigger this payment
-     */
-    quoteId?: string;
-
-    /**
-     * Details about the rate and fees for the transaction.
-     */
-    rateDetails?: QuotesAPI.OutgoingRateDetails;
-
-    /**
-     * Amount to be received by recipient in the recipient's currency
-     */
-    receivedAmount?: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * The refund if transaction was refunded.
-     */
-    refund?: OutgoingTransaction.Refund;
-
-    /**
-     * Status of an outgoing payment transaction.
-     *
-     * | Status       | Description                                             |
-     * | ------------ | ------------------------------------------------------- |
-     * | `PENDING`    | Quote is pending confirmation                           |
-     * | `EXPIRED`    | Quote wasn't executed before expiry window              |
-     * | `PROCESSING` | Executing the quote after receiving funds               |
-     * | `COMPLETED`  | Payout successfully reached the destination             |
-     * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
-     */
-    status?: 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
-  }
-
-  export namespace OutgoingTransaction {
-    /**
-     * The refund if transaction was refunded.
-     */
-    export interface Refund {
-      /**
-       * When the refund was initiated
-       */
-      initiatedAt: string;
-
-      /**
-       * The unique reference ID of the refund
-       */
-      reference: string;
-
-      /**
-       * Current status of the refund
-       */
-      status: 'PENDING' | 'COMPLETED' | 'FAILED';
-
-      /**
-       * Reason for the refund
-       */
-      reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION';
-
-      /**
-       * When the refund was settled
-       */
-      settledAt?: string;
-    }
-  }
-}
+export type Transaction = TransactionsAPI.IncomingTransaction | SandboxAPI.OutgoingTransaction;
 
 export interface TransferInCreateParams {
   /**
    * Body param: Destination internal account details
    */
-  destination: TransferInCreateParams.Destination;
+  destination: InternalAccountReference;
 
   /**
    * Body param: Source external account details
    */
-  source: TransferInCreateParams.Source;
+  source: ExternalAccountReference;
 
   /**
    * Body param: Amount in the smallest unit of the currency (e.g., cents for
@@ -303,33 +95,12 @@ export interface TransferInCreateParams {
   'Idempotency-Key'?: string;
 }
 
-export namespace TransferInCreateParams {
-  /**
-   * Destination internal account details
-   */
-  export interface Destination {
-    /**
-     * Reference to an internal account ID
-     */
-    accountId: string;
-  }
-
-  /**
-   * Source external account details
-   */
-  export interface Source {
-    /**
-     * Reference to an external account ID
-     */
-    accountId: string;
-  }
-}
-
 export declare namespace TransferIn {
   export {
     type BaseTransactionDestination as BaseTransactionDestination,
+    type ExternalAccountReference as ExternalAccountReference,
+    type InternalAccountReference as InternalAccountReference,
     type Transaction as Transaction,
-    type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,
   };
 }

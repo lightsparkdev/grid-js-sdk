@@ -31,10 +31,10 @@ For example:
 \`\`\`
 async function run(client) {
   const quote = await client.quotes.create({
-    destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
-    lockedCurrencyAmount: 1,
+    destination: { destinationType: 'ACCOUNT', accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123' },
+    lockedCurrencyAmount: 10000,
     lockedCurrencySide: 'SENDING',
-    source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
+    source: { sourceType: 'ACCOUNT', accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },
   });
 
   console.log(quote.id);

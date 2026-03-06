@@ -82,6 +82,299 @@ export class ExternalAccounts extends APIResource {
   }
 }
 
+export type BaseExternalAccountInfo = unknown;
+
+export interface BrlAccountInfo {
+  accountType: 'BRL_ACCOUNT';
+
+  paymentRails: Array<'PIX'>;
+
+  /**
+   * The PIX key of the bank
+   */
+  pixKey: string;
+
+  /**
+   * The type of PIX key of the bank
+   */
+  pixKeyType: string;
+
+  /**
+   * The tax ID of the bank account
+   */
+  taxId: string;
+}
+
+export interface CadAccountInfo {
+  /**
+   * Bank account number (7-12 digits)
+   */
+  accountNumber: string;
+
+  accountType: 'CAD_ACCOUNT';
+
+  /**
+   * Canadian financial institution number (3 digits)
+   */
+  bankCode: string;
+
+  /**
+   * Transit number identifying the branch (5 digits)
+   */
+  branchCode: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
+export interface DkkAccountInfo {
+  accountType: 'DKK_ACCOUNT';
+
+  /**
+   * The IBAN of the bank
+   */
+  iban: string;
+
+  paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+  /**
+   * The SWIFT BIC of the bank
+   */
+  swiftBic?: string;
+}
+
+export interface EurAccountInfo {
+  accountType: 'EUR_ACCOUNT';
+
+  /**
+   * The IBAN of the bank
+   */
+  iban: string;
+
+  paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+  /**
+   * The SWIFT BIC of the bank
+   */
+  swiftBic?: string;
+}
+
+export interface GbpAccountInfo {
+  /**
+   * UK bank account number (8 digits)
+   */
+  accountNumber: string;
+
+  accountType: 'GBP_ACCOUNT';
+
+  paymentRails: Array<'FASTER_PAYMENTS'>;
+
+  /**
+   * UK bank sort code (6 digits, may include hyphens)
+   */
+  sortCode: string;
+}
+
+export interface HkdAccountInfo {
+  /**
+   * Hong Kong bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'HKD_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
+}
+
+export interface IdrAccountInfo {
+  /**
+   * Indonesian bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'IDR_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * Indonesian phone number for e-wallet payments
+   */
+  phoneNumber: string;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
+}
+
+export interface InrAccountInfo {
+  accountType: 'INR_ACCOUNT';
+
+  paymentRails: Array<'UPI'>;
+
+  /**
+   * The VPA of the bank
+   */
+  vpa: string;
+}
+
+export interface MxnAccountInfo {
+  accountType: 'MXN_ACCOUNT';
+
+  /**
+   * The CLABE number of the bank
+   */
+  clabeNumber: string;
+
+  paymentRails: Array<'SPEI'>;
+}
+
+export interface MyrAccountInfo {
+  /**
+   * Malaysian bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'MYR_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
+}
+
+export interface NgnAccountInfo {
+  /**
+   * Nigerian bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'NGN_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
+export interface PhpAccountInfo {
+  /**
+   * Bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'PHP_ACCOUNT';
+
+  /**
+   * Name of the beneficiary's bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
+export interface SgdAccountInfo {
+  /**
+   * Bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'SGD_ACCOUNT';
+
+  /**
+   * Name of the beneficiary's bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
+}
+
+export interface ThbAccountInfo {
+  /**
+   * Thai bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'THB_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
+}
+
+export interface UsdAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'USD_ACCOUNT';
+
+  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
+
+  /**
+   * The routing number of the bank
+   */
+  routingNumber: string;
+}
+
+export interface VndAccountInfo {
+  /**
+   * Vietnamese bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'VND_ACCOUNT';
+
+  /**
+   * Name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * SWIFT/BIC code (8 or 11 characters)
+   */
+  swiftCode: string;
+}
+
 export interface ExternalAccountListResponse {
   /**
    * List of external accounts matching the filter criteria
@@ -90,6 +383,10 @@ export interface ExternalAccountListResponse {
 }
 
 export interface ExternalAccountCreateParams {
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
   accountInfo: ExternalAccountsAPI.ExternalAccountInfoOneOf;
 
   /**
@@ -113,6 +410,23 @@ export interface ExternalAccountListParams {
 
 export declare namespace ExternalAccounts {
   export {
+    type BaseExternalAccountInfo as BaseExternalAccountInfo,
+    type BrlAccountInfo as BrlAccountInfo,
+    type CadAccountInfo as CadAccountInfo,
+    type DkkAccountInfo as DkkAccountInfo,
+    type EurAccountInfo as EurAccountInfo,
+    type GbpAccountInfo as GbpAccountInfo,
+    type HkdAccountInfo as HkdAccountInfo,
+    type IdrAccountInfo as IdrAccountInfo,
+    type InrAccountInfo as InrAccountInfo,
+    type MxnAccountInfo as MxnAccountInfo,
+    type MyrAccountInfo as MyrAccountInfo,
+    type NgnAccountInfo as NgnAccountInfo,
+    type PhpAccountInfo as PhpAccountInfo,
+    type SgdAccountInfo as SgdAccountInfo,
+    type ThbAccountInfo as ThbAccountInfo,
+    type UsdAccountInfo as UsdAccountInfo,
+    type VndAccountInfo as VndAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

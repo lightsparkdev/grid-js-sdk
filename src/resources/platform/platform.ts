@@ -3,10 +3,27 @@
 import { APIResource } from '../../core/resource';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
+  BaseExternalAccountInfo,
+  BrlAccountInfo,
+  CadAccountInfo,
+  DkkAccountInfo,
+  EurAccountInfo,
   ExternalAccountCreateParams,
   ExternalAccountListParams,
   ExternalAccountListResponse,
   ExternalAccounts,
+  GbpAccountInfo,
+  HkdAccountInfo,
+  IdrAccountInfo,
+  InrAccountInfo,
+  MxnAccountInfo,
+  MyrAccountInfo,
+  NgnAccountInfo,
+  PhpAccountInfo,
+  SgdAccountInfo,
+  ThbAccountInfo,
+  UsdAccountInfo,
+  VndAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { APIPromise } from '../../core/api-promise';
@@ -66,6 +83,23 @@ export declare namespace Platform {
 
   export {
     ExternalAccounts as ExternalAccounts,
+    type BaseExternalAccountInfo as BaseExternalAccountInfo,
+    type BrlAccountInfo as BrlAccountInfo,
+    type CadAccountInfo as CadAccountInfo,
+    type DkkAccountInfo as DkkAccountInfo,
+    type EurAccountInfo as EurAccountInfo,
+    type GbpAccountInfo as GbpAccountInfo,
+    type HkdAccountInfo as HkdAccountInfo,
+    type IdrAccountInfo as IdrAccountInfo,
+    type InrAccountInfo as InrAccountInfo,
+    type MxnAccountInfo as MxnAccountInfo,
+    type MyrAccountInfo as MyrAccountInfo,
+    type NgnAccountInfo as NgnAccountInfo,
+    type PhpAccountInfo as PhpAccountInfo,
+    type SgdAccountInfo as SgdAccountInfo,
+    type ThbAccountInfo as ThbAccountInfo,
+    type UsdAccountInfo as UsdAccountInfo,
+    type VndAccountInfo as VndAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

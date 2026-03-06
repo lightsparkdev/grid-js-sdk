@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as ExternalAccountsAPI from './external-accounts';
+import * as PlatformExternalAccountsAPI from '../platform/external-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -122,7 +123,7 @@ export interface Address {
   state?: string;
 }
 
-export interface BaseWalletInfo {
+export interface BaseWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
   accountType: 'BASE_WALLET';
 
   /**
@@ -172,27 +173,10 @@ export interface BrlBeneficiary {
   registrationNumber?: string;
 }
 
-export interface BrlExternalAccountInfo {
-  accountType: 'BRL_ACCOUNT';
-
+export interface BrlExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.BrlAccountInfo {
   beneficiary: BrlBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'PIX'>;
-
-  /**
-   * The PIX key of the bank
-   */
-  pixKey: string;
-
-  /**
-   * The type of PIX key of the bank
-   */
-  pixKeyType: string;
-
-  /**
-   * The tax ID of the bank account
-   */
-  taxId: string;
 }
 
 export interface BusinessBeneficiary {
@@ -272,22 +256,10 @@ export interface DkkBeneficiary {
   registrationNumber?: string;
 }
 
-export interface DkkExternalAccountInfo {
-  accountType: 'DKK_ACCOUNT';
-
+export interface DkkExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.DkkAccountInfo {
   beneficiary: DkkBeneficiary | BusinessBeneficiary;
-
-  /**
-   * The IBAN of the bank
-   */
-  iban: string;
-
-  paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
-
-  /**
-   * The SWIFT BIC of the bank
-   */
-  swiftBic?: string;
 }
 
 export interface ExternalAccount {
@@ -296,6 +268,10 @@ export interface ExternalAccount {
    */
   id: string;
 
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**
@@ -360,6 +336,10 @@ export namespace ExternalAccount {
 }
 
 export interface ExternalAccountCreate {
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**
@@ -392,6 +372,10 @@ export interface ExternalAccountCreate {
   platformAccountId?: string;
 }
 
+/**
+ * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+ * `lightningAddress` must be provided.
+ */
 export type ExternalAccountInfoOneOf =
   | BrlExternalAccountInfo
   | ExternalAccountInfoOneOf.CadExternalAccountInfo
@@ -425,27 +409,10 @@ export type ExternalAccountInfoOneOf =
   | BaseWalletInfo;
 
 export namespace ExternalAccountInfoOneOf {
-  export interface CadExternalAccountInfo {
-    /**
-     * Bank account number (7-12 digits)
-     */
-    accountNumber: string;
-
-    accountType: 'CAD_ACCOUNT';
-
-    /**
-     * Canadian financial institution number (3 digits)
-     */
-    bankCode: string;
-
+  export interface CadExternalAccountInfo
+    extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+      PlatformExternalAccountsAPI.CadAccountInfo {
     beneficiary: CadExternalAccountInfo.CadBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * Transit number identifying the branch (5 digits)
-     */
-    branchCode: string;
-
-    paymentRails: Array<'BANK_TRANSFER'>;
   }
 
   export namespace CadExternalAccountInfo {
@@ -491,22 +458,10 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface EurExternalAccountInfo {
-    accountType: 'EUR_ACCOUNT';
-
+  export interface EurExternalAccountInfo
+    extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+      PlatformExternalAccountsAPI.EurAccountInfo {
     beneficiary: EurExternalAccountInfo.EurBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * The IBAN of the bank
-     */
-    iban: string;
-
-    paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
-
-    /**
-     * The SWIFT BIC of the bank
-     */
-    swiftBic?: string;
   }
 
   export namespace EurExternalAccountInfo {
@@ -552,7 +507,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface KesExternalAccountInfo {
+  export interface KesExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'KES_ACCOUNT';
 
     beneficiary: KesExternalAccountInfo.KesBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -613,7 +568,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface MwkExternalAccountInfo {
+  export interface MwkExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'MWK_ACCOUNT';
 
     beneficiary: MwkExternalAccountInfo.MwkBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -676,22 +631,10 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface NgnExternalAccountInfo {
-    /**
-     * Nigerian bank account number
-     */
-    accountNumber: string;
-
-    accountType: 'NGN_ACCOUNT';
-
-    /**
-     * Name of the bank
-     */
-    bankName: string;
-
+  export interface NgnExternalAccountInfo
+    extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+      PlatformExternalAccountsAPI.NgnAccountInfo {
     beneficiary: NgnExternalAccountInfo.NgnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'BANK_TRANSFER'>;
   }
 
   export namespace NgnExternalAccountInfo {
@@ -737,7 +680,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface RwfExternalAccountInfo {
+  export interface RwfExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'RWF_ACCOUNT';
 
     beneficiary: RwfExternalAccountInfo.RwfBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -798,7 +741,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface TzsExternalAccountInfo {
+  export interface TzsExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'TZS_ACCOUNT';
 
     beneficiary: TzsExternalAccountInfo.TzsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -859,7 +802,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface UgxExternalAccountInfo {
+  export interface UgxExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'UGX_ACCOUNT';
 
     beneficiary: UgxExternalAccountInfo.UgxBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -922,7 +865,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface XofExternalAccountInfo {
+  export interface XofExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'XOF_ACCOUNT';
 
     beneficiary: XofExternalAccountInfo.XofBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -985,7 +928,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface ZarExternalAccountInfo {
+  export interface ZarExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     /**
      * South African bank account number
      */
@@ -1046,7 +989,7 @@ export namespace ExternalAccountInfoOneOf {
     }
   }
 
-  export interface ZmwExternalAccountInfo {
+  export interface ZmwExternalAccountInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
     accountType: 'ZMW_ACCOUNT';
 
     beneficiary: ZmwExternalAccountInfo.ZmwBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
@@ -1149,22 +1092,10 @@ export interface GbpBeneficiary {
   registrationNumber?: string;
 }
 
-export interface GbpExternalAccountInfo {
-  /**
-   * UK bank account number (8 digits)
-   */
-  accountNumber: string;
-
-  accountType: 'GBP_ACCOUNT';
-
+export interface GbpExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.GbpAccountInfo {
   beneficiary: GbpBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'FASTER_PAYMENTS'>;
-
-  /**
-   * UK bank sort code (6 digits, may include hyphens)
-   */
-  sortCode: string;
 }
 
 export interface HkdBeneficiary {
@@ -1208,27 +1139,10 @@ export interface HkdBeneficiary {
   registrationNumber?: string;
 }
 
-export interface HkdExternalAccountInfo {
-  /**
-   * Hong Kong bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'HKD_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
+export interface HkdExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.HkdAccountInfo {
   beneficiary: HkdBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
 }
 
 export interface IdrBeneficiary {
@@ -1272,32 +1186,10 @@ export interface IdrBeneficiary {
   registrationNumber?: string;
 }
 
-export interface IdrExternalAccountInfo {
-  /**
-   * Indonesian bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'IDR_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
+export interface IdrExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.IdrAccountInfo {
   beneficiary: IdrBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * Indonesian phone number for e-wallet payments
-   */
-  phoneNumber: string;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
 }
 
 export interface InrBeneficiary {
@@ -1341,20 +1233,17 @@ export interface InrBeneficiary {
   registrationNumber?: string;
 }
 
-export interface InrExternalAccountInfo {
-  accountType: 'INR_ACCOUNT';
-
+export interface InrExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.InrAccountInfo {
   beneficiary: InrBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'UPI'>;
-
-  /**
-   * The VPA of the bank
-   */
-  vpa: string;
 }
 
-export interface LightningWalletInfo {
+/**
+ * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+ * `lightningAddress` must be provided.
+ */
+export interface LightningWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
   accountType: 'LIGHTNING';
 
   /**
@@ -1416,17 +1305,10 @@ export interface MxnBeneficiary {
   registrationNumber?: string;
 }
 
-export interface MxnExternalAccountInfo {
-  accountType: 'MXN_ACCOUNT';
-
+export interface MxnExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.MxnAccountInfo {
   beneficiary: MxnBeneficiary | BusinessBeneficiary;
-
-  /**
-   * The CLABE number of the bank
-   */
-  clabeNumber: string;
-
-  paymentRails: Array<'SPEI'>;
 }
 
 export interface MyrBeneficiary {
@@ -1470,27 +1352,10 @@ export interface MyrBeneficiary {
   registrationNumber?: string;
 }
 
-export interface MyrExternalAccountInfo {
-  /**
-   * Malaysian bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'MYR_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
+export interface MyrExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.MyrAccountInfo {
   beneficiary: MyrBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
 }
 
 export interface PhpBeneficiary {
@@ -1534,25 +1399,13 @@ export interface PhpBeneficiary {
   registrationNumber?: string;
 }
 
-export interface PhpExternalAccountInfo {
-  /**
-   * Bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'PHP_ACCOUNT';
-
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
+export interface PhpExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.PhpAccountInfo {
   beneficiary: PhpBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
 }
 
-export interface PolygonWalletInfo {
+export interface PolygonWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
   accountType: 'POLYGON_WALLET';
 
   /**
@@ -1602,30 +1455,13 @@ export interface SgdBeneficiary {
   registrationNumber?: string;
 }
 
-export interface SgdExternalAccountInfo {
-  /**
-   * Bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'SGD_ACCOUNT';
-
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
+export interface SgdExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.SgdAccountInfo {
   beneficiary: SgdBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
 }
 
-export interface SolanaWalletInfo {
+export interface SolanaWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
   accountType: 'SOLANA_WALLET';
 
   /**
@@ -1634,7 +1470,7 @@ export interface SolanaWalletInfo {
   address: string;
 }
 
-export interface SparkWalletInfo {
+export interface SparkWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
   accountType: 'SPARK_WALLET';
 
   /**
@@ -1684,30 +1520,13 @@ export interface ThbBeneficiary {
   registrationNumber?: string;
 }
 
-export interface ThbExternalAccountInfo {
-  /**
-   * Thai bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'THB_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
+export interface ThbExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.ThbAccountInfo {
   beneficiary: ThbBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
 }
 
-export interface TronWalletInfo {
+export interface TronWalletInfo extends PlatformExternalAccountsAPI.BaseExternalAccountInfo {
   accountType: 'TRON_WALLET';
 
   /**
@@ -1757,22 +1576,10 @@ export interface UsdBeneficiary {
   registrationNumber?: string;
 }
 
-export interface UsdExternalAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
-  accountType: 'USD_ACCOUNT';
-
+export interface UsdExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.UsdAccountInfo {
   beneficiary: UsdBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
-
-  /**
-   * The routing number of the bank
-   */
-  routingNumber: string;
 }
 
 export interface VndBeneficiary {
@@ -1816,30 +1623,17 @@ export interface VndBeneficiary {
   registrationNumber?: string;
 }
 
-export interface VndExternalAccountInfo {
-  /**
-   * Vietnamese bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'VND_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
+export interface VndExternalAccountInfo
+  extends PlatformExternalAccountsAPI.BaseExternalAccountInfo,
+    PlatformExternalAccountsAPI.VndAccountInfo {
   beneficiary: VndBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
 }
 
 export interface ExternalAccountCreateParams {
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**

@@ -1,9 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as InvitationsAPI from './invitations';
-import * as QuotesAPI from './quotes';
-import * as TransactionsAPI from './transactions';
 import * as TransferInAPI from './transfer-in';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
@@ -19,7 +16,7 @@ export class TransferOut extends APIResource {
    *
    * @example
    * ```ts
-   * const transferOut = await client.transferOut.create({
+   * const transaction = await client.transferOut.create({
    *   destination: {
    *     accountId:
    *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -32,7 +29,7 @@ export class TransferOut extends APIResource {
    * });
    * ```
    */
-  create(params: TransferOutCreateParams, options?: RequestOptions): APIPromise<TransferOutCreateResponse> {
+  create(params: TransferOutCreateParams, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/transfer-out', {
       body,
@@ -45,128 +42,16 @@ export class TransferOut extends APIResource {
   }
 }
 
-export type TransferOutCreateResponse =
-  | TransactionsAPI.IncomingTransaction
-  | TransferOutCreateResponse.OutgoingTransaction;
-
-export namespace TransferOutCreateResponse {
-  export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'status' | 'type'> {
-    /**
-     * Amount sent in the sender's currency
-     */
-    sentAmount: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * Source account details
-     */
-    source: TransactionsAPI.TransactionSourceOneOf;
-
-    type: 'OUTGOING';
-
-    /**
-     * Number of sending currency units per receiving currency unit.
-     */
-    exchangeRate?: number;
-
-    /**
-     * If the transaction failed, this field provides the reason for failure.
-     */
-    failureReason?:
-      | 'QUOTE_EXPIRED'
-      | 'QUOTE_EXECUTION_FAILED'
-      | 'LIGHTNING_PAYMENT_FAILED'
-      | 'FUNDING_AMOUNT_MISMATCH'
-      | 'COUNTERPARTY_POST_TX_FAILED'
-      | 'TIMEOUT';
-
-    /**
-     * The fees associated with the quote in the smallest unit of the sending currency
-     * (eg. cents).
-     */
-    fees?: number;
-
-    /**
-     * Payment instructions for executing the payment.
-     */
-    paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
-
-    /**
-     * The ID of the quote that was used to trigger this payment
-     */
-    quoteId?: string;
-
-    /**
-     * Details about the rate and fees for the transaction.
-     */
-    rateDetails?: QuotesAPI.OutgoingRateDetails;
-
-    /**
-     * Amount to be received by recipient in the recipient's currency
-     */
-    receivedAmount?: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * The refund if transaction was refunded.
-     */
-    refund?: OutgoingTransaction.Refund;
-
-    /**
-     * Status of an outgoing payment transaction.
-     *
-     * | Status       | Description                                             |
-     * | ------------ | ------------------------------------------------------- |
-     * | `PENDING`    | Quote is pending confirmation                           |
-     * | `EXPIRED`    | Quote wasn't executed before expiry window              |
-     * | `PROCESSING` | Executing the quote after receiving funds               |
-     * | `COMPLETED`  | Payout successfully reached the destination             |
-     * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
-     */
-    status?: 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
-  }
-
-  export namespace OutgoingTransaction {
-    /**
-     * The refund if transaction was refunded.
-     */
-    export interface Refund {
-      /**
-       * When the refund was initiated
-       */
-      initiatedAt: string;
-
-      /**
-       * The unique reference ID of the refund
-       */
-      reference: string;
-
-      /**
-       * Current status of the refund
-       */
-      status: 'PENDING' | 'COMPLETED' | 'FAILED';
-
-      /**
-       * Reason for the refund
-       */
-      reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION';
-
-      /**
-       * When the refund was settled
-       */
-      settledAt?: string;
-    }
-  }
-}
-
 export interface TransferOutCreateParams {
   /**
    * Body param: Destination external account details
    */
-  destination: TransferOutCreateParams.Destination;
+  destination: TransferInAPI.ExternalAccountReference;
 
   /**
    * Body param: Source internal account details
    */
-  source: TransferOutCreateParams.Source;
+  source: TransferInAPI.InternalAccountReference;
 
   /**
    * Body param: Amount in the smallest unit of the currency (e.g., cents for
@@ -181,31 +66,6 @@ export interface TransferOutCreateParams {
   'Idempotency-Key'?: string;
 }
 
-export namespace TransferOutCreateParams {
-  /**
-   * Destination external account details
-   */
-  export interface Destination {
-    /**
-     * Reference to an external account ID
-     */
-    accountId: string;
-  }
-
-  /**
-   * Source internal account details
-   */
-  export interface Source {
-    /**
-     * Reference to an internal account ID
-     */
-    accountId: string;
-  }
-}
-
 export declare namespace TransferOut {
-  export {
-    type TransferOutCreateResponse as TransferOutCreateResponse,
-    type TransferOutCreateParams as TransferOutCreateParams,
-  };
+  export { type TransferOutCreateParams as TransferOutCreateParams };
 }

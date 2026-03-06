@@ -5,6 +5,7 @@ import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
 import * as TransactionsAPI from '../transactions';
 import * as TransferInAPI from '../transfer-in';
+import * as ExternalAccountsAPI from '../customers/external-accounts';
 import * as InternalAccountsAPI from './internal-accounts';
 import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
 import * as UmaAPI from './uma';
@@ -31,18 +32,42 @@ export class Sandbox extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.sandbox.sendFunds({
+   * const outgoingTransaction = await client.sandbox.sendFunds({
    *   currencyCode: 'USD',
    *   quoteId: 'Quote:019542f5-b3e7-1d02-0000-000000000006',
    * });
    * ```
    */
-  sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<SandboxSendFundsResponse> {
+  sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<OutgoingTransaction> {
     return this._client.post('/sandbox/send', { body, ...options });
   }
 }
 
-export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction, 'status' | 'type'> {
+export interface OutgoingTransaction {
+  /**
+   * Unique identifier for the transaction
+   */
+  id: string;
+
+  /**
+   * System ID of the customer (sender for outgoing, recipient for incoming)
+   */
+  customerId: string;
+
+  /**
+   * Destination account details
+   */
+  destination:
+    | OutgoingTransaction.AccountTransactionDestination
+    | OutgoingTransaction.UmaAddressTransactionDestination
+    | OutgoingTransaction.ExternalAccountDetailsTransactionDestination;
+
+  /**
+   * Platform-specific ID of the customer (sender for outgoing, recipient for
+   * incoming)
+   */
+  platformCustomerId: string;
+
   /**
    * Amount sent in the sender's currency
    */
@@ -53,7 +78,46 @@ export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction
    */
   source: TransactionsAPI.TransactionSourceOneOf;
 
-  type: 'OUTGOING';
+  /**
+   * Status of an outgoing payment transaction.
+   *
+   * | Status       | Description                                             |
+   * | ------------ | ------------------------------------------------------- |
+   * | `PENDING`    | Quote is pending confirmation                           |
+   * | `EXPIRED`    | Quote wasn't executed before expiry window              |
+   * | `PROCESSING` | Executing the quote after receiving funds               |
+   * | `COMPLETED`  | Payout successfully reached the destination             |
+   * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+   */
+  status:
+    | 'PENDING'
+    | 'EXPIRED'
+    | 'PROCESSING'
+    | 'COMPLETED'
+    | 'FAILED'
+    | 'CREATED'
+    | 'SENT'
+    | 'REJECTED'
+    | 'REFUNDED';
+
+  type: 'OUTGOING' | 'INCOMING';
+
+  /**
+   * Additional information about the counterparty, if available and relevant to the
+   * transaction and platform. Only applicable for transactions to/from UMA
+   * addresses.
+   */
+  counterpartyInformation?: { [key: string]: unknown };
+
+  /**
+   * When the transaction was created
+   */
+  createdAt?: string;
+
+  /**
+   * Optional memo or description for the payment
+   */
+  description?: string;
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -100,23 +164,55 @@ export interface SandboxSendFundsResponse extends Omit<TransferInAPI.Transaction
   /**
    * The refund if transaction was refunded.
    */
-  refund?: SandboxSendFundsResponse.Refund;
+  refund?: OutgoingTransaction.Refund;
 
   /**
-   * Status of an outgoing payment transaction.
-   *
-   * | Status       | Description                                             |
-   * | ------------ | ------------------------------------------------------- |
-   * | `PENDING`    | Quote is pending confirmation                           |
-   * | `EXPIRED`    | Quote wasn't executed before expiry window              |
-   * | `PROCESSING` | Executing the quote after receiving funds               |
-   * | `COMPLETED`  | Payout successfully reached the destination             |
-   * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+   * When the payment was or will be settled
    */
-  status?: 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+  settledAt?: string;
+
+  /**
+   * When the transaction was last updated
+   */
+  updatedAt?: string;
 }
 
-export namespace SandboxSendFundsResponse {
+export namespace OutgoingTransaction {
+  /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination extends TransferInAPI.BaseTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
+  }
+
+  /**
+   * Transaction destination where external account details were provided inline at
+   * quote creation rather than using a pre-registered external account.
+   */
+  export interface ExternalAccountDetailsTransactionDestination
+    extends TransferInAPI.BaseTransactionDestination {
+    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
+
+    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
+  }
+
   /**
    * The refund if transaction was refunded.
    */
@@ -172,7 +268,7 @@ Sandbox.Webhooks = Webhooks;
 
 export declare namespace Sandbox {
   export {
-    type SandboxSendFundsResponse as SandboxSendFundsResponse,
+    type OutgoingTransaction as OutgoingTransaction,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 
