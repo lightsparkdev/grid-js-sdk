@@ -56,7 +56,7 @@ const quote = await client.quotes.create({
     accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
     destinationType: 'ACCOUNT',
   },
-  lockedCurrencyAmount: 10000,
+  lockedCurrencyAmount: 1,
   lockedCurrencySide: 'SENDING',
   source: {
     accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -85,7 +85,7 @@ const params: LightsparkGrid.QuoteCreateParams = {
     accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
     destinationType: 'ACCOUNT',
   },
-  lockedCurrencyAmount: 10000,
+  lockedCurrencyAmount: 1,
   lockedCurrencySide: 'SENDING',
   source: {
     accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -140,7 +140,7 @@ const quote = await client.quotes
       accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
       destinationType: 'ACCOUNT',
     },
-    lockedCurrencyAmount: 10000,
+    lockedCurrencyAmount: 1,
     lockedCurrencySide: 'SENDING',
     source: {
       accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -189,7 +189,7 @@ const client = new LightsparkGrid({
 // Or, configure per-request:
 await client.quotes.create({
   destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
-  lockedCurrencyAmount: 10000,
+  lockedCurrencyAmount: 1,
   lockedCurrencySide: 'SENDING',
   source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
 }, {
@@ -211,7 +211,7 @@ const client = new LightsparkGrid({
 // Override per-request:
 await client.quotes.create({
   destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
-  lockedCurrencyAmount: 10000,
+  lockedCurrencyAmount: 1,
   lockedCurrencySide: 'SENDING',
   source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
 }, {
@@ -274,7 +274,7 @@ const response = await client.quotes
       accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
       destinationType: 'ACCOUNT',
     },
-    lockedCurrencyAmount: 10000,
+    lockedCurrencyAmount: 1,
     lockedCurrencySide: 'SENDING',
     source: {
       accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -291,7 +291,7 @@ const { data: quote, response: raw } = await client.quotes
       accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
       destinationType: 'ACCOUNT',
     },
-    lockedCurrencyAmount: 10000,
+    lockedCurrencyAmount: 1,
     lockedCurrencySide: 'SENDING',
     source: {
       accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
