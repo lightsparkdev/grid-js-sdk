@@ -81,7 +81,9 @@ export {
 export {
   Transactions,
   type BaseTransactionSource,
+  type IncomingRateDetails,
   type IncomingTransaction,
+  type ReconciliationInstructions,
   type TransactionSourceOneOf,
   type TransactionStatus,
   type TransactionType,

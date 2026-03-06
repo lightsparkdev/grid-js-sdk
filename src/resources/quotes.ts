@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import * as PlatformExternalAccountsAPI from './platform/external-accounts';
 import { APIPromise } from '../core/api-promise';
@@ -210,11 +209,11 @@ export interface OutgoingRateDetails {
 export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.PaymentUsdAccountInfo
-    | PaymentInstructions.PaymentBrlAccountInfo
+    | PlatformExternalAccountsAPI.BrlAccountInfo
     | PaymentInstructions.PaymentMxnAccountInfo
     | PaymentInstructions.PaymentDkkAccountInfo
     | PaymentInstructions.PaymentEurAccountInfo
-    | PaymentInstructions.PaymentInrAccountInfo
+    | PlatformExternalAccountsAPI.InrAccountInfo
     | PaymentInstructions.PaymentNgnAccountInfo
     | PaymentInstructions.PaymentCadAccountInfo
     | PaymentInstructions.PaymentGbpAccountInfo
@@ -244,145 +243,33 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentUsdAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.UsdAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentUsdAccountInfo extends PlatformExternalAccountsAPI.UsdAccountInfo {}
 
-  export interface PaymentBrlAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.BrlAccountInfo {}
+  export interface PaymentMxnAccountInfo extends PlatformExternalAccountsAPI.MxnAccountInfo {}
 
-  export interface PaymentMxnAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.MxnAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentDkkAccountInfo extends PlatformExternalAccountsAPI.DkkAccountInfo {}
 
-  export interface PaymentDkkAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.DkkAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
-
-  export interface PaymentEurAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.EurAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
-
-  export interface PaymentInrAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.InrAccountInfo {}
+  export interface PaymentEurAccountInfo extends PlatformExternalAccountsAPI.EurAccountInfo {}
 
   export interface PaymentNgnAccountInfo extends PlatformExternalAccountsAPI.NgnAccountInfo {}
 
-  export interface PaymentCadAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.CadAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentCadAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
 
-  export interface PaymentGbpAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.GbpAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentGbpAccountInfo extends PlatformExternalAccountsAPI.GbpAccountInfo {}
 
-  export interface PaymentHkdAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.HkdAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentHkdAccountInfo extends PlatformExternalAccountsAPI.HkdAccountInfo {}
 
-  export interface PaymentIdrAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.IdrAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentIdrAccountInfo extends PlatformExternalAccountsAPI.IdrAccountInfo {}
 
-  export interface PaymentMyrAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.MyrAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentMyrAccountInfo extends PlatformExternalAccountsAPI.MyrAccountInfo {}
 
-  export interface PaymentPhpAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.PhpAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentPhpAccountInfo extends PlatformExternalAccountsAPI.PhpAccountInfo {}
 
-  export interface PaymentSgdAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.SgdAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentSgdAccountInfo extends PlatformExternalAccountsAPI.SgdAccountInfo {}
 
-  export interface PaymentThbAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.ThbAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentThbAccountInfo extends PlatformExternalAccountsAPI.ThbAccountInfo {}
 
-  export interface PaymentVndAccountInfo
-    extends QuotesAPI.BasePaymentAccountInfo,
-      PlatformExternalAccountsAPI.VndAccountInfo {
-    /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-  }
+  export interface PaymentVndAccountInfo extends PlatformExternalAccountsAPI.VndAccountInfo {}
 
   export interface PaymentSparkWalletInfo {
     accountType: 'SPARK_WALLET';

@@ -74,7 +74,9 @@ import {
 } from './resources/tokens';
 import {
   BaseTransactionSource,
+  IncomingRateDetails,
   IncomingTransaction,
+  ReconciliationInstructions,
   TransactionApproveParams,
   TransactionListParams,
   TransactionRejectParams,
@@ -1070,7 +1072,9 @@ export declare namespace LightsparkGrid {
   export {
     Transactions as Transactions,
     type BaseTransactionSource as BaseTransactionSource,
+    type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
+    type ReconciliationInstructions as ReconciliationInstructions,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
