@@ -9,6 +9,7 @@ import * as TransactionsAPI from './transactions';
 import * as TransferInAPI from './transfer-in';
 import * as CustomersAPI from './customers/customers';
 import * as ExternalAccountsAPI from './customers/external-accounts';
+import * as InternalAccountsAPI from './sandbox/internal-accounts';
 
 export class Webhooks extends APIResource {
   unwrap(body: string): UnwrapWebhookEvent {
@@ -46,6 +47,11 @@ export interface IncomingPaymentWebhookEvent {
     | 'CUSTOMER.KYC_SUBMITTED'
     | 'CUSTOMER.KYC_MANUALLY_APPROVED'
     | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -94,6 +100,11 @@ export interface OutgoingPaymentWebhookEvent {
     | 'CUSTOMER.KYC_SUBMITTED'
     | 'CUSTOMER.KYC_MANUALLY_APPROVED'
     | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -216,12 +227,6 @@ export interface TestWebhookWebhookEvent {
   id: string;
 
   /**
-   * The resource object. Contains the full resource as the corresponding GET
-   * endpoint would return it.
-   */
-  data: unknown;
-
-  /**
    * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
@@ -244,6 +249,11 @@ export interface TestWebhookWebhookEvent {
     | 'CUSTOMER.KYC_SUBMITTED'
     | 'CUSTOMER.KYC_MANUALLY_APPROVED'
     | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -282,6 +292,11 @@ export interface BulkUploadWebhookEvent {
     | 'CUSTOMER.KYC_SUBMITTED'
     | 'CUSTOMER.KYC_MANUALLY_APPROVED'
     | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'TEST';
@@ -343,7 +358,7 @@ export interface InvitationClaimedWebhookEvent {
    */
   id: string;
 
-  data: InvitationClaimedWebhookEvent.Data;
+  data: InvitationsAPI.UmaInvitation;
 
   /**
    * ISO 8601 timestamp of when the webhook was sent
@@ -368,75 +383,15 @@ export interface InvitationClaimedWebhookEvent {
     | 'CUSTOMER.KYC_SUBMITTED'
     | 'CUSTOMER.KYC_MANUALLY_APPROVED'
     | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'TEST';
-}
-
-export namespace InvitationClaimedWebhookEvent {
-  export interface Data {
-    /**
-     * The unique code of the invitation
-     */
-    code: string;
-
-    /**
-     * When the invitation was created
-     */
-    createdAt: string;
-
-    /**
-     * The UMA address of the inviter
-     */
-    inviterUma: string;
-
-    /**
-     * The status of the invitation
-     */
-    status: 'PENDING' | 'CLAIMED' | 'EXPIRED' | 'CANCELLED';
-
-    /**
-     * The URL where this invitation can be claimed.
-     */
-    url: string;
-
-    /**
-     * The amount to send to the invitee when the invitation is claimed. This is
-     * optional and if not provided, the invitee will not receive any amount. Note that
-     * the actual sending of the amount must be done by the inviter platform once the
-     * INVITATION_CLAIMED webhook is received. If the inviter platform either does not
-     * send the payment or the payment fails, the invitee will not receive this amount.
-     * This field is primarily used for display purposes on the claiming side of the
-     * invitation. This field is useful for "send-by-link" style customer flows where
-     * an inviter can send a payment simply by sharing a link without knowing the
-     * receiver's UMA address. Note that these sends can only be sender-locked, meaning
-     * that the sender will not know ahead of time how much the receiver will receive
-     * in the receiving currency.
-     */
-    amountToSend?: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * When the invitation was claimed if it has been claimed
-     */
-    claimedAt?: string;
-
-    /**
-     * When the invitation expires (if at all)
-     */
-    expiresAt?: string;
-
-    /**
-     * The inviter's first name. Will be displayed when the recipient clicks the invite
-     * link
-     */
-    firstName?: string;
-
-    /**
-     * The UMA address of the invitee
-     */
-    inviteeUma?: string;
-  }
 }
 
 export interface KYCStatusWebhookEvent {
@@ -469,6 +424,11 @@ export interface KYCStatusWebhookEvent {
     | 'INCOMING_PAYMENT.PENDING'
     | 'INCOMING_PAYMENT.COMPLETED'
     | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -493,9 +453,164 @@ export namespace KYCStatusWebhookEvent {
     fullName?: string;
 
     /**
+     * The current KYC status of a customer
+     */
+    kycStatus?:
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
+
+    /**
      * Country code (ISO 3166-1 alpha-2)
      */
     nationality?: string;
+  }
+}
+
+export interface KYBStatusWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data: KYBStatusWebhookEvent.Data;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type:
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_SUBMITTED'
+    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
+}
+
+export namespace KYBStatusWebhookEvent {
+  export interface Data extends CustomersAPI.Customer {
+    customerType: 'BUSINESS';
+
+    address?: ExternalAccountsAPI.Address;
+
+    beneficialOwners?: Array<Data.BeneficialOwner>;
+
+    businessInfo?: Data.BusinessInfo;
+
+    /**
+     * The current KYB status of a business customer
+     */
+    kybStatus?:
+      | 'AWAITING_SUBMISSION'
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
+  }
+
+  export namespace Data {
+    export interface BeneficialOwner {
+      /**
+       * Individual's full name
+       */
+      fullName: string;
+
+      /**
+       * Type of individual in the corporation
+       */
+      individualType:
+        | 'DIRECTOR'
+        | 'CONTROL_PERSON'
+        | 'BUSINESS_POINT_OF_CONTACT'
+        | 'TRUSTEE'
+        | 'SETTLOR'
+        | 'GENERAL_PARTNER';
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * Date of birth in ISO 8601 format (YYYY-MM-DD)
+       */
+      birthDate?: string;
+
+      /**
+       * Email address of the individual
+       */
+      emailAddress?: string;
+
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      nationality?: string;
+
+      /**
+       * Percent of ownership when individual type is beneficial owner
+       */
+      percentageOwnership?: number;
+
+      /**
+       * Phone number of the individual in E.164 format
+       */
+      phoneNumber?: string;
+
+      /**
+       * Tax identification number of the individual. This could be a Social Security
+       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
+       * individuals, or a Passport Number.
+       */
+      taxId?: string;
+
+      /**
+       * Title at company
+       */
+      title?: string;
+    }
+
+    export interface BusinessInfo {
+      /**
+       * Legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * Business registration number
+       */
+      registrationNumber?: string;
+
+      /**
+       * Tax identification number
+       */
+      taxId?: string;
+    }
   }
 }
 
@@ -505,7 +620,7 @@ export interface InternalAccountStatusWebhookEvent {
    */
   id: string;
 
-  data: InternalAccountStatusWebhookEvent.Data;
+  data: InternalAccountsAPI.InternalAccount;
 
   /**
    * ISO 8601 timestamp of when the webhook was sent
@@ -530,42 +645,15 @@ export interface InternalAccountStatusWebhookEvent {
     | 'CUSTOMER.KYC_SUBMITTED'
     | 'CUSTOMER.KYC_MANUALLY_APPROVED'
     | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_SUBMITTED'
+    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
+    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'TEST';
-}
-
-export namespace InternalAccountStatusWebhookEvent {
-  export interface Data {
-    /**
-     * The ID of the internal account
-     */
-    id: string;
-
-    balance: InvitationsAPI.CurrencyAmount;
-
-    /**
-     * Timestamp when the internal account was created
-     */
-    createdAt: string;
-
-    /**
-     * Payment instructions for funding the account
-     */
-    fundingPaymentInstructions: Array<QuotesAPI.PaymentInstructions>;
-
-    /**
-     * Timestamp when the internal account was last updated
-     */
-    updatedAt: string;
-
-    /**
-     * The ID of the customer associated with the internal account. If this field is
-     * empty, the internal account belongs to the platform.
-     */
-    customerId?: string;
-  }
 }
 
 export type UnwrapWebhookEvent =
@@ -575,6 +663,7 @@ export type UnwrapWebhookEvent =
   | BulkUploadWebhookEvent
   | InvitationClaimedWebhookEvent
   | KYCStatusWebhookEvent
+  | KYBStatusWebhookEvent
   | InternalAccountStatusWebhookEvent;
 
 export declare namespace Webhooks {
@@ -585,6 +674,7 @@ export declare namespace Webhooks {
     type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
     type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
+    type KYBStatusWebhookEvent as KYBStatusWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };

@@ -223,18 +223,6 @@ export interface Customer {
   isDeleted?: boolean;
 
   /**
-   * The current KYC status of a customer
-   */
-  kycStatus?:
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'PENDING_REVIEW'
-    | 'EXPIRED'
-    | 'CANCELED'
-    | 'MANUALLY_APPROVED'
-    | 'MANUALLY_REJECTED';
-
-  /**
    * Last update timestamp
    */
   updatedAt?: string;
@@ -276,6 +264,18 @@ export namespace CustomerOneOf {
     fullName?: string;
 
     /**
+     * The current KYC status of a customer
+     */
+    kycStatus?:
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
+
+    /**
      * Country code (ISO 3166-1 alpha-2)
      */
     nationality?: string;
@@ -289,6 +289,19 @@ export namespace CustomerOneOf {
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
     businessInfo?: BusinessCustomer.BusinessInfo;
+
+    /**
+     * The current KYB status of a business customer
+     */
+    kybStatus?:
+      | 'AWAITING_SUBMISSION'
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
   }
 
   export namespace BusinessCustomer {
@@ -416,6 +429,18 @@ export namespace CustomerCreateParams {
     fullName?: string;
 
     /**
+     * The current KYC status of a customer
+     */
+    kycStatus?:
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
+
+    /**
      * Country code (ISO 3166-1 alpha-2)
      */
     nationality?: string;
@@ -429,6 +454,19 @@ export namespace CustomerCreateParams {
     beneficialOwners?: Array<BusinessCustomerCreateRequest.BeneficialOwner>;
 
     businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
+
+    /**
+     * The current KYB status of a business customer
+     */
+    kybStatus?:
+      | 'AWAITING_SUBMISSION'
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
   }
 
   export namespace BusinessCustomerCreateRequest {
@@ -531,6 +569,18 @@ export namespace CustomerUpdateParams {
     fullName?: string;
 
     /**
+     * The current KYC status of a customer
+     */
+    kycStatus?:
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
+
+    /**
      * Country code (ISO 3166-1 alpha-2)
      */
     nationality?: string;
@@ -547,6 +597,19 @@ export namespace CustomerUpdateParams {
      * Additional information for business entities
      */
     businessInfo?: BusinessCustomerUpdateRequest.BusinessInfo;
+
+    /**
+     * The current KYB status of a business customer
+     */
+    kybStatus?:
+      | 'AWAITING_SUBMISSION'
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'PENDING_REVIEW'
+      | 'EXPIRED'
+      | 'CANCELED'
+      | 'MANUALLY_APPROVED'
+      | 'MANUALLY_REJECTED';
   }
 
   export namespace BusinessCustomerUpdateRequest {
