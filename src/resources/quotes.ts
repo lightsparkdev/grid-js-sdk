@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as QuotesAPI from './quotes';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import * as PlatformExternalAccountsAPI from './platform/external-accounts';
 import { APIPromise } from '../core/api-promise';
@@ -135,11 +136,19 @@ export class Quotes extends APIResource {
 
 export type QuotesDefaultPagination = DefaultPagination<Quote>;
 
-export type BaseDestination = unknown;
+export interface BaseDestination {
+  /**
+   * Type of payment destination
+   */
+  destinationType: 'ACCOUNT' | 'UMA_ADDRESS' | 'EXTERNAL_ACCOUNT_DETAILS';
+}
 
-export type BasePaymentAccountInfo = unknown;
-
-export type BaseQuoteSource = unknown;
+export interface BaseQuoteSource {
+  /**
+   * Type of quote funding source
+   */
+  sourceType: 'ACCOUNT' | 'REALTIME_FUNDING';
+}
 
 export interface Currency {
   /**
@@ -449,7 +458,7 @@ export namespace QuoteDestinationOneOf {
   /**
    * Destination account details
    */
-  export interface AccountDestination {
+  export interface AccountDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
     /**
      * Destination account identifier
      */
@@ -461,7 +470,7 @@ export namespace QuoteDestinationOneOf {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressDestination {
+  export interface UmaAddressDestination extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -489,7 +498,8 @@ export namespace QuoteDestinationOneOf {
    * the account. Useful for one-off payments to some destination. See the external
    * accounts endpoints for test values in sandbox mode.
    */
-  export interface ExternalAccountDetailsDestination {
+  export interface ExternalAccountDetailsDestination
+    extends Omit<QuotesAPI.BaseDestination, 'destinationType'> {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
@@ -507,7 +517,7 @@ export namespace QuoteSourceOneOf {
   /**
    * Source account details
    */
-  export interface AccountQuoteSource {
+  export interface AccountQuoteSource extends Omit<QuotesAPI.BaseQuoteSource, 'sourceType'> {
     /**
      * Source account identifier
      */
@@ -530,7 +540,7 @@ export namespace QuoteSourceOneOf {
    * option is only valid for instant payment methods. Do not try to fund a quote
    * with a non-instant payment method (ACH, etc.).
    */
-  export interface RealtimeFundingQuoteSource {
+  export interface RealtimeFundingQuoteSource extends Omit<QuotesAPI.BaseQuoteSource, 'sourceType'> {
     /**
      * Currency code for the funding source. See
      * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
@@ -686,7 +696,6 @@ export interface QuoteListParams extends DefaultPaginationParams {
 export declare namespace Quotes {
   export {
     type BaseDestination as BaseDestination,
-    type BasePaymentAccountInfo as BasePaymentAccountInfo,
     type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,

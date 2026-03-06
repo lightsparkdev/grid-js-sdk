@@ -3,7 +3,6 @@
 import { APIResource } from '../../core/resource';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
-  BaseExternalAccountInfo,
   BrlAccountInfo,
   CadAccountInfo,
   DkkAccountInfo,
@@ -83,7 +82,6 @@ export declare namespace Platform {
 
   export {
     ExternalAccounts as ExternalAccounts,
-    type BaseExternalAccountInfo as BaseExternalAccountInfo,
     type BrlAccountInfo as BrlAccountInfo,
     type CadAccountInfo as CadAccountInfo,
     type DkkAccountInfo as DkkAccountInfo,

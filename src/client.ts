@@ -42,7 +42,6 @@ import {
 } from './resources/plaid';
 import {
   BaseDestination,
-  BasePaymentAccountInfo,
   BaseQuoteSource,
   Currency,
   OutgoingRateDetails,
@@ -76,6 +75,8 @@ import {
   BaseTransactionSource,
   IncomingRateDetails,
   IncomingTransaction,
+  OutgoingTransaction,
+  OutgoingTransactionStatus,
   ReconciliationInstructions,
   TransactionApproveParams,
   TransactionListParams,
@@ -135,7 +136,11 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { OutgoingTransaction, Sandbox, SandboxSendFundsParams } from './resources/sandbox/sandbox';
+import {
+  OutgoingTransaction as SandboxAPIOutgoingTransaction,
+  Sandbox,
+  SandboxSendFundsParams,
+} from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -1056,7 +1061,6 @@ export declare namespace LightsparkGrid {
   export {
     Quotes as Quotes,
     type BaseDestination as BaseDestination,
-    type BasePaymentAccountInfo as BasePaymentAccountInfo,
     type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
@@ -1074,6 +1078,8 @@ export declare namespace LightsparkGrid {
     type BaseTransactionSource as BaseTransactionSource,
     type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
+    type OutgoingTransaction as OutgoingTransaction,
+    type OutgoingTransactionStatus as OutgoingTransactionStatus,
     type ReconciliationInstructions as ReconciliationInstructions,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
@@ -1093,7 +1099,7 @@ export declare namespace LightsparkGrid {
 
   export {
     Sandbox as Sandbox,
-    type OutgoingTransaction as OutgoingTransaction,
+    type SandboxAPIOutgoingTransaction as OutgoingTransaction,
     type SandboxSendFundsParams as SandboxSendFundsParams,
   };
 

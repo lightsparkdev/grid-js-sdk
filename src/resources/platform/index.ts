@@ -2,7 +2,6 @@
 
 export {
   ExternalAccounts,
-  type BaseExternalAccountInfo,
   type BrlAccountInfo,
   type CadAccountInfo,
   type DkkAccountInfo,
