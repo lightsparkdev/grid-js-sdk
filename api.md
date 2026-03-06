@@ -313,7 +313,6 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">KYCStatusWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">KYBStatusWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 

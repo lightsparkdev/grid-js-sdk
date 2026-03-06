@@ -106,7 +106,6 @@ import {
   IncomingPaymentWebhookEvent,
   InternalAccountStatusWebhookEvent,
   InvitationClaimedWebhookEvent,
-  KYBStatusWebhookEvent,
   KYCStatusWebhookEvent,
   OutgoingPaymentWebhookEvent,
   TestWebhookWebhookEvent,
@@ -1125,7 +1124,6 @@ export declare namespace LightsparkGrid {
     type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
     type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
-    type KYBStatusWebhookEvent as KYBStatusWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
