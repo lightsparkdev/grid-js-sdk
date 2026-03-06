@@ -115,7 +115,7 @@ export {
   type TestWebhookWebhookEvent,
   type BulkUploadWebhookEvent,
   type InvitationClaimedWebhookEvent,
-  type KYCStatusWebhookEvent,
+  type CustomerUpdateWebhookEvent,
   type InternalAccountStatusWebhookEvent,
   type UnwrapWebhookEvent,
 } from './webhooks';
