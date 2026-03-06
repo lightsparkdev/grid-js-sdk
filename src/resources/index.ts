@@ -106,6 +106,7 @@ export {
   type BulkUploadWebhookEvent,
   type InvitationClaimedWebhookEvent,
   type KYCStatusWebhookEvent,
+  type KYBStatusWebhookEvent,
   type InternalAccountStatusWebhookEvent,
   type UnwrapWebhookEvent,
 } from './webhooks';
