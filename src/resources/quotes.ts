@@ -815,6 +815,14 @@ export namespace Quote {
     sourceType: 'REALTIME_FUNDING';
 
     /**
+     * The crypto network to use for the funding source. Required when `currency` is a
+     * stablecoin (e.g. USDC, USDT). Specifies which network the customer will deposit
+     * on, so the correct deposit address can be generated. Example values:
+     * `SOLANA_MAINNET`, `SOLANA_DEVNET`, `ETHEREUM_MAINNET`.
+     */
+    cryptoNetwork?: string;
+
+    /**
      * Source customer ID. If this transaction is being initiated on behalf of a
      * customer, this is required. If customerId is not provided, the quote will be
      * created on behalf of the platform itself.
@@ -997,6 +1005,14 @@ export namespace QuoteCreateParams {
     currency: string;
 
     sourceType: 'REALTIME_FUNDING';
+
+    /**
+     * The crypto network to use for the funding source. Required when `currency` is a
+     * stablecoin (e.g. USDC, USDT). Specifies which network the customer will deposit
+     * on, so the correct deposit address can be generated. Example values:
+     * `SOLANA_MAINNET`, `SOLANA_DEVNET`, `ETHEREUM_MAINNET`.
+     */
+    cryptoNetwork?: string;
 
     /**
      * Source customer ID. If this transaction is being initiated on behalf of a
