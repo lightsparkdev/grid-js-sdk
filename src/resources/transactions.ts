@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as TransactionsAPI from './transactions';
 import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
@@ -93,11 +92,6 @@ export class Transactions extends APIResource {
 }
 
 export interface BaseTransactionSource {
-  /**
-   * Type of transaction source
-   */
-  sourceType: 'ACCOUNT' | 'UMA_ADDRESS' | 'REALTIME_FUNDING';
-
   /**
    * Currency code for the source
    */
@@ -243,8 +237,7 @@ export namespace IncomingTransaction {
   /**
    * Destination account details
    */
-  export interface AccountTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface AccountTransactionDestination {
     /**
      * Destination account identifier
      */
@@ -256,8 +249,7 @@ export namespace IncomingTransaction {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface UmaAddressTransactionDestination {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -270,8 +262,7 @@ export namespace IncomingTransaction {
    * Transaction destination where external account details were provided inline at
    * quote creation rather than using a pre-registered external account.
    */
-  export interface ExternalAccountDetailsTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface ExternalAccountDetailsTransactionDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
@@ -407,8 +398,7 @@ export namespace OutgoingTransaction {
   /**
    * Destination account details
    */
-  export interface AccountTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface AccountTransactionDestination {
     /**
      * Destination account identifier
      */
@@ -420,8 +410,7 @@ export namespace OutgoingTransaction {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface UmaAddressTransactionDestination {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -434,8 +423,7 @@ export namespace OutgoingTransaction {
    * Transaction destination where external account details were provided inline at
    * quote creation rather than using a pre-registered external account.
    */
-  export interface ExternalAccountDetailsTransactionDestination
-    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
+  export interface ExternalAccountDetailsTransactionDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
@@ -505,8 +493,7 @@ export namespace TransactionSourceOneOf {
   /**
    * Source account details
    */
-  export interface AccountTransactionSource
-    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+  export interface AccountTransactionSource {
     /**
      * Source account identifier
      */
@@ -518,8 +505,7 @@ export namespace TransactionSourceOneOf {
   /**
    * UMA address source details
    */
-  export interface UmaAddressTransactionSource
-    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+  export interface UmaAddressTransactionSource {
     sourceType: 'UMA_ADDRESS';
 
     /**
@@ -532,8 +518,7 @@ export namespace TransactionSourceOneOf {
    * Transaction was funded using a real-time funding source (RTP, SEPA Instant,
    * Spark, Stables, etc.).
    */
-  export interface RealtimeFundingTransactionSource
-    extends Omit<TransactionsAPI.BaseTransactionSource, 'sourceType'> {
+  export interface RealtimeFundingTransactionSource {
     /**
      * Currency code for the funding source
      */
