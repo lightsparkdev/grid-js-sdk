@@ -2,7 +2,6 @@
 
 import { APIResource } from '../core/resource';
 import * as TransactionsAPI from './transactions';
-import * as SandboxAPI from './sandbox/sandbox';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -74,7 +73,7 @@ export interface InternalAccountReference {
   accountId: string;
 }
 
-export type Transaction = TransactionsAPI.IncomingTransaction | SandboxAPI.OutgoingTransaction;
+export type Transaction = TransactionsAPI.IncomingTransaction | TransactionsAPI.OutgoingTransaction;
 
 export interface TransferInCreateParams {
   /**

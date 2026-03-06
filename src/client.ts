@@ -136,11 +136,7 @@ import {
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import {
-  OutgoingTransaction as SandboxAPIOutgoingTransaction,
-  Sandbox,
-  SandboxSendFundsParams,
-} from './resources/sandbox/sandbox';
+import { Sandbox, SandboxSendFundsParams } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -1097,11 +1093,7 @@ export declare namespace LightsparkGrid {
     type InvitationClaimParams as InvitationClaimParams,
   };
 
-  export {
-    Sandbox as Sandbox,
-    type SandboxAPIOutgoingTransaction as OutgoingTransaction,
-    type SandboxSendFundsParams as SandboxSendFundsParams,
-  };
+  export { Sandbox as Sandbox, type SandboxSendFundsParams as SandboxSendFundsParams };
 
   export {
     UmaProviders as UmaProviders,

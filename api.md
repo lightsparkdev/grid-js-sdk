@@ -239,10 +239,6 @@ Methods:
 
 # Sandbox
 
-Types:
-
-- <code><a href="./src/resources/sandbox/sandbox.ts">OutgoingTransaction</a></code>
-
 Methods:
 
 - <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> OutgoingTransaction</code>
