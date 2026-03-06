@@ -47,6 +47,7 @@ Types:
 
 - <code><a href="./src/resources/customers/external-accounts.ts">Address</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryVerifiedData</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BrlBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BrlExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BusinessBeneficiary</a></code>
@@ -114,7 +115,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/platform/external-accounts.ts">BaseExternalAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">BrlAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">CadAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">DkkAccountInfo</a></code>
@@ -187,7 +187,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/quotes.ts">BaseDestination</a></code>
-- <code><a href="./src/resources/quotes.ts">BasePaymentAccountInfo</a></code>
 - <code><a href="./src/resources/quotes.ts">BaseQuoteSource</a></code>
 - <code><a href="./src/resources/quotes.ts">Currency</a></code>
 - <code><a href="./src/resources/quotes.ts">OutgoingRateDetails</a></code>
@@ -210,6 +209,8 @@ Types:
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingRateDetails</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
+- <code><a href="./src/resources/transactions.ts">OutgoingTransaction</a></code>
+- <code><a href="./src/resources/transactions.ts">OutgoingTransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">ReconciliationInstructions</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>

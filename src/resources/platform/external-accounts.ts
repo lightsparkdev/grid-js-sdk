@@ -82,8 +82,6 @@ export class ExternalAccounts extends APIResource {
   }
 }
 
-export type BaseExternalAccountInfo = unknown;
-
 export interface BrlAccountInfo {
   accountType: 'BRL_ACCOUNT';
 
@@ -410,7 +408,6 @@ export interface ExternalAccountListParams {
 
 export declare namespace ExternalAccounts {
   export {
-    type BaseExternalAccountInfo as BaseExternalAccountInfo,
     type BrlAccountInfo as BrlAccountInfo,
     type CadAccountInfo as CadAccountInfo,
     type DkkAccountInfo as DkkAccountInfo,

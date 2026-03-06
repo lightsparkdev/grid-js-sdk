@@ -4,6 +4,7 @@ import { APIResource } from '../../core/resource';
 import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
 import * as TransactionsAPI from '../transactions';
+import * as TransferInAPI from '../transfer-in';
 import * as ExternalAccountsAPI from '../customers/external-accounts';
 import * as InternalAccountsAPI from './internal-accounts';
 import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
@@ -88,16 +89,7 @@ export interface OutgoingTransaction {
    * | `COMPLETED`  | Payout successfully reached the destination             |
    * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
    */
-  status:
-    | 'PENDING'
-    | 'EXPIRED'
-    | 'PROCESSING'
-    | 'COMPLETED'
-    | 'FAILED'
-    | 'CREATED'
-    | 'SENT'
-    | 'REJECTED'
-    | 'REFUNDED';
+  status: TransactionsAPI.OutgoingTransactionStatus;
 
   type: 'OUTGOING' | 'INCOMING';
 
@@ -180,7 +172,8 @@ export namespace OutgoingTransaction {
   /**
    * Destination account details
    */
-  export interface AccountTransactionDestination {
+  export interface AccountTransactionDestination
+    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
     /**
      * Destination account identifier
      */
@@ -192,7 +185,8 @@ export namespace OutgoingTransaction {
   /**
    * UMA address destination details
    */
-  export interface UmaAddressTransactionDestination {
+  export interface UmaAddressTransactionDestination
+    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
     destinationType: 'UMA_ADDRESS';
 
     /**
@@ -205,7 +199,8 @@ export namespace OutgoingTransaction {
    * Transaction destination where external account details were provided inline at
    * quote creation rather than using a pre-registered external account.
    */
-  export interface ExternalAccountDetailsTransactionDestination {
+  export interface ExternalAccountDetailsTransactionDestination
+    extends Omit<TransferInAPI.BaseTransactionDestination, 'destinationType'> {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
 
     externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;

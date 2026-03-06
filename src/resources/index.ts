@@ -48,7 +48,6 @@ export {
 export {
   Quotes,
   type BaseDestination,
-  type BasePaymentAccountInfo,
   type BaseQuoteSource,
   type Currency,
   type OutgoingRateDetails,
@@ -83,6 +82,8 @@ export {
   type BaseTransactionSource,
   type IncomingRateDetails,
   type IncomingTransaction,
+  type OutgoingTransaction,
+  type OutgoingTransactionStatus,
   type ReconciliationInstructions,
   type TransactionSourceOneOf,
   type TransactionStatus,

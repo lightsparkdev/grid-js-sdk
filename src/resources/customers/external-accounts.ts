@@ -132,6 +132,13 @@ export interface BaseWalletInfo {
   address: string;
 }
 
+export interface BeneficiaryVerifiedData {
+  /**
+   * The verified full name of the account holder as returned by the payment rail
+   */
+  fullName?: string;
+}
+
 export interface BrlBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
@@ -290,7 +297,7 @@ export interface ExternalAccount {
   /**
    * Verified beneficiary data returned by the payment rail, if available
    */
-  beneficiaryVerifiedData?: ExternalAccount.BeneficiaryVerifiedData;
+  beneficiaryVerifiedData?: BeneficiaryVerifiedData;
 
   /**
    * The customer this account is tied to, or null if the account is on behalf of the
@@ -313,18 +320,6 @@ export interface ExternalAccount {
    * Optional platform-specific identifier for this account
    */
   platformAccountId?: string;
-}
-
-export namespace ExternalAccount {
-  /**
-   * Verified beneficiary data returned by the payment rail, if available
-   */
-  export interface BeneficiaryVerifiedData {
-    /**
-     * The verified full name of the account holder as returned by the payment rail
-     */
-    fullName?: string;
-  }
 }
 
 export interface ExternalAccountCreate {
@@ -1494,6 +1489,7 @@ export declare namespace ExternalAccounts {
   export {
     type Address as Address,
     type BaseWalletInfo as BaseWalletInfo,
+    type BeneficiaryVerifiedData as BeneficiaryVerifiedData,
     type BrlBeneficiary as BrlBeneficiary,
     type BrlExternalAccountInfo as BrlExternalAccountInfo,
     type BusinessBeneficiary as BusinessBeneficiary,
