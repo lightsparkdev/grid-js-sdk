@@ -32,7 +32,7 @@ For example:
 async function run(client) {
   const quote = await client.quotes.create({
     destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
-    lockedCurrencyAmount: 10000,
+    lockedCurrencyAmount: 1,
     lockedCurrencySide: 'SENDING',
     source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
   });
