@@ -49,11 +49,6 @@ export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
 
 export interface BaseTransactionDestination {
   /**
-   * Type of transaction destination
-   */
-  destinationType: 'ACCOUNT' | 'UMA_ADDRESS' | 'EXTERNAL_ACCOUNT_DETAILS';
-
-  /**
    * Currency code for the destination
    */
   currency?: string;
