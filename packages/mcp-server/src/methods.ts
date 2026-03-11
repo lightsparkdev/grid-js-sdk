@@ -275,6 +275,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/exchange-rates',
   },
   { clientCallName: 'client.webhooks.unwrap', fullyQualifiedName: 'webhooks.unwrap' },
+  {
+    clientCallName: 'client.crypto.estimateWithdrawalFee',
+    fullyQualifiedName: 'crypto.estimateWithdrawalFee',
+    httpMethod: 'post',
+    httpPath: '/crypto/estimate-withdrawal-fee',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

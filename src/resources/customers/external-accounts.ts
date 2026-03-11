@@ -300,6 +300,13 @@ export interface ExternalAccount {
   beneficiaryVerifiedData?: BeneficiaryVerifiedData;
 
   /**
+   * The blockchain network for this external account, if applicable. Present when
+   * the account is a cryptocurrency wallet. Example values: SOLANA_MAINNET,
+   * ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   */
+  cryptoNetwork?: string;
+
+  /**
    * The customer this account is tied to, or null if the account is on behalf of the
    * platform.
    */
@@ -333,6 +340,14 @@ export interface ExternalAccountCreate {
    * The ISO 4217 currency code
    */
   currency: string;
+
+  /**
+   * The blockchain network for this external account. Required when the account is a
+   * cryptocurrency wallet (e.g. SolanaWallet, PolygonWallet, TronWallet). Specifies
+   * which network the wallet is on. Example values: SOLANA_MAINNET, SOLANA_DEVNET,
+   * ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   */
+  cryptoNetwork?: string;
 
   /**
    * The ID of the customer for whom to create the external account. If not provided,
@@ -1442,6 +1457,14 @@ export interface ExternalAccountCreateParams {
    * The ISO 4217 currency code
    */
   currency: string;
+
+  /**
+   * The blockchain network for this external account. Required when the account is a
+   * cryptocurrency wallet (e.g. SolanaWallet, PolygonWallet, TronWallet). Specifies
+   * which network the wallet is on. Example values: SOLANA_MAINNET, SOLANA_DEVNET,
+   * ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   */
+  cryptoNetwork?: string;
 
   /**
    * The ID of the customer for whom to create the external account. If not provided,

@@ -149,6 +149,7 @@ const fuse = new Fuse(
     'client.tokens.retrieve',
     'client.exchangeRates.list',
     'client.webhooks.unwrap',
+    'client.crypto.estimateWithdrawalFee',
   ],
   { threshold: 1, shouldSort: true },
 );

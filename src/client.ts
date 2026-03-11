@@ -26,6 +26,11 @@ import {
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
+import {
+  Crypto,
+  CryptoEstimateWithdrawalFeeParams,
+  CryptoEstimateWithdrawalFeeResponse,
+} from './resources/crypto';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
   CurrencyAmount,
@@ -966,6 +971,10 @@ export class LightsparkGrid {
    */
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  /**
+   * Endpoints for creating and confirming quotes for cross-currency transfers
+   */
+  crypto: API.Crypto = new API.Crypto(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -983,6 +992,7 @@ LightsparkGrid.UmaProviders = UmaProviders;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
 LightsparkGrid.Webhooks = Webhooks;
+LightsparkGrid.Crypto = Crypto;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1127,6 +1137,12 @@ export declare namespace LightsparkGrid {
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
+  };
+
+  export {
+    Crypto as Crypto,
+    type CryptoEstimateWithdrawalFeeResponse as CryptoEstimateWithdrawalFeeResponse,
+    type CryptoEstimateWithdrawalFeeParams as CryptoEstimateWithdrawalFeeParams,
   };
 
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;

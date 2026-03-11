@@ -27,6 +27,7 @@ TEST_PATHS=(
 	tests/api-resources/uma-providers.test.ts
 	tests/api-resources/tokens.test.ts
 	tests/api-resources/exchange-rates.test.ts
+	tests/api-resources/crypto.test.ts
 	tests/index.test.ts
 )
 
