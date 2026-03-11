@@ -9,6 +9,11 @@ export {
   type ConfigUpdateParams,
 } from './config';
 export {
+  Crypto,
+  type CryptoEstimateWithdrawalFeeResponse,
+  type CryptoEstimateWithdrawalFeeParams,
+} from './crypto';
+export {
   Customers,
   type BusinessCustomerFields,
   type BusinessInfo,

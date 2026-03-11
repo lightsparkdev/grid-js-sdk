@@ -63,6 +63,7 @@ describe('resource externalAccounts', () => {
         },
       },
       currency: 'USD',
+      cryptoNetwork: 'SOLANA_MAINNET',
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       defaultUmaDepositAccount: true,
       platformAccountId: 'ext_acc_123456',

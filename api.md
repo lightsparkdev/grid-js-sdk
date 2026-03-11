@@ -319,3 +319,13 @@ Types:
 Methods:
 
 - <code>client.webhooks.<a href="./src/resources/webhooks.ts">unwrap</a>(body) -> void</code>
+
+# Crypto
+
+Types:
+
+- <code><a href="./src/resources/crypto.ts">CryptoEstimateWithdrawalFeeResponse</a></code>
+
+Methods:
+
+- <code title="post /crypto/estimate-withdrawal-fee">client.crypto.<a href="./src/resources/crypto.ts">estimateWithdrawalFee</a>({ ...params }) -> CryptoEstimateWithdrawalFeeResponse</code>
