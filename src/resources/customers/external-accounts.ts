@@ -408,7 +408,8 @@ export type ExternalAccountInfoOneOf =
   | SolanaWalletInfo
   | TronWalletInfo
   | PolygonWalletInfo
-  | BaseWalletInfo;
+  | BaseWalletInfo
+  | ExternalAccountInfoOneOf.AedExternalAccountInfo;
 
 export namespace ExternalAccountInfoOneOf {
   export interface CadExternalAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
@@ -428,7 +429,7 @@ export namespace ExternalAccountInfoOneOf {
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
   }
@@ -554,7 +555,7 @@ export namespace ExternalAccountInfoOneOf {
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
   }
@@ -615,7 +616,7 @@ export namespace ExternalAccountInfoOneOf {
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
   }
@@ -798,7 +799,7 @@ export namespace ExternalAccountInfoOneOf {
     accountType: 'ZAR_ACCOUNT';
 
     /**
-     * Name of the bank
+     * The name of the bank
      */
     bankName: string;
 
@@ -863,13 +864,74 @@ export namespace ExternalAccountInfoOneOf {
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
   }
 
   export namespace ZmwExternalAccountInfo {
     export interface ZmwBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface AedExternalAccountInfo {
+    accountType: 'AED_ACCOUNT';
+
+    beneficiary: AedExternalAccountInfo.AedBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * UAE IBAN (23 characters, starting with AE)
+     */
+    iban: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode?: string;
+  }
+
+  export namespace AedExternalAccountInfo {
+    export interface AedBeneficiary {
       beneficiaryType: 'INDIVIDUAL';
 
       /**

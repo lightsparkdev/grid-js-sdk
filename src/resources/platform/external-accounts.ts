@@ -88,17 +88,17 @@ export interface BrlAccountInfo {
   paymentRails: Array<'PIX'>;
 
   /**
-   * The PIX key of the bank
+   * The PIX key (email, phone, CPF, CNPJ, or random)
    */
   pixKey: string;
 
   /**
-   * The type of PIX key of the bank
+   * The type of PIX key
    */
-  pixKeyType: string;
+  pixKeyType: 'CPF' | 'CNPJ' | 'EMAIL' | 'PHONE' | 'RANDOM';
 
   /**
-   * The tax ID of the bank account
+   * The tax ID (CPF or CNPJ)
    */
   taxId: string;
 }
@@ -128,32 +128,32 @@ export interface DkkAccountInfo {
   accountType: 'DKK_ACCOUNT';
 
   /**
-   * The IBAN of the bank
+   * The IBAN of the bank account
    */
   iban: string;
 
   paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
 
   /**
-   * The SWIFT BIC of the bank
+   * The SWIFT/BIC code of the bank
    */
-  swiftBic?: string;
+  swiftCode?: string;
 }
 
 export interface EurAccountInfo {
   accountType: 'EUR_ACCOUNT';
 
   /**
-   * The IBAN of the bank
+   * The IBAN of the bank account
    */
   iban: string;
 
   paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
 
   /**
-   * The SWIFT BIC of the bank
+   * The SWIFT/BIC code of the bank
    */
-  swiftBic?: string;
+  swiftCode?: string;
 }
 
 export interface GbpAccountInfo {
@@ -167,7 +167,7 @@ export interface GbpAccountInfo {
   paymentRails: Array<'FASTER_PAYMENTS'>;
 
   /**
-   * UK bank sort code (6 digits, may include hyphens)
+   * The UK sort code
    */
   sortCode: string;
 }
@@ -181,14 +181,14 @@ export interface HkdAccountInfo {
   accountType: 'HKD_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The name of the bank
    */
   bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
 }
@@ -202,7 +202,7 @@ export interface IdrAccountInfo {
   accountType: 'IDR_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The name of the bank
    */
   bankName: string;
 
@@ -214,7 +214,7 @@ export interface IdrAccountInfo {
   phoneNumber: string;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
 }
@@ -225,7 +225,7 @@ export interface InrAccountInfo {
   paymentRails: Array<'UPI'>;
 
   /**
-   * The VPA of the bank
+   * The UPI Virtual Payment Address
    */
   vpa: string;
 }
@@ -250,14 +250,14 @@ export interface MyrAccountInfo {
   accountType: 'MYR_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The name of the bank
    */
   bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
 }
@@ -271,7 +271,7 @@ export interface NgnAccountInfo {
   accountType: 'NGN_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The name of the bank
    */
   bankName: string;
 
@@ -310,7 +310,7 @@ export interface SgdAccountInfo {
   paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
 }
@@ -324,14 +324,14 @@ export interface ThbAccountInfo {
   accountType: 'THB_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The name of the bank
    */
   bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
 }
@@ -347,7 +347,7 @@ export interface UsdAccountInfo {
   paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
   /**
-   * The routing number of the bank
+   * The ABA routing number
    */
   routingNumber: string;
 }
@@ -361,14 +361,14 @@ export interface VndAccountInfo {
   accountType: 'VND_ACCOUNT';
 
   /**
-   * Name of the bank
+   * The name of the bank
    */
   bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
-   * SWIFT/BIC code (8 or 11 characters)
+   * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
 }

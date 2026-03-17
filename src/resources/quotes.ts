@@ -222,6 +222,15 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentSgdAccountInfo
     | PaymentInstructions.PaymentThbAccountInfo
     | PaymentInstructions.PaymentVndAccountInfo
+    | PaymentInstructions.PaymentAedAccountInfo
+    | PaymentInstructions.PaymentKesAccountInfo
+    | PaymentInstructions.PaymentMwkAccountInfo
+    | PaymentInstructions.PaymentRwfAccountInfo
+    | PaymentInstructions.PaymentTzsAccountInfo
+    | PaymentInstructions.PaymentUgxAccountInfo
+    | PaymentInstructions.PaymentXofAccountInfo
+    | PaymentInstructions.PaymentZarAccountInfo
+    | PaymentInstructions.PaymentZmwAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -268,6 +277,210 @@ export namespace PaymentInstructions {
   export interface PaymentThbAccountInfo extends PlatformExternalAccountsAPI.ThbAccountInfo {}
 
   export interface PaymentVndAccountInfo extends PlatformExternalAccountsAPI.VndAccountInfo {}
+
+  export interface PaymentAedAccountInfo {
+    accountType: 'AED_ACCOUNT';
+
+    /**
+     * UAE IBAN (23 characters, starting with AE)
+     */
+    iban: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode?: string;
+  }
+
+  export interface PaymentKesAccountInfo {
+    accountType: 'KES_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Kenyan mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentMwkAccountInfo {
+    accountType: 'MWK_ACCOUNT';
+
+    countries: Array<'MW'>;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Malawian mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * Mobile money provider
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentRwfAccountInfo {
+    accountType: 'RWF_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Rwandan mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentTzsAccountInfo {
+    accountType: 'TZS_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Tanzanian mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentUgxAccountInfo {
+    accountType: 'UGX_ACCOUNT';
+
+    countries: Array<'UG'>;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Ugandan mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * Mobile money provider
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentXofAccountInfo {
+    accountType: 'XOF_ACCOUNT';
+
+    countries: Array<'SN' | 'BJ' | 'CI'>;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * West African mobile money phone number (Senegal, Benin, or Ivory Coast)
+     */
+    phoneNumber: string;
+
+    /**
+     * Mobile money provider
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentZarAccountInfo {
+    /**
+     * South African bank account number
+     */
+    accountNumber: string;
+
+    accountType: 'ZAR_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentZmwAccountInfo {
+    accountType: 'ZMW_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * Zambian mobile money phone number
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
 
   export interface PaymentSparkWalletInfo {
     accountType: 'SPARK_WALLET';
