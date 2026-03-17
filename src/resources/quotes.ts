@@ -37,22 +37,6 @@ export class Quotes extends APIResource {
    * **Important:** If you are transferring funds in the same currency (no exchange
    * required), use the `/transfer-in` or `/transfer-out` endpoints instead.
    *
-   * **Sandbox Testing:** When using the `externalAccountDetails` destination type in
-   * sandbox mode, use account number patterns ending in specific digits to test
-   * different scenarios. These patterns should be used with the primary alias,
-   * address, or identifier of whatever account type you're testing. For example, the
-   * US account number, a CLABE, an IBAN, a spark wallet address, etc. The failure
-   * patterns are:
-   *
-   * - Account numbers ending in **002**: Insufficient funds (transfer-in will fail)
-   * - Account numbers ending in **003**: Account closed/invalid (transfers will
-   *   fail)
-   * - Account numbers ending in **004**: Transfer rejected (bank rejects the
-   *   transfer)
-   * - Account numbers ending in **005**: Timeout/delayed failure (stays pending
-   *   ~30s, then fails)
-   * - Any other account number: Success (transfers complete normally)
-   *
    * @example
    * ```ts
    * const quote = await client.quotes.create({
@@ -697,8 +681,8 @@ export namespace QuoteDestinationOneOf {
   /**
    * A convenient destination option which adds the external account and creates the
    * quote in one step rather than first needing to call /external-accounts to add
-   * the account. Useful for one-off payments to some destination. See the external
-   * accounts endpoints for test values in sandbox mode.
+   * the account. Useful for one-off payments to some destination. See the Sandbox
+   * Testing guide in the API reference for test values.
    */
   export interface ExternalAccountDetailsDestination {
     destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
