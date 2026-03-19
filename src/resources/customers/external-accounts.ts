@@ -394,7 +394,9 @@ export type ExternalAccountInfoOneOf =
   | TronWalletInfo
   | PolygonWalletInfo
   | BaseWalletInfo
-  | ExternalAccountInfoOneOf.AedExternalAccountInfo;
+  | ExternalAccountInfoOneOf.AedExternalAccountInfo
+  | ExternalAccountInfoOneOf.BwpExternalAccountInfo
+  | ExternalAccountInfoOneOf.XafExternalAccountInfo;
 
 export namespace ExternalAccountInfoOneOf {
   export interface CadExternalAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
@@ -467,17 +469,15 @@ export namespace ExternalAccountInfoOneOf {
 
     beneficiary: MwkExternalAccountInfo.MwkBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
-    countries: Array<'MW'>;
-
     paymentRails: Array<'MOBILE_MONEY'>;
 
     /**
-     * Malawian mobile money phone number
+     * The phone number in international format
      */
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
   }
@@ -654,17 +654,15 @@ export namespace ExternalAccountInfoOneOf {
 
     beneficiary: UgxExternalAccountInfo.UgxBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
-    countries: Array<'UG'>;
-
     paymentRails: Array<'MOBILE_MONEY'>;
 
     /**
-     * Ugandan mobile money phone number
+     * The phone number in international format
      */
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
   }
@@ -717,19 +715,22 @@ export namespace ExternalAccountInfoOneOf {
 
     beneficiary: XofExternalAccountInfo.XofBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
-    countries: Array<'SN' | 'BJ' | 'CI'>;
-
     paymentRails: Array<'MOBILE_MONEY'>;
 
     /**
-     * West African mobile money phone number (Senegal, Benin, or Ivory Coast)
+     * The phone number in international format
      */
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
+
+    /**
+     * Country code within the West African CFA franc zone
+     */
+    region: 'BJ' | 'CI' | 'SN' | 'TG';
   }
 
   export namespace XofExternalAccountInfo {
@@ -917,6 +918,133 @@ export namespace ExternalAccountInfoOneOf {
 
   export namespace AedExternalAccountInfo {
     export interface AedBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface BwpExternalAccountInfo {
+    accountType: 'BWP_ACCOUNT';
+
+    beneficiary: BwpExternalAccountInfo.BwpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+  }
+
+  export namespace BwpExternalAccountInfo {
+    export interface BwpBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The registration number of the beneficiary
+       */
+      registrationNumber?: string;
+    }
+  }
+
+  export interface XafExternalAccountInfo {
+    accountType: 'XAF_ACCOUNT';
+
+    beneficiary: XafExternalAccountInfo.XafBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Country code within the Central African CFA franc zone
+     */
+    region: 'CM' | 'CG';
+  }
+
+  export namespace XafExternalAccountInfo {
+    export interface XafBeneficiary {
       beneficiaryType: 'INDIVIDUAL';
 
       /**
