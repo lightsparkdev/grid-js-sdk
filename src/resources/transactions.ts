@@ -178,8 +178,7 @@ export interface IncomingTransaction {
 
   /**
    * Additional information about the counterparty, if available and relevant to the
-   * transaction and platform. Only applicable for transactions to/from UMA
-   * addresses.
+   * transaction and platform.
    */
   counterpartyInformation?: { [key: string]: unknown };
 
@@ -320,8 +319,7 @@ export interface OutgoingTransaction {
 
   /**
    * Additional information about the counterparty, if available and relevant to the
-   * transaction and platform. Only applicable for transactions to/from UMA
-   * addresses.
+   * transaction and platform.
    */
   counterpartyInformation?: { [key: string]: unknown };
 

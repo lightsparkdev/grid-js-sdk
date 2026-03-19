@@ -621,6 +621,12 @@ export interface Quote {
   transactionId: string;
 
   /**
+   * Additional information about the counterparty, if available and required by the
+   * platform in their configuration.
+   */
+  counterpartyInformation?: { [key: string]: unknown };
+
+  /**
    * Payment instructions for executing the payment. This is not required when using
    * an internal account source.
    */
@@ -670,12 +676,6 @@ export namespace QuoteDestinationOneOf {
      * UMA address of the recipient
      */
     umaAddress: string;
-
-    /**
-     * Information about the recipient, as required by the platform in their
-     * configuration.
-     */
-    counterpartyInformation?: { [key: string]: unknown };
 
     /**
      * Currency code for the destination. See
