@@ -35,6 +35,7 @@ describe('resource quotes', () => {
       destination: {
         accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
         destinationType: 'ACCOUNT',
+        paymentRail: 'ACH',
       },
       lockedCurrencyAmount: 10000,
       lockedCurrencySide: 'SENDING',
