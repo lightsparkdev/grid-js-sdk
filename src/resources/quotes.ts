@@ -215,6 +215,8 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentXofAccountInfo
     | PaymentInstructions.PaymentZarAccountInfo
     | PaymentInstructions.PaymentZmwAccountInfo
+    | PaymentInstructions.PaymentBwpAccountInfo
+    | PaymentInstructions.PaymentXafAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -309,17 +311,15 @@ export namespace PaymentInstructions {
   export interface PaymentMwkAccountInfo {
     accountType: 'MWK_ACCOUNT';
 
-    countries: Array<'MW'>;
-
     paymentRails: Array<'MOBILE_MONEY'>;
 
     /**
-     * Malawian mobile money phone number
+     * The phone number in international format
      */
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
 
@@ -377,17 +377,15 @@ export namespace PaymentInstructions {
   export interface PaymentUgxAccountInfo {
     accountType: 'UGX_ACCOUNT';
 
-    countries: Array<'UG'>;
-
     paymentRails: Array<'MOBILE_MONEY'>;
 
     /**
-     * Ugandan mobile money phone number
+     * The phone number in international format
      */
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
 
@@ -401,17 +399,15 @@ export namespace PaymentInstructions {
   export interface PaymentXofAccountInfo {
     accountType: 'XOF_ACCOUNT';
 
-    countries: Array<'SN' | 'BJ' | 'CI'>;
-
     paymentRails: Array<'MOBILE_MONEY'>;
 
     /**
-     * West African mobile money phone number (Senegal, Benin, or Ivory Coast)
+     * The phone number in international format
      */
     phoneNumber: string;
 
     /**
-     * Mobile money provider
+     * The mobile money provider name
      */
     provider: string;
 
@@ -420,6 +416,11 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+
+    /**
+     * Country code within the West African CFA franc zone
+     */
+    region: 'BJ' | 'CI' | 'SN' | 'TG';
   }
 
   export interface PaymentZarAccountInfo {
@@ -464,6 +465,55 @@ export namespace PaymentInstructions {
      * it
      */
     reference: string;
+  }
+
+  export interface PaymentBwpAccountInfo {
+    accountType: 'BWP_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentXafAccountInfo {
+    accountType: 'XAF_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * The mobile money provider name
+     */
+    provider: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * Country code within the Central African CFA franc zone
+     */
+    region: 'CM' | 'CG';
   }
 
   export interface PaymentSparkWalletInfo {
