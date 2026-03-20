@@ -71,7 +71,8 @@ export type CustomerInfoFieldName =
   | 'FI_ADDRESS'
   | 'PURPOSE_OF_PAYMENT'
   | 'ULTIMATE_INSTITUTION_COUNTRY'
-  | 'IDENTIFIER';
+  | 'IDENTIFIER'
+  | 'BUSINESS_TYPE';
 
 export interface PlatformConfig {
   /**
