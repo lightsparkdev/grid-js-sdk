@@ -2,6 +2,17 @@
 
 export * from './shared';
 export {
+  BeneficialOwners,
+  type BeneficialOwnerCreateResponse,
+  type BeneficialOwnerRetrieveResponse,
+  type BeneficialOwnerUpdateResponse,
+  type BeneficialOwnerListResponse,
+  type BeneficialOwnerCreateParams,
+  type BeneficialOwnerUpdateParams,
+  type BeneficialOwnerListParams,
+  type BeneficialOwnerListResponsesDefaultPagination,
+} from './beneficial-owners';
+export {
   Config,
   type CustomerInfoFieldName,
   type PlatformConfig,
@@ -31,6 +42,17 @@ export {
   type CustomerListInternalAccountsParams,
   type CustomerOneovesDefaultPagination,
 } from './customers/customers';
+export {
+  Documents,
+  type DocumentRetrieveResponse,
+  type DocumentListResponse,
+  type DocumentReplaceResponse,
+  type DocumentUploadResponse,
+  type DocumentListParams,
+  type DocumentReplaceParams,
+  type DocumentUploadParams,
+  type DocumentListResponsesDefaultPagination,
+} from './documents';
 export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
 export {
   Invitations,
@@ -114,6 +136,15 @@ export {
   type UmaProviderListResponsesDefaultPagination,
 } from './uma-providers';
 export {
+  Verifications,
+  type VerificationRetrieveResponse,
+  type VerificationListResponse,
+  type VerificationSubmitResponse,
+  type VerificationListParams,
+  type VerificationSubmitParams,
+  type VerificationListResponsesDefaultPagination,
+} from './verifications';
+export {
   Webhooks,
   type IncomingPaymentWebhookEvent,
   type OutgoingPaymentWebhookEvent,
@@ -122,5 +153,6 @@ export {
   type InvitationClaimedWebhookEvent,
   type CustomerUpdateWebhookEvent,
   type InternalAccountStatusWebhookEvent,
+  type VerificationUpdateWebhookEvent,
   type UnwrapWebhookEvent,
 } from './webhooks';

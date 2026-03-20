@@ -28,6 +28,9 @@ TEST_PATHS=(
 	tests/api-resources/tokens.test.ts
 	tests/api-resources/exchange-rates.test.ts
 	tests/api-resources/crypto.test.ts
+	tests/api-resources/beneficial-owners.test.ts
+	tests/api-resources/documents.test.ts
+	tests/api-resources/verifications.test.ts
 	tests/index.test.ts
 )
 

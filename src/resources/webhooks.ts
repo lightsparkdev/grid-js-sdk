@@ -41,14 +41,15 @@ export interface IncomingPaymentWebhookEvent {
     | 'OUTGOING_PAYMENT.REFUND_FAILED'
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -94,14 +95,15 @@ export interface OutgoingPaymentWebhookEvent {
     | 'INCOMING_PAYMENT.FAILED'
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -135,14 +137,15 @@ export interface TestWebhookWebhookEvent {
     | 'INCOMING_PAYMENT.FAILED'
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -178,14 +181,15 @@ export interface BulkUploadWebhookEvent {
     | 'INCOMING_PAYMENT.FAILED'
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'TEST';
@@ -269,14 +273,15 @@ export interface InvitationClaimedWebhookEvent {
     | 'INCOMING_PAYMENT.FAILED'
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
@@ -299,14 +304,10 @@ export interface CustomerUpdateWebhookEvent {
   type:
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
     | 'OUTGOING_PAYMENT.PENDING'
     | 'OUTGOING_PAYMENT.PROCESSING'
     | 'OUTGOING_PAYMENT.COMPLETED'
@@ -318,6 +319,11 @@ export interface CustomerUpdateWebhookEvent {
     | 'INCOMING_PAYMENT.PENDING'
     | 'INCOMING_PAYMENT.COMPLETED'
     | 'INCOMING_PAYMENT.FAILED'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -353,18 +359,155 @@ export interface InternalAccountStatusWebhookEvent {
     | 'INCOMING_PAYMENT.FAILED'
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_SUBMITTED'
-    | 'CUSTOMER.KYC_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYC_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_SUBMITTED'
-    | 'CUSTOMER.KYB_MANUALLY_APPROVED'
-    | 'CUSTOMER.KYB_MANUALLY_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'TEST';
+}
+
+export interface VerificationUpdateWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data: VerificationUpdateWebhookEvent.Data;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type:
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
+}
+
+export namespace VerificationUpdateWebhookEvent {
+  export interface Data {
+    /**
+     * Unique identifier for this verification
+     */
+    id: string;
+
+    /**
+     * When this verification was created
+     */
+    createdAt: string;
+
+    /**
+     * The ID of the customer being verified
+     */
+    customerId: string;
+
+    /**
+     * List of issues preventing verification from proceeding. Empty when
+     * verificationStatus is APPROVED or IN_PROGRESS.
+     */
+    errors: Array<Data.Error>;
+
+    /**
+     * Current status of the KYC/KYB verification
+     */
+    verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED';
+
+    /**
+     * When this verification was last updated
+     */
+    updatedAt?: string;
+  }
+
+  export namespace Data {
+    export interface Error {
+      /**
+       * Human-readable description of the issue
+       */
+      reason: string;
+
+      /**
+       * ID of the resource with the issue (Customer, BeneficialOwner, or Document)
+       */
+      resourceId: string;
+
+      /**
+       * Type of verification error
+       */
+      type:
+        | 'MISSING_FIELD'
+        | 'INVALID_FIELD'
+        | 'MISSING_DOCUMENT'
+        | 'INVALID_DOCUMENT'
+        | 'EXPIRED_DOCUMENT'
+        | 'MISSING_BENEFICIAL_OWNER';
+
+      /**
+       * Document types that would satisfy this requirement. The integrator can upload
+       * any one of the listed types. Present when type is MISSING_DOCUMENT,
+       * INVALID_DOCUMENT, or EXPIRED_DOCUMENT.
+       */
+      acceptedDocumentTypes?: Array<
+        | 'PASSPORT'
+        | 'DRIVERS_LICENSE'
+        | 'NATIONAL_ID'
+        | 'PROOF_OF_ADDRESS'
+        | 'BANK_STATEMENT'
+        | 'TAX_RETURN'
+        | 'CERTIFICATE_OF_INCORPORATION'
+        | 'ARTICLES_OF_INCORPORATION'
+        | 'ARTICLES_OF_ASSOCIATION'
+        | 'STATE_REGISTRY_EXCERPT'
+        | 'GOOD_STANDING_CERTIFICATE'
+        | 'INFORMATION_STATEMENT'
+        | 'INCUMBENCY_CERTIFICATE'
+        | 'BUSINESS_LICENSE'
+        | 'SHAREHOLDER_REGISTER'
+        | 'POWER_OF_ATTORNEY'
+        | 'UTILITY_BILL'
+        | 'SELFIE'
+        | 'OTHER'
+      >;
+
+      /**
+       * Dot-notation path to the field with the issue. Present when type is
+       * MISSING_FIELD or INVALID_FIELD.
+       */
+      field?: string;
+    }
+  }
 }
 
 export type UnwrapWebhookEvent =
@@ -374,7 +517,8 @@ export type UnwrapWebhookEvent =
   | BulkUploadWebhookEvent
   | InvitationClaimedWebhookEvent
   | CustomerUpdateWebhookEvent
-  | InternalAccountStatusWebhookEvent;
+  | InternalAccountStatusWebhookEvent
+  | VerificationUpdateWebhookEvent;
 
 export declare namespace Webhooks {
   export {
@@ -385,6 +529,7 @@ export declare namespace Webhooks {
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
+    type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }

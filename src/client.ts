@@ -20,6 +20,17 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  BeneficialOwnerCreateParams,
+  BeneficialOwnerCreateResponse,
+  BeneficialOwnerListParams,
+  BeneficialOwnerListResponse,
+  BeneficialOwnerListResponsesDefaultPagination,
+  BeneficialOwnerRetrieveResponse,
+  BeneficialOwnerUpdateParams,
+  BeneficialOwnerUpdateResponse,
+  BeneficialOwners,
+} from './resources/beneficial-owners';
+import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
@@ -31,6 +42,17 @@ import {
   CryptoEstimateWithdrawalFeeParams,
   CryptoEstimateWithdrawalFeeResponse,
 } from './resources/crypto';
+import {
+  DocumentListParams,
+  DocumentListResponse,
+  DocumentListResponsesDefaultPagination,
+  DocumentReplaceParams,
+  DocumentReplaceResponse,
+  DocumentRetrieveResponse,
+  DocumentUploadParams,
+  DocumentUploadResponse,
+  Documents,
+} from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
   CurrencyAmount,
@@ -107,6 +129,15 @@ import {
   UmaProviders,
 } from './resources/uma-providers';
 import {
+  VerificationListParams,
+  VerificationListResponse,
+  VerificationListResponsesDefaultPagination,
+  VerificationRetrieveResponse,
+  VerificationSubmitParams,
+  VerificationSubmitResponse,
+  Verifications,
+} from './resources/verifications';
+import {
   BulkUploadWebhookEvent,
   CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
@@ -115,6 +146,7 @@ import {
   OutgoingPaymentWebhookEvent,
   TestWebhookWebhookEvent,
   UnwrapWebhookEvent,
+  VerificationUpdateWebhookEvent,
   Webhooks,
 } from './resources/webhooks';
 import {
@@ -975,6 +1007,18 @@ export class LightsparkGrid {
    * Endpoints for creating and confirming quotes for cross-currency transfers
    */
   crypto: API.Crypto = new API.Crypto(this);
+  /**
+   * Endpoints for Know Your Customer (KYC) and Know Your Business (KYB) verification, including managing beneficial owners and triggering verification for customers.
+   */
+  beneficialOwners: API.BeneficialOwners = new API.BeneficialOwners(this);
+  /**
+   * Endpoints for uploading and managing verification documents for customers and beneficial owners. Supports KYC and KYB document requirements.
+   */
+  documents: API.Documents = new API.Documents(this);
+  /**
+   * Endpoints for Know Your Customer (KYC) and Know Your Business (KYB) verification, including managing beneficial owners and triggering verification for customers.
+   */
+  verifications: API.Verifications = new API.Verifications(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -993,6 +1037,9 @@ LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
 LightsparkGrid.Webhooks = Webhooks;
 LightsparkGrid.Crypto = Crypto;
+LightsparkGrid.BeneficialOwners = BeneficialOwners;
+LightsparkGrid.Documents = Documents;
+LightsparkGrid.Verifications = Verifications;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1136,6 +1183,7 @@ export declare namespace LightsparkGrid {
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
+    type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 
@@ -1143,6 +1191,40 @@ export declare namespace LightsparkGrid {
     Crypto as Crypto,
     type CryptoEstimateWithdrawalFeeResponse as CryptoEstimateWithdrawalFeeResponse,
     type CryptoEstimateWithdrawalFeeParams as CryptoEstimateWithdrawalFeeParams,
+  };
+
+  export {
+    BeneficialOwners as BeneficialOwners,
+    type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
+    type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
+    type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
+    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
+    type BeneficialOwnerListResponsesDefaultPagination as BeneficialOwnerListResponsesDefaultPagination,
+    type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
+    type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
+    type BeneficialOwnerListParams as BeneficialOwnerListParams,
+  };
+
+  export {
+    Documents as Documents,
+    type DocumentRetrieveResponse as DocumentRetrieveResponse,
+    type DocumentListResponse as DocumentListResponse,
+    type DocumentReplaceResponse as DocumentReplaceResponse,
+    type DocumentUploadResponse as DocumentUploadResponse,
+    type DocumentListResponsesDefaultPagination as DocumentListResponsesDefaultPagination,
+    type DocumentListParams as DocumentListParams,
+    type DocumentReplaceParams as DocumentReplaceParams,
+    type DocumentUploadParams as DocumentUploadParams,
+  };
+
+  export {
+    Verifications as Verifications,
+    type VerificationRetrieveResponse as VerificationRetrieveResponse,
+    type VerificationListResponse as VerificationListResponse,
+    type VerificationSubmitResponse as VerificationSubmitResponse,
+    type VerificationListResponsesDefaultPagination as VerificationListResponsesDefaultPagination,
+    type VerificationListParams as VerificationListParams,
+    type VerificationSubmitParams as VerificationSubmitParams,
   };
 
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;

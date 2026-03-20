@@ -281,6 +281,78 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'post',
     httpPath: '/crypto/estimate-withdrawal-fee',
   },
+  {
+    clientCallName: 'client.beneficialOwners.create',
+    fullyQualifiedName: 'beneficialOwners.create',
+    httpMethod: 'post',
+    httpPath: '/beneficial-owners',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.retrieve',
+    fullyQualifiedName: 'beneficialOwners.retrieve',
+    httpMethod: 'get',
+    httpPath: '/beneficial-owners/{beneficialOwnerId}',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.update',
+    fullyQualifiedName: 'beneficialOwners.update',
+    httpMethod: 'patch',
+    httpPath: '/beneficial-owners/{beneficialOwnerId}',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.list',
+    fullyQualifiedName: 'beneficialOwners.list',
+    httpMethod: 'get',
+    httpPath: '/beneficial-owners',
+  },
+  {
+    clientCallName: 'client.documents.retrieve',
+    fullyQualifiedName: 'documents.retrieve',
+    httpMethod: 'get',
+    httpPath: '/documents/{documentId}',
+  },
+  {
+    clientCallName: 'client.documents.list',
+    fullyQualifiedName: 'documents.list',
+    httpMethod: 'get',
+    httpPath: '/documents',
+  },
+  {
+    clientCallName: 'client.documents.delete',
+    fullyQualifiedName: 'documents.delete',
+    httpMethod: 'delete',
+    httpPath: '/documents/{documentId}',
+  },
+  {
+    clientCallName: 'client.documents.replace',
+    fullyQualifiedName: 'documents.replace',
+    httpMethod: 'put',
+    httpPath: '/documents/{documentId}',
+  },
+  {
+    clientCallName: 'client.documents.upload',
+    fullyQualifiedName: 'documents.upload',
+    httpMethod: 'post',
+    httpPath: '/documents',
+  },
+  {
+    clientCallName: 'client.verifications.retrieve',
+    fullyQualifiedName: 'verifications.retrieve',
+    httpMethod: 'get',
+    httpPath: '/verifications/{verificationId}',
+  },
+  {
+    clientCallName: 'client.verifications.list',
+    fullyQualifiedName: 'verifications.list',
+    httpMethod: 'get',
+    httpPath: '/verifications',
+  },
+  {
+    clientCallName: 'client.verifications.submit',
+    fullyQualifiedName: 'verifications.submit',
+    httpMethod: 'post',
+    httpPath: '/verifications',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {
