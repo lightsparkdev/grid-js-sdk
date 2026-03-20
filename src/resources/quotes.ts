@@ -191,7 +191,7 @@ export interface OutgoingRateDetails {
 export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.PaymentUsdAccountInfo
-    | PlatformExternalAccountsAPI.BrlAccountInfo
+    | PaymentInstructions.PaymentBrlAccountInfo
     | PaymentInstructions.PaymentMxnAccountInfo
     | PaymentInstructions.PaymentDkkAccountInfo
     | PaymentInstructions.PaymentEurAccountInfo
@@ -237,6 +237,16 @@ export interface PaymentInstructions {
 
 export namespace PaymentInstructions {
   export interface PaymentUsdAccountInfo extends PlatformExternalAccountsAPI.UsdAccountInfo {}
+
+  export interface PaymentBrlAccountInfo {
+    /**
+     * A PIX QR code payload that can be used to fund the transaction. This can be
+     * rendered as a QR code image or pasted into a PIX-compatible banking app.
+     */
+    qrCode: string;
+
+    accountType?: 'BRL_ACCOUNT';
+  }
 
   export interface PaymentMxnAccountInfo extends PlatformExternalAccountsAPI.MxnAccountInfo {}
 
