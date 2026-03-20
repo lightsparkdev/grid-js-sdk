@@ -70,7 +70,7 @@ export class Customers extends APIResource {
    * ```ts
    * const customerOneOf = await client.customers.create({
    *   CreateCustomerRequest: {
-   *     platformCustomerId: '9f84e0c2a72c4fa',
+   *     platformCustomerId: 'ind-9f84e0c2',
    *     customerType: 'INDIVIDUAL',
    *   },
    * });
@@ -211,15 +211,7 @@ export interface BusinessCustomerFields {
   /**
    * The current KYB status of a business customer
    */
-  kybStatus?:
-    | 'AWAITING_SUBMISSION'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'PENDING_REVIEW'
-    | 'EXPIRED'
-    | 'CANCELED'
-    | 'MANUALLY_APPROVED'
-    | 'MANUALLY_REJECTED';
+  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 }
 
 export namespace BusinessCustomerFields {
@@ -310,9 +302,57 @@ export namespace BusinessCustomerFields {
       | 'PUBLIC_ADMINISTRATION';
 
     /**
+     * List of countries where the business operates (ISO 3166-1 alpha-2)
+     */
+    countriesOfOperation?: Array<string>;
+
+    /**
+     * Country of incorporation or registration (ISO 3166-1 alpha-2)
+     */
+    country?: string;
+
+    /**
+     * Trade name or DBA name of the business, if different from the legal name
+     */
+    doingBusinessAs?: string;
+
+    /**
+     * Legal entity type of the business
+     */
+    entityType?:
+      | 'SOLE_PROPRIETORSHIP'
+      | 'PARTNERSHIP'
+      | 'LLC'
+      | 'CORPORATION'
+      | 'S_CORPORATION'
+      | 'NON_PROFIT'
+      | 'OTHER';
+
+    /**
+     * Expected monthly transaction activity for the business
+     */
+    expectedActivityVolumes?: BusinessInfo.ExpectedActivityVolumes;
+
+    /**
+     * List of countries where the business expects to send payments (ISO 3166-1
+     * alpha-2)
+     */
+    expectedRecipientJurisdictions?: Array<string>;
+
+    /**
+     * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+     */
+    incorporatedOn?: string;
+
+    /**
      * Legal name of the business
      */
     legalName?: string;
+
+    /**
+     * The intended purpose for using the Grid account
+     */
+    purposeOfAccount?: 'PAYMENTS' | 'PAYROLL' | 'TREASURY' | 'TRADING' | 'LENDING' | 'COLLECTIONS' | 'OTHER';
 
     /**
      * Business registration number
@@ -320,9 +360,48 @@ export namespace BusinessCustomerFields {
     registrationNumber?: string;
 
     /**
+     * The primary source of funds for the business
+     */
+    sourceOfFunds?:
+      | 'OPERATING_REVENUE'
+      | 'INVESTMENT_INCOME'
+      | 'LOANS'
+      | 'VENTURE_CAPITAL'
+      | 'PERSONAL_SAVINGS'
+      | 'DONATIONS'
+      | 'OTHER';
+
+    /**
      * Tax identification number
      */
     taxId?: string;
+  }
+
+  export namespace BusinessInfo {
+    /**
+     * Expected monthly transaction activity for the business
+     */
+    export interface ExpectedActivityVolumes {
+      /**
+       * Expected number of transactions per month
+       */
+      monthlyTransactionCount?:
+        | 'LESS_THAN_10'
+        | '10_TO_100'
+        | '100_TO_500'
+        | '500_TO_1000'
+        | 'MORE_THAN_1000';
+
+      /**
+       * Expected total transaction volume per month in USD equivalent
+       */
+      monthlyTransactionVolume?:
+        | 'LESS_THAN_10K'
+        | '10K_TO_100K'
+        | '100K_TO_1M'
+        | '1M_TO_10M'
+        | 'MORE_THAN_10M';
+    }
   }
 }
 
@@ -361,14 +440,91 @@ export interface BusinessInfo {
     | 'PUBLIC_ADMINISTRATION';
 
   /**
+   * List of countries where the business operates (ISO 3166-1 alpha-2)
+   */
+  countriesOfOperation?: Array<string>;
+
+  /**
+   * Country of incorporation or registration (ISO 3166-1 alpha-2)
+   */
+  country?: string;
+
+  /**
+   * Trade name or DBA name of the business, if different from the legal name
+   */
+  doingBusinessAs?: string;
+
+  /**
+   * Legal entity type of the business
+   */
+  entityType?:
+    | 'SOLE_PROPRIETORSHIP'
+    | 'PARTNERSHIP'
+    | 'LLC'
+    | 'CORPORATION'
+    | 'S_CORPORATION'
+    | 'NON_PROFIT'
+    | 'OTHER';
+
+  /**
+   * Expected monthly transaction activity for the business
+   */
+  expectedActivityVolumes?: BusinessInfo.ExpectedActivityVolumes;
+
+  /**
+   * List of countries where the business expects to send payments (ISO 3166-1
+   * alpha-2)
+   */
+  expectedRecipientJurisdictions?: Array<string>;
+
+  /**
+   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+   */
+  incorporatedOn?: string;
+
+  /**
+   * The intended purpose for using the Grid account
+   */
+  purposeOfAccount?: 'PAYMENTS' | 'PAYROLL' | 'TREASURY' | 'TRADING' | 'LENDING' | 'COLLECTIONS' | 'OTHER';
+
+  /**
    * Business registration number
    */
   registrationNumber?: string;
 
   /**
+   * The primary source of funds for the business
+   */
+  sourceOfFunds?:
+    | 'OPERATING_REVENUE'
+    | 'INVESTMENT_INCOME'
+    | 'LOANS'
+    | 'VENTURE_CAPITAL'
+    | 'PERSONAL_SAVINGS'
+    | 'DONATIONS'
+    | 'OTHER';
+
+  /**
    * Tax identification number
    */
   taxId?: string;
+}
+
+export namespace BusinessInfo {
+  /**
+   * Expected monthly transaction activity for the business
+   */
+  export interface ExpectedActivityVolumes {
+    /**
+     * Expected number of transactions per month
+     */
+    monthlyTransactionCount?: 'LESS_THAN_10' | '10_TO_100' | '100_TO_500' | '500_TO_1000' | 'MORE_THAN_1000';
+
+    /**
+     * Expected total transaction volume per month in USD equivalent
+     */
+    monthlyTransactionVolume?: 'LESS_THAN_10K' | '10K_TO_100K' | '100K_TO_1M' | '1M_TO_10M' | 'MORE_THAN_10M';
+  }
 }
 
 export interface Customer {
@@ -467,14 +623,7 @@ export interface IndividualCustomerFields {
   /**
    * The current KYC status of a customer
    */
-  kycStatus?:
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'PENDING_REVIEW'
-    | 'EXPIRED'
-    | 'CANCELED'
-    | 'MANUALLY_APPROVED'
-    | 'MANUALLY_REJECTED';
+  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
   /**
    * Country code (ISO 3166-1 alpha-2)

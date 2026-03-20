@@ -314,6 +314,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CustomerUpdateWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">VerificationUpdateWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 
 Methods:
@@ -329,3 +330,50 @@ Types:
 Methods:
 
 - <code title="post /crypto/estimate-withdrawal-fee">client.crypto.<a href="./src/resources/crypto.ts">estimateWithdrawalFee</a>({ ...params }) -> CryptoEstimateWithdrawalFeeResponse</code>
+
+# BeneficialOwners
+
+Types:
+
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerCreateResponse</a></code>
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerRetrieveResponse</a></code>
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerUpdateResponse</a></code>
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerListResponse</a></code>
+
+Methods:
+
+- <code title="post /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">create</a>({ ...params }) -> BeneficialOwnerCreateResponse</code>
+- <code title="get /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">retrieve</a>(beneficialOwnerID) -> BeneficialOwnerRetrieveResponse</code>
+- <code title="patch /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">update</a>(beneficialOwnerID, { ...params }) -> BeneficialOwnerUpdateResponse</code>
+- <code title="get /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">list</a>({ ...params }) -> BeneficialOwnerListResponsesDefaultPagination</code>
+
+# Documents
+
+Types:
+
+- <code><a href="./src/resources/documents.ts">DocumentRetrieveResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentReplaceResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentUploadResponse</a></code>
+
+Methods:
+
+- <code title="get /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(documentID) -> DocumentRetrieveResponse</code>
+- <code title="get /documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentListResponsesDefaultPagination</code>
+- <code title="delete /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">delete</a>(documentID) -> void</code>
+- <code title="put /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">replace</a>(documentID, { ...params }) -> DocumentReplaceResponse</code>
+- <code title="post /documents">client.documents.<a href="./src/resources/documents.ts">upload</a>({ ...params }) -> DocumentUploadResponse</code>
+
+# Verifications
+
+Types:
+
+- <code><a href="./src/resources/verifications.ts">VerificationRetrieveResponse</a></code>
+- <code><a href="./src/resources/verifications.ts">VerificationListResponse</a></code>
+- <code><a href="./src/resources/verifications.ts">VerificationSubmitResponse</a></code>
+
+Methods:
+
+- <code title="get /verifications/{verificationId}">client.verifications.<a href="./src/resources/verifications.ts">retrieve</a>(verificationID) -> VerificationRetrieveResponse</code>
+- <code title="get /verifications">client.verifications.<a href="./src/resources/verifications.ts">list</a>({ ...params }) -> VerificationListResponsesDefaultPagination</code>
+- <code title="post /verifications">client.verifications.<a href="./src/resources/verifications.ts">submit</a>({ ...params }) -> VerificationSubmitResponse</code>
