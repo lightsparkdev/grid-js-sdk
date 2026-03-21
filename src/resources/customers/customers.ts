@@ -201,8 +201,6 @@ export interface BusinessCustomerFields {
 
   address?: ExternalAccountsAPI.Address;
 
-  beneficialOwners?: Array<BusinessCustomerFields.BeneficialOwner>;
-
   /**
    * Additional information for business entities
    */
@@ -215,63 +213,6 @@ export interface BusinessCustomerFields {
 }
 
 export namespace BusinessCustomerFields {
-  export interface BeneficialOwner {
-    /**
-     * Individual's full name
-     */
-    fullName: string;
-
-    /**
-     * Type of individual in the corporation
-     */
-    individualType:
-      | 'DIRECTOR'
-      | 'CONTROL_PERSON'
-      | 'BUSINESS_POINT_OF_CONTACT'
-      | 'TRUSTEE'
-      | 'SETTLOR'
-      | 'GENERAL_PARTNER';
-
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * Email address of the individual
-     */
-    emailAddress?: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-
-    /**
-     * Percent of ownership when individual type is beneficial owner
-     */
-    percentageOwnership?: number;
-
-    /**
-     * Phone number of the individual in E.164 format
-     */
-    phoneNumber?: string;
-
-    /**
-     * Tax identification number of the individual. This could be a Social Security
-     * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-     * individuals, or a Passport Number.
-     */
-    taxId?: string;
-
-    /**
-     * Title at company
-     */
-    title?: string;
-  }
-
   /**
    * Additional information for business entities
    */
@@ -329,9 +270,14 @@ export namespace BusinessCustomerFields {
       | 'OTHER';
 
     /**
-     * Expected monthly transaction activity for the business
+     * Expected number of transactions per month
      */
-    expectedActivityVolumes?: BusinessInfo.ExpectedActivityVolumes;
+    expectedMonthlyTransactionCount?: string;
+
+    /**
+     * Expected total transaction volume per month in USD equivalent
+     */
+    expectedMonthlyTransactionVolume?: string;
 
     /**
      * List of countries where the business expects to send payments (ISO 3166-1
@@ -352,7 +298,7 @@ export namespace BusinessCustomerFields {
     /**
      * The intended purpose for using the Grid account
      */
-    purposeOfAccount?: 'PAYMENTS' | 'PAYROLL' | 'TREASURY' | 'TRADING' | 'LENDING' | 'COLLECTIONS' | 'OTHER';
+    purposeOfAccount?: string;
 
     /**
      * Business registration number
@@ -362,46 +308,12 @@ export namespace BusinessCustomerFields {
     /**
      * The primary source of funds for the business
      */
-    sourceOfFunds?:
-      | 'OPERATING_REVENUE'
-      | 'INVESTMENT_INCOME'
-      | 'LOANS'
-      | 'VENTURE_CAPITAL'
-      | 'PERSONAL_SAVINGS'
-      | 'DONATIONS'
-      | 'OTHER';
+    sourceOfFunds?: string;
 
     /**
      * Tax identification number
      */
     taxId?: string;
-  }
-
-  export namespace BusinessInfo {
-    /**
-     * Expected monthly transaction activity for the business
-     */
-    export interface ExpectedActivityVolumes {
-      /**
-       * Expected number of transactions per month
-       */
-      monthlyTransactionCount?:
-        | 'LESS_THAN_10'
-        | '10_TO_100'
-        | '100_TO_500'
-        | '500_TO_1000'
-        | 'MORE_THAN_1000';
-
-      /**
-       * Expected total transaction volume per month in USD equivalent
-       */
-      monthlyTransactionVolume?:
-        | 'LESS_THAN_10K'
-        | '10K_TO_100K'
-        | '100K_TO_1M'
-        | '1M_TO_10M'
-        | 'MORE_THAN_10M';
-    }
   }
 }
 
@@ -467,9 +379,14 @@ export interface BusinessInfo {
     | 'OTHER';
 
   /**
-   * Expected monthly transaction activity for the business
+   * Expected number of transactions per month
    */
-  expectedActivityVolumes?: BusinessInfo.ExpectedActivityVolumes;
+  expectedMonthlyTransactionCount?: string;
+
+  /**
+   * Expected total transaction volume per month in USD equivalent
+   */
+  expectedMonthlyTransactionVolume?: string;
 
   /**
    * List of countries where the business expects to send payments (ISO 3166-1
@@ -485,7 +402,7 @@ export interface BusinessInfo {
   /**
    * The intended purpose for using the Grid account
    */
-  purposeOfAccount?: 'PAYMENTS' | 'PAYROLL' | 'TREASURY' | 'TRADING' | 'LENDING' | 'COLLECTIONS' | 'OTHER';
+  purposeOfAccount?: string;
 
   /**
    * Business registration number
@@ -495,36 +412,12 @@ export interface BusinessInfo {
   /**
    * The primary source of funds for the business
    */
-  sourceOfFunds?:
-    | 'OPERATING_REVENUE'
-    | 'INVESTMENT_INCOME'
-    | 'LOANS'
-    | 'VENTURE_CAPITAL'
-    | 'PERSONAL_SAVINGS'
-    | 'DONATIONS'
-    | 'OTHER';
+  sourceOfFunds?: string;
 
   /**
    * Tax identification number
    */
   taxId?: string;
-}
-
-export namespace BusinessInfo {
-  /**
-   * Expected monthly transaction activity for the business
-   */
-  export interface ExpectedActivityVolumes {
-    /**
-     * Expected number of transactions per month
-     */
-    monthlyTransactionCount?: 'LESS_THAN_10' | '10_TO_100' | '100_TO_500' | '500_TO_1000' | 'MORE_THAN_1000';
-
-    /**
-     * Expected total transaction volume per month in USD equivalent
-     */
-    monthlyTransactionVolume?: 'LESS_THAN_10K' | '10K_TO_100K' | '100K_TO_1M' | '1M_TO_10M' | 'MORE_THAN_10M';
-  }
 }
 
 export interface Customer {
@@ -585,10 +478,71 @@ export namespace CustomerOneOf {
   export interface BusinessCustomer
     extends CustomersAPI.Customer,
       Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
+    beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
+
     /**
      * Additional information required for business entities
      */
     businessInfo?: CustomersAPI.BusinessInfo;
+  }
+
+  export namespace BusinessCustomer {
+    export interface BeneficialOwner {
+      /**
+       * Individual's full name
+       */
+      fullName: string;
+
+      /**
+       * Type of individual in the corporation
+       */
+      individualType:
+        | 'DIRECTOR'
+        | 'CONTROL_PERSON'
+        | 'BUSINESS_POINT_OF_CONTACT'
+        | 'TRUSTEE'
+        | 'SETTLOR'
+        | 'GENERAL_PARTNER';
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * Date of birth in ISO 8601 format (YYYY-MM-DD)
+       */
+      birthDate?: string;
+
+      /**
+       * Email address of the individual
+       */
+      emailAddress?: string;
+
+      /**
+       * Country code (ISO 3166-1 alpha-2)
+       */
+      nationality?: string;
+
+      /**
+       * Percent of ownership when individual type is beneficial owner
+       */
+      percentageOwnership?: number;
+
+      /**
+       * Phone number of the individual in E.164 format
+       */
+      phoneNumber?: string;
+
+      /**
+       * Tax identification number of the individual. This could be a Social Security
+       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
+       * individuals, or a Passport Number.
+       */
+      taxId?: string;
+
+      /**
+       * Title at company
+       */
+      title?: string;
+    }
   }
 }
 
