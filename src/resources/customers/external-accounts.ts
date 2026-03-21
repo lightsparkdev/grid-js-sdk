@@ -394,6 +394,7 @@ export type ExternalAccountInfoOneOf =
   | TronWalletInfo
   | PolygonWalletInfo
   | BaseWalletInfo
+  | ExternalAccountInfoOneOf.EthereumWalletExternalAccountInfo
   | ExternalAccountInfoOneOf.AedExternalAccountInfo
   | ExternalAccountInfoOneOf.BwpExternalAccountInfo
   | ExternalAccountInfoOneOf.XafExternalAccountInfo;
@@ -896,6 +897,15 @@ export namespace ExternalAccountInfoOneOf {
        */
       registrationNumber?: string;
     }
+  }
+
+  export interface EthereumWalletExternalAccountInfo {
+    accountType: 'ETHEREUM_WALLET';
+
+    /**
+     * Ethereum L1 wallet address
+     */
+    address: string;
   }
 
   export interface AedExternalAccountInfo {

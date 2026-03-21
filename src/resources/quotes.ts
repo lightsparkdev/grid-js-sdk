@@ -222,7 +222,8 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentSolanaWalletInfo
     | PaymentInstructions.PaymentTronWalletInfo
     | PaymentInstructions.PaymentPolygonWalletInfo
-    | PaymentInstructions.PaymentBaseWalletInfo;
+    | PaymentInstructions.PaymentBaseWalletInfo
+    | PaymentInstructions.PaymentEthereumWalletInfo;
 
   /**
    * Additional human-readable instructions for making the payment
@@ -601,6 +602,20 @@ export namespace PaymentInstructions {
 
     /**
      * Base eth wallet address
+     */
+    address: string;
+
+    /**
+     * Type of asset
+     */
+    assetType?: 'USDC';
+  }
+
+  export interface PaymentEthereumWalletInfo {
+    accountType: 'ETHEREUM_WALLET';
+
+    /**
+     * Ethereum L1 wallet address
      */
     address: string;
 
