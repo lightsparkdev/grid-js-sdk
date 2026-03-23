@@ -21,6 +21,7 @@ export class BeneficialOwners extends APIResource {
    *   await client.beneficialOwners.create({
    *     customerId:
    *       'Customer:019542f5-b3e7-1d02-0000-000000000001',
+   *     ownershipPercentage: 51,
    *     personalInfo: {
    *       address: {
    *         country: 'US',
@@ -29,12 +30,10 @@ export class BeneficialOwners extends APIResource {
    *       },
    *       birthDate: '1978-06-15',
    *       firstName: 'Jane',
+   *       identifier: '123-45-6789',
+   *       idType: 'SSN',
    *       lastName: 'Smith',
    *       nationality: 'US',
-   *       personalIds: {
-   *         identifier: '123-45-6789',
-   *         idType: 'SSN',
-   *       },
    *     },
    *     roles: ['UBO', 'DIRECTOR'],
    *   });
@@ -158,6 +157,16 @@ export namespace BeneficialOwnerCreateResponse {
     firstName: string;
 
     /**
+     * The identification number or value
+     */
+    identifier: string;
+
+    /**
+     * Type of personal identification document
+     */
+    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+    /**
      * Last name of the individual
      */
     lastName: string;
@@ -167,7 +176,10 @@ export namespace BeneficialOwnerCreateResponse {
      */
     nationality: string;
 
-    personalIds: PersonalInfo.PersonalIDs;
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
 
     /**
      * Email address of the individual
@@ -183,25 +195,6 @@ export namespace BeneficialOwnerCreateResponse {
      * Phone number in E.164 format
      */
     phoneNumber?: string;
-  }
-
-  export namespace PersonalInfo {
-    export interface PersonalIDs {
-      /**
-       * The identification number or value
-       */
-      identifier: string;
-
-      /**
-       * Type of personal identification document
-       */
-      idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-      /**
-       * Country that issued the identification (ISO 3166-1 alpha-2)
-       */
-      countryOfIssuance?: string;
-    }
   }
 }
 
@@ -259,6 +252,16 @@ export namespace BeneficialOwnerRetrieveResponse {
     firstName: string;
 
     /**
+     * The identification number or value
+     */
+    identifier: string;
+
+    /**
+     * Type of personal identification document
+     */
+    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+    /**
      * Last name of the individual
      */
     lastName: string;
@@ -268,7 +271,10 @@ export namespace BeneficialOwnerRetrieveResponse {
      */
     nationality: string;
 
-    personalIds: PersonalInfo.PersonalIDs;
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
 
     /**
      * Email address of the individual
@@ -284,25 +290,6 @@ export namespace BeneficialOwnerRetrieveResponse {
      * Phone number in E.164 format
      */
     phoneNumber?: string;
-  }
-
-  export namespace PersonalInfo {
-    export interface PersonalIDs {
-      /**
-       * The identification number or value
-       */
-      identifier: string;
-
-      /**
-       * Type of personal identification document
-       */
-      idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-      /**
-       * Country that issued the identification (ISO 3166-1 alpha-2)
-       */
-      countryOfIssuance?: string;
-    }
   }
 }
 
@@ -360,6 +347,16 @@ export namespace BeneficialOwnerUpdateResponse {
     firstName: string;
 
     /**
+     * The identification number or value
+     */
+    identifier: string;
+
+    /**
+     * Type of personal identification document
+     */
+    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+    /**
      * Last name of the individual
      */
     lastName: string;
@@ -369,7 +366,10 @@ export namespace BeneficialOwnerUpdateResponse {
      */
     nationality: string;
 
-    personalIds: PersonalInfo.PersonalIDs;
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
 
     /**
      * Email address of the individual
@@ -385,25 +385,6 @@ export namespace BeneficialOwnerUpdateResponse {
      * Phone number in E.164 format
      */
     phoneNumber?: string;
-  }
-
-  export namespace PersonalInfo {
-    export interface PersonalIDs {
-      /**
-       * The identification number or value
-       */
-      identifier: string;
-
-      /**
-       * Type of personal identification document
-       */
-      idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-      /**
-       * Country that issued the identification (ISO 3166-1 alpha-2)
-       */
-      countryOfIssuance?: string;
-    }
   }
 }
 
@@ -461,6 +442,16 @@ export namespace BeneficialOwnerListResponse {
     firstName: string;
 
     /**
+     * The identification number or value
+     */
+    identifier: string;
+
+    /**
+     * Type of personal identification document
+     */
+    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+    /**
      * Last name of the individual
      */
     lastName: string;
@@ -470,7 +461,10 @@ export namespace BeneficialOwnerListResponse {
      */
     nationality: string;
 
-    personalIds: PersonalInfo.PersonalIDs;
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
 
     /**
      * Email address of the individual
@@ -487,25 +481,6 @@ export namespace BeneficialOwnerListResponse {
      */
     phoneNumber?: string;
   }
-
-  export namespace PersonalInfo {
-    export interface PersonalIDs {
-      /**
-       * The identification number or value
-       */
-      identifier: string;
-
-      /**
-       * Type of personal identification document
-       */
-      idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-      /**
-       * Country that issued the identification (ISO 3166-1 alpha-2)
-       */
-      countryOfIssuance?: string;
-    }
-  }
 }
 
 export interface BeneficialOwnerCreateParams {
@@ -514,18 +489,18 @@ export interface BeneficialOwnerCreateParams {
    */
   customerId: string;
 
+  /**
+   * Percentage of ownership in the business (0-100). Relevant when role includes
+   * UBO.
+   */
+  ownershipPercentage: number;
+
   personalInfo: BeneficialOwnerCreateParams.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
   roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * Percentage of ownership in the business (0-100). Relevant when role includes
-   * UBO.
-   */
-  ownershipPercentage?: number;
 }
 
 export namespace BeneficialOwnerCreateParams {
@@ -543,6 +518,16 @@ export namespace BeneficialOwnerCreateParams {
     firstName: string;
 
     /**
+     * The identification number or value
+     */
+    identifier: string;
+
+    /**
+     * Type of personal identification document
+     */
+    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+    /**
      * Last name of the individual
      */
     lastName: string;
@@ -552,7 +537,10 @@ export namespace BeneficialOwnerCreateParams {
      */
     nationality: string;
 
-    personalIds: PersonalInfo.PersonalIDs;
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
 
     /**
      * Email address of the individual
@@ -568,25 +556,6 @@ export namespace BeneficialOwnerCreateParams {
      * Phone number in E.164 format
      */
     phoneNumber?: string;
-  }
-
-  export namespace PersonalInfo {
-    export interface PersonalIDs {
-      /**
-       * The identification number or value
-       */
-      identifier: string;
-
-      /**
-       * Type of personal identification document
-       */
-      idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-      /**
-       * Country that issued the identification (ISO 3166-1 alpha-2)
-       */
-      countryOfIssuance?: string;
-    }
   }
 }
 
@@ -622,6 +591,11 @@ export namespace BeneficialOwnerUpdateParams {
     birthDate?: string;
 
     /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
+
+    /**
      * Email address of the individual
      */
     email?: string;
@@ -630,6 +604,16 @@ export namespace BeneficialOwnerUpdateParams {
      * First name of the individual
      */
     firstName?: string;
+
+    /**
+     * The identification number or value
+     */
+    identifier?: string;
+
+    /**
+     * Type of personal identification document
+     */
+    idType?: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
 
     /**
      * Last name of the individual
@@ -646,31 +630,10 @@ export namespace BeneficialOwnerUpdateParams {
      */
     nationality?: string;
 
-    personalIds?: PersonalInfo.PersonalIDs;
-
     /**
      * Phone number in E.164 format
      */
     phoneNumber?: string;
-  }
-
-  export namespace PersonalInfo {
-    export interface PersonalIDs {
-      /**
-       * The identification number or value
-       */
-      identifier: string;
-
-      /**
-       * Type of personal identification document
-       */
-      idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-      /**
-       * Country that issued the identification (ISO 3166-1 alpha-2)
-       */
-      countryOfIssuance?: string;
-    }
   }
 }
 
