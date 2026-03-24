@@ -272,12 +272,22 @@ export namespace BusinessCustomerFields {
     /**
      * Expected number of transactions per month
      */
-    expectedMonthlyTransactionCount?: string;
+    expectedMonthlyTransactionCount?:
+      | 'COUNT_UNDER_10'
+      | 'COUNT_10_TO_100'
+      | 'COUNT_100_TO_500'
+      | 'COUNT_500_TO_1000'
+      | 'COUNT_OVER_1000';
 
     /**
      * Expected total transaction volume per month in USD equivalent
      */
-    expectedMonthlyTransactionVolume?: string;
+    expectedMonthlyTransactionVolume?:
+      | 'VOLUME_UNDER_10K'
+      | 'VOLUME_10K_TO_100K'
+      | 'VOLUME_100K_TO_1M'
+      | 'VOLUME_1M_TO_10M'
+      | 'VOLUME_OVER_10M';
 
     /**
      * List of countries where the business expects to send payments (ISO 3166-1
@@ -381,12 +391,22 @@ export interface BusinessInfo {
   /**
    * Expected number of transactions per month
    */
-  expectedMonthlyTransactionCount?: string;
+  expectedMonthlyTransactionCount?:
+    | 'COUNT_UNDER_10'
+    | 'COUNT_10_TO_100'
+    | 'COUNT_100_TO_500'
+    | 'COUNT_500_TO_1000'
+    | 'COUNT_OVER_1000';
 
   /**
    * Expected total transaction volume per month in USD equivalent
    */
-  expectedMonthlyTransactionVolume?: string;
+  expectedMonthlyTransactionVolume?:
+    | 'VOLUME_UNDER_10K'
+    | 'VOLUME_10K_TO_100K'
+    | 'VOLUME_100K_TO_1M'
+    | 'VOLUME_1M_TO_10M'
+    | 'VOLUME_OVER_10M';
 
   /**
    * List of countries where the business expects to send payments (ISO 3166-1
