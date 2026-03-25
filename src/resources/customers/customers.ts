@@ -308,7 +308,20 @@ export namespace BusinessCustomerFields {
     /**
      * The intended purpose for using the Grid account
      */
-    purposeOfAccount?: string;
+    purposeOfAccount?:
+      | 'CONTRACTOR_PAYOUTS'
+      | 'CREATOR_PAYOUTS'
+      | 'EMPLOYEE_PAYOUTS'
+      | 'MARKETPLACE_SELLER_PAYOUTS'
+      | 'SUPPLIER_PAYMENTS'
+      | 'CROSS_BORDER_B2B'
+      | 'AR_AUTOMATION'
+      | 'AP_AUTOMATION'
+      | 'EMBEDDED_PAYMENTS'
+      | 'PLATFORM_FEE_COLLECTION'
+      | 'P2P_TRANSFERS'
+      | 'CHARITABLE_DONATIONS'
+      | 'OTHER';
 
     /**
      * Business registration number
@@ -422,7 +435,20 @@ export interface BusinessInfo {
   /**
    * The intended purpose for using the Grid account
    */
-  purposeOfAccount?: string;
+  purposeOfAccount?:
+    | 'CONTRACTOR_PAYOUTS'
+    | 'CREATOR_PAYOUTS'
+    | 'EMPLOYEE_PAYOUTS'
+    | 'MARKETPLACE_SELLER_PAYOUTS'
+    | 'SUPPLIER_PAYMENTS'
+    | 'CROSS_BORDER_B2B'
+    | 'AR_AUTOMATION'
+    | 'AP_AUTOMATION'
+    | 'EMBEDDED_PAYMENTS'
+    | 'PLATFORM_FEE_COLLECTION'
+    | 'P2P_TRANSFERS'
+    | 'CHARITABLE_DONATIONS'
+    | 'OTHER';
 
   /**
    * Business registration number
