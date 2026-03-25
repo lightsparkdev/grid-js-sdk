@@ -464,20 +464,39 @@ export namespace VerificationUpdateWebhookEvent {
       resourceId: string;
 
       /**
-       * Type of verification error
+       * Type of verification error. The category-specific MISSING\_\*\_DOCUMENT types
+       * indicate which document category is needed and determine the accepted document
+       * types returned in acceptedDocumentTypes.
        */
       type:
         | 'MISSING_FIELD'
         | 'INVALID_FIELD'
-        | 'MISSING_DOCUMENT'
+        | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
+        | 'MISSING_COMPANY_DETAILS_DOCUMENT'
+        | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
+        | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
+        | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
+        | 'MISSING_IDENTITY_DOCUMENT'
         | 'INVALID_DOCUMENT'
         | 'EXPIRED_DOCUMENT'
         | 'MISSING_BENEFICIAL_OWNER';
 
       /**
        * Document types that would satisfy this requirement. The integrator can upload
-       * any one of the listed types. Present when type is MISSING_DOCUMENT,
-       * INVALID_DOCUMENT, or EXPIRED_DOCUMENT.
+       * any one of the listed types. Present when type is
+       * MISSING_LEGAL_PRESENCE_DOCUMENT, MISSING_COMPANY_DETAILS_DOCUMENT,
+       * MISSING_CONTROL_STRUCTURE_DOCUMENT, MISSING_OWNERSHIP_STRUCTURE_DOCUMENT,
+       * MISSING_PROOF_OF_ADDRESS_DOCUMENT, MISSING_IDENTITY_DOCUMENT, INVALID_DOCUMENT,
+       * or EXPIRED_DOCUMENT.
+       *
+       * | Error Type                           | Accepted Document Types                                                                                                                                                            |
+       * | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+       * | MISSING_LEGAL_PRESENCE_DOCUMENT      | CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT                                                                           |
+       * | MISSING_COMPANY_DETAILS_DOCUMENT     | INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE |
+       * | MISSING_CONTROL_STRUCTURE_DOCUMENT   | ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT                                                          |
+       * | MISSING_OWNERSHIP_STRUCTURE_DOCUMENT | SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION                                    |
+       * | MISSING_PROOF_OF_ADDRESS_DOCUMENT    | PROOF_OF_ADDRESS                                                                                                                                                                   |
+       * | MISSING_IDENTITY_DOCUMENT            | PASSPORT, DRIVERS_LICENSE, NATIONAL_ID                                                                                                                                             |
        */
       acceptedDocumentTypes?: Array<
         | 'PASSPORT'

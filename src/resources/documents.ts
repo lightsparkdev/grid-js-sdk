@@ -140,7 +140,19 @@ export interface DocumentRetrieveResponse {
   documentHolder: string;
 
   /**
-   * Type of identity or business verification document
+   * Type of identity or business verification document. Document types are grouped
+   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
+   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
+   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
+   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
+   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
+   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
+   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
+   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
+   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
+   * **Proof of address** — PROOF_OF_ADDRESS
    */
   documentType:
     | 'PASSPORT'
@@ -208,7 +220,19 @@ export interface DocumentListResponse {
   documentHolder: string;
 
   /**
-   * Type of identity or business verification document
+   * Type of identity or business verification document. Document types are grouped
+   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
+   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
+   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
+   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
+   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
+   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
+   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
+   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
+   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
+   * **Proof of address** — PROOF_OF_ADDRESS
    */
   documentType:
     | 'PASSPORT'
@@ -276,7 +300,19 @@ export interface DocumentReplaceResponse {
   documentHolder: string;
 
   /**
-   * Type of identity or business verification document
+   * Type of identity or business verification document. Document types are grouped
+   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
+   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
+   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
+   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
+   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
+   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
+   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
+   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
+   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
+   * **Proof of address** — PROOF_OF_ADDRESS
    */
   documentType:
     | 'PASSPORT'
@@ -344,7 +380,19 @@ export interface DocumentUploadResponse {
   documentHolder: string;
 
   /**
-   * Type of identity or business verification document
+   * Type of identity or business verification document. Document types are grouped
+   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
+   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
+   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
+   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
+   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
+   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
+   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
+   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
+   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
+   * **Proof of address** — PROOF_OF_ADDRESS
    */
   documentType:
     | 'PASSPORT'
@@ -408,7 +456,19 @@ export interface DocumentReplaceParams {
   country: string;
 
   /**
-   * Type of identity or business verification document
+   * Type of identity or business verification document. Document types are grouped
+   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
+   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
+   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
+   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
+   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
+   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
+   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
+   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
+   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
+   * **Proof of address** — PROOF_OF_ADDRESS
    */
   documentType:
     | 'PASSPORT'
@@ -460,7 +520,19 @@ export interface DocumentUploadParams {
   documentHolder: string;
 
   /**
-   * Type of identity or business verification document
+   * Type of identity or business verification document. Document types are grouped
+   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
+   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
+   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
+   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
+   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
+   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
+   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
+   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
+   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
+   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
+   * **Proof of address** — PROOF_OF_ADDRESS
    */
   documentType:
     | 'PASSPORT'
