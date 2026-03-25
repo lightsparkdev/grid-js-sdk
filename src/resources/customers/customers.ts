@@ -535,59 +535,97 @@ export namespace CustomerOneOf {
   export namespace BusinessCustomer {
     export interface BeneficialOwner {
       /**
-       * Individual's full name
+       * Unique identifier for this beneficial owner
        */
-      fullName: string;
+      id: string;
 
       /**
-       * Type of individual in the corporation
+       * When this beneficial owner was created
        */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
+      createdAt: string;
 
       /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
+       * The ID of the business customer this beneficial owner is associated with
        */
-      birthDate?: string;
+      customerId: string;
 
       /**
-       * Email address of the individual
+       * The current KYC status of a customer
        */
-      emailAddress?: string;
+      kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
       /**
-       * Country code (ISO 3166-1 alpha-2)
+       * Percentage of ownership in the business (0-100)
        */
-      nationality?: string;
+      ownershipPercentage: number;
+
+      personalInfo: BeneficialOwner.PersonalInfo;
 
       /**
-       * Percent of ownership when individual type is beneficial owner
+       * Roles of this person within the business
        */
-      percentageOwnership?: number;
+      roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
 
       /**
-       * Phone number of the individual in E.164 format
+       * When this beneficial owner was last updated
        */
-      phoneNumber?: string;
+      updatedAt?: string;
+    }
 
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
+    export namespace BeneficialOwner {
+      export interface PersonalInfo {
+        address: ExternalAccountsAPI.Address;
 
-      /**
-       * Title at company
-       */
-      title?: string;
+        /**
+         * Date of birth in ISO 8601 format (YYYY-MM-DD)
+         */
+        birthDate: string;
+
+        /**
+         * First name of the individual
+         */
+        firstName: string;
+
+        /**
+         * The identification number or value
+         */
+        identifier: string;
+
+        /**
+         * Type of personal identification document
+         */
+        idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+        /**
+         * Last name of the individual
+         */
+        lastName: string;
+
+        /**
+         * Country of nationality (ISO 3166-1 alpha-2)
+         */
+        nationality: string;
+
+        /**
+         * Country that issued the identification (ISO 3166-1 alpha-2)
+         */
+        countryOfIssuance?: string;
+
+        /**
+         * Email address of the individual
+         */
+        email?: string;
+
+        /**
+         * Middle name of the individual
+         */
+        middleName?: string;
+
+        /**
+         * Phone number in E.164 format
+         */
+        phoneNumber?: string;
+      }
     }
   }
 }

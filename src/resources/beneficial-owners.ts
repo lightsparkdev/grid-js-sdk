@@ -124,17 +124,17 @@ export interface BeneficialOwnerCreateResponse {
    */
   kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
+  /**
+   * Percentage of ownership in the business (0-100)
+   */
+  ownershipPercentage: number;
+
   personalInfo: BeneficialOwnerCreateResponse.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
   roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage?: number;
 
   /**
    * When this beneficial owner was last updated
@@ -219,17 +219,17 @@ export interface BeneficialOwnerRetrieveResponse {
    */
   kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
+  /**
+   * Percentage of ownership in the business (0-100)
+   */
+  ownershipPercentage: number;
+
   personalInfo: BeneficialOwnerRetrieveResponse.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
   roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage?: number;
 
   /**
    * When this beneficial owner was last updated
@@ -314,17 +314,17 @@ export interface BeneficialOwnerUpdateResponse {
    */
   kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
+  /**
+   * Percentage of ownership in the business (0-100)
+   */
+  ownershipPercentage: number;
+
   personalInfo: BeneficialOwnerUpdateResponse.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
   roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage?: number;
 
   /**
    * When this beneficial owner was last updated
@@ -409,17 +409,17 @@ export interface BeneficialOwnerListResponse {
    */
   kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
+  /**
+   * Percentage of ownership in the business (0-100)
+   */
+  ownershipPercentage: number;
+
   personalInfo: BeneficialOwnerListResponse.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
   roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage?: number;
 
   /**
    * When this beneficial owner was last updated
