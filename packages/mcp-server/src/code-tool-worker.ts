@@ -120,8 +120,6 @@ const fuse = new Fuse(
     'client.platform.listInternalAccounts',
     'client.platform.externalAccounts.create',
     'client.platform.externalAccounts.list',
-    'client.plaid.createLinkToken',
-    'client.plaid.submitPublicToken',
     'client.transferIn.create',
     'client.transferOut.create',
     'client.receiver.lookupExternalAccount',

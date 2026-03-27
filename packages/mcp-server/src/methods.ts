@@ -107,18 +107,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/platform/external-accounts',
   },
   {
-    clientCallName: 'client.plaid.createLinkToken',
-    fullyQualifiedName: 'plaid.createLinkToken',
-    httpMethod: 'post',
-    httpPath: '/plaid/link-tokens',
-  },
-  {
-    clientCallName: 'client.plaid.submitPublicToken',
-    fullyQualifiedName: 'plaid.submitPublicToken',
-    httpMethod: 'post',
-    httpPath: '/plaid/callback/{plaid_link_token}',
-  },
-  {
     clientCallName: 'client.transferIn.create',
     fullyQualifiedName: 'transferIn.create',
     httpMethod: 'post',
