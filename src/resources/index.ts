@@ -62,12 +62,6 @@ export {
   type InvitationClaimParams,
 } from './invitations';
 export {
-  Plaid,
-  type PlaidCreateLinkTokenResponse,
-  type PlaidCreateLinkTokenParams,
-  type PlaidSubmitPublicTokenParams,
-} from './plaid';
-export {
   Platform,
   type PlatformListInternalAccountsResponse,
   type PlatformListInternalAccountsParams,

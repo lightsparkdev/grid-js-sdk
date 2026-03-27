@@ -13,7 +13,6 @@ TEST_PATHS=(
 	tests/api-resources/customers/bulk.test.ts
 	tests/api-resources/platform/platform.test.ts
 	tests/api-resources/platform/external-accounts.test.ts
-	tests/api-resources/plaid.test.ts
 	tests/api-resources/transfer-in.test.ts
 	tests/api-resources/transfer-out.test.ts
 	tests/api-resources/receiver.test.ts

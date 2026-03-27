@@ -138,17 +138,6 @@ Methods:
 - <code title="post /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">create</a>({ ...params }) -> ExternalAccount</code>
 - <code title="get /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountListResponse</code>
 
-# Plaid
-
-Types:
-
-- <code><a href="./src/resources/plaid.ts">PlaidCreateLinkTokenResponse</a></code>
-
-Methods:
-
-- <code title="post /plaid/link-tokens">client.plaid.<a href="./src/resources/plaid.ts">createLinkToken</a>({ ...params }) -> PlaidCreateLinkTokenResponse</code>
-- <code title="post /plaid/callback/{plaid_link_token}">client.plaid.<a href="./src/resources/plaid.ts">submitPublicToken</a>(plaidLinkToken, { ...params }) -> ExternalAccount</code>
-
 # TransferIn
 
 Types:

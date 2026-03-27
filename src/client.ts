@@ -62,12 +62,6 @@ import {
   UmaInvitation,
 } from './resources/invitations';
 import {
-  Plaid,
-  PlaidCreateLinkTokenParams,
-  PlaidCreateLinkTokenResponse,
-  PlaidSubmitPublicTokenParams,
-} from './resources/plaid';
-import {
   BaseDestination,
   BaseQuoteSource,
   Currency,
@@ -962,10 +956,6 @@ export class LightsparkGrid {
    */
   platform: API.Platform = new API.Platform(this);
   /**
-   * External account management endpoints for creating and managing external bank accounts
-   */
-  plaid: API.Plaid = new API.Plaid(this);
-  /**
    * Endpoints for transferring funds between internal and external accounts with the same currency
    */
   transferIn: API.TransferIn = new API.TransferIn(this);
@@ -1024,7 +1014,6 @@ export class LightsparkGrid {
 LightsparkGrid.Config = Config;
 LightsparkGrid.Customers = Customers;
 LightsparkGrid.Platform = Platform;
-LightsparkGrid.Plaid = Plaid;
 LightsparkGrid.TransferIn = TransferIn;
 LightsparkGrid.TransferOut = TransferOut;
 LightsparkGrid.Receiver = Receiver;
@@ -1081,13 +1070,6 @@ export declare namespace LightsparkGrid {
     Platform as Platform,
     type PlatformListInternalAccountsResponse as PlatformListInternalAccountsResponse,
     type PlatformListInternalAccountsParams as PlatformListInternalAccountsParams,
-  };
-
-  export {
-    Plaid as Plaid,
-    type PlaidCreateLinkTokenResponse as PlaidCreateLinkTokenResponse,
-    type PlaidCreateLinkTokenParams as PlaidCreateLinkTokenParams,
-    type PlaidSubmitPublicTokenParams as PlaidSubmitPublicTokenParams,
   };
 
   export {
