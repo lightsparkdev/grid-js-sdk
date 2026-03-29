@@ -346,8 +346,7 @@ export interface OutgoingTransaction {
     | 'QUOTE_EXECUTION_FAILED'
     | 'LIGHTNING_PAYMENT_FAILED'
     | 'FUNDING_AMOUNT_MISMATCH'
-    | 'COUNTERPARTY_POST_TX_FAILED'
-    | 'TIMEOUT';
+    | 'COUNTERPARTY_POST_TX_FAILED';
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
@@ -448,7 +447,7 @@ export namespace OutgoingTransaction {
     /**
      * Reason for the refund
      */
-    reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION';
+    reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION' | 'TIMEOUT';
 
     /**
      * When the refund was settled
