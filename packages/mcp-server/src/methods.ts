@@ -341,6 +341,12 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'post',
     httpPath: '/verifications',
   },
+  {
+    clientCallName: 'client.discoveries.list',
+    fullyQualifiedName: 'discoveries.list',
+    httpMethod: 'get',
+    httpPath: '/discoveries',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

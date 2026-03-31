@@ -30,6 +30,7 @@ TEST_PATHS=(
 	tests/api-resources/beneficial-owners.test.ts
 	tests/api-resources/documents.test.ts
 	tests/api-resources/verifications.test.ts
+	tests/api-resources/discoveries.test.ts
 	tests/index.test.ts
 )
 

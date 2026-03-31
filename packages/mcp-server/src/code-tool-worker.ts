@@ -160,6 +160,7 @@ const fuse = new Fuse(
     'client.verifications.list',
     'client.verifications.retrieve',
     'client.verifications.submit',
+    'client.discoveries.list',
   ],
   { threshold: 1, shouldSort: true },
 );
