@@ -94,7 +94,13 @@ export interface VerificationRetrieveResponse {
   /**
    * Current status of the KYC/KYB verification
    */
-  verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED';
+  verificationStatus:
+    | 'RESOLVE_ERRORS'
+    | 'PENDING_MANUAL_REVIEW'
+    | 'IN_PROGRESS'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'READY_FOR_VERIFICATION';
 
   /**
    * When this verification was last updated
@@ -115,9 +121,11 @@ export namespace VerificationRetrieveResponse {
     resourceId: string;
 
     /**
-     * Type of verification error. The category-specific MISSING\_\*\_DOCUMENT types
-     * indicate which document category is needed and determine the accepted document
-     * types returned in acceptedDocumentTypes.
+     * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
+     * indicate which document category is needed. Document quality types
+     * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
+     * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
+     * themselves (sanctions, fraud, criminal records).
      */
     type:
       | 'MISSING_FIELD'
@@ -130,6 +138,16 @@ export namespace VerificationRetrieveResponse {
       | 'MISSING_IDENTITY_DOCUMENT'
       | 'INVALID_DOCUMENT'
       | 'EXPIRED_DOCUMENT'
+      | 'POOR_QUALITY_DOCUMENT'
+      | 'SUSPECTED_FRAUD_DOCUMENT'
+      | 'WRONG_DOCUMENT_TYPE'
+      | 'INCOMPLETE_DOCUMENT'
+      | 'UNREADABLE_DOCUMENT'
+      | 'DOCUMENT_VERIFICATION_FAILED'
+      | 'APPLICANT_SANCTIONED'
+      | 'APPLICANT_FRAUD'
+      | 'APPLICANT_CRIMINAL_RECORD'
+      | 'APPLICANT_REJECTED'
       | 'MISSING_BENEFICIAL_OWNER';
 
     /**
@@ -204,7 +222,13 @@ export interface VerificationListResponse {
   /**
    * Current status of the KYC/KYB verification
    */
-  verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED';
+  verificationStatus:
+    | 'RESOLVE_ERRORS'
+    | 'PENDING_MANUAL_REVIEW'
+    | 'IN_PROGRESS'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'READY_FOR_VERIFICATION';
 
   /**
    * When this verification was last updated
@@ -225,9 +249,11 @@ export namespace VerificationListResponse {
     resourceId: string;
 
     /**
-     * Type of verification error. The category-specific MISSING\_\*\_DOCUMENT types
-     * indicate which document category is needed and determine the accepted document
-     * types returned in acceptedDocumentTypes.
+     * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
+     * indicate which document category is needed. Document quality types
+     * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
+     * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
+     * themselves (sanctions, fraud, criminal records).
      */
     type:
       | 'MISSING_FIELD'
@@ -240,6 +266,16 @@ export namespace VerificationListResponse {
       | 'MISSING_IDENTITY_DOCUMENT'
       | 'INVALID_DOCUMENT'
       | 'EXPIRED_DOCUMENT'
+      | 'POOR_QUALITY_DOCUMENT'
+      | 'SUSPECTED_FRAUD_DOCUMENT'
+      | 'WRONG_DOCUMENT_TYPE'
+      | 'INCOMPLETE_DOCUMENT'
+      | 'UNREADABLE_DOCUMENT'
+      | 'DOCUMENT_VERIFICATION_FAILED'
+      | 'APPLICANT_SANCTIONED'
+      | 'APPLICANT_FRAUD'
+      | 'APPLICANT_CRIMINAL_RECORD'
+      | 'APPLICANT_REJECTED'
       | 'MISSING_BENEFICIAL_OWNER';
 
     /**
@@ -314,7 +350,13 @@ export interface VerificationSubmitResponse {
   /**
    * Current status of the KYC/KYB verification
    */
-  verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED';
+  verificationStatus:
+    | 'RESOLVE_ERRORS'
+    | 'PENDING_MANUAL_REVIEW'
+    | 'IN_PROGRESS'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'READY_FOR_VERIFICATION';
 
   /**
    * When this verification was last updated
@@ -335,9 +377,11 @@ export namespace VerificationSubmitResponse {
     resourceId: string;
 
     /**
-     * Type of verification error. The category-specific MISSING\_\*\_DOCUMENT types
-     * indicate which document category is needed and determine the accepted document
-     * types returned in acceptedDocumentTypes.
+     * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
+     * indicate which document category is needed. Document quality types
+     * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
+     * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
+     * themselves (sanctions, fraud, criminal records).
      */
     type:
       | 'MISSING_FIELD'
@@ -350,6 +394,16 @@ export namespace VerificationSubmitResponse {
       | 'MISSING_IDENTITY_DOCUMENT'
       | 'INVALID_DOCUMENT'
       | 'EXPIRED_DOCUMENT'
+      | 'POOR_QUALITY_DOCUMENT'
+      | 'SUSPECTED_FRAUD_DOCUMENT'
+      | 'WRONG_DOCUMENT_TYPE'
+      | 'INCOMPLETE_DOCUMENT'
+      | 'UNREADABLE_DOCUMENT'
+      | 'DOCUMENT_VERIFICATION_FAILED'
+      | 'APPLICANT_SANCTIONED'
+      | 'APPLICANT_FRAUD'
+      | 'APPLICANT_CRIMINAL_RECORD'
+      | 'APPLICANT_REJECTED'
       | 'MISSING_BENEFICIAL_OWNER';
 
     /**
@@ -413,7 +467,13 @@ export interface VerificationListParams extends DefaultPaginationParams {
   /**
    * Filter by verification status
    */
-  verificationStatus?: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED';
+  verificationStatus?:
+    | 'RESOLVE_ERRORS'
+    | 'PENDING_MANUAL_REVIEW'
+    | 'IN_PROGRESS'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'READY_FOR_VERIFICATION';
 }
 
 export interface VerificationSubmitParams {
