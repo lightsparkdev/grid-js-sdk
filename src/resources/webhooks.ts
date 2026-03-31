@@ -50,6 +50,7 @@ export interface IncomingPaymentWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -104,6 +105,7 @@ export interface OutgoingPaymentWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -146,6 +148,7 @@ export interface TestWebhookWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -190,6 +193,7 @@ export interface BulkUploadWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'TEST';
@@ -282,6 +286,7 @@ export interface InvitationClaimedWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
@@ -324,6 +329,7 @@ export interface CustomerUpdateWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -368,6 +374,7 @@ export interface InternalAccountStatusWebhookEvent {
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
     | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
@@ -410,6 +417,7 @@ export interface VerificationUpdateWebhookEvent {
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
     | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
     | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
@@ -443,7 +451,13 @@ export namespace VerificationUpdateWebhookEvent {
     /**
      * Current status of the KYC/KYB verification
      */
-    verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED';
+    verificationStatus:
+      | 'RESOLVE_ERRORS'
+      | 'PENDING_MANUAL_REVIEW'
+      | 'IN_PROGRESS'
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'READY_FOR_VERIFICATION';
 
     /**
      * When this verification was last updated
@@ -464,9 +478,11 @@ export namespace VerificationUpdateWebhookEvent {
       resourceId: string;
 
       /**
-       * Type of verification error. The category-specific MISSING\_\*\_DOCUMENT types
-       * indicate which document category is needed and determine the accepted document
-       * types returned in acceptedDocumentTypes.
+       * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
+       * indicate which document category is needed. Document quality types
+       * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
+       * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
+       * themselves (sanctions, fraud, criminal records).
        */
       type:
         | 'MISSING_FIELD'
@@ -479,6 +495,16 @@ export namespace VerificationUpdateWebhookEvent {
         | 'MISSING_IDENTITY_DOCUMENT'
         | 'INVALID_DOCUMENT'
         | 'EXPIRED_DOCUMENT'
+        | 'POOR_QUALITY_DOCUMENT'
+        | 'SUSPECTED_FRAUD_DOCUMENT'
+        | 'WRONG_DOCUMENT_TYPE'
+        | 'INCOMPLETE_DOCUMENT'
+        | 'UNREADABLE_DOCUMENT'
+        | 'DOCUMENT_VERIFICATION_FAILED'
+        | 'APPLICANT_SANCTIONED'
+        | 'APPLICANT_FRAUD'
+        | 'APPLICANT_CRIMINAL_RECORD'
+        | 'APPLICANT_REJECTED'
         | 'MISSING_BENEFICIAL_OWNER';
 
       /**
