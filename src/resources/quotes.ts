@@ -217,6 +217,14 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentZmwAccountInfo
     | PaymentInstructions.PaymentBwpAccountInfo
     | PaymentInstructions.PaymentXafAccountInfo
+    | PaymentInstructions.PaymentBdtAccountInfo
+    | PaymentInstructions.PaymentCopAccountInfo
+    | PaymentInstructions.PaymentEgpAccountInfo
+    | PaymentInstructions.PaymentGhsAccountInfo
+    | PaymentInstructions.PaymentGtqAccountInfo
+    | PaymentInstructions.PaymentHtgAccountInfo
+    | PaymentInstructions.PaymentJmdAccountInfo
+    | PaymentInstructions.PaymentPkrAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -525,6 +533,207 @@ export namespace PaymentInstructions {
      * Country code within the Central African CFA franc zone
      */
     region: 'CM' | 'CG';
+  }
+
+  export interface PaymentBdtAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'BDT_ACCOUNT';
+
+    /**
+     * The branch code
+     */
+    branchCode: string;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode?: string;
+  }
+
+  export interface PaymentCopAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'COP_ACCOUNT';
+
+    /**
+     * The bank account type
+     */
+    bankAccountType: 'CHECKING' | 'SAVINGS';
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentEgpAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'EGP_ACCOUNT';
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The IBAN of the bank account
+     */
+    iban?: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode?: string;
+  }
+
+  export interface PaymentGhsAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'GHS_ACCOUNT';
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentGtqAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'GTQ_ACCOUNT';
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentHtgAccountInfo {
+    accountType: 'HTG_ACCOUNT';
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentJmdAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'JMD_ACCOUNT';
+
+    /**
+     * The bank account type
+     */
+    bankAccountType: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * The branch code
+     */
+    branchCode: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface PaymentPkrAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'PKR_ACCOUNT';
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The IBAN of the bank account
+     */
+    iban?: string;
   }
 
   export interface PaymentSparkWalletInfo {
