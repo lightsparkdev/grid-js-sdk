@@ -329,7 +329,7 @@ export interface UsdAccountInfo {
 
   accountType: 'USD_ACCOUNT';
 
-  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
+  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW' | 'BANK_TRANSFER'>;
 
   /**
    * The ABA routing number

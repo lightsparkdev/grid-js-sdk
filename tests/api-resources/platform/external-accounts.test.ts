@@ -17,12 +17,7 @@ describe('resource externalAccounts', () => {
         accountType: 'USD_ACCOUNT',
         paymentRails: ['ACH'],
         routingNumber: '123456789',
-        beneficiary: {
-          beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
-          fullName: 'John Doe',
-          nationality: 'US',
-        },
+        beneficiary: { beneficiaryType: 'INDIVIDUAL', fullName: 'John Doe' },
       },
       currency: 'USD',
     });
@@ -45,9 +40,7 @@ describe('resource externalAccounts', () => {
         routingNumber: '123456789',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
           fullName: 'John Doe',
-          nationality: 'US',
           address: {
             country: 'US',
             line1: '123 Main Street',
@@ -56,10 +49,11 @@ describe('resource externalAccounts', () => {
             line2: 'Apt 4B',
             state: 'CA',
           },
+          birthDate: '1990-01-15',
           countryOfResidence: 'countryOfResidence',
           email: 'email',
+          nationality: 'US',
           phoneNumber: 'phoneNumber',
-          registrationNumber: 'registrationNumber',
         },
       },
       currency: 'USD',

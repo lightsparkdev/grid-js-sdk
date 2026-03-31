@@ -158,11 +158,6 @@ export interface BrlBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface BrlExternalAccountInfo extends PlatformExternalAccountsAPI.BrlAccountInfo {}
@@ -237,11 +232,6 @@ export interface DkkBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface DkkExternalAccountInfo extends PlatformExternalAccountsAPI.DkkAccountInfo {}
@@ -397,7 +387,15 @@ export type ExternalAccountInfoOneOf =
   | ExternalAccountInfoOneOf.EthereumWalletExternalAccountInfo
   | ExternalAccountInfoOneOf.AedExternalAccountInfo
   | ExternalAccountInfoOneOf.BwpExternalAccountInfo
-  | ExternalAccountInfoOneOf.XafExternalAccountInfo;
+  | ExternalAccountInfoOneOf.XafExternalAccountInfo
+  | ExternalAccountInfoOneOf.BdtExternalAccountInfo
+  | ExternalAccountInfoOneOf.CopExternalAccountInfo
+  | ExternalAccountInfoOneOf.EgpExternalAccountInfo
+  | ExternalAccountInfoOneOf.GhsExternalAccountInfo
+  | ExternalAccountInfoOneOf.GtqExternalAccountInfo
+  | ExternalAccountInfoOneOf.HtgExternalAccountInfo
+  | ExternalAccountInfoOneOf.JmdExternalAccountInfo
+  | ExternalAccountInfoOneOf.PkrExternalAccountInfo;
 
 export namespace ExternalAccountInfoOneOf {
   export interface CadExternalAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
@@ -457,11 +455,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -518,11 +511,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -581,11 +569,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -642,11 +625,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -703,11 +681,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -769,11 +742,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -830,11 +798,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -891,11 +854,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -961,11 +919,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -1022,11 +975,6 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
     }
   }
 
@@ -1088,11 +1036,479 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
+    }
+  }
+
+  export interface BdtExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'BDT_ACCOUNT';
+
+    beneficiary: BdtExternalAccountInfo.BdtBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The branch code
+     */
+    branchCode: string;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode?: string;
+  }
+
+  export namespace BdtExternalAccountInfo {
+    export interface BdtBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
 
       /**
-       * The registration number of the beneficiary
+       * The full name of the beneficiary
        */
-      registrationNumber?: string;
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+
+  export interface CopExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'COP_ACCOUNT';
+
+    /**
+     * The bank account type
+     */
+    bankAccountType: 'CHECKING' | 'SAVINGS';
+
+    beneficiary: CopExternalAccountInfo.CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace CopExternalAccountInfo {
+    export interface CopBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+
+  export interface EgpExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'EGP_ACCOUNT';
+
+    beneficiary: EgpExternalAccountInfo.EgpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * The IBAN of the bank account
+     */
+    iban?: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode?: string;
+  }
+
+  export namespace EgpExternalAccountInfo {
+    export interface EgpBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber: string;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+    }
+  }
+
+  export interface GhsExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'GHS_ACCOUNT';
+
+    beneficiary: GhsExternalAccountInfo.GhsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace GhsExternalAccountInfo {
+    export interface GhsBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+
+  export interface GtqExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'GTQ_ACCOUNT';
+
+    beneficiary: GtqExternalAccountInfo.GtqBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace GtqExternalAccountInfo {
+    export interface GtqBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+
+  export interface HtgExternalAccountInfo {
+    accountType: 'HTG_ACCOUNT';
+
+    beneficiary: HtgExternalAccountInfo.HtgBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace HtgExternalAccountInfo {
+    export interface HtgBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+
+  export interface JmdExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'JMD_ACCOUNT';
+
+    /**
+     * The bank account type
+     */
+    bankAccountType: 'CHECKING' | 'SAVINGS';
+
+    beneficiary: JmdExternalAccountInfo.JmdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The branch code
+     */
+    branchCode: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+  }
+
+  export namespace JmdExternalAccountInfo {
+    export interface JmdBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber: string;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+    }
+  }
+
+  export interface PkrExternalAccountInfo {
+    /**
+     * The account number of the bank
+     */
+    accountNumber: string;
+
+    accountType: 'PKR_ACCOUNT';
+
+    beneficiary: PkrExternalAccountInfo.PkrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * The IBAN of the bank account
+     */
+    iban?: string;
+  }
+
+  export namespace PkrExternalAccountInfo {
+    export interface PkrBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
     }
   }
 }
@@ -1131,11 +1547,6 @@ export interface GbpBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface GbpExternalAccountInfo extends PlatformExternalAccountsAPI.GbpAccountInfo {}
@@ -1174,11 +1585,6 @@ export interface HkdBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface HkdExternalAccountInfo extends PlatformExternalAccountsAPI.HkdAccountInfo {}
@@ -1217,11 +1623,6 @@ export interface IdrBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface IdrExternalAccountInfo extends PlatformExternalAccountsAPI.IdrAccountInfo {}
@@ -1260,11 +1661,6 @@ export interface InrBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface InrExternalAccountInfo extends PlatformExternalAccountsAPI.InrAccountInfo {}
@@ -1328,11 +1724,6 @@ export interface MxnBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface MxnExternalAccountInfo extends PlatformExternalAccountsAPI.MxnAccountInfo {}
@@ -1371,11 +1762,6 @@ export interface MyrBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface MyrExternalAccountInfo extends PlatformExternalAccountsAPI.MyrAccountInfo {}
@@ -1414,11 +1800,6 @@ export interface PhpBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface PhpExternalAccountInfo extends PlatformExternalAccountsAPI.PhpAccountInfo {}
@@ -1466,11 +1847,6 @@ export interface SgdBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface SgdExternalAccountInfo extends PlatformExternalAccountsAPI.SgdAccountInfo {}
@@ -1527,11 +1903,6 @@ export interface ThbBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface ThbExternalAccountInfo extends PlatformExternalAccountsAPI.ThbAccountInfo {}
@@ -1549,21 +1920,16 @@ export interface UsdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The birth date of the beneficiary
-   */
-  birthDate: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
 
-  /**
-   * The nationality of the beneficiary
-   */
-  nationality: string;
-
   address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
 
   /**
    * The country of residence of the beneficiary
@@ -1576,14 +1942,14 @@ export interface UsdBeneficiary {
   email?: string;
 
   /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface UsdExternalAccountInfo extends PlatformExternalAccountsAPI.UsdAccountInfo {}
@@ -1622,11 +1988,6 @@ export interface VndBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
 export interface VndExternalAccountInfo extends PlatformExternalAccountsAPI.VndAccountInfo {}
