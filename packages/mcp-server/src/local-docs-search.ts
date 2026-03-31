@@ -979,6 +979,20 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     markdown:
       "## submit\n\n`client.verifications.submit(customerId: string): { id: string; createdAt: string; customerId: string; errors: object[]; verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED'; updatedAt?: string; }`\n\n**post** `/verifications`\n\nTrigger KYC (individual) or KYB (business) verification for a customer. The response indicates whether all required information has been provided. If data is missing, the `errors` array describes exactly what needs to be supplied before verification can proceed.\n\nCall this endpoint again after resolving errors to re-submit.\n\n\n### Parameters\n\n- `customerId: string`\n  The ID of the customer to verify\n\n### Returns\n\n- `{ id: string; createdAt: string; customerId: string; errors: { reason: string; resourceId: string; type: string; acceptedDocumentTypes?: string[]; field?: string; }[]; verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED'; updatedAt?: string; }`\n\n  - `id: string`\n  - `createdAt: string`\n  - `customerId: string`\n  - `errors: { reason: string; resourceId: string; type: string; acceptedDocumentTypes?: string[]; field?: string; }[]`\n  - `verificationStatus: 'RESOLVE_ERRORS' | 'PENDING_MANUAL_REVIEW' | 'IN_PROGRESS' | 'APPROVED' | 'REJECTED'`\n  - `updatedAt?: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.verifications.submit({ customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001' });\n\nconsole.log(response);\n```",
   },
+  {
+    name: 'list',
+    endpoint: '/discoveries',
+    httpMethod: 'get',
+    summary: 'List available receiving institution names',
+    description:
+      'Retrieve available payment institution names for a given country and currency. Use this endpoint\nto look up supported banks and payment providers for a specific corridor.\nIf no country and currency parameter are provided, all payment institutions will be returned\n\nThe `bankName` field in each result is the value to pass as `bankName` when\ncreating an external account via `POST /customers/external-accounts`.\n',
+    stainlessPath: '(resource) discoveries > (method) list',
+    qualified: 'client.discoveries.list',
+    params: ['country?: string;', 'currency?: string;'],
+    response: '{ data?: { bankName: string; country: string; currency: string; displayName: string; }[]; }',
+    markdown:
+      "## list\n\n`client.discoveries.list(country?: string, currency?: string): { data?: object[]; }`\n\n**get** `/discoveries`\n\nRetrieve available payment institution names for a given country and currency. Use this endpoint\nto look up supported banks and payment providers for a specific corridor.\nIf no country and currency parameter are provided, all payment institutions will be returned\n\nThe `bankName` field in each result is the value to pass as `bankName` when\ncreating an external account via `POST /customers/external-accounts`.\n\n\n### Parameters\n\n- `country?: string`\n  ISO 3166-1 alpha-2 country code (e.g. PH)\n\n- `currency?: string`\n  ISO 4217 currency code (e.g. PHP)\n\n### Returns\n\n- `{ data?: { bankName: string; country: string; currency: string; displayName: string; }[]; }`\n\n  - `data?: { bankName: string; country: string; currency: string; displayName: string; }[]`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst discoveries = await client.discoveries.list();\n\nconsole.log(discoveries);\n```",
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [];

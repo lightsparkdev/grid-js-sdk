@@ -368,3 +368,13 @@ Methods:
 - <code title="get /verifications/{verificationId}">client.verifications.<a href="./src/resources/verifications.ts">retrieve</a>(verificationID) -> VerificationRetrieveResponse</code>
 - <code title="get /verifications">client.verifications.<a href="./src/resources/verifications.ts">list</a>({ ...params }) -> VerificationListResponsesDefaultPagination</code>
 - <code title="post /verifications">client.verifications.<a href="./src/resources/verifications.ts">submit</a>({ ...params }) -> VerificationSubmitResponse</code>
+
+# Discoveries
+
+Types:
+
+- <code><a href="./src/resources/discoveries.ts">DiscoveryListResponse</a></code>
+
+Methods:
+
+- <code title="get /discoveries">client.discoveries.<a href="./src/resources/discoveries.ts">list</a>({ ...params }) -> DiscoveryListResponse</code>

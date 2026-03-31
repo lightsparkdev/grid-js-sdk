@@ -42,6 +42,7 @@ import {
   CryptoEstimateWithdrawalFeeParams,
   CryptoEstimateWithdrawalFeeResponse,
 } from './resources/crypto';
+import { Discoveries, DiscoveryListParams, DiscoveryListResponse } from './resources/discoveries';
 import {
   DocumentListParams,
   DocumentListResponse,
@@ -1011,6 +1012,10 @@ export class LightsparkGrid {
    * Endpoints for Know Your Customer (KYC) and Know Your Business (KYB) verification, including managing beneficial owners and triggering verification for customers.
    */
   verifications: API.Verifications = new API.Verifications(this);
+  /**
+   * Endpoints for discovering available payment rails, banks, and providers for a given country and currency corridor.
+   */
+  discoveries: API.Discoveries = new API.Discoveries(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -1032,6 +1037,7 @@ LightsparkGrid.Crypto = Crypto;
 LightsparkGrid.BeneficialOwners = BeneficialOwners;
 LightsparkGrid.Documents = Documents;
 LightsparkGrid.Verifications = Verifications;
+LightsparkGrid.Discoveries = Discoveries;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1212,6 +1218,12 @@ export declare namespace LightsparkGrid {
     type VerificationListResponsesDefaultPagination as VerificationListResponsesDefaultPagination,
     type VerificationListParams as VerificationListParams,
     type VerificationSubmitParams as VerificationSubmitParams,
+  };
+
+  export {
+    Discoveries as Discoveries,
+    type DiscoveryListResponse as DiscoveryListResponse,
+    type DiscoveryListParams as DiscoveryListParams,
   };
 
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;

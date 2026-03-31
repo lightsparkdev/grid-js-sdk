@@ -42,6 +42,7 @@ export {
   type CustomerListInternalAccountsParams,
   type CustomerOneovesDefaultPagination,
 } from './customers/customers';
+export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';
 export {
   Documents,
   type DocumentRetrieveResponse,
