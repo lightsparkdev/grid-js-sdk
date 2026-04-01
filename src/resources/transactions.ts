@@ -5,7 +5,6 @@ import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
 import { TransactionsDefaultPagination } from './transfer-in';
-import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -144,8 +143,7 @@ export interface IncomingTransaction {
    */
   destination:
     | IncomingTransaction.AccountTransactionDestination
-    | IncomingTransaction.UmaAddressTransactionDestination
-    | IncomingTransaction.ExternalAccountDetailsTransactionDestination;
+    | IncomingTransaction.UmaAddressTransactionDestination;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -255,16 +253,6 @@ export namespace IncomingTransaction {
      */
     umaAddress: string;
   }
-
-  /**
-   * Transaction destination where external account details were provided inline at
-   * quote creation rather than using a pre-registered external account.
-   */
-  export interface ExternalAccountDetailsTransactionDestination {
-    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
-
-    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
-  }
 }
 
 export interface OutgoingTransaction {
@@ -283,8 +271,7 @@ export interface OutgoingTransaction {
    */
   destination:
     | OutgoingTransaction.AccountTransactionDestination
-    | OutgoingTransaction.UmaAddressTransactionDestination
-    | OutgoingTransaction.ExternalAccountDetailsTransactionDestination;
+    | OutgoingTransaction.UmaAddressTransactionDestination;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -413,16 +400,6 @@ export namespace OutgoingTransaction {
      * UMA address of the recipient
      */
     umaAddress: string;
-  }
-
-  /**
-   * Transaction destination where external account details were provided inline at
-   * quote creation rather than using a pre-registered external account.
-   */
-  export interface ExternalAccountDetailsTransactionDestination {
-    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
-
-    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
 
   /**
