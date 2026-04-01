@@ -138,8 +138,6 @@ Methods:
 - <code title="post /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">create</a>({ ...params }) -> ExternalAccount</code>
 - <code title="get /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountListResponse</code>
 
-# Plaid
-
 # TransferIn
 
 Types:
