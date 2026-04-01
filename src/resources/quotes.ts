@@ -1,8 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as ExternalAccountsAPI from './customers/external-accounts';
-import * as PlatformExternalAccountsAPI from './platform/external-accounts';
+import * as ExternalAccountsAPI from './platform/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -195,7 +194,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentMxnAccountInfo
     | PaymentInstructions.PaymentDkkAccountInfo
     | PaymentInstructions.PaymentEurAccountInfo
-    | PlatformExternalAccountsAPI.InrAccountInfo
+    | ExternalAccountsAPI.InrAccountInfo
     | PaymentInstructions.PaymentNgnAccountInfo
     | PaymentInstructions.PaymentCadAccountInfo
     | PaymentInstructions.PaymentGbpAccountInfo
@@ -245,7 +244,7 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentUsdAccountInfo extends PlatformExternalAccountsAPI.UsdAccountInfo {}
+  export interface PaymentUsdAccountInfo extends ExternalAccountsAPI.UsdAccountInfo {}
 
   export interface PaymentBrlAccountInfo {
     /**
@@ -257,31 +256,31 @@ export namespace PaymentInstructions {
     accountType?: 'BRL_ACCOUNT';
   }
 
-  export interface PaymentMxnAccountInfo extends PlatformExternalAccountsAPI.MxnAccountInfo {}
+  export interface PaymentMxnAccountInfo extends ExternalAccountsAPI.MxnAccountInfo {}
 
-  export interface PaymentDkkAccountInfo extends PlatformExternalAccountsAPI.DkkAccountInfo {}
+  export interface PaymentDkkAccountInfo extends ExternalAccountsAPI.DkkAccountInfo {}
 
-  export interface PaymentEurAccountInfo extends PlatformExternalAccountsAPI.EurAccountInfo {}
+  export interface PaymentEurAccountInfo extends ExternalAccountsAPI.EurAccountInfo {}
 
-  export interface PaymentNgnAccountInfo extends PlatformExternalAccountsAPI.NgnAccountInfo {}
+  export interface PaymentNgnAccountInfo extends ExternalAccountsAPI.NgnAccountInfo {}
 
-  export interface PaymentCadAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
+  export interface PaymentCadAccountInfo extends ExternalAccountsAPI.CadAccountInfo {}
 
-  export interface PaymentGbpAccountInfo extends PlatformExternalAccountsAPI.GbpAccountInfo {}
+  export interface PaymentGbpAccountInfo extends ExternalAccountsAPI.GbpAccountInfo {}
 
-  export interface PaymentHkdAccountInfo extends PlatformExternalAccountsAPI.HkdAccountInfo {}
+  export interface PaymentHkdAccountInfo extends ExternalAccountsAPI.HkdAccountInfo {}
 
-  export interface PaymentIdrAccountInfo extends PlatformExternalAccountsAPI.IdrAccountInfo {}
+  export interface PaymentIdrAccountInfo extends ExternalAccountsAPI.IdrAccountInfo {}
 
-  export interface PaymentMyrAccountInfo extends PlatformExternalAccountsAPI.MyrAccountInfo {}
+  export interface PaymentMyrAccountInfo extends ExternalAccountsAPI.MyrAccountInfo {}
 
-  export interface PaymentPhpAccountInfo extends PlatformExternalAccountsAPI.PhpAccountInfo {}
+  export interface PaymentPhpAccountInfo extends ExternalAccountsAPI.PhpAccountInfo {}
 
-  export interface PaymentSgdAccountInfo extends PlatformExternalAccountsAPI.SgdAccountInfo {}
+  export interface PaymentSgdAccountInfo extends ExternalAccountsAPI.SgdAccountInfo {}
 
-  export interface PaymentThbAccountInfo extends PlatformExternalAccountsAPI.ThbAccountInfo {}
+  export interface PaymentThbAccountInfo extends ExternalAccountsAPI.ThbAccountInfo {}
 
-  export interface PaymentVndAccountInfo extends PlatformExternalAccountsAPI.VndAccountInfo {}
+  export interface PaymentVndAccountInfo extends ExternalAccountsAPI.VndAccountInfo {}
 
   export interface PaymentAedAccountInfo {
     accountType: 'AED_ACCOUNT';
@@ -927,8 +926,7 @@ export interface Quote {
  */
 export type QuoteDestinationOneOf =
   | QuoteDestinationOneOf.AccountDestination
-  | QuoteDestinationOneOf.UmaAddressDestination
-  | QuoteDestinationOneOf.ExternalAccountDetailsDestination;
+  | QuoteDestinationOneOf.UmaAddressDestination;
 
 export namespace QuoteDestinationOneOf {
   /**
@@ -967,18 +965,6 @@ export namespace QuoteDestinationOneOf {
      * for the full list of supported fiat and crypto currencies.
      */
     currency?: string;
-  }
-
-  /**
-   * A convenient destination option which adds the external account and creates the
-   * quote in one step rather than first needing to call /external-accounts to add
-   * the account. Useful for one-off payments to some destination. See the Sandbox
-   * Testing guide in the API reference for test values.
-   */
-  export interface ExternalAccountDetailsDestination {
-    destinationType: 'EXTERNAL_ACCOUNT_DETAILS';
-
-    externalAccountDetails: ExternalAccountsAPI.ExternalAccountCreate;
   }
 }
 
