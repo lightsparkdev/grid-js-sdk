@@ -92,8 +92,8 @@ describe('resource beneficialOwners', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.beneficialOwners.list();
+  test.skip('list: only required params', async () => {
+    const responsePromise = client.beneficialOwners.list({ customerId: 'customerId' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -104,18 +104,11 @@ describe('resource beneficialOwners', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.beneficialOwners.list(
-        {
-          cursor: 'cursor',
-          customerId: 'customerId',
-          limit: 1,
-          role: 'UBO',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  test.skip('list: required and optional params', async () => {
+    const response = await client.beneficialOwners.list({
+      customerId: 'customerId',
+      cursor: 'cursor',
+      limit: 1,
+    });
   });
 });

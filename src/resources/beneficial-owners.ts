@@ -79,19 +79,20 @@ export class BeneficialOwners extends APIResource {
   }
 
   /**
-   * Retrieve a list of beneficial owners with optional filtering by customer ID and
-   * role.
+   * Retrieve a list of beneficial owners for a business customer.
    *
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const beneficialOwnerListResponse of client.beneficialOwners.list()) {
+   * for await (const beneficialOwnerListResponse of client.beneficialOwners.list(
+   *   { customerId: 'customerId' },
+   * )) {
    *   // ...
    * }
    * ```
    */
   list(
-    query: BeneficialOwnerListParams | null | undefined = {},
+    query: BeneficialOwnerListParams,
     options?: RequestOptions,
   ): PagePromise<BeneficialOwnerListResponsesDefaultPagination, BeneficialOwnerListResponse> {
     return this._client.getAPIList('/beneficial-owners', DefaultPagination<BeneficialOwnerListResponse>, {
@@ -639,19 +640,14 @@ export namespace BeneficialOwnerUpdateParams {
 
 export interface BeneficialOwnerListParams extends DefaultPaginationParams {
   /**
-   * Filter by business customer ID
+   * The business customer ID
    */
-  customerId?: string;
+  customerId: string;
 
   /**
    * Maximum number of results to return (default 20, max 100)
    */
   limit?: number;
-
-  /**
-   * Filter by role
-   */
-  role?: 'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER';
 }
 
 export declare namespace BeneficialOwners {
