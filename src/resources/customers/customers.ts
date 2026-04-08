@@ -489,9 +489,20 @@ export interface Customer {
   createdAt?: string;
 
   /**
+   * List of currency codes enabled for this customer.
+   */
+  currencies?: Array<string>;
+
+  /**
    * Whether the customer is marked as deleted
    */
   isDeleted?: boolean;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
+   * and regulatory jurisdiction.
+   */
+  region?: string;
 
   /**
    * Last update timestamp
@@ -505,6 +516,25 @@ export interface CustomerCreate {
    * the system.
    */
   platformCustomerId: string;
+
+  /**
+   * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
+   * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
+   * use more than one sending currency, since the correct currencies cannot always
+   * be inferred. If not provided, currencies will be inferred from the customer's
+   * region. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
+   * This determines the regulatory jurisdiction and KYC requirements for the
+   * customer. Required if the customer will use currencies with different KYC
+   * requirements across regions. A customer with accounts in multiple regions should
+   * be registered as separate customers. This field is immutable after creation.
+   */
+  region?: string;
 
   /**
    * Optional UMA address identifier. If not provided during customer creation, one
@@ -637,6 +667,14 @@ export type CustomerType = 'INDIVIDUAL' | 'BUSINESS';
 
 export interface CustomerUpdate {
   /**
+   * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
+   * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
+   * list. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
    * Optional UMA address identifier. If provided, the customer's UMA address will be
    * updated. This is an optional identifier to route payments to the customer.
    */
@@ -735,6 +773,12 @@ export interface CustomerListParams extends DefaultPaginationParams {
   createdBefore?: string;
 
   /**
+   * Filter by currency code. Returns customers that have this currency in their
+   * enabled currencies list.
+   */
+  currency?: string;
+
+  /**
    * Filter by customer type
    */
   customerType?: CustomerType;
@@ -753,6 +797,11 @@ export interface CustomerListParams extends DefaultPaginationParams {
    * Filter by platform-specific customer identifier
    */
   platformCustomerId?: string;
+
+  /**
+   * Filter by customer region (ISO 3166-1 alpha-2 country code)
+   */
+  region?: string;
 
   /**
    * Filter by uma address

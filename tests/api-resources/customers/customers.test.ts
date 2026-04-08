@@ -28,6 +28,8 @@ describe('resource customers', () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
         platformCustomerId: 'ind-9f84e0c2',
+        currencies: ['USD', 'USDC'],
+        region: 'US',
         umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
@@ -76,6 +78,7 @@ describe('resource customers', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
+        currencies: ['USD', 'EUR', 'USDC'],
         umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
@@ -114,11 +117,13 @@ describe('resource customers', () => {
         {
           createdAfter: '2019-12-27T18:11:19.117Z',
           createdBefore: '2019-12-27T18:11:19.117Z',
+          currency: 'currency',
           cursor: 'cursor',
           customerType: 'INDIVIDUAL',
           isIncludingDeleted: true,
           limit: 1,
           platformCustomerId: 'platformCustomerId',
+          region: 'region',
           umaAddress: 'umaAddress',
           updatedAfter: '2019-12-27T18:11:19.117Z',
           updatedBefore: '2019-12-27T18:11:19.117Z',
