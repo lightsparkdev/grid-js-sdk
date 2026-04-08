@@ -65,40 +65,6 @@ describe('resource quotes', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.quotes.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.quotes.list(
-        {
-          createdAfter: '2019-12-27T18:11:19.117Z',
-          createdBefore: '2019-12-27T18:11:19.117Z',
-          cursor: 'cursor',
-          customerId: 'customerId',
-          limit: 1,
-          receivingAccountId: 'receivingAccountId',
-          receivingUmaAddress: 'receivingUmaAddress',
-          sendingAccountId: 'sendingAccountId',
-          sendingUmaAddress: 'sendingUmaAddress',
-          status: 'PENDING',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(LightsparkGrid.NotFoundError);
-  });
-
-  // Mock server tests are disabled
   test.skip('execute', async () => {
     const responsePromise = client.quotes.execute('Quote:019542f5-b3e7-1d02-0000-000000000001');
     const rawResponse = await responsePromise.asResponse();

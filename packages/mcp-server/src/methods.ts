@@ -143,12 +143,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/quotes/{quoteId}',
   },
   {
-    clientCallName: 'client.quotes.list',
-    fullyQualifiedName: 'quotes.list',
-    httpMethod: 'get',
-    httpPath: '/quotes',
-  },
-  {
     clientCallName: 'client.quotes.execute',
     fullyQualifiedName: 'quotes.execute',
     httpMethod: 'post',

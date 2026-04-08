@@ -78,8 +78,6 @@ export {
   type QuoteDestinationOneOf,
   type QuoteSourceOneOf,
   type QuoteCreateParams,
-  type QuoteListParams,
-  type QuotesDefaultPagination,
 } from './quotes';
 export {
   Receiver,

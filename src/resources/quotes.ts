@@ -3,7 +3,6 @@
 import { APIResource } from '../core/resource';
 import * as ExternalAccountsAPI from './platform/external-accounts';
 import { APIPromise } from '../core/api-promise';
-import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -75,26 +74,6 @@ export class Quotes extends APIResource {
   }
 
   /**
-   * Retrieve a list of transfer quotes with optional filtering parameters. Returns
-   * all quotes that match the specified filters. If no filters are provided, returns
-   * all quotes (paginated).
-   *
-   * @example
-   * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const quote of client.quotes.list()) {
-   *   // ...
-   * }
-   * ```
-   */
-  list(
-    query: QuoteListParams | null | undefined = {},
-    options?: RequestOptions,
-  ): PagePromise<QuotesDefaultPagination, Quote> {
-    return this._client.getAPIList('/quotes', DefaultPagination<Quote>, { query, ...options });
-  }
-
-  /**
    * Execute a quote by its ID. This endpoint initiates the transfer between the
    * source and destination accounts.
    *
@@ -115,8 +94,6 @@ export class Quotes extends APIResource {
     return this._client.post(path`/quotes/${quoteID}/execute`, options);
   }
 }
-
-export type QuotesDefaultPagination = DefaultPagination<Quote>;
 
 export type BaseDestination = unknown;
 
@@ -1110,53 +1087,6 @@ export interface QuoteCreateParams {
   senderCustomerInfo?: { [key: string]: unknown };
 }
 
-export interface QuoteListParams extends DefaultPaginationParams {
-  /**
-   * Filter quotes created after this timestamp (inclusive)
-   */
-  createdAfter?: string;
-
-  /**
-   * Filter quotes created before this timestamp (inclusive)
-   */
-  createdBefore?: string;
-
-  /**
-   * Filter by sending customer ID
-   */
-  customerId?: string;
-
-  /**
-   * Maximum number of results to return (default 20, max 100)
-   */
-  limit?: number;
-
-  /**
-   * Filter by receiving account ID
-   */
-  receivingAccountId?: string;
-
-  /**
-   * Filter by receiving UMA address
-   */
-  receivingUmaAddress?: string;
-
-  /**
-   * Filter by sending account ID
-   */
-  sendingAccountId?: string;
-
-  /**
-   * Filter by sending UMA address
-   */
-  sendingUmaAddress?: string;
-
-  /**
-   * Filter by quote status
-   */
-  status?: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
-}
-
 export declare namespace Quotes {
   export {
     type BaseDestination as BaseDestination,
@@ -1167,8 +1097,6 @@ export declare namespace Quotes {
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
     type QuoteSourceOneOf as QuoteSourceOneOf,
-    type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
-    type QuoteListParams as QuoteListParams,
   };
 }
