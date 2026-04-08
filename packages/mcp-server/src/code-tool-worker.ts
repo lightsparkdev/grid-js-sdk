@@ -130,7 +130,6 @@ const fuse = new Fuse(
     'client.receiver.lookupUma',
     'client.quotes.create',
     'client.quotes.execute',
-    'client.quotes.list',
     'client.quotes.retrieve',
     'client.transactions.approve',
     'client.transactions.list',

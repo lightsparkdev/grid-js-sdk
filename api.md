@@ -188,7 +188,6 @@ Methods:
 
 - <code title="post /quotes">client.quotes.<a href="./src/resources/quotes.ts">create</a>({ ...params }) -> Quote</code>
 - <code title="get /quotes/{quoteId}">client.quotes.<a href="./src/resources/quotes.ts">retrieve</a>(quoteID) -> Quote</code>
-- <code title="get /quotes">client.quotes.<a href="./src/resources/quotes.ts">list</a>({ ...params }) -> QuotesDefaultPagination</code>
 - <code title="post /quotes/{quoteId}/execute">client.quotes.<a href="./src/resources/quotes.ts">execute</a>(quoteID) -> Quote</code>
 
 # Transactions

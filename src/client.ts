@@ -71,10 +71,8 @@ import {
   Quote,
   QuoteCreateParams,
   QuoteDestinationOneOf,
-  QuoteListParams,
   QuoteSourceOneOf,
   Quotes,
-  QuotesDefaultPagination,
 } from './resources/quotes';
 import {
   CounterpartyFieldDefinition,
@@ -1109,9 +1107,7 @@ export declare namespace LightsparkGrid {
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
     type QuoteSourceOneOf as QuoteSourceOneOf,
-    type QuotesDefaultPagination as QuotesDefaultPagination,
     type QuoteCreateParams as QuoteCreateParams,
-    type QuoteListParams as QuoteListParams,
   };
 
   export {
