@@ -78,7 +78,8 @@ export interface CryptoEstimateWithdrawalFeeParams {
 
   /**
    * The blockchain network for the withdrawal. Example values: SOLANA_MAINNET,
-   * SOLANA_DEVNET, ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   * SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET, BASE_TESTNET,
+   * SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET, LIGHTNING_REGTEST.
    */
   cryptoNetwork: string;
 

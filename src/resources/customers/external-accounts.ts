@@ -277,7 +277,8 @@ export interface ExternalAccount {
   /**
    * The blockchain network for this external account, if applicable. Present when
    * the account is a cryptocurrency wallet. Example values: SOLANA_MAINNET,
-   * ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   * SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET, BASE_TESTNET,
+   * SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET, LIGHTNING_REGTEST.
    */
   cryptoNetwork?: string;
 
@@ -318,9 +319,10 @@ export interface ExternalAccountCreate {
 
   /**
    * The blockchain network for this external account. Required when the account is a
-   * cryptocurrency wallet (e.g. SolanaWallet, PolygonWallet, TronWallet). Specifies
-   * which network the wallet is on. Example values: SOLANA_MAINNET, SOLANA_DEVNET,
-   * ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   * cryptocurrency wallet. Specifies which network the wallet is on. Example values:
+   * SOLANA_MAINNET, SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET,
+   * BASE_TESTNET, SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET,
+   * LIGHTNING_REGTEST.
    */
   cryptoNetwork?: string;
 
@@ -2006,9 +2008,10 @@ export interface ExternalAccountCreateParams {
 
   /**
    * The blockchain network for this external account. Required when the account is a
-   * cryptocurrency wallet (e.g. SolanaWallet, PolygonWallet, TronWallet). Specifies
-   * which network the wallet is on. Example values: SOLANA_MAINNET, SOLANA_DEVNET,
-   * ETHEREUM_MAINNET, POLYGON_MAINNET, TRON_MAINNET.
+   * cryptocurrency wallet. Specifies which network the wallet is on. Example values:
+   * SOLANA_MAINNET, SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET,
+   * BASE_TESTNET, SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET,
+   * LIGHTNING_REGTEST.
    */
   cryptoNetwork?: string;
 
