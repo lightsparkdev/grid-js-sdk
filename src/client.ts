@@ -71,6 +71,7 @@ import {
   Quote,
   QuoteCreateParams,
   QuoteDestinationOneOf,
+  QuoteExecuteParams,
   QuoteSourceOneOf,
   Quotes,
 } from './resources/quotes';
@@ -1108,6 +1109,7 @@ export declare namespace LightsparkGrid {
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
     type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuoteCreateParams as QuoteCreateParams,
+    type QuoteExecuteParams as QuoteExecuteParams,
   };
 
   export {

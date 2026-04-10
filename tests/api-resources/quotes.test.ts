@@ -49,6 +49,7 @@ describe('resource quotes', () => {
       lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
       purposeOfPayment: 'GIFT',
       senderCustomerInfo: { FULL_NAME: 'bar', NATIONALITY: 'bar' },
+      'Idempotency-Key': '<uuid>',
     });
   });
 
@@ -74,5 +75,17 @@ describe('resource quotes', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('execute: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.quotes.execute(
+        'Quote:019542f5-b3e7-1d02-0000-000000000001',
+        { 'Idempotency-Key': '<uuid>' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 });

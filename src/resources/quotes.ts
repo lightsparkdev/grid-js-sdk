@@ -3,6 +3,7 @@
 import { APIResource } from '../core/resource';
 import * as ExternalAccountsAPI from './platform/external-accounts';
 import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -55,8 +56,16 @@ export class Quotes extends APIResource {
    * });
    * ```
    */
-  create(body: QuoteCreateParams, options?: RequestOptions): APIPromise<Quote> {
-    return this._client.post('/quotes', { body, ...options });
+  create(params: QuoteCreateParams, options?: RequestOptions): APIPromise<Quote> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/quotes', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -90,8 +99,19 @@ export class Quotes extends APIResource {
    * );
    * ```
    */
-  execute(quoteID: string, options?: RequestOptions): APIPromise<Quote> {
-    return this._client.post(path`/quotes/${quoteID}/execute`, options);
+  execute(
+    quoteID: string,
+    params: QuoteExecuteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<Quote> {
+    const { 'Idempotency-Key': idempotencyKey } = params ?? {};
+    return this._client.post(path`/quotes/${quoteID}/execute`, {
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -1010,18 +1030,18 @@ export namespace QuoteSourceOneOf {
 
 export interface QuoteCreateParams {
   /**
-   * Destination account details
+   * Body param: Destination account details
    */
   destination: QuoteDestinationOneOf;
 
   /**
-   * The amount to send/receive in the smallest unit of the locked currency (eg.
-   * cents). See `lockedCurrencySide` for more information.
+   * Body param: The amount to send/receive in the smallest unit of the locked
+   * currency (eg. cents). See `lockedCurrencySide` for more information.
    */
   lockedCurrencyAmount: number;
 
   /**
-   * The side of the quote which should be locked and specified in the
+   * Body param: The side of the quote which should be locked and specified in the
    * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
    * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
    * cents). If I want the receiver to receive exactly $10 USD, I would set this to
@@ -1030,37 +1050,38 @@ export interface QuoteCreateParams {
   lockedCurrencySide: 'SENDING' | 'RECEIVING';
 
   /**
-   * Source account details
+   * Body param: Source account details
    */
   source: QuoteSourceOneOf;
 
   /**
-   * Optional description/memo for the transfer
+   * Body param: Optional description/memo for the transfer
    */
   description?: string;
 
   /**
-   * Whether to immediately execute the quote after creation. If true, the quote will
-   * be executed and the transaction will be created at the current exchange rate. It
-   * should only be used if you don't want to lock and view rate details before
-   * executing the quote. If you are executing a pre-existing quote, use the
-   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default. This can
-   * only be used for quotes with a `source` which is either an internal account, or
-   * has direct pull functionality (e.g. ACH pull with an external account).
+   * Body param: Whether to immediately execute the quote after creation. If true,
+   * the quote will be executed and the transaction will be created at the current
+   * exchange rate. It should only be used if you don't want to lock and view rate
+   * details before executing the quote. If you are executing a pre-existing quote,
+   * use the `/quotes/{quoteId}/execute` endpoint instead. This is false by default.
+   * This can only be used for quotes with a `source` which is either an internal
+   * account, or has direct pull functionality (e.g. ACH pull with an external
+   * account).
    */
   immediatelyExecute?: boolean;
 
   /**
-   * Lookup ID from a previous receiver lookup request. If provided, this can make
-   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
-   * required for UMA destinations due to counterparty institution requirements. See
-   * `senderCustomerInfo` for more information.
+   * Body param: Lookup ID from a previous receiver lookup request. If provided, this
+   * can make the quote creation more efficient by reusing cached lookup data. NOTE:
+   * This is required for UMA destinations due to counterparty institution
+   * requirements. See `senderCustomerInfo` for more information.
    */
   lookupId?: string;
 
   /**
-   * The purpose of the payment. This may be required when sending to certain
-   * geographies (e.g. India).
+   * Body param: The purpose of the payment. This may be required when sending to
+   * certain geographies (e.g. India).
    */
   purposeOfPayment?:
     | 'GIFT'
@@ -1077,16 +1098,30 @@ export interface QuoteCreateParams {
     | 'OTHER';
 
   /**
-   * Key-value pairs of additional information about the sender which was requested
-   * by the destination. This is relevant when the destination requires more sender
-   * info than was provided during customer creation. Any fields specified in
-   * `requiredPayerDataFields` from the response of the
+   * Body param: Key-value pairs of additional information about the sender which was
+   * requested by the destination. This is relevant when the destination requires
+   * more sender info than was provided during customer creation. Any fields
+   * specified in `requiredPayerDataFields` from the response of the
    * `/receiver/uma/{receiverUmaAddress}` (lookupUma) or
    * `/receiver/external-account/{accountId}` (lookupExternalAccount) endpoints MUST
    * be provided here if they were requested. If the destination did not request any
    * additional information, this field can be omitted.
    */
   senderCustomerInfo?: { [key: string]: unknown };
+
+  /**
+   * Header param: A unique identifier for the request. If the same key is sent
+   * multiple times, the server will return the same response as the first request.
+   */
+  'Idempotency-Key'?: string;
+}
+
+export interface QuoteExecuteParams {
+  /**
+   * A unique identifier for the request. If the same key is sent multiple times, the
+   * server will return the same response as the first request.
+   */
+  'Idempotency-Key'?: string;
 }
 
 export declare namespace Quotes {
@@ -1100,5 +1135,6 @@ export declare namespace Quotes {
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
     type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuoteCreateParams as QuoteCreateParams,
+    type QuoteExecuteParams as QuoteExecuteParams,
   };
 }

@@ -78,6 +78,7 @@ export {
   type QuoteDestinationOneOf,
   type QuoteSourceOneOf,
   type QuoteCreateParams,
+  type QuoteExecuteParams,
 } from './quotes';
 export {
   Receiver,
