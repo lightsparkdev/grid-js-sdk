@@ -62,7 +62,6 @@ export {
   type InvitationCreateParams,
   type InvitationClaimParams,
 } from './invitations';
-export { Plaid } from './plaid';
 export {
   Platform,
   type PlatformListInternalAccountsResponse,
