@@ -123,9 +123,9 @@ export interface BeneficialOwnerPersonalInfo {
   identifier: string;
 
   /**
-   * Type of personal identification document
+   * Type of tax identification
    */
-  idType: 'SSN' | 'ITIN' | 'EIN' | 'NON_TAX_ID';
+  idType: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 
   /**
    * Last name of the individual
@@ -386,9 +386,9 @@ export namespace BeneficialOwnerUpdateParams {
     identifier?: string;
 
     /**
-     * Type of personal identification document
+     * Type of tax identification
      */
-    idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_TAX_ID';
+    idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 
     /**
      * Last name of the individual
