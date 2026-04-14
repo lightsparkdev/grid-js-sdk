@@ -497,7 +497,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       typescript: {
         method: 'client.customers.bulk.uploadCsv',
         example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.customers.bulk.uploadCsv({\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.jobId);",
+          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.customers.bulk.uploadCsv({\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.jobId);",
       },
     },
   },
@@ -1848,7 +1848,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       typescript: {
         method: 'client.documents.upload',
         example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.upload({\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.id);",
+          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.upload({\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.id);",
       },
     },
   },
@@ -1961,7 +1961,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       typescript: {
         method: 'client.documents.replace',
         example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.replace('documentId', {\n  country: 'US',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.id);",
+          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.replace('documentId', {\n  country: 'US',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.id);",
       },
     },
   },
