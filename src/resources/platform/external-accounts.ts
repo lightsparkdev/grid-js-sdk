@@ -67,6 +67,48 @@ export class ExternalAccounts extends APIResource {
   }
 }
 
+export interface AedAccountInfo {
+  accountType: 'AED_ACCOUNT';
+
+  /**
+   * UAE IBAN (23 characters, starting with AE)
+   */
+  iban: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * The SWIFT/BIC code of the bank
+   */
+  swiftCode?: string;
+}
+
+export interface BdtAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'BDT_ACCOUNT';
+
+  /**
+   * The branch code
+   */
+  branchCode: string;
+
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The SWIFT/BIC code of the bank
+   */
+  swiftCode?: string;
+}
+
 export interface BrlAccountInfo {
   accountType: 'BRL_ACCOUNT';
 
@@ -86,6 +128,22 @@ export interface BrlAccountInfo {
    * The tax ID (CPF or CNPJ)
    */
   taxId: string;
+}
+
+export interface BwpAccountInfo {
+  accountType: 'BWP_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
 }
 
 export interface CadAccountInfo {
@@ -109,6 +167,27 @@ export interface CadAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
+export interface CopAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'COP_ACCOUNT';
+
+  /**
+   * The bank account type
+   */
+  bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+}
+
 export interface DkkAccountInfo {
   accountType: 'DKK_ACCOUNT';
 
@@ -118,6 +197,27 @@ export interface DkkAccountInfo {
   iban: string;
 
   paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
+
+  /**
+   * The SWIFT/BIC code of the bank
+   */
+  swiftCode?: string;
+}
+
+export interface EgpAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'EGP_ACCOUNT';
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+
+  /**
+   * The IBAN of the bank account
+   */
+  iban?: string;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -157,6 +257,38 @@ export interface GbpAccountInfo {
   sortCode: string;
 }
 
+export interface GhsAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'GHS_ACCOUNT';
+
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+}
+
+export interface GtqAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'GTQ_ACCOUNT';
+
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+}
+
 export interface HkdAccountInfo {
   /**
    * Hong Kong bank account number
@@ -176,6 +308,17 @@ export interface HkdAccountInfo {
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export interface HtgAccountInfo {
+  accountType: 'HTG_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
 }
 
 export interface IdrAccountInfo {
@@ -213,6 +356,59 @@ export interface InrAccountInfo {
    * The UPI Virtual Payment Address
    */
   vpa: string;
+}
+
+export interface JmdAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'JMD_ACCOUNT';
+
+  /**
+   * The bank account type
+   */
+  bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The branch code
+   */
+  branchCode: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
+export interface KesAccountInfo {
+  accountType: 'KES_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * Kenyan mobile money phone number
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
+}
+
+export interface MwkAccountInfo {
+  accountType: 'MWK_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
 }
 
 export interface MxnAccountInfo {
@@ -279,6 +475,43 @@ export interface PhpAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
+export interface PkrAccountInfo {
+  /**
+   * The account number of the bank
+   */
+  accountNumber: string;
+
+  accountType: 'PKR_ACCOUNT';
+
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The IBAN of the bank account
+   */
+  iban?: string;
+}
+
+export interface RwfAccountInfo {
+  accountType: 'RWF_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * Rwandan mobile money phone number
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
+}
+
 export interface SgdAccountInfo {
   /**
    * Bank account number
@@ -321,6 +554,38 @@ export interface ThbAccountInfo {
   swiftCode: string;
 }
 
+export interface TzsAccountInfo {
+  accountType: 'TZS_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * Tanzanian mobile money phone number
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
+}
+
+export interface UgxAccountInfo {
+  accountType: 'UGX_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
+}
+
 export interface UsdAccountInfo {
   /**
    * The account number of the bank
@@ -356,6 +621,80 @@ export interface VndAccountInfo {
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export interface XafAccountInfo {
+  accountType: 'XAF_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
+
+  /**
+   * Country code within the Central African CFA franc zone
+   */
+  region: 'CM' | 'CG';
+}
+
+export interface XofAccountInfo {
+  accountType: 'XOF_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
+
+  /**
+   * Country code within the West African CFA franc zone
+   */
+  region: 'BJ' | 'CI' | 'SN' | 'TG';
+}
+
+export interface ZarAccountInfo {
+  /**
+   * South African bank account number
+   */
+  accountNumber: string;
+
+  accountType: 'ZAR_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
+}
+
+export interface ZmwAccountInfo {
+  accountType: 'ZMW_ACCOUNT';
+
+  paymentRails: Array<'MOBILE_MONEY'>;
+
+  /**
+   * Zambian mobile money phone number
+   */
+  phoneNumber: string;
+
+  /**
+   * The mobile money provider name
+   */
+  provider: string;
 }
 
 export interface ExternalAccountListResponse {
@@ -435,22 +774,41 @@ export interface ExternalAccountListParams {
 
 export declare namespace ExternalAccounts {
   export {
+    type AedAccountInfo as AedAccountInfo,
+    type BdtAccountInfo as BdtAccountInfo,
     type BrlAccountInfo as BrlAccountInfo,
+    type BwpAccountInfo as BwpAccountInfo,
     type CadAccountInfo as CadAccountInfo,
+    type CopAccountInfo as CopAccountInfo,
     type DkkAccountInfo as DkkAccountInfo,
+    type EgpAccountInfo as EgpAccountInfo,
     type EurAccountInfo as EurAccountInfo,
     type GbpAccountInfo as GbpAccountInfo,
+    type GhsAccountInfo as GhsAccountInfo,
+    type GtqAccountInfo as GtqAccountInfo,
     type HkdAccountInfo as HkdAccountInfo,
+    type HtgAccountInfo as HtgAccountInfo,
     type IdrAccountInfo as IdrAccountInfo,
     type InrAccountInfo as InrAccountInfo,
+    type JmdAccountInfo as JmdAccountInfo,
+    type KesAccountInfo as KesAccountInfo,
+    type MwkAccountInfo as MwkAccountInfo,
     type MxnAccountInfo as MxnAccountInfo,
     type MyrAccountInfo as MyrAccountInfo,
     type NgnAccountInfo as NgnAccountInfo,
     type PhpAccountInfo as PhpAccountInfo,
+    type PkrAccountInfo as PkrAccountInfo,
+    type RwfAccountInfo as RwfAccountInfo,
     type SgdAccountInfo as SgdAccountInfo,
     type ThbAccountInfo as ThbAccountInfo,
+    type TzsAccountInfo as TzsAccountInfo,
+    type UgxAccountInfo as UgxAccountInfo,
     type UsdAccountInfo as UsdAccountInfo,
     type VndAccountInfo as VndAccountInfo,
+    type XafAccountInfo as XafAccountInfo,
+    type XofAccountInfo as XofAccountInfo,
+    type ZarAccountInfo as ZarAccountInfo,
+    type ZmwAccountInfo as ZmwAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
