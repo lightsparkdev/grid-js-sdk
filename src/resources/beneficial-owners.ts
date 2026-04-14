@@ -125,7 +125,7 @@ export interface BeneficialOwnerPersonalInfo {
   /**
    * Type of personal identification document
    */
-  idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+  idType: 'SSN' | 'ITIN' | 'EIN' | 'NON_TAX_ID';
 
   /**
    * Last name of the individual
@@ -388,7 +388,7 @@ export namespace BeneficialOwnerUpdateParams {
     /**
      * Type of personal identification document
      */
-    idType?: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+    idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_TAX_ID';
 
     /**
      * Last name of the individual

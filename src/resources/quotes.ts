@@ -214,6 +214,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentBwpAccountInfo
     | PaymentInstructions.PaymentXafAccountInfo
     | PaymentInstructions.PaymentBdtAccountInfo
+    | PaymentInstructions.PaymentArsAccountInfo
     | PaymentInstructions.PaymentCopAccountInfo
     | PaymentInstructions.PaymentEgpAccountInfo
     | PaymentInstructions.PaymentGhsAccountInfo
@@ -303,7 +304,23 @@ export namespace PaymentInstructions {
 
   export interface PaymentBdtAccountInfo extends ExternalAccountsAPI.BdtAccountInfo {}
 
-  export interface PaymentCopAccountInfo extends ExternalAccountsAPI.CopAccountInfo {}
+  export interface PaymentArsAccountInfo {
+    /**
+     * The static CVU (Clave Virtual Uniforme) bank account number to pay to.
+     */
+    accountNumber: string;
+
+    accountType: 'ARS_ACCOUNT';
+  }
+
+  export interface PaymentCopAccountInfo {
+    /**
+     * A payment URL where the customer can complete their COP deposit.
+     */
+    paymentUrl: string;
+
+    accountType?: 'COP_ACCOUNT';
+  }
 
   export interface PaymentEgpAccountInfo extends ExternalAccountsAPI.EgpAccountInfo {}
 
