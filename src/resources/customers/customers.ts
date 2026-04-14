@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as CustomersAPI from './customers';
+import * as BeneficialOwnersAPI from '../beneficial-owners';
 import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
 import * as ExternalAccountsAPI from './external-accounts';
@@ -589,7 +590,7 @@ export namespace CustomerOneOf {
        */
       ownershipPercentage: number;
 
-      personalInfo: BeneficialOwner.PersonalInfo;
+      personalInfo: BeneficialOwnersAPI.BeneficialOwnerPersonalInfo;
 
       /**
        * Roles of this person within the business
@@ -600,62 +601,6 @@ export namespace CustomerOneOf {
        * When this beneficial owner was last updated
        */
       updatedAt?: string;
-    }
-
-    export namespace BeneficialOwner {
-      export interface PersonalInfo {
-        address: ExternalAccountsAPI.Address;
-
-        /**
-         * Date of birth in ISO 8601 format (YYYY-MM-DD)
-         */
-        birthDate: string;
-
-        /**
-         * First name of the individual
-         */
-        firstName: string;
-
-        /**
-         * The identification number or value
-         */
-        identifier: string;
-
-        /**
-         * Type of personal identification document
-         */
-        idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-        /**
-         * Last name of the individual
-         */
-        lastName: string;
-
-        /**
-         * Country of nationality (ISO 3166-1 alpha-2)
-         */
-        nationality: string;
-
-        /**
-         * Country that issued the identification (ISO 3166-1 alpha-2)
-         */
-        countryOfIssuance?: string;
-
-        /**
-         * Email address of the individual
-         */
-        email?: string;
-
-        /**
-         * Middle name of the individual
-         */
-        middleName?: string;
-
-        /**
-         * Phone number in E.164 format
-         */
-        phoneNumber?: string;
-      }
     }
   }
 }

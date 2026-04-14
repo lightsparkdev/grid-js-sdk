@@ -2,7 +2,66 @@
 
 Types:
 
+- <code><a href="./src/resources/shared.ts">AedBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">AedExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">BdtBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">BdtExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">BrlExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BulkCustomerImportErrorEntry</a></code>
+- <code><a href="./src/resources/shared.ts">BwpBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">BwpExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">CadBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">CadExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">CopBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">CopExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">DkkExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">EgpBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">EgpExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">EthereumWalletExternalAccountInfo</a></code>
+- <code><a href="./src/resources/shared.ts">EurBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">EurExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">GbpExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">GhsBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">GhsExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">GtqBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">GtqExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">HkdExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">HtgBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">HtgExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">IdrExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">InrExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">JmdBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">JmdExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">KesBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">KesExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">MwkBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">MwkExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">MxnExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">MyrExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">NgnBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">NgnExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">PhpExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">PkrBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">PkrExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">RwfBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">RwfExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">SgdExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">ThbExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">TzsBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">TzsExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">UgxBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">UgxExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">UsdExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">VerificationError</a></code>
+- <code><a href="./src/resources/shared.ts">VndExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">XafBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">XafExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">XofBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">XofExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">ZarBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">ZarExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">ZmwBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">ZmwExternalAccountCreateInfo</a></code>
 
 # Config
 
@@ -323,6 +382,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerPersonalInfo</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerCreateResponse</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerRetrieveResponse</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerUpdateResponse</a></code>

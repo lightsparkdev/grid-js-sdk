@@ -25,6 +25,7 @@ import {
   BeneficialOwnerListParams,
   BeneficialOwnerListResponse,
   BeneficialOwnerListResponsesDefaultPagination,
+  BeneficialOwnerPersonalInfo,
   BeneficialOwnerRetrieveResponse,
   BeneficialOwnerUpdateParams,
   BeneficialOwnerUpdateResponse,
@@ -1181,6 +1182,7 @@ export declare namespace LightsparkGrid {
 
   export {
     BeneficialOwners as BeneficialOwners,
+    type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
     type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
     type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
     type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
@@ -1219,5 +1221,64 @@ export declare namespace LightsparkGrid {
     type DiscoveryListParams as DiscoveryListParams,
   };
 
+  export type AedBeneficiary = API.AedBeneficiary;
+  export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
+  export type BdtBeneficiary = API.BdtBeneficiary;
+  export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
+  export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
+  export type BwpBeneficiary = API.BwpBeneficiary;
+  export type BwpExternalAccountCreateInfo = API.BwpExternalAccountCreateInfo;
+  export type CadBeneficiary = API.CadBeneficiary;
+  export type CadExternalAccountCreateInfo = API.CadExternalAccountCreateInfo;
+  export type CopBeneficiary = API.CopBeneficiary;
+  export type CopExternalAccountCreateInfo = API.CopExternalAccountCreateInfo;
+  export type DkkExternalAccountCreateInfo = API.DkkExternalAccountCreateInfo;
+  export type EgpBeneficiary = API.EgpBeneficiary;
+  export type EgpExternalAccountCreateInfo = API.EgpExternalAccountCreateInfo;
+  export type EthereumWalletExternalAccountInfo = API.EthereumWalletExternalAccountInfo;
+  export type EurBeneficiary = API.EurBeneficiary;
+  export type EurExternalAccountCreateInfo = API.EurExternalAccountCreateInfo;
+  export type GbpExternalAccountCreateInfo = API.GbpExternalAccountCreateInfo;
+  export type GhsBeneficiary = API.GhsBeneficiary;
+  export type GhsExternalAccountCreateInfo = API.GhsExternalAccountCreateInfo;
+  export type GtqBeneficiary = API.GtqBeneficiary;
+  export type GtqExternalAccountCreateInfo = API.GtqExternalAccountCreateInfo;
+  export type HkdExternalAccountCreateInfo = API.HkdExternalAccountCreateInfo;
+  export type HtgBeneficiary = API.HtgBeneficiary;
+  export type HtgExternalAccountCreateInfo = API.HtgExternalAccountCreateInfo;
+  export type IdrExternalAccountCreateInfo = API.IdrExternalAccountCreateInfo;
+  export type InrExternalAccountCreateInfo = API.InrExternalAccountCreateInfo;
+  export type JmdBeneficiary = API.JmdBeneficiary;
+  export type JmdExternalAccountCreateInfo = API.JmdExternalAccountCreateInfo;
+  export type KesBeneficiary = API.KesBeneficiary;
+  export type KesExternalAccountCreateInfo = API.KesExternalAccountCreateInfo;
+  export type MwkBeneficiary = API.MwkBeneficiary;
+  export type MwkExternalAccountCreateInfo = API.MwkExternalAccountCreateInfo;
+  export type MxnExternalAccountCreateInfo = API.MxnExternalAccountCreateInfo;
+  export type MyrExternalAccountCreateInfo = API.MyrExternalAccountCreateInfo;
+  export type NgnBeneficiary = API.NgnBeneficiary;
+  export type NgnExternalAccountCreateInfo = API.NgnExternalAccountCreateInfo;
+  export type PhpExternalAccountCreateInfo = API.PhpExternalAccountCreateInfo;
+  export type PkrBeneficiary = API.PkrBeneficiary;
+  export type PkrExternalAccountCreateInfo = API.PkrExternalAccountCreateInfo;
+  export type RwfBeneficiary = API.RwfBeneficiary;
+  export type RwfExternalAccountCreateInfo = API.RwfExternalAccountCreateInfo;
+  export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
+  export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
+  export type TzsBeneficiary = API.TzsBeneficiary;
+  export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;
+  export type UgxBeneficiary = API.UgxBeneficiary;
+  export type UgxExternalAccountCreateInfo = API.UgxExternalAccountCreateInfo;
+  export type UsdExternalAccountCreateInfo = API.UsdExternalAccountCreateInfo;
+  export type VerificationError = API.VerificationError;
+  export type VndExternalAccountCreateInfo = API.VndExternalAccountCreateInfo;
+  export type XafBeneficiary = API.XafBeneficiary;
+  export type XafExternalAccountCreateInfo = API.XafExternalAccountCreateInfo;
+  export type XofBeneficiary = API.XofBeneficiary;
+  export type XofExternalAccountCreateInfo = API.XofExternalAccountCreateInfo;
+  export type ZarBeneficiary = API.ZarBeneficiary;
+  export type ZarExternalAccountCreateInfo = API.ZarExternalAccountCreateInfo;
+  export type ZmwBeneficiary = API.ZmwBeneficiary;
+  export type ZmwExternalAccountCreateInfo = API.ZmwExternalAccountCreateInfo;
 }
