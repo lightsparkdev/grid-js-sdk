@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -89,7 +90,7 @@ export interface VerificationRetrieveResponse {
    * List of issues preventing verification from proceeding. Empty when
    * verificationStatus is APPROVED or IN_PROGRESS.
    */
-  errors: Array<VerificationRetrieveResponse.Error>;
+  errors: Array<Shared.VerificationError>;
 
   /**
    * Current status of the KYC/KYB verification
@@ -106,95 +107,6 @@ export interface VerificationRetrieveResponse {
    * When this verification was last updated
    */
   updatedAt?: string;
-}
-
-export namespace VerificationRetrieveResponse {
-  export interface Error {
-    /**
-     * Human-readable description of the issue
-     */
-    reason: string;
-
-    /**
-     * ID of the resource with the issue (Customer, BeneficialOwner, or Document)
-     */
-    resourceId: string;
-
-    /**
-     * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
-     * indicate which document category is needed. Document quality types
-     * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
-     * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
-     * themselves (sanctions, fraud, criminal records).
-     */
-    type:
-      | 'MISSING_FIELD'
-      | 'INVALID_FIELD'
-      | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
-      | 'MISSING_COMPANY_DETAILS_DOCUMENT'
-      | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
-      | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
-      | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
-      | 'MISSING_IDENTITY_DOCUMENT'
-      | 'INVALID_DOCUMENT'
-      | 'EXPIRED_DOCUMENT'
-      | 'POOR_QUALITY_DOCUMENT'
-      | 'SUSPECTED_FRAUD_DOCUMENT'
-      | 'WRONG_DOCUMENT_TYPE'
-      | 'INCOMPLETE_DOCUMENT'
-      | 'UNREADABLE_DOCUMENT'
-      | 'DOCUMENT_VERIFICATION_FAILED'
-      | 'APPLICANT_SANCTIONED'
-      | 'APPLICANT_FRAUD'
-      | 'APPLICANT_CRIMINAL_RECORD'
-      | 'APPLICANT_REJECTED'
-      | 'MISSING_BENEFICIAL_OWNER';
-
-    /**
-     * Document types that would satisfy this requirement. The integrator can upload
-     * any one of the listed types. Present when type is
-     * MISSING_LEGAL_PRESENCE_DOCUMENT, MISSING_COMPANY_DETAILS_DOCUMENT,
-     * MISSING_CONTROL_STRUCTURE_DOCUMENT, MISSING_OWNERSHIP_STRUCTURE_DOCUMENT,
-     * MISSING_PROOF_OF_ADDRESS_DOCUMENT, MISSING_IDENTITY_DOCUMENT, INVALID_DOCUMENT,
-     * or EXPIRED_DOCUMENT.
-     *
-     * | Error Type                           | Accepted Document Types                                                                                                                                                            |
-     * | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-     * | MISSING_LEGAL_PRESENCE_DOCUMENT      | CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT                                                                           |
-     * | MISSING_COMPANY_DETAILS_DOCUMENT     | INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE |
-     * | MISSING_CONTROL_STRUCTURE_DOCUMENT   | ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT                                                          |
-     * | MISSING_OWNERSHIP_STRUCTURE_DOCUMENT | SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION                                    |
-     * | MISSING_PROOF_OF_ADDRESS_DOCUMENT    | PROOF_OF_ADDRESS                                                                                                                                                                   |
-     * | MISSING_IDENTITY_DOCUMENT            | PASSPORT, DRIVERS_LICENSE, NATIONAL_ID                                                                                                                                             |
-     */
-    acceptedDocumentTypes?: Array<
-      | 'PASSPORT'
-      | 'DRIVERS_LICENSE'
-      | 'NATIONAL_ID'
-      | 'PROOF_OF_ADDRESS'
-      | 'BANK_STATEMENT'
-      | 'TAX_RETURN'
-      | 'CERTIFICATE_OF_INCORPORATION'
-      | 'ARTICLES_OF_INCORPORATION'
-      | 'ARTICLES_OF_ASSOCIATION'
-      | 'STATE_REGISTRY_EXCERPT'
-      | 'GOOD_STANDING_CERTIFICATE'
-      | 'INFORMATION_STATEMENT'
-      | 'INCUMBENCY_CERTIFICATE'
-      | 'BUSINESS_LICENSE'
-      | 'SHAREHOLDER_REGISTER'
-      | 'POWER_OF_ATTORNEY'
-      | 'UTILITY_BILL'
-      | 'SELFIE'
-      | 'OTHER'
-    >;
-
-    /**
-     * Dot-notation path to the field with the issue. Present when type is
-     * MISSING_FIELD or INVALID_FIELD.
-     */
-    field?: string;
-  }
 }
 
 export interface VerificationListResponse {
@@ -217,7 +129,7 @@ export interface VerificationListResponse {
    * List of issues preventing verification from proceeding. Empty when
    * verificationStatus is APPROVED or IN_PROGRESS.
    */
-  errors: Array<VerificationListResponse.Error>;
+  errors: Array<Shared.VerificationError>;
 
   /**
    * Current status of the KYC/KYB verification
@@ -234,95 +146,6 @@ export interface VerificationListResponse {
    * When this verification was last updated
    */
   updatedAt?: string;
-}
-
-export namespace VerificationListResponse {
-  export interface Error {
-    /**
-     * Human-readable description of the issue
-     */
-    reason: string;
-
-    /**
-     * ID of the resource with the issue (Customer, BeneficialOwner, or Document)
-     */
-    resourceId: string;
-
-    /**
-     * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
-     * indicate which document category is needed. Document quality types
-     * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
-     * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
-     * themselves (sanctions, fraud, criminal records).
-     */
-    type:
-      | 'MISSING_FIELD'
-      | 'INVALID_FIELD'
-      | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
-      | 'MISSING_COMPANY_DETAILS_DOCUMENT'
-      | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
-      | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
-      | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
-      | 'MISSING_IDENTITY_DOCUMENT'
-      | 'INVALID_DOCUMENT'
-      | 'EXPIRED_DOCUMENT'
-      | 'POOR_QUALITY_DOCUMENT'
-      | 'SUSPECTED_FRAUD_DOCUMENT'
-      | 'WRONG_DOCUMENT_TYPE'
-      | 'INCOMPLETE_DOCUMENT'
-      | 'UNREADABLE_DOCUMENT'
-      | 'DOCUMENT_VERIFICATION_FAILED'
-      | 'APPLICANT_SANCTIONED'
-      | 'APPLICANT_FRAUD'
-      | 'APPLICANT_CRIMINAL_RECORD'
-      | 'APPLICANT_REJECTED'
-      | 'MISSING_BENEFICIAL_OWNER';
-
-    /**
-     * Document types that would satisfy this requirement. The integrator can upload
-     * any one of the listed types. Present when type is
-     * MISSING_LEGAL_PRESENCE_DOCUMENT, MISSING_COMPANY_DETAILS_DOCUMENT,
-     * MISSING_CONTROL_STRUCTURE_DOCUMENT, MISSING_OWNERSHIP_STRUCTURE_DOCUMENT,
-     * MISSING_PROOF_OF_ADDRESS_DOCUMENT, MISSING_IDENTITY_DOCUMENT, INVALID_DOCUMENT,
-     * or EXPIRED_DOCUMENT.
-     *
-     * | Error Type                           | Accepted Document Types                                                                                                                                                            |
-     * | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-     * | MISSING_LEGAL_PRESENCE_DOCUMENT      | CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT                                                                           |
-     * | MISSING_COMPANY_DETAILS_DOCUMENT     | INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE |
-     * | MISSING_CONTROL_STRUCTURE_DOCUMENT   | ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT                                                          |
-     * | MISSING_OWNERSHIP_STRUCTURE_DOCUMENT | SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION                                    |
-     * | MISSING_PROOF_OF_ADDRESS_DOCUMENT    | PROOF_OF_ADDRESS                                                                                                                                                                   |
-     * | MISSING_IDENTITY_DOCUMENT            | PASSPORT, DRIVERS_LICENSE, NATIONAL_ID                                                                                                                                             |
-     */
-    acceptedDocumentTypes?: Array<
-      | 'PASSPORT'
-      | 'DRIVERS_LICENSE'
-      | 'NATIONAL_ID'
-      | 'PROOF_OF_ADDRESS'
-      | 'BANK_STATEMENT'
-      | 'TAX_RETURN'
-      | 'CERTIFICATE_OF_INCORPORATION'
-      | 'ARTICLES_OF_INCORPORATION'
-      | 'ARTICLES_OF_ASSOCIATION'
-      | 'STATE_REGISTRY_EXCERPT'
-      | 'GOOD_STANDING_CERTIFICATE'
-      | 'INFORMATION_STATEMENT'
-      | 'INCUMBENCY_CERTIFICATE'
-      | 'BUSINESS_LICENSE'
-      | 'SHAREHOLDER_REGISTER'
-      | 'POWER_OF_ATTORNEY'
-      | 'UTILITY_BILL'
-      | 'SELFIE'
-      | 'OTHER'
-    >;
-
-    /**
-     * Dot-notation path to the field with the issue. Present when type is
-     * MISSING_FIELD or INVALID_FIELD.
-     */
-    field?: string;
-  }
 }
 
 export interface VerificationSubmitResponse {
@@ -345,7 +168,7 @@ export interface VerificationSubmitResponse {
    * List of issues preventing verification from proceeding. Empty when
    * verificationStatus is APPROVED or IN_PROGRESS.
    */
-  errors: Array<VerificationSubmitResponse.Error>;
+  errors: Array<Shared.VerificationError>;
 
   /**
    * Current status of the KYC/KYB verification
@@ -362,95 +185,6 @@ export interface VerificationSubmitResponse {
    * When this verification was last updated
    */
   updatedAt?: string;
-}
-
-export namespace VerificationSubmitResponse {
-  export interface Error {
-    /**
-     * Human-readable description of the issue
-     */
-    reason: string;
-
-    /**
-     * ID of the resource with the issue (Customer, BeneficialOwner, or Document)
-     */
-    resourceId: string;
-
-    /**
-     * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
-     * indicate which document category is needed. Document quality types
-     * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
-     * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
-     * themselves (sanctions, fraud, criminal records).
-     */
-    type:
-      | 'MISSING_FIELD'
-      | 'INVALID_FIELD'
-      | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
-      | 'MISSING_COMPANY_DETAILS_DOCUMENT'
-      | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
-      | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
-      | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
-      | 'MISSING_IDENTITY_DOCUMENT'
-      | 'INVALID_DOCUMENT'
-      | 'EXPIRED_DOCUMENT'
-      | 'POOR_QUALITY_DOCUMENT'
-      | 'SUSPECTED_FRAUD_DOCUMENT'
-      | 'WRONG_DOCUMENT_TYPE'
-      | 'INCOMPLETE_DOCUMENT'
-      | 'UNREADABLE_DOCUMENT'
-      | 'DOCUMENT_VERIFICATION_FAILED'
-      | 'APPLICANT_SANCTIONED'
-      | 'APPLICANT_FRAUD'
-      | 'APPLICANT_CRIMINAL_RECORD'
-      | 'APPLICANT_REJECTED'
-      | 'MISSING_BENEFICIAL_OWNER';
-
-    /**
-     * Document types that would satisfy this requirement. The integrator can upload
-     * any one of the listed types. Present when type is
-     * MISSING_LEGAL_PRESENCE_DOCUMENT, MISSING_COMPANY_DETAILS_DOCUMENT,
-     * MISSING_CONTROL_STRUCTURE_DOCUMENT, MISSING_OWNERSHIP_STRUCTURE_DOCUMENT,
-     * MISSING_PROOF_OF_ADDRESS_DOCUMENT, MISSING_IDENTITY_DOCUMENT, INVALID_DOCUMENT,
-     * or EXPIRED_DOCUMENT.
-     *
-     * | Error Type                           | Accepted Document Types                                                                                                                                                            |
-     * | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-     * | MISSING_LEGAL_PRESENCE_DOCUMENT      | CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT                                                                           |
-     * | MISSING_COMPANY_DETAILS_DOCUMENT     | INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE |
-     * | MISSING_CONTROL_STRUCTURE_DOCUMENT   | ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT                                                          |
-     * | MISSING_OWNERSHIP_STRUCTURE_DOCUMENT | SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE, STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION                                    |
-     * | MISSING_PROOF_OF_ADDRESS_DOCUMENT    | PROOF_OF_ADDRESS                                                                                                                                                                   |
-     * | MISSING_IDENTITY_DOCUMENT            | PASSPORT, DRIVERS_LICENSE, NATIONAL_ID                                                                                                                                             |
-     */
-    acceptedDocumentTypes?: Array<
-      | 'PASSPORT'
-      | 'DRIVERS_LICENSE'
-      | 'NATIONAL_ID'
-      | 'PROOF_OF_ADDRESS'
-      | 'BANK_STATEMENT'
-      | 'TAX_RETURN'
-      | 'CERTIFICATE_OF_INCORPORATION'
-      | 'ARTICLES_OF_INCORPORATION'
-      | 'ARTICLES_OF_ASSOCIATION'
-      | 'STATE_REGISTRY_EXCERPT'
-      | 'GOOD_STANDING_CERTIFICATE'
-      | 'INFORMATION_STATEMENT'
-      | 'INCUMBENCY_CERTIFICATE'
-      | 'BUSINESS_LICENSE'
-      | 'SHAREHOLDER_REGISTER'
-      | 'POWER_OF_ATTORNEY'
-      | 'UTILITY_BILL'
-      | 'SELFIE'
-      | 'OTHER'
-    >;
-
-    /**
-     * Dot-notation path to the field with the issue. Present when type is
-     * MISSING_FIELD or INVALID_FIELD.
-     */
-    field?: string;
-  }
 }
 
 export interface VerificationListParams extends DefaultPaginationParams {

@@ -104,6 +104,60 @@ export class BeneficialOwners extends APIResource {
 
 export type BeneficialOwnerListResponsesDefaultPagination = DefaultPagination<BeneficialOwnerListResponse>;
 
+export interface BeneficialOwnerPersonalInfo {
+  address: ExternalAccountsAPI.Address;
+
+  /**
+   * Date of birth in ISO 8601 format (YYYY-MM-DD)
+   */
+  birthDate: string;
+
+  /**
+   * First name of the individual
+   */
+  firstName: string;
+
+  /**
+   * The identification number or value
+   */
+  identifier: string;
+
+  /**
+   * Type of personal identification document
+   */
+  idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
+
+  /**
+   * Last name of the individual
+   */
+  lastName: string;
+
+  /**
+   * Country of nationality (ISO 3166-1 alpha-2)
+   */
+  nationality: string;
+
+  /**
+   * Country that issued the identification (ISO 3166-1 alpha-2)
+   */
+  countryOfIssuance?: string;
+
+  /**
+   * Email address of the individual
+   */
+  email?: string;
+
+  /**
+   * Middle name of the individual
+   */
+  middleName?: string;
+
+  /**
+   * Phone number in E.164 format
+   */
+  phoneNumber?: string;
+}
+
 export interface BeneficialOwnerCreateResponse {
   /**
    * Unique identifier for this beneficial owner
@@ -130,7 +184,7 @@ export interface BeneficialOwnerCreateResponse {
    */
   ownershipPercentage: number;
 
-  personalInfo: BeneficialOwnerCreateResponse.PersonalInfo;
+  personalInfo: BeneficialOwnerPersonalInfo;
 
   /**
    * Roles of this person within the business
@@ -141,62 +195,6 @@ export interface BeneficialOwnerCreateResponse {
    * When this beneficial owner was last updated
    */
   updatedAt?: string;
-}
-
-export namespace BeneficialOwnerCreateResponse {
-  export interface PersonalInfo {
-    address: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
-
-    /**
-     * First name of the individual
-     */
-    firstName: string;
-
-    /**
-     * The identification number or value
-     */
-    identifier: string;
-
-    /**
-     * Type of personal identification document
-     */
-    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-    /**
-     * Last name of the individual
-     */
-    lastName: string;
-
-    /**
-     * Country of nationality (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
-
-    /**
-     * Country that issued the identification (ISO 3166-1 alpha-2)
-     */
-    countryOfIssuance?: string;
-
-    /**
-     * Email address of the individual
-     */
-    email?: string;
-
-    /**
-     * Middle name of the individual
-     */
-    middleName?: string;
-
-    /**
-     * Phone number in E.164 format
-     */
-    phoneNumber?: string;
-  }
 }
 
 export interface BeneficialOwnerRetrieveResponse {
@@ -225,7 +223,7 @@ export interface BeneficialOwnerRetrieveResponse {
    */
   ownershipPercentage: number;
 
-  personalInfo: BeneficialOwnerRetrieveResponse.PersonalInfo;
+  personalInfo: BeneficialOwnerPersonalInfo;
 
   /**
    * Roles of this person within the business
@@ -236,62 +234,6 @@ export interface BeneficialOwnerRetrieveResponse {
    * When this beneficial owner was last updated
    */
   updatedAt?: string;
-}
-
-export namespace BeneficialOwnerRetrieveResponse {
-  export interface PersonalInfo {
-    address: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
-
-    /**
-     * First name of the individual
-     */
-    firstName: string;
-
-    /**
-     * The identification number or value
-     */
-    identifier: string;
-
-    /**
-     * Type of personal identification document
-     */
-    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-    /**
-     * Last name of the individual
-     */
-    lastName: string;
-
-    /**
-     * Country of nationality (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
-
-    /**
-     * Country that issued the identification (ISO 3166-1 alpha-2)
-     */
-    countryOfIssuance?: string;
-
-    /**
-     * Email address of the individual
-     */
-    email?: string;
-
-    /**
-     * Middle name of the individual
-     */
-    middleName?: string;
-
-    /**
-     * Phone number in E.164 format
-     */
-    phoneNumber?: string;
-  }
 }
 
 export interface BeneficialOwnerUpdateResponse {
@@ -320,7 +262,7 @@ export interface BeneficialOwnerUpdateResponse {
    */
   ownershipPercentage: number;
 
-  personalInfo: BeneficialOwnerUpdateResponse.PersonalInfo;
+  personalInfo: BeneficialOwnerPersonalInfo;
 
   /**
    * Roles of this person within the business
@@ -331,62 +273,6 @@ export interface BeneficialOwnerUpdateResponse {
    * When this beneficial owner was last updated
    */
   updatedAt?: string;
-}
-
-export namespace BeneficialOwnerUpdateResponse {
-  export interface PersonalInfo {
-    address: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
-
-    /**
-     * First name of the individual
-     */
-    firstName: string;
-
-    /**
-     * The identification number or value
-     */
-    identifier: string;
-
-    /**
-     * Type of personal identification document
-     */
-    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-    /**
-     * Last name of the individual
-     */
-    lastName: string;
-
-    /**
-     * Country of nationality (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
-
-    /**
-     * Country that issued the identification (ISO 3166-1 alpha-2)
-     */
-    countryOfIssuance?: string;
-
-    /**
-     * Email address of the individual
-     */
-    email?: string;
-
-    /**
-     * Middle name of the individual
-     */
-    middleName?: string;
-
-    /**
-     * Phone number in E.164 format
-     */
-    phoneNumber?: string;
-  }
 }
 
 export interface BeneficialOwnerListResponse {
@@ -415,7 +301,7 @@ export interface BeneficialOwnerListResponse {
    */
   ownershipPercentage: number;
 
-  personalInfo: BeneficialOwnerListResponse.PersonalInfo;
+  personalInfo: BeneficialOwnerPersonalInfo;
 
   /**
    * Roles of this person within the business
@@ -426,62 +312,6 @@ export interface BeneficialOwnerListResponse {
    * When this beneficial owner was last updated
    */
   updatedAt?: string;
-}
-
-export namespace BeneficialOwnerListResponse {
-  export interface PersonalInfo {
-    address: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
-
-    /**
-     * First name of the individual
-     */
-    firstName: string;
-
-    /**
-     * The identification number or value
-     */
-    identifier: string;
-
-    /**
-     * Type of personal identification document
-     */
-    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-    /**
-     * Last name of the individual
-     */
-    lastName: string;
-
-    /**
-     * Country of nationality (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
-
-    /**
-     * Country that issued the identification (ISO 3166-1 alpha-2)
-     */
-    countryOfIssuance?: string;
-
-    /**
-     * Email address of the individual
-     */
-    email?: string;
-
-    /**
-     * Middle name of the individual
-     */
-    middleName?: string;
-
-    /**
-     * Phone number in E.164 format
-     */
-    phoneNumber?: string;
-  }
 }
 
 export interface BeneficialOwnerCreateParams {
@@ -496,68 +326,12 @@ export interface BeneficialOwnerCreateParams {
    */
   ownershipPercentage: number;
 
-  personalInfo: BeneficialOwnerCreateParams.PersonalInfo;
+  personalInfo: BeneficialOwnerPersonalInfo;
 
   /**
    * Roles of this person within the business
    */
   roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-}
-
-export namespace BeneficialOwnerCreateParams {
-  export interface PersonalInfo {
-    address: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
-
-    /**
-     * First name of the individual
-     */
-    firstName: string;
-
-    /**
-     * The identification number or value
-     */
-    identifier: string;
-
-    /**
-     * Type of personal identification document
-     */
-    idType: 'SSN' | 'PASSPORT' | 'NATIONAL_ID' | 'DRIVERS_LICENSE' | 'TAX_ID' | 'ITIN' | 'CPF';
-
-    /**
-     * Last name of the individual
-     */
-    lastName: string;
-
-    /**
-     * Country of nationality (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
-
-    /**
-     * Country that issued the identification (ISO 3166-1 alpha-2)
-     */
-    countryOfIssuance?: string;
-
-    /**
-     * Email address of the individual
-     */
-    email?: string;
-
-    /**
-     * Middle name of the individual
-     */
-    middleName?: string;
-
-    /**
-     * Phone number in E.164 format
-     */
-    phoneNumber?: string;
-  }
 }
 
 export interface BeneficialOwnerUpdateParams {
@@ -652,6 +426,7 @@ export interface BeneficialOwnerListParams extends DefaultPaginationParams {
 
 export declare namespace BeneficialOwners {
   export {
+    type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
     type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
     type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
     type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,

@@ -3,6 +3,7 @@
 export * from './shared';
 export {
   BeneficialOwners,
+  type BeneficialOwnerPersonalInfo,
   type BeneficialOwnerCreateResponse,
   type BeneficialOwnerRetrieveResponse,
   type BeneficialOwnerUpdateResponse,
