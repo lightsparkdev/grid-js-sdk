@@ -63,6 +63,30 @@ describe('resource externalAccounts', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('retrieve', async () => {
+    const responsePromise = client.customers.externalAccounts.retrieve('externalAccountId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('update', async () => {
+    const responsePromise = client.customers.externalAccounts.update('externalAccountId', {});
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.customers.externalAccounts.list();
     const rawResponse = await responsePromise.asResponse();
@@ -88,5 +112,17 @@ describe('resource externalAccounts', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete', async () => {
+    const responsePromise = client.customers.externalAccounts.delete('externalAccountId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

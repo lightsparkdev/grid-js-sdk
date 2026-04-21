@@ -71,10 +71,28 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/external-accounts',
   },
   {
+    clientCallName: 'client.customers.externalAccounts.retrieve',
+    fullyQualifiedName: 'customers.externalAccounts.retrieve',
+    httpMethod: 'get',
+    httpPath: '/customers/external-accounts/{externalAccountId}',
+  },
+  {
+    clientCallName: 'client.customers.externalAccounts.update',
+    fullyQualifiedName: 'customers.externalAccounts.update',
+    httpMethod: 'patch',
+    httpPath: '/customers/external-accounts/{externalAccountId}',
+  },
+  {
     clientCallName: 'client.customers.externalAccounts.list',
     fullyQualifiedName: 'customers.externalAccounts.list',
     httpMethod: 'get',
     httpPath: '/customers/external-accounts',
+  },
+  {
+    clientCallName: 'client.customers.externalAccounts.delete',
+    fullyQualifiedName: 'customers.externalAccounts.delete',
+    httpMethod: 'delete',
+    httpPath: '/customers/external-accounts/{externalAccountId}',
   },
   {
     clientCallName: 'client.customers.bulk.getJobStatus',
@@ -101,10 +119,28 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/platform/external-accounts',
   },
   {
+    clientCallName: 'client.platform.externalAccounts.retrieve',
+    fullyQualifiedName: 'platform.externalAccounts.retrieve',
+    httpMethod: 'get',
+    httpPath: '/platform/external-accounts/{externalAccountId}',
+  },
+  {
+    clientCallName: 'client.platform.externalAccounts.update',
+    fullyQualifiedName: 'platform.externalAccounts.update',
+    httpMethod: 'patch',
+    httpPath: '/platform/external-accounts/{externalAccountId}',
+  },
+  {
     clientCallName: 'client.platform.externalAccounts.list',
     fullyQualifiedName: 'platform.externalAccounts.list',
     httpMethod: 'get',
     httpPath: '/platform/external-accounts',
+  },
+  {
+    clientCallName: 'client.platform.externalAccounts.delete',
+    fullyQualifiedName: 'platform.externalAccounts.delete',
+    httpMethod: 'delete',
+    httpPath: '/platform/external-accounts/{externalAccountId}',
   },
   {
     clientCallName: 'client.transferIn.create',

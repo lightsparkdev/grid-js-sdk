@@ -27,6 +27,7 @@ import {
   ExternalAccountCreateParams,
   ExternalAccountInfoOneOf,
   ExternalAccountListParams,
+  ExternalAccountUpdateParams,
   ExternalAccounts,
   ExternalAccountsDefaultPagination,
   GbpBeneficiary,
@@ -899,6 +900,7 @@ export declare namespace Customers {
     type ZmwExternalAccountInfo as ZmwExternalAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
+    type ExternalAccountUpdateParams as ExternalAccountUpdateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 

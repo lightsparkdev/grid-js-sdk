@@ -1,11 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ExternalAccountsAPI from './external-accounts';
 import * as Shared from '../shared';
 import * as PlatformExternalAccountsAPI from '../platform/external-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
 /**
  * External account management endpoints for creating and managing external bank accounts
@@ -47,6 +50,42 @@ export class ExternalAccounts extends APIResource {
   }
 
   /**
+   * Retrieve a customer external account by its system-generated ID
+   *
+   * @example
+   * ```ts
+   * const externalAccount =
+   *   await client.customers.externalAccounts.retrieve(
+   *     'externalAccountId',
+   *   );
+   * ```
+   */
+  retrieve(externalAccountID: string, options?: RequestOptions): APIPromise<ExternalAccount> {
+    return this._client.get(path`/customers/external-accounts/${externalAccountID}`, options);
+  }
+
+  /**
+   * Update mutable fields on a customer external account. Only `platformAccountId`
+   * and `beneficiary` can be updated via this endpoint.
+   *
+   * @example
+   * ```ts
+   * const externalAccount =
+   *   await client.customers.externalAccounts.update(
+   *     'externalAccountId',
+   *     { platformAccountId: 'ext_acc_654321' },
+   *   );
+   * ```
+   */
+  update(
+    externalAccountID: string,
+    body: ExternalAccountUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<ExternalAccount> {
+    return this._client.patch(path`/customers/external-accounts/${externalAccountID}`, { body, ...options });
+  }
+
+  /**
    * Retrieve a list of external accounts with optional filtering parameters. Returns
    * all external accounts that match the specified filters. If no filters are
    * provided, returns all external accounts (paginated).
@@ -69,6 +108,23 @@ export class ExternalAccounts extends APIResource {
     return this._client.getAPIList('/customers/external-accounts', DefaultPagination<ExternalAccount>, {
       query,
       ...options,
+    });
+  }
+
+  /**
+   * Delete a customer external account by its system-generated ID
+   *
+   * @example
+   * ```ts
+   * await client.customers.externalAccounts.delete(
+   *   'externalAccountId',
+   * );
+   * ```
+   */
+  delete(externalAccountID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/customers/external-accounts/${externalAccountID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 }
@@ -1051,6 +1107,41 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
+export interface ExternalAccountUpdateParams {
+  /**
+   * Updated beneficiary information for the external account
+   */
+  beneficiary?: ExternalAccountUpdateParams.IndividualBeneficiary | BusinessBeneficiary;
+
+  /**
+   * Optional platform-specific identifier for this account
+   */
+  platformAccountId?: string;
+}
+
+export namespace ExternalAccountUpdateParams {
+  export interface IndividualBeneficiary {
+    beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
+
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate: string;
+
+    /**
+     * Individual's full name
+     */
+    fullName: string;
+
+    /**
+     * Country code (ISO 3166-1 alpha-2)
+     */
+    nationality: string;
+
+    address?: ExternalAccountsAPI.Address;
+  }
+}
+
 export interface ExternalAccountListParams extends DefaultPaginationParams {
   /**
    * Filter by currency code
@@ -1132,6 +1223,7 @@ export declare namespace ExternalAccounts {
     type ZmwExternalAccountInfo as ZmwExternalAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
+    type ExternalAccountUpdateParams as ExternalAccountUpdateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 }
