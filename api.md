@@ -168,7 +168,10 @@ Types:
 Methods:
 
 - <code title="post /customers/external-accounts">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">create</a>({ ...params }) -> ExternalAccount</code>
+- <code title="get /customers/external-accounts/{externalAccountId}">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
+- <code title="patch /customers/external-accounts/{externalAccountId}">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">update</a>(externalAccountID, { ...params }) -> ExternalAccount</code>
 - <code title="get /customers/external-accounts">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
+- <code title="delete /customers/external-accounts/{externalAccountId}">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
 
 ## Bulk
 
@@ -236,7 +239,10 @@ Types:
 Methods:
 
 - <code title="post /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">create</a>({ ...params }) -> ExternalAccount</code>
+- <code title="get /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
+- <code title="patch /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">update</a>(externalAccountID, { ...params }) -> ExternalAccount</code>
 - <code title="get /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountListResponse</code>
+- <code title="delete /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
 
 # TransferIn
 

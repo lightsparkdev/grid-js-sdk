@@ -4,7 +4,9 @@ import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ExternalAccountsAPI from '../customers/external-accounts';
 import { APIPromise } from '../../core/api-promise';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
 /**
  * External account management endpoints for creating and managing external bank accounts
@@ -47,6 +49,45 @@ export class ExternalAccounts extends APIResource {
   }
 
   /**
+   * Retrieve a platform external account by its system-generated ID
+   *
+   * @example
+   * ```ts
+   * const externalAccount =
+   *   await client.platform.externalAccounts.retrieve(
+   *     'externalAccountId',
+   *   );
+   * ```
+   */
+  retrieve(
+    externalAccountID: string,
+    options?: RequestOptions,
+  ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
+    return this._client.get(path`/platform/external-accounts/${externalAccountID}`, options);
+  }
+
+  /**
+   * Update mutable fields on a platform external account. Only `platformAccountId`
+   * and `beneficiary` can be updated via this endpoint.
+   *
+   * @example
+   * ```ts
+   * const externalAccount =
+   *   await client.platform.externalAccounts.update(
+   *     'externalAccountId',
+   *     { platformAccountId: 'ext_acc_654321' },
+   *   );
+   * ```
+   */
+  update(
+    externalAccountID: string,
+    body: ExternalAccountUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
+    return this._client.patch(path`/platform/external-accounts/${externalAccountID}`, { body, ...options });
+  }
+
+  /**
    * Retrieve a list of all external accounts that belong to the platform, as opposed
    * to an individual customer.
    *
@@ -64,6 +105,23 @@ export class ExternalAccounts extends APIResource {
     options?: RequestOptions,
   ): APIPromise<ExternalAccountListResponse> {
     return this._client.get('/platform/external-accounts', { query, ...options });
+  }
+
+  /**
+   * Delete a platform external account by its system-generated ID
+   *
+   * @example
+   * ```ts
+   * await client.platform.externalAccounts.delete(
+   *   'externalAccountId',
+   * );
+   * ```
+   */
+  delete(externalAccountID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/platform/external-accounts/${externalAccountID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
   }
 }
 
@@ -765,6 +823,41 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
+export interface ExternalAccountUpdateParams {
+  /**
+   * Updated beneficiary information for the external account
+   */
+  beneficiary?: ExternalAccountUpdateParams.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+  /**
+   * Optional platform-specific identifier for this account
+   */
+  platformAccountId?: string;
+}
+
+export namespace ExternalAccountUpdateParams {
+  export interface IndividualBeneficiary {
+    beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
+
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate: string;
+
+    /**
+     * Individual's full name
+     */
+    fullName: string;
+
+    /**
+     * Country code (ISO 3166-1 alpha-2)
+     */
+    nationality: string;
+
+    address?: ExternalAccountsAPI.Address;
+  }
+}
+
 export interface ExternalAccountListParams {
   /**
    * Filter by currency code
@@ -811,6 +904,7 @@ export declare namespace ExternalAccounts {
     type ZmwAccountInfo as ZmwAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
+    type ExternalAccountUpdateParams as ExternalAccountUpdateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 }
