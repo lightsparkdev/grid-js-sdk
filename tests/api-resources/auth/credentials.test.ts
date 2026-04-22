@@ -36,6 +36,18 @@ describe('resource credentials', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('resendChallenge', async () => {
+    const responsePromise = client.auth.credentials.resendChallenge('id');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
   test.skip('verify: only required params', async () => {
     const responsePromise = client.auth.credentials.verify('id', {
       clientPublicKey:

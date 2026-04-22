@@ -490,9 +490,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/auth/credentials.ts">CredentialCreateResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">CredentialResendChallengeResponse</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">CredentialVerifyResponse</a></code>
 
 Methods:
 
 - <code title="post /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">create</a>({ ...params }) -> CredentialCreateResponse</code>
+- <code title="post /auth/credentials/{id}/challenge">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">resendChallenge</a>(id) -> CredentialResendChallengeResponse</code>
 - <code title="post /auth/credentials/{id}/verify">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">verify</a>(id, { ...params }) -> CredentialVerifyResponse</code>
