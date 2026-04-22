@@ -20,7 +20,11 @@ export class Credentials extends APIResource {
    * `201` with the created `AuthMethod`. For `EMAIL_OTP` credentials, this call also
    * triggers a one-time password email to the address on the customer record tied to
    * the internal account; the credential must be activated via
-   * `POST /auth/credentials/{id}/verify` before it can sign requests.
+   * `POST /auth/credentials/{id}/verify` before it can sign requests. For `OAUTH`
+   * credentials, the supplied `oidcToken` is validated inline against the issuer's
+   * `.well-known` OpenID configuration (the token's `iat` must be less than 60
+   * seconds before the request); activation still happens via
+   * `POST /auth/credentials/{id}/verify`.
    *
    * **Adding an additional credential**
    *
@@ -246,34 +250,78 @@ export interface CredentialVerifyResponse {
   updatedAt: string;
 }
 
-export interface CredentialCreateParams {
-  /**
-   * Body param: Identifier of the internal account that this credential will
-   * authenticate.
-   */
-  accountId: string;
+export type CredentialCreateParams =
+  | CredentialCreateParams.EmailOtpCredentialCreateRequest
+  | CredentialCreateParams.OAuthCredentialCreateRequest;
 
-  /**
-   * Body param: Discriminator value identifying this as an email OTP credential.
-   */
-  type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';
+export declare namespace CredentialCreateParams {
+  export interface EmailOtpCredentialCreateRequest {
+    /**
+     * Body param: Identifier of the internal account that this credential will
+     * authenticate.
+     */
+    accountId: string;
 
-  /**
-   * Header param: Signature over the `payloadToSign` returned in a prior `202`
-   * response, produced with the session private key of an existing verified
-   * authentication credential on the target internal account and base64-encoded.
-   * Required when registering an additional credential on an internal account that
-   * already has one; ignored when the internal account has no existing credentials.
-   */
-  'Grid-Wallet-Signature'?: string;
+    /**
+     * Body param: Discriminator value identifying this as an email OTP credential.
+     */
+    type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';
 
-  /**
-   * Header param: The `requestId` returned in a prior `202` response, echoed back on
-   * the signed retry so the server can correlate it with the issued challenge.
-   * Required on the signed retry when registering an additional credential; must be
-   * paired with `Grid-Wallet-Signature`.
-   */
-  'Request-Id'?: string;
+    /**
+     * Header param: Signature over the `payloadToSign` returned in a prior `202`
+     * response, produced with the session private key of an existing verified
+     * authentication credential on the target internal account and base64-encoded.
+     * Required when registering an additional credential on an internal account that
+     * already has one; ignored when the internal account has no existing credentials.
+     */
+    'Grid-Wallet-Signature'?: string;
+
+    /**
+     * Header param: The `requestId` returned in a prior `202` response, echoed back on
+     * the signed retry so the server can correlate it with the issued challenge.
+     * Required on the signed retry when registering an additional credential; must be
+     * paired with `Grid-Wallet-Signature`.
+     */
+    'Request-Id'?: string;
+  }
+
+  export interface OAuthCredentialCreateRequest {
+    /**
+     * Body param: Identifier of the internal account that this credential will
+     * authenticate.
+     */
+    accountId: string;
+
+    /**
+     * Body param: OIDC ID token issued by the identity provider (e.g. Google, Apple).
+     * Grid fetches the issuer's signing key from the `iss` claim's `.well-known`
+     * OpenID configuration and verifies the token signature. The token's `iat` claim
+     * must be less than 60 seconds before the request timestamp.
+     */
+    oidcToken: string;
+
+    /**
+     * Body param: Discriminator value identifying this as an OAuth credential.
+     */
+    type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+
+    /**
+     * Header param: Signature over the `payloadToSign` returned in a prior `202`
+     * response, produced with the session private key of an existing verified
+     * authentication credential on the target internal account and base64-encoded.
+     * Required when registering an additional credential on an internal account that
+     * already has one; ignored when the internal account has no existing credentials.
+     */
+    'Grid-Wallet-Signature'?: string;
+
+    /**
+     * Header param: The `requestId` returned in a prior `202` response, echoed back on
+     * the signed retry so the server can correlate it with the issued challenge.
+     * Required on the signed retry when registering an additional credential; must be
+     * paired with `Grid-Wallet-Signature`.
+     */
+    'Request-Id'?: string;
+  }
 }
 
 export interface CredentialVerifyParams {
