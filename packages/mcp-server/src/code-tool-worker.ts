@@ -170,6 +170,8 @@ const fuse = new Fuse(
     'client.verifications.retrieve',
     'client.verifications.submit',
     'client.discoveries.list',
+    'client.auth.credentials.create',
+    'client.auth.credentials.verify',
   ],
   { threshold: 1, shouldSort: true },
 );

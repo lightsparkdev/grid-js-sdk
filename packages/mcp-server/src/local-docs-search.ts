@@ -2356,6 +2356,88 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'create',
+    endpoint: '/auth/credentials',
+    httpMethod: 'post',
+    summary: 'Create an authentication credential',
+    description:
+      "Register an authentication credential for an Embedded Wallet customer.\n\n**First credential on an internal account**\n\nIf the target internal account does not yet have any authentication credential registered, call this endpoint with the credential details. The response is `201` with the created `AuthMethod`. For `EMAIL_OTP` credentials, this call also triggers a one-time password email to the address on the customer record tied to the internal account; the credential must be activated via `POST /auth/credentials/{id}/verify` before it can sign requests.\n\n**Adding an additional credential**\n\nRegistering an additional credential against an internal account that already has one requires a signature from an existing verified credential. Call this endpoint with the new credential's details; if an existing credential is already registered on the internal account the response is `202` with a `payloadToSign` and a `requestId`. Sign the payload with the session private key of an existing verified credential on the same internal account (decrypted client-side from its `encryptedSessionSigningKey`) and retry the same request with the signature supplied as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `201` with the created `AuthMethod`. For `EMAIL_OTP`, the OTP email is triggered on the signed retry, and the credential must then be activated via `POST /auth/credentials/{id}/verify`.\n",
+    stainlessPath: '(resource) auth.credentials > (method) create',
+    qualified: 'client.auth.credentials.create',
+    params: [
+      'accountId: string;',
+      "type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';",
+      'Grid-Wallet-Signature?: string;',
+      'Request-Id?: string;',
+    ],
+    response:
+      "{ id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }",
+    markdown:
+      "## create\n\n`client.auth.credentials.create(accountId: string, type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY', Grid-Wallet-Signature?: string, Request-Id?: string): { id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n**post** `/auth/credentials`\n\nRegister an authentication credential for an Embedded Wallet customer.\n\n**First credential on an internal account**\n\nIf the target internal account does not yet have any authentication credential registered, call this endpoint with the credential details. The response is `201` with the created `AuthMethod`. For `EMAIL_OTP` credentials, this call also triggers a one-time password email to the address on the customer record tied to the internal account; the credential must be activated via `POST /auth/credentials/{id}/verify` before it can sign requests.\n\n**Adding an additional credential**\n\nRegistering an additional credential against an internal account that already has one requires a signature from an existing verified credential. Call this endpoint with the new credential's details; if an existing credential is already registered on the internal account the response is `202` with a `payloadToSign` and a `requestId`. Sign the payload with the session private key of an existing verified credential on the same internal account (decrypted client-side from its `encryptedSessionSigningKey`) and retry the same request with the signature supplied as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `201` with the created `AuthMethod`. For `EMAIL_OTP`, the OTP email is triggered on the signed retry, and the credential must then be activated via `POST /auth/credentials/{id}/verify`.\n\n\n### Parameters\n\n- `accountId: string`\n  Identifier of the internal account that this credential will authenticate.\n\n- `type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY'`\n  Discriminator value identifying this as an email OTP credential.\n\n- `Grid-Wallet-Signature?: string`\n\n- `Request-Id?: string`\n\n### Returns\n\n- `{ id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n  - `id: string`\n  - `accountId: string`\n  - `createdAt: string`\n  - `nickname: string`\n  - `type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'`\n  - `updatedAt: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst credential = await client.auth.credentials.create({ accountId: 'InternalAccount:019542f5-b3e7-1d02-0000-000000000002', type: 'EMAIL_OTP' });\n\nconsole.log(credential);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountId": "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n          "type": "EMAIL_OTP"\n        }\'',
+      },
+      kotlin: {
+        method: 'auth().credentials().create',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialCreateParams\nimport com.lightspark.grid.models.auth.credentials.CredentialCreateResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialCreateParams = CredentialCreateParams.builder()\n        .accountId("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n        .type(CredentialCreateParams.Type.EMAIL_OTP)\n        .build()\n    val credential: CredentialCreateResponse = client.auth().credentials().create(params)\n}',
+      },
+      python: {
+        method: 'auth.credentials.create',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncredential = client.auth.credentials.create(\n    account_id="InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n    type="EMAIL_OTP",\n)\nprint(credential.id)',
+      },
+      typescript: {
+        method: 'client.auth.credentials.create',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst credential = await client.auth.credentials.create({\n  accountId: 'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n  type: 'EMAIL_OTP',\n});\n\nconsole.log(credential.id);",
+      },
+    },
+  },
+  {
+    name: 'verify',
+    endpoint: '/auth/credentials/{id}/verify',
+    httpMethod: 'post',
+    summary: 'Verify an authentication credential',
+    description:
+      'Complete the verification step for a previously created authentication credential and issue a session signing key.\n\nFor `EMAIL_OTP` credentials, supply the one-time password that was emailed to the user along with a client-generated public key. On success, the response contains an `encryptedSessionSigningKey` that is encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp marking when the session expires. The `clientPublicKey` is ephemeral and one-time-use per verification request.\n',
+    stainlessPath: '(resource) auth.credentials > (method) verify',
+    qualified: 'client.auth.credentials.verify',
+    params: [
+      'id: string;',
+      'clientPublicKey: string;',
+      'otp: string;',
+      "type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';",
+    ],
+    response:
+      "{ id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }",
+    markdown:
+      "## verify\n\n`client.auth.credentials.verify(id: string, clientPublicKey: string, otp: string, type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY'): { id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n**post** `/auth/credentials/{id}/verify`\n\nComplete the verification step for a previously created authentication credential and issue a session signing key.\n\nFor `EMAIL_OTP` credentials, supply the one-time password that was emailed to the user along with a client-generated public key. On success, the response contains an `encryptedSessionSigningKey` that is encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp marking when the session expires. The `clientPublicKey` is ephemeral and one-time-use per verification request.\n\n\n### Parameters\n\n- `id: string`\n\n- `clientPublicKey: string`\n  Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04 prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters total). The matching private key must remain on the client. Grid encrypts the session signing key returned in the response to this public key. The key is ephemeral and one-time-use per verification request.\n\n- `otp: string`\n  The one-time password received by the user via email.\n\n- `type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY'`\n  Discriminator value identifying this as an email OTP verification.\n\n### Returns\n\n- `{ id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n  - `id: string`\n  - `accountId: string`\n  - `createdAt: string`\n  - `encryptedSessionSigningKey: string`\n  - `expiresAt: string`\n  - `nickname: string`\n  - `type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'`\n  - `updatedAt: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.credentials.verify('id', {\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  otp: '123456',\n  type: 'EMAIL_OTP',\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials/$ID/verify \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "clientPublicKey": "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n          "otp": "123456",\n          "type": "EMAIL_OTP"\n        }\'',
+      },
+      kotlin: {
+        method: 'auth().credentials().verify',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyParams\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialVerifyParams = CredentialVerifyParams.builder()\n        .id("id")\n        .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n        .otp("123456")\n        .type(CredentialVerifyParams.Type.EMAIL_OTP)\n        .build()\n    val response: CredentialVerifyResponse = client.auth().credentials().verify(params)\n}',
+      },
+      python: {
+        method: 'auth.credentials.verify',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.credentials.verify(\n    id="id",\n    client_public_key="04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n    otp="123456",\n    type="EMAIL_OTP",\n)\nprint(response.id)',
+      },
+      typescript: {
+        method: 'client.auth.credentials.verify',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.credentials.verify('id', {\n  clientPublicKey:\n    '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  otp: '123456',\n  type: 'EMAIL_OTP',\n});\n\nconsole.log(response.id);",
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
