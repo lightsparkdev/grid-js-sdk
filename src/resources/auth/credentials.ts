@@ -88,11 +88,15 @@ export class Credentials extends APIResource {
    * credential and issue a session signing key.
    *
    * For `EMAIL_OTP` credentials, supply the one-time password that was emailed to
-   * the user along with a client-generated public key. On success, the response
-   * contains an `encryptedSessionSigningKey` that is encrypted to the supplied
-   * `clientPublicKey`, along with an `expiresAt` timestamp marking when the session
-   * expires. The `clientPublicKey` is ephemeral and one-time-use per verification
-   * request.
+   * the user along with a client-generated public key. For `OAUTH` credentials,
+   * supply a fresh OIDC token (`iat` must be less than 60 seconds before the
+   * request) along with the client-generated public key; this is also the
+   * reauthentication path after a prior session expired.
+   *
+   * On success, the response contains an `encryptedSessionSigningKey` that is
+   * encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp
+   * marking when the session expires. The `clientPublicKey` is ephemeral and
+   * one-time-use per verification request.
    *
    * @example
    * ```ts
@@ -324,25 +328,56 @@ export declare namespace CredentialCreateParams {
   }
 }
 
-export interface CredentialVerifyParams {
-  /**
-   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-   * total). The matching private key must remain on the client. Grid encrypts the
-   * session signing key returned in the response to this public key. The key is
-   * ephemeral and one-time-use per verification request.
-   */
-  clientPublicKey: string;
+export type CredentialVerifyParams =
+  | CredentialVerifyParams.EmailOtpCredentialVerifyRequest
+  | CredentialVerifyParams.OAuthCredentialVerifyRequest;
 
-  /**
-   * The one-time password received by the user via email.
-   */
-  otp: string;
+export declare namespace CredentialVerifyParams {
+  export interface EmailOtpCredentialVerifyRequest {
+    /**
+     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+     * total). The matching private key must remain on the client. Grid encrypts the
+     * session signing key returned in the response to this public key. The key is
+     * ephemeral and one-time-use per verification request.
+     */
+    clientPublicKey: string;
 
-  /**
-   * Discriminator value identifying this as an email OTP verification.
-   */
-  type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';
+    /**
+     * The one-time password received by the user via email.
+     */
+    otp: string;
+
+    /**
+     * Discriminator value identifying this as an email OTP verification.
+     */
+    type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';
+  }
+
+  export interface OAuthCredentialVerifyRequest {
+    /**
+     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+     * total). The matching private key must remain on the client. Grid encrypts the
+     * session signing key returned in the response to this public key. The key is
+     * ephemeral and one-time-use per verification request.
+     */
+    clientPublicKey: string;
+
+    /**
+     * OIDC ID token issued by the identity provider. For reauthentication after a
+     * prior session expired, supply a fresh token — the token's `iat` claim must be
+     * less than 60 seconds before the request timestamp. Grid fetches the issuer's
+     * signing key from the `iss` claim's `.well-known` OpenID configuration and
+     * verifies the token signature.
+     */
+    oidcToken: string;
+
+    /**
+     * Discriminator value identifying this as an OAuth verification.
+     */
+    type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+  }
 }
 
 export declare namespace Credentials {

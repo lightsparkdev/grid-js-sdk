@@ -77,11 +77,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nplatform_config = client.config.retrieve()\nprint(platform_config.id)',
       },
-      ruby: {
-        method: 'config.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.retrieve\n\nputs(platform_config)',
-      },
       typescript: {
         method: 'client.config.retrieve',
         example:
@@ -121,11 +116,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nplatform_config = client.config.update(\n    supported_currencies=[{\n        "currency_code": "USD",\n        "min_amount": 100,\n        "max_amount": 1000000,\n        "enabled_transaction_types": ["OUTGOING", "INCOMING"],\n        "required_counterparty_fields": [{\n            "name": "FULL_NAME",\n            "mandatory": True,\n        }, {\n            "name": "NATIONALITY",\n            "mandatory": True,\n        }, {\n            "name": "BIRTH_DATE",\n            "mandatory": True,\n        }],\n    }],\n    uma_domain="mycompany.com",\n    webhook_endpoint="https://api.mycompany.com/webhooks/uma",\n)\nprint(platform_config.id)',
       },
-      ruby: {
-        method: 'config.update',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.update\n\nputs(platform_config)',
-      },
       typescript: {
         method: 'client.config.update',
         example:
@@ -163,11 +153,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.create',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncustomer_one_of = client.customers.create(\n    create_customer_request={\n        "customer_type": "INDIVIDUAL"\n    },\n)\nprint(customer_one_of)',
-      },
-      ruby: {
-        method: 'customers.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.create(create_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
       },
       typescript: {
         method: 'client.customers.create',
@@ -218,11 +203,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.customers.list()\npage = page.data[0]\nprint(page)',
       },
-      ruby: {
-        method: 'customers.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list\n\nputs(page)',
-      },
       typescript: {
         method: 'client.customers.list',
         example:
@@ -257,11 +237,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.retrieve',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncustomer_one_of = client.customers.retrieve(\n    "customerId",\n)\nprint(customer_one_of)',
-      },
-      ruby: {
-        method: 'customers.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.retrieve("customerId")\n\nputs(customer_one_of)',
       },
       typescript: {
         method: 'client.customers.retrieve',
@@ -301,11 +276,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncustomer_one_of = client.customers.update(\n    customer_id="customerId",\n    update_customer_request={\n        "customer_type": "INDIVIDUAL"\n    },\n)\nprint(customer_one_of)',
       },
-      ruby: {
-        method: 'customers.update',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.update("customerId", update_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
-      },
       typescript: {
         method: 'client.customers.update',
         example:
@@ -341,11 +311,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncustomer_one_of = client.customers.delete(\n    "customerId",\n)\nprint(customer_one_of)',
       },
-      ruby: {
-        method: 'customers.delete',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.delete("customerId")\n\nputs(customer_one_of)',
-      },
       typescript: {
         method: 'client.customers.delete',
         example:
@@ -379,11 +344,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.get_kyc_link',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.customers.get_kyc_link(\n    platform_customer_id="platformCustomerId",\n)\nprint(response.customer_id)',
-      },
-      ruby: {
-        method: 'customers.get_kyc_link',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.get_kyc_link(platform_customer_id: "platformCustomerId")\n\nputs(response)',
       },
       typescript: {
         method: 'client.customers.getKYCLink',
@@ -421,11 +381,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.customers.list_internal_accounts()\npage = page.data[0]\nprint(page.id)',
       },
-      ruby: {
-        method: 'customers.list_internal_accounts',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list_internal_accounts\n\nputs(page)',
-      },
       typescript: {
         method: 'client.customers.listInternalAccounts',
         example:
@@ -461,11 +416,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.list',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.customers.external_accounts.list()\npage = page.data[0]\nprint(page.id)',
-      },
-      ruby: {
-        method: 'customers.external_accounts.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.external_accounts.list\n\nputs(page)',
       },
       typescript: {
         method: 'client.customers.externalAccounts.list',
@@ -509,11 +459,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nexternal_account = client.customers.external_accounts.create(\n    account_info={\n        "account_type": "USD_ACCOUNT",\n        "account_number": "12345678901",\n        "routing_number": "123456789",\n        "bank_account_type": "CHECKING",\n        "beneficiary": {\n            "beneficiary_type": "INDIVIDUAL",\n            "full_name": "John Doe",\n            "birth_date": "1990-01-15",\n            "nationality": "US",\n            "address": {\n                "line1": "123 Main Street",\n                "city": "San Francisco",\n                "state": "CA",\n                "postal_code": "94105",\n                "country": "US",\n            },\n        },\n    },\n    currency="USD",\n    customer_id="Customer:019542f5-b3e7-1d02-0000-000000000001",\n)\nprint(external_account.id)',
       },
-      ruby: {
-        method: 'customers.external_accounts.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
-      },
       typescript: {
         method: 'client.customers.externalAccounts.create',
         example:
@@ -549,11 +494,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nexternal_account = client.customers.external_accounts.retrieve(\n    "externalAccountId",\n)\nprint(external_account.id)',
       },
-      ruby: {
-        method: 'customers.external_accounts.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
-      },
       typescript: {
         method: 'client.customers.externalAccounts.retrieve',
         example:
@@ -586,11 +526,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.delete',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nclient.customers.external_accounts.delete(\n    "externalAccountId",\n)',
-      },
-      ruby: {
-        method: 'customers.external_accounts.delete',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.customers.external_accounts.delete("externalAccountId")\n\nputs(result)',
       },
       typescript: {
         method: 'client.customers.externalAccounts.delete',
@@ -626,11 +561,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.bulk.upload_csv',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.customers.bulk.upload_csv(\n    file=b"Example data",\n)\nprint(response.job_id)',
-      },
-      ruby: {
-        method: 'customers.bulk.upload_csv',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.upload_csv(file: StringIO.new("Example data"))\n\nputs(response)',
       },
       typescript: {
         method: 'client.customers.bulk.uploadCsv',
@@ -668,11 +598,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.customers.bulk.get_job_status(\n    "jobId",\n)\nprint(response.id)',
       },
-      ruby: {
-        method: 'customers.bulk.get_job_status',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.get_job_status("jobId")\n\nputs(response)',
-      },
       typescript: {
         method: 'client.customers.bulk.getJobStatus',
         example:
@@ -709,11 +634,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.platform.list_internal_accounts()\nprint(response.data)',
       },
-      ruby: {
-        method: 'platform.list_internal_accounts',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.platform.list_internal_accounts\n\nputs(response)',
-      },
       typescript: {
         method: 'client.platform.listInternalAccounts',
         example:
@@ -749,11 +669,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.list',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nexternal_accounts = client.platform.external_accounts.list()\nprint(external_accounts.data)',
-      },
-      ruby: {
-        method: 'platform.external_accounts.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_accounts = lightspark_grid.platform.external_accounts.list\n\nputs(external_accounts)',
       },
       typescript: {
         method: 'client.platform.externalAccounts.list',
@@ -794,11 +709,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nexternal_account = client.platform.external_accounts.create(\n    account_info={\n        "account_type": "USD_ACCOUNT",\n        "account_number": "12345678901",\n        "routing_number": "123456789",\n        "bank_account_type": "CHECKING",\n        "beneficiary": {\n            "beneficiary_type": "INDIVIDUAL",\n            "full_name": "John Doe",\n            "birth_date": "1990-01-15",\n            "nationality": "US",\n            "address": {\n                "line1": "123 Main Street",\n                "city": "San Francisco",\n                "state": "CA",\n                "postal_code": "94105",\n                "country": "US",\n            },\n        },\n    },\n    currency="USD",\n)\nprint(external_account.id)',
       },
-      ruby: {
-        method: 'platform.external_accounts.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
-      },
       typescript: {
         method: 'client.platform.externalAccounts.create',
         example:
@@ -834,11 +744,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nexternal_account = client.platform.external_accounts.retrieve(\n    "externalAccountId",\n)\nprint(external_account.id)',
       },
-      ruby: {
-        method: 'platform.external_accounts.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
-      },
       typescript: {
         method: 'client.platform.externalAccounts.retrieve',
         example:
@@ -871,11 +776,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.delete',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nclient.platform.external_accounts.delete(\n    "externalAccountId",\n)',
-      },
-      ruby: {
-        method: 'platform.external_accounts.delete',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.platform.external_accounts.delete("externalAccountId")\n\nputs(result)',
       },
       typescript: {
         method: 'client.platform.externalAccounts.delete',
@@ -918,11 +818,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ntransaction = client.transfer_in.create(\n    destination={\n        "account_id": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n    },\n    source={\n        "account_id": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n    },\n    amount=12550,\n)\nprint(transaction)',
       },
-      ruby: {
-        method: 'transfer_in.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_in.create(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(transaction)',
-      },
       typescript: {
         method: 'client.transferIn.create',
         example:
@@ -963,11 +858,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ntransaction = client.transfer_out.create(\n    destination={\n        "account_id": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n    },\n    source={\n        "account_id": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n    },\n    amount=12550,\n)\nprint(transaction)',
       },
-      ruby: {
-        method: 'transfer_out.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_out.create(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(transaction)',
-      },
       typescript: {
         method: 'client.transferOut.create',
         example:
@@ -1003,11 +893,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver.lookup_uma',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.receiver.lookup_uma(\n    receiver_uma_address="receiverUmaAddress",\n)\nprint(response)',
-      },
-      ruby: {
-        method: 'receiver.lookup_uma',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_uma("receiverUmaAddress")\n\nputs(response)',
       },
       typescript: {
         method: 'client.receiver.lookupUma',
@@ -1045,11 +930,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.receiver.lookup_external_account(\n    account_id="ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n)\nprint(response)',
       },
-      ruby: {
-        method: 'receiver.lookup_external_account',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_external_account("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n\nputs(response)',
-      },
       typescript: {
         method: 'client.receiver.lookupExternalAccount',
         example:
@@ -1085,11 +965,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.retrieve',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nquote = client.quotes.retrieve(\n    "quoteId",\n)\nprint(quote.id)',
-      },
-      ruby: {
-        method: 'quotes.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.retrieve("quoteId")\n\nputs(quote)',
       },
       typescript: {
         method: 'client.quotes.retrieve',
@@ -1138,11 +1013,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nquote = client.quotes.create(\n    destination={\n        "destination_type": "ACCOUNT",\n        "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    },\n    locked_currency_amount=10000,\n    locked_currency_side="SENDING",\n    source={\n        "source_type": "ACCOUNT",\n        "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n    },\n    description="Transfer between accounts, either internal or external.",\n)\nprint(quote.id)',
       },
-      ruby: {
-        method: 'quotes.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 10000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
-      },
       typescript: {
         method: 'client.quotes.create',
         example:
@@ -1178,11 +1048,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.execute',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nquote = client.quotes.execute(\n    quote_id="Quote:019542f5-b3e7-1d02-0000-000000000001",\n)\nprint(quote.id)',
-      },
-      ruby: {
-        method: 'quotes.execute',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(quote)',
       },
       typescript: {
         method: 'client.quotes.execute',
@@ -1233,11 +1098,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.transactions.list()\npage = page.data[0]\nprint(page)',
       },
-      ruby: {
-        method: 'transactions.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.transactions.list\n\nputs(page)',
-      },
       typescript: {
         method: 'client.transactions.list',
         example:
@@ -1272,11 +1132,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions.retrieve',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ntransaction = client.transactions.retrieve(\n    "transactionId",\n)\nprint(transaction)',
-      },
-      ruby: {
-        method: 'transactions.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transactions.retrieve("transactionId")\n\nputs(transaction)',
       },
       typescript: {
         method: 'client.transactions.retrieve',
@@ -1314,11 +1169,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nincoming_transaction = client.transactions.approve(\n    transaction_id="transactionId",\n)\nprint(incoming_transaction.id)',
       },
-      ruby: {
-        method: 'transactions.approve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.approve("transactionId")\n\nputs(incoming_transaction)',
-      },
       typescript: {
         method: 'client.transactions.approve',
         example:
@@ -1355,11 +1205,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nincoming_transaction = client.transactions.reject(\n    transaction_id="transactionId",\n)\nprint(incoming_transaction.id)',
       },
-      ruby: {
-        method: 'transactions.reject',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.reject("transactionId")\n\nputs(incoming_transaction)',
-      },
       typescript: {
         method: 'client.transactions.reject',
         example:
@@ -1395,11 +1240,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\numa_invitation = client.invitations.create(\n    inviter_uma="$inviter@uma.domain",\n)\nprint(uma_invitation.code)',
       },
-      ruby: {
-        method: 'invitations.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.create(inviter_uma: "$inviter@uma.domain")\n\nputs(uma_invitation)',
-      },
       typescript: {
         method: 'client.invitations.create',
         example:
@@ -1434,11 +1274,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations.retrieve',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\numa_invitation = client.invitations.retrieve(\n    "invitationCode",\n)\nprint(uma_invitation.code)',
-      },
-      ruby: {
-        method: 'invitations.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.retrieve("invitationCode")\n\nputs(uma_invitation)',
       },
       typescript: {
         method: 'client.invitations.retrieve',
@@ -1476,11 +1311,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\numa_invitation = client.invitations.claim(\n    invitation_code="invitationCode",\n    invitee_uma="$invitee@uma.domain",\n)\nprint(uma_invitation.code)',
       },
-      ruby: {
-        method: 'invitations.claim',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.claim("invitationCode", invitee_uma: "$invitee@uma.domain")\n\nputs(uma_invitation)',
-      },
       typescript: {
         method: 'client.invitations.claim',
         example:
@@ -1517,11 +1347,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\numa_invitation = client.invitations.cancel(\n    "invitationCode",\n)\nprint(uma_invitation.code)',
       },
-      ruby: {
-        method: 'invitations.cancel',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.cancel("invitationCode")\n\nputs(uma_invitation)',
-      },
       typescript: {
         method: 'client.invitations.cancel',
         example:
@@ -1557,11 +1382,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.send_funds',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\noutgoing_transaction = client.sandbox.send_funds(\n    currency_code="USD",\n    quote_id="Quote:019542f5-b3e7-1d02-0000-000000000006",\n)\nprint(outgoing_transaction.id)',
-      },
-      ruby: {
-        method: 'sandbox.send_funds',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\noutgoing_transaction = lightspark_grid.sandbox.send_funds(\n  currency_code: "USD",\n  quote_id: "Quote:019542f5-b3e7-1d02-0000-000000000006"\n)\n\nputs(outgoing_transaction)',
       },
       typescript: {
         method: 'client.sandbox.sendFunds',
@@ -1605,11 +1425,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nincoming_transaction = client.sandbox.uma.receive_payment(\n    receiving_currency_amount=1000,\n    receiving_currency_code="USD",\n    sender_uma_address="$success.usd@sandbox.grid.uma.money",\n)\nprint(incoming_transaction.id)',
       },
-      ruby: {
-        method: 'sandbox.uma.receive_payment',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.sandbox.uma.receive_payment(\n  receiving_currency_amount: 1000,\n  receiving_currency_code: "USD",\n  sender_uma_address: "$success.usd@sandbox.grid.uma.money"\n)\n\nputs(incoming_transaction)',
-      },
       typescript: {
         method: 'client.sandbox.uma.receivePayment',
         example:
@@ -1646,11 +1461,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ninternal_account = client.sandbox.internal_accounts.fund(\n    account_id="InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    amount=100000,\n)\nprint(internal_account.id)',
       },
-      ruby: {
-        method: 'sandbox.internal_accounts.fund',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.sandbox.internal_accounts.fund(\n  "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n  amount: 100000\n)\n\nputs(internal_account)',
-      },
       typescript: {
         method: 'client.sandbox.internalAccounts.fund',
         example:
@@ -1683,11 +1493,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.webhooks.send_test',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.sandbox.webhooks.send_test()\nprint(response.response_status)',
-      },
-      ruby: {
-        method: 'sandbox.webhooks.send_test',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.webhooks.send_test\n\nputs(response)',
       },
       typescript: {
         method: 'client.sandbox.webhooks.sendTest',
@@ -1732,11 +1537,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.uma_providers.list()\npage = page.data[0]\nprint(page.allow_list_status)',
       },
-      ruby: {
-        method: 'uma_providers.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.uma_providers.list\n\nputs(page)',
-      },
       typescript: {
         method: 'client.umaProviders.list',
         example:
@@ -1771,11 +1571,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.create',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\napi_token = client.tokens.create(\n    name="Sandbox read-only",\n    permissions=["VIEW"],\n)\nprint(api_token.id)',
-      },
-      ruby: {
-        method: 'tokens.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.create(name: "Sandbox read-only", permissions: [:VIEW])\n\nputs(api_token)',
       },
       typescript: {
         method: 'client.tokens.create',
@@ -1821,11 +1616,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.tokens.list()\npage = page.data[0]\nprint(page.id)',
       },
-      ruby: {
-        method: 'tokens.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.tokens.list\n\nputs(page)',
-      },
       typescript: {
         method: 'client.tokens.list',
         example:
@@ -1861,11 +1651,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\napi_token = client.tokens.retrieve(\n    "tokenId",\n)\nprint(api_token.id)',
       },
-      ruby: {
-        method: 'tokens.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.retrieve("tokenId")\n\nputs(api_token)',
-      },
       typescript: {
         method: 'client.tokens.retrieve',
         example:
@@ -1898,11 +1683,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.delete',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nclient.tokens.delete(\n    "tokenId",\n)',
-      },
-      ruby: {
-        method: 'tokens.delete',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.tokens.delete("tokenId")\n\nputs(result)',
       },
       typescript: {
         method: 'client.tokens.delete',
@@ -1940,11 +1720,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nexchange_rates = client.exchange_rates.list()\nprint(exchange_rates.data)',
       },
-      ruby: {
-        method: 'exchange_rates.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexchange_rates = lightspark_grid.exchange_rates.list\n\nputs(exchange_rates)',
-      },
       typescript: {
         method: 'client.exchangeRates.list',
         example:
@@ -1969,11 +1744,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'webhooks.unwrap',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nclient.webhooks.unwrap()',
-      },
-      ruby: {
-        method: 'webhooks.unwrap',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.webhooks.unwrap\n\nputs(result)',
       },
       typescript: {
         method: 'client.webhooks.unwrap',
@@ -2017,11 +1787,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.crypto.estimate_withdrawal_fee(\n    amount=1000000,\n    crypto_network="SOLANA_MAINNET",\n    currency="USDC",\n    destination_address="7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n    internal_account_id="InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n)\nprint(response.application_fee)',
       },
-      ruby: {
-        method: 'crypto.estimate_withdrawal_fee',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.crypto.estimate_withdrawal_fee(\n  amount: 1000000,\n  crypto_network: "SOLANA_MAINNET",\n  currency: "USDC",\n  destination_address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n  internal_account_id: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n)\n\nputs(response)',
-      },
       typescript: {
         method: 'client.crypto.estimateWithdrawalFee',
         example:
@@ -2063,11 +1828,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom datetime import date\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nbeneficial_owner = client.beneficial_owners.create(\n    customer_id="Customer:019542f5-b3e7-1d02-0000-000000000001",\n    ownership_percentage=51,\n    personal_info={\n        "address": {\n            "country": "US",\n            "line1": "123 Main Street",\n            "postal_code": "94105",\n        },\n        "birth_date": date.fromisoformat("1978-06-15"),\n        "first_name": "Jane",\n        "identifier": "123-45-6789",\n        "id_type": "SSN",\n        "last_name": "Smith",\n        "nationality": "US",\n    },\n    roles=["UBO", "DIRECTOR"],\n)\nprint(beneficial_owner.id)',
       },
-      ruby: {
-        method: 'beneficial_owners.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  ownership_percentage: 51,\n  personal_info: {\n    address: {country: "US", line1: "123 Main Street", postalCode: "94105"},\n    birthDate: "1978-06-15",\n    firstName: "Jane",\n    identifier: "123-45-6789",\n    idType: :SSN,\n    lastName: "Smith",\n    nationality: "US"\n  },\n  roles: [:UBO, :DIRECTOR]\n)\n\nputs(beneficial_owner)',
-      },
       typescript: {
         method: 'client.beneficialOwners.create',
         example:
@@ -2103,11 +1863,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.beneficial_owners.list(\n    customer_id="customerId",\n)\npage = page.data[0]\nprint(page.id)',
       },
-      ruby: {
-        method: 'beneficial_owners.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.beneficial_owners.list(customer_id: "customerId")\n\nputs(page)',
-      },
       typescript: {
         method: 'client.beneficialOwners.list',
         example:
@@ -2142,11 +1897,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.retrieve',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nbeneficial_owner = client.beneficial_owners.retrieve(\n    "beneficialOwnerId",\n)\nprint(beneficial_owner.id)',
-      },
-      ruby: {
-        method: 'beneficial_owners.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.retrieve("beneficialOwnerId")\n\nputs(beneficial_owner)',
       },
       typescript: {
         method: 'client.beneficialOwners.retrieve',
@@ -2187,11 +1937,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.update',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nbeneficial_owner = client.beneficial_owners.update(\n    beneficial_owner_id="beneficialOwnerId",\n)\nprint(beneficial_owner.id)',
-      },
-      ruby: {
-        method: 'beneficial_owners.update',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.update("beneficialOwnerId")\n\nputs(beneficial_owner)',
       },
       typescript: {
         method: 'client.beneficialOwners.update',
@@ -2236,11 +1981,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.documents.upload(\n    country="US",\n    document_holder="BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n    document_type="PASSPORT",\n    file=b"Example data",\n)\nprint(response.id)',
       },
-      ruby: {
-        method: 'documents.upload',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  country: "US",\n  document_holder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
-      },
       typescript: {
         method: 'client.documents.upload',
         example:
@@ -2276,11 +2016,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.documents.list()\npage = page.data[0]\nprint(page.id)',
       },
-      ruby: {
-        method: 'documents.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.documents.list\n\nputs(page)',
-      },
       typescript: {
         method: 'client.documents.list',
         example:
@@ -2315,11 +2050,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.retrieve',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ndocument = client.documents.retrieve(\n    "documentId",\n)\nprint(document.id)',
-      },
-      ruby: {
-        method: 'documents.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndocument = lightspark_grid.documents.retrieve("documentId")\n\nputs(document)',
       },
       typescript: {
         method: 'client.documents.retrieve',
@@ -2364,11 +2094,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.documents.replace(\n    document_id="documentId",\n    country="US",\n    document_type="PASSPORT",\n    file=b"Example data",\n)\nprint(response.id)',
       },
-      ruby: {
-        method: 'documents.replace',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  country: "US",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
-      },
       typescript: {
         method: 'client.documents.replace',
         example:
@@ -2402,11 +2127,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.delete',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nclient.documents.delete(\n    "documentId",\n)',
-      },
-      ruby: {
-        method: 'documents.delete',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.documents.delete("documentId")\n\nputs(result)',
       },
       typescript: {
         method: 'client.documents.delete',
@@ -2444,11 +2164,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.verifications.submit(\n    customer_id="Customer:019542f5-b3e7-1d02-0000-000000000001",\n)\nprint(response.id)',
       },
-      ruby: {
-        method: 'verifications.submit',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.verifications.submit(customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(response)',
-      },
       typescript: {
         method: 'client.verifications.submit',
         example:
@@ -2483,11 +2198,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications.list',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.verifications.list()\npage = page.data[0]\nprint(page.id)',
-      },
-      ruby: {
-        method: 'verifications.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.verifications.list\n\nputs(page)',
       },
       typescript: {
         method: 'client.verifications.list',
@@ -2524,11 +2234,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nverification = client.verifications.retrieve(\n    "verificationId",\n)\nprint(verification.id)',
       },
-      ruby: {
-        method: 'verifications.retrieve',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nverification = lightspark_grid.verifications.retrieve("verificationId")\n\nputs(verification)',
-      },
       typescript: {
         method: 'client.verifications.retrieve',
         example:
@@ -2563,11 +2268,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries.list',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ndiscoveries = client.discoveries.list()\nprint(discoveries.data)',
-      },
-      ruby: {
-        method: 'discoveries.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndiscoveries = lightspark_grid.discoveries.list\n\nputs(discoveries)',
       },
       typescript: {
         method: 'client.discoveries.list',
@@ -2607,11 +2307,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncredential = client.auth.credentials.create(\n    account_id="InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n    type="EMAIL_OTP",\n)\nprint(credential.id)',
       },
-      ruby: {
-        method: 'auth.credentials.create',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncredential = lightspark_grid.auth.credentials.create(\n  body: {accountId: "InternalAccount:019542f5-b3e7-1d02-0000-000000000002", type: :EMAIL_OTP}\n)\n\nputs(credential)',
-      },
       typescript: {
         method: 'client.auth.credentials.create',
         example:
@@ -2625,19 +2320,15 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     httpMethod: 'post',
     summary: 'Verify an authentication credential',
     description:
-      'Complete the verification step for a previously created authentication credential and issue a session signing key.\n\nFor `EMAIL_OTP` credentials, supply the one-time password that was emailed to the user along with a client-generated public key. On success, the response contains an `encryptedSessionSigningKey` that is encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp marking when the session expires. The `clientPublicKey` is ephemeral and one-time-use per verification request.\n',
+      'Complete the verification step for a previously created authentication credential and issue a session signing key.\n\nFor `EMAIL_OTP` credentials, supply the one-time password that was emailed to the user along with a client-generated public key. For `OAUTH` credentials, supply a fresh OIDC token (`iat` must be less than 60 seconds before the request) along with the client-generated public key; this is also the reauthentication path after a prior session expired.\n\nOn success, the response contains an `encryptedSessionSigningKey` that is encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp marking when the session expires. The `clientPublicKey` is ephemeral and one-time-use per verification request.\n',
     stainlessPath: '(resource) auth.credentials > (method) verify',
     qualified: 'client.auth.credentials.verify',
     params: [
       'id: string;',
-      'clientPublicKey: string;',
-      'otp: string;',
-      "type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';",
+      "body: { clientPublicKey: string; otp: string; type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY'; } | { clientPublicKey: string; oidcToken: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; };",
     ],
     response:
       "{ id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }",
-    markdown:
-      "## verify\n\n`client.auth.credentials.verify(id: string, clientPublicKey: string, otp: string, type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY'): { id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n**post** `/auth/credentials/{id}/verify`\n\nComplete the verification step for a previously created authentication credential and issue a session signing key.\n\nFor `EMAIL_OTP` credentials, supply the one-time password that was emailed to the user along with a client-generated public key. On success, the response contains an `encryptedSessionSigningKey` that is encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp marking when the session expires. The `clientPublicKey` is ephemeral and one-time-use per verification request.\n\n\n### Parameters\n\n- `id: string`\n\n- `clientPublicKey: string`\n  Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04 prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters total). The matching private key must remain on the client. Grid encrypts the session signing key returned in the response to this public key. The key is ephemeral and one-time-use per verification request.\n\n- `otp: string`\n  The one-time password received by the user via email.\n\n- `type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY'`\n  Discriminator value identifying this as an email OTP verification.\n\n### Returns\n\n- `{ id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n  - `id: string`\n  - `accountId: string`\n  - `createdAt: string`\n  - `encryptedSessionSigningKey: string`\n  - `expiresAt: string`\n  - `nickname: string`\n  - `type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'`\n  - `updatedAt: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.credentials.verify('id', {\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  otp: '123456',\n  type: 'EMAIL_OTP',\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       http: {
         example:
@@ -2646,17 +2337,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       kotlin: {
         method: 'auth().credentials().verify',
         example:
-          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyParams\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialVerifyParams = CredentialVerifyParams.builder()\n        .id("id")\n        .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n        .otp("123456")\n        .type(CredentialVerifyParams.Type.EMAIL_OTP)\n        .build()\n    val response: CredentialVerifyResponse = client.auth().credentials().verify(params)\n}',
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyParams\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialVerifyParams = CredentialVerifyParams.builder()\n        .id("id")\n        .body(CredentialVerifyParams.Body.EmailOtpCredentialVerifyRequest.builder()\n            .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n            .otp("123456")\n            .type(CredentialVerifyParams.Body.EmailOtpCredentialVerifyRequest.Type.EMAIL_OTP)\n            .build())\n        .build()\n    val response: CredentialVerifyResponse = client.auth().credentials().verify(params)\n}',
       },
       python: {
         method: 'auth.credentials.verify',
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.credentials.verify(\n    id="id",\n    client_public_key="04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n    otp="123456",\n    type="EMAIL_OTP",\n)\nprint(response.id)',
-      },
-      ruby: {
-        method: 'auth.credentials.verify',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.auth.credentials.verify(\n  "id",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n  otp: "123456",\n  type: :EMAIL_OTP\n)\n\nputs(response)',
       },
       typescript: {
         method: 'client.auth.credentials.verify',
@@ -2694,11 +2380,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.credentials.resend_challenge(\n    "id",\n)\nprint(response.id)',
       },
-      ruby: {
-        method: 'auth.credentials.resend_challenge',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.auth.credentials.resend_challenge("id")\n\nputs(response)',
-      },
       typescript: {
         method: 'client.auth.credentials.resendChallenge',
         example:
@@ -2718,11 +2399,6 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'typescript',
     content:
       "# Lightspark Grid TypeScript API Library\n\n[![NPM version](https://img.shields.io/npm/v/@lightsparkdev/grid.svg?label=npm%20(stable))](https://npmjs.org/package/@lightsparkdev/grid) ![npm bundle size](https://img.shields.io/bundlephobia/minzip/@lightsparkdev/grid) [![JSR Version](https://jsr.io/badges/@lightsparkdev/grid)](https://jsr.io/@lightsparkdev/grid)\n\nThis library provides convenient access to the Lightspark Grid REST API from server-side TypeScript or JavaScript.\n\n\n\nThe full API of this library can be found in [api.md](api.md).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwiWC1HcmlkLVNpZ25hdHVyZSI6Ik15IFdlYmhvb2sgU2lnbmF0dXJlIn19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n```sh\nnpm install @lightsparkdev/grid\n```\n\n### Installation from JSR\n\n```sh\ndeno add jsr:@lightsparkdev/grid\nnpx jsr add @lightsparkdev/grid\n```\n\nThese commands will make the module importable from the `@lightsparkdev/grid` scope:\n\nYou can also [import directly from JSR](https://jsr.io/docs/using-packages#importing-with-jsr-specifiers) without an install step if you're using the Deno JavaScript runtime:\n\n```ts\nimport LightsparkGrid from 'jsr:@lightsparkdev/grid';\n```\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n<!-- prettier-ignore -->\n```js\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst quote = await client.quotes.create({\n  destination: {\n    destinationType: 'ACCOUNT',\n    accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n  },\n  lockedCurrencyAmount: 10000,\n  lockedCurrencySide: 'SENDING',\n  source: {\n    sourceType: 'ACCOUNT',\n    accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  },\n});\n\nconsole.log(quote.id);\n```\n\n\n\n### Request & Response types\n\nThis library includes TypeScript definitions for all request params and response fields. You may import and use them like so:\n\n<!-- prettier-ignore -->\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst params: LightsparkGrid.QuoteCreateParams = {\n  destination: {\n    destinationType: 'ACCOUNT',\n    accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n  },\n  lockedCurrencyAmount: 10000,\n  lockedCurrencySide: 'SENDING',\n  source: {\n    sourceType: 'ACCOUNT',\n    accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  },\n};\nconst quote: LightsparkGrid.Quote = await client.quotes.create(params);\n```\n\nDocumentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.\n\n## File uploads\n\nRequest parameters that correspond to file uploads can be passed in many different forms:\n- `File` (or an object with the same structure)\n- a `fetch` `Response` (or an object with the same structure)\n- an `fs.ReadStream`\n- the return value of our `toFile` helper\n\n```ts\nimport fs from 'fs';\nimport LightsparkGrid, { toFile } from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\n// If you have access to Node `fs` we recommend using `fs.createReadStream()`:\nawait client.customers.bulk.uploadCsv({ file: fs.createReadStream('/path/to/file') });\n\n// Or if you have the web `File` API you can pass a `File` instance:\nawait client.customers.bulk.uploadCsv({ file: new File(['my bytes'], 'file') });\n\n// You can also pass a `fetch` `Response`:\nawait client.customers.bulk.uploadCsv({ file: await fetch('https://somesite/file') });\n\n// Finally, if none of the above are convenient, you can use our `toFile` helper:\nawait client.customers.bulk.uploadCsv({ file: await toFile(Buffer.from('my bytes'), 'file') });\nawait client.customers.bulk.uploadCsv({ file: await toFile(new Uint8Array([0, 1, 2]), 'file') });\n```\n\n\n\n## Handling errors\n\nWhen the library is unable to connect to the API,\nor if the API returns a non-success status code (i.e., 4xx or 5xx response),\na subclass of `APIError` will be thrown:\n\n<!-- prettier-ignore -->\n```ts\nconst quote = await client.quotes\n  .create({\n    destination: {\n      destinationType: 'ACCOUNT',\n      accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n    },\n    lockedCurrencyAmount: 10000,\n    lockedCurrencySide: 'SENDING',\n    source: {\n      sourceType: 'ACCOUNT',\n      accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    },\n  })\n  .catch(async (err) => {\n    if (err instanceof LightsparkGrid.APIError) {\n      console.log(err.status); // 400\n      console.log(err.name); // BadRequestError\n      console.log(err.headers); // {server: 'nginx', ...}\n    } else {\n      throw err;\n    }\n  });\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors will all be retried by default.\n\nYou can use the `maxRetries` option to configure or disable this:\n\n<!-- prettier-ignore -->\n```js\n// Configure the default for all requests:\nconst client = new LightsparkGrid({\n  maxRetries: 0, // default is 2\n});\n\n// Or, configure per-request:\nawait client.quotes.create({\n  destination: { destinationType: 'ACCOUNT', accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123' },\n  lockedCurrencyAmount: 10000,\n  lockedCurrencySide: 'SENDING',\n  source: { sourceType: 'ACCOUNT', accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },\n}, {\n  maxRetries: 5,\n});\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default. You can configure this with a `timeout` option:\n\n<!-- prettier-ignore -->\n```ts\n// Configure the default for all requests:\nconst client = new LightsparkGrid({\n  timeout: 20 * 1000, // 20 seconds (default is 1 minute)\n});\n\n// Override per-request:\nawait client.quotes.create({\n  destination: { destinationType: 'ACCOUNT', accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123' },\n  lockedCurrencyAmount: 10000,\n  lockedCurrencySide: 'SENDING',\n  source: { sourceType: 'ACCOUNT', accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },\n}, {\n  timeout: 5 * 1000,\n});\n```\n\nOn timeout, an `APIConnectionTimeoutError` is thrown.\n\nNote that requests which time out will be [retried twice by default](#retries).\n\n## Auto-pagination\n\nList methods in the LightsparkGrid API are paginated.\nYou can use the `for await … of` syntax to iterate through items across all pages:\n\n```ts\nasync function fetchAllCustomerOneoves(params) {\n  const allCustomerOneoves = [];\n  // Automatically fetches more pages as needed.\n  for await (const customerOneOf of client.customers.list()) {\n    allCustomerOneoves.push(customerOneOf);\n  }\n  return allCustomerOneoves;\n}\n```\n\nAlternatively, you can request a single page at a time:\n\n```ts\nlet page = await client.customers.list();\nfor (const customerOneOf of page.data) {\n  console.log(customerOneOf);\n}\n\n// Convenience methods are provided for manually paginating:\nwhile (page.hasNextPage()) {\n  page = await page.getNextPage();\n  // ...\n}\n```\n\n\n\n## Advanced Usage\n\n### Accessing raw Response data (e.g., headers)\n\nThe \"raw\" `Response` returned by `fetch()` can be accessed through the `.asResponse()` method on the `APIPromise` type that all methods return.\nThis method returns as soon as the headers for a successful response are received and does not consume the response body, so you are free to write custom parsing or streaming logic.\n\nYou can also use the `.withResponse()` method to get the raw `Response` along with the parsed data.\nUnlike `.asResponse()` this method consumes the body, returning once it is parsed.\n\n<!-- prettier-ignore -->\n```ts\nconst client = new LightsparkGrid();\n\nconst response = await client.quotes\n  .create({\n    destination: {\n      destinationType: 'ACCOUNT',\n      accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n    },\n    lockedCurrencyAmount: 10000,\n    lockedCurrencySide: 'SENDING',\n    source: {\n      sourceType: 'ACCOUNT',\n      accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    },\n  })\n  .asResponse();\nconsole.log(response.headers.get('X-My-Header'));\nconsole.log(response.statusText); // access the underlying Response object\n\nconst { data: quote, response: raw } = await client.quotes\n  .create({\n    destination: {\n      destinationType: 'ACCOUNT',\n      accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n    },\n    lockedCurrencyAmount: 10000,\n    lockedCurrencySide: 'SENDING',\n    source: {\n      sourceType: 'ACCOUNT',\n      accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    },\n  })\n  .withResponse();\nconsole.log(raw.headers.get('X-My-Header'));\nconsole.log(quote.id);\n```\n\n### Logging\n\n> [!IMPORTANT]\n> All log messages are intended for debugging only. The format and content of log messages\n> may change between releases.\n\n#### Log levels\n\nThe log level can be configured in two ways:\n\n1. Via the `LIGHTSPARK_GRID_LOG` environment variable\n2. Using the `logLevel` client option (overrides the environment variable if set)\n\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  logLevel: 'debug', // Show all log messages\n});\n```\n\nAvailable log levels, from most to least verbose:\n\n- `'debug'` - Show debug messages, info, warnings, and errors\n- `'info'` - Show info messages, warnings, and errors\n- `'warn'` - Show warnings and errors (default)\n- `'error'` - Show only errors\n- `'off'` - Disable all logging\n\nAt the `'debug'` level, all HTTP requests and responses are logged, including headers and bodies.\nSome authentication-related headers are redacted, but sensitive data in request and response bodies\nmay still be visible.\n\n#### Custom logger\n\nBy default, this library logs to `globalThis.console`. You can also provide a custom logger.\nMost logging libraries are supported, including [pino](https://www.npmjs.com/package/pino), [winston](https://www.npmjs.com/package/winston), [bunyan](https://www.npmjs.com/package/bunyan), [consola](https://www.npmjs.com/package/consola), [signale](https://www.npmjs.com/package/signale), and [@std/log](https://jsr.io/@std/log). If your logger doesn't work, please open an issue.\n\nWhen providing a custom logger, the `logLevel` option still controls which messages are emitted, messages\nbelow the configured level will not be sent to your logger.\n\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\nimport pino from 'pino';\n\nconst logger = pino();\n\nconst client = new LightsparkGrid({\n  logger: logger.child({ name: 'LightsparkGrid' }),\n  logLevel: 'debug', // Send all messages to pino, allowing it to filter\n});\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.get`, `client.post`, and other HTTP verbs.\nOptions on the client, such as retries, will be respected when making these requests.\n\n```ts\nawait client.post('/some/path', {\n  body: { some_prop: 'foo' },\n  query: { some_query_arg: 'bar' },\n});\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use `// @ts-expect-error` on the undocumented\nparameter. This library doesn't validate at runtime that the request matches the type, so any extra values you\nsend will be sent as-is.\n\n```ts\nclient.quotes.create({\n  // ...\n  // @ts-expect-error baz is not yet public\n  baz: 'undocumented option',\n});\n```\n\nFor requests with the `GET` verb, any extra params will be in the query, all other requests will send the\nextra param in the body.\n\nIf you want to explicitly send an extra argument, you can do so with the `query`, `body`, and `headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may access the response object with `// @ts-expect-error` on\nthe response object, or cast the response object to the requisite type. Like the request params, we do not\nvalidate or strip extra properties from the response from the API.\n\n### Customizing the fetch client\n\nBy default, this library expects a global `fetch` function is defined.\n\nIf you want to use a different `fetch` function, you can either polyfill the global:\n\n```ts\nimport fetch from 'my-fetch';\n\nglobalThis.fetch = fetch;\n```\n\nOr pass it to the client:\n\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\nimport fetch from 'my-fetch';\n\nconst client = new LightsparkGrid({ fetch });\n```\n\n### Fetch options\n\nIf you want to set custom `fetch` options without overriding the `fetch` function, you can provide a `fetchOptions` object when instantiating the client or making a request. (Request-specific options override client options.)\n\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  fetchOptions: {\n    // `RequestInit` options\n  },\n});\n```\n\n#### Configuring proxies\n\nTo modify proxy behavior, you can provide custom `fetchOptions` that add runtime-specific proxy\noptions to requests:\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/node.svg\" align=\"top\" width=\"18\" height=\"21\"> **Node** <sup>[[docs](https://github.com/nodejs/undici/blob/main/docs/docs/api/ProxyAgent.md#example---proxyagent-with-fetch)]</sup>\n\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\nimport * as undici from 'undici';\n\nconst proxyAgent = new undici.ProxyAgent('http://localhost:8888');\nconst client = new LightsparkGrid({\n  fetchOptions: {\n    dispatcher: proxyAgent,\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/bun.svg\" align=\"top\" width=\"18\" height=\"21\"> **Bun** <sup>[[docs](https://bun.sh/guides/http/proxy)]</sup>\n\n```ts\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  fetchOptions: {\n    proxy: 'http://localhost:8888',\n  },\n});\n```\n\n<img src=\"https://raw.githubusercontent.com/stainless-api/sdk-assets/refs/heads/main/deno.svg\" align=\"top\" width=\"18\" height=\"21\"> **Deno** <sup>[[docs](https://docs.deno.com/api/deno/~/Deno.createHttpClient)]</sup>\n\n```ts\nimport LightsparkGrid from 'jsr:@lightsparkdev/grid';\n\nconst httpClient = Deno.createHttpClient({ proxy: { url: 'http://localhost:8888' } });\nconst client = new LightsparkGrid({\n  fetchOptions: {\n    client: httpClient,\n  },\n});\n```\n\n## Frequently Asked Questions\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/lightsparkdev/grid-js-sdk/issues) with questions, bugs, or suggestions.\n\n## Requirements\n\nTypeScript >= 4.9 is supported.\n\nThe following runtimes are supported:\n\n- Web browsers (Up-to-date Chrome, Firefox, Safari, Edge, and more)\n- Node.js 20 LTS or later ([non-EOL](https://endoflife.date/nodejs)) versions.\n- Deno v1.28.0 or higher.\n- Bun 1.0 or later.\n- Cloudflare Workers.\n- Vercel Edge Runtime.\n- Jest 28 or greater with the `\"node\"` environment (`\"jsdom\"` is not supported at this time).\n- Nitro v2.6 or greater.\n\nNote that React Native is not supported at this time.\n\nIf you are interested in other runtime environments, please open or upvote an issue on GitHub.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n",
-  },
-  {
-    language: 'ruby',
-    content:
-      '# Lightspark Grid Ruby API library\n\nThe Lightspark Grid Ruby library provides convenient access to the Lightspark Grid REST API from any Ruby 3.2.0+ application. It ships with comprehensive types & docstrings in Yard, RBS, and RBI – [see below](https://github.com/stainless-sdks/grid-ruby#Sorbet) for usage with Sorbet. The standard library\'s `net/http` is used as the HTTP transport, with connection pooling via the `connection_pool` gem.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwiWC1HcmlkLVNpZ25hdHVyZSI6Ik15IFdlYmhvb2sgU2lnbmF0dXJlIn19)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nDocumentation for releases of this gem can be found [on RubyDoc](https://gemdocs.org/gems/grid).\n\n\n\n## Installation\n\nTo use this gem, install via Bundler by adding the following to your application\'s `Gemfile`:\n\n```ruby\ngem "grid", "~> 0.0.1"\n```\n\n## Usage\n\n```ruby\nrequire "bundler/setup"\nrequire "grid"\n\nlightspark_grid = Grid::Client.new(\n  username: ENV["GRID_CLIENT_ID"], # This is the default and can be omitted\n  password: ENV["GRID_CLIENT_SECRET"] # This is the default and can be omitted\n)\n\nquote = lightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(quote.id)\n```\n\n\n\n### Pagination\n\nList methods in the Lightspark Grid API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```ruby\npage = lightspark_grid.customers.list\n\n# Fetch single item from page.\ncustomer = page.data[0]\nputs(customer)\n\n# Automatically fetches more pages as needed.\npage.auto_paging_each do |customer|\n  puts(customer)\nend\n```\n\nAlternatively, you can use the `#next_page?` and `#next_page` methods for more granular control working with pages.\n\n```ruby\nif page.next_page?\n  new_page = page.next_page\n  puts(new_page.data[0])\nend\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads can be passed as raw contents, a [`Pathname`](https://rubyapi.org/3.2/o/pathname) instance, [`StringIO`](https://rubyapi.org/3.2/o/stringio), or more.\n\n```ruby\nrequire "pathname"\n\n# Use `Pathname` to send the filename and/or avoid paging a large file into memory:\nresponse = lightspark_grid.customers.bulk.upload_csv(file: Pathname("/path/to/file"))\n\n# Alternatively, pass file contents or a `StringIO` directly:\nresponse = lightspark_grid.customers.bulk.upload_csv(file: File.read("/path/to/file"))\n\n# Or, to control the filename and/or content type:\nfile = Grid::FilePart.new(File.read("/path/to/file"), filename: "/path/to/file", content_type: "…")\nresponse = lightspark_grid.customers.bulk.upload_csv(file: file)\n\nputs(response.jobId)\n```\n\nNote that you can also pass a raw `IO` descriptor, but this disables retries, as the library can\'t be sure if the descriptor is a file or pipe (which cannot be rewound).\n\n### Handling errors\n\nWhen the library is unable to connect to the API, or if the API returns a non-success status code (i.e., 4xx or 5xx response), a subclass of `Grid::Errors::APIError` will be thrown:\n\n```ruby\nbegin\n  quote = lightspark_grid.quotes.create(\n    destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n    locked_currency_amount: 10000,\n    locked_currency_side: "SENDING",\n    source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n  )\nrescue Grid::Errors::APIConnectionError => e\n  puts("The server could not be reached")\n  puts(e.cause)  # an underlying Exception, likely raised within `net/http`\nrescue Grid::Errors::RateLimitError => e\n  puts("A 429 status code was received; we should back off a bit.")\nrescue Grid::Errors::APIStatusError => e\n  puts("Another non-200-range status code was received")\n  puts(e.status)\nend\n```\n\nError codes are as follows:\n\n| Cause            | Error Type                 |\n| ---------------- | -------------------------- |\n| HTTP 400         | `BadRequestError`          |\n| HTTP 401         | `AuthenticationError`      |\n| HTTP 403         | `PermissionDeniedError`    |\n| HTTP 404         | `NotFoundError`            |\n| HTTP 409         | `ConflictError`            |\n| HTTP 422         | `UnprocessableEntityError` |\n| HTTP 429         | `RateLimitError`           |\n| HTTP >= 500      | `InternalServerError`      |\n| Other HTTP error | `APIStatusError`           |\n| Timeout          | `APITimeoutError`          |\n| Network error    | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\n\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, >=500 Internal errors, and timeouts will all be retried by default.\n\nYou can use the `max_retries` option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\nlightspark_grid = Grid::Client.new(\n  max_retries: 0 # default is 2\n)\n\n# Or, configure per-request:\nlightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  request_options: {max_retries: 5}\n)\n```\n\n### Timeouts\n\nBy default, requests will time out after 60 seconds. You can use the timeout option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\nlightspark_grid = Grid::Client.new(\n  timeout: nil # default is 60\n)\n\n# Or, configure per-request:\nlightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  request_options: {timeout: 5}\n)\n```\n\nOn timeout, `Grid::Errors::APITimeoutError` is raised.\n\nNote that requests that time out are retried by default.\n\n## Advanced concepts\n\n### BaseModel\n\nAll parameter and response objects inherit from `Grid::Internal::Type::BaseModel`, which provides several conveniences, including:\n\n1. All fields, including unknown ones, are accessible with `obj[:prop]` syntax, and can be destructured with `obj => {prop: prop}` or pattern-matching syntax.\n\n2. Structural equivalence for equality; if two API calls return the same values, comparing the responses with == will return true.\n\n3. Both instances and the classes themselves can be pretty-printed.\n\n4. Helpers such as `#to_h`, `#deep_to_h`, `#to_json`, and `#to_yaml`.\n\n### Making custom or undocumented requests\n\n#### Undocumented properties\n\nYou can send undocumented parameters to any endpoint, and read undocumented response properties, like so:\n\nNote: the `extra_` parameters of the same name overrides the documented parameters.\n\n```ruby\nquote =\n  lightspark_grid.quotes.create(\n    destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n    locked_currency_amount: 10000,\n    locked_currency_side: "SENDING",\n    source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n    request_options: {\n      extra_query: {my_query_parameter: value},\n      extra_body: {my_body_parameter: value},\n      extra_headers: {"my-header": value}\n    }\n  )\n\nputs(quote[:my_undocumented_property])\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` under the `request_options:` parameter when making a request, as seen in the examples above.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints while retaining the benefit of auth, retries, and so on, you can make requests using `client.request`, like so:\n\n```ruby\nresponse = client.request(\n  method: :post,\n  path: \'/undocumented/endpoint\',\n  query: {"dog": "woof"},\n  headers: {"useful-header": "interesting-value"},\n  body: {"hello": "world"}\n)\n```\n\n### Concurrency & connection pooling\n\nThe `Grid::Client` instances are threadsafe, but are only are fork-safe when there are no in-flight HTTP requests.\n\nEach instance of `Grid::Client` has its own HTTP connection pool with a default size of 99. As such, we recommend instantiating the client once per application in most settings.\n\nWhen all available connections from the pool are checked out, requests wait for a new connection to become available, with queue time counting towards the request timeout.\n\nUnless otherwise specified, other classes in the SDK do not have locks protecting their underlying data structure.\n\n## Sorbet\n\nThis library provides comprehensive [RBI](https://sorbet.org/docs/rbi) definitions, and has no dependency on sorbet-runtime.\n\nYou can provide typesafe request parameters like so:\n\n```ruby\nlightspark_grid.quotes.create(\n  destination: Grid::QuoteDestinationOneOf::AccountDestination.new(\n    account_id: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n  ),\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: Grid::QuoteSourceOneOf::AccountQuoteSource.new(\n    account_id: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n  )\n)\n```\n\nOr, equivalently:\n\n```ruby\n# Hashes work, but are not typesafe:\nlightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\n# You can also splat a full Params class:\nparams = Grid::QuoteCreateParams.new(\n  destination: Grid::QuoteDestinationOneOf::AccountDestination.new(\n    account_id: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n  ),\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: Grid::QuoteSourceOneOf::AccountQuoteSource.new(\n    account_id: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n  )\n)\nlightspark_grid.quotes.create(**params)\n```\n\n### Enums\n\nSince this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:\n\n```ruby\n# :INDIVIDUAL\nputs(Grid::CustomerType::INDIVIDUAL)\n\n# Revealed type: `T.all(Grid::CustomerType, Symbol)`\nT.reveal_type(Grid::CustomerType::INDIVIDUAL)\n```\n\nEnum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:\n\n```ruby\n# Using the enum constants preserves the tagged type information:\nlightspark_grid.customers.list(\n  customer_type: Grid::CustomerType::INDIVIDUAL,\n  # …\n)\n\n# Literal values are also permissible:\nlightspark_grid.customers.list(\n  customer_type: :INDIVIDUAL,\n  # …\n)\n```\n\n## Versioning\n\nThis package follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions. As the library is in initial development and has a major version of `0`, APIs may change at any time.\n\nThis package considers improvements to the (non-runtime) `*.rbi` and `*.rbs` type definitions to be non-breaking changes.\n\n## Requirements\n\nRuby 3.2.0 or higher.\n\n## Contributing\n\nSee [the contributing documentation](https://github.com/stainless-sdks/grid-ruby/tree/main/CONTRIBUTING.md).\n',
   },
   {
     language: 'kotlin',
