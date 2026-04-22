@@ -62,6 +62,24 @@ export class Credentials extends APIResource {
   }
 
   /**
+   * Re-issue the challenge for an existing authentication credential.
+   *
+   * For `EMAIL_OTP` credentials, this triggers a new one-time password email to the
+   * address on file. After the user receives the new OTP, call
+   * `POST /auth/credentials/{id}/verify` to complete verification and issue a
+   * session.
+   *
+   * @example
+   * ```ts
+   * const response =
+   *   await client.auth.credentials.resendChallenge('id');
+   * ```
+   */
+  resendChallenge(id: string, options?: RequestOptions): APIPromise<CredentialResendChallengeResponse> {
+    return this._client.post(path`/auth/credentials/${id}/challenge`, options);
+  }
+
+  /**
    * Complete the verification step for a previously created authentication
    * credential and issue a session signing key.
    *
@@ -95,6 +113,46 @@ export class Credentials extends APIResource {
 }
 
 export interface CredentialCreateResponse {
+  /**
+   * System-generated unique identifier for the authentication credential.
+   */
+  id: string;
+
+  /**
+   * Identifier of the internal account that this credential authenticates.
+   */
+  accountId: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
+   * the email address; for OAUTH credentials it is typically the email claim from
+   * the OIDC token; for PASSKEY credentials it is the nickname provided at
+   * registration time.
+   */
+  nickname: string;
+
+  /**
+   * The type of authentication credential.
+   *
+   * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
+   *   Google or Apple.
+   * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
+   * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
+   */
+  type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+}
+
+export interface CredentialResendChallengeResponse {
   /**
    * System-generated unique identifier for the authentication credential.
    */
@@ -242,6 +300,7 @@ export interface CredentialVerifyParams {
 export declare namespace Credentials {
   export {
     type CredentialCreateResponse as CredentialCreateResponse,
+    type CredentialResendChallengeResponse as CredentialResendChallengeResponse,
     type CredentialVerifyResponse as CredentialVerifyResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialVerifyParams as CredentialVerifyParams,

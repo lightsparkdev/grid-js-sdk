@@ -4,6 +4,7 @@ export { Auth } from './auth';
 export {
   Credentials,
   type CredentialCreateResponse,
+  type CredentialResendChallengeResponse,
   type CredentialVerifyResponse,
   type CredentialCreateParams,
   type CredentialVerifyParams,

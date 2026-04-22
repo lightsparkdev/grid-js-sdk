@@ -2438,6 +2438,42 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'resend_challenge',
+    endpoint: '/auth/credentials/{id}/challenge',
+    httpMethod: 'post',
+    summary: 'Resend an authentication credential challenge',
+    description:
+      'Re-issue the challenge for an existing authentication credential.\n\nFor `EMAIL_OTP` credentials, this triggers a new one-time password email to the address on file. After the user receives the new OTP, call `POST /auth/credentials/{id}/verify` to complete verification and issue a session.\n',
+    stainlessPath: '(resource) auth.credentials > (method) resend_challenge',
+    qualified: 'client.auth.credentials.resendChallenge',
+    params: ['id: string;'],
+    response:
+      "{ id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }",
+    markdown:
+      "## resend_challenge\n\n`client.auth.credentials.resendChallenge(id: string): { id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n**post** `/auth/credentials/{id}/challenge`\n\nRe-issue the challenge for an existing authentication credential.\n\nFor `EMAIL_OTP` credentials, this triggers a new one-time password email to the address on file. After the user receives the new OTP, call `POST /auth/credentials/{id}/verify` to complete verification and issue a session.\n\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }`\n\n  - `id: string`\n  - `accountId: string`\n  - `createdAt: string`\n  - `nickname: string`\n  - `type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'`\n  - `updatedAt: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.credentials.resendChallenge('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials/$ID/challenge \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'auth().credentials().resendChallenge',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialResendChallengeParams\nimport com.lightspark.grid.models.auth.credentials.CredentialResendChallengeResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: CredentialResendChallengeResponse = client.auth().credentials().resendChallenge("id")\n}',
+      },
+      python: {
+        method: 'auth.credentials.resend_challenge',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.credentials.resend_challenge(\n    "id",\n)\nprint(response.id)',
+      },
+      typescript: {
+        method: 'client.auth.credentials.resendChallenge',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.credentials.resendChallenge('id');\n\nconsole.log(response.id);",
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
