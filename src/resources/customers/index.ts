@@ -87,7 +87,6 @@ export {
   type ZarExternalAccountInfo,
   type ZmwExternalAccountInfo,
   type ExternalAccountCreateParams,
-  type ExternalAccountUpdateParams,
   type ExternalAccountListParams,
   type ExternalAccountsDefaultPagination,
 } from './external-accounts';

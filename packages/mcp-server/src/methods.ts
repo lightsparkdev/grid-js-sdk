@@ -77,12 +77,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/external-accounts/{externalAccountId}',
   },
   {
-    clientCallName: 'client.customers.externalAccounts.update',
-    fullyQualifiedName: 'customers.externalAccounts.update',
-    httpMethod: 'patch',
-    httpPath: '/customers/external-accounts/{externalAccountId}',
-  },
-  {
     clientCallName: 'client.customers.externalAccounts.list',
     fullyQualifiedName: 'customers.externalAccounts.list',
     httpMethod: 'get',
@@ -122,12 +116,6 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.platform.externalAccounts.retrieve',
     fullyQualifiedName: 'platform.externalAccounts.retrieve',
     httpMethod: 'get',
-    httpPath: '/platform/external-accounts/{externalAccountId}',
-  },
-  {
-    clientCallName: 'client.platform.externalAccounts.update',
-    fullyQualifiedName: 'platform.externalAccounts.update',
-    httpMethod: 'patch',
     httpPath: '/platform/external-accounts/{externalAccountId}',
   },
   {

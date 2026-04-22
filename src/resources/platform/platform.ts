@@ -15,7 +15,6 @@ import {
   ExternalAccountCreateParams,
   ExternalAccountListParams,
   ExternalAccountListResponse,
-  ExternalAccountUpdateParams,
   ExternalAccounts,
   GbpAccountInfo,
   GhsAccountInfo,
@@ -139,7 +138,6 @@ export declare namespace Platform {
     type ZmwAccountInfo as ZmwAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
-    type ExternalAccountUpdateParams as ExternalAccountUpdateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 }

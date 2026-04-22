@@ -67,27 +67,6 @@ export class ExternalAccounts extends APIResource {
   }
 
   /**
-   * Update mutable fields on a platform external account. Only `platformAccountId`
-   * and `beneficiary` can be updated via this endpoint.
-   *
-   * @example
-   * ```ts
-   * const externalAccount =
-   *   await client.platform.externalAccounts.update(
-   *     'externalAccountId',
-   *     { platformAccountId: 'ext_acc_654321' },
-   *   );
-   * ```
-   */
-  update(
-    externalAccountID: string,
-    body: ExternalAccountUpdateParams,
-    options?: RequestOptions,
-  ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.patch(path`/platform/external-accounts/${externalAccountID}`, { body, ...options });
-  }
-
-  /**
    * Retrieve a list of all external accounts that belong to the platform, as opposed
    * to an individual customer.
    *
@@ -823,41 +802,6 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
-export interface ExternalAccountUpdateParams {
-  /**
-   * Updated beneficiary information for the external account
-   */
-  beneficiary?: ExternalAccountUpdateParams.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-  /**
-   * Optional platform-specific identifier for this account
-   */
-  platformAccountId?: string;
-}
-
-export namespace ExternalAccountUpdateParams {
-  export interface IndividualBeneficiary {
-    beneficiaryType: 'INDIVIDUAL' | 'BUSINESS';
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality: string;
-
-    address?: ExternalAccountsAPI.Address;
-  }
-}
-
 export interface ExternalAccountListParams {
   /**
    * Filter by currency code
@@ -904,7 +848,6 @@ export declare namespace ExternalAccounts {
     type ZmwAccountInfo as ZmwAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
-    type ExternalAccountUpdateParams as ExternalAccountUpdateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 }
