@@ -72,7 +72,8 @@ export type CustomerInfoFieldName =
   | 'PURPOSE_OF_PAYMENT'
   | 'ULTIMATE_INSTITUTION_COUNTRY'
   | 'IDENTIFIER'
-  | 'BUSINESS_TYPE';
+  | 'BUSINESS_TYPE'
+  | 'COMPANY_LEGAL_NAME';
 
 export interface PlatformConfig {
   /**

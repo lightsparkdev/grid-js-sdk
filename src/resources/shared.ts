@@ -294,6 +294,16 @@ export interface CopBeneficiary {
   birthDate?: string;
 
   /**
+   * The identity document number
+   */
+  documentNumber?: string;
+
+  /**
+   * The type of identity document (e.g., national ID, passport)
+   */
+  documentType?: string;
+
+  /**
    * The email of the beneficiary
    */
   email?: string;
@@ -321,6 +331,11 @@ export interface CopExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1219,6 +1234,11 @@ export interface UsdExternalAccountCreateInfo {
    * The ABA routing number
    */
   routingNumber: string;
+
+  /**
+   * The bank account type. Required for certain corridors (e.g., El Salvador).
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
 }
 
 export interface VerificationError {

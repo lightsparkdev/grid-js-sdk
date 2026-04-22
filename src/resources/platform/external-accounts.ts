@@ -23,6 +23,7 @@ export class ExternalAccounts extends APIResource {
    *       accountType: 'USD_ACCOUNT',
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
+   *       bankAccountType: 'CHECKING',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
@@ -216,6 +217,11 @@ export interface CopAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -637,6 +643,11 @@ export interface UsdAccountInfo {
    * The ABA routing number
    */
   routingNumber: string;
+
+  /**
+   * The bank account type. Required for certain corridors (e.g., El Salvador).
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
 }
 
 export interface VndAccountInfo {
