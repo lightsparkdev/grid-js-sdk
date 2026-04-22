@@ -377,6 +377,18 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'get',
     httpPath: '/discoveries',
   },
+  {
+    clientCallName: 'client.auth.credentials.create',
+    fullyQualifiedName: 'auth.credentials.create',
+    httpMethod: 'post',
+    httpPath: '/auth/credentials',
+  },
+  {
+    clientCallName: 'client.auth.credentials.verify',
+    fullyQualifiedName: 'auth.credentials.verify',
+    httpMethod: 'post',
+    httpPath: '/auth/credentials/{id}/verify',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

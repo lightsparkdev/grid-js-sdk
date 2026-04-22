@@ -144,6 +144,7 @@ import {
   VerificationUpdateWebhookEvent,
   Webhooks,
 } from './resources/webhooks';
+import { Auth } from './resources/auth/auth';
 import {
   BusinessCustomerFields,
   BusinessInfo,
@@ -1014,6 +1015,7 @@ export class LightsparkGrid {
    * Endpoints for discovering available payment rails, banks, and providers for a given country and currency corridor.
    */
   discoveries: API.Discoveries = new API.Discoveries(this);
+  auth: API.Auth = new API.Auth(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -1035,6 +1037,7 @@ LightsparkGrid.BeneficialOwners = BeneficialOwners;
 LightsparkGrid.Documents = Documents;
 LightsparkGrid.Verifications = Verifications;
 LightsparkGrid.Discoveries = Discoveries;
+LightsparkGrid.Auth = Auth;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1220,6 +1223,8 @@ export declare namespace LightsparkGrid {
     type DiscoveryListResponse as DiscoveryListResponse,
     type DiscoveryListParams as DiscoveryListParams,
   };
+
+  export { Auth as Auth };
 
   export type AedBeneficiary = API.AedBeneficiary;
   export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
