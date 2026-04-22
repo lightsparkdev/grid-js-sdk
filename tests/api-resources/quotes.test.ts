@@ -83,7 +83,11 @@ describe('resource quotes', () => {
     await expect(
       client.quotes.execute(
         'Quote:019542f5-b3e7-1d02-0000-000000000001',
-        { 'Idempotency-Key': '<uuid>' },
+        {
+          'Grid-Wallet-Signature':
+            'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',
+          'Idempotency-Key': '<uuid>',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);

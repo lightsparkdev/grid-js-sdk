@@ -90,6 +90,12 @@ export class Quotes extends APIResource {
    * internal account, or has direct pull functionality (e.g. ACH pull with an
    * external account).
    *
+   * When the quote's `source` is an internal account of type `EMBEDDED_WALLET`, the
+   * request must include a `Grid-Wallet-Signature` header. The signature is produced
+   * by signing the `payloadToSign` value from the quote's
+   * `paymentInstructions[].accountOrWalletInfo` entry with the session private key
+   * of a verified authentication credential on the source Embedded Wallet.
+   *
    * Once executed, the quote cannot be cancelled and the transfer will be processed.
    *
    * @example
@@ -104,11 +110,14 @@ export class Quotes extends APIResource {
     params: QuoteExecuteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<Quote> {
-    const { 'Idempotency-Key': idempotencyKey } = params ?? {};
+    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Idempotency-Key': idempotencyKey } = params ?? {};
     return this._client.post(path`/quotes/${quoteID}/execute`, {
       ...options,
       headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        {
+          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
+          ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined),
+        },
         options?.headers,
       ]),
     });
@@ -228,7 +237,8 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentTronWalletInfo
     | PaymentInstructions.PaymentPolygonWalletInfo
     | PaymentInstructions.PaymentBaseWalletInfo
-    | PaymentInstructions.PaymentEthereumWalletInfo;
+    | PaymentInstructions.PaymentEthereumWalletInfo
+    | PaymentInstructions.PaymentEmbeddedWalletInfo;
 
   /**
    * Additional human-readable instructions for making the payment
@@ -430,6 +440,23 @@ export namespace PaymentInstructions {
      * Type of asset
      */
     assetType?: 'USDC';
+  }
+
+  export interface PaymentEmbeddedWalletInfo {
+    /**
+     * Discriminator value identifying this as Embedded Wallet payment instructions.
+     */
+    accountType: 'EMBEDDED_WALLET';
+
+    /**
+     * JSON-encoded transaction signing payload that must be signed, as-is
+     * (byte-for-byte, without re-serialization), with the session private key of a
+     * verified authentication credential on the source Embedded Wallet. The resulting
+     * signature is base64-encoded and passed as the `Grid-Wallet-Signature` header on
+     * `POST /quotes/{quoteId}/execute` to authorize the outbound transfer from the
+     * wallet.
+     */
+    payloadToSign: string;
   }
 }
 
@@ -682,7 +709,12 @@ export interface QuoteCreateParams {
    * use the `/quotes/{quoteId}/execute` endpoint instead. This is false by default.
    * This can only be used for quotes with a `source` which is either an internal
    * account, or has direct pull functionality (e.g. ACH pull with an external
-   * account).
+   * account). Not supported when the `source` is an internal account of type
+   * `EMBEDDED_WALLET`: those transfers require a `Grid-Wallet-Signature` over the
+   * `payloadToSign` returned in the quote response, which is not available in a
+   * combined create-and-execute call. Create the quote first with
+   * `immediatelyExecute: false` and then call `POST /quotes/{quoteId}/execute` with
+   * the signature header.
    */
   immediatelyExecute?: boolean;
 
@@ -732,6 +764,15 @@ export interface QuoteCreateParams {
 }
 
 export interface QuoteExecuteParams {
+  /**
+   * Signature over the `payloadToSign` returned in the quote's
+   * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
+   * private key of a verified authentication credential on the source Embedded
+   * Wallet and base64-encoded. Required when the quote's source is an internal
+   * account of type `EMBEDDED_WALLET`; ignored for other source types.
+   */
+  'Grid-Wallet-Signature'?: string;
+
   /**
    * A unique identifier for the request. If the same key is sent multiple times, the
    * server will return the same response as the first request.
