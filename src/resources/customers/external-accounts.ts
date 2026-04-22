@@ -24,6 +24,7 @@ export class ExternalAccounts extends APIResource {
    *       accountType: 'USD_ACCOUNT',
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
+   *       bankAccountType: 'CHECKING',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
