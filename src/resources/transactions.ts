@@ -542,7 +542,8 @@ export interface TransactionListParams extends DefaultPaginationParams {
   accountIdentifier?: string;
 
   /**
-   * Filter by system customer ID
+   * Filter by system customer ID. To filter to transactions made on behalf of the
+   * platform, specify the platform ID as the customer ID.
    */
   customerId?: string;
 
