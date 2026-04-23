@@ -366,6 +366,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/discoveries',
   },
   {
+    clientCallName: 'client.auth.listSessions',
+    fullyQualifiedName: 'auth.listSessions',
+    httpMethod: 'get',
+    httpPath: '/auth/sessions',
+  },
+  {
     clientCallName: 'client.auth.credentials.create',
     fullyQualifiedName: 'auth.credentials.create',
     httpMethod: 'post',

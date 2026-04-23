@@ -2278,6 +2278,42 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'list_sessions',
+    endpoint: '/auth/sessions',
+    httpMethod: 'get',
+    summary: 'List active sessions',
+    description:
+      'Retrieve all active authentication sessions on an Embedded Wallet internal account. A session is created each time a credential is verified via `POST /auth/credentials/{id}/verify`, and remains active until its `expiresAt` passes or it is revoked via `DELETE /auth/sessions/{id}`.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of concurrent sessions (one per signed-in device, typically 1–4), so all results are returned inline.',
+    stainlessPath: '(resource) auth > (method) list_sessions',
+    qualified: 'client.auth.listSessions',
+    params: ['accountId: string;'],
+    response:
+      "{ data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]; }",
+    markdown:
+      "## list_sessions\n\n`client.auth.listSessions(accountId: string): { data: object[]; }`\n\n**get** `/auth/sessions`\n\nRetrieve all active authentication sessions on an Embedded Wallet internal account. A session is created each time a credential is verified via `POST /auth/credentials/{id}/verify`, and remains active until its `expiresAt` passes or it is revoked via `DELETE /auth/sessions/{id}`.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of concurrent sessions (one per signed-in device, typically 1–4), so all results are returned inline.\n\n### Parameters\n\n- `accountId: string`\n  Internal account id whose sessions to list.\n\n### Returns\n\n- `{ data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]; }`\n\n  - `data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.listSessions({ accountId: 'accountId' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'auth().listSessions',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.AuthListSessionsParams\nimport com.lightspark.grid.models.auth.AuthListSessionsResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: AuthListSessionsParams = AuthListSessionsParams.builder()\n        .accountId("accountId")\n        .build()\n    val response: AuthListSessionsResponse = client.auth().listSessions(params)\n}',
+      },
+      python: {
+        method: 'auth.list_sessions',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.list_sessions(\n    account_id="accountId",\n)\nprint(response.data)',
+      },
+      typescript: {
+        method: 'client.auth.listSessions',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.listSessions({ accountId: 'accountId' });\n\nconsole.log(response.data);",
+      },
+    },
+  },
+  {
     name: 'create',
     endpoint: '/auth/credentials',
     httpMethod: 'post',
@@ -2330,7 +2366,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Request-Id?: string;',
     ],
     response:
-      "{ id: string; accountId: string; createdAt: string; encryptedSessionSigningKey: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }",
+      "{ id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }",
     perLanguage: {
       http: {
         example:

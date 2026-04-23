@@ -580,13 +580,19 @@ export interface CredentialRevokeResponse {
   type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
 }
 
+/**
+ * An authentication session on an Embedded Wallet internal account. Returned from
+ * `GET /auth/sessions` (list) and `POST /auth/credentials/{id}/verify` (on
+ * credential verification). Only the verify response includes
+ * `encryptedSessionSigningKey` — it is delivered exactly once at the moment the
+ * session is issued and is never returned by the list endpoint.
+ */
 export interface CredentialVerifyResponse {
   /**
    * System-generated unique identifier for the session. Pass this value to
    * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
-   * the `id` inherited from `AuthMethod` so the verify response identifies the
-   * session that was just issued; the caller already has the authenticating
-   * credential's `AuthMethod` id from the path of the verify request.
+   * the `id` inherited from `AuthMethod` so this response identifies the session
+   * rather than the authenticating credential.
    */
   id: string;
 
@@ -599,15 +605,6 @@ export interface CredentialVerifyResponse {
    * Creation timestamp.
    */
   createdAt: string;
-
-  /**
-   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
-   * the verify request. Encoded as a base58check string: the decoded payload is a
-   * 33-byte compressed P-256 encapsulated public key followed by AES-256-GCM
-   * ciphertext. The client decrypts this key with its private key and uses it to
-   * sign subsequent Embedded Wallet requests until `expiresAt`.
-   */
-  encryptedSessionSigningKey: string;
 
   /**
    * Timestamp after which the session is no longer valid and the
@@ -637,6 +634,20 @@ export interface CredentialVerifyResponse {
    * Last update timestamp.
    */
   updatedAt: string;
+
+  /**
+   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
+   * the verify request. Encoded as a base58check string: the decoded payload is a
+   * 33-byte compressed P-256 encapsulated public key followed by AES-256-GCM
+   * ciphertext. The client decrypts this key with its private key and uses it to
+   * sign subsequent Embedded Wallet requests until `expiresAt`.
+   *
+   * Only returned from `POST /auth/credentials/{id}/verify` (where the session is
+   * first issued). Omitted from responses that simply surface existing sessions
+   * (e.g. `GET /auth/sessions`) — Grid does not retain the plaintext key after the
+   * client has decrypted it.
+   */
+  encryptedSessionSigningKey?: string;
 }
 
 export type CredentialCreateParams =

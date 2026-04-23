@@ -483,6 +483,14 @@ Methods:
 
 # Auth
 
+Types:
+
+- <code><a href="./src/resources/auth/auth.ts">AuthListSessionsResponse</a></code>
+
+Methods:
+
+- <code title="get /auth/sessions">client.auth.<a href="./src/resources/auth/auth.ts">listSessions</a>({ ...params }) -> AuthListSessionsResponse</code>
+
 ## Credentials
 
 Types:
