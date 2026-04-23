@@ -537,6 +537,11 @@ export type TransactionType = 'INCOMING' | 'OUTGOING';
 
 export interface TransactionListParams extends DefaultPaginationParams {
   /**
+   * Filter by account identifier (matches either sender or receiver)
+   */
+  accountIdentifier?: string;
+
+  /**
    * Filter by system customer ID
    */
   customerId?: string;
