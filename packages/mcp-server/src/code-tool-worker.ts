@@ -169,6 +169,7 @@ const fuse = new Fuse(
     'client.verifications.submit',
     'client.discoveries.list',
     'client.auth.credentials.create',
+    'client.auth.credentials.list',
     'client.auth.credentials.resendChallenge',
     'client.auth.credentials.verify',
   ],

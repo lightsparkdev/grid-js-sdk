@@ -2389,6 +2389,42 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'list',
+    endpoint: '/auth/credentials',
+    httpMethod: 'get',
+    summary: 'List authentication credentials',
+    description:
+      'Retrieve all authentication credentials registered on an Embedded Wallet internal account.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of credentials (typically 1–5), so all results are returned inline. Additional per-credential detail (such as active session expiry) is available on `GET /auth/sessions`.',
+    stainlessPath: '(resource) auth.credentials > (method) list',
+    qualified: 'client.auth.credentials.list',
+    params: ['accountId: string;'],
+    response:
+      "{ data: { id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }[]; }",
+    markdown:
+      "## list\n\n`client.auth.credentials.list(accountId: string): { data: object[]; }`\n\n**get** `/auth/credentials`\n\nRetrieve all authentication credentials registered on an Embedded Wallet internal account.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of credentials (typically 1–5), so all results are returned inline. Additional per-credential detail (such as active session expiry) is available on `GET /auth/sessions`.\n\n### Parameters\n\n- `accountId: string`\n  Internal account id whose authentication credentials to list.\n\n### Returns\n\n- `{ data: { id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }[]; }`\n\n  - `data: { id: string; accountId: string; createdAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; }[]`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst credentials = await client.auth.credentials.list({ accountId: 'accountId' });\n\nconsole.log(credentials);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'auth().credentials().list',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialListParams\nimport com.lightspark.grid.models.auth.credentials.CredentialListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialListParams = CredentialListParams.builder()\n        .accountId("accountId")\n        .build()\n    val credentials: CredentialListResponse = client.auth().credentials().list(params)\n}',
+      },
+      python: {
+        method: 'auth.credentials.list',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncredentials = client.auth.credentials.list(\n    account_id="accountId",\n)\nprint(credentials.data)',
+      },
+      typescript: {
+        method: 'client.auth.credentials.list',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst credentials = await client.auth.credentials.list({ accountId: 'accountId' });\n\nconsole.log(credentials.data);",
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
