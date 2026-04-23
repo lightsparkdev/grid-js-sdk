@@ -175,6 +175,7 @@ const fuse = new Fuse(
     'client.auth.credentials.verify',
     'client.auth.sessions.list',
     'client.auth.sessions.revoke',
+    'client.internalAccounts.export',
   ],
   { threshold: 1, shouldSort: true },
 );
