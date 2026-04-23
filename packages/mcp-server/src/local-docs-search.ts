@@ -2425,6 +2425,42 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'revoke',
+    endpoint: '/auth/credentials/{id}',
+    httpMethod: 'delete',
+    summary: 'Revoke an authentication credential',
+    description:
+      'Revoke an authentication credential on an Embedded Wallet internal account.\n\nRevocation is a two-step flow because it must be authorized by a session on a *different* credential on the same internal account:\n\n1. Call `DELETE /auth/credentials/{id}` with no headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of an existing verified credential on the same internal account — other than the one being revoked — and retry the same `DELETE` request with the signature supplied as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `204`.\n\nThe account must retain at least one authentication credential; an account with only a single credential cannot use this endpoint to revoke it.\n',
+    stainlessPath: '(resource) auth.credentials > (method) revoke',
+    qualified: 'client.auth.credentials.revoke',
+    params: ['id: string;', 'Grid-Wallet-Signature?: string;', 'Request-Id?: string;'],
+    response:
+      "{ expiresAt: string; payloadToSign: string; requestId: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; }",
+    markdown:
+      "## revoke\n\n`client.auth.credentials.revoke(id: string, Grid-Wallet-Signature?: string, Request-Id?: string): { expiresAt: string; payloadToSign: string; requestId: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; }`\n\n**delete** `/auth/credentials/{id}`\n\nRevoke an authentication credential on an Embedded Wallet internal account.\n\nRevocation is a two-step flow because it must be authorized by a session on a *different* credential on the same internal account:\n\n1. Call `DELETE /auth/credentials/{id}` with no headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of an existing verified credential on the same internal account — other than the one being revoked — and retry the same `DELETE` request with the signature supplied as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `204`.\n\nThe account must retain at least one authentication credential; an account with only a single credential cannot use this endpoint to revoke it.\n\n\n### Parameters\n\n- `id: string`\n\n- `Grid-Wallet-Signature?: string`\n\n- `Request-Id?: string`\n\n### Returns\n\n- `{ expiresAt: string; payloadToSign: string; requestId: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; }`\n  202 response returned from Embedded Wallet Auth endpoints that require a signed retry — `POST /auth/credentials` (adding an additional credential), `DELETE /auth/credentials/{id}` (revoking a credential), and `DELETE /auth/sessions/{id}` (revoking a session). Carries the signing fields from `SignedRequestChallenge` plus the `type` of the authentication credential involved (being added, being revoked, or that issued the session being revoked). The client already knows the target resource id from the request path / body it just sent, so nothing beyond `type` is echoed in the response.\n\n  - `expiresAt: string`\n  - `payloadToSign: string`\n  - `requestId: string`\n  - `type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.credentials.revoke('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials/$ID \\\n    -X DELETE \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'auth().credentials().revoke',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.CredentialRevokeParams\nimport com.lightspark.grid.models.auth.credentials.CredentialRevokeResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: CredentialRevokeResponse = client.auth().credentials().revoke("id")\n}',
+      },
+      python: {
+        method: 'auth.credentials.revoke',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.credentials.revoke(\n    id="id",\n)\nprint(response.expires_at)',
+      },
+      typescript: {
+        method: 'client.auth.credentials.revoke',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.credentials.revoke('id');\n\nconsole.log(response.expiresAt);",
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [

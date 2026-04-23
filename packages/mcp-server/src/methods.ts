@@ -384,6 +384,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/auth/credentials/{id}/challenge',
   },
   {
+    clientCallName: 'client.auth.credentials.revoke',
+    fullyQualifiedName: 'auth.credentials.revoke',
+    httpMethod: 'delete',
+    httpPath: '/auth/credentials/{id}',
+  },
+  {
     clientCallName: 'client.auth.credentials.verify',
     fullyQualifiedName: 'auth.credentials.verify',
     httpMethod: 'post',

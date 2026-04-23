@@ -171,6 +171,7 @@ const fuse = new Fuse(
     'client.auth.credentials.create',
     'client.auth.credentials.list',
     'client.auth.credentials.resendChallenge',
+    'client.auth.credentials.revoke',
     'client.auth.credentials.verify',
   ],
   { threshold: 1, shouldSort: true },
