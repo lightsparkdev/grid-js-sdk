@@ -24,7 +24,19 @@ export class Credentials extends APIResource {
    * credentials, the supplied `oidcToken` is validated inline against the issuer's
    * `.well-known` OpenID configuration (the token's `iat` must be less than 60
    * seconds before the request); activation still happens via
-   * `POST /auth/credentials/{id}/verify`.
+   * `POST /auth/credentials/{id}/verify`. For `PASSKEY` credentials, the client
+   * completes a WebAuthn registration (`navigator.credentials.create()`) using a
+   * `challenge` issued by the platform backend and submits the resulting
+   * `attestation` here; the credential must still be activated via
+   * `POST /auth/credentials/{id}/verify` by completing a WebAuthn assertion. Unlike
+   * the registration `challenge` (platform-issued), the challenge for the first
+   * authentication is issued by Grid and returned inline on the `201` response
+   * alongside the `AuthMethod` fields, plus a `requestId` and challenge `expiresAt`
+   * (see `PasskeyAuthChallenge`). The client uses that Grid-issued `challenge` to
+   * produce the assertion and submits it with `Request-Id: <requestId>` to
+   * `POST /auth/credentials/{id}/verify`. On every subsequent reauthentication the
+   * challenge is re-issued via `POST /auth/credentials/{id}/challenge`. Only one
+   * `PASSKEY` credential is supported per internal account in v1.
    *
    * **Adding an additional credential**
    *
@@ -120,44 +132,140 @@ export class Credentials extends APIResource {
   }
 }
 
-export interface CredentialCreateResponse {
+/**
+ * Discriminated response shape returned from `POST /auth/credentials` (on
+ * successful registration) and `POST /auth/credentials/{id}/challenge` (on
+ * challenge re-issue). For `EMAIL_OTP` and `OAUTH` credentials the body is a plain
+ * `AuthMethod` (wrapped as `AuthMethodResponse` to disambiguate the oneOf). For
+ * `PASSKEY` credentials the body is a `PasskeyAuthChallenge` — the base
+ * `AuthMethod` fields plus the Grid-issued `challenge`, `requestId`, and
+ * `expiresAt` that drive the subsequent assertion.
+ */
+export type CredentialCreateResponse =
+  | CredentialCreateResponse.AuthMethod
+  | CredentialCreateResponse.PasskeyAuthChallenge;
+
+export namespace CredentialCreateResponse {
   /**
-   * System-generated unique identifier for the authentication credential.
+   * Strict wrapper around `AuthMethod` used inside `AuthCredentialResponseOneOf` for
+   * the `EMAIL_OTP` and `OAUTH` branches. The only difference from `AuthMethod` is
+   * `unevaluatedProperties: false`, which disambiguates the oneOf against
+   * `PasskeyAuthChallenge` — without the strictness, an `AuthMethod` with extra
+   * fields would ambiguously match both branches.
    */
-  id: string;
+  export interface AuthMethod {
+    /**
+     * System-generated unique identifier for the authentication credential.
+     */
+    id: string;
+
+    /**
+     * Identifier of the internal account that this credential authenticates.
+     */
+    accountId: string;
+
+    /**
+     * Creation timestamp.
+     */
+    createdAt: string;
+
+    /**
+     * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
+     * the email address; for OAUTH credentials it is typically the email claim from
+     * the OIDC token; for PASSKEY credentials it is the nickname provided at
+     * registration time.
+     */
+    nickname: string;
+
+    /**
+     * The type of authentication credential.
+     *
+     * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
+     *   Google or Apple.
+     * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
+     * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
+     */
+    type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+
+    /**
+     * Last update timestamp.
+     */
+    updatedAt: string;
+  }
 
   /**
-   * Identifier of the internal account that this credential authenticates.
+   * Extended `AuthMethod` shape returned for `PASSKEY` credentials from
+   * `POST /auth/credentials` (first-authentication case) and
+   * `POST /auth/credentials/{id}/challenge` (reauthentication case). Adds a
+   * Grid-issued `challenge`, the corresponding `requestId`, and the challenge's
+   * `expiresAt` to the base `AuthMethod` fields. The client signs the challenge with
+   * the passkey to produce the assertion submitted to
+   * `POST /auth/credentials/{id}/verify`.
    */
-  accountId: string;
+  export interface PasskeyAuthChallenge {
+    /**
+     * System-generated unique identifier for the authentication credential.
+     */
+    id: string;
 
-  /**
-   * Creation timestamp.
-   */
-  createdAt: string;
+    /**
+     * Identifier of the internal account that this credential authenticates.
+     */
+    accountId: string;
 
-  /**
-   * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
-   * the email address; for OAUTH credentials it is typically the email claim from
-   * the OIDC token; for PASSKEY credentials it is the nickname provided at
-   * registration time.
-   */
-  nickname: string;
+    /**
+     * Base64url-encoded challenge issued by Grid for the pending passkey
+     * authentication. The client passes it into `navigator.credentials.get()` as the
+     * WebAuthn challenge; the resulting assertion is submitted to
+     * `POST /auth/credentials/{id}/verify`. Single-use; a new challenge is issued on
+     * the next call to `POST /auth/credentials/{id}/challenge`.
+     */
+    challenge: string;
 
-  /**
-   * The type of authentication credential.
-   *
-   * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
-   *   Google or Apple.
-   * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
-   * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
-   */
-  type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+    /**
+     * Creation timestamp.
+     */
+    createdAt: string;
 
-  /**
-   * Last update timestamp.
-   */
-  updatedAt: string;
+    /**
+     * Timestamp after which the issued challenge is no longer valid. The assertion
+     * must reach `POST /auth/credentials/{id}/verify` before this time; otherwise the
+     * client must request a fresh challenge via
+     * `POST /auth/credentials/{id}/challenge`.
+     */
+    expiresAt: string;
+
+    /**
+     * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
+     * the email address; for OAUTH credentials it is typically the email claim from
+     * the OIDC token; for PASSKEY credentials it is the nickname provided at
+     * registration time.
+     */
+    nickname: string;
+
+    /**
+     * Unique identifier for this pending passkey authentication request. Must be
+     * echoed as the `Request-Id` header on the subsequent
+     * `POST /auth/credentials/{id}/verify` call so Grid can correlate the assertion
+     * with the issued challenge.
+     */
+    requestId: string;
+
+    /**
+     * The type of authentication credential.
+     *
+     * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
+     *   Google or Apple.
+     * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
+     * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
+     */
+    type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+
+    /**
+     * Last update timestamp.
+     */
+    updatedAt: string;
+  }
 }
 
 export interface CredentialResendChallengeResponse {
@@ -261,7 +369,8 @@ export interface CredentialVerifyResponse {
 
 export type CredentialCreateParams =
   | CredentialCreateParams.EmailOtpCredentialCreateRequest
-  | CredentialCreateParams.OAuthCredentialCreateRequest;
+  | CredentialCreateParams.OAuthCredentialCreateRequest
+  | CredentialCreateParams.PasskeyCredentialCreateRequest;
 
 export declare namespace CredentialCreateParams {
   export interface EmailOtpCredentialCreateRequest {
@@ -330,6 +439,92 @@ export declare namespace CredentialCreateParams {
      * paired with `Grid-Wallet-Signature`.
      */
     'Request-Id'?: string;
+  }
+
+  export interface PasskeyCredentialCreateRequest {
+    /**
+     * Body param: Identifier of the internal account that this credential will
+     * authenticate.
+     */
+    accountId: string;
+
+    /**
+     * Body param
+     */
+    attestation: PasskeyCredentialCreateRequest.Attestation;
+
+    /**
+     * Body param: Base64url-encoded WebAuthn challenge issued by the platform backend
+     * and passed to the client before `navigator.credentials.create()`. Grid verifies
+     * it matches the challenge embedded in the attestation's `clientDataJson`, binding
+     * the attestation to this registration. Must be single-use.
+     */
+    challenge: string;
+
+    /**
+     * Body param: Human-readable identifier for the passkey, chosen by the user at
+     * registration time (e.g. "iPhone Face-ID", "YubiKey 5C"). Shown back on
+     * `AuthMethod` responses and in credential listings.
+     */
+    nickname: string;
+
+    /**
+     * Body param: Discriminator value identifying this as a passkey credential.
+     */
+    type: 'PASSKEY' | 'OAUTH' | 'EMAIL_OTP';
+
+    /**
+     * Header param: Signature over the `payloadToSign` returned in a prior `202`
+     * response, produced with the session private key of an existing verified
+     * authentication credential on the target internal account and base64-encoded.
+     * Required when registering an additional credential on an internal account that
+     * already has one; ignored when the internal account has no existing credentials.
+     */
+    'Grid-Wallet-Signature'?: string;
+
+    /**
+     * Header param: The `requestId` returned in a prior `202` response, echoed back on
+     * the signed retry so the server can correlate it with the issued challenge.
+     * Required on the signed retry when registering an additional credential; must be
+     * paired with `Grid-Wallet-Signature`.
+     */
+    'Request-Id'?: string;
+  }
+
+  export namespace PasskeyCredentialCreateRequest {
+    export interface Attestation {
+      /**
+       * Base64url-encoded CBOR attestation object produced by the authenticator during
+       * registration. Corresponds to
+       * `AuthenticatorAttestationResponse.attestationObject`.
+       */
+      attestationObject: string;
+
+      /**
+       * Base64url-encoded JSON client data collected by the browser during the WebAuthn
+       * `navigator.credentials.create()` call. Corresponds to
+       * `AuthenticatorAttestationResponse.clientDataJSON` from the WebAuthn spec —
+       * Grid's field name is intentionally camelCased as `clientDataJson` (lowercase
+       * JSON) for consistency with the rest of the API; the value is the same bytes the
+       * browser returns. Contains the challenge, origin, and `type: "webauthn.create"`.
+       */
+      clientDataJson: string;
+
+      /**
+       * Base64url-encoded credential identifier produced by the authenticator at
+       * registration time. Typically the base64url of `PublicKeyCredential.rawId`.
+       */
+      credentialId: string;
+
+      /**
+       * Optional. WebAuthn transports as returned by
+       * `AuthenticatorAttestationResponse.getTransports()`. Values follow the W3C
+       * `AuthenticatorTransport` enum — pass the raw values through to Grid;
+       * provider-specific translation is handled server-side. Some authenticators return
+       * an empty array; omit the field or send `[]` in that case.
+       */
+      transports?: Array<'usb' | 'nfc' | 'ble' | 'internal' | 'hybrid'>;
+    }
   }
 }
 
