@@ -28,6 +28,7 @@ describe('resource customers', () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
         currencies: ['USD', 'USDC'],
+        email: 'john.doe@example.com',
         platformCustomerId: 'ind-9f84e0c2',
         region: 'US',
         umaAddress: '$john.doe@uma.domain.com',
@@ -79,6 +80,7 @@ describe('resource customers', () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
         currencies: ['USD', 'EUR', 'USDC'],
+        email: 'john.doe@example.com',
         umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
