@@ -23,7 +23,6 @@ export class ExternalAccounts extends APIResource {
    *       accountType: 'USD_ACCOUNT',
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
-   *       bankAccountType: 'CHECKING',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
@@ -130,6 +129,11 @@ export interface BdtAccountInfo {
   accountType: 'BDT_ACCOUNT';
 
   /**
+   * The name of the bank
+   */
+  bankName: string;
+
+  /**
    * The branch code
    */
   branchCode: string;
@@ -223,12 +227,7 @@ export interface CopAccountInfo {
    */
   bankName: string;
 
-  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
-
-  /**
-   * The phone number in international format
-   */
-  phoneNumber: string;
+  paymentRails: Array<'BANK_TRANSFER'>;
 }
 
 export interface DkkAccountInfo {
@@ -254,6 +253,11 @@ export interface EgpAccountInfo {
   accountNumber: string;
 
   accountType: 'EGP_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 
@@ -308,6 +312,11 @@ export interface GhsAccountInfo {
 
   accountType: 'GHS_ACCOUNT';
 
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
@@ -324,12 +333,17 @@ export interface GtqAccountInfo {
 
   accountType: 'GTQ_ACCOUNT';
 
-  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+  /**
+   * The bank account type
+   */
+  bankAccountType: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The phone number in international format
+   * The name of the bank
    */
-  phoneNumber: string;
+  bankName: string;
+
+  paymentRails: Array<'BANK_TRANSFER'>;
 }
 
 export interface HkdAccountInfo {
@@ -413,6 +427,11 @@ export interface JmdAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   /**
    * The branch code
@@ -526,6 +545,11 @@ export interface PkrAccountInfo {
 
   accountType: 'PKR_ACCOUNT';
 
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
@@ -637,17 +661,12 @@ export interface UsdAccountInfo {
 
   accountType: 'USD_ACCOUNT';
 
-  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW' | 'BANK_TRANSFER'>;
+  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
   /**
    * The ABA routing number
    */
   routingNumber: string;
-
-  /**
-   * The bank account type. Required for certain corridors (e.g., El Salvador).
-   */
-  bankAccountType?: 'CHECKING' | 'SAVINGS';
 }
 
 export interface VndAccountInfo {
