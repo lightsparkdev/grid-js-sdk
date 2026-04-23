@@ -366,12 +366,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/discoveries',
   },
   {
-    clientCallName: 'client.auth.listSessions',
-    fullyQualifiedName: 'auth.listSessions',
-    httpMethod: 'get',
-    httpPath: '/auth/sessions',
-  },
-  {
     clientCallName: 'client.auth.credentials.create',
     fullyQualifiedName: 'auth.credentials.create',
     httpMethod: 'post',
@@ -400,6 +394,18 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'auth.credentials.verify',
     httpMethod: 'post',
     httpPath: '/auth/credentials/{id}/verify',
+  },
+  {
+    clientCallName: 'client.auth.sessions.list',
+    fullyQualifiedName: 'auth.sessions.list',
+    httpMethod: 'get',
+    httpPath: '/auth/sessions',
+  },
+  {
+    clientCallName: 'client.auth.sessions.revoke',
+    fullyQualifiedName: 'auth.sessions.revoke',
+    httpMethod: 'delete',
+    httpPath: '/auth/sessions/{id}',
   },
 ];
 

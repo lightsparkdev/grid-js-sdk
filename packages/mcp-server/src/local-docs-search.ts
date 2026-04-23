@@ -2278,42 +2278,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'list_sessions',
-    endpoint: '/auth/sessions',
-    httpMethod: 'get',
-    summary: 'List active sessions',
-    description:
-      'Retrieve all active authentication sessions on an Embedded Wallet internal account. A session is created each time a credential is verified via `POST /auth/credentials/{id}/verify`, and remains active until its `expiresAt` passes or it is revoked via `DELETE /auth/sessions/{id}`.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of concurrent sessions (one per signed-in device, typically 1–4), so all results are returned inline.',
-    stainlessPath: '(resource) auth > (method) list_sessions',
-    qualified: 'client.auth.listSessions',
-    params: ['accountId: string;'],
-    response:
-      "{ data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]; }",
-    markdown:
-      "## list_sessions\n\n`client.auth.listSessions(accountId: string): { data: object[]; }`\n\n**get** `/auth/sessions`\n\nRetrieve all active authentication sessions on an Embedded Wallet internal account. A session is created each time a credential is verified via `POST /auth/credentials/{id}/verify`, and remains active until its `expiresAt` passes or it is revoked via `DELETE /auth/sessions/{id}`.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of concurrent sessions (one per signed-in device, typically 1–4), so all results are returned inline.\n\n### Parameters\n\n- `accountId: string`\n  Internal account id whose sessions to list.\n\n### Returns\n\n- `{ data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]; }`\n\n  - `data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.listSessions({ accountId: 'accountId' });\n\nconsole.log(response);\n```",
-    perLanguage: {
-      http: {
-        example:
-          'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
-      },
-      kotlin: {
-        method: 'auth().listSessions',
-        example:
-          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.AuthListSessionsParams\nimport com.lightspark.grid.models.auth.AuthListSessionsResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: AuthListSessionsParams = AuthListSessionsParams.builder()\n        .accountId("accountId")\n        .build()\n    val response: AuthListSessionsResponse = client.auth().listSessions(params)\n}',
-      },
-      python: {
-        method: 'auth.list_sessions',
-        example:
-          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.list_sessions(\n    account_id="accountId",\n)\nprint(response.data)',
-      },
-      typescript: {
-        method: 'client.auth.listSessions',
-        example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.listSessions({ accountId: 'accountId' });\n\nconsole.log(response.data);",
-      },
-    },
-  },
-  {
     name: 'create',
     endpoint: '/auth/credentials',
     httpMethod: 'post',
@@ -2494,6 +2458,78 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'client.auth.credentials.revoke',
         example:
           "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.credentials.revoke('id');\n\nconsole.log(response.expiresAt);",
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/auth/sessions',
+    httpMethod: 'get',
+    summary: 'List active sessions',
+    description:
+      'Retrieve all active authentication sessions on an Embedded Wallet internal account. A session is created each time a credential is verified via `POST /auth/credentials/{id}/verify`, and remains active until its `expiresAt` passes or it is revoked via `DELETE /auth/sessions/{id}`.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of concurrent sessions (one per signed-in device, typically 1–4), so all results are returned inline.',
+    stainlessPath: '(resource) auth.sessions > (method) list',
+    qualified: 'client.auth.sessions.list',
+    params: ['accountId: string;'],
+    response:
+      "{ data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]; }",
+    markdown:
+      "## list\n\n`client.auth.sessions.list(accountId: string): { data: object[]; }`\n\n**get** `/auth/sessions`\n\nRetrieve all active authentication sessions on an Embedded Wallet internal account. A session is created each time a credential is verified via `POST /auth/credentials/{id}/verify`, and remains active until its `expiresAt` passes or it is revoked via `DELETE /auth/sessions/{id}`.\n\nThe response is not paginated: an internal account is expected to have a small, bounded number of concurrent sessions (one per signed-in device, typically 1–4), so all results are returned inline.\n\n### Parameters\n\n- `accountId: string`\n  Internal account id whose sessions to list.\n\n### Returns\n\n- `{ data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]; }`\n\n  - `data: { id: string; accountId: string; createdAt: string; expiresAt: string; nickname: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; updatedAt: string; encryptedSessionSigningKey?: string; }[]`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst sessions = await client.auth.sessions.list({ accountId: 'accountId' });\n\nconsole.log(sessions);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'auth().sessions().list',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.sessions.SessionListParams\nimport com.lightspark.grid.models.auth.sessions.SessionListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SessionListParams = SessionListParams.builder()\n        .accountId("accountId")\n        .build()\n    val sessions: SessionListResponse = client.auth().sessions().list(params)\n}',
+      },
+      python: {
+        method: 'auth.sessions.list',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nsessions = client.auth.sessions.list(\n    account_id="accountId",\n)\nprint(sessions.data)',
+      },
+      typescript: {
+        method: 'client.auth.sessions.list',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst sessions = await client.auth.sessions.list({ accountId: 'accountId' });\n\nconsole.log(sessions.data);",
+      },
+    },
+  },
+  {
+    name: 'revoke',
+    endpoint: '/auth/sessions/{id}',
+    httpMethod: 'delete',
+    summary: 'Revoke an authentication session',
+    description:
+      'Revoke an authentication session on an Embedded Wallet internal account. Revocation is a two-step signed-retry flow:\n\n1. Call `DELETE /auth/sessions/{id}` with no headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of a verified session on the same internal account (this can be the session being revoked, for self-logout) and retry the same `DELETE` request with the signature as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `204`.\n',
+    stainlessPath: '(resource) auth.sessions > (method) revoke',
+    qualified: 'client.auth.sessions.revoke',
+    params: ['id: string;', 'Grid-Wallet-Signature?: string;', 'Request-Id?: string;'],
+    response:
+      "{ expiresAt: string; payloadToSign: string; requestId: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; }",
+    markdown:
+      "## revoke\n\n`client.auth.sessions.revoke(id: string, Grid-Wallet-Signature?: string, Request-Id?: string): { expiresAt: string; payloadToSign: string; requestId: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; }`\n\n**delete** `/auth/sessions/{id}`\n\nRevoke an authentication session on an Embedded Wallet internal account. Revocation is a two-step signed-retry flow:\n\n1. Call `DELETE /auth/sessions/{id}` with no headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of a verified session on the same internal account (this can be the session being revoked, for self-logout) and retry the same `DELETE` request with the signature as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `204`.\n\n\n### Parameters\n\n- `id: string`\n\n- `Grid-Wallet-Signature?: string`\n\n- `Request-Id?: string`\n\n### Returns\n\n- `{ expiresAt: string; payloadToSign: string; requestId: string; type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'; }`\n  202 response returned from Embedded Wallet Auth endpoints that require a signed retry — `POST /auth/credentials` (adding an additional credential), `DELETE /auth/credentials/{id}` (revoking a credential), and `DELETE /auth/sessions/{id}` (revoking a session). Carries the signing fields from `SignedRequestChallenge` plus the `type` of the authentication credential involved (being added, being revoked, or that issued the session being revoked). The client already knows the target resource id from the request path / body it just sent, so nothing beyond `type` is echoed in the response.\n\n  - `expiresAt: string`\n  - `payloadToSign: string`\n  - `requestId: string`\n  - `type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY'`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.auth.sessions.revoke('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions/$ID \\\n    -X DELETE \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'auth().sessions().revoke',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.sessions.SessionRevokeParams\nimport com.lightspark.grid.models.auth.sessions.SessionRevokeResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: SessionRevokeResponse = client.auth().sessions().revoke("id")\n}',
+      },
+      python: {
+        method: 'auth.sessions.revoke',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.auth.sessions.revoke(\n    id="id",\n)\nprint(response.expires_at)',
+      },
+      typescript: {
+        method: 'client.auth.sessions.revoke',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.auth.sessions.revoke('id');\n\nconsole.log(response.expiresAt);",
       },
     },
   },

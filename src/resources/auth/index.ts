@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Auth, type AuthListSessionsResponse, type AuthListSessionsParams } from './auth';
+export { Auth } from './auth';
 export {
   Credentials,
   type CredentialCreateResponse,
@@ -13,3 +13,10 @@ export {
   type CredentialRevokeParams,
   type CredentialVerifyParams,
 } from './credentials';
+export {
+  Sessions,
+  type SessionListResponse,
+  type SessionRevokeResponse,
+  type SessionListParams,
+  type SessionRevokeParams,
+} from './sessions';
