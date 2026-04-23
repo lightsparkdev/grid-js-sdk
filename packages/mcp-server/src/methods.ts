@@ -407,6 +407,12 @@ export const sdkMethods: SdkMethod[] = [
     httpMethod: 'delete',
     httpPath: '/auth/sessions/{id}',
   },
+  {
+    clientCallName: 'client.internalAccounts.export',
+    fullyQualifiedName: 'internalAccounts.export',
+    httpMethod: 'post',
+    httpPath: '/internal-accounts/{id}/export',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

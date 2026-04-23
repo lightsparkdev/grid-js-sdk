@@ -58,6 +58,11 @@ export {
 } from './documents';
 export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
 export {
+  InternalAccounts,
+  type InternalAccountExportResponse,
+  type InternalAccountExportParams,
+} from './internal-accounts';
+export {
   Invitations,
   type CurrencyAmount,
   type UmaInvitation,

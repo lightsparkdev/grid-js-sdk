@@ -512,3 +512,13 @@ Methods:
 
 - <code title="get /auth/sessions">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">list</a>({ ...params }) -> SessionListResponse</code>
 - <code title="delete /auth/sessions/{id}">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">revoke</a>(id, { ...params }) -> SessionRevokeResponse</code>
+
+# InternalAccounts
+
+Types:
+
+- <code><a href="./src/resources/internal-accounts.ts">InternalAccountExportResponse</a></code>
+
+Methods:
+
+- <code title="post /internal-accounts/{id}/export">client.internalAccounts.<a href="./src/resources/internal-accounts.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>

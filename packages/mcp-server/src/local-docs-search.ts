@@ -2533,6 +2533,41 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
     },
   },
+  {
+    name: 'export',
+    endpoint: '/internal-accounts/{id}/export',
+    httpMethod: 'post',
+    summary: 'Export internal account wallet credentials',
+    description:
+      'Export the wallet credentials of an Embedded Wallet internal account. Wallet credentials are returned encrypted to the client public key that was supplied when the authorizing session was verified.\n\nExport is a two-step signed-retry flow (same pattern as add-additional credential, revoke credential, and revoke session):\n\n1. Call `POST /internal-accounts/{id}/export` with no headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of a verified authentication credential on the same internal account and retry with the signature as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `200` with `encryptedWalletCredentials`, which the client can decrypt with its local private key.\n',
+    stainlessPath: '(resource) internal_accounts > (method) export',
+    qualified: 'client.internalAccounts.export',
+    params: ['id: string;', 'Grid-Wallet-Signature?: string;', 'Request-Id?: string;'],
+    response: '{ id: string; encryptedWalletCredentials: string; }',
+    markdown:
+      "## export\n\n`client.internalAccounts.export(id: string, Grid-Wallet-Signature?: string, Request-Id?: string): { id: string; encryptedWalletCredentials: string; }`\n\n**post** `/internal-accounts/{id}/export`\n\nExport the wallet credentials of an Embedded Wallet internal account. Wallet credentials are returned encrypted to the client public key that was supplied when the authorizing session was verified.\n\nExport is a two-step signed-retry flow (same pattern as add-additional credential, revoke credential, and revoke session):\n\n1. Call `POST /internal-accounts/{id}/export` with no headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of a verified authentication credential on the same internal account and retry with the signature as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `200` with `encryptedWalletCredentials`, which the client can decrypt with its local private key.\n\n\n### Parameters\n\n- `id: string`\n\n- `Grid-Wallet-Signature?: string`\n\n- `Request-Id?: string`\n\n### Returns\n\n- `{ id: string; encryptedWalletCredentials: string; }`\n\n  - `id: string`\n  - `encryptedWalletCredentials: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.internalAccounts.export('id');\n\nconsole.log(response);\n```",
+    perLanguage: {
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/internal-accounts/$ID/export \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+      kotlin: {
+        method: 'internalAccounts().export',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.internalaccounts.InternalAccountExportParams\nimport com.lightspark.grid.models.internalaccounts.InternalAccountExportResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: InternalAccountExportResponse = client.internalAccounts().export("id")\n}',
+      },
+      python: {
+        method: 'internal_accounts.export',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.internal_accounts.export(\n    id="id",\n)\nprint(response.id)',
+      },
+      typescript: {
+        method: 'client.internalAccounts.export',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.internalAccounts.export('id');\n\nconsole.log(response.id);",
+      },
+    },
+  },
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [

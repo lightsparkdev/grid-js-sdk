@@ -57,6 +57,11 @@ import {
 } from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
+  InternalAccountExportParams,
+  InternalAccountExportResponse,
+  InternalAccounts,
+} from './resources/internal-accounts';
+import {
   CurrencyAmount,
   InvitationClaimParams,
   InvitationCreateParams,
@@ -1016,6 +1021,10 @@ export class LightsparkGrid {
    */
   discoveries: API.Discoveries = new API.Discoveries(this);
   auth: API.Auth = new API.Auth(this);
+  /**
+   * Internal account management endpoints for creating and managing internal accounts
+   */
+  internalAccounts: API.InternalAccounts = new API.InternalAccounts(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -1038,6 +1047,7 @@ LightsparkGrid.Documents = Documents;
 LightsparkGrid.Verifications = Verifications;
 LightsparkGrid.Discoveries = Discoveries;
 LightsparkGrid.Auth = Auth;
+LightsparkGrid.InternalAccounts = InternalAccounts;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1225,6 +1235,12 @@ export declare namespace LightsparkGrid {
   };
 
   export { Auth as Auth };
+
+  export {
+    InternalAccounts as InternalAccounts,
+    type InternalAccountExportResponse as InternalAccountExportResponse,
+    type InternalAccountExportParams as InternalAccountExportParams,
+  };
 
   export type AedBeneficiary = API.AedBeneficiary;
   export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
