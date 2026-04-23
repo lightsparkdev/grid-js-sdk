@@ -202,7 +202,11 @@ export interface CredentialResendChallengeResponse {
 
 export interface CredentialVerifyResponse {
   /**
-   * System-generated unique identifier for the authentication credential.
+   * System-generated unique identifier for the session. Pass this value to
+   * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
+   * the `id` inherited from `AuthMethod` so the verify response identifies the
+   * session that was just issued; the caller already has the authenticating
+   * credential's `AuthMethod` id from the path of the verify request.
    */
   id: string;
 
@@ -217,16 +221,17 @@ export interface CredentialVerifyResponse {
   createdAt: string;
 
   /**
-   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied
-   * when the credential was created. Encoded as a base58check string: the decoded
-   * payload is a 33-byte compressed P-256 encapsulated public key followed by
-   * AES-256-GCM ciphertext. The client decrypts this key with its private key and
-   * uses it to sign subsequent Embedded Wallet requests until `expiresAt`.
+   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
+   * the verify request. Encoded as a base58check string: the decoded payload is a
+   * 33-byte compressed P-256 encapsulated public key followed by AES-256-GCM
+   * ciphertext. The client decrypts this key with its private key and uses it to
+   * sign subsequent Embedded Wallet requests until `expiresAt`.
    */
   encryptedSessionSigningKey: string;
 
   /**
-   * Timestamp after which the session signing key is no longer valid.
+   * Timestamp after which the session is no longer valid and the
+   * `encryptedSessionSigningKey` must not be used to sign further requests.
    */
   expiresAt: string;
 
