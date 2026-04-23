@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
-export { Auth } from './auth/auth';
+export { Auth, type AuthListSessionsResponse, type AuthListSessionsParams } from './auth/auth';
 export {
   BeneficialOwners,
   type BeneficialOwnerPersonalInfo,
