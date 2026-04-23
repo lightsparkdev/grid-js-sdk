@@ -33,6 +33,7 @@ TEST_PATHS=(
 	tests/api-resources/discoveries.test.ts
 	tests/api-resources/auth/auth.test.ts
 	tests/api-resources/auth/credentials.test.ts
+	tests/api-resources/auth/sessions.test.ts
 	tests/index.test.ts
 )
 

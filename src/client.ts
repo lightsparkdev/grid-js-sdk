@@ -144,7 +144,7 @@ import {
   VerificationUpdateWebhookEvent,
   Webhooks,
 } from './resources/webhooks';
-import { Auth, AuthListSessionsParams, AuthListSessionsResponse } from './resources/auth/auth';
+import { Auth } from './resources/auth/auth';
 import {
   BusinessCustomerFields,
   BusinessInfo,
@@ -1015,9 +1015,6 @@ export class LightsparkGrid {
    * Endpoints for discovering available payment rails, banks, and providers for a given country and currency corridor.
    */
   discoveries: API.Discoveries = new API.Discoveries(this);
-  /**
-   * Endpoints for registering and verifying end-user authentication credentials (email OTP, OAuth, passkey) used to sign Embedded Wallet actions.
-   */
   auth: API.Auth = new API.Auth(this);
 }
 
@@ -1227,11 +1224,7 @@ export declare namespace LightsparkGrid {
     type DiscoveryListParams as DiscoveryListParams,
   };
 
-  export {
-    Auth as Auth,
-    type AuthListSessionsResponse as AuthListSessionsResponse,
-    type AuthListSessionsParams as AuthListSessionsParams,
-  };
+  export { Auth as Auth };
 
   export type AedBeneficiary = API.AedBeneficiary;
   export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
