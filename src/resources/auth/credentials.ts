@@ -124,6 +124,47 @@ export class Credentials extends APIResource {
   }
 
   /**
+   * Revoke an authentication credential on an Embedded Wallet internal account.
+   *
+   * Revocation is a two-step flow because it must be authorized by a session on a
+   * _different_ credential on the same internal account:
+   *
+   * 1. Call `DELETE /auth/credentials/{id}` with no headers. The response is `202`
+   *    with a `payloadToSign`, `requestId`, and `expiresAt`.
+   *
+   * 2. Sign the `payloadToSign` with the session private key of an existing verified
+   *    credential on the same internal account — other than the one being revoked —
+   *    and retry the same `DELETE` request with the signature supplied as the
+   *    `Grid-Wallet-Signature` header and the `requestId` echoed back as the
+   *    `Request-Id` header. The signed retry returns `204`.
+   *
+   * The account must retain at least one authentication credential; an account with
+   * only a single credential cannot use this endpoint to revoke it.
+   *
+   * @example
+   * ```ts
+   * const response = await client.auth.credentials.revoke('id');
+   * ```
+   */
+  revoke(
+    id: string,
+    params: CredentialRevokeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CredentialRevokeResponse> {
+    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID } = params ?? {};
+    return this._client.delete(path`/auth/credentials/${id}`, {
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
+          ...(requestID != null ? { 'Request-Id': requestID } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Complete the verification step for a previously created authentication
    * credential and issue a session signing key.
    *
@@ -498,6 +539,47 @@ export namespace CredentialResendChallengeResponse {
   }
 }
 
+/**
+ * 202 response returned from Embedded Wallet Auth endpoints that require a signed
+ * retry — `POST /auth/credentials` (adding an additional credential),
+ * `DELETE /auth/credentials/{id}` (revoking a credential), and
+ * `DELETE /auth/sessions/{id}` (revoking a session). Carries the signing fields
+ * from `SignedRequestChallenge` plus the `type` of the authentication credential
+ * involved (being added, being revoked, or that issued the session being revoked).
+ * The client already knows the target resource id from the request path / body it
+ * just sent, so nothing beyond `type` is echoed in the response.
+ */
+export interface CredentialRevokeResponse {
+  /**
+   * Timestamp after which this challenge is no longer valid. The signed retry must
+   * be submitted before this time.
+   */
+  expiresAt: string;
+
+  /**
+   * Payload that must be signed with the session private key of a verified
+   * authentication credential. The resulting signature is passed as the
+   * `Grid-Wallet-Signature` header on the retry of the originating request to
+   * complete the operation.
+   */
+  payloadToSign: string;
+
+  /**
+   * Unique identifier for this request. Must be echoed in the `Request-Id` header on
+   * the signed retry so the server can correlate the retry with the issued
+   * challenge.
+   */
+  requestId: string;
+
+  /**
+   * Credential type relevant to this challenge: the credential type being added
+   * (`POST /auth/credentials`), the credential type being revoked
+   * (`DELETE /auth/credentials/{id}`), or the type of credential that issued the
+   * session being revoked (`DELETE /auth/sessions/{id}`).
+   */
+  type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+}
+
 export interface CredentialVerifyResponse {
   /**
    * System-generated unique identifier for the session. Pass this value to
@@ -725,6 +807,23 @@ export interface CredentialListParams {
   accountId: string;
 }
 
+export interface CredentialRevokeParams {
+  /**
+   * Signature over the `payloadToSign` returned in a prior `202` response, produced
+   * with the session private key of an existing verified authentication credential
+   * on the same internal account (other than the one being revoked) and
+   * base64-encoded. Required on the signed retry; ignored on the initial call.
+   */
+  'Grid-Wallet-Signature'?: string;
+
+  /**
+   * The `requestId` returned in a prior `202` response, echoed back on the signed
+   * retry so the server can correlate it with the issued challenge. Required on the
+   * signed retry; must be paired with `Grid-Wallet-Signature`.
+   */
+  'Request-Id'?: string;
+}
+
 export type CredentialVerifyParams =
   | CredentialVerifyParams.EmailOtpCredentialVerifyRequest
   | CredentialVerifyParams.OAuthCredentialVerifyRequest
@@ -874,9 +973,11 @@ export declare namespace Credentials {
     type CredentialCreateResponse as CredentialCreateResponse,
     type CredentialListResponse as CredentialListResponse,
     type CredentialResendChallengeResponse as CredentialResendChallengeResponse,
+    type CredentialRevokeResponse as CredentialRevokeResponse,
     type CredentialVerifyResponse as CredentialVerifyResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,
+    type CredentialRevokeParams as CredentialRevokeParams,
     type CredentialVerifyParams as CredentialVerifyParams,
   };
 }

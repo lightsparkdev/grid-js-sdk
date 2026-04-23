@@ -8,6 +8,8 @@ import {
   CredentialListParams,
   CredentialListResponse,
   CredentialResendChallengeResponse,
+  CredentialRevokeParams,
+  CredentialRevokeResponse,
   CredentialVerifyParams,
   CredentialVerifyResponse,
   Credentials,
@@ -25,9 +27,11 @@ export declare namespace Auth {
     type CredentialCreateResponse as CredentialCreateResponse,
     type CredentialListResponse as CredentialListResponse,
     type CredentialResendChallengeResponse as CredentialResendChallengeResponse,
+    type CredentialRevokeResponse as CredentialRevokeResponse,
     type CredentialVerifyResponse as CredentialVerifyResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,
+    type CredentialRevokeParams as CredentialRevokeParams,
     type CredentialVerifyParams as CredentialVerifyParams,
   };
 }
