@@ -103,7 +103,16 @@ export class Credentials extends APIResource {
    * the user along with a client-generated public key. For `OAUTH` credentials,
    * supply a fresh OIDC token (`iat` must be less than 60 seconds before the
    * request) along with the client-generated public key; this is also the
-   * reauthentication path after a prior session expired.
+   * reauthentication path after a prior session expired. For `PASSKEY` credentials,
+   * the client completes a WebAuthn assertion (`navigator.credentials.get()`)
+   * against the Grid-issued `challenge` returned from either
+   * `POST /auth/credentials` (first authentication) or
+   * `POST /auth/credentials/{id}/challenge` (reauthentication), and submits the
+   * resulting `assertion` along with the client-generated public key. The
+   * `requestId` that accompanied the challenge must be echoed in the `Request-Id`
+   * header so Grid can correlate the assertion with the pending challenge; Grid
+   * verifies the WebAuthn signature against the stored credential before issuing the
+   * session.
    *
    * On success, the response contains an `encryptedSessionSigningKey` that is
    * encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp
@@ -125,10 +134,18 @@ export class Credentials extends APIResource {
    */
   verify(
     id: string,
-    body: CredentialVerifyParams,
+    params: CredentialVerifyParams,
     options?: RequestOptions,
   ): APIPromise<CredentialVerifyResponse> {
-    return this._client.post(path`/auth/credentials/${id}/verify`, { body, ...options });
+    const { 'Request-Id': requestID, ...body } = params;
+    return this._client.post(path`/auth/credentials/${id}/verify`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(requestID != null ? { 'Request-Id': requestID } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -530,53 +547,145 @@ export declare namespace CredentialCreateParams {
 
 export type CredentialVerifyParams =
   | CredentialVerifyParams.EmailOtpCredentialVerifyRequest
-  | CredentialVerifyParams.OAuthCredentialVerifyRequest;
+  | CredentialVerifyParams.OAuthCredentialVerifyRequest
+  | CredentialVerifyParams.PasskeyCredentialVerifyRequest;
 
 export declare namespace CredentialVerifyParams {
   export interface EmailOtpCredentialVerifyRequest {
     /**
-     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-     * total). The matching private key must remain on the client. Grid encrypts the
-     * session signing key returned in the response to this public key. The key is
-     * ephemeral and one-time-use per verification request.
+     * Body param: Client-generated P-256 public key, hex-encoded in uncompressed SEC1
+     * format (0x04 prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+     * characters total). The matching private key must remain on the client. Grid
+     * encrypts the session signing key returned in the response to this public key.
+     * The key is ephemeral and one-time-use per verification request.
      */
     clientPublicKey: string;
 
     /**
-     * The one-time password received by the user via email.
+     * Body param: The one-time password received by the user via email.
      */
     otp: string;
 
     /**
-     * Discriminator value identifying this as an email OTP verification.
+     * Body param: Discriminator value identifying this as an email OTP verification.
      */
     type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';
+
+    /**
+     * Header param: The `requestId` returned alongside the Grid-issued `challenge`
+     * from `POST /auth/credentials` or `POST /auth/credentials/{id}/challenge`, echoed
+     * back here so Grid can correlate the assertion with the pending challenge.
+     * Required when `type` is `PASSKEY`; ignored for `EMAIL_OTP` and `OAUTH`.
+     */
+    'Request-Id'?: string;
   }
 
   export interface OAuthCredentialVerifyRequest {
     /**
-     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-     * total). The matching private key must remain on the client. Grid encrypts the
-     * session signing key returned in the response to this public key. The key is
-     * ephemeral and one-time-use per verification request.
+     * Body param: Client-generated P-256 public key, hex-encoded in uncompressed SEC1
+     * format (0x04 prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+     * characters total). The matching private key must remain on the client. Grid
+     * encrypts the session signing key returned in the response to this public key.
+     * The key is ephemeral and one-time-use per verification request.
      */
     clientPublicKey: string;
 
     /**
-     * OIDC ID token issued by the identity provider. For reauthentication after a
-     * prior session expired, supply a fresh token — the token's `iat` claim must be
-     * less than 60 seconds before the request timestamp. Grid fetches the issuer's
-     * signing key from the `iss` claim's `.well-known` OpenID configuration and
-     * verifies the token signature.
+     * Body param: OIDC ID token issued by the identity provider. For reauthentication
+     * after a prior session expired, supply a fresh token — the token's `iat` claim
+     * must be less than 60 seconds before the request timestamp. Grid fetches the
+     * issuer's signing key from the `iss` claim's `.well-known` OpenID configuration
+     * and verifies the token signature.
      */
     oidcToken: string;
 
     /**
-     * Discriminator value identifying this as an OAuth verification.
+     * Body param: Discriminator value identifying this as an OAuth verification.
      */
     type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+
+    /**
+     * Header param: The `requestId` returned alongside the Grid-issued `challenge`
+     * from `POST /auth/credentials` or `POST /auth/credentials/{id}/challenge`, echoed
+     * back here so Grid can correlate the assertion with the pending challenge.
+     * Required when `type` is `PASSKEY`; ignored for `EMAIL_OTP` and `OAUTH`.
+     */
+    'Request-Id'?: string;
+  }
+
+  export interface PasskeyCredentialVerifyRequest {
+    /**
+     * Body param
+     */
+    assertion: PasskeyCredentialVerifyRequest.Assertion;
+
+    /**
+     * Body param: Client-generated P-256 public key, hex-encoded in uncompressed SEC1
+     * format (0x04 prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+     * characters total). The matching private key must remain on the client. Grid
+     * encrypts the session signing key returned in the response to this public key.
+     * The key is ephemeral and one-time-use per verification request.
+     */
+    clientPublicKey: string;
+
+    /**
+     * Body param: Discriminator value identifying this as a passkey verification.
+     */
+    type: 'PASSKEY' | 'OAUTH' | 'EMAIL_OTP';
+
+    /**
+     * Header param: The `requestId` returned alongside the Grid-issued `challenge`
+     * from `POST /auth/credentials` or `POST /auth/credentials/{id}/challenge`, echoed
+     * back here so Grid can correlate the assertion with the pending challenge.
+     * Required when `type` is `PASSKEY`; ignored for `EMAIL_OTP` and `OAUTH`.
+     */
+    'Request-Id'?: string;
+  }
+
+  export namespace PasskeyCredentialVerifyRequest {
+    export interface Assertion {
+      /**
+       * Base64url-encoded authenticator data returned by the authenticator during the
+       * assertion. Corresponds to `AuthenticatorAssertionResponse.authenticatorData`.
+       */
+      authenticatorData: string;
+
+      /**
+       * Base64url-encoded JSON client data collected by the browser during the WebAuthn
+       * `navigator.credentials.get()` call. Corresponds to
+       * `AuthenticatorAssertionResponse.clientDataJSON` from the WebAuthn spec — Grid's
+       * field name is intentionally camelCased as `clientDataJson` (lowercase JSON) for
+       * consistency with the rest of the API; the value is the same bytes the browser
+       * returns. Contains the challenge, origin, and `type: "webauthn.get"`.
+       */
+      clientDataJson: string;
+
+      /**
+       * Base64url-encoded credential identifier returned during the WebAuthn assertion.
+       * Corresponds to `PublicKeyCredential.rawId`.
+       */
+      credentialId: string;
+
+      /**
+       * Base64url-encoded signature produced by the authenticator over
+       * `authenticatorData || SHA-256(clientDataJSON)`. Corresponds to
+       * `AuthenticatorAssertionResponse.signature`. The signature byte format is
+       * determined by the credential's public-key algorithm — DER-encoded ECDSA for
+       * ES256 (P-256, typical for passkeys), PKCS#1 v1.5 for RS256, or a raw 64-byte
+       * signature for EdDSA.
+       */
+      signature: string;
+
+      /**
+       * Base64url-encoded user handle returned by the authenticator. Corresponds to
+       * `AuthenticatorAssertionResponse.userHandle`. Populated (and required by the
+       * WebAuthn spec) for discoverable credentials — resident keys used in the "Sign in
+       * with passkey" autofill flow — and typically present for passkey registrations.
+       * Omit this field entirely for non-discoverable credentials specified via
+       * `allowCredentials` where the authenticator returns no user handle.
+       */
+      userHandle?: string;
+    }
   }
 }
 
