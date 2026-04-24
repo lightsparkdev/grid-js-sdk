@@ -58,6 +58,19 @@ export interface InternalAccount {
   fundingPaymentInstructions: Array<QuotesAPI.PaymentInstructions>;
 
   /**
+   * Classification of an internal account.
+   *
+   * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
+   *   holding account used as the source for Payouts flows).
+   * - `INTERNAL_CRYPTO`: A Grid-managed crypto holding account denominated in a
+   *   stablecoin such as USDC.
+   * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
+   *   customer. Outbound transfers require a session signature produced by the
+   *   customer's device — see the Embedded Wallets guide.
+   */
+  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+
+  /**
    * Timestamp when the internal account was last updated
    */
   updatedAt: string;
