@@ -89,6 +89,13 @@ export interface PlatformListInternalAccountsParams {
    * Filter by currency code
    */
   currency?: string;
+
+  /**
+   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
+   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   */
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 }
 
 Platform.ExternalAccounts = ExternalAccounts;

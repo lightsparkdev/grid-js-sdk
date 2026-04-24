@@ -826,6 +826,13 @@ export interface CustomerListInternalAccountsParams extends DefaultPaginationPar
    * Maximum number of results to return (default 20, max 100)
    */
   limit?: number;
+
+  /**
+   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
+   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   */
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 }
 
 Customers.ExternalAccounts = ExternalAccounts;

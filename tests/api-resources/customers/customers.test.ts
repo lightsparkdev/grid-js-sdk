@@ -189,6 +189,7 @@ describe('resource customers', () => {
           cursor: 'cursor',
           customerId: 'customerId',
           limit: 1,
+          type: 'INTERNAL_FIAT',
         },
         { path: '/_stainless_unknown_path' },
       ),
