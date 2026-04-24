@@ -24,6 +24,7 @@ export class ExternalAccounts extends APIResource {
    *       accountType: 'USD_ACCOUNT',
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
+   *       bankAccountType: 'CHECKING',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
@@ -914,24 +915,19 @@ export interface TzsExternalAccountInfo extends PlatformExternalAccountsAPI.TzsA
 export interface UgxExternalAccountInfo extends PlatformExternalAccountsAPI.UgxAccountInfo {}
 
 export interface UsdBeneficiary {
-  address: Address;
-
   beneficiaryType: 'INDIVIDUAL';
-
-  /**
-   * The birth date of the beneficiary
-   */
-  birthDate: string;
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
 
+  address?: Address;
+
   /**
-   * The nationality of the beneficiary
+   * The birth date of the beneficiary
    */
-  nationality: string;
+  birthDate?: string;
 
   /**
    * The country of residence of the beneficiary
@@ -942,6 +938,11 @@ export interface UsdBeneficiary {
    * The email of the beneficiary
    */
   email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
 
   /**
    * The phone number of the beneficiary

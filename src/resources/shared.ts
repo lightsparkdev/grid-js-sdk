@@ -98,11 +98,6 @@ export interface BdtExternalAccountCreateInfo {
 
   accountType: 'BDT_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: BdtBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
@@ -282,14 +277,9 @@ export interface CopBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The identity document number
+   * The country of residence of the beneficiary
    */
-  documentNumber: string;
-
-  /**
-   * The type of identity document (e.g., national ID, passport)
-   */
-  documentType: string;
+  countryOfResidence: string;
 
   /**
    * The full name of the beneficiary
@@ -304,9 +294,14 @@ export interface CopBeneficiary {
   birthDate?: string;
 
   /**
-   * The country of residence of the beneficiary
+   * The identity document number
    */
-  countryOfResidence?: string;
+  documentNumber?: string;
+
+  /**
+   * The type of identity document (e.g., national ID, passport)
+   */
+  documentType?: string;
 
   /**
    * The email of the beneficiary
@@ -343,6 +338,11 @@ export interface CopExternalAccountCreateInfo {
   bankName: string;
 
   beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
 }
 
 export interface DkkExternalAccountCreateInfo {
@@ -404,11 +404,6 @@ export interface EgpExternalAccountCreateInfo {
   accountNumber: string;
 
   accountType: 'EGP_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: EgpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -544,11 +539,6 @@ export interface GhsExternalAccountCreateInfo {
 
   accountType: 'GHS_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: GhsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
@@ -570,11 +560,6 @@ export interface GtqBeneficiary {
    */
   fullName: string;
 
-  /**
-   * The phone number of the beneficiary
-   */
-  phoneNumber: string;
-
   address?: ExternalAccountsAPI.Address;
 
   /**
@@ -591,6 +576,11 @@ export interface GtqBeneficiary {
    * The nationality of the beneficiary
    */
   nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
 }
 
 export interface GtqExternalAccountCreateInfo {
@@ -601,17 +591,12 @@ export interface GtqExternalAccountCreateInfo {
 
   accountType: 'GTQ_ACCOUNT';
 
-  /**
-   * The bank account type
-   */
-  bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: GtqBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber: string;
 }
 
 export interface HkdExternalAccountCreateInfo {
@@ -767,11 +752,6 @@ export interface JmdExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: JmdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1029,11 +1009,6 @@ export interface PkrExternalAccountCreateInfo {
 
   accountType: 'PKR_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: PkrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
@@ -1259,6 +1234,11 @@ export interface UsdExternalAccountCreateInfo {
    * The ABA routing number
    */
   routingNumber: string;
+
+  /**
+   * The bank account type. Required for certain corridors (e.g., El Salvador).
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
 }
 
 export interface VerificationError {
