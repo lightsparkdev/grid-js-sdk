@@ -10,8 +10,11 @@ const client = new LightsparkGrid({
 
 describe('resource internalAccounts', () => {
   // Mock server tests are disabled
-  test.skip('export', async () => {
-    const responsePromise = client.internalAccounts.export('id');
+  test.skip('export: only required params', async () => {
+    const responsePromise = client.internalAccounts.export('id', {
+      clientPublicKey:
+        '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,18 +25,13 @@ describe('resource internalAccounts', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('export: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.internalAccounts.export(
-        'id',
-        {
-          'Grid-Wallet-Signature':
-            'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',
-          'Request-Id': '7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  test.skip('export: required and optional params', async () => {
+    const response = await client.internalAccounts.export('id', {
+      clientPublicKey:
+        '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+      'Grid-Wallet-Signature':
+        'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',
+      'Request-Id': '7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
+    });
   });
 });
