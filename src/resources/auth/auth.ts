@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as CredentialsAPI from './credentials';
 import {
+  AuthMethod,
   CredentialCreateParams,
   CredentialCreateResponse,
   CredentialListParams,
@@ -34,6 +35,7 @@ Auth.Sessions = Sessions;
 export declare namespace Auth {
   export {
     Credentials as Credentials,
+    type AuthMethod as AuthMethod,
     type CredentialCreateResponse as CredentialCreateResponse,
     type CredentialListResponse as CredentialListResponse,
     type CredentialResendChallengeResponse as CredentialResendChallengeResponse,

@@ -487,6 +487,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/auth/credentials.ts">AuthMethod</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">CredentialCreateResponse</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">CredentialListResponse</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">CredentialResendChallengeResponse</a></code>

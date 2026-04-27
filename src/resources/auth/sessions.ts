@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CredentialsAPI from './credentials';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -83,7 +84,7 @@ export namespace SessionListResponse {
    * `encryptedSessionSigningKey` — it is delivered exactly once at the moment the
    * session is issued and is never returned by the list endpoint.
    */
-  export interface Data {
+  export interface Data extends CredentialsAPI.AuthMethod {
     /**
      * System-generated unique identifier for the session. Pass this value to
      * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
@@ -93,43 +94,10 @@ export namespace SessionListResponse {
     id: string;
 
     /**
-     * Identifier of the internal account that this credential authenticates.
-     */
-    accountId: string;
-
-    /**
-     * Creation timestamp.
-     */
-    createdAt: string;
-
-    /**
      * Timestamp after which the session is no longer valid and the
      * `encryptedSessionSigningKey` must not be used to sign further requests.
      */
     expiresAt: string;
-
-    /**
-     * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
-     * the email address; for OAUTH credentials it is typically the email claim from
-     * the OIDC token; for PASSKEY credentials it is the nickname provided at
-     * registration time.
-     */
-    nickname: string;
-
-    /**
-     * The type of authentication credential.
-     *
-     * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
-     *   Google or Apple.
-     * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
-     * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
-     */
-    type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
-
-    /**
-     * Last update timestamp.
-     */
-    updatedAt: string;
 
     /**
      * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on

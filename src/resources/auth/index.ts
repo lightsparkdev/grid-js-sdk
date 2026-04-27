@@ -3,6 +3,7 @@
 export { Auth } from './auth';
 export {
   Credentials,
+  type AuthMethod,
   type CredentialCreateResponse,
   type CredentialListResponse,
   type CredentialResendChallengeResponse,
