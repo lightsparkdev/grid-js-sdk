@@ -34,7 +34,7 @@ describe('resource credentials', () => {
         type: 'EMAIL_OTP',
       },
       'Grid-Wallet-Signature':
-        'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',
+        'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
       'Request-Id': '7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
     });
   });
@@ -88,7 +88,7 @@ describe('resource credentials', () => {
         'id',
         {
           'Grid-Wallet-Signature':
-            'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',
+            'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
           'Request-Id': '7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
         },
         { path: '/_stainless_unknown_path' },
