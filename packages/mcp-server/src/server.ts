@@ -28,7 +28,7 @@ export const newMcpServer = async ({
   new McpServer(
     {
       name: 'lightsparkdev_grid_api',
-      version: '0.8.0',
+      version: '1.7.0',
     },
     {
       instructions: await getInstructions({ stainlessApiKey, customInstructionsPath }),
