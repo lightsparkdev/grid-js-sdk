@@ -53,7 +53,6 @@ describe('resource externalAccounts', () => {
           phoneNumber: 'phoneNumber',
         },
         routingNumber: '123456789',
-        bankAccountType: 'CHECKING',
       },
       currency: 'USD',
       cryptoNetwork: 'SOLANA_MAINNET',
