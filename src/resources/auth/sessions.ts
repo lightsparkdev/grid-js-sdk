@@ -39,11 +39,11 @@ export class Sessions extends APIResource {
    * 1. Call `DELETE /auth/sessions/{id}` with no headers. The response is `202` with
    *    a `payloadToSign`, `requestId`, and `expiresAt`.
    *
-   * 2. Sign the `payloadToSign` with the session private key of a verified session
-   *    on the same internal account (this can be the session being revoked, for
-   *    self-logout) and retry the same `DELETE` request with the signature as the
-   *    `Grid-Wallet-Signature` header and the `requestId` echoed back as the
-   *    `Request-Id` header. The signed retry returns `204`.
+   * 2. Use the session API keypair of a verified session on the same internal
+   *    account (this can be the session being revoked, for self-logout) to build an
+   *    API-key stamp over `payloadToSign`, then retry the same `DELETE` request with
+   *    that full stamp as the `Grid-Wallet-Signature` header and the `requestId`
+   *    echoed back as the `Request-Id` header. The signed retry returns `204`.
    *
    * @example
    * ```ts
@@ -133,10 +133,10 @@ export interface SessionRevokeResponse {
   expiresAt: string;
 
   /**
-   * Payload that must be signed with the session private key of a verified
-   * authentication credential. The resulting signature is passed as the
-   * `Grid-Wallet-Signature` header on the retry of the originating request to
-   * complete the operation.
+   * Canonical payload for the retry authorization stamp. Build an API-key stamp over
+   * this exact value with the session API keypair, then send the full
+   * base64url-encoded stamp in `Grid-Wallet-Signature` on the retry that completes
+   * the original request.
    */
   payloadToSign: string;
 
@@ -165,9 +165,9 @@ export interface SessionListParams {
 
 export interface SessionRevokeParams {
   /**
-   * Signature over the `payloadToSign` returned in a prior `202` response, produced
-   * with the session private key of a verified session on the same internal account
-   * and base64-encoded. Required on the signed retry; ignored on the initial call.
+   * Full API-key stamp built over the prior `payloadToSign` with the session API
+   * keypair of a verified session on the same internal account. Required on the
+   * signed retry; ignored on the initial call.
    */
   'Grid-Wallet-Signature'?: string;
 

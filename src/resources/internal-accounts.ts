@@ -21,17 +21,17 @@ export class InternalAccounts extends APIResource {
    * 1. Call `POST /internal-accounts/{id}/export` with the request body
    *    `{ "clientPublicKey": "..." }` and no signature headers. Grid binds the
    *    `clientPublicKey` into the `payloadToSign` it returns, so the subsequent
-   *    `Grid-Wallet-Signature` commits to the target encryption key. The response is
-   *    `202` with `payloadToSign`, `requestId`, and `expiresAt`.
+   *    stamp in `Grid-Wallet-Signature` commits to the target encryption key. The
+   *    response is `202` with `payloadToSign`, `requestId`, and `expiresAt`.
    *
-   * 2. Sign the `payloadToSign` with the session private key of a verified
-   *    authentication credential on the same internal account and retry with the
-   *    signature as the `Grid-Wallet-Signature` header and the `requestId` echoed
-   *    back as the `Request-Id` header. The retry body must carry the **same**
-   *    `clientPublicKey` submitted in step 1 — Grid rejects the retry with `401` if
-   *    it disagrees with what was bound into `payloadToSign`. The signed retry
-   *    returns `200` with `encryptedWalletCredentials`, which the client decrypts
-   *    with the matching private key.
+   * 2. Use the session API keypair of a verified authentication credential on the
+   *    same internal account to build an API-key stamp over `payloadToSign`, then
+   *    retry with that full stamp as the `Grid-Wallet-Signature` header and the
+   *    `requestId` echoed back as the `Request-Id` header. The retry body must carry
+   *    the **same** `clientPublicKey` submitted in step 1 — Grid rejects the retry
+   *    with `401` if it disagrees with what was bound into `payloadToSign`. The
+   *    signed retry returns `200` with `encryptedWalletCredentials`, which the
+   *    client decrypts with the matching private key.
    *
    * The `clientPublicKey` is ephemeral: generate a fresh P-256 keypair for this
    * export and discard the private key after decrypting. Do not reuse the keypair
@@ -76,10 +76,19 @@ export interface InternalAccountExportResponse {
   id: string;
 
   /**
-   * Encrypted wallet mnemonic, sealed to the `clientPublicKey` supplied on the
-   * verify request. Decrypt with the matching private key, then manage the mnemonic
-   * securely — it is the master key of the self-custodial Embedded Wallet. Encoded
-   * as base58check (same format as `AuthSession.encryptedSessionSigningKey`).
+   * Encrypted wallet mnemonic, sealed to the `clientPublicKey` from the request body
+   * using HPKE: DHKEM(P-256, HKDF-SHA256) + HKDF-SHA256 + AES-256-GCM. Decrypt with
+   * the matching private key, then manage the mnemonic securely because it is the
+   * master key of the self-custodial Embedded Wallet. The value is a JSON string of
+   * the form
+   * `{"version": "v1.0.0", "data": "<hex>", "dataSignature": "<hex>", "enclaveQuorumPublic": "<hex>"}`.
+   * `data` hex-decodes to JSON
+   * `{"encappedPublic": "<hex>", "ciphertext": "<hex>", "organizationId": "<id>"}`,
+   * where `encappedPublic` is the uncompressed SEC1 ephemeral public key.
+   * `dataSignature` is an ECDSA-P256-SHA256 signature over the `data` bytes produced
+   * by the issuer key in `enclaveQuorumPublic`; verify before decrypting. In
+   * sandbox, `dataSignature` and `enclaveQuorumPublic` are empty strings. Clients
+   * should bypass attestation verification when calling against sandbox.
    */
   encryptedWalletCredentials: string;
 }
@@ -94,10 +103,9 @@ export interface InternalAccountExportParams {
   clientPublicKey: string;
 
   /**
-   * Header param: Signature over the `payloadToSign` returned in a prior `202`
-   * response, produced with the session private key of a verified authentication
-   * credential on the target internal account and base64-encoded. Required on the
-   * signed retry; ignored on the initial call.
+   * Header param: Full API-key stamp built over the prior `payloadToSign` with the
+   * session API keypair of a verified authentication credential on the target
+   * internal account. Required on the signed retry; ignored on the initial call.
    */
   'Grid-Wallet-Signature'?: string;
 
