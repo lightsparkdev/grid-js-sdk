@@ -12,7 +12,7 @@ describe('resource customers', () => {
   // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.customers.create({
-      CreateCustomerRequest: { platformCustomerId: '9f84e0c2a72c4fa', customerType: 'INDIVIDUAL' },
+      CreateCustomerRequest: { customerType: 'INDIVIDUAL' },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -27,7 +27,10 @@ describe('resource customers', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
-        platformCustomerId: '9f84e0c2a72c4fa',
+        currencies: ['USD', 'USDC'],
+        email: 'john.doe@example.com',
+        platformCustomerId: 'ind-9f84e0c2',
+        region: 'US',
         umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
@@ -39,7 +42,8 @@ describe('resource customers', () => {
           state: 'CA',
         },
         birthDate: '1990-01-15',
-        fullName: 'John Michael Doe',
+        fullName: 'Jane Smith',
+        kycStatus: 'APPROVED',
         nationality: 'US',
       },
     });
@@ -75,6 +79,8 @@ describe('resource customers', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
+        currencies: ['USD', 'EUR', 'USDC'],
+        email: 'john.doe@example.com',
         umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
@@ -87,6 +93,7 @@ describe('resource customers', () => {
         },
         birthDate: '1985-06-15',
         fullName: 'John Smith',
+        kycStatus: 'APPROVED',
         nationality: 'US',
       },
     });
@@ -112,11 +119,13 @@ describe('resource customers', () => {
         {
           createdAfter: '2019-12-27T18:11:19.117Z',
           createdBefore: '2019-12-27T18:11:19.117Z',
+          currency: 'currency',
           cursor: 'cursor',
           customerType: 'INDIVIDUAL',
           isIncludingDeleted: true,
           limit: 1,
           platformCustomerId: 'platformCustomerId',
+          region: 'region',
           umaAddress: 'umaAddress',
           updatedAfter: '2019-12-27T18:11:19.117Z',
           updatedBefore: '2019-12-27T18:11:19.117Z',
@@ -180,6 +189,7 @@ describe('resource customers', () => {
           cursor: 'cursor',
           customerId: 'customerId',
           limit: 1,
+          type: 'INTERNAL_FIAT',
         },
         { path: '/_stainless_unknown_path' },
       ),

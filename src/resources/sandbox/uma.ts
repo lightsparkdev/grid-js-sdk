@@ -5,6 +5,9 @@ import * as TransactionsAPI from '../transactions';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Endpoints to trigger test cases in sandbox
+ */
 export class Uma extends APIResource {
   /**
    * Simulate sending payment from an sandbox uma address to a platform customer to

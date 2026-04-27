@@ -2,18 +2,26 @@
 
 import { APIResource } from '../../core/resource';
 import * as CustomersAPI from './customers';
+import * as BeneficialOwnersAPI from '../beneficial-owners';
 import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
   Address,
+  AedExternalAccountInfo,
   BaseWalletInfo,
+  BdtExternalAccountInfo,
   BeneficiaryVerifiedData,
   BrlBeneficiary,
   BrlExternalAccountInfo,
   BusinessBeneficiary,
+  BwpExternalAccountInfo,
+  CadExternalAccountInfo,
+  CopExternalAccountInfo,
   DkkBeneficiary,
   DkkExternalAccountInfo,
+  EgpExternalAccountInfo,
+  EurExternalAccountInfo,
   ExternalAccount,
   ExternalAccountCreate,
   ExternalAccountCreateParams,
@@ -23,20 +31,29 @@ import {
   ExternalAccountsDefaultPagination,
   GbpBeneficiary,
   GbpExternalAccountInfo,
+  GhsExternalAccountInfo,
+  GtqExternalAccountInfo,
   HkdBeneficiary,
   HkdExternalAccountInfo,
+  HtgExternalAccountInfo,
   IdrBeneficiary,
   IdrExternalAccountInfo,
   InrBeneficiary,
   InrExternalAccountInfo,
+  JmdExternalAccountInfo,
+  KesExternalAccountInfo,
   LightningWalletInfo,
+  MwkExternalAccountInfo,
   MxnBeneficiary,
   MxnExternalAccountInfo,
   MyrBeneficiary,
   MyrExternalAccountInfo,
+  NgnExternalAccountInfo,
   PhpBeneficiary,
   PhpExternalAccountInfo,
+  PkrExternalAccountInfo,
   PolygonWalletInfo,
+  RwfExternalAccountInfo,
   SgdBeneficiary,
   SgdExternalAccountInfo,
   SolanaWalletInfo,
@@ -44,10 +61,16 @@ import {
   ThbBeneficiary,
   ThbExternalAccountInfo,
   TronWalletInfo,
+  TzsExternalAccountInfo,
+  UgxExternalAccountInfo,
   UsdBeneficiary,
   UsdExternalAccountInfo,
   VndBeneficiary,
   VndExternalAccountInfo,
+  XafExternalAccountInfo,
+  XofExternalAccountInfo,
+  ZarExternalAccountInfo,
+  ZmwExternalAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { InternalAccountsDefaultPagination } from '../sandbox/internal-accounts';
@@ -69,10 +92,7 @@ export class Customers extends APIResource {
    * @example
    * ```ts
    * const customerOneOf = await client.customers.create({
-   *   CreateCustomerRequest: {
-   *     platformCustomerId: '9f84e0c2a72c4fa',
-   *     customerType: 'INDIVIDUAL',
-   *   },
+   *   CreateCustomerRequest: { customerType: 'INDIVIDUAL' },
    * });
    * ```
    */
@@ -196,6 +216,276 @@ export class Customers extends APIResource {
 
 export type CustomerOneovesDefaultPagination = DefaultPagination<CustomerOneOf>;
 
+export interface BusinessCustomerFields {
+  customerType: 'BUSINESS';
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Additional information for business entities
+   */
+  businessInfo?: BusinessCustomerFields.BusinessInfo;
+
+  /**
+   * The current KYB status of a business customer
+   */
+  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+}
+
+export namespace BusinessCustomerFields {
+  /**
+   * Additional information for business entities
+   */
+  export interface BusinessInfo {
+    /**
+     * The high-level industry category of the business
+     */
+    businessType?:
+      | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
+      | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
+      | 'UTILITIES'
+      | 'CONSTRUCTION'
+      | 'MANUFACTURING'
+      | 'WHOLESALE_TRADE'
+      | 'RETAIL_TRADE'
+      | 'TRANSPORTATION_AND_WAREHOUSING'
+      | 'INFORMATION'
+      | 'FINANCE_AND_INSURANCE'
+      | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
+      | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
+      | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
+      | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
+      | 'EDUCATIONAL_SERVICES'
+      | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
+      | 'ARTS_ENTERTAINMENT_AND_RECREATION'
+      | 'ACCOMMODATION_AND_FOOD_SERVICES'
+      | 'OTHER_SERVICES'
+      | 'PUBLIC_ADMINISTRATION';
+
+    /**
+     * List of countries where the business operates (ISO 3166-1 alpha-2)
+     */
+    countriesOfOperation?: Array<string>;
+
+    /**
+     * Country of incorporation or registration (ISO 3166-1 alpha-2)
+     */
+    country?: string;
+
+    /**
+     * Trade name or DBA name of the business, if different from the legal name
+     */
+    doingBusinessAs?: string;
+
+    /**
+     * Legal entity type of the business
+     */
+    entityType?:
+      | 'SOLE_PROPRIETORSHIP'
+      | 'PARTNERSHIP'
+      | 'LLC'
+      | 'CORPORATION'
+      | 'S_CORPORATION'
+      | 'NON_PROFIT'
+      | 'OTHER';
+
+    /**
+     * Expected number of transactions per month
+     */
+    expectedMonthlyTransactionCount?:
+      | 'COUNT_UNDER_10'
+      | 'COUNT_10_TO_100'
+      | 'COUNT_100_TO_500'
+      | 'COUNT_500_TO_1000'
+      | 'COUNT_OVER_1000';
+
+    /**
+     * Expected total transaction volume per month in USD equivalent
+     */
+    expectedMonthlyTransactionVolume?:
+      | 'VOLUME_UNDER_10K'
+      | 'VOLUME_10K_TO_100K'
+      | 'VOLUME_100K_TO_1M'
+      | 'VOLUME_1M_TO_10M'
+      | 'VOLUME_OVER_10M';
+
+    /**
+     * List of countries where the business expects to send payments (ISO 3166-1
+     * alpha-2)
+     */
+    expectedRecipientJurisdictions?: Array<string>;
+
+    /**
+     * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+     */
+    incorporatedOn?: string;
+
+    /**
+     * Legal name of the business
+     */
+    legalName?: string;
+
+    /**
+     * The intended purpose for using the Grid account
+     */
+    purposeOfAccount?:
+      | 'CONTRACTOR_PAYOUTS'
+      | 'CREATOR_PAYOUTS'
+      | 'EMPLOYEE_PAYOUTS'
+      | 'MARKETPLACE_SELLER_PAYOUTS'
+      | 'SUPPLIER_PAYMENTS'
+      | 'CROSS_BORDER_B2B'
+      | 'AR_AUTOMATION'
+      | 'AP_AUTOMATION'
+      | 'EMBEDDED_PAYMENTS'
+      | 'PLATFORM_FEE_COLLECTION'
+      | 'P2P_TRANSFERS'
+      | 'CHARITABLE_DONATIONS'
+      | 'OTHER';
+
+    /**
+     * Business registration number
+     */
+    registrationNumber?: string;
+
+    /**
+     * The primary source of funds for the business
+     */
+    sourceOfFunds?: string;
+
+    /**
+     * Tax identification number
+     */
+    taxId?: string;
+  }
+}
+
+/**
+ * Additional information required for business entities
+ */
+export interface BusinessInfo {
+  /**
+   * Legal name of the business
+   */
+  legalName: string;
+
+  /**
+   * The high-level industry category of the business
+   */
+  businessType?:
+    | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
+    | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
+    | 'UTILITIES'
+    | 'CONSTRUCTION'
+    | 'MANUFACTURING'
+    | 'WHOLESALE_TRADE'
+    | 'RETAIL_TRADE'
+    | 'TRANSPORTATION_AND_WAREHOUSING'
+    | 'INFORMATION'
+    | 'FINANCE_AND_INSURANCE'
+    | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
+    | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
+    | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
+    | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
+    | 'EDUCATIONAL_SERVICES'
+    | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
+    | 'ARTS_ENTERTAINMENT_AND_RECREATION'
+    | 'ACCOMMODATION_AND_FOOD_SERVICES'
+    | 'OTHER_SERVICES'
+    | 'PUBLIC_ADMINISTRATION';
+
+  /**
+   * List of countries where the business operates (ISO 3166-1 alpha-2)
+   */
+  countriesOfOperation?: Array<string>;
+
+  /**
+   * Country of incorporation or registration (ISO 3166-1 alpha-2)
+   */
+  country?: string;
+
+  /**
+   * Trade name or DBA name of the business, if different from the legal name
+   */
+  doingBusinessAs?: string;
+
+  /**
+   * Legal entity type of the business
+   */
+  entityType?:
+    | 'SOLE_PROPRIETORSHIP'
+    | 'PARTNERSHIP'
+    | 'LLC'
+    | 'CORPORATION'
+    | 'S_CORPORATION'
+    | 'NON_PROFIT'
+    | 'OTHER';
+
+  /**
+   * Expected number of transactions per month
+   */
+  expectedMonthlyTransactionCount?:
+    | 'COUNT_UNDER_10'
+    | 'COUNT_10_TO_100'
+    | 'COUNT_100_TO_500'
+    | 'COUNT_500_TO_1000'
+    | 'COUNT_OVER_1000';
+
+  /**
+   * Expected total transaction volume per month in USD equivalent
+   */
+  expectedMonthlyTransactionVolume?:
+    | 'VOLUME_UNDER_10K'
+    | 'VOLUME_10K_TO_100K'
+    | 'VOLUME_100K_TO_1M'
+    | 'VOLUME_1M_TO_10M'
+    | 'VOLUME_OVER_10M';
+
+  /**
+   * List of countries where the business expects to send payments (ISO 3166-1
+   * alpha-2)
+   */
+  expectedRecipientJurisdictions?: Array<string>;
+
+  /**
+   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+   */
+  incorporatedOn?: string;
+
+  /**
+   * The intended purpose for using the Grid account
+   */
+  purposeOfAccount?:
+    | 'CONTRACTOR_PAYOUTS'
+    | 'CREATOR_PAYOUTS'
+    | 'EMPLOYEE_PAYOUTS'
+    | 'MARKETPLACE_SELLER_PAYOUTS'
+    | 'SUPPLIER_PAYMENTS'
+    | 'CROSS_BORDER_B2B'
+    | 'AR_AUTOMATION'
+    | 'AP_AUTOMATION'
+    | 'EMBEDDED_PAYMENTS'
+    | 'PLATFORM_FEE_COLLECTION'
+    | 'P2P_TRANSFERS'
+    | 'CHARITABLE_DONATIONS'
+    | 'OTHER';
+
+  /**
+   * Business registration number
+   */
+  registrationNumber?: string;
+
+  /**
+   * The primary source of funds for the business
+   */
+  sourceOfFunds?: string;
+
+  /**
+   * Tax identification number
+   */
+  taxId?: string;
+}
+
 export interface Customer {
   /**
    * Platform-specific customer identifier
@@ -219,21 +509,25 @@ export interface Customer {
   createdAt?: string;
 
   /**
+   * List of currency codes enabled for this customer.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer.
+   */
+  email?: string;
+
+  /**
    * Whether the customer is marked as deleted
    */
   isDeleted?: boolean;
 
   /**
-   * The current KYC status of a customer
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
+   * and regulatory jurisdiction.
    */
-  kycStatus?:
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'PENDING_REVIEW'
-    | 'EXPIRED'
-    | 'CANCELED'
-    | 'MANUALLY_APPROVED'
-    | 'MANUALLY_REJECTED';
+  region?: string;
 
   /**
    * Last update timestamp
@@ -243,10 +537,34 @@ export interface Customer {
 
 export interface CustomerCreate {
   /**
+   * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
+   * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
+   * use more than one sending currency, since the correct currencies cannot always
+   * be inferred. If not provided, currencies will be inferred from the customer's
+   * region. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer.
+   */
+  email?: string;
+
+  /**
    * Platform-specific customer identifier. If not provided, one will be generated by
    * the system.
    */
-  platformCustomerId: string;
+  platformCustomerId?: string;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
+   * This determines the regulatory jurisdiction and KYC requirements for the
+   * customer. Required if the customer will use currencies with different KYC
+   * requirements across regions. A customer with accounts in multiple regions should
+   * be registered as separate customers. This field is immutable after creation.
+   */
+  region?: string;
 
   /**
    * Optional UMA address identifier. If not provided during customer creation, one
@@ -261,120 +579,111 @@ export interface CustomerCreate {
 export type CustomerOneOf = CustomerOneOf.IndividualCustomer | CustomerOneOf.BusinessCustomer;
 
 export namespace CustomerOneOf {
-  export interface IndividualCustomer extends CustomersAPI.Customer {
-    customerType: 'INDIVIDUAL';
+  export interface IndividualCustomer extends CustomersAPI.Customer, CustomersAPI.IndividualCustomerFields {}
 
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
-
-  export interface BusinessCustomer extends CustomersAPI.Customer {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
+  export interface BusinessCustomer
+    extends CustomersAPI.Customer,
+      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
-    businessInfo?: BusinessCustomer.BusinessInfo;
+    /**
+     * Additional information required for business entities
+     */
+    businessInfo?: CustomersAPI.BusinessInfo;
   }
 
   export namespace BusinessCustomer {
     export interface BeneficialOwner {
       /**
-       * Individual's full name
+       * Unique identifier for this beneficial owner
        */
-      fullName: string;
+      id: string;
 
       /**
-       * Type of individual in the corporation
+       * When this beneficial owner was created
        */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
+      createdAt: string;
 
       /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
+       * The ID of the business customer this beneficial owner is associated with
        */
-      birthDate?: string;
+      customerId: string;
 
       /**
-       * Email address of the individual
+       * The current KYC status of a customer
        */
-      emailAddress?: string;
+      kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
 
       /**
-       * Country code (ISO 3166-1 alpha-2)
+       * Percentage of ownership in the business (0-100)
        */
-      nationality?: string;
+      ownershipPercentage: number;
+
+      personalInfo: BeneficialOwnersAPI.BeneficialOwnerPersonalInfo;
 
       /**
-       * Percent of ownership when individual type is beneficial owner
+       * Roles of this person within the business
        */
-      percentageOwnership?: number;
+      roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
 
       /**
-       * Phone number of the individual in E.164 format
+       * When this beneficial owner was last updated
        */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
+      updatedAt?: string;
     }
   }
 }
 
+/**
+ * Whether the customer is an individual or a business entity
+ */
+export type CustomerType = 'INDIVIDUAL' | 'BUSINESS';
+
 export interface CustomerUpdate {
+  /**
+   * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
+   * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
+   * list. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer.
+   */
+  email?: string;
+
   /**
    * Optional UMA address identifier. If provided, the customer's UMA address will be
    * updated. This is an optional identifier to route payments to the customer.
    */
   umaAddress?: string;
+}
+
+export interface IndividualCustomerFields {
+  customerType: 'INDIVIDUAL';
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Date of birth in ISO 8601 format (YYYY-MM-DD)
+   */
+  birthDate?: string;
+
+  /**
+   * Individual's full name
+   */
+  fullName?: string;
+
+  /**
+   * The current KYC status of a customer
+   */
+  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
+  /**
+   * Country code (ISO 3166-1 alpha-2)
+   */
+  nationality?: string;
 }
 
 export interface CustomerGetKYCLinkResponse {
@@ -401,111 +710,17 @@ export interface CustomerCreateParams {
 }
 
 export namespace CustomerCreateParams {
-  export interface IndividualCustomerCreateRequest extends CustomersAPI.CustomerCreate {
-    customerType: 'INDIVIDUAL';
+  export interface IndividualCustomerCreateRequest
+    extends CustomersAPI.CustomerCreate,
+      CustomersAPI.IndividualCustomerFields {}
 
-    address?: ExternalAccountsAPI.Address;
-
+  export interface BusinessCustomerCreateRequest
+    extends CustomersAPI.CustomerCreate,
+      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     * Additional information required for business entities
      */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
-
-  export interface BusinessCustomerCreateRequest extends CustomersAPI.CustomerCreate {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    beneficialOwners?: Array<BusinessCustomerCreateRequest.BeneficialOwner>;
-
-    businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
-  }
-
-  export namespace BusinessCustomerCreateRequest {
-    export interface BeneficialOwner {
-      /**
-       * Individual's full name
-       */
-      fullName: string;
-
-      /**
-       * Type of individual in the corporation
-       */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
-       */
-      birthDate?: string;
-
-      /**
-       * Email address of the individual
-       */
-      emailAddress?: string;
-
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      nationality?: string;
-
-      /**
-       * Percent of ownership when individual type is beneficial owner
-       */
-      percentageOwnership?: number;
-
-      /**
-       * Phone number of the individual in E.164 format
-       */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
-    }
+    businessInfo?: CustomersAPI.BusinessInfo;
   }
 }
 
@@ -516,118 +731,13 @@ export interface CustomerUpdateParams {
 }
 
 export namespace CustomerUpdateParams {
-  export interface IndividualCustomerUpdateRequest extends CustomersAPI.CustomerUpdate {
-    customerType: 'INDIVIDUAL';
+  export interface IndividualCustomerUpdateRequest
+    extends CustomersAPI.CustomerUpdate,
+      CustomersAPI.IndividualCustomerFields {}
 
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-  }
-
-  export interface BusinessCustomerUpdateRequest extends CustomersAPI.CustomerUpdate {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    beneficialOwners?: Array<BusinessCustomerUpdateRequest.BeneficialOwner>;
-
-    /**
-     * Additional information for business entities
-     */
-    businessInfo?: BusinessCustomerUpdateRequest.BusinessInfo;
-  }
-
-  export namespace BusinessCustomerUpdateRequest {
-    export interface BeneficialOwner {
-      /**
-       * Individual's full name
-       */
-      fullName: string;
-
-      /**
-       * Type of individual in the corporation
-       */
-      individualType:
-        | 'DIRECTOR'
-        | 'CONTROL_PERSON'
-        | 'BUSINESS_POINT_OF_CONTACT'
-        | 'TRUSTEE'
-        | 'SETTLOR'
-        | 'GENERAL_PARTNER';
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * Date of birth in ISO 8601 format (YYYY-MM-DD)
-       */
-      birthDate?: string;
-
-      /**
-       * Email address of the individual
-       */
-      emailAddress?: string;
-
-      /**
-       * Country code (ISO 3166-1 alpha-2)
-       */
-      nationality?: string;
-
-      /**
-       * Percent of ownership when individual type is beneficial owner
-       */
-      percentageOwnership?: number;
-
-      /**
-       * Phone number of the individual in E.164 format
-       */
-      phoneNumber?: string;
-
-      /**
-       * Tax identification number of the individual. This could be a Social Security
-       * Number (SSN) for US individuals, Tax Identification Number (TIN) for non-US
-       * individuals, or a Passport Number.
-       */
-      taxId?: string;
-
-      /**
-       * Title at company
-       */
-      title?: string;
-    }
-
-    /**
-     * Additional information for business entities
-     */
-    export interface BusinessInfo {
-      /**
-       * Legal name of the business
-       */
-      legalName?: string;
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId?: string;
-    }
-  }
+  export interface BusinessCustomerUpdateRequest
+    extends CustomersAPI.CustomerUpdate,
+      CustomersAPI.BusinessCustomerFields {}
 }
 
 export interface CustomerListParams extends DefaultPaginationParams {
@@ -642,9 +752,15 @@ export interface CustomerListParams extends DefaultPaginationParams {
   createdBefore?: string;
 
   /**
+   * Filter by currency code. Returns customers that have this currency in their
+   * enabled currencies list.
+   */
+  currency?: string;
+
+  /**
    * Filter by customer type
    */
-  customerType?: 'INDIVIDUAL' | 'BUSINESS';
+  customerType?: CustomerType;
 
   /**
    * Whether to include deleted customers in the results. Default is false.
@@ -660,6 +776,11 @@ export interface CustomerListParams extends DefaultPaginationParams {
    * Filter by platform-specific customer identifier
    */
   platformCustomerId?: string;
+
+  /**
+   * Filter by customer region (ISO 3166-1 alpha-2 country code)
+   */
+  region?: string;
 
   /**
    * Filter by uma address
@@ -705,6 +826,13 @@ export interface CustomerListInternalAccountsParams extends DefaultPaginationPar
    * Maximum number of results to return (default 20, max 100)
    */
   limit?: number;
+
+  /**
+   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
+   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   */
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 }
 
 Customers.ExternalAccounts = ExternalAccounts;
@@ -712,10 +840,14 @@ Customers.Bulk = Bulk;
 
 export declare namespace Customers {
   export {
+    type BusinessCustomerFields as BusinessCustomerFields,
+    type BusinessInfo as BusinessInfo,
     type Customer as Customer,
     type CustomerCreate as CustomerCreate,
     type CustomerOneOf as CustomerOneOf,
+    type CustomerType as CustomerType,
     type CustomerUpdate as CustomerUpdate,
+    type IndividualCustomerFields as IndividualCustomerFields,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
@@ -728,32 +860,48 @@ export declare namespace Customers {
   export {
     ExternalAccounts as ExternalAccounts,
     type Address as Address,
+    type AedExternalAccountInfo as AedExternalAccountInfo,
     type BaseWalletInfo as BaseWalletInfo,
+    type BdtExternalAccountInfo as BdtExternalAccountInfo,
     type BeneficiaryVerifiedData as BeneficiaryVerifiedData,
     type BrlBeneficiary as BrlBeneficiary,
     type BrlExternalAccountInfo as BrlExternalAccountInfo,
     type BusinessBeneficiary as BusinessBeneficiary,
+    type BwpExternalAccountInfo as BwpExternalAccountInfo,
+    type CadExternalAccountInfo as CadExternalAccountInfo,
+    type CopExternalAccountInfo as CopExternalAccountInfo,
     type DkkBeneficiary as DkkBeneficiary,
     type DkkExternalAccountInfo as DkkExternalAccountInfo,
+    type EgpExternalAccountInfo as EgpExternalAccountInfo,
+    type EurExternalAccountInfo as EurExternalAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
     type GbpBeneficiary as GbpBeneficiary,
     type GbpExternalAccountInfo as GbpExternalAccountInfo,
+    type GhsExternalAccountInfo as GhsExternalAccountInfo,
+    type GtqExternalAccountInfo as GtqExternalAccountInfo,
     type HkdBeneficiary as HkdBeneficiary,
     type HkdExternalAccountInfo as HkdExternalAccountInfo,
+    type HtgExternalAccountInfo as HtgExternalAccountInfo,
     type IdrBeneficiary as IdrBeneficiary,
     type IdrExternalAccountInfo as IdrExternalAccountInfo,
     type InrBeneficiary as InrBeneficiary,
     type InrExternalAccountInfo as InrExternalAccountInfo,
+    type JmdExternalAccountInfo as JmdExternalAccountInfo,
+    type KesExternalAccountInfo as KesExternalAccountInfo,
     type LightningWalletInfo as LightningWalletInfo,
+    type MwkExternalAccountInfo as MwkExternalAccountInfo,
     type MxnBeneficiary as MxnBeneficiary,
     type MxnExternalAccountInfo as MxnExternalAccountInfo,
     type MyrBeneficiary as MyrBeneficiary,
     type MyrExternalAccountInfo as MyrExternalAccountInfo,
+    type NgnExternalAccountInfo as NgnExternalAccountInfo,
     type PhpBeneficiary as PhpBeneficiary,
     type PhpExternalAccountInfo as PhpExternalAccountInfo,
+    type PkrExternalAccountInfo as PkrExternalAccountInfo,
     type PolygonWalletInfo as PolygonWalletInfo,
+    type RwfExternalAccountInfo as RwfExternalAccountInfo,
     type SgdBeneficiary as SgdBeneficiary,
     type SgdExternalAccountInfo as SgdExternalAccountInfo,
     type SolanaWalletInfo as SolanaWalletInfo,
@@ -761,10 +909,16 @@ export declare namespace Customers {
     type ThbBeneficiary as ThbBeneficiary,
     type ThbExternalAccountInfo as ThbExternalAccountInfo,
     type TronWalletInfo as TronWalletInfo,
+    type TzsExternalAccountInfo as TzsExternalAccountInfo,
+    type UgxExternalAccountInfo as UgxExternalAccountInfo,
     type UsdBeneficiary as UsdBeneficiary,
     type UsdExternalAccountInfo as UsdExternalAccountInfo,
     type VndBeneficiary as VndBeneficiary,
     type VndExternalAccountInfo as VndExternalAccountInfo,
+    type XafExternalAccountInfo as XafExternalAccountInfo,
+    type XofExternalAccountInfo as XofExternalAccountInfo,
+    type ZarExternalAccountInfo as ZarExternalAccountInfo,
+    type ZmwExternalAccountInfo as ZmwExternalAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

@@ -1,10 +1,5 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import fs from 'node:fs';
-import path from 'node:path';
-import url from 'node:url';
-import { newDenoHTTPWorker } from '@valtown/deno-http-worker';
-import { workerPath } from './code-tool-paths.cjs';
 import {
   ContentBlock,
   McpRequestContext,
@@ -17,6 +12,7 @@ import {
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { readEnv, requireValue } from './util';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
+import { getLogger } from './logger';
 import { SdkMethod } from './methods';
 import { McpCodeExecutionMode } from './options';
 import { ClientOptions } from '@lightsparkdev/grid';
@@ -30,10 +26,10 @@ For example:
 \`\`\`
 async function run(client) {
   const quote = await client.quotes.create({
-    destination: { accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', destinationType: 'ACCOUNT' },
+    destination: { destinationType: 'ACCOUNT', accountId: 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123' },
     lockedCurrencyAmount: 10000,
     lockedCurrencySide: 'SENDING',
-    source: { accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965', sourceType: 'ACCOUNT' },
+    source: { sourceType: 'ACCOUNT', accountId: 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965' },
   });
 
   console.log(quote.id);
@@ -88,6 +84,8 @@ export function codeTool({
     },
   };
 
+  const logger = getLogger();
+
   const handler = async ({
     reqContext,
     args,
@@ -112,11 +110,27 @@ export function codeTool({
       }
     }
 
+    let result: ToolCallResult;
+    const startTime = Date.now();
+
     if (codeExecutionMode === 'local') {
-      return await localDenoHandler({ reqContext, args });
+      logger.debug('Executing code in local Deno environment');
+      result = await localDenoHandler({ reqContext, args });
     } else {
-      return await remoteStainlessHandler({ reqContext, args });
+      logger.debug('Executing code in remote Stainless environment');
+      result = await remoteStainlessHandler({ reqContext, args });
     }
+
+    logger.info(
+      {
+        codeExecutionMode,
+        durationMs: Date.now() - startTime,
+        isError: result.isError,
+        contentRows: result.content?.length ?? 0,
+      },
+      'Got code tool execution result',
+    );
+    return result;
   };
 
   return { metadata, tool, handler };
@@ -135,24 +149,28 @@ const remoteStainlessHandler = async ({
 
   const codeModeEndpoint = readEnv('CODE_MODE_ENDPOINT_URL') ?? 'https://api.stainless.com/api/ai/code-tool';
 
+  const localClientEnvs = {
+    GRID_CLIENT_ID: requireValue(
+      readEnv('GRID_CLIENT_ID') ?? client.username,
+      'set GRID_CLIENT_ID environment variable or provide username client option',
+    ),
+    GRID_CLIENT_SECRET: requireValue(
+      readEnv('GRID_CLIENT_SECRET') ?? client.password,
+      'set GRID_CLIENT_SECRET environment variable or provide password client option',
+    ),
+    GRID_WEBHOOK_PUBKEY: readEnv('GRID_WEBHOOK_PUBKEY') ?? client.webhookSignature ?? undefined,
+    LIGHTSPARK_GRID_BASE_URL: readEnv('LIGHTSPARK_GRID_BASE_URL') ?? client.baseURL ?? undefined,
+  };
+  // Merge any upstream client envs from the request header, with upstream values taking precedence.
+  const mergedClientEnvs = { ...localClientEnvs, ...reqContext.upstreamClientEnvs };
+
   // Setting a Stainless API key authenticates requests to the code tool endpoint.
   const res = await fetch(codeModeEndpoint, {
     method: 'POST',
     headers: {
       ...(reqContext.stainlessApiKey && { Authorization: reqContext.stainlessApiKey }),
       'Content-Type': 'application/json',
-      client_envs: JSON.stringify({
-        GRID_CLIENT_ID: requireValue(
-          readEnv('GRID_CLIENT_ID') ?? client.username,
-          'set GRID_CLIENT_ID environment variable or provide username client option',
-        ),
-        GRID_CLIENT_SECRET: requireValue(
-          readEnv('GRID_CLIENT_SECRET') ?? client.password,
-          'set GRID_CLIENT_SECRET environment variable or provide password client option',
-        ),
-        GRID_WEBHOOK_PUBKEY: readEnv('GRID_WEBHOOK_PUBKEY') ?? client.webhookSignature ?? undefined,
-        LIGHTSPARK_GRID_BASE_URL: readEnv('LIGHTSPARK_GRID_BASE_URL') ?? client.baseURL ?? undefined,
-      }),
+      'x-stainless-mcp-client-envs': JSON.stringify(mergedClientEnvs),
     },
     body: JSON.stringify({
       project_name: 'grid',
@@ -163,6 +181,11 @@ const remoteStainlessHandler = async ({
   });
 
   if (!res.ok) {
+    if (res.status === 404 && !reqContext.stainlessApiKey) {
+      throw new Error(
+        'Could not access code tool for this project. You may need to provide a Stainless API key via the STAINLESS_API_KEY environment variable, the --stainless-api-key flag, or the x-stainless-api-key HTTP header.',
+      );
+    }
     throw new Error(
       `${res.status}: ${
         res.statusText
@@ -190,6 +213,13 @@ const localDenoHandler = async ({
   reqContext: McpRequestContext;
   args: unknown;
 }): Promise<ToolCallResult> => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const url = await import('node:url');
+  const { newDenoHTTPWorker } = await import('@valtown/deno-http-worker');
+  const { getWorkerPath } = await import('./code-tool-paths.cjs');
+  const workerPath = getWorkerPath();
+
   const client = reqContext.client;
   const baseURLHostname = new URL(client.baseURL).hostname;
   const { code } = args as { code: string };
@@ -251,6 +281,9 @@ const localDenoHandler = async ({
     printOutput: true,
     spawnOptions: {
       cwd: path.dirname(workerPath),
+      // Merge any upstream client envs into the Deno subprocess environment,
+      // with the upstream env vars taking precedence.
+      env: { ...process.env, ...reqContext.upstreamClientEnvs },
     },
   });
 
@@ -260,15 +293,17 @@ const localDenoHandler = async ({
         reject(new Error(`Worker exited with code ${exitCode}`));
       });
 
-      const opts: ClientOptions = {
-        baseURL: client.baseURL,
-        username: client.username,
-        password: client.password,
-        webhookSignature: client.webhookSignature,
+      // Strip null/undefined values so that the worker SDK client can fall back to
+      // reading from environment variables (including any upstreamClientEnvs).
+      const opts = {
+        ...(client.baseURL != null ? { baseURL: client.baseURL } : undefined),
+        ...(client.username != null ? { username: client.username } : undefined),
+        ...(client.password != null ? { password: client.password } : undefined),
+        ...(client.webhookSignature != null ? { webhookSignature: client.webhookSignature } : undefined),
         defaultHeaders: {
           'X-Stainless-MCP': 'true',
         },
-      };
+      } satisfies Partial<ClientOptions> as ClientOptions;
 
       const req = worker.request(
         'http://localhost',

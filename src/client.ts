@@ -20,13 +20,47 @@ import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
+  BeneficialOwnerCreateParams,
+  BeneficialOwnerCreateResponse,
+  BeneficialOwnerListParams,
+  BeneficialOwnerListResponse,
+  BeneficialOwnerListResponsesDefaultPagination,
+  BeneficialOwnerPersonalInfo,
+  BeneficialOwnerRetrieveResponse,
+  BeneficialOwnerUpdateParams,
+  BeneficialOwnerUpdateResponse,
+  BeneficialOwners,
+} from './resources/beneficial-owners';
+import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
+import {
+  Crypto,
+  CryptoEstimateWithdrawalFeeParams,
+  CryptoEstimateWithdrawalFeeResponse,
+} from './resources/crypto';
+import { Discoveries, DiscoveryListParams, DiscoveryListResponse } from './resources/discoveries';
+import {
+  DocumentListParams,
+  DocumentListResponse,
+  DocumentListResponsesDefaultPagination,
+  DocumentReplaceParams,
+  DocumentReplaceResponse,
+  DocumentRetrieveResponse,
+  DocumentUploadParams,
+  DocumentUploadResponse,
+  Documents,
+} from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
+import {
+  InternalAccountExportParams,
+  InternalAccountExportResponse,
+  InternalAccounts,
+} from './resources/internal-accounts';
 import {
   CurrencyAmount,
   InvitationClaimParams,
@@ -35,21 +69,17 @@ import {
   UmaInvitation,
 } from './resources/invitations';
 import {
-  Plaid,
-  PlaidCreateLinkTokenParams,
-  PlaidCreateLinkTokenResponse,
-  PlaidSubmitPublicTokenParams,
-} from './resources/plaid';
-import {
+  BaseDestination,
+  BaseQuoteSource,
   Currency,
   OutgoingRateDetails,
   PaymentInstructions,
   Quote,
   QuoteCreateParams,
   QuoteDestinationOneOf,
-  QuoteListParams,
+  QuoteExecuteParams,
+  QuoteSourceOneOf,
   Quotes,
-  QuotesDefaultPagination,
 } from './resources/quotes';
 import {
   CounterpartyFieldDefinition,
@@ -69,26 +99,29 @@ import {
   Tokens,
 } from './resources/tokens';
 import {
+  BaseTransactionSource,
+  IncomingRateDetails,
   IncomingTransaction,
   OutgoingTransaction,
+  OutgoingTransactionStatus,
+  ReconciliationInstructions,
   TransactionApproveParams,
   TransactionListParams,
-  TransactionListResponse,
-  TransactionListResponsesDefaultPagination,
   TransactionRejectParams,
-  TransactionRetrieveResponse,
   TransactionSourceOneOf,
   TransactionStatus,
   TransactionType,
   Transactions,
 } from './resources/transactions';
 import {
+  BaseTransactionDestination,
+  ExternalAccountReference,
+  InternalAccountReference,
   Transaction,
   TransferIn,
   TransferInCreateParams,
-  TransferInCreateResponse,
 } from './resources/transfer-in';
-import { TransferOut, TransferOutCreateParams, TransferOutCreateResponse } from './resources/transfer-out';
+import { TransferOut, TransferOutCreateParams } from './resources/transfer-out';
 import {
   UmaProviderListParams,
   UmaProviderListResponse,
@@ -96,17 +129,30 @@ import {
   UmaProviders,
 } from './resources/uma-providers';
 import {
-  AccountStatusWebhookEvent,
+  VerificationListParams,
+  VerificationListResponse,
+  VerificationListResponsesDefaultPagination,
+  VerificationRetrieveResponse,
+  VerificationSubmitParams,
+  VerificationSubmitResponse,
+  Verifications,
+} from './resources/verifications';
+import {
   BulkUploadWebhookEvent,
+  CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
+  InternalAccountStatusWebhookEvent,
   InvitationClaimedWebhookEvent,
-  KYCStatusWebhookEvent,
   OutgoingPaymentWebhookEvent,
   TestWebhookWebhookEvent,
   UnwrapWebhookEvent,
+  VerificationUpdateWebhookEvent,
   Webhooks,
 } from './resources/webhooks';
+import { Auth } from './resources/auth/auth';
 import {
+  BusinessCustomerFields,
+  BusinessInfo,
   Customer,
   CustomerCreate,
   CustomerCreateParams,
@@ -116,16 +162,18 @@ import {
   CustomerListParams,
   CustomerOneOf,
   CustomerOneovesDefaultPagination,
+  CustomerType,
   CustomerUpdate,
   CustomerUpdateParams,
   Customers,
+  IndividualCustomerFields,
 } from './resources/customers/customers';
 import {
   Platform,
   PlatformListInternalAccountsParams,
   PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { Sandbox, SandboxSendFundsParams, SandboxSendTestResponse } from './resources/sandbox/sandbox';
+import { Sandbox, SandboxSendFundsParams } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -410,8 +458,9 @@ export class LightsparkGrid {
       : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
 
     const defaultQuery = this.defaultQuery();
-    if (!isEmptyObj(defaultQuery)) {
-      query = { ...defaultQuery, ...query };
+    const pathQuery = Object.fromEntries(url.searchParams);
+    if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+      query = { ...pathQuery, ...defaultQuery, ...query };
     }
 
     if (typeof query === 'object' && query && !Array.isArray(query)) {
@@ -744,9 +793,9 @@ export class LightsparkGrid {
       }
     }
 
-    // If the API asks us to wait a certain amount of time (and it's a reasonable amount),
-    // just do what it says, but otherwise calculate a default
-    if (!(timeoutMillis && 0 <= timeoutMillis && timeoutMillis < 60 * 1000)) {
+    // If the API asks us to wait a certain amount of time, just do what it
+    // says, but otherwise calculate a default
+    if (timeoutMillis === undefined) {
       const maxRetries = options.maxRetries ?? this.maxRetries;
       timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
     }
@@ -904,27 +953,83 @@ export class LightsparkGrid {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Platform configuration endpoints for managing global settings. You can also configure these settings in the Grid dashboard.
+   */
   config: API.Config = new API.Config(this);
   customers: API.Customers = new API.Customers(this);
+  /**
+   * Internal account management endpoints for creating and managing internal accounts
+   */
   platform: API.Platform = new API.Platform(this);
-  plaid: API.Plaid = new API.Plaid(this);
+  /**
+   * Endpoints for transferring funds between internal and external accounts with the same currency
+   */
   transferIn: API.TransferIn = new API.TransferIn(this);
+  /**
+   * Endpoints for transferring funds between internal and external accounts with the same currency
+   */
   transferOut: API.TransferOut = new API.TransferOut(this);
+  /**
+   * Endpoints for creating and confirming quotes for cross-currency transfers
+   */
   receiver: API.Receiver = new API.Receiver(this);
+  /**
+   * Endpoints for creating and confirming quotes for cross-currency transfers
+   */
   quotes: API.Quotes = new API.Quotes(this);
+  /**
+   * Endpoints for retrieving transaction information
+   */
   transactions: API.Transactions = new API.Transactions(this);
+  /**
+   * Endpoints for creating, claiming and managing UMA invitations
+   */
   invitations: API.Invitations = new API.Invitations(this);
+  /**
+   * Endpoints to trigger test cases in sandbox
+   */
   sandbox: API.Sandbox = new API.Sandbox(this);
   umaProviders: API.UmaProviders = new API.UmaProviders(this);
+  /**
+   * Endpoints to programmatically manage API tokens
+   */
   tokens: API.Tokens = new API.Tokens(this);
+  /**
+   * Endpoints for retrieving cached foreign exchange rates. Rates are cached for approximately 5 minutes and include platform-specific fees.
+   */
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
+  /**
+   * Endpoints for creating and confirming quotes for cross-currency transfers
+   */
+  crypto: API.Crypto = new API.Crypto(this);
+  /**
+   * Endpoints for Know Your Customer (KYC) and Know Your Business (KYB) verification, including managing beneficial owners and triggering verification for customers.
+   */
+  beneficialOwners: API.BeneficialOwners = new API.BeneficialOwners(this);
+  /**
+   * Endpoints for uploading and managing verification documents for customers and beneficial owners. Supports KYC and KYB document requirements.
+   */
+  documents: API.Documents = new API.Documents(this);
+  /**
+   * Endpoints for Know Your Customer (KYC) and Know Your Business (KYB) verification, including managing beneficial owners and triggering verification for customers.
+   */
+  verifications: API.Verifications = new API.Verifications(this);
+  /**
+   * Endpoints for discovering available payment rails, banks, and providers for a given country and currency corridor.
+   */
+  discoveries: API.Discoveries = new API.Discoveries(this);
+  auth: API.Auth = new API.Auth(this);
+  /**
+   * Internal account management endpoints for creating and managing internal accounts
+   */
+  internalAccounts: API.InternalAccounts = new API.InternalAccounts(this);
 }
 
 LightsparkGrid.Config = Config;
 LightsparkGrid.Customers = Customers;
 LightsparkGrid.Platform = Platform;
-LightsparkGrid.Plaid = Plaid;
 LightsparkGrid.TransferIn = TransferIn;
 LightsparkGrid.TransferOut = TransferOut;
 LightsparkGrid.Receiver = Receiver;
@@ -936,6 +1041,13 @@ LightsparkGrid.UmaProviders = UmaProviders;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
 LightsparkGrid.Webhooks = Webhooks;
+LightsparkGrid.Crypto = Crypto;
+LightsparkGrid.BeneficialOwners = BeneficialOwners;
+LightsparkGrid.Documents = Documents;
+LightsparkGrid.Verifications = Verifications;
+LightsparkGrid.Discoveries = Discoveries;
+LightsparkGrid.Auth = Auth;
+LightsparkGrid.InternalAccounts = InternalAccounts;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -956,10 +1068,14 @@ export declare namespace LightsparkGrid {
 
   export {
     Customers as Customers,
+    type BusinessCustomerFields as BusinessCustomerFields,
+    type BusinessInfo as BusinessInfo,
     type Customer as Customer,
     type CustomerCreate as CustomerCreate,
     type CustomerOneOf as CustomerOneOf,
+    type CustomerType as CustomerType,
     type CustomerUpdate as CustomerUpdate,
+    type IndividualCustomerFields as IndividualCustomerFields,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
@@ -976,24 +1092,15 @@ export declare namespace LightsparkGrid {
   };
 
   export {
-    Plaid as Plaid,
-    type PlaidCreateLinkTokenResponse as PlaidCreateLinkTokenResponse,
-    type PlaidCreateLinkTokenParams as PlaidCreateLinkTokenParams,
-    type PlaidSubmitPublicTokenParams as PlaidSubmitPublicTokenParams,
-  };
-
-  export {
     TransferIn as TransferIn,
+    type BaseTransactionDestination as BaseTransactionDestination,
+    type ExternalAccountReference as ExternalAccountReference,
+    type InternalAccountReference as InternalAccountReference,
     type Transaction as Transaction,
-    type TransferInCreateResponse as TransferInCreateResponse,
     type TransferInCreateParams as TransferInCreateParams,
   };
 
-  export {
-    TransferOut as TransferOut,
-    type TransferOutCreateResponse as TransferOutCreateResponse,
-    type TransferOutCreateParams as TransferOutCreateParams,
-  };
+  export { TransferOut as TransferOut, type TransferOutCreateParams as TransferOutCreateParams };
 
   export {
     Receiver as Receiver,
@@ -1007,26 +1114,29 @@ export declare namespace LightsparkGrid {
 
   export {
     Quotes as Quotes,
+    type BaseDestination as BaseDestination,
+    type BaseQuoteSource as BaseQuoteSource,
     type Currency as Currency,
     type OutgoingRateDetails as OutgoingRateDetails,
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
-    type QuotesDefaultPagination as QuotesDefaultPagination,
+    type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuoteCreateParams as QuoteCreateParams,
-    type QuoteListParams as QuoteListParams,
+    type QuoteExecuteParams as QuoteExecuteParams,
   };
 
   export {
     Transactions as Transactions,
+    type BaseTransactionSource as BaseTransactionSource,
+    type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
     type OutgoingTransaction as OutgoingTransaction,
+    type OutgoingTransactionStatus as OutgoingTransactionStatus,
+    type ReconciliationInstructions as ReconciliationInstructions,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
-    type TransactionRetrieveResponse as TransactionRetrieveResponse,
-    type TransactionListResponse as TransactionListResponse,
-    type TransactionListResponsesDefaultPagination as TransactionListResponsesDefaultPagination,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
@@ -1040,11 +1150,7 @@ export declare namespace LightsparkGrid {
     type InvitationClaimParams as InvitationClaimParams,
   };
 
-  export {
-    Sandbox as Sandbox,
-    type SandboxSendTestResponse as SandboxSendTestResponse,
-    type SandboxSendFundsParams as SandboxSendFundsParams,
-  };
+  export { Sandbox as Sandbox, type SandboxSendFundsParams as SandboxSendFundsParams };
 
   export {
     UmaProviders as UmaProviders,
@@ -1075,10 +1181,125 @@ export declare namespace LightsparkGrid {
     type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
     type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
-    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
-    type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
+    type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
+    type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
+    type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 
+  export {
+    Crypto as Crypto,
+    type CryptoEstimateWithdrawalFeeResponse as CryptoEstimateWithdrawalFeeResponse,
+    type CryptoEstimateWithdrawalFeeParams as CryptoEstimateWithdrawalFeeParams,
+  };
+
+  export {
+    BeneficialOwners as BeneficialOwners,
+    type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
+    type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
+    type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
+    type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
+    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
+    type BeneficialOwnerListResponsesDefaultPagination as BeneficialOwnerListResponsesDefaultPagination,
+    type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
+    type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
+    type BeneficialOwnerListParams as BeneficialOwnerListParams,
+  };
+
+  export {
+    Documents as Documents,
+    type DocumentRetrieveResponse as DocumentRetrieveResponse,
+    type DocumentListResponse as DocumentListResponse,
+    type DocumentReplaceResponse as DocumentReplaceResponse,
+    type DocumentUploadResponse as DocumentUploadResponse,
+    type DocumentListResponsesDefaultPagination as DocumentListResponsesDefaultPagination,
+    type DocumentListParams as DocumentListParams,
+    type DocumentReplaceParams as DocumentReplaceParams,
+    type DocumentUploadParams as DocumentUploadParams,
+  };
+
+  export {
+    Verifications as Verifications,
+    type VerificationRetrieveResponse as VerificationRetrieveResponse,
+    type VerificationListResponse as VerificationListResponse,
+    type VerificationSubmitResponse as VerificationSubmitResponse,
+    type VerificationListResponsesDefaultPagination as VerificationListResponsesDefaultPagination,
+    type VerificationListParams as VerificationListParams,
+    type VerificationSubmitParams as VerificationSubmitParams,
+  };
+
+  export {
+    Discoveries as Discoveries,
+    type DiscoveryListResponse as DiscoveryListResponse,
+    type DiscoveryListParams as DiscoveryListParams,
+  };
+
+  export { Auth as Auth };
+
+  export {
+    InternalAccounts as InternalAccounts,
+    type InternalAccountExportResponse as InternalAccountExportResponse,
+    type InternalAccountExportParams as InternalAccountExportParams,
+  };
+
+  export type AedBeneficiary = API.AedBeneficiary;
+  export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
+  export type BdtBeneficiary = API.BdtBeneficiary;
+  export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
+  export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
+  export type BwpBeneficiary = API.BwpBeneficiary;
+  export type BwpExternalAccountCreateInfo = API.BwpExternalAccountCreateInfo;
+  export type CadBeneficiary = API.CadBeneficiary;
+  export type CadExternalAccountCreateInfo = API.CadExternalAccountCreateInfo;
+  export type CopBeneficiary = API.CopBeneficiary;
+  export type CopExternalAccountCreateInfo = API.CopExternalAccountCreateInfo;
+  export type DkkExternalAccountCreateInfo = API.DkkExternalAccountCreateInfo;
+  export type EgpBeneficiary = API.EgpBeneficiary;
+  export type EgpExternalAccountCreateInfo = API.EgpExternalAccountCreateInfo;
+  export type EthereumWalletExternalAccountInfo = API.EthereumWalletExternalAccountInfo;
+  export type EurBeneficiary = API.EurBeneficiary;
+  export type EurExternalAccountCreateInfo = API.EurExternalAccountCreateInfo;
+  export type GbpExternalAccountCreateInfo = API.GbpExternalAccountCreateInfo;
+  export type GhsBeneficiary = API.GhsBeneficiary;
+  export type GhsExternalAccountCreateInfo = API.GhsExternalAccountCreateInfo;
+  export type GtqBeneficiary = API.GtqBeneficiary;
+  export type GtqExternalAccountCreateInfo = API.GtqExternalAccountCreateInfo;
+  export type HkdExternalAccountCreateInfo = API.HkdExternalAccountCreateInfo;
+  export type HtgBeneficiary = API.HtgBeneficiary;
+  export type HtgExternalAccountCreateInfo = API.HtgExternalAccountCreateInfo;
+  export type IdrExternalAccountCreateInfo = API.IdrExternalAccountCreateInfo;
+  export type InrExternalAccountCreateInfo = API.InrExternalAccountCreateInfo;
+  export type JmdBeneficiary = API.JmdBeneficiary;
+  export type JmdExternalAccountCreateInfo = API.JmdExternalAccountCreateInfo;
+  export type KesBeneficiary = API.KesBeneficiary;
+  export type KesExternalAccountCreateInfo = API.KesExternalAccountCreateInfo;
+  export type MwkBeneficiary = API.MwkBeneficiary;
+  export type MwkExternalAccountCreateInfo = API.MwkExternalAccountCreateInfo;
+  export type MxnExternalAccountCreateInfo = API.MxnExternalAccountCreateInfo;
+  export type MyrExternalAccountCreateInfo = API.MyrExternalAccountCreateInfo;
+  export type NgnBeneficiary = API.NgnBeneficiary;
+  export type NgnExternalAccountCreateInfo = API.NgnExternalAccountCreateInfo;
+  export type PhpExternalAccountCreateInfo = API.PhpExternalAccountCreateInfo;
+  export type PkrBeneficiary = API.PkrBeneficiary;
+  export type PkrExternalAccountCreateInfo = API.PkrExternalAccountCreateInfo;
+  export type RwfBeneficiary = API.RwfBeneficiary;
+  export type RwfExternalAccountCreateInfo = API.RwfExternalAccountCreateInfo;
+  export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
+  export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
+  export type TzsBeneficiary = API.TzsBeneficiary;
+  export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;
+  export type UgxBeneficiary = API.UgxBeneficiary;
+  export type UgxExternalAccountCreateInfo = API.UgxExternalAccountCreateInfo;
+  export type UsdExternalAccountCreateInfo = API.UsdExternalAccountCreateInfo;
+  export type VerificationError = API.VerificationError;
+  export type VndExternalAccountCreateInfo = API.VndExternalAccountCreateInfo;
+  export type XafBeneficiary = API.XafBeneficiary;
+  export type XafExternalAccountCreateInfo = API.XafExternalAccountCreateInfo;
+  export type XofBeneficiary = API.XofBeneficiary;
+  export type XofExternalAccountCreateInfo = API.XofExternalAccountCreateInfo;
+  export type ZarBeneficiary = API.ZarBeneficiary;
+  export type ZarExternalAccountCreateInfo = API.ZarExternalAccountCreateInfo;
+  export type ZmwBeneficiary = API.ZmwBeneficiary;
+  export type ZmwExternalAccountCreateInfo = API.ZmwExternalAccountCreateInfo;
 }

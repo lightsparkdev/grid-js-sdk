@@ -71,10 +71,22 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/external-accounts',
   },
   {
+    clientCallName: 'client.customers.externalAccounts.retrieve',
+    fullyQualifiedName: 'customers.externalAccounts.retrieve',
+    httpMethod: 'get',
+    httpPath: '/customers/external-accounts/{externalAccountId}',
+  },
+  {
     clientCallName: 'client.customers.externalAccounts.list',
     fullyQualifiedName: 'customers.externalAccounts.list',
     httpMethod: 'get',
     httpPath: '/customers/external-accounts',
+  },
+  {
+    clientCallName: 'client.customers.externalAccounts.delete',
+    fullyQualifiedName: 'customers.externalAccounts.delete',
+    httpMethod: 'delete',
+    httpPath: '/customers/external-accounts/{externalAccountId}',
   },
   {
     clientCallName: 'client.customers.bulk.getJobStatus',
@@ -101,22 +113,22 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/platform/external-accounts',
   },
   {
+    clientCallName: 'client.platform.externalAccounts.retrieve',
+    fullyQualifiedName: 'platform.externalAccounts.retrieve',
+    httpMethod: 'get',
+    httpPath: '/platform/external-accounts/{externalAccountId}',
+  },
+  {
     clientCallName: 'client.platform.externalAccounts.list',
     fullyQualifiedName: 'platform.externalAccounts.list',
     httpMethod: 'get',
     httpPath: '/platform/external-accounts',
   },
   {
-    clientCallName: 'client.plaid.createLinkToken',
-    fullyQualifiedName: 'plaid.createLinkToken',
-    httpMethod: 'post',
-    httpPath: '/plaid/link-tokens',
-  },
-  {
-    clientCallName: 'client.plaid.submitPublicToken',
-    fullyQualifiedName: 'plaid.submitPublicToken',
-    httpMethod: 'post',
-    httpPath: '/plaid/callback/{plaid_link_token}',
+    clientCallName: 'client.platform.externalAccounts.delete',
+    fullyQualifiedName: 'platform.externalAccounts.delete',
+    httpMethod: 'delete',
+    httpPath: '/platform/external-accounts/{externalAccountId}',
   },
   {
     clientCallName: 'client.transferIn.create',
@@ -153,12 +165,6 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'quotes.retrieve',
     httpMethod: 'get',
     httpPath: '/quotes/{quoteId}',
-  },
-  {
-    clientCallName: 'client.quotes.list',
-    fullyQualifiedName: 'quotes.list',
-    httpMethod: 'get',
-    httpPath: '/quotes',
   },
   {
     clientCallName: 'client.quotes.execute',
@@ -221,12 +227,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/sandbox/send',
   },
   {
-    clientCallName: 'client.sandbox.sendTest',
-    fullyQualifiedName: 'sandbox.sendTest',
-    httpMethod: 'post',
-    httpPath: '/webhooks/test',
-  },
-  {
     clientCallName: 'client.sandbox.uma.receivePayment',
     fullyQualifiedName: 'sandbox.uma.receivePayment',
     httpMethod: 'post',
@@ -237,6 +237,12 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'sandbox.internalAccounts.fund',
     httpMethod: 'post',
     httpPath: '/sandbox/internal-accounts/{accountId}/fund',
+  },
+  {
+    clientCallName: 'client.sandbox.webhooks.sendTest',
+    fullyQualifiedName: 'sandbox.webhooks.sendTest',
+    httpMethod: 'post',
+    httpPath: '/sandbox/webhooks/test',
   },
   {
     clientCallName: 'client.umaProviders.list',
@@ -275,6 +281,138 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/exchange-rates',
   },
   { clientCallName: 'client.webhooks.unwrap', fullyQualifiedName: 'webhooks.unwrap' },
+  {
+    clientCallName: 'client.crypto.estimateWithdrawalFee',
+    fullyQualifiedName: 'crypto.estimateWithdrawalFee',
+    httpMethod: 'post',
+    httpPath: '/crypto/estimate-withdrawal-fee',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.create',
+    fullyQualifiedName: 'beneficialOwners.create',
+    httpMethod: 'post',
+    httpPath: '/beneficial-owners',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.retrieve',
+    fullyQualifiedName: 'beneficialOwners.retrieve',
+    httpMethod: 'get',
+    httpPath: '/beneficial-owners/{beneficialOwnerId}',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.update',
+    fullyQualifiedName: 'beneficialOwners.update',
+    httpMethod: 'patch',
+    httpPath: '/beneficial-owners/{beneficialOwnerId}',
+  },
+  {
+    clientCallName: 'client.beneficialOwners.list',
+    fullyQualifiedName: 'beneficialOwners.list',
+    httpMethod: 'get',
+    httpPath: '/beneficial-owners',
+  },
+  {
+    clientCallName: 'client.documents.retrieve',
+    fullyQualifiedName: 'documents.retrieve',
+    httpMethod: 'get',
+    httpPath: '/documents/{documentId}',
+  },
+  {
+    clientCallName: 'client.documents.list',
+    fullyQualifiedName: 'documents.list',
+    httpMethod: 'get',
+    httpPath: '/documents',
+  },
+  {
+    clientCallName: 'client.documents.delete',
+    fullyQualifiedName: 'documents.delete',
+    httpMethod: 'delete',
+    httpPath: '/documents/{documentId}',
+  },
+  {
+    clientCallName: 'client.documents.replace',
+    fullyQualifiedName: 'documents.replace',
+    httpMethod: 'put',
+    httpPath: '/documents/{documentId}',
+  },
+  {
+    clientCallName: 'client.documents.upload',
+    fullyQualifiedName: 'documents.upload',
+    httpMethod: 'post',
+    httpPath: '/documents',
+  },
+  {
+    clientCallName: 'client.verifications.retrieve',
+    fullyQualifiedName: 'verifications.retrieve',
+    httpMethod: 'get',
+    httpPath: '/verifications/{verificationId}',
+  },
+  {
+    clientCallName: 'client.verifications.list',
+    fullyQualifiedName: 'verifications.list',
+    httpMethod: 'get',
+    httpPath: '/verifications',
+  },
+  {
+    clientCallName: 'client.verifications.submit',
+    fullyQualifiedName: 'verifications.submit',
+    httpMethod: 'post',
+    httpPath: '/verifications',
+  },
+  {
+    clientCallName: 'client.discoveries.list',
+    fullyQualifiedName: 'discoveries.list',
+    httpMethod: 'get',
+    httpPath: '/discoveries',
+  },
+  {
+    clientCallName: 'client.auth.credentials.create',
+    fullyQualifiedName: 'auth.credentials.create',
+    httpMethod: 'post',
+    httpPath: '/auth/credentials',
+  },
+  {
+    clientCallName: 'client.auth.credentials.list',
+    fullyQualifiedName: 'auth.credentials.list',
+    httpMethod: 'get',
+    httpPath: '/auth/credentials',
+  },
+  {
+    clientCallName: 'client.auth.credentials.resendChallenge',
+    fullyQualifiedName: 'auth.credentials.resendChallenge',
+    httpMethod: 'post',
+    httpPath: '/auth/credentials/{id}/challenge',
+  },
+  {
+    clientCallName: 'client.auth.credentials.revoke',
+    fullyQualifiedName: 'auth.credentials.revoke',
+    httpMethod: 'delete',
+    httpPath: '/auth/credentials/{id}',
+  },
+  {
+    clientCallName: 'client.auth.credentials.verify',
+    fullyQualifiedName: 'auth.credentials.verify',
+    httpMethod: 'post',
+    httpPath: '/auth/credentials/{id}/verify',
+  },
+  {
+    clientCallName: 'client.auth.sessions.list',
+    fullyQualifiedName: 'auth.sessions.list',
+    httpMethod: 'get',
+    httpPath: '/auth/sessions',
+  },
+  {
+    clientCallName: 'client.auth.sessions.revoke',
+    fullyQualifiedName: 'auth.sessions.revoke',
+    httpMethod: 'delete',
+    httpPath: '/auth/sessions/{id}',
+  },
+  {
+    clientCallName: 'client.internalAccounts.export',
+    fullyQualifiedName: 'internalAccounts.export',
+    httpMethod: 'post',
+    httpPath: '/internal-accounts/{id}/export',
+  },
 ];
 
 function allowedMethodsForCodeTool(options: McpOptions | undefined): SdkMethod[] | undefined {

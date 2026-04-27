@@ -1,11 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as TransactionsAPI from './transactions';
+import * as TransferInAPI from './transfer-in';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * Endpoints for transferring funds between internal and external accounts with the same currency
+ */
 export class TransferOut extends APIResource {
   /**
    * Transfer funds from an internal account to an external account for a specific
@@ -13,7 +16,7 @@ export class TransferOut extends APIResource {
    *
    * @example
    * ```ts
-   * const transferOut = await client.transferOut.create({
+   * const transaction = await client.transferOut.create({
    *   destination: {
    *     accountId:
    *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -26,7 +29,7 @@ export class TransferOut extends APIResource {
    * });
    * ```
    */
-  create(params: TransferOutCreateParams, options?: RequestOptions): APIPromise<TransferOutCreateResponse> {
+  create(params: TransferOutCreateParams, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/transfer-out', {
       body,
@@ -39,20 +42,16 @@ export class TransferOut extends APIResource {
   }
 }
 
-export type TransferOutCreateResponse =
-  | TransactionsAPI.IncomingTransaction
-  | TransactionsAPI.OutgoingTransaction;
-
 export interface TransferOutCreateParams {
   /**
    * Body param: Destination external account details
    */
-  destination: TransferOutCreateParams.Destination;
+  destination: TransferInAPI.ExternalAccountReference;
 
   /**
    * Body param: Source internal account details
    */
-  source: TransferOutCreateParams.Source;
+  source: TransferInAPI.InternalAccountReference;
 
   /**
    * Body param: Amount in the smallest unit of the currency (e.g., cents for
@@ -67,31 +66,6 @@ export interface TransferOutCreateParams {
   'Idempotency-Key'?: string;
 }
 
-export namespace TransferOutCreateParams {
-  /**
-   * Destination external account details
-   */
-  export interface Destination {
-    /**
-     * Reference to an external account ID
-     */
-    accountId: string;
-  }
-
-  /**
-   * Source internal account details
-   */
-  export interface Source {
-    /**
-     * Reference to an internal account ID
-     */
-    accountId: string;
-  }
-}
-
 export declare namespace TransferOut {
-  export {
-    type TransferOutCreateResponse as TransferOutCreateResponse,
-    type TransferOutCreateParams as TransferOutCreateParams,
-  };
+  export { type TransferOutCreateParams as TransferOutCreateParams };
 }

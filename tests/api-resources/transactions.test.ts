@@ -39,6 +39,7 @@ describe('resource transactions', () => {
     await expect(
       client.transactions.list(
         {
+          accountIdentifier: 'accountIdentifier',
           cursor: 'cursor',
           customerId: 'customerId',
           endDate: '2019-12-27T18:11:19.117Z',

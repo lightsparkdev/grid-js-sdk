@@ -7,6 +7,10 @@ import ts from 'typescript';
 import { WorkerOutput } from './code-tool-types';
 import { LightsparkGrid, ClientOptions } from '@lightsparkdev/grid';
 
+async function tseval(code: string) {
+  return import('data:application/typescript;charset=utf-8;base64,' + Buffer.from(code).toString('base64'));
+}
+
 function getRunFunctionSource(code: string): {
   type: 'declaration' | 'expression';
   client: string | undefined;
@@ -114,21 +118,22 @@ const fuse = new Fuse(
     'client.customers.retrieve',
     'client.customers.update',
     'client.customers.externalAccounts.create',
+    'client.customers.externalAccounts.delete',
     'client.customers.externalAccounts.list',
+    'client.customers.externalAccounts.retrieve',
     'client.customers.bulk.getJobStatus',
     'client.customers.bulk.uploadCsv',
     'client.platform.listInternalAccounts',
     'client.platform.externalAccounts.create',
+    'client.platform.externalAccounts.delete',
     'client.platform.externalAccounts.list',
-    'client.plaid.createLinkToken',
-    'client.plaid.submitPublicToken',
+    'client.platform.externalAccounts.retrieve',
     'client.transferIn.create',
     'client.transferOut.create',
     'client.receiver.lookupExternalAccount',
     'client.receiver.lookupUma',
     'client.quotes.create',
     'client.quotes.execute',
-    'client.quotes.list',
     'client.quotes.retrieve',
     'client.transactions.approve',
     'client.transactions.list',
@@ -139,9 +144,9 @@ const fuse = new Fuse(
     'client.invitations.create',
     'client.invitations.retrieve',
     'client.sandbox.sendFunds',
-    'client.sandbox.sendTest',
     'client.sandbox.uma.receivePayment',
     'client.sandbox.internalAccounts.fund',
+    'client.sandbox.webhooks.sendTest',
     'client.umaProviders.list',
     'client.tokens.create',
     'client.tokens.delete',
@@ -149,6 +154,28 @@ const fuse = new Fuse(
     'client.tokens.retrieve',
     'client.exchangeRates.list',
     'client.webhooks.unwrap',
+    'client.crypto.estimateWithdrawalFee',
+    'client.beneficialOwners.create',
+    'client.beneficialOwners.list',
+    'client.beneficialOwners.retrieve',
+    'client.beneficialOwners.update',
+    'client.documents.delete',
+    'client.documents.list',
+    'client.documents.replace',
+    'client.documents.retrieve',
+    'client.documents.upload',
+    'client.verifications.list',
+    'client.verifications.retrieve',
+    'client.verifications.submit',
+    'client.discoveries.list',
+    'client.auth.credentials.create',
+    'client.auth.credentials.list',
+    'client.auth.credentials.resendChallenge',
+    'client.auth.credentials.revoke',
+    'client.auth.credentials.verify',
+    'client.auth.sessions.list',
+    'client.auth.sessions.revoke',
+    'client.internalAccounts.export',
   ],
   { threshold: 1, shouldSort: true },
 );
@@ -225,7 +252,8 @@ function makeSdkProxy<T extends object>(obj: T, { path, isBelievedBad = false }:
 
 function parseError(code: string, error: unknown): string | undefined {
   if (!(error instanceof Error)) return;
-  const message = error.name ? `${error.name}: ${error.message}` : error.message;
+  const cause = error.cause instanceof Error ? `: ${error.cause.message}` : '';
+  const message = error.name ? `${error.name}: ${error.message}${cause}` : `${error.message}${cause}`;
   try {
     // Deno uses V8; the first "<anonymous>:LINE:COLUMN" is the top of stack.
     const lineNumber = error.stack?.match(/<anonymous>:([0-9]+):[0-9]+/)?.[1];
@@ -281,7 +309,9 @@ const fetch = async (req: Request): Promise<Response> => {
 
   const log_lines: string[] = [];
   const err_lines: string[] = [];
-  const console = {
+  const originalConsole = globalThis.console;
+  globalThis.console = {
+    ...originalConsole,
     log: (...args: unknown[]) => {
       log_lines.push(util.format(...args));
     },
@@ -291,7 +321,7 @@ const fetch = async (req: Request): Promise<Response> => {
   };
   try {
     let run_ = async (client: any) => {};
-    eval(`${code}\nrun_ = run;`);
+    run_ = (await tseval(`${code}\nexport default run;`)).default;
     const result = await run_(makeSdkProxy(client, { path: ['client'] }));
     return Response.json({
       is_error: false,
@@ -309,6 +339,8 @@ const fetch = async (req: Request): Promise<Response> => {
       } satisfies WorkerOutput,
       { status: 400, statusText: 'Code execution error' },
     );
+  } finally {
+    globalThis.console = originalConsole;
   }
 };
 

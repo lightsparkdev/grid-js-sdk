@@ -4,11 +4,15 @@ import { APIResource } from '../core/resource';
 import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
+import { TransactionsDefaultPagination } from './transfer-in';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Endpoints for retrieving transaction information
+ */
 export class Transactions extends APIResource {
   /**
    * Retrieve detailed information about a specific transaction.
@@ -20,7 +24,7 @@ export class Transactions extends APIResource {
    * );
    * ```
    */
-  retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransactionRetrieveResponse> {
+  retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
     return this._client.get(path`/transactions/${transactionID}`, options);
   }
 
@@ -32,7 +36,7 @@ export class Transactions extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const transactionListResponse of client.transactions.list()) {
+   * for await (const transaction of client.transactions.list()) {
    *   // ...
    * }
    * ```
@@ -40,8 +44,8 @@ export class Transactions extends APIResource {
   list(
     query: TransactionListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<TransactionListResponsesDefaultPagination, TransactionListResponse> {
-    return this._client.getAPIList('/transactions', DefaultPagination<TransactionListResponse>, {
+  ): PagePromise<TransactionsDefaultPagination, TransferInAPI.Transaction> {
+    return this._client.getAPIList('/transactions', DefaultPagination<TransferInAPI.Transaction>, {
       query,
       ...options,
     });
@@ -86,15 +90,105 @@ export class Transactions extends APIResource {
   }
 }
 
-export type TransactionListResponsesDefaultPagination = DefaultPagination<TransactionListResponse>;
+export interface BaseTransactionSource {
+  /**
+   * Currency code for the source
+   */
+  currency?: string;
+}
 
-export interface IncomingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
+/**
+ * Details about the rate and fees for an incoming transaction.
+ */
+export interface IncomingRateDetails {
+  /**
+   * The fixed fee charged by the Grid product to execute the quote in the smallest
+   * unit of the receiving currency (eg. cents).
+   */
+  gridApiFixedFee: number;
+
+  /**
+   * The underlying multiplier from the mSATS to the receiving currency, including
+   * variable fees.
+   */
+  gridApiMultiplier: number;
+
+  /**
+   * The variable fee amount charged by the Grid product to execute the quote in the
+   * smallest unit of the receiving currency (eg. cents). This is the receiving
+   * amount times gridApiVariableFeeRate.
+   */
+  gridApiVariableFeeAmount: number;
+
+  /**
+   * The variable fee rate charged by the Grid product to execute the quote as a
+   * percentage of the receiving currency amount.
+   */
+  gridApiVariableFeeRate: number;
+}
+
+export interface IncomingTransaction {
+  /**
+   * Unique identifier for the transaction
+   */
+  id: string;
+
+  /**
+   * System ID of the customer (sender for outgoing, recipient for incoming)
+   */
+  customerId: string;
+
+  /**
+   * Destination account details
+   */
+  destination:
+    | IncomingTransaction.AccountTransactionDestination
+    | IncomingTransaction.UmaAddressTransactionDestination;
+
+  /**
+   * Platform-specific ID of the customer (sender for outgoing, recipient for
+   * incoming)
+   */
+  platformCustomerId: string;
+
   /**
    * Amount received in the recipient's currency
    */
   receivedAmount: InvitationsAPI.CurrencyAmount;
 
-  type: 'INCOMING';
+  /**
+   * Status of a payment transaction.
+   *
+   * | Status       | Description                                                                                        |
+   * | ------------ | -------------------------------------------------------------------------------------------------- |
+   * | `CREATED`    | Initial lookup has been created                                                                    |
+   * | `PENDING`    | Quote has been created                                                                             |
+   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
+   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
+   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
+   * | `FAILED`     | An error occurred during payment                                                                   |
+   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
+   * | `EXPIRED`    | Quote has expired                                                                                  |
+   */
+  status: TransactionStatus;
+
+  type: 'INCOMING' | 'OUTGOING';
+
+  /**
+   * Additional information about the counterparty, if available and relevant to the
+   * transaction and platform.
+   */
+  counterpartyInformation?: { [key: string]: unknown };
+
+  /**
+   * When the transaction was created
+   */
+  createdAt?: string;
+
+  /**
+   * Optional memo or description for the payment
+   */
+  description?: string;
 
   /**
    * If the transaction failed, this field provides the reason for failure.
@@ -112,68 +206,119 @@ export interface IncomingTransaction extends Omit<TransferInAPI.Transaction, 'ty
   /**
    * Details about the rate and fees for the transaction.
    */
-  rateDetails?: IncomingTransaction.RateDetails;
+  rateDetails?: IncomingRateDetails;
 
   /**
    * Included for all transactions except those with "CREATED" status
    */
-  reconciliationInstructions?: IncomingTransaction.ReconciliationInstructions;
+  reconciliationInstructions?: ReconciliationInstructions;
 
+  /**
+   * When the payment was or will be settled
+   */
+  settledAt?: string;
+
+  /**
+   * Source account details
+   */
   source?: TransactionSourceOneOf;
+
+  /**
+   * When the transaction was last updated
+   */
+  updatedAt?: string;
 }
 
 export namespace IncomingTransaction {
   /**
-   * Details about the rate and fees for the transaction.
+   * Destination account details
    */
-  export interface RateDetails {
+  export interface AccountTransactionDestination {
     /**
-     * The fixed fee charged by the Grid product to execute the quote in the smallest
-     * unit of the receiving currency (eg. cents).
+     * Destination account identifier
      */
-    gridApiFixedFee: number;
+    accountId: string;
 
-    /**
-     * The underlying multiplier from the mSATS to the receiving currency, including
-     * variable fees.
-     */
-    gridApiMultiplier: number;
-
-    /**
-     * The variable fee amount charged by the Grid product to execute the quote in the
-     * smallest unit of the receiving currency (eg. cents). This is the receiving
-     * amount times gridApiVariableFeeRate.
-     */
-    gridApiVariableFeeAmount: number;
-
-    /**
-     * The variable fee rate charged by the Grid product to execute the quote as a
-     * percentage of the receiving currency amount.
-     */
-    gridApiVariableFeeRate: number;
+    destinationType: 'ACCOUNT';
   }
 
   /**
-   * Included for all transactions except those with "CREATED" status
+   * UMA address destination details
    */
-  export interface ReconciliationInstructions {
+  export interface UmaAddressTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
     /**
-     * Unique reference code that must be included with the payment to match it with
-     * the correct incoming transaction
+     * UMA address of the recipient
      */
-    reference: string;
+    umaAddress: string;
   }
 }
 
-export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'type'> {
+export interface OutgoingTransaction {
+  /**
+   * Unique identifier for the transaction
+   */
+  id: string;
+
+  /**
+   * System ID of the customer (sender for outgoing, recipient for incoming)
+   */
+  customerId: string;
+
+  /**
+   * Destination account details
+   */
+  destination:
+    | OutgoingTransaction.AccountTransactionDestination
+    | OutgoingTransaction.UmaAddressTransactionDestination;
+
+  /**
+   * Platform-specific ID of the customer (sender for outgoing, recipient for
+   * incoming)
+   */
+  platformCustomerId: string;
+
   /**
    * Amount sent in the sender's currency
    */
   sentAmount: InvitationsAPI.CurrencyAmount;
 
+  /**
+   * Source account details
+   */
   source: TransactionSourceOneOf;
 
-  type: 'OUTGOING';
+  /**
+   * Status of an outgoing payment transaction.
+   *
+   * | Status       | Description                                             |
+   * | ------------ | ------------------------------------------------------- |
+   * | `PENDING`    | Quote is pending confirmation                           |
+   * | `EXPIRED`    | Quote wasn't executed before expiry window              |
+   * | `PROCESSING` | Executing the quote after receiving funds               |
+   * | `COMPLETED`  | Payout successfully reached the destination             |
+   * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+   */
+  status: OutgoingTransactionStatus;
+
+  type: 'OUTGOING' | 'INCOMING';
+
+  /**
+   * Additional information about the counterparty, if available and relevant to the
+   * transaction and platform.
+   */
+  counterpartyInformation?: { [key: string]: unknown };
+
+  /**
+   * When the transaction was created
+   */
+  createdAt?: string;
+
+  /**
+   * Optional memo or description for the payment
+   */
+  description?: string;
 
   /**
    * Number of sending currency units per receiving currency unit.
@@ -188,8 +333,7 @@ export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'ty
     | 'QUOTE_EXECUTION_FAILED'
     | 'LIGHTNING_PAYMENT_FAILED'
     | 'FUNDING_AMOUNT_MISMATCH'
-    | 'COUNTERPARTY_POST_TX_FAILED'
-    | 'TIMEOUT';
+    | 'COUNTERPARTY_POST_TX_FAILED';
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
@@ -221,9 +365,43 @@ export interface OutgoingTransaction extends Omit<TransferInAPI.Transaction, 'ty
    * The refund if transaction was refunded.
    */
   refund?: OutgoingTransaction.Refund;
+
+  /**
+   * When the payment was or will be settled
+   */
+  settledAt?: string;
+
+  /**
+   * When the transaction was last updated
+   */
+  updatedAt?: string;
 }
 
 export namespace OutgoingTransaction {
+  /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
+  }
+
   /**
    * The refund if transaction was refunded.
    */
@@ -234,23 +412,60 @@ export namespace OutgoingTransaction {
     initiatedAt: string;
 
     /**
-     * The unique reference code of the refund
+     * The unique reference ID of the refund
      */
     reference: string;
 
     /**
-     * When the refund was or will be settled
+     * Current status of the refund
+     */
+    status: 'PENDING' | 'COMPLETED' | 'FAILED';
+
+    /**
+     * Reason for the refund
+     */
+    reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION' | 'TIMEOUT';
+
+    /**
+     * When the refund was settled
      */
     settledAt?: string;
   }
 }
 
+/**
+ * Status of an outgoing payment transaction.
+ *
+ * | Status       | Description                                             |
+ * | ------------ | ------------------------------------------------------- |
+ * | `PENDING`    | Quote is pending confirmation                           |
+ * | `EXPIRED`    | Quote wasn't executed before expiry window              |
+ * | `PROCESSING` | Executing the quote after receiving funds               |
+ * | `COMPLETED`  | Payout successfully reached the destination             |
+ * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+ */
+export type OutgoingTransactionStatus = 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+
+export interface ReconciliationInstructions {
+  /**
+   * Unique reference code that must be included with the payment to match it with
+   * the correct incoming transaction
+   */
+  reference: string;
+}
+
+/**
+ * Source account details
+ */
 export type TransactionSourceOneOf =
   | TransactionSourceOneOf.AccountTransactionSource
   | TransactionSourceOneOf.UmaAddressTransactionSource
   | TransactionSourceOneOf.RealtimeFundingTransactionSource;
 
 export namespace TransactionSourceOneOf {
+  /**
+   * Source account details
+   */
   export interface AccountTransactionSource {
     /**
      * Source account identifier
@@ -258,13 +473,11 @@ export namespace TransactionSourceOneOf {
     accountId: string;
 
     sourceType: 'ACCOUNT';
-
-    /**
-     * Currency code for the source
-     */
-    currency?: string;
   }
 
+  /**
+   * UMA address source details
+   */
   export interface UmaAddressTransactionSource {
     sourceType: 'UMA_ADDRESS';
 
@@ -272,13 +485,12 @@ export namespace TransactionSourceOneOf {
      * UMA address of the sender
      */
     umaAddress: string;
-
-    /**
-     * Currency code for the source
-     */
-    currency?: string;
   }
 
+  /**
+   * Transaction was funded using a real-time funding source (RTP, SEPA Instant,
+   * Spark, Stables, etc.).
+   */
   export interface RealtimeFundingTransactionSource {
     /**
      * Currency code for the funding source
@@ -302,7 +514,6 @@ export namespace TransactionSourceOneOf {
  * | `CREATED`    | Initial lookup has been created                                                                    |
  * | `PENDING`    | Quote has been created                                                                             |
  * | `PROCESSING` | Funding has been received and payment initiated                                                    |
- * | `SENT`       | Cross border settlement has been initiated                                                         |
  * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
  * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
  * | `FAILED`     | An error occurred during payment                                                                   |
@@ -313,7 +524,6 @@ export type TransactionStatus =
   | 'CREATED'
   | 'PENDING'
   | 'PROCESSING'
-  | 'SENT'
   | 'COMPLETED'
   | 'REJECTED'
   | 'FAILED'
@@ -325,13 +535,15 @@ export type TransactionStatus =
  */
 export type TransactionType = 'INCOMING' | 'OUTGOING';
 
-export type TransactionRetrieveResponse = IncomingTransaction | OutgoingTransaction;
-
-export type TransactionListResponse = IncomingTransaction | OutgoingTransaction;
-
 export interface TransactionListParams extends DefaultPaginationParams {
   /**
-   * Filter by system customer ID
+   * Filter by account identifier (matches either sender or receiver)
+   */
+  accountIdentifier?: string;
+
+  /**
+   * Filter by system customer ID. To filter to transactions made on behalf of the
+   * platform, specify the platform ID as the customer ID.
    */
   customerId?: string;
 
@@ -404,16 +616,19 @@ export interface TransactionRejectParams {
 
 export declare namespace Transactions {
   export {
+    type BaseTransactionSource as BaseTransactionSource,
+    type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
     type OutgoingTransaction as OutgoingTransaction,
+    type OutgoingTransactionStatus as OutgoingTransactionStatus,
+    type ReconciliationInstructions as ReconciliationInstructions,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
-    type TransactionRetrieveResponse as TransactionRetrieveResponse,
-    type TransactionListResponse as TransactionListResponse,
-    type TransactionListResponsesDefaultPagination as TransactionListResponsesDefaultPagination,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
   };
 }
+
+export { type TransactionsDefaultPagination };

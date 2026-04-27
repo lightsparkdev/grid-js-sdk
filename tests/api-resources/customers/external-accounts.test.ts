@@ -15,13 +15,7 @@ describe('resource externalAccounts', () => {
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
-        beneficiary: {
-          beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
-          fullName: 'John Doe',
-          nationality: 'US',
-        },
-        paymentRails: ['ACH'],
+        beneficiary: { beneficiaryType: 'INDIVIDUAL', fullName: 'John Doe' },
         routingNumber: '123456789',
       },
       currency: 'USD',
@@ -43,9 +37,7 @@ describe('resource externalAccounts', () => {
         accountType: 'USD_ACCOUNT',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
-          birthDate: '1990-01-15',
           fullName: 'John Doe',
-          nationality: 'US',
           address: {
             country: 'US',
             line1: '123 Main Street',
@@ -54,19 +46,32 @@ describe('resource externalAccounts', () => {
             line2: 'Apt 4B',
             state: 'CA',
           },
+          birthDate: '1990-01-15',
           countryOfResidence: 'countryOfResidence',
           email: 'email',
+          nationality: 'US',
           phoneNumber: 'phoneNumber',
-          registrationNumber: 'registrationNumber',
         },
-        paymentRails: ['ACH'],
         routingNumber: '123456789',
       },
       currency: 'USD',
+      cryptoNetwork: 'SOLANA_MAINNET',
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       defaultUmaDepositAccount: true,
       platformAccountId: 'ext_acc_123456',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve', async () => {
+    const responsePromise = client.customers.externalAccounts.retrieve('externalAccountId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled
@@ -95,5 +100,17 @@ describe('resource externalAccounts', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('delete', async () => {
+    const responsePromise = client.customers.externalAccounts.delete('externalAccountId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

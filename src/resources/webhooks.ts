@@ -5,6 +5,8 @@ import * as InvitationsAPI from './invitations';
 import * as ReceiverAPI from './receiver';
 import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
+import * as CustomersAPI from './customers/customers';
+import * as InternalAccountsAPI from './sandbox/internal-accounts';
 
 export class Webhooks extends APIResource {
   unwrap(body: string): UnwrapWebhookEvent {
@@ -18,32 +20,53 @@ export interface IncomingPaymentWebhookEvent {
    */
   id: string;
 
+  data: IncomingPaymentWebhookEvent.Data;
+
   /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  transaction: TransactionsAPI.IncomingTransaction;
-
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
-    | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'INVITATION_CLAIMED'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
+}
 
-  /**
-   * Information required by the sender's VASP about the recipient. Platform must
-   * provide these in the 200 OK response if approving. Note that this only includes
-   * fields which Grid does not already have from initial customer registration.
-   */
-  requestedReceiverCustomerInfoFields?: Array<ReceiverAPI.CounterpartyFieldDefinition>;
+export namespace IncomingPaymentWebhookEvent {
+  export interface Data extends TransactionsAPI.IncomingTransaction {
+    /**
+     * Information required by the sender's VASP about the recipient. Platform must
+     * provide these in the 200 OK response if approving. Note that this only includes
+     * fields which Grid does not already have from initial customer registration.
+     */
+    requestedReceiverCustomerInfoFields?: Array<ReceiverAPI.CounterpartyFieldDefinition>;
+  }
 }
 
 export interface OutgoingPaymentWebhookEvent {
@@ -52,25 +75,42 @@ export interface OutgoingPaymentWebhookEvent {
    */
   id: string;
 
+  data: TransactionsAPI.OutgoingTransaction;
+
   /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  transaction: TransactionsAPI.OutgoingTransaction;
-
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
-    | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'INVITATION_CLAIMED'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
 }
 
 export interface TestWebhookWebhookEvent {
@@ -80,22 +120,39 @@ export interface TestWebhookWebhookEvent {
   id: string;
 
   /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
     | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'INVITATION_CLAIMED'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED';
 }
 
 export interface BulkUploadWebhookEvent {
@@ -104,35 +161,52 @@ export interface BulkUploadWebhookEvent {
    */
   id: string;
 
-  bulkCustomerImportJob: BulkUploadWebhookEvent.BulkCustomerImportJob;
+  data: BulkUploadWebhookEvent.Data;
 
   /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
-    | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'INVITATION_CLAIMED'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'TEST';
 }
 
 export namespace BulkUploadWebhookEvent {
-  export interface BulkCustomerImportJob {
+  export interface Data {
     /**
      * Unique identifier for the bulk import job
      */
     id: string;
 
-    progress: BulkCustomerImportJob.Progress;
+    progress: Data.Progress;
 
     /**
      * Current status of the job
@@ -150,7 +224,7 @@ export namespace BulkUploadWebhookEvent {
     errors?: Array<Shared.BulkCustomerImportErrorEntry>;
   }
 
-  export namespace BulkCustomerImportJob {
+  export namespace Data {
     export interface Progress {
       /**
        * Number of customers that failed to create
@@ -181,111 +255,215 @@ export interface InvitationClaimedWebhookEvent {
    */
   id: string;
 
-  invitation: InvitationsAPI.UmaInvitation;
+  data: InvitationsAPI.UmaInvitation;
 
   /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INVITATION_CLAIMED'
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
-    | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'INVITATION.CLAIMED'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
 }
 
-export interface KYCStatusWebhookEvent {
+export interface CustomerUpdateWebhookEvent {
   /**
    * Unique identifier for this webhook delivery (can be used for idempotency)
    */
   id: string;
 
-  /**
-   * System generated id of the customer
-   */
-  customerId: string;
+  data: CustomersAPI.CustomerOneOf;
 
   /**
-   * The current KYC status of a customer
-   */
-  kycStatus:
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'PENDING_REVIEW'
-    | 'EXPIRED'
-    | 'CANCELED'
-    | 'MANUALLY_APPROVED'
-    | 'MANUALLY_REJECTED';
-
-  /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
-    | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'INVITATION_CLAIMED'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
 }
 
-export interface AccountStatusWebhookEvent {
+export interface InternalAccountStatusWebhookEvent {
   /**
    * Unique identifier for this webhook delivery (can be used for idempotency)
    */
   id: string;
 
-  /**
-   * The id of the account whose balance has changed
-   */
-  accountId: string;
+  data: InternalAccountsAPI.InternalAccount;
 
   /**
-   * ISO8601 timestamp when the webhook was sent (can be used to prevent replay
-   * attacks)
+   * ISO 8601 timestamp of when the webhook was sent
    */
   timestamp: string;
 
-  /**
-   * Type of webhook event
-   */
   type:
-    | 'INCOMING_PAYMENT'
-    | 'OUTGOING_PAYMENT'
-    | 'TEST'
-    | 'BULK_UPLOAD'
-    | 'INVITATION_CLAIMED'
-    | 'KYC_STATUS'
-    | 'ACCOUNT_STATUS';
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
+}
+
+export interface VerificationUpdateWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data: VerificationUpdateWebhookEvent.Data;
 
   /**
-   * The ID of the customer associated with the internal account
+   * ISO 8601 timestamp of when the webhook was sent
    */
-  customerId?: string;
+  timestamp: string;
 
-  newBalance?: InvitationsAPI.CurrencyAmount;
+  type:
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'TEST';
+}
 
-  oldBalance?: InvitationsAPI.CurrencyAmount;
+export namespace VerificationUpdateWebhookEvent {
+  export interface Data {
+    /**
+     * Unique identifier for this verification
+     */
+    id: string;
 
-  /**
-   * The ID of the customer as associated in your platform
-   */
-  platformCustomerId?: string;
+    /**
+     * When this verification was created
+     */
+    createdAt: string;
+
+    /**
+     * The ID of the customer being verified
+     */
+    customerId: string;
+
+    /**
+     * List of issues preventing verification from proceeding. Empty when
+     * verificationStatus is APPROVED or IN_PROGRESS.
+     */
+    errors: Array<Shared.VerificationError>;
+
+    /**
+     * Current status of the KYC/KYB verification
+     */
+    verificationStatus:
+      | 'RESOLVE_ERRORS'
+      | 'PENDING_MANUAL_REVIEW'
+      | 'IN_PROGRESS'
+      | 'APPROVED'
+      | 'REJECTED'
+      | 'READY_FOR_VERIFICATION';
+
+    /**
+     * When this verification was last updated
+     */
+    updatedAt?: string;
+  }
 }
 
 export type UnwrapWebhookEvent =
@@ -294,8 +472,9 @@ export type UnwrapWebhookEvent =
   | TestWebhookWebhookEvent
   | BulkUploadWebhookEvent
   | InvitationClaimedWebhookEvent
-  | KYCStatusWebhookEvent
-  | AccountStatusWebhookEvent;
+  | CustomerUpdateWebhookEvent
+  | InternalAccountStatusWebhookEvent
+  | VerificationUpdateWebhookEvent;
 
 export declare namespace Webhooks {
   export {
@@ -304,8 +483,9 @@ export declare namespace Webhooks {
     type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
     type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
-    type KYCStatusWebhookEvent as KYCStatusWebhookEvent,
-    type AccountStatusWebhookEvent as AccountStatusWebhookEvent,
+    type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
+    type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
+    type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }

@@ -3,15 +3,53 @@
 import { APIResource } from '../../core/resource';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
+  AedAccountInfo,
+  BdtAccountInfo,
+  BrlAccountInfo,
+  BwpAccountInfo,
+  CadAccountInfo,
+  CopAccountInfo,
+  DkkAccountInfo,
+  EgpAccountInfo,
+  EurAccountInfo,
   ExternalAccountCreateParams,
   ExternalAccountListParams,
   ExternalAccountListResponse,
   ExternalAccounts,
+  GbpAccountInfo,
+  GhsAccountInfo,
+  GtqAccountInfo,
+  HkdAccountInfo,
+  HtgAccountInfo,
+  IdrAccountInfo,
+  InrAccountInfo,
+  JmdAccountInfo,
+  KesAccountInfo,
+  MwkAccountInfo,
+  MxnAccountInfo,
+  MyrAccountInfo,
+  NgnAccountInfo,
+  PhpAccountInfo,
+  PkrAccountInfo,
+  RwfAccountInfo,
+  SgdAccountInfo,
+  ThbAccountInfo,
+  TzsAccountInfo,
+  UgxAccountInfo,
+  UsdAccountInfo,
+  VndAccountInfo,
+  XafAccountInfo,
+  XofAccountInfo,
+  ZarAccountInfo,
+  ZmwAccountInfo,
 } from './external-accounts';
 import * as InternalAccountsAPI from '../sandbox/internal-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
+/**
+ * Internal account management endpoints for creating and managing internal accounts
+ */
 export class Platform extends APIResource {
   externalAccounts: ExternalAccountsAPI.ExternalAccounts = new ExternalAccountsAPI.ExternalAccounts(
     this._client,
@@ -51,6 +89,13 @@ export interface PlatformListInternalAccountsParams {
    * Filter by currency code
    */
   currency?: string;
+
+  /**
+   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
+   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   */
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 }
 
 Platform.ExternalAccounts = ExternalAccounts;
@@ -63,6 +108,41 @@ export declare namespace Platform {
 
   export {
     ExternalAccounts as ExternalAccounts,
+    type AedAccountInfo as AedAccountInfo,
+    type BdtAccountInfo as BdtAccountInfo,
+    type BrlAccountInfo as BrlAccountInfo,
+    type BwpAccountInfo as BwpAccountInfo,
+    type CadAccountInfo as CadAccountInfo,
+    type CopAccountInfo as CopAccountInfo,
+    type DkkAccountInfo as DkkAccountInfo,
+    type EgpAccountInfo as EgpAccountInfo,
+    type EurAccountInfo as EurAccountInfo,
+    type GbpAccountInfo as GbpAccountInfo,
+    type GhsAccountInfo as GhsAccountInfo,
+    type GtqAccountInfo as GtqAccountInfo,
+    type HkdAccountInfo as HkdAccountInfo,
+    type HtgAccountInfo as HtgAccountInfo,
+    type IdrAccountInfo as IdrAccountInfo,
+    type InrAccountInfo as InrAccountInfo,
+    type JmdAccountInfo as JmdAccountInfo,
+    type KesAccountInfo as KesAccountInfo,
+    type MwkAccountInfo as MwkAccountInfo,
+    type MxnAccountInfo as MxnAccountInfo,
+    type MyrAccountInfo as MyrAccountInfo,
+    type NgnAccountInfo as NgnAccountInfo,
+    type PhpAccountInfo as PhpAccountInfo,
+    type PkrAccountInfo as PkrAccountInfo,
+    type RwfAccountInfo as RwfAccountInfo,
+    type SgdAccountInfo as SgdAccountInfo,
+    type ThbAccountInfo as ThbAccountInfo,
+    type TzsAccountInfo as TzsAccountInfo,
+    type UgxAccountInfo as UgxAccountInfo,
+    type UsdAccountInfo as UsdAccountInfo,
+    type VndAccountInfo as VndAccountInfo,
+    type XafAccountInfo as XafAccountInfo,
+    type XofAccountInfo as XofAccountInfo,
+    type ZarAccountInfo as ZarAccountInfo,
+    type ZmwAccountInfo as ZmwAccountInfo,
     type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

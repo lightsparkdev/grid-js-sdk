@@ -1,29 +1,20 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as ExternalAccountsAPI from './external-accounts';
+import * as Shared from '../shared';
+import * as PlatformExternalAccountsAPI from '../platform/external-accounts';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
 
+/**
+ * External account management endpoints for creating and managing external bank accounts
+ */
 export class ExternalAccounts extends APIResource {
   /**
    * Register a new external bank account for a customer.
-   *
-   * **Sandbox Testing:** In sandbox mode, use these account number patterns to test
-   * different transfer scenarios. These patterns should be used with the primary
-   * alias, address, or identifier of whatever account type you're testing. For
-   * example, the US account number, a CLABE, an IBAN, a spark wallet address, etc.
-   * The failure patterns are:
-   *
-   * - Account numbers ending in **002**: Insufficient funds (transfer-in will fail)
-   * - Account numbers ending in **003**: Account closed/invalid (transfers will
-   *   fail)
-   * - Account numbers ending in **004**: Transfer rejected (bank rejects the
-   *   transfer)
-   * - Account numbers ending in **005**: Timeout/delayed failure (stays pending
-   *   ~30s, then fails)
-   * - Any other account number: Success (transfers complete normally)
    *
    * @example
    * ```ts
@@ -31,7 +22,6 @@ export class ExternalAccounts extends APIResource {
    *   await client.customers.externalAccounts.create({
    *     accountInfo: {
    *       accountType: 'USD_ACCOUNT',
-   *       paymentRails: ['ACH'],
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
    *       beneficiary: {
@@ -59,6 +49,21 @@ export class ExternalAccounts extends APIResource {
   }
 
   /**
+   * Retrieve a customer external account by its system-generated ID
+   *
+   * @example
+   * ```ts
+   * const externalAccount =
+   *   await client.customers.externalAccounts.retrieve(
+   *     'externalAccountId',
+   *   );
+   * ```
+   */
+  retrieve(externalAccountID: string, options?: RequestOptions): APIPromise<ExternalAccount> {
+    return this._client.get(path`/customers/external-accounts/${externalAccountID}`, options);
+  }
+
+  /**
    * Retrieve a list of external accounts with optional filtering parameters. Returns
    * all external accounts that match the specified filters. If no filters are
    * provided, returns all external accounts (paginated).
@@ -81,6 +86,23 @@ export class ExternalAccounts extends APIResource {
     return this._client.getAPIList('/customers/external-accounts', DefaultPagination<ExternalAccount>, {
       query,
       ...options,
+    });
+  }
+
+  /**
+   * Delete a customer external account by its system-generated ID
+   *
+   * @example
+   * ```ts
+   * await client.customers.externalAccounts.delete(
+   *   'externalAccountId',
+   * );
+   * ```
+   */
+  delete(externalAccountID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/customers/external-accounts/${externalAccountID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
   }
 }
@@ -119,6 +141,8 @@ export interface Address {
   state?: string;
 }
 
+export interface AedExternalAccountInfo extends PlatformExternalAccountsAPI.AedAccountInfo {}
+
 export interface BaseWalletInfo {
   accountType: 'BASE_WALLET';
 
@@ -127,6 +151,8 @@ export interface BaseWalletInfo {
    */
   address: string;
 }
+
+export interface BdtExternalAccountInfo extends PlatformExternalAccountsAPI.BdtAccountInfo {}
 
 export interface BeneficiaryVerifiedData {
   /**
@@ -169,35 +195,9 @@ export interface BrlBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface BrlExternalAccountInfo {
-  accountType: 'BRL_ACCOUNT';
-
-  beneficiary: BrlBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'PIX'>;
-
-  /**
-   * The PIX key of the bank
-   */
-  pixKey: string;
-
-  /**
-   * The type of PIX key of the bank
-   */
-  pixKeyType: string;
-
-  /**
-   * The tax ID of the bank account
-   */
-  taxId: string;
-}
+export interface BrlExternalAccountInfo extends PlatformExternalAccountsAPI.BrlAccountInfo {}
 
 export interface BusinessBeneficiary {
   beneficiaryType: 'BUSINESS';
@@ -235,6 +235,12 @@ export interface BusinessBeneficiary {
   taxId?: string;
 }
 
+export interface BwpExternalAccountInfo extends PlatformExternalAccountsAPI.BwpAccountInfo {}
+
+export interface CadExternalAccountInfo extends PlatformExternalAccountsAPI.CadAccountInfo {}
+
+export interface CopExternalAccountInfo extends PlatformExternalAccountsAPI.CopAccountInfo {}
+
 export interface DkkBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
@@ -269,30 +275,13 @@ export interface DkkBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface DkkExternalAccountInfo {
-  accountType: 'DKK_ACCOUNT';
+export interface DkkExternalAccountInfo extends PlatformExternalAccountsAPI.DkkAccountInfo {}
 
-  beneficiary: DkkBeneficiary | BusinessBeneficiary;
+export interface EgpExternalAccountInfo extends PlatformExternalAccountsAPI.EgpAccountInfo {}
 
-  /**
-   * The IBAN of the bank
-   */
-  iban: string;
-
-  paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
-
-  /**
-   * The SWIFT BIC of the bank
-   */
-  swiftBic?: string;
-}
+export interface EurExternalAccountInfo extends PlatformExternalAccountsAPI.EurAccountInfo {}
 
 export interface ExternalAccount {
   /**
@@ -300,6 +289,10 @@ export interface ExternalAccount {
    */
   id: string;
 
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
   accountInfo: ExternalAccountInfoOneOf;
 
   /**
@@ -329,6 +322,14 @@ export interface ExternalAccount {
   beneficiaryVerifiedData?: BeneficiaryVerifiedData;
 
   /**
+   * The blockchain network for this external account, if applicable. Present when
+   * the account is a cryptocurrency wallet. Example values: SOLANA_MAINNET,
+   * SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET, BASE_TESTNET,
+   * SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET, LIGHTNING_REGTEST.
+   */
+  cryptoNetwork?: string;
+
+  /**
    * The customer this account is tied to, or null if the account is on behalf of the
    * platform.
    */
@@ -352,12 +353,67 @@ export interface ExternalAccount {
 }
 
 export interface ExternalAccountCreate {
-  accountInfo: ExternalAccountInfoOneOf;
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
+  accountInfo:
+    | Shared.AedExternalAccountCreateInfo
+    | Shared.BrlExternalAccountCreateInfo
+    | Shared.BwpExternalAccountCreateInfo
+    | Shared.CadExternalAccountCreateInfo
+    | Shared.DkkExternalAccountCreateInfo
+    | Shared.EurExternalAccountCreateInfo
+    | Shared.GbpExternalAccountCreateInfo
+    | Shared.HkdExternalAccountCreateInfo
+    | Shared.IdrExternalAccountCreateInfo
+    | Shared.InrExternalAccountCreateInfo
+    | Shared.KesExternalAccountCreateInfo
+    | Shared.MwkExternalAccountCreateInfo
+    | Shared.MxnExternalAccountCreateInfo
+    | Shared.MyrExternalAccountCreateInfo
+    | Shared.NgnExternalAccountCreateInfo
+    | Shared.PhpExternalAccountCreateInfo
+    | Shared.RwfExternalAccountCreateInfo
+    | Shared.SgdExternalAccountCreateInfo
+    | Shared.ThbExternalAccountCreateInfo
+    | Shared.TzsExternalAccountCreateInfo
+    | Shared.UgxExternalAccountCreateInfo
+    | Shared.UsdExternalAccountCreateInfo
+    | Shared.VndExternalAccountCreateInfo
+    | Shared.XafExternalAccountCreateInfo
+    | Shared.XofExternalAccountCreateInfo
+    | Shared.ZarExternalAccountCreateInfo
+    | Shared.ZmwExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
+    | SparkWalletInfo
+    | LightningWalletInfo
+    | SolanaWalletInfo
+    | TronWalletInfo
+    | PolygonWalletInfo
+    | BaseWalletInfo
+    | Shared.EthereumWalletExternalAccountInfo;
 
   /**
    * The ISO 4217 currency code
    */
   currency: string;
+
+  /**
+   * The blockchain network for this external account. Required when the account is a
+   * cryptocurrency wallet. Specifies which network the wallet is on. Example values:
+   * SOLANA_MAINNET, SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET,
+   * BASE_TESTNET, SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET,
+   * LIGHTNING_REGTEST.
+   */
+  cryptoNetwork?: string;
 
   /**
    * The ID of the customer for whom to create the external account. If not provided,
@@ -384,529 +440,53 @@ export interface ExternalAccountCreate {
   platformAccountId?: string;
 }
 
+/**
+ * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+ * `lightningAddress` must be provided.
+ */
 export type ExternalAccountInfoOneOf =
   | BrlExternalAccountInfo
-  | ExternalAccountInfoOneOf.CadExternalAccountInfo
+  | CadExternalAccountInfo
   | DkkExternalAccountInfo
-  | ExternalAccountInfoOneOf.EurExternalAccountInfo
+  | EurExternalAccountInfo
   | GbpExternalAccountInfo
   | HkdExternalAccountInfo
   | IdrExternalAccountInfo
   | InrExternalAccountInfo
-  | ExternalAccountInfoOneOf.KesExternalAccountInfo
+  | KesExternalAccountInfo
+  | MwkExternalAccountInfo
   | MxnExternalAccountInfo
   | MyrExternalAccountInfo
-  | ExternalAccountInfoOneOf.NgnExternalAccountInfo
+  | NgnExternalAccountInfo
   | PhpExternalAccountInfo
-  | ExternalAccountInfoOneOf.RwfExternalAccountInfo
+  | RwfExternalAccountInfo
   | SgdExternalAccountInfo
   | ThbExternalAccountInfo
-  | ExternalAccountInfoOneOf.TzsExternalAccountInfo
+  | TzsExternalAccountInfo
+  | UgxExternalAccountInfo
   | UsdExternalAccountInfo
   | VndExternalAccountInfo
-  | ExternalAccountInfoOneOf.ZarExternalAccountInfo
-  | ExternalAccountInfoOneOf.ZmwExternalAccountInfo
+  | XofExternalAccountInfo
+  | ZarExternalAccountInfo
+  | ZmwExternalAccountInfo
   | SparkWalletInfo
   | LightningWalletInfo
   | SolanaWalletInfo
   | TronWalletInfo
   | PolygonWalletInfo
-  | BaseWalletInfo;
-
-export namespace ExternalAccountInfoOneOf {
-  export interface CadExternalAccountInfo {
-    /**
-     * Bank account number (7-12 digits)
-     */
-    accountNumber: string;
-
-    accountType: 'CAD_ACCOUNT';
-
-    /**
-     * Canadian financial institution number (3 digits)
-     */
-    bankCode: string;
-
-    beneficiary: CadExternalAccountInfo.CadBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * Transit number identifying the branch (5 digits)
-     */
-    branchCode: string;
-
-    paymentRails: Array<'BANK_TRANSFER'>;
-  }
-
-  export namespace CadExternalAccountInfo {
-    export interface CadBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface EurExternalAccountInfo {
-    accountType: 'EUR_ACCOUNT';
-
-    beneficiary: EurExternalAccountInfo.EurBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * The IBAN of the bank
-     */
-    iban: string;
-
-    paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
-
-    /**
-     * The SWIFT BIC of the bank
-     */
-    swiftBic?: string;
-  }
-
-  export namespace EurExternalAccountInfo {
-    export interface EurBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface KesExternalAccountInfo {
-    accountType: 'KES_ACCOUNT';
-
-    beneficiary: KesExternalAccountInfo.KesBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'MOBILE_MONEY'>;
-
-    /**
-     * Kenyan mobile money phone number
-     */
-    phoneNumber: string;
-
-    /**
-     * Mobile money provider
-     */
-    provider: 'M-PESA';
-  }
-
-  export namespace KesExternalAccountInfo {
-    export interface KesBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface NgnExternalAccountInfo {
-    /**
-     * Nigerian bank account number
-     */
-    accountNumber: string;
-
-    accountType: 'NGN_ACCOUNT';
-
-    /**
-     * Name of the bank
-     */
-    bankName: string;
-
-    beneficiary: NgnExternalAccountInfo.NgnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'BANK_TRANSFER'>;
-  }
-
-  export namespace NgnExternalAccountInfo {
-    export interface NgnBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface RwfExternalAccountInfo {
-    accountType: 'RWF_ACCOUNT';
-
-    beneficiary: RwfExternalAccountInfo.RwfBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'MOBILE_MONEY'>;
-
-    /**
-     * Rwandan mobile money phone number
-     */
-    phoneNumber: string;
-
-    /**
-     * Mobile money provider
-     */
-    provider: 'MTN' | 'AIRTEL';
-  }
-
-  export namespace RwfExternalAccountInfo {
-    export interface RwfBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface TzsExternalAccountInfo {
-    accountType: 'TZS_ACCOUNT';
-
-    beneficiary: TzsExternalAccountInfo.TzsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'MOBILE_MONEY'>;
-
-    /**
-     * Tanzanian mobile money phone number
-     */
-    phoneNumber: string;
-
-    /**
-     * Mobile money provider
-     */
-    provider: 'AIRTEL' | 'VODACOM';
-  }
-
-  export namespace TzsExternalAccountInfo {
-    export interface TzsBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface ZarExternalAccountInfo {
-    /**
-     * South African bank account number
-     */
-    accountNumber: string;
-
-    accountType: 'ZAR_ACCOUNT';
-
-    /**
-     * Name of the bank
-     */
-    bankName: string;
-
-    beneficiary: ZarExternalAccountInfo.ZarBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'BANK_TRANSFER'>;
-  }
-
-  export namespace ZarExternalAccountInfo {
-    export interface ZarBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-
-  export interface ZmwExternalAccountInfo {
-    accountType: 'ZMW_ACCOUNT';
-
-    beneficiary: ZmwExternalAccountInfo.ZmwBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    paymentRails: Array<'MOBILE_MONEY'>;
-
-    /**
-     * Zambian mobile money phone number
-     */
-    phoneNumber: string;
-
-    /**
-     * Mobile money provider
-     */
-    provider: 'TNM' | 'AIRTEL' | 'ZAMTEL' | 'MTN';
-  }
-
-  export namespace ZmwExternalAccountInfo {
-    export interface ZmwBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-
-      /**
-       * The registration number of the beneficiary
-       */
-      registrationNumber?: string;
-    }
-  }
-}
+  | BaseWalletInfo
+  | Shared.EthereumWalletExternalAccountInfo
+  | AedExternalAccountInfo
+  | BwpExternalAccountInfo
+  | XafExternalAccountInfo
+  | BdtExternalAccountInfo
+  | CopExternalAccountInfo
+  | EgpExternalAccountInfo
+  | GhsExternalAccountInfo
+  | GtqExternalAccountInfo
+  | HtgExternalAccountInfo
+  | JmdExternalAccountInfo
+  | PkrExternalAccountInfo;
 
 export interface GbpBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -942,30 +522,13 @@ export interface GbpBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface GbpExternalAccountInfo {
-  /**
-   * UK bank account number (8 digits)
-   */
-  accountNumber: string;
+export interface GbpExternalAccountInfo extends PlatformExternalAccountsAPI.GbpAccountInfo {}
 
-  accountType: 'GBP_ACCOUNT';
+export interface GhsExternalAccountInfo extends PlatformExternalAccountsAPI.GhsAccountInfo {}
 
-  beneficiary: GbpBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'FASTER_PAYMENTS'>;
-
-  /**
-   * UK bank sort code (6 digits, may include hyphens)
-   */
-  sortCode: string;
-}
+export interface GtqExternalAccountInfo extends PlatformExternalAccountsAPI.GtqAccountInfo {}
 
 export interface HkdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1001,35 +564,11 @@ export interface HkdBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface HkdExternalAccountInfo {
-  /**
-   * Hong Kong bank account number
-   */
-  accountNumber: string;
+export interface HkdExternalAccountInfo extends PlatformExternalAccountsAPI.HkdAccountInfo {}
 
-  accountType: 'HKD_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
-  beneficiary: HkdBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
-}
+export interface HtgExternalAccountInfo extends PlatformExternalAccountsAPI.HtgAccountInfo {}
 
 export interface IdrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1065,40 +604,9 @@ export interface IdrBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface IdrExternalAccountInfo {
-  /**
-   * Indonesian bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'IDR_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
-  beneficiary: IdrBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * Indonesian phone number for e-wallet payments
-   */
-  phoneNumber: string;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
-}
+export interface IdrExternalAccountInfo extends PlatformExternalAccountsAPI.IdrAccountInfo {}
 
 export interface InrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1134,26 +642,18 @@ export interface InrBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface InrExternalAccountInfo {
-  accountType: 'INR_ACCOUNT';
+export interface InrExternalAccountInfo extends PlatformExternalAccountsAPI.InrAccountInfo {}
 
-  beneficiary: InrBeneficiary | BusinessBeneficiary;
+export interface JmdExternalAccountInfo extends PlatformExternalAccountsAPI.JmdAccountInfo {}
 
-  paymentRails: Array<'UPI'>;
+export interface KesExternalAccountInfo extends PlatformExternalAccountsAPI.KesAccountInfo {}
 
-  /**
-   * The VPA of the bank
-   */
-  vpa: string;
-}
-
+/**
+ * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+ * `lightningAddress` must be provided.
+ */
 export interface LightningWalletInfo {
   accountType: 'LIGHTNING';
 
@@ -1174,6 +674,8 @@ export interface LightningWalletInfo {
    */
   lightningAddress?: string;
 }
+
+export interface MwkExternalAccountInfo extends PlatformExternalAccountsAPI.MwkAccountInfo {}
 
 export interface MxnBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1209,25 +711,9 @@ export interface MxnBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface MxnExternalAccountInfo {
-  accountType: 'MXN_ACCOUNT';
-
-  beneficiary: MxnBeneficiary | BusinessBeneficiary;
-
-  /**
-   * The CLABE number of the bank
-   */
-  clabeNumber: string;
-
-  paymentRails: Array<'SPEI'>;
-}
+export interface MxnExternalAccountInfo extends PlatformExternalAccountsAPI.MxnAccountInfo {}
 
 export interface MyrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1263,35 +749,11 @@ export interface MyrBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface MyrExternalAccountInfo {
-  /**
-   * Malaysian bank account number
-   */
-  accountNumber: string;
+export interface MyrExternalAccountInfo extends PlatformExternalAccountsAPI.MyrAccountInfo {}
 
-  accountType: 'MYR_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
-  beneficiary: MyrBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
-}
+export interface NgnExternalAccountInfo extends PlatformExternalAccountsAPI.NgnAccountInfo {}
 
 export interface PhpBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1327,30 +789,11 @@ export interface PhpBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface PhpExternalAccountInfo {
-  /**
-   * Bank account number
-   */
-  accountNumber: string;
+export interface PhpExternalAccountInfo extends PlatformExternalAccountsAPI.PhpAccountInfo {}
 
-  accountType: 'PHP_ACCOUNT';
-
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
-  beneficiary: PhpBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-}
+export interface PkrExternalAccountInfo extends PlatformExternalAccountsAPI.PkrAccountInfo {}
 
 export interface PolygonWalletInfo {
   accountType: 'POLYGON_WALLET';
@@ -1360,6 +803,8 @@ export interface PolygonWalletInfo {
    */
   address: string;
 }
+
+export interface RwfExternalAccountInfo extends PlatformExternalAccountsAPI.RwfAccountInfo {}
 
 export interface SgdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1395,35 +840,9 @@ export interface SgdBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface SgdExternalAccountInfo {
-  /**
-   * Bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'SGD_ACCOUNT';
-
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
-  beneficiary: SgdBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
-}
+export interface SgdExternalAccountInfo extends PlatformExternalAccountsAPI.SgdAccountInfo {}
 
 export interface SolanaWalletInfo {
   accountType: 'SOLANA_WALLET';
@@ -1477,35 +896,9 @@ export interface ThbBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface ThbExternalAccountInfo {
-  /**
-   * Thai bank account number
-   */
-  accountNumber: string;
-
-  accountType: 'THB_ACCOUNT';
-
-  /**
-   * Name of the bank
-   */
-  bankName: string;
-
-  beneficiary: ThbBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
-}
+export interface ThbExternalAccountInfo extends PlatformExternalAccountsAPI.ThbAccountInfo {}
 
 export interface TronWalletInfo {
   accountType: 'TRON_WALLET';
@@ -1516,25 +909,24 @@ export interface TronWalletInfo {
   address: string;
 }
 
+export interface TzsExternalAccountInfo extends PlatformExternalAccountsAPI.TzsAccountInfo {}
+
+export interface UgxExternalAccountInfo extends PlatformExternalAccountsAPI.UgxAccountInfo {}
+
 export interface UsdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
-
-  /**
-   * The birth date of the beneficiary
-   */
-  birthDate: string;
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
 
-  /**
-   * The nationality of the beneficiary
-   */
-  nationality: string;
-
   address?: Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
 
   /**
    * The country of residence of the beneficiary
@@ -1547,33 +939,17 @@ export interface UsdBeneficiary {
   email?: string;
 
   /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface UsdExternalAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
-  accountType: 'USD_ACCOUNT';
-
-  beneficiary: UsdBeneficiary | BusinessBeneficiary;
-
-  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
-
-  /**
-   * The routing number of the bank
-   */
-  routingNumber: string;
-}
+export interface UsdExternalAccountInfo extends PlatformExternalAccountsAPI.UsdAccountInfo {}
 
 export interface VndBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1609,43 +985,80 @@ export interface VndBeneficiary {
    * The phone number of the beneficiary
    */
   phoneNumber?: string;
-
-  /**
-   * The registration number of the beneficiary
-   */
-  registrationNumber?: string;
 }
 
-export interface VndExternalAccountInfo {
-  /**
-   * Vietnamese bank account number
-   */
-  accountNumber: string;
+export interface VndExternalAccountInfo extends PlatformExternalAccountsAPI.VndAccountInfo {}
 
-  accountType: 'VND_ACCOUNT';
+export interface XafExternalAccountInfo extends PlatformExternalAccountsAPI.XafAccountInfo {}
 
-  /**
-   * Name of the bank
-   */
-  bankName: string;
+export interface XofExternalAccountInfo extends PlatformExternalAccountsAPI.XofAccountInfo {}
 
-  beneficiary: VndBeneficiary | BusinessBeneficiary;
+export interface ZarExternalAccountInfo extends PlatformExternalAccountsAPI.ZarAccountInfo {}
 
-  paymentRails: Array<'BANK_TRANSFER'>;
-
-  /**
-   * SWIFT/BIC code (8 or 11 characters)
-   */
-  swiftCode: string;
-}
+export interface ZmwExternalAccountInfo extends PlatformExternalAccountsAPI.ZmwAccountInfo {}
 
 export interface ExternalAccountCreateParams {
-  accountInfo: ExternalAccountInfoOneOf;
+  /**
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
+   */
+  accountInfo:
+    | Shared.AedExternalAccountCreateInfo
+    | Shared.BrlExternalAccountCreateInfo
+    | Shared.BwpExternalAccountCreateInfo
+    | Shared.CadExternalAccountCreateInfo
+    | Shared.DkkExternalAccountCreateInfo
+    | Shared.EurExternalAccountCreateInfo
+    | Shared.GbpExternalAccountCreateInfo
+    | Shared.HkdExternalAccountCreateInfo
+    | Shared.IdrExternalAccountCreateInfo
+    | Shared.InrExternalAccountCreateInfo
+    | Shared.KesExternalAccountCreateInfo
+    | Shared.MwkExternalAccountCreateInfo
+    | Shared.MxnExternalAccountCreateInfo
+    | Shared.MyrExternalAccountCreateInfo
+    | Shared.NgnExternalAccountCreateInfo
+    | Shared.PhpExternalAccountCreateInfo
+    | Shared.RwfExternalAccountCreateInfo
+    | Shared.SgdExternalAccountCreateInfo
+    | Shared.ThbExternalAccountCreateInfo
+    | Shared.TzsExternalAccountCreateInfo
+    | Shared.UgxExternalAccountCreateInfo
+    | Shared.UsdExternalAccountCreateInfo
+    | Shared.VndExternalAccountCreateInfo
+    | Shared.XafExternalAccountCreateInfo
+    | Shared.XofExternalAccountCreateInfo
+    | Shared.ZarExternalAccountCreateInfo
+    | Shared.ZmwExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
+    | SparkWalletInfo
+    | LightningWalletInfo
+    | SolanaWalletInfo
+    | TronWalletInfo
+    | PolygonWalletInfo
+    | BaseWalletInfo
+    | Shared.EthereumWalletExternalAccountInfo;
 
   /**
    * The ISO 4217 currency code
    */
   currency: string;
+
+  /**
+   * The blockchain network for this external account. Required when the account is a
+   * cryptocurrency wallet. Specifies which network the wallet is on. Example values:
+   * SOLANA_MAINNET, SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET,
+   * BASE_TESTNET, SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET,
+   * LIGHTNING_REGTEST.
+   */
+  cryptoNetwork?: string;
 
   /**
    * The ID of the customer for whom to create the external account. If not provided,
@@ -1692,32 +1105,48 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
 export declare namespace ExternalAccounts {
   export {
     type Address as Address,
+    type AedExternalAccountInfo as AedExternalAccountInfo,
     type BaseWalletInfo as BaseWalletInfo,
+    type BdtExternalAccountInfo as BdtExternalAccountInfo,
     type BeneficiaryVerifiedData as BeneficiaryVerifiedData,
     type BrlBeneficiary as BrlBeneficiary,
     type BrlExternalAccountInfo as BrlExternalAccountInfo,
     type BusinessBeneficiary as BusinessBeneficiary,
+    type BwpExternalAccountInfo as BwpExternalAccountInfo,
+    type CadExternalAccountInfo as CadExternalAccountInfo,
+    type CopExternalAccountInfo as CopExternalAccountInfo,
     type DkkBeneficiary as DkkBeneficiary,
     type DkkExternalAccountInfo as DkkExternalAccountInfo,
+    type EgpExternalAccountInfo as EgpExternalAccountInfo,
+    type EurExternalAccountInfo as EurExternalAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
     type GbpBeneficiary as GbpBeneficiary,
     type GbpExternalAccountInfo as GbpExternalAccountInfo,
+    type GhsExternalAccountInfo as GhsExternalAccountInfo,
+    type GtqExternalAccountInfo as GtqExternalAccountInfo,
     type HkdBeneficiary as HkdBeneficiary,
     type HkdExternalAccountInfo as HkdExternalAccountInfo,
+    type HtgExternalAccountInfo as HtgExternalAccountInfo,
     type IdrBeneficiary as IdrBeneficiary,
     type IdrExternalAccountInfo as IdrExternalAccountInfo,
     type InrBeneficiary as InrBeneficiary,
     type InrExternalAccountInfo as InrExternalAccountInfo,
+    type JmdExternalAccountInfo as JmdExternalAccountInfo,
+    type KesExternalAccountInfo as KesExternalAccountInfo,
     type LightningWalletInfo as LightningWalletInfo,
+    type MwkExternalAccountInfo as MwkExternalAccountInfo,
     type MxnBeneficiary as MxnBeneficiary,
     type MxnExternalAccountInfo as MxnExternalAccountInfo,
     type MyrBeneficiary as MyrBeneficiary,
     type MyrExternalAccountInfo as MyrExternalAccountInfo,
+    type NgnExternalAccountInfo as NgnExternalAccountInfo,
     type PhpBeneficiary as PhpBeneficiary,
     type PhpExternalAccountInfo as PhpExternalAccountInfo,
+    type PkrExternalAccountInfo as PkrExternalAccountInfo,
     type PolygonWalletInfo as PolygonWalletInfo,
+    type RwfExternalAccountInfo as RwfExternalAccountInfo,
     type SgdBeneficiary as SgdBeneficiary,
     type SgdExternalAccountInfo as SgdExternalAccountInfo,
     type SolanaWalletInfo as SolanaWalletInfo,
@@ -1725,10 +1154,16 @@ export declare namespace ExternalAccounts {
     type ThbBeneficiary as ThbBeneficiary,
     type ThbExternalAccountInfo as ThbExternalAccountInfo,
     type TronWalletInfo as TronWalletInfo,
+    type TzsExternalAccountInfo as TzsExternalAccountInfo,
+    type UgxExternalAccountInfo as UgxExternalAccountInfo,
     type UsdBeneficiary as UsdBeneficiary,
     type UsdExternalAccountInfo as UsdExternalAccountInfo,
     type VndBeneficiary as VndBeneficiary,
     type VndExternalAccountInfo as VndExternalAccountInfo,
+    type XafExternalAccountInfo as XafExternalAccountInfo,
+    type XofExternalAccountInfo as XofExternalAccountInfo,
+    type ZarExternalAccountInfo as ZarExternalAccountInfo,
+    type ZmwExternalAccountInfo as ZmwExternalAccountInfo,
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,

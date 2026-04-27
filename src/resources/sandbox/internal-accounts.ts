@@ -8,6 +8,9 @@ import { DefaultPagination } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
+/**
+ * Endpoints to trigger test cases in sandbox
+ */
 export class InternalAccounts extends APIResource {
   /**
    * Simulate receiving funds into an internal account in the sandbox environment.
@@ -53,6 +56,19 @@ export interface InternalAccount {
    * Payment instructions for funding the account
    */
   fundingPaymentInstructions: Array<QuotesAPI.PaymentInstructions>;
+
+  /**
+   * Classification of an internal account.
+   *
+   * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
+   *   holding account used as the source for Payouts flows).
+   * - `INTERNAL_CRYPTO`: A Grid-managed crypto holding account denominated in a
+   *   stablecoin such as USDC.
+   * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
+   *   customer. Outbound transfers require a session signature produced by the
+   *   customer's device — see the Embedded Wallets guide.
+   */
+  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 
   /**
    * Timestamp when the internal account was last updated
