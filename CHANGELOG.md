@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.7.1 (2026-04-28)
+
+Full Changelog: [v1.7.0...v1.7.1](https://github.com/lightsparkdev/grid-js-sdk/compare/v1.7.0...v1.7.1)
+
+### Features
+
+* **api:** add clientPublicKey param to auth credentials resendChallenge ([a8144cd](https://github.com/lightsparkdev/grid-js-sdk/commit/a8144cd19d32e4c3e9470f62de7a76f8441944ea))
+* support setting headers via env ([b51ca4e](https://github.com/lightsparkdev/grid-js-sdk/commit/b51ca4e0ea178ad63db2c542c7eb48493b779821))
+
+
+### Bug Fixes
+
+* **types:** make clientPublicKey optional in auth credential verify requests ([36100d4](https://github.com/lightsparkdev/grid-js-sdk/commit/36100d4c8ccd12747a993ac87fde845429c4a097))
+
+
+### Chores
+
+* **internal:** codegen related update ([0dbf593](https://github.com/lightsparkdev/grid-js-sdk/commit/0dbf593989f9f753c24312113b50cb16a417b9a4))
+* restructure docs search code ([6ff3a06](https://github.com/lightsparkdev/grid-js-sdk/commit/6ff3a06166425bab7154ad5cba23ff36cd4f3d62))
+
+
+### Documentation
+
+* **api:** update signature docs to reference Turnkey API-key stamps ([2c939d2](https://github.com/lightsparkdev/grid-js-sdk/commit/2c939d211ae8a274113010fddf8be30285604a6a))
+* **types:** update IBAN field descriptions for DKK/EGP/PKR account types ([b16d932](https://github.com/lightsparkdev/grid-js-sdk/commit/b16d93202fd0d1cc07bbd1bb5962234ae1abff81))
+
 ## 1.7.0 (2026-04-27)
 
 Full Changelog: [v0.8.0...v1.7.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v0.8.0...v1.7.0)
