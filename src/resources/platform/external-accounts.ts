@@ -769,6 +769,21 @@ export interface ExternalAccountListResponse {
    * List of external accounts matching the filter criteria
    */
   data: Array<ExternalAccountsAPI.ExternalAccount>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of external accounts matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
 }
 
 export interface ExternalAccountCreateParams {
@@ -837,6 +852,16 @@ export interface ExternalAccountListParams {
    * Filter by currency code
    */
   currency?: string;
+
+  /**
+   * Cursor for pagination (returned from previous request)
+   */
+  cursor?: string;
+
+  /**
+   * Maximum number of results to return (default 20, max 100)
+   */
+  limit?: number;
 }
 
 export declare namespace ExternalAccounts {
