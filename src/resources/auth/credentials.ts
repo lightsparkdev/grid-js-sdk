@@ -28,16 +28,14 @@ export class Credentials extends APIResource {
    * `POST /auth/credentials/{id}/verify`. For `PASSKEY` credentials, the client
    * completes a WebAuthn registration (`navigator.credentials.create()`) using a
    * `challenge` issued by the platform backend and submits the resulting
-   * `attestation` here; the credential must still be activated via
-   * `POST /auth/credentials/{id}/verify` by completing a WebAuthn assertion. Unlike
-   * the registration `challenge` (platform-issued), the challenge for the first
-   * authentication is issued by Grid and returned inline on the `201` response
-   * alongside the `AuthMethod` fields, plus a `requestId` and challenge `expiresAt`
-   * (see `PasskeyAuthChallenge`). The client uses that Grid-issued `challenge` to
-   * produce the assertion and submits it with `Request-Id: <requestId>` to
-   * `POST /auth/credentials/{id}/verify`. On every subsequent reauthentication the
-   * challenge is re-issued via `POST /auth/credentials/{id}/challenge`. Only one
-   * `PASSKEY` credential is supported per internal account in v1.
+   * `attestation` here. The registration response is a plain `AuthMethod` (no inline
+   * authentication challenge). To produce the first session, the client follows
+   * registration with two further calls: `POST /auth/credentials/{id}/challenge`
+   * (carrying the client's ephemeral `clientPublicKey`) returns a Grid-issued
+   * WebAuthn challenge plus `requestId`, and `POST /auth/credentials/{id}/verify`
+   * (with `Request-Id: <requestId>`) consumes the resulting assertion and issues the
+   * session. The same two-step pattern is used on every subsequent reauthentication.
+   * Only one `PASSKEY` credential is supported per internal account in v1.
    *
    * **Adding an additional credential**
    *
@@ -56,7 +54,7 @@ export class Credentials extends APIResource {
    *
    * @example
    * ```ts
-   * const credential = await client.auth.credentials.create({
+   * const authMethod = await client.auth.credentials.create({
    *   AuthCredentialCreateRequest: {
    *     accountId:
    *       'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
@@ -65,7 +63,7 @@ export class Credentials extends APIResource {
    * });
    * ```
    */
-  create(params: CredentialCreateParams, options?: RequestOptions): APIPromise<CredentialCreateResponse> {
+  create(params: CredentialCreateParams, options?: RequestOptions): APIPromise<AuthMethod> {
     const {
       AuthCredentialCreateRequest,
       'Grid-Wallet-Signature': gridWalletSignature,
@@ -114,7 +112,10 @@ export class Credentials extends APIResource {
    * verification and issue a session.
    *
    * For `PASSKEY` credentials, this issues a fresh Grid-generated WebAuthn challenge
-   * for reauthentication. The response is a `PasskeyAuthChallenge` — the base
+   * for reauthentication. The request body must carry the client's ephemeral
+   * `clientPublicKey` so Grid can bake it into the Turnkey session-creation payload
+   * the returned challenge is computed from — this seals the resulting session
+   * signing key to the client. The response is a `PasskeyAuthChallenge` — the base
    * `AuthMethod` fields plus the new `challenge`, `requestId`, and `expiresAt`. The
    * client passes the `challenge` into `navigator.credentials.get()` and submits the
    * resulting assertion to `POST /auth/credentials/{id}/verify` with
@@ -123,11 +124,18 @@ export class Credentials extends APIResource {
    * @example
    * ```ts
    * const response =
-   *   await client.auth.credentials.resendChallenge('id');
+   *   await client.auth.credentials.resendChallenge('id', {
+   *     clientPublicKey:
+   *       '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   *   });
    * ```
    */
-  resendChallenge(id: string, options?: RequestOptions): APIPromise<CredentialResendChallengeResponse> {
-    return this._client.post(path`/auth/credentials/${id}/challenge`, options);
+  resendChallenge(
+    id: string,
+    body: CredentialResendChallengeParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<CredentialResendChallengeResponse> {
+    return this._client.post(path`/auth/credentials/${id}/challenge`, { body, ...options });
   }
 
   /**
@@ -267,55 +275,6 @@ export interface AuthMethod {
   updatedAt: string;
 }
 
-/**
- * Discriminated response shape returned from `POST /auth/credentials` (on
- * successful registration) and `POST /auth/credentials/{id}/challenge` (on
- * challenge re-issue). For `EMAIL_OTP` and `OAUTH` credentials the body is a plain
- * `AuthMethod` (wrapped as `AuthMethodResponse` to disambiguate the oneOf). For
- * `PASSKEY` credentials the body is a `PasskeyAuthChallenge` — the base
- * `AuthMethod` fields plus the Grid-issued `challenge`, `requestId`, and
- * `expiresAt` that drive the subsequent assertion.
- */
-export type CredentialCreateResponse = AuthMethod | CredentialCreateResponse.PasskeyAuthChallenge;
-
-export namespace CredentialCreateResponse {
-  /**
-   * Extended `AuthMethod` shape returned for `PASSKEY` credentials from
-   * `POST /auth/credentials` (first-authentication case) and
-   * `POST /auth/credentials/{id}/challenge` (reauthentication case). Adds a
-   * Grid-issued `challenge`, the corresponding `requestId`, and the challenge's
-   * `expiresAt` to the base `AuthMethod` fields. The client signs the challenge with
-   * the passkey to produce the assertion submitted to
-   * `POST /auth/credentials/{id}/verify`.
-   */
-  export interface PasskeyAuthChallenge extends CredentialsAPI.AuthMethod {
-    /**
-     * Base64url-encoded challenge issued by Grid for the pending passkey
-     * authentication. The client passes it into `navigator.credentials.get()` as the
-     * WebAuthn challenge; the resulting assertion is submitted to
-     * `POST /auth/credentials/{id}/verify`. Single-use; a new challenge is issued on
-     * the next call to `POST /auth/credentials/{id}/challenge`.
-     */
-    challenge: string;
-
-    /**
-     * Timestamp after which the issued challenge is no longer valid. The assertion
-     * must reach `POST /auth/credentials/{id}/verify` before this time; otherwise the
-     * client must request a fresh challenge via
-     * `POST /auth/credentials/{id}/challenge`.
-     */
-    expiresAt: string;
-
-    /**
-     * Unique identifier for this pending passkey authentication request. Must be
-     * echoed as the `Request-Id` header on the subsequent
-     * `POST /auth/credentials/{id}/verify` call so Grid can correlate the assertion
-     * with the issued challenge.
-     */
-    requestId: string;
-  }
-}
-
 export interface CredentialListResponse {
   /**
    * List of authentication credentials registered on the internal account.
@@ -324,13 +283,14 @@ export interface CredentialListResponse {
 }
 
 /**
- * Discriminated response shape returned from `POST /auth/credentials` (on
- * successful registration) and `POST /auth/credentials/{id}/challenge` (on
- * challenge re-issue). For `EMAIL_OTP` and `OAUTH` credentials the body is a plain
- * `AuthMethod` (wrapped as `AuthMethodResponse` to disambiguate the oneOf). For
- * `PASSKEY` credentials the body is a `PasskeyAuthChallenge` — the base
- * `AuthMethod` fields plus the Grid-issued `challenge`, `requestId`, and
- * `expiresAt` that drive the subsequent assertion.
+ * Discriminated response shape returned from
+ * `POST /auth/credentials/{id}/challenge`. For `EMAIL_OTP` and `OAUTH` credentials
+ * the body is a plain `AuthMethod` (wrapped as `AuthMethodResponse` to
+ * disambiguate the oneOf). For `PASSKEY` credentials the body is a
+ * `PasskeyAuthChallenge` — the base `AuthMethod` fields plus the Grid-issued
+ * `challenge`, `requestId`, and `expiresAt` that drive the subsequent assertion.
+ * Registration responses from `POST /auth/credentials` use the simpler
+ * `AuthMethodResponse` shape directly for all three credential types.
  */
 export type CredentialResendChallengeResponse =
   | AuthMethod
@@ -585,6 +545,19 @@ export interface CredentialListParams {
   accountId: string;
 }
 
+export interface CredentialResendChallengeParams {
+  /**
+   * Required for `PASSKEY` credentials. Client-generated P-256 public key,
+   * hex-encoded in uncompressed SEC1 format (`04` prefix followed by the 32-byte X
+   * and 32-byte Y coordinates; 130 hex characters total). The matching private key
+   * must remain on the client. Grid bakes this key into the Turnkey session-creation
+   * payload that the returned `challenge` is computed from, so the resulting session
+   * signing key is sealed to the client. Ignored for `EMAIL_OTP` and `OAUTH`
+   * credentials.
+   */
+  clientPublicKey?: string;
+}
+
 export interface CredentialRevokeParams {
   /**
    * Full API-key stamp built over the prior `payloadToSign` with the session API
@@ -735,13 +708,13 @@ export namespace CredentialVerifyParams {
 export declare namespace Credentials {
   export {
     type AuthMethod as AuthMethod,
-    type CredentialCreateResponse as CredentialCreateResponse,
     type CredentialListResponse as CredentialListResponse,
     type CredentialResendChallengeResponse as CredentialResendChallengeResponse,
     type CredentialRevokeResponse as CredentialRevokeResponse,
     type CredentialVerifyResponse as CredentialVerifyResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,
+    type CredentialResendChallengeParams as CredentialResendChallengeParams,
     type CredentialRevokeParams as CredentialRevokeParams,
     type CredentialVerifyParams as CredentialVerifyParams,
   };
