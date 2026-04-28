@@ -4,13 +4,13 @@ export { Auth } from './auth';
 export {
   Credentials,
   type AuthMethod,
-  type CredentialCreateResponse,
   type CredentialListResponse,
   type CredentialResendChallengeResponse,
   type CredentialRevokeResponse,
   type CredentialVerifyResponse,
   type CredentialCreateParams,
   type CredentialListParams,
+  type CredentialResendChallengeParams,
   type CredentialRevokeParams,
   type CredentialVerifyParams,
 } from './credentials';

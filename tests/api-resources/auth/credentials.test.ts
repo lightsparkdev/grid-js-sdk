@@ -69,6 +69,21 @@ describe('resource credentials', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('resendChallenge: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.auth.credentials.resendChallenge(
+        'id',
+        {
+          clientPublicKey:
+            '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('revoke', async () => {
     const responsePromise = client.auth.credentials.revoke('id');
     const rawResponse = await responsePromise.asResponse();
