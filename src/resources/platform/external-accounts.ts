@@ -234,7 +234,7 @@ export interface DkkAccountInfo {
   accountType: 'DKK_ACCOUNT';
 
   /**
-   * The IBAN of the bank account
+   * Danish IBAN (18 characters, starting with DK)
    */
   iban: string;
 
@@ -262,7 +262,7 @@ export interface EgpAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 
   /**
-   * The IBAN of the bank account
+   * Egyptian IBAN (29 characters, starting with EG)
    */
   iban?: string;
 
@@ -558,7 +558,7 @@ export interface PkrAccountInfo {
   phoneNumber: string;
 
   /**
-   * The IBAN of the bank account
+   * Pakistani IBAN (24 characters, starting with PK)
    */
   iban?: string;
 }
