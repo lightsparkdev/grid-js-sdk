@@ -5,9 +5,9 @@ import * as CredentialsAPI from './credentials';
 import {
   AuthMethod,
   CredentialCreateParams,
-  CredentialCreateResponse,
   CredentialListParams,
   CredentialListResponse,
+  CredentialResendChallengeParams,
   CredentialResendChallengeResponse,
   CredentialRevokeParams,
   CredentialRevokeResponse,
@@ -36,13 +36,13 @@ export declare namespace Auth {
   export {
     Credentials as Credentials,
     type AuthMethod as AuthMethod,
-    type CredentialCreateResponse as CredentialCreateResponse,
     type CredentialListResponse as CredentialListResponse,
     type CredentialResendChallengeResponse as CredentialResendChallengeResponse,
     type CredentialRevokeResponse as CredentialRevokeResponse,
     type CredentialVerifyResponse as CredentialVerifyResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,
+    type CredentialResendChallengeParams as CredentialResendChallengeParams,
     type CredentialRevokeParams as CredentialRevokeParams,
     type CredentialVerifyParams as CredentialVerifyParams,
   };
