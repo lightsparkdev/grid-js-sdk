@@ -209,8 +209,6 @@ export class Credentials extends APIResource {
    *   'id',
    *   {
    *     AuthCredentialVerifyRequest: {
-   *       clientPublicKey:
-   *         '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
    *       otp: '123456',
    *       type: 'EMAIL_OTP',
    *     },
@@ -596,15 +594,6 @@ export interface CredentialVerifyParams {
 export namespace CredentialVerifyParams {
   export interface EmailOtpCredentialVerifyRequest {
     /**
-     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-     * total). The matching private key must remain on the client. Grid encrypts the
-     * session signing key returned in the response to this public key. The key is
-     * ephemeral and one-time-use per verification request.
-     */
-    clientPublicKey: string;
-
-    /**
      * The one-time password received by the user via email.
      */
     otp: string;
@@ -613,6 +602,15 @@ export namespace CredentialVerifyParams {
      * Discriminator value identifying this as an email OTP verification.
      */
     type: 'EMAIL_OTP' | 'OAUTH' | 'PASSKEY';
+
+    /**
+     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+     * total). The matching private key must remain on the client. Grid encrypts the
+     * session signing key returned in the response to this public key. The key is
+     * ephemeral and one-time-use per verification request.
+     */
+    clientPublicKey?: string;
   }
 
   export interface OAuthCredentialVerifyRequest {
@@ -642,15 +640,6 @@ export namespace CredentialVerifyParams {
 
   export interface PasskeyCredentialVerifyRequest {
     assertion: PasskeyCredentialVerifyRequest.Assertion;
-
-    /**
-     * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-     * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-     * total). The matching private key must remain on the client. Grid encrypts the
-     * session signing key returned in the response to this public key. The key is
-     * ephemeral and one-time-use per verification request.
-     */
-    clientPublicKey: string;
 
     /**
      * Discriminator value identifying this as a passkey verification.
