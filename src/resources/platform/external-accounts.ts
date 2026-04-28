@@ -128,22 +128,17 @@ export interface BdtAccountInfo {
 
   accountType: 'BDT_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
-  /**
-   * The branch code
-   */
-  branchCode: string;
-
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
    * The phone number in international format
    */
   phoneNumber: string;
+
+  /**
+   * The branch code
+   */
+  branchCode?: string;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -312,11 +307,6 @@ export interface GhsAccountInfo {
 
   accountType: 'GHS_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
@@ -337,11 +327,6 @@ export interface GtqAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 }
@@ -427,11 +412,6 @@ export interface JmdAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   /**
    * The branch code
