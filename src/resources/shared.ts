@@ -58,6 +58,11 @@ export interface BdtBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
+
+  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -68,11 +73,6 @@ export interface BdtBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -98,22 +98,17 @@ export interface BdtExternalAccountCreateInfo {
 
   accountType: 'BDT_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: BdtBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-  /**
-   * The branch code
-   */
-  branchCode: string;
 
   /**
    * The phone number in international format
    */
   phoneNumber: string;
+
+  /**
+   * The branch code
+   */
+  branchCode?: string;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -504,6 +499,11 @@ export interface GhsBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
+
+  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -514,11 +514,6 @@ export interface GhsBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -544,11 +539,6 @@ export interface GhsExternalAccountCreateInfo {
 
   accountType: 'GHS_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: GhsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
@@ -570,11 +560,6 @@ export interface GtqBeneficiary {
    */
   fullName: string;
 
-  /**
-   * The phone number of the beneficiary
-   */
-  phoneNumber: string;
-
   address?: ExternalAccountsAPI.Address;
 
   /**
@@ -591,6 +576,11 @@ export interface GtqBeneficiary {
    * The nationality of the beneficiary
    */
   nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
 }
 
 export interface GtqExternalAccountCreateInfo {
@@ -605,11 +595,6 @@ export interface GtqExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: GtqBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 }
@@ -639,6 +624,11 @@ export interface HtgBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
+
+  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -649,11 +639,6 @@ export interface HtgBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -725,6 +710,11 @@ export interface JmdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
+
+  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -738,11 +728,6 @@ export interface JmdBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -767,11 +752,6 @@ export interface JmdExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: JmdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -989,6 +969,11 @@ export interface PkrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
+
+  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -999,11 +984,6 @@ export interface PkrBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
