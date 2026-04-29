@@ -91,24 +91,24 @@ export interface BdtBeneficiary {
 }
 
 export interface BdtExternalAccountCreateInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'BDT_ACCOUNT';
 
   beneficiary: BdtBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
-   * The phone number in international format
+   * The account number of the bank
    */
-  phoneNumber: string;
+  accountNumber?: string;
 
   /**
    * The branch code
    */
   branchCode?: string;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber?: string;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -532,19 +532,19 @@ export interface GhsBeneficiary {
 }
 
 export interface GhsExternalAccountCreateInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'GHS_ACCOUNT';
 
   beneficiary: GhsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
+   * The account number of the bank
+   */
+  accountNumber?: string;
+
+  /**
    * The phone number in international format
    */
-  phoneNumber: string;
+  phoneNumber?: string;
 }
 
 export interface GtqBeneficiary {
@@ -1002,29 +1002,29 @@ export interface PkrBeneficiary {
 }
 
 export interface PkrExternalAccountCreateInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'PKR_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: PkrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
-   * The phone number in international format
+   * The account number of the bank
    */
-  phoneNumber: string;
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)
    */
   iban?: string;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber?: string;
 }
 
 export interface RwfBeneficiary {

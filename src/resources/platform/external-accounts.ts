@@ -121,24 +121,24 @@ export interface AedAccountInfo {
 }
 
 export interface BdtAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'BDT_ACCOUNT';
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The phone number in international format
+   * The account number of the bank
    */
-  phoneNumber: string;
+  accountNumber?: string;
 
   /**
    * The branch code
    */
   branchCode?: string;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber?: string;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -300,19 +300,19 @@ export interface GbpAccountInfo {
 }
 
 export interface GhsAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'GHS_ACCOUNT';
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
+   * The account number of the bank
+   */
+  accountNumber?: string;
+
+  /**
    * The phone number in international format
    */
-  phoneNumber: string;
+  phoneNumber?: string;
 }
 
 export interface GtqAccountInfo {
@@ -518,29 +518,29 @@ export interface PhpAccountInfo {
 }
 
 export interface PkrAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'PKR_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The phone number in international format
+   * The account number of the bank
    */
-  phoneNumber: string;
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)
    */
   iban?: string;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber?: string;
 }
 
 export interface RwfAccountInfo {
