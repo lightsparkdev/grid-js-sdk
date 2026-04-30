@@ -17,7 +17,9 @@
     "entry_point": "index.js",
     "mcp_config": {
       "command": "node",
-      "args": ["${__dirname}/index.js"],
+      "args": [
+        "${__dirname}/index.js"
+      ],
       "env": {
         "GRID_CLIENT_ID": "${user_config.GRID_CLIENT_ID}",
         "GRID_CLIENT_SECRET": "${user_config.GRID_CLIENT_SECRET}",
@@ -52,5 +54,7 @@
       "node": ">=18.0.0"
     }
   },
-  "keywords": ["api"]
+  "keywords": [
+    "api"
+  ]
 }
