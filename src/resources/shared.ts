@@ -58,11 +58,6 @@ export interface BdtBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -73,6 +68,11 @@ export interface BdtBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -499,11 +499,6 @@ export interface GhsBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -514,6 +509,11 @@ export interface GhsBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -560,6 +560,11 @@ export interface GtqBeneficiary {
    */
   fullName: string;
 
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber: string;
+
   address?: ExternalAccountsAPI.Address;
 
   /**
@@ -576,11 +581,6 @@ export interface GtqBeneficiary {
    * The nationality of the beneficiary
    */
   nationality?: string;
-
-  /**
-   * The phone number of the beneficiary
-   */
-  phoneNumber?: string;
 }
 
 export interface GtqExternalAccountCreateInfo {
@@ -624,11 +624,6 @@ export interface HtgBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -639,6 +634,11 @@ export interface HtgBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -710,11 +710,6 @@ export interface JmdBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -728,6 +723,11 @@ export interface JmdBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -969,11 +969,6 @@ export interface PkrBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -984,6 +979,11 @@ export interface PkrBeneficiary {
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
