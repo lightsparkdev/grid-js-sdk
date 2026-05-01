@@ -1,0 +1,1972 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+import { APIResource } from '../../core/resource';
+import * as QuotesAPI from '../quotes';
+import * as TransferInAPI from '../transfer-in';
+import * as ActionsAPI from './actions';
+import {
+  ActionApproveParams,
+  ActionApproveResponse,
+  ActionRejectParams,
+  ActionRejectResponse,
+  Actions,
+} from './actions';
+import * as DeviceCodesAPI from './device-codes';
+import {
+  DeviceCodeGetStatusResponse,
+  DeviceCodeRedeemResponse,
+  DeviceCodeRegenerateResponse,
+  DeviceCodes,
+} from './device-codes';
+import * as TransactionsAPI from './transactions';
+import { Transactions } from './transactions';
+import * as MeAPI from './me/me';
+import {
+  Me,
+  MeCreateTransferInParams,
+  MeCreateTransferInResponse,
+  MeCreateTransferOutParams,
+  MeCreateTransferOutResponse,
+  MeListInternalAccountsParams,
+  MeRetrieveResponse,
+} from './me/me';
+import { APIPromise } from '../../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
+import { buildHeaders } from '../../internal/headers';
+import { RequestOptions } from '../../internal/request-options';
+import { path } from '../../internal/utils/path';
+
+/**
+ * Endpoints for creating and managing agents (experimental), called by the partner's backend using platform credentials. Covers the full agent lifecycle: creation, policy configuration, pausing, deletion, the device code installation flow, and approving or rejecting transactions initiated by agents.
+ */
+export class Agents extends APIResource {
+  me: MeAPI.Me = new MeAPI.Me(this._client);
+  deviceCodes: DeviceCodesAPI.DeviceCodes = new DeviceCodesAPI.DeviceCodes(this._client);
+  transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
+
+  /**
+   * Create a new agent with a specified policy. Returns the created agent and a
+   * device code that must be redeemed by the agent software to complete
+   * installation.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.create({
+   *   customerId:
+   *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
+   *   name: 'Payroll Automation Agent',
+   *   policy: {
+   *     defaultExecutionMode: 'AUTO',
+   *     permissions: ['VIEW_TRANSACTIONS'],
+   *     spendingLimits: {
+   *       currency: 'USD',
+   *       perTransactionLimit: 50000,
+   *     },
+   *   },
+   * });
+   * ```
+   */
+  create(body: AgentCreateParams, options?: RequestOptions): APIPromise<AgentCreateResponse> {
+    return this._client.post('/agents', { body, ...options });
+  }
+
+  /**
+   * Retrieve an agent by its system-generated ID.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.retrieve('agentId');
+   * ```
+   */
+  retrieve(agentID: string, options?: RequestOptions): APIPromise<AgentRetrieveResponse> {
+    return this._client.get(path`/agents/${agentID}`, options);
+  }
+
+  /**
+   * Update an agent's name or paused state.
+   *
+   * @example
+   * ```ts
+   * const agent = await client.agents.update('agentId');
+   * ```
+   */
+  update(
+    agentID: string,
+    body: AgentUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentUpdateResponse> {
+    return this._client.patch(path`/agents/${agentID}`, { body, ...options });
+  }
+
+  /**
+   * Retrieve a paginated list of agents for the authenticated platform.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const agentListResponse of client.agents.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    query: AgentListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<AgentListResponsesDefaultPagination, AgentListResponse> {
+    return this._client.getAPIList('/agents', DefaultPagination<AgentListResponse>, { query, ...options });
+  }
+
+  /**
+   * Permanently delete an agent. Connected agent software will lose access
+   * immediately.
+   *
+   * @example
+   * ```ts
+   * await client.agents.delete('agentId');
+   * ```
+   */
+  delete(agentID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/agents/${agentID}`, {
+      ...options,
+      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+    });
+  }
+
+  /**
+   * Retrieve a paginated list of agent actions that require platform approval.
+   * Filter by `agentId` or `customerId` to scope results to a specific agent or
+   * customer. Approve or reject individual actions via
+   * `POST /agents/{agentId}/actions/{actionId}/approve` or
+   * `POST /agents/{agentId}/actions/{actionId}/reject`.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const agentListApprovalsResponse of client.agents.listApprovals()) {
+   *   // ...
+   * }
+   * ```
+   */
+  listApprovals(
+    query: AgentListApprovalsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<AgentListApprovalsResponsesDefaultPagination, AgentListApprovalsResponse> {
+    return this._client.getAPIList('/agents/approvals', DefaultPagination<AgentListApprovalsResponse>, {
+      query,
+      ...options,
+    });
+  }
+
+  /**
+   * Partially update an agent's policy. Only provided fields will be updated;
+   * omitted fields retain their current values. Policy changes take effect
+   * immediately.
+   *
+   * @example
+   * ```ts
+   * const response = await client.agents.updatePolicy(
+   *   'agentId',
+   * );
+   * ```
+   */
+  updatePolicy(
+    agentID: string,
+    body: AgentUpdatePolicyParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentUpdatePolicyResponse> {
+    return this._client.patch(path`/agents/${agentID}/policy`, { body, ...options });
+  }
+}
+
+export type AgentListResponsesDefaultPagination = DefaultPagination<AgentListResponse>;
+
+export type AgentListApprovalsResponsesDefaultPagination = DefaultPagination<AgentListApprovalsResponse>;
+
+/**
+ * Response returned when an agent is created, including the agent and a device
+ * code for installation.
+ */
+export interface AgentCreateResponse {
+  /**
+   * A programmatic agent with scoped permissions and a spending policy, used to
+   * automate payment workflows.
+   */
+  agent: AgentCreateResponse.Agent;
+
+  deviceCode: AgentCreateResponse.DeviceCode;
+}
+
+export namespace AgentCreateResponse {
+  /**
+   * A programmatic agent with scoped permissions and a spending policy, used to
+   * automate payment workflows.
+   */
+  export interface Agent {
+    /**
+     * System-generated unique identifier for the agent.
+     */
+    id: string;
+
+    /**
+     * Creation timestamp.
+     */
+    createdAt: string;
+
+    /**
+     * The ID of the customer this agent operates on behalf of.
+     */
+    customerId: string;
+
+    /**
+     * Whether the agent has been installed and connected (i.e., its device code has
+     * been redeemed).
+     */
+    isConnected: boolean;
+
+    /**
+     * Whether the agent is currently paused. Paused agents cannot initiate any
+     * actions.
+     */
+    isPaused: boolean;
+
+    /**
+     * Human-readable name for the agent.
+     */
+    name: string;
+
+    /**
+     * Policy governing what an agent can do, how it executes actions, and its spending
+     * boundaries.
+     */
+    policy: Agent.Policy;
+
+    /**
+     * Last update timestamp.
+     */
+    updatedAt: string;
+
+    /**
+     * Real-time counters tracking the agent's spending and transaction activity
+     * against its policy limits.
+     */
+    usage: Agent.Usage;
+  }
+
+  export namespace Agent {
+    /**
+     * Policy governing what an agent can do, how it executes actions, and its spending
+     * boundaries.
+     */
+    export interface Policy {
+      /**
+       * Execution mode controlling whether agent actions require human approval. AUTO:
+       * The agent can execute actions autonomously without explicit approval.
+       * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+       * execution.
+       */
+      defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
+
+      /**
+       * List of permissions granted to the agent.
+       */
+      permissions: Array<
+        | 'VIEW_TRANSACTIONS'
+        | 'CREATE_TRANSFERS'
+        | 'CREATE_QUOTES'
+        | 'EXECUTE_QUOTES'
+        | 'MANAGE_EXTERNAL_ACCOUNTS'
+      >;
+
+      /**
+       * Spending limits that cap the agent's transaction amounts and frequency. All
+       * amount fields are integers in the smallest unit of the specified currency. When
+       * a transaction is denominated in a different currency, Grid converts using the
+       * exchange rate at evaluation time.
+       */
+      spendingLimits: Policy.SpendingLimits;
+
+      /**
+       * Optional restrictions that limit the agent to specific accounts or override
+       * policy per account.
+       */
+      accountRestrictions?: Policy.AccountRestrictions;
+
+      /**
+       * Thresholds that force approval for high-value transactions, overriding the
+       * default execution mode. When a transaction is denominated in a different
+       * currency than the threshold, Grid converts using the exchange rate at evaluation
+       * time.
+       */
+      approvalThresholds?: Policy.ApprovalThresholds;
+    }
+
+    export namespace Policy {
+      /**
+       * Spending limits that cap the agent's transaction amounts and frequency. All
+       * amount fields are integers in the smallest unit of the specified currency. When
+       * a transaction is denominated in a different currency, Grid converts using the
+       * exchange rate at evaluation time.
+       */
+      export interface SpendingLimits {
+        /**
+         * ISO 4217 currency code that all amount limits are denominated in.
+         */
+        currency: string;
+
+        /**
+         * Maximum amount the agent can transfer in a single transaction.
+         */
+        perTransactionLimit: number;
+
+        /**
+         * Maximum total amount the agent can transfer per day. Null means no daily limit.
+         */
+        dailyLimit?: number | null;
+
+        /**
+         * Maximum number of transactions the agent can initiate per day.
+         */
+        dailyTransactionLimit?: number;
+
+        /**
+         * Maximum total amount the agent can transfer per month. Null means no monthly
+         * limit.
+         */
+        monthlyLimit?: number | null;
+      }
+
+      /**
+       * Optional restrictions that limit the agent to specific accounts or override
+       * policy per account.
+       */
+      export interface AccountRestrictions {
+        /**
+         * Per-account rules that override the agent's default policy for specific
+         * accounts.
+         */
+        accountRules?: Array<AccountRestrictions.AccountRule>;
+
+        /**
+         * If set, restricts the agent to operate only on the specified internal account
+         * IDs. Null means the agent can access all accounts.
+         */
+        allowedAccountIds?: Array<string> | null;
+      }
+
+      export namespace AccountRestrictions {
+        /**
+         * Per-account policy override that takes precedence over the agent's default
+         * policy for a specific account.
+         */
+        export interface AccountRule {
+          /**
+           * The internal account ID this rule applies to.
+           */
+          accountId: string;
+
+          /**
+           * Execution mode controlling whether agent actions require human approval. AUTO:
+           * The agent can execute actions autonomously without explicit approval.
+           * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+           * execution.
+           */
+          executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+          /**
+           * Per-transaction limit override, in the smallest unit of the relevant currency.
+           * Null inherits from the agent's spending limits.
+           */
+          perTransactionLimit?: number | null;
+        }
+      }
+
+      /**
+       * Thresholds that force approval for high-value transactions, overriding the
+       * default execution mode. When a transaction is denominated in a different
+       * currency than the threshold, Grid converts using the exchange rate at evaluation
+       * time.
+       */
+      export interface ApprovalThresholds {
+        /**
+         * If set, any transaction above this amount (in the smallest unit of the specified
+         * currency) will require explicit approval even when the agent's
+         * defaultExecutionMode is AUTO. Null means no threshold override.
+         */
+        amount?: number | null;
+
+        /**
+         * ISO 4217 currency code that the amount threshold is denominated in. Required
+         * when amount is set.
+         */
+        currency?: string;
+      }
+    }
+
+    /**
+     * Real-time counters tracking the agent's spending and transaction activity
+     * against its policy limits.
+     */
+    export interface Usage {
+      /**
+       * Total amount spent by the agent today, in the smallest unit of the policy's
+       * `spendingLimits.currency`.
+       */
+      dailySpend: number;
+
+      /**
+       * Number of transactions initiated by the agent today.
+       */
+      dailyTransactionCount: number;
+
+      /**
+       * Total amount spent by the agent this month, in the smallest unit of the policy's
+       * `spendingLimits.currency`.
+       */
+      monthlySpend: number;
+
+      /**
+       * The date when daily usage counters will reset.
+       */
+      dailyResetDate?: string;
+
+      /**
+       * The year-month (YYYY-MM) when monthly usage counters will reset.
+       */
+      monthlyResetMonth?: string;
+    }
+  }
+
+  export interface DeviceCode {
+    /**
+     * The agent this device code belongs to.
+     */
+    agentId: string;
+
+    /**
+     * Human-readable device code used to install and connect the agent software.
+     */
+    code: string;
+
+    /**
+     * Timestamp when this device code expires.
+     */
+    expiresAt: string;
+
+    /**
+     * Whether this device code has already been redeemed by the agent.
+     */
+    redeemed: boolean;
+  }
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentRetrieveResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentRetrieveResponse.Policy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentRetrieveResponse.Usage;
+}
+
+export namespace AgentRetrieveResponse {
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  export interface Policy {
+    /**
+     * Execution mode controlling whether agent actions require human approval. AUTO:
+     * The agent can execute actions autonomously without explicit approval.
+     * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+     * execution.
+     */
+    defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
+
+    /**
+     * List of permissions granted to the agent.
+     */
+    permissions: Array<
+      | 'VIEW_TRANSACTIONS'
+      | 'CREATE_TRANSFERS'
+      | 'CREATE_QUOTES'
+      | 'EXECUTE_QUOTES'
+      | 'MANAGE_EXTERNAL_ACCOUNTS'
+    >;
+
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    spendingLimits: Policy.SpendingLimits;
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    accountRestrictions?: Policy.AccountRestrictions;
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    approvalThresholds?: Policy.ApprovalThresholds;
+  }
+
+  export namespace Policy {
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    export interface SpendingLimits {
+      /**
+       * ISO 4217 currency code that all amount limits are denominated in.
+       */
+      currency: string;
+
+      /**
+       * Maximum amount the agent can transfer in a single transaction.
+       */
+      perTransactionLimit: number;
+
+      /**
+       * Maximum total amount the agent can transfer per day. Null means no daily limit.
+       */
+      dailyLimit?: number | null;
+
+      /**
+       * Maximum number of transactions the agent can initiate per day.
+       */
+      dailyTransactionLimit?: number;
+
+      /**
+       * Maximum total amount the agent can transfer per month. Null means no monthly
+       * limit.
+       */
+      monthlyLimit?: number | null;
+    }
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    export interface AccountRestrictions {
+      /**
+       * Per-account rules that override the agent's default policy for specific
+       * accounts.
+       */
+      accountRules?: Array<AccountRestrictions.AccountRule>;
+
+      /**
+       * If set, restricts the agent to operate only on the specified internal account
+       * IDs. Null means the agent can access all accounts.
+       */
+      allowedAccountIds?: Array<string> | null;
+    }
+
+    export namespace AccountRestrictions {
+      /**
+       * Per-account policy override that takes precedence over the agent's default
+       * policy for a specific account.
+       */
+      export interface AccountRule {
+        /**
+         * The internal account ID this rule applies to.
+         */
+        accountId: string;
+
+        /**
+         * Execution mode controlling whether agent actions require human approval. AUTO:
+         * The agent can execute actions autonomously without explicit approval.
+         * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+         * execution.
+         */
+        executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+        /**
+         * Per-transaction limit override, in the smallest unit of the relevant currency.
+         * Null inherits from the agent's spending limits.
+         */
+        perTransactionLimit?: number | null;
+      }
+    }
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    export interface ApprovalThresholds {
+      /**
+       * If set, any transaction above this amount (in the smallest unit of the specified
+       * currency) will require explicit approval even when the agent's
+       * defaultExecutionMode is AUTO. Null means no threshold override.
+       */
+      amount?: number | null;
+
+      /**
+       * ISO 4217 currency code that the amount threshold is denominated in. Required
+       * when amount is set.
+       */
+      currency?: string;
+    }
+  }
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  export interface Usage {
+    /**
+     * Total amount spent by the agent today, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    dailySpend: number;
+
+    /**
+     * Number of transactions initiated by the agent today.
+     */
+    dailyTransactionCount: number;
+
+    /**
+     * Total amount spent by the agent this month, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    monthlySpend: number;
+
+    /**
+     * The date when daily usage counters will reset.
+     */
+    dailyResetDate?: string;
+
+    /**
+     * The year-month (YYYY-MM) when monthly usage counters will reset.
+     */
+    monthlyResetMonth?: string;
+  }
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentUpdateResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentUpdateResponse.Policy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentUpdateResponse.Usage;
+}
+
+export namespace AgentUpdateResponse {
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  export interface Policy {
+    /**
+     * Execution mode controlling whether agent actions require human approval. AUTO:
+     * The agent can execute actions autonomously without explicit approval.
+     * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+     * execution.
+     */
+    defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
+
+    /**
+     * List of permissions granted to the agent.
+     */
+    permissions: Array<
+      | 'VIEW_TRANSACTIONS'
+      | 'CREATE_TRANSFERS'
+      | 'CREATE_QUOTES'
+      | 'EXECUTE_QUOTES'
+      | 'MANAGE_EXTERNAL_ACCOUNTS'
+    >;
+
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    spendingLimits: Policy.SpendingLimits;
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    accountRestrictions?: Policy.AccountRestrictions;
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    approvalThresholds?: Policy.ApprovalThresholds;
+  }
+
+  export namespace Policy {
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    export interface SpendingLimits {
+      /**
+       * ISO 4217 currency code that all amount limits are denominated in.
+       */
+      currency: string;
+
+      /**
+       * Maximum amount the agent can transfer in a single transaction.
+       */
+      perTransactionLimit: number;
+
+      /**
+       * Maximum total amount the agent can transfer per day. Null means no daily limit.
+       */
+      dailyLimit?: number | null;
+
+      /**
+       * Maximum number of transactions the agent can initiate per day.
+       */
+      dailyTransactionLimit?: number;
+
+      /**
+       * Maximum total amount the agent can transfer per month. Null means no monthly
+       * limit.
+       */
+      monthlyLimit?: number | null;
+    }
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    export interface AccountRestrictions {
+      /**
+       * Per-account rules that override the agent's default policy for specific
+       * accounts.
+       */
+      accountRules?: Array<AccountRestrictions.AccountRule>;
+
+      /**
+       * If set, restricts the agent to operate only on the specified internal account
+       * IDs. Null means the agent can access all accounts.
+       */
+      allowedAccountIds?: Array<string> | null;
+    }
+
+    export namespace AccountRestrictions {
+      /**
+       * Per-account policy override that takes precedence over the agent's default
+       * policy for a specific account.
+       */
+      export interface AccountRule {
+        /**
+         * The internal account ID this rule applies to.
+         */
+        accountId: string;
+
+        /**
+         * Execution mode controlling whether agent actions require human approval. AUTO:
+         * The agent can execute actions autonomously without explicit approval.
+         * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+         * execution.
+         */
+        executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+        /**
+         * Per-transaction limit override, in the smallest unit of the relevant currency.
+         * Null inherits from the agent's spending limits.
+         */
+        perTransactionLimit?: number | null;
+      }
+    }
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    export interface ApprovalThresholds {
+      /**
+       * If set, any transaction above this amount (in the smallest unit of the specified
+       * currency) will require explicit approval even when the agent's
+       * defaultExecutionMode is AUTO. Null means no threshold override.
+       */
+      amount?: number | null;
+
+      /**
+       * ISO 4217 currency code that the amount threshold is denominated in. Required
+       * when amount is set.
+       */
+      currency?: string;
+    }
+  }
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  export interface Usage {
+    /**
+     * Total amount spent by the agent today, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    dailySpend: number;
+
+    /**
+     * Number of transactions initiated by the agent today.
+     */
+    dailyTransactionCount: number;
+
+    /**
+     * Total amount spent by the agent this month, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    monthlySpend: number;
+
+    /**
+     * The date when daily usage counters will reset.
+     */
+    dailyResetDate?: string;
+
+    /**
+     * The year-month (YYYY-MM) when monthly usage counters will reset.
+     */
+    monthlyResetMonth?: string;
+  }
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentListResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentListResponse.Policy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentListResponse.Usage;
+}
+
+export namespace AgentListResponse {
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  export interface Policy {
+    /**
+     * Execution mode controlling whether agent actions require human approval. AUTO:
+     * The agent can execute actions autonomously without explicit approval.
+     * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+     * execution.
+     */
+    defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
+
+    /**
+     * List of permissions granted to the agent.
+     */
+    permissions: Array<
+      | 'VIEW_TRANSACTIONS'
+      | 'CREATE_TRANSFERS'
+      | 'CREATE_QUOTES'
+      | 'EXECUTE_QUOTES'
+      | 'MANAGE_EXTERNAL_ACCOUNTS'
+    >;
+
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    spendingLimits: Policy.SpendingLimits;
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    accountRestrictions?: Policy.AccountRestrictions;
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    approvalThresholds?: Policy.ApprovalThresholds;
+  }
+
+  export namespace Policy {
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    export interface SpendingLimits {
+      /**
+       * ISO 4217 currency code that all amount limits are denominated in.
+       */
+      currency: string;
+
+      /**
+       * Maximum amount the agent can transfer in a single transaction.
+       */
+      perTransactionLimit: number;
+
+      /**
+       * Maximum total amount the agent can transfer per day. Null means no daily limit.
+       */
+      dailyLimit?: number | null;
+
+      /**
+       * Maximum number of transactions the agent can initiate per day.
+       */
+      dailyTransactionLimit?: number;
+
+      /**
+       * Maximum total amount the agent can transfer per month. Null means no monthly
+       * limit.
+       */
+      monthlyLimit?: number | null;
+    }
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    export interface AccountRestrictions {
+      /**
+       * Per-account rules that override the agent's default policy for specific
+       * accounts.
+       */
+      accountRules?: Array<AccountRestrictions.AccountRule>;
+
+      /**
+       * If set, restricts the agent to operate only on the specified internal account
+       * IDs. Null means the agent can access all accounts.
+       */
+      allowedAccountIds?: Array<string> | null;
+    }
+
+    export namespace AccountRestrictions {
+      /**
+       * Per-account policy override that takes precedence over the agent's default
+       * policy for a specific account.
+       */
+      export interface AccountRule {
+        /**
+         * The internal account ID this rule applies to.
+         */
+        accountId: string;
+
+        /**
+         * Execution mode controlling whether agent actions require human approval. AUTO:
+         * The agent can execute actions autonomously without explicit approval.
+         * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+         * execution.
+         */
+        executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+        /**
+         * Per-transaction limit override, in the smallest unit of the relevant currency.
+         * Null inherits from the agent's spending limits.
+         */
+        perTransactionLimit?: number | null;
+      }
+    }
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    export interface ApprovalThresholds {
+      /**
+       * If set, any transaction above this amount (in the smallest unit of the specified
+       * currency) will require explicit approval even when the agent's
+       * defaultExecutionMode is AUTO. Null means no threshold override.
+       */
+      amount?: number | null;
+
+      /**
+       * ISO 4217 currency code that the amount threshold is denominated in. Required
+       * when amount is set.
+       */
+      currency?: string;
+    }
+  }
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  export interface Usage {
+    /**
+     * Total amount spent by the agent today, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    dailySpend: number;
+
+    /**
+     * Number of transactions initiated by the agent today.
+     */
+    dailyTransactionCount: number;
+
+    /**
+     * Total amount spent by the agent this month, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    monthlySpend: number;
+
+    /**
+     * The date when daily usage counters will reset.
+     */
+    dailyResetDate?: string;
+
+    /**
+     * The year-month (YYYY-MM) when monthly usage counters will reset.
+     */
+    monthlyResetMonth?: string;
+  }
+}
+
+/**
+ * An action submitted by an agent that may require platform approval before
+ * execution. All agent-initiated operations (quote execution, transfers) are
+ * represented as AgentActions, giving the platform a consistent object to approve,
+ * reject, and audit regardless of the underlying operation type.
+ */
+export interface AgentListApprovalsResponse {
+  /**
+   * System-generated unique identifier for this action.
+   */
+  id: string;
+
+  /**
+   * The agent that submitted this action.
+   */
+  agentId: string;
+
+  /**
+   * When the action was submitted by the agent.
+   */
+  createdAt: string;
+
+  /**
+   * The customer on whose behalf the action was submitted.
+   */
+  customerId: string;
+
+  /**
+   * Platform-specific ID of the customer.
+   */
+  platformCustomerId: string;
+
+  /**
+   * Status of an agent action.
+   *
+   * | Status             | Description                                                            |
+   * | ------------------ | ---------------------------------------------------------------------- |
+   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
+   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
+   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
+   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
+   */
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
+
+  /**
+   * The type of action the agent is requesting.
+   *
+   * | Type            | Description                                              |
+   * | --------------- | -------------------------------------------------------- |
+   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
+   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
+   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
+   */
+  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
+
+  /**
+   * When the action was last updated.
+   */
+  updatedAt: string;
+
+  /**
+   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
+   * transfer actions. Contains the full amount, currency, destination, and rate
+   * details needed to present an approval decision to the user.
+   */
+  quote?: QuotesAPI.Quote;
+
+  /**
+   * Human-readable reason provided by the platform when rejecting the action. Only
+   * present when status is `REJECTED`.
+   */
+  rejectionReason?: string;
+
+  /**
+   * The resulting transaction, populated once the action has been approved and
+   * execution has begun. Absent while the action is `PENDING_APPROVAL` or
+   * `REJECTED`.
+   */
+  transaction?: TransferInAPI.Transaction;
+
+  /**
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   */
+  transferDetails?: AgentListApprovalsResponse.TransferDetails;
+}
+
+export namespace AgentListApprovalsResponse {
+  /**
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   */
+  export interface TransferDetails {
+    /**
+     * Transfer amount in the smallest unit of the specified currency.
+     */
+    amount: number;
+
+    /**
+     * ISO 4217 currency code for the transfer amount.
+     */
+    currency: string;
+
+    /**
+     * ID of the destination account (internal or external).
+     */
+    destinationAccountId: string;
+
+    /**
+     * ID of the source account (internal or external).
+     */
+    sourceAccountId: string;
+  }
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentUpdatePolicyResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentUpdatePolicyResponse.Policy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentUpdatePolicyResponse.Usage;
+}
+
+export namespace AgentUpdatePolicyResponse {
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  export interface Policy {
+    /**
+     * Execution mode controlling whether agent actions require human approval. AUTO:
+     * The agent can execute actions autonomously without explicit approval.
+     * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+     * execution.
+     */
+    defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
+
+    /**
+     * List of permissions granted to the agent.
+     */
+    permissions: Array<
+      | 'VIEW_TRANSACTIONS'
+      | 'CREATE_TRANSFERS'
+      | 'CREATE_QUOTES'
+      | 'EXECUTE_QUOTES'
+      | 'MANAGE_EXTERNAL_ACCOUNTS'
+    >;
+
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    spendingLimits: Policy.SpendingLimits;
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    accountRestrictions?: Policy.AccountRestrictions;
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    approvalThresholds?: Policy.ApprovalThresholds;
+  }
+
+  export namespace Policy {
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    export interface SpendingLimits {
+      /**
+       * ISO 4217 currency code that all amount limits are denominated in.
+       */
+      currency: string;
+
+      /**
+       * Maximum amount the agent can transfer in a single transaction.
+       */
+      perTransactionLimit: number;
+
+      /**
+       * Maximum total amount the agent can transfer per day. Null means no daily limit.
+       */
+      dailyLimit?: number | null;
+
+      /**
+       * Maximum number of transactions the agent can initiate per day.
+       */
+      dailyTransactionLimit?: number;
+
+      /**
+       * Maximum total amount the agent can transfer per month. Null means no monthly
+       * limit.
+       */
+      monthlyLimit?: number | null;
+    }
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    export interface AccountRestrictions {
+      /**
+       * Per-account rules that override the agent's default policy for specific
+       * accounts.
+       */
+      accountRules?: Array<AccountRestrictions.AccountRule>;
+
+      /**
+       * If set, restricts the agent to operate only on the specified internal account
+       * IDs. Null means the agent can access all accounts.
+       */
+      allowedAccountIds?: Array<string> | null;
+    }
+
+    export namespace AccountRestrictions {
+      /**
+       * Per-account policy override that takes precedence over the agent's default
+       * policy for a specific account.
+       */
+      export interface AccountRule {
+        /**
+         * The internal account ID this rule applies to.
+         */
+        accountId: string;
+
+        /**
+         * Execution mode controlling whether agent actions require human approval. AUTO:
+         * The agent can execute actions autonomously without explicit approval.
+         * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+         * execution.
+         */
+        executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+        /**
+         * Per-transaction limit override, in the smallest unit of the relevant currency.
+         * Null inherits from the agent's spending limits.
+         */
+        perTransactionLimit?: number | null;
+      }
+    }
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    export interface ApprovalThresholds {
+      /**
+       * If set, any transaction above this amount (in the smallest unit of the specified
+       * currency) will require explicit approval even when the agent's
+       * defaultExecutionMode is AUTO. Null means no threshold override.
+       */
+      amount?: number | null;
+
+      /**
+       * ISO 4217 currency code that the amount threshold is denominated in. Required
+       * when amount is set.
+       */
+      currency?: string;
+    }
+  }
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  export interface Usage {
+    /**
+     * Total amount spent by the agent today, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    dailySpend: number;
+
+    /**
+     * Number of transactions initiated by the agent today.
+     */
+    dailyTransactionCount: number;
+
+    /**
+     * Total amount spent by the agent this month, in the smallest unit of the policy's
+     * `spendingLimits.currency`.
+     */
+    monthlySpend: number;
+
+    /**
+     * The date when daily usage counters will reset.
+     */
+    dailyResetDate?: string;
+
+    /**
+     * The year-month (YYYY-MM) when monthly usage counters will reset.
+     */
+    monthlyResetMonth?: string;
+  }
+}
+
+export interface AgentCreateParams {
+  /**
+   * The ID of the customer this agent will operate on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Human-readable name to identify the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentCreateParams.Policy;
+}
+
+export namespace AgentCreateParams {
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  export interface Policy {
+    /**
+     * Execution mode controlling whether agent actions require human approval. AUTO:
+     * The agent can execute actions autonomously without explicit approval.
+     * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+     * execution.
+     */
+    defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
+
+    /**
+     * List of permissions granted to the agent.
+     */
+    permissions: Array<
+      | 'VIEW_TRANSACTIONS'
+      | 'CREATE_TRANSFERS'
+      | 'CREATE_QUOTES'
+      | 'EXECUTE_QUOTES'
+      | 'MANAGE_EXTERNAL_ACCOUNTS'
+    >;
+
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    spendingLimits: Policy.SpendingLimits;
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    accountRestrictions?: Policy.AccountRestrictions;
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    approvalThresholds?: Policy.ApprovalThresholds;
+  }
+
+  export namespace Policy {
+    /**
+     * Spending limits that cap the agent's transaction amounts and frequency. All
+     * amount fields are integers in the smallest unit of the specified currency. When
+     * a transaction is denominated in a different currency, Grid converts using the
+     * exchange rate at evaluation time.
+     */
+    export interface SpendingLimits {
+      /**
+       * ISO 4217 currency code that all amount limits are denominated in.
+       */
+      currency: string;
+
+      /**
+       * Maximum amount the agent can transfer in a single transaction.
+       */
+      perTransactionLimit: number;
+
+      /**
+       * Maximum total amount the agent can transfer per day. Null means no daily limit.
+       */
+      dailyLimit?: number | null;
+
+      /**
+       * Maximum number of transactions the agent can initiate per day.
+       */
+      dailyTransactionLimit?: number;
+
+      /**
+       * Maximum total amount the agent can transfer per month. Null means no monthly
+       * limit.
+       */
+      monthlyLimit?: number | null;
+    }
+
+    /**
+     * Optional restrictions that limit the agent to specific accounts or override
+     * policy per account.
+     */
+    export interface AccountRestrictions {
+      /**
+       * Per-account rules that override the agent's default policy for specific
+       * accounts.
+       */
+      accountRules?: Array<AccountRestrictions.AccountRule>;
+
+      /**
+       * If set, restricts the agent to operate only on the specified internal account
+       * IDs. Null means the agent can access all accounts.
+       */
+      allowedAccountIds?: Array<string> | null;
+    }
+
+    export namespace AccountRestrictions {
+      /**
+       * Per-account policy override that takes precedence over the agent's default
+       * policy for a specific account.
+       */
+      export interface AccountRule {
+        /**
+         * The internal account ID this rule applies to.
+         */
+        accountId: string;
+
+        /**
+         * Execution mode controlling whether agent actions require human approval. AUTO:
+         * The agent can execute actions autonomously without explicit approval.
+         * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+         * execution.
+         */
+        executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+        /**
+         * Per-transaction limit override, in the smallest unit of the relevant currency.
+         * Null inherits from the agent's spending limits.
+         */
+        perTransactionLimit?: number | null;
+      }
+    }
+
+    /**
+     * Thresholds that force approval for high-value transactions, overriding the
+     * default execution mode. When a transaction is denominated in a different
+     * currency than the threshold, Grid converts using the exchange rate at evaluation
+     * time.
+     */
+    export interface ApprovalThresholds {
+      /**
+       * If set, any transaction above this amount (in the smallest unit of the specified
+       * currency) will require explicit approval even when the agent's
+       * defaultExecutionMode is AUTO. Null means no threshold override.
+       */
+      amount?: number | null;
+
+      /**
+       * ISO 4217 currency code that the amount threshold is denominated in. Required
+       * when amount is set.
+       */
+      currency?: string;
+    }
+  }
+}
+
+export interface AgentUpdateParams {
+  /**
+   * Set to true to pause the agent or false to resume it.
+   */
+  isPaused?: boolean;
+
+  /**
+   * Updated name for the agent.
+   */
+  name?: string;
+}
+
+export interface AgentListParams extends DefaultPaginationParams {
+  /**
+   * Filter agents created after this timestamp (inclusive)
+   */
+  createdAfter?: string;
+
+  /**
+   * Filter agents created before this timestamp (inclusive)
+   */
+  createdBefore?: string;
+
+  /**
+   * Filter by customer ID
+   */
+  customerId?: string;
+
+  /**
+   * Filter by connection status (whether the device code has been redeemed)
+   */
+  isConnected?: boolean;
+
+  /**
+   * Filter by paused status
+   */
+  isPaused?: boolean;
+
+  /**
+   * Maximum number of results to return (default 20, max 100)
+   */
+  limit?: number;
+
+  /**
+   * Filter agents updated after this timestamp (inclusive)
+   */
+  updatedAfter?: string;
+
+  /**
+   * Filter agents updated before this timestamp (inclusive)
+   */
+  updatedBefore?: string;
+}
+
+export interface AgentListApprovalsParams extends DefaultPaginationParams {
+  /**
+   * Filter by agent ID
+   */
+  agentId?: string;
+
+  /**
+   * Filter by customer ID
+   */
+  customerId?: string;
+
+  /**
+   * Filter by end date (inclusive) in ISO 8601 format
+   */
+  endDate?: string;
+
+  /**
+   * Maximum number of results to return (default 20, max 100)
+   */
+  limit?: number;
+
+  /**
+   * Order to sort results in
+   */
+  sortOrder?: 'asc' | 'desc';
+
+  /**
+   * Filter by start date (inclusive) in ISO 8601 format
+   */
+  startDate?: string;
+}
+
+export interface AgentUpdatePolicyParams {
+  /**
+   * Optional restrictions that limit the agent to specific accounts or override
+   * policy per account.
+   */
+  accountRestrictions?: AgentUpdatePolicyParams.AccountRestrictions;
+
+  /**
+   * Thresholds that force approval for high-value transactions, overriding the
+   * default execution mode. When a transaction is denominated in a different
+   * currency than the threshold, Grid converts using the exchange rate at evaluation
+   * time.
+   */
+  approvalThresholds?: AgentUpdatePolicyParams.ApprovalThresholds;
+
+  /**
+   * Execution mode controlling whether agent actions require human approval. AUTO:
+   * The agent can execute actions autonomously without explicit approval.
+   * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+   * execution.
+   */
+  defaultExecutionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+  /**
+   * Updated list of permissions. Replaces the entire permissions list when provided.
+   */
+  permissions?: Array<
+    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
+  >;
+
+  /**
+   * Partial update to spending limits. Only provided fields will be updated; omitted
+   * fields retain their current values.
+   */
+  spendingLimits?: AgentUpdatePolicyParams.SpendingLimits;
+}
+
+export namespace AgentUpdatePolicyParams {
+  /**
+   * Optional restrictions that limit the agent to specific accounts or override
+   * policy per account.
+   */
+  export interface AccountRestrictions {
+    /**
+     * Per-account rules that override the agent's default policy for specific
+     * accounts.
+     */
+    accountRules?: Array<AccountRestrictions.AccountRule>;
+
+    /**
+     * If set, restricts the agent to operate only on the specified internal account
+     * IDs. Null means the agent can access all accounts.
+     */
+    allowedAccountIds?: Array<string> | null;
+  }
+
+  export namespace AccountRestrictions {
+    /**
+     * Per-account policy override that takes precedence over the agent's default
+     * policy for a specific account.
+     */
+    export interface AccountRule {
+      /**
+       * The internal account ID this rule applies to.
+       */
+      accountId: string;
+
+      /**
+       * Execution mode controlling whether agent actions require human approval. AUTO:
+       * The agent can execute actions autonomously without explicit approval.
+       * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+       * execution.
+       */
+      executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+      /**
+       * Per-transaction limit override, in the smallest unit of the relevant currency.
+       * Null inherits from the agent's spending limits.
+       */
+      perTransactionLimit?: number | null;
+    }
+  }
+
+  /**
+   * Thresholds that force approval for high-value transactions, overriding the
+   * default execution mode. When a transaction is denominated in a different
+   * currency than the threshold, Grid converts using the exchange rate at evaluation
+   * time.
+   */
+  export interface ApprovalThresholds {
+    /**
+     * If set, any transaction above this amount (in the smallest unit of the specified
+     * currency) will require explicit approval even when the agent's
+     * defaultExecutionMode is AUTO. Null means no threshold override.
+     */
+    amount?: number | null;
+
+    /**
+     * ISO 4217 currency code that the amount threshold is denominated in. Required
+     * when amount is set.
+     */
+    currency?: string;
+  }
+
+  /**
+   * Partial update to spending limits. Only provided fields will be updated; omitted
+   * fields retain their current values.
+   */
+  export interface SpendingLimits {
+    /**
+     * ISO 4217 currency code that all amount limits are denominated in. Updating this
+     * recasts all existing limits into the new currency denomination.
+     */
+    currency?: string;
+
+    /**
+     * Maximum daily spend. Set to null to remove the daily limit.
+     */
+    dailyLimit?: number | null;
+
+    /**
+     * Maximum number of transactions per day.
+     */
+    dailyTransactionLimit?: number;
+
+    /**
+     * Maximum monthly spend. Set to null to remove the monthly limit.
+     */
+    monthlyLimit?: number | null;
+
+    /**
+     * Maximum amount per transaction.
+     */
+    perTransactionLimit?: number;
+  }
+}
+
+Agents.Me = Me;
+Agents.DeviceCodes = DeviceCodes;
+Agents.Transactions = Transactions;
+Agents.Actions = Actions;
+
+export declare namespace Agents {
+  export {
+    type AgentCreateResponse as AgentCreateResponse,
+    type AgentRetrieveResponse as AgentRetrieveResponse,
+    type AgentUpdateResponse as AgentUpdateResponse,
+    type AgentListResponse as AgentListResponse,
+    type AgentListApprovalsResponse as AgentListApprovalsResponse,
+    type AgentUpdatePolicyResponse as AgentUpdatePolicyResponse,
+    type AgentListResponsesDefaultPagination as AgentListResponsesDefaultPagination,
+    type AgentListApprovalsResponsesDefaultPagination as AgentListApprovalsResponsesDefaultPagination,
+    type AgentCreateParams as AgentCreateParams,
+    type AgentUpdateParams as AgentUpdateParams,
+    type AgentListParams as AgentListParams,
+    type AgentListApprovalsParams as AgentListApprovalsParams,
+    type AgentUpdatePolicyParams as AgentUpdatePolicyParams,
+  };
+
+  export {
+    Me as Me,
+    type MeRetrieveResponse as MeRetrieveResponse,
+    type MeCreateTransferInResponse as MeCreateTransferInResponse,
+    type MeCreateTransferOutResponse as MeCreateTransferOutResponse,
+    type MeCreateTransferInParams as MeCreateTransferInParams,
+    type MeCreateTransferOutParams as MeCreateTransferOutParams,
+    type MeListInternalAccountsParams as MeListInternalAccountsParams,
+  };
+
+  export {
+    DeviceCodes as DeviceCodes,
+    type DeviceCodeGetStatusResponse as DeviceCodeGetStatusResponse,
+    type DeviceCodeRedeemResponse as DeviceCodeRedeemResponse,
+    type DeviceCodeRegenerateResponse as DeviceCodeRegenerateResponse,
+  };
+
+  export { Transactions as Transactions };
+
+  export {
+    Actions as Actions,
+    type ActionApproveResponse as ActionApproveResponse,
+    type ActionRejectResponse as ActionRejectResponse,
+    type ActionApproveParams as ActionApproveParams,
+    type ActionRejectParams as ActionRejectParams,
+  };
+}
