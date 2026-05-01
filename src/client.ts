@@ -138,6 +138,7 @@ import {
   Verifications,
 } from './resources/verifications';
 import {
+  AgentActionWebhookEvent,
   BulkUploadWebhookEvent,
   CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
@@ -149,6 +150,22 @@ import {
   VerificationUpdateWebhookEvent,
   Webhooks,
 } from './resources/webhooks';
+import {
+  AgentCreateParams,
+  AgentCreateResponse,
+  AgentListApprovalsParams,
+  AgentListApprovalsResponse,
+  AgentListApprovalsResponsesDefaultPagination,
+  AgentListParams,
+  AgentListResponse,
+  AgentListResponsesDefaultPagination,
+  AgentRetrieveResponse,
+  AgentUpdateParams,
+  AgentUpdatePolicyParams,
+  AgentUpdatePolicyResponse,
+  AgentUpdateResponse,
+  Agents,
+} from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
   BusinessCustomerFields,
@@ -1037,6 +1054,10 @@ export class LightsparkGrid {
    * Internal account management endpoints for creating and managing internal accounts
    */
   internalAccounts: API.InternalAccounts = new API.InternalAccounts(this);
+  /**
+   * Endpoints for creating and managing agents (experimental), called by the partner's backend using platform credentials. Covers the full agent lifecycle: creation, policy configuration, pausing, deletion, the device code installation flow, and approving or rejecting transactions initiated by agents.
+   */
+  agents: API.Agents = new API.Agents(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -1060,6 +1081,7 @@ LightsparkGrid.Verifications = Verifications;
 LightsparkGrid.Discoveries = Discoveries;
 LightsparkGrid.Auth = Auth;
 LightsparkGrid.InternalAccounts = InternalAccounts;
+LightsparkGrid.Agents = Agents;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1188,6 +1210,7 @@ export declare namespace LightsparkGrid {
 
   export {
     Webhooks as Webhooks,
+    type AgentActionWebhookEvent as AgentActionWebhookEvent,
     type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
     type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
     type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
@@ -1252,6 +1275,23 @@ export declare namespace LightsparkGrid {
     InternalAccounts as InternalAccounts,
     type InternalAccountExportResponse as InternalAccountExportResponse,
     type InternalAccountExportParams as InternalAccountExportParams,
+  };
+
+  export {
+    Agents as Agents,
+    type AgentCreateResponse as AgentCreateResponse,
+    type AgentRetrieveResponse as AgentRetrieveResponse,
+    type AgentUpdateResponse as AgentUpdateResponse,
+    type AgentListResponse as AgentListResponse,
+    type AgentListApprovalsResponse as AgentListApprovalsResponse,
+    type AgentUpdatePolicyResponse as AgentUpdatePolicyResponse,
+    type AgentListResponsesDefaultPagination as AgentListResponsesDefaultPagination,
+    type AgentListApprovalsResponsesDefaultPagination as AgentListApprovalsResponsesDefaultPagination,
+    type AgentCreateParams as AgentCreateParams,
+    type AgentUpdateParams as AgentUpdateParams,
+    type AgentListParams as AgentListParams,
+    type AgentListApprovalsParams as AgentListApprovalsParams,
+    type AgentUpdatePolicyParams as AgentUpdatePolicyParams,
   };
 
   export type AedBeneficiary = API.AedBeneficiary;

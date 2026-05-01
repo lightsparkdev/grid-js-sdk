@@ -1,6 +1,22 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
+export {
+  Agents,
+  type AgentCreateResponse,
+  type AgentRetrieveResponse,
+  type AgentUpdateResponse,
+  type AgentListResponse,
+  type AgentListApprovalsResponse,
+  type AgentUpdatePolicyResponse,
+  type AgentCreateParams,
+  type AgentUpdateParams,
+  type AgentListParams,
+  type AgentListApprovalsParams,
+  type AgentUpdatePolicyParams,
+  type AgentListResponsesDefaultPagination,
+  type AgentListApprovalsResponsesDefaultPagination,
+} from './agents/agents';
 export { Auth } from './auth/auth';
 export {
   BeneficialOwners,
@@ -147,6 +163,7 @@ export {
 } from './verifications';
 export {
   Webhooks,
+  type AgentActionWebhookEvent,
   type IncomingPaymentWebhookEvent,
   type OutgoingPaymentWebhookEvent,
   type TestWebhookWebhookEvent,

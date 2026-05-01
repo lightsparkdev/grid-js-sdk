@@ -175,6 +175,12 @@ export interface IncomingTransaction {
   type: 'INCOMING' | 'OUTGOING';
 
   /**
+   * If this transaction was initiated by an agent, the system-generated ID of that
+   * agent. Absent for platform-initiated transactions.
+   */
+  agentId?: string;
+
+  /**
    * Additional information about the counterparty, if available and relevant to the
    * transaction and platform.
    */
@@ -303,6 +309,12 @@ export interface OutgoingTransaction {
   status: OutgoingTransactionStatus;
 
   type: 'OUTGOING' | 'INCOMING';
+
+  /**
+   * If this transaction was initiated by an agent, the system-generated ID of that
+   * agent. Absent for platform-initiated transactions.
+   */
+  agentId?: string;
 
   /**
    * Additional information about the counterparty, if available and relevant to the
