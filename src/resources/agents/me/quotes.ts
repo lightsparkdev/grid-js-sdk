@@ -70,8 +70,8 @@ export class Quotes extends APIResource {
    * permission in the agent's policy. If the agent's policy requires approval for
    * this amount (based on execution mode or approval thresholds), the transaction
    * will be created in a pending state and must be approved by the platform via
-   * `POST /agents/{agentId}/transactions/{transactionId}/approve`. Once executed,
-   * the quote cannot be cancelled.
+   * `POST /agents/{agentId}/actions/{actionId}/approve`. Once executed, the quote
+   * cannot be cancelled.
    *
    * @example
    * ```ts
