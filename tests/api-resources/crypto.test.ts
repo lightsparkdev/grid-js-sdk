@@ -13,7 +13,7 @@ describe('resource crypto', () => {
   test.skip('estimateWithdrawalFee: only required params', async () => {
     const responsePromise = client.crypto.estimateWithdrawalFee({
       amount: 1000000,
-      cryptoNetwork: 'SOLANA_MAINNET',
+      cryptoNetwork: 'SOLANA',
       currency: 'USDC',
       destinationAddress: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
       internalAccountId: 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
@@ -31,7 +31,7 @@ describe('resource crypto', () => {
   test.skip('estimateWithdrawalFee: required and optional params', async () => {
     const response = await client.crypto.estimateWithdrawalFee({
       amount: 1000000,
-      cryptoNetwork: 'SOLANA_MAINNET',
+      cryptoNetwork: 'SOLANA',
       currency: 'USDC',
       destinationAddress: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
       internalAccountId: 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
