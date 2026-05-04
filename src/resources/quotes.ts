@@ -654,10 +654,8 @@ export namespace QuoteSourceOneOf {
     /**
      * The crypto network to use for the funding source. Required when `currency` is a
      * stablecoin (e.g. USDC, USDT). Specifies which network the customer will deposit
-     * on, so the correct deposit address can be generated. Example values:
-     * `SOLANA_MAINNET`, `SOLANA_DEVNET`, `ETHEREUM_MAINNET`, `ETHEREUM_TESTNET`,
-     * `BASE_MAINNET`, `BASE_TESTNET`, `SPARK_MAINNET`, `SPARK_TESTNET`,
-     * `LIGHTNING_MAINNET`, `LIGHTNING_REGTEST`.
+     * on, so the correct deposit address can be generated. Example values: `SOLANA`,
+     * `ETHEREUM`, `BASE`, `POLYGON`, `SPARK`, `LIGHTNING`, `BITCOIN`.
      */
     cryptoNetwork?: string;
 
