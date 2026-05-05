@@ -252,7 +252,7 @@ export interface AuthMethod {
   /**
    * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
    * the email address; for OAUTH credentials it is typically the email claim from
-   * the OIDC token; for PASSKEY credentials it is the nickname provided at
+   * the OIDC token; for PASSKEY credentials it is the validated nickname provided at
    * registration time.
    */
   nickname: string;
@@ -488,8 +488,10 @@ export namespace CredentialCreateParams {
 
     /**
      * Human-readable identifier for the passkey, chosen by the user at registration
-     * time (e.g. "iPhone Face-ID", "YubiKey 5C"). Shown back on `AuthMethod` responses
-     * and in credential listings.
+     * time (e.g. "iPhone Face-ID", "YubiKey 5C"). Leading and trailing whitespace is
+     * ignored. Must be 1-100 characters and may contain Unicode letters, numbers,
+     * spaces, and the following separators: period, underscore, hyphen, apostrophe,
+     * and parentheses. Shown back on AuthMethod responses and in credential listings.
      */
     nickname: string;
 

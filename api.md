@@ -532,7 +532,7 @@ Types:
 - <code><a href="./src/resources/agents/agents.ts">AgentRetrieveResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUpdateResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentListApprovalsResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentRetrieveApprovalsResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUpdatePolicyResponse</a></code>
 
 Methods:
@@ -542,23 +542,24 @@ Methods:
 - <code title="patch /agents/{agentId}">client.agents.<a href="./src/resources/agents/agents.ts">update</a>(agentID, { ...params }) -> AgentUpdateResponse</code>
 - <code title="get /agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentListResponsesDefaultPagination</code>
 - <code title="delete /agents/{agentId}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(agentID) -> void</code>
-- <code title="get /agents/approvals">client.agents.<a href="./src/resources/agents/agents.ts">listApprovals</a>({ ...params }) -> AgentListApprovalsResponsesDefaultPagination</code>
+- <code title="get /agents/approvals">client.agents.<a href="./src/resources/agents/agents.ts">retrieveApprovals</a>({ ...params }) -> AgentRetrieveApprovalsResponse</code>
 - <code title="patch /agents/{agentId}/policy">client.agents.<a href="./src/resources/agents/agents.ts">updatePolicy</a>(agentID, { ...params }) -> AgentUpdatePolicyResponse</code>
 
 ## Me
 
 Types:
 
-- <code><a href="./src/resources/agents/me/me.ts">MeRetrieveResponse</a></code>
-- <code><a href="./src/resources/agents/me/me.ts">MeCreateTransferInResponse</a></code>
-- <code><a href="./src/resources/agents/me/me.ts">MeCreateTransferOutResponse</a></code>
+- <code><a href="./src/resources/agents/me/me.ts">MeListResponse</a></code>
+- <code><a href="./src/resources/agents/me/me.ts">MeRetrieveInternalAccountsResponse</a></code>
+- <code><a href="./src/resources/agents/me/me.ts">MeTransferInResponse</a></code>
+- <code><a href="./src/resources/agents/me/me.ts">MeTransferOutResponse</a></code>
 
 Methods:
 
-- <code title="get /agents/me">client.agents.me.<a href="./src/resources/agents/me/me.ts">retrieve</a>() -> MeRetrieveResponse</code>
-- <code title="post /agents/me/transfer-in">client.agents.me.<a href="./src/resources/agents/me/me.ts">createTransferIn</a>({ ...params }) -> MeCreateTransferInResponse</code>
-- <code title="post /agents/me/transfer-out">client.agents.me.<a href="./src/resources/agents/me/me.ts">createTransferOut</a>({ ...params }) -> MeCreateTransferOutResponse</code>
-- <code title="get /agents/me/internal-accounts">client.agents.me.<a href="./src/resources/agents/me/me.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
+- <code title="get /agents/me">client.agents.me.<a href="./src/resources/agents/me/me.ts">list</a>() -> MeListResponse</code>
+- <code title="get /agents/me/internal-accounts">client.agents.me.<a href="./src/resources/agents/me/me.ts">retrieveInternalAccounts</a>({ ...params }) -> MeRetrieveInternalAccountsResponse</code>
+- <code title="post /agents/me/transfer-in">client.agents.me.<a href="./src/resources/agents/me/me.ts">transferIn</a>({ ...params }) -> MeTransferInResponse</code>
+- <code title="post /agents/me/transfer-out">client.agents.me.<a href="./src/resources/agents/me/me.ts">transferOut</a>({ ...params }) -> MeTransferOutResponse</code>
 
 ### Transactions
 
@@ -579,15 +580,6 @@ Methods:
 - <code title="get /agents/me/quotes/{quoteId}">client.agents.me.quotes.<a href="./src/resources/agents/me/quotes.ts">retrieve</a>(quoteID) -> Quote</code>
 - <code title="post /agents/me/quotes/{quoteId}/execute">client.agents.me.quotes.<a href="./src/resources/agents/me/quotes.ts">execute</a>(quoteID, { ...params }) -> QuoteExecuteResponse</code>
 
-### ExternalAccounts
-
-Methods:
-
-- <code title="get /agents/me/external-accounts/{externalAccountId}">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
-- <code title="get /agents/me/external-accounts">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
-- <code title="delete /agents/me/external-accounts/{externalAccountId}">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
-- <code title="post /agents/me/external-accounts">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">add</a>({ ...params }) -> ExternalAccount</code>
-
 ### Actions
 
 Types:
@@ -600,21 +592,32 @@ Methods:
 - <code title="get /agents/me/actions/{actionId}">client.agents.me.actions.<a href="./src/resources/agents/me/actions.ts">retrieve</a>(actionID) -> ActionRetrieveResponse</code>
 - <code title="get /agents/me/actions">client.agents.me.actions.<a href="./src/resources/agents/me/actions.ts">list</a>({ ...params }) -> ActionListResponsesDefaultPagination</code>
 
+### ExternalAccounts
+
+Types:
+
+- <code><a href="./src/resources/agents/me/external-accounts.ts">ExternalAccountRetrieveExternalAccountsResponse</a></code>
+
+Methods:
+
+- <code title="get /agents/me/external-accounts/{externalAccountId}">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
+- <code title="delete /agents/me/external-accounts/{externalAccountId}">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
+- <code title="post /agents/me/external-accounts">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">externalAccounts</a>({ ...params }) -> ExternalAccount</code>
+- <code title="get /agents/me/external-accounts">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">retrieveExternalAccounts</a>({ ...params }) -> ExternalAccountRetrieveExternalAccountsResponse</code>
+
 ## DeviceCodes
 
 Types:
 
-- <code><a href="./src/resources/agents/device-codes.ts">DeviceCodeGetStatusResponse</a></code>
+- <code><a href="./src/resources/agents/device-codes.ts">DeviceCodeDeviceCodesResponse</a></code>
 - <code><a href="./src/resources/agents/device-codes.ts">DeviceCodeRedeemResponse</a></code>
-- <code><a href="./src/resources/agents/device-codes.ts">DeviceCodeRegenerateResponse</a></code>
+- <code><a href="./src/resources/agents/device-codes.ts">DeviceCodeRetrieveStatusResponse</a></code>
 
 Methods:
 
-- <code title="get /agents/device-codes/{code}/status">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">getStatus</a>(code) -> DeviceCodeGetStatusResponse</code>
+- <code title="post /agents/{agentId}/device-codes">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">deviceCodes</a>(agentID) -> DeviceCodeDeviceCodesResponse</code>
 - <code title="post /agents/device-codes/{code}/redeem">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">redeem</a>(code) -> DeviceCodeRedeemResponse</code>
-- <code title="post /agents/{agentId}/device-codes">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">regenerate</a>(agentID) -> DeviceCodeRegenerateResponse</code>
-
-## Transactions
+- <code title="get /agents/device-codes/{code}/status">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">retrieveStatus</a>(code) -> DeviceCodeRetrieveStatusResponse</code>
 
 ## Actions
 
