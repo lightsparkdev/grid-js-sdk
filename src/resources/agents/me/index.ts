@@ -9,17 +9,19 @@ export {
 } from './actions';
 export {
   ExternalAccounts,
-  type ExternalAccountListParams,
-  type ExternalAccountAddParams,
+  type ExternalAccountRetrieveExternalAccountsResponse,
+  type ExternalAccountExternalAccountsParams,
+  type ExternalAccountRetrieveExternalAccountsParams,
 } from './external-accounts';
 export {
   Me,
-  type MeRetrieveResponse,
-  type MeCreateTransferInResponse,
-  type MeCreateTransferOutResponse,
-  type MeCreateTransferInParams,
-  type MeCreateTransferOutParams,
-  type MeListInternalAccountsParams,
+  type MeListResponse,
+  type MeRetrieveInternalAccountsResponse,
+  type MeTransferInResponse,
+  type MeTransferOutResponse,
+  type MeRetrieveInternalAccountsParams,
+  type MeTransferInParams,
+  type MeTransferOutParams,
 } from './me';
 export { Quotes, type QuoteExecuteResponse, type QuoteCreateParams, type QuoteExecuteParams } from './quotes';
 export { Transactions, type TransactionListParams } from './transactions';

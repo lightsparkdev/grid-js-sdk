@@ -22,33 +22,6 @@ describe('resource externalAccounts', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('list', async () => {
-    const responsePromise = client.agents.me.externalAccounts.list();
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('list: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.agents.me.externalAccounts.list(
-        {
-          currency: 'currency',
-          cursor: 'cursor',
-          limit: 1,
-        },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(LightsparkGrid.NotFoundError);
-  });
-
-  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.agents.me.externalAccounts.delete('externalAccountId');
     const rawResponse = await responsePromise.asResponse();
@@ -61,8 +34,8 @@ describe('resource externalAccounts', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('add: only required params', async () => {
-    const responsePromise = client.agents.me.externalAccounts.add({
+  test.skip('externalAccounts: only required params', async () => {
+    const responsePromise = client.agents.me.externalAccounts.externalAccounts({
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
@@ -81,8 +54,8 @@ describe('resource externalAccounts', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('add: required and optional params', async () => {
-    const response = await client.agents.me.externalAccounts.add({
+  test.skip('externalAccounts: required and optional params', async () => {
+    const response = await client.agents.me.externalAccounts.externalAccounts({
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
@@ -110,5 +83,32 @@ describe('resource externalAccounts', () => {
       defaultUmaDepositAccount: true,
       platformAccountId: 'ext_acc_123456',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieveExternalAccounts', async () => {
+    const responsePromise = client.agents.me.externalAccounts.retrieveExternalAccounts();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieveExternalAccounts: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.agents.me.externalAccounts.retrieveExternalAccounts(
+        {
+          currency: 'currency',
+          cursor: 'cursor',
+          limit: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 });
