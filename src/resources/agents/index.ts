@@ -38,4 +38,10 @@ export {
   type MeCreateTransferOutParams,
   type MeListInternalAccountsParams,
 } from './me/index';
-export { Transactions } from './transactions';
+export {
+  Transactions,
+  type TransactionApproveResponse,
+  type TransactionRejectResponse,
+  type TransactionApproveParams,
+  type TransactionRejectParams,
+} from './transactions';

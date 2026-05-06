@@ -15,9 +15,11 @@ export const parseClientAuthHeaders = (req: IncomingMessage, required?: boolean)
           username: rawValue.slice(0, rawValue.search(':')),
           password: rawValue.slice(rawValue.search(':') + 1),
         };
+      case 'Bearer':
+        return { agentAccessToken: req.headers.authorization.slice('Bearer '.length) };
       default:
         throw new Error(
-          'Unsupported authorization scheme. Expected the "Authorization" header to be a supported scheme (Basic).',
+          'Unsupported authorization scheme. Expected the "Authorization" header to be a supported scheme (Basic, Bearer).',
         );
     }
   } else if (required) {
@@ -32,11 +34,15 @@ export const parseClientAuthHeaders = (req: IncomingMessage, required?: boolean)
     Array.isArray(req.headers['x-grid-client-secret']) ?
       req.headers['x-grid-client-secret'][0]
     : req.headers['x-grid-client-secret'];
+  const agentAccessToken =
+    Array.isArray(req.headers['x-grid-agent-access-token']) ?
+      req.headers['x-grid-agent-access-token'][0]
+    : req.headers['x-grid-agent-access-token'];
   const webhookSignature =
     Array.isArray(req.headers['x-grid-signature']) ?
       req.headers['x-grid-signature'][0]
     : req.headers['x-grid-signature'];
-  return { username, password, webhookSignature };
+  return { username, password, agentAccessToken, webhookSignature };
 };
 
 export const getStainlessApiKey = (req: IncomingMessage, mcpOptions: McpOptions): string | undefined => {
