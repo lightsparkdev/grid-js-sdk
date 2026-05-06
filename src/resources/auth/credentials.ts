@@ -111,6 +111,10 @@ export class Credentials extends APIResource {
    * user receives the new OTP, call `POST /auth/credentials/{id}/verify` to complete
    * verification and issue a session.
    *
+   * `OAUTH` credentials do not have a challenge step. To authenticate or
+   * reauthenticate an OAuth credential, call `POST /auth/credentials/{id}/verify`
+   * with a fresh OIDC token and a `clientPublicKey`.
+   *
    * For `PASSKEY` credentials, this issues a fresh Grid-generated WebAuthn challenge
    * for reauthentication. The request body must carry the client's ephemeral
    * `clientPublicKey` so Grid can bake it into the Turnkey session-creation payload
@@ -284,13 +288,14 @@ export interface CredentialListResponse {
 
 /**
  * Discriminated response shape returned from
- * `POST /auth/credentials/{id}/challenge`. For `EMAIL_OTP` and `OAUTH` credentials
- * the body is a plain `AuthMethod` (wrapped as `AuthMethodResponse` to
- * disambiguate the oneOf). For `PASSKEY` credentials the body is a
- * `PasskeyAuthChallenge` — the base `AuthMethod` fields plus the Grid-issued
- * `challenge`, `requestId`, and `expiresAt` that drive the subsequent assertion.
- * Registration responses from `POST /auth/credentials` use the simpler
- * `AuthMethodResponse` shape directly for all three credential types.
+ * `POST /auth/credentials/{id}/challenge`. For `EMAIL_OTP` credentials the body is
+ * a plain `AuthMethod` (wrapped as `AuthMethodResponse` to disambiguate the
+ * oneOf). For `PASSKEY` credentials the body is a `PasskeyAuthChallenge` — the
+ * base `AuthMethod` fields plus the Grid-issued `challenge`, `requestId`, and
+ * `expiresAt` that drive the subsequent assertion. OAuth credentials do not use
+ * the challenge endpoint; call `POST /auth/credentials/{id}/verify` with a fresh
+ * OIDC token instead. Registration responses from `POST /auth/credentials` use the
+ * simpler `AuthMethodResponse` shape directly for all three credential types.
  */
 export type CredentialResendChallengeResponse =
   | AuthMethod
@@ -554,8 +559,7 @@ export interface CredentialResendChallengeParams {
    * and 32-byte Y coordinates; 130 hex characters total). The matching private key
    * must remain on the client. Grid bakes this key into the Turnkey session-creation
    * payload that the returned `challenge` is computed from, so the resulting session
-   * signing key is sealed to the client. Ignored for `EMAIL_OTP` and `OAUTH`
-   * credentials.
+   * signing key is sealed to the client. Ignored for `EMAIL_OTP`.
    */
   clientPublicKey?: string;
 }
