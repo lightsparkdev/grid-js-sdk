@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../core/resource';
 import * as QuotesAPI from '../quotes';
+import * as Shared from '../shared';
 import * as TransferInAPI from '../transfer-in';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
@@ -144,34 +145,7 @@ export interface TransactionApproveResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  transferDetails?: TransactionApproveResponse.TransferDetails;
-}
-
-export namespace TransactionApproveResponse {
-  /**
-   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-   */
-  export interface TransferDetails {
-    /**
-     * Transfer amount in the smallest unit of the specified currency.
-     */
-    amount: number;
-
-    /**
-     * ISO 4217 currency code for the transfer amount.
-     */
-    currency: string;
-
-    /**
-     * ID of the destination account (internal or external).
-     */
-    destinationAccountId: string;
-
-    /**
-     * ID of the source account (internal or external).
-     */
-    sourceAccountId: string;
-  }
+  transferDetails?: Shared.AgentTransferDetails;
 }
 
 /**
@@ -257,34 +231,7 @@ export interface TransactionRejectResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  transferDetails?: TransactionRejectResponse.TransferDetails;
-}
-
-export namespace TransactionRejectResponse {
-  /**
-   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-   */
-  export interface TransferDetails {
-    /**
-     * Transfer amount in the smallest unit of the specified currency.
-     */
-    amount: number;
-
-    /**
-     * ISO 4217 currency code for the transfer amount.
-     */
-    currency: string;
-
-    /**
-     * ID of the destination account (internal or external).
-     */
-    destinationAccountId: string;
-
-    /**
-     * ID of the source account (internal or external).
-     */
-    sourceAccountId: string;
-  }
+  transferDetails?: Shared.AgentTransferDetails;
 }
 
 export interface TransactionApproveParams {

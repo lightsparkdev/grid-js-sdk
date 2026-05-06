@@ -2,6 +2,7 @@
 
 import { APIResource } from '../../../core/resource';
 import * as QuotesAPI from '../../quotes';
+import * as Shared from '../../shared';
 import * as TransferInAPI from '../../transfer-in';
 import { APIPromise } from '../../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../../core/pagination';
@@ -137,34 +138,7 @@ export interface ActionRetrieveResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  transferDetails?: ActionRetrieveResponse.TransferDetails;
-}
-
-export namespace ActionRetrieveResponse {
-  /**
-   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-   */
-  export interface TransferDetails {
-    /**
-     * Transfer amount in the smallest unit of the specified currency.
-     */
-    amount: number;
-
-    /**
-     * ISO 4217 currency code for the transfer amount.
-     */
-    currency: string;
-
-    /**
-     * ID of the destination account (internal or external).
-     */
-    destinationAccountId: string;
-
-    /**
-     * ID of the source account (internal or external).
-     */
-    sourceAccountId: string;
-  }
+  transferDetails?: Shared.AgentTransferDetails;
 }
 
 /**
@@ -250,34 +224,7 @@ export interface ActionListResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  transferDetails?: ActionListResponse.TransferDetails;
-}
-
-export namespace ActionListResponse {
-  /**
-   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-   */
-  export interface TransferDetails {
-    /**
-     * Transfer amount in the smallest unit of the specified currency.
-     */
-    amount: number;
-
-    /**
-     * ISO 4217 currency code for the transfer amount.
-     */
-    currency: string;
-
-    /**
-     * ID of the destination account (internal or external).
-     */
-    destinationAccountId: string;
-
-    /**
-     * ID of the source account (internal or external).
-     */
-    sourceAccountId: string;
-  }
+  transferDetails?: Shared.AgentTransferDetails;
 }
 
 export interface ActionListParams extends DefaultPaginationParams {

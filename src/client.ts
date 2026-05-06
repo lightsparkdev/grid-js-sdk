@@ -159,11 +159,13 @@ import {
   AgentListParams,
   AgentListResponse,
   AgentListResponsesDefaultPagination,
+  AgentPolicy,
   AgentRetrieveResponse,
   AgentUpdateParams,
   AgentUpdatePolicyParams,
   AgentUpdatePolicyResponse,
   AgentUpdateResponse,
+  AgentUsage,
   Agents,
 } from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
@@ -1313,6 +1315,8 @@ export declare namespace LightsparkGrid {
 
   export {
     Agents as Agents,
+    type AgentPolicy as AgentPolicy,
+    type AgentUsage as AgentUsage,
     type AgentCreateResponse as AgentCreateResponse,
     type AgentRetrieveResponse as AgentRetrieveResponse,
     type AgentUpdateResponse as AgentUpdateResponse,
@@ -1330,6 +1334,7 @@ export declare namespace LightsparkGrid {
 
   export type AedBeneficiary = API.AedBeneficiary;
   export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
+  export type AgentTransferDetails = API.AgentTransferDetails;
   export type BdtBeneficiary = API.BdtBeneficiary;
   export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
   export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;

@@ -4,6 +4,7 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">AedBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">AedExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">AgentTransferDetails</a></code>
 - <code><a href="./src/resources/shared.ts">BdtBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BdtExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BrlExternalAccountCreateInfo</a></code>
@@ -528,6 +529,8 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/agents/agents.ts">AgentPolicy</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentUsage</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentRetrieveResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUpdateResponse</a></code>
