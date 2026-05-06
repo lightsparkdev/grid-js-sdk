@@ -13,21 +13,22 @@ import {
 } from './actions';
 import * as DeviceCodesAPI from './device-codes';
 import {
-  DeviceCodeDeviceCodesResponse,
+  DeviceCodeGetStatusResponse,
   DeviceCodeRedeemResponse,
-  DeviceCodeRetrieveStatusResponse,
+  DeviceCodeRegenerateResponse,
   DeviceCodes,
 } from './device-codes';
+import * as TransactionsAPI from './transactions';
+import { Transactions } from './transactions';
 import * as MeAPI from './me/me';
 import {
   Me,
-  MeListResponse,
-  MeRetrieveInternalAccountsParams,
-  MeRetrieveInternalAccountsResponse,
-  MeTransferInParams,
-  MeTransferInResponse,
-  MeTransferOutParams,
-  MeTransferOutResponse,
+  MeCreateTransferInParams,
+  MeCreateTransferInResponse,
+  MeCreateTransferOutParams,
+  MeCreateTransferOutResponse,
+  MeListInternalAccountsParams,
+  MeRetrieveResponse,
 } from './me/me';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
@@ -41,6 +42,7 @@ import { path } from '../../internal/utils/path';
 export class Agents extends APIResource {
   me: MeAPI.Me = new MeAPI.Me(this._client);
   deviceCodes: DeviceCodesAPI.DeviceCodes = new DeviceCodesAPI.DeviceCodes(this._client);
+  transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
@@ -140,14 +142,20 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.agents.retrieveApprovals();
+   * // Automatically fetches more pages as needed.
+   * for await (const agentListApprovalsResponse of client.agents.listApprovals()) {
+   *   // ...
+   * }
    * ```
    */
-  retrieveApprovals(
-    query: AgentRetrieveApprovalsParams | null | undefined = {},
+  listApprovals(
+    query: AgentListApprovalsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AgentRetrieveApprovalsResponse> {
-    return this._client.get('/agents/approvals', { query, ...options });
+  ): PagePromise<AgentListApprovalsResponsesDefaultPagination, AgentListApprovalsResponse> {
+    return this._client.getAPIList('/agents/approvals', DefaultPagination<AgentListApprovalsResponse>, {
+      query,
+      ...options,
+    });
   }
 
   /**
@@ -172,6 +180,8 @@ export class Agents extends APIResource {
 }
 
 export type AgentListResponsesDefaultPagination = DefaultPagination<AgentListResponse>;
+
+export type AgentListApprovalsResponsesDefaultPagination = DefaultPagination<AgentListApprovalsResponse>;
 
 /**
  * Response returned when an agent is created, including the agent and a device
@@ -1167,140 +1177,116 @@ export namespace AgentListResponse {
   }
 }
 
-export interface AgentRetrieveApprovalsResponse {
+/**
+ * An action submitted by an agent that may require platform approval before
+ * execution. All agent-initiated operations (quote execution, transfers) are
+ * represented as AgentActions, giving the platform a consistent object to approve,
+ * reject, and audit regardless of the underlying operation type.
+ */
+export interface AgentListApprovalsResponse {
   /**
-   * List of agent actions matching the filter criteria.
+   * System-generated unique identifier for this action.
    */
-  data: Array<AgentRetrieveApprovalsResponse.Data>;
+  id: string;
 
   /**
-   * Indicates if more results are available beyond this page.
+   * The agent that submitted this action.
    */
-  hasMore: boolean;
+  agentId: string;
 
   /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true).
+   * When the action was submitted by the agent.
    */
-  nextCursor?: string;
+  createdAt: string;
 
   /**
-   * Total number of actions matching the criteria (excluding pagination).
+   * The customer on whose behalf the action was submitted.
    */
-  totalCount?: number;
+  customerId: string;
+
+  /**
+   * Platform-specific ID of the customer.
+   */
+  platformCustomerId: string;
+
+  /**
+   * Status of an agent action.
+   *
+   * | Status             | Description                                                            |
+   * | ------------------ | ---------------------------------------------------------------------- |
+   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
+   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
+   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
+   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
+   */
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
+
+  /**
+   * The type of action the agent is requesting.
+   *
+   * | Type            | Description                                              |
+   * | --------------- | -------------------------------------------------------- |
+   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
+   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
+   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
+   */
+  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
+
+  /**
+   * When the action was last updated.
+   */
+  updatedAt: string;
+
+  /**
+   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
+   * transfer actions. Contains the full amount, currency, destination, and rate
+   * details needed to present an approval decision to the user.
+   */
+  quote?: QuotesAPI.Quote;
+
+  /**
+   * Human-readable reason provided by the platform when rejecting the action. Only
+   * present when status is `REJECTED`.
+   */
+  rejectionReason?: string;
+
+  /**
+   * The resulting transaction, populated once the action has been approved and
+   * execution has begun. Absent while the action is `PENDING_APPROVAL` or
+   * `REJECTED`.
+   */
+  transaction?: TransferInAPI.Transaction;
+
+  /**
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   */
+  transferDetails?: AgentListApprovalsResponse.TransferDetails;
 }
 
-export namespace AgentRetrieveApprovalsResponse {
+export namespace AgentListApprovalsResponse {
   /**
-   * An action submitted by an agent that may require platform approval before
-   * execution. All agent-initiated operations (quote execution, transfers) are
-   * represented as AgentActions, giving the platform a consistent object to approve,
-   * reject, and audit regardless of the underlying operation type.
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  export interface Data {
+  export interface TransferDetails {
     /**
-     * System-generated unique identifier for this action.
+     * Transfer amount in the smallest unit of the specified currency.
      */
-    id: string;
-
-    /**
-     * The agent that submitted this action.
-     */
-    agentId: string;
+    amount: number;
 
     /**
-     * When the action was submitted by the agent.
+     * ISO 4217 currency code for the transfer amount.
      */
-    createdAt: string;
+    currency: string;
 
     /**
-     * The customer on whose behalf the action was submitted.
+     * ID of the destination account (internal or external).
      */
-    customerId: string;
+    destinationAccountId: string;
 
     /**
-     * Platform-specific ID of the customer.
+     * ID of the source account (internal or external).
      */
-    platformCustomerId: string;
-
-    /**
-     * Status of an agent action.
-     *
-     * | Status             | Description                                                            |
-     * | ------------------ | ---------------------------------------------------------------------- |
-     * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
-     * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
-     * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
-     * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
-     */
-    status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
-
-    /**
-     * The type of action the agent is requesting.
-     *
-     * | Type            | Description                                              |
-     * | --------------- | -------------------------------------------------------- |
-     * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
-     * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
-     * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
-     */
-    type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
-
-    /**
-     * When the action was last updated.
-     */
-    updatedAt: string;
-
-    /**
-     * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
-     * transfer actions. Contains the full amount, currency, destination, and rate
-     * details needed to present an approval decision to the user.
-     */
-    quote?: QuotesAPI.Quote;
-
-    /**
-     * Human-readable reason provided by the platform when rejecting the action. Only
-     * present when status is `REJECTED`.
-     */
-    rejectionReason?: string;
-
-    /**
-     * The resulting transaction, populated once the action has been approved and
-     * execution has begun. Absent while the action is `PENDING_APPROVAL` or
-     * `REJECTED`.
-     */
-    transaction?: TransferInAPI.Transaction;
-
-    /**
-     * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-     */
-    transferDetails?: Data.TransferDetails;
-  }
-
-  export namespace Data {
-    /**
-     * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-     */
-    export interface TransferDetails {
-      /**
-       * Transfer amount in the smallest unit of the specified currency.
-       */
-      amount: number;
-
-      /**
-       * ISO 4217 currency code for the transfer amount.
-       */
-      currency: string;
-
-      /**
-       * ID of the destination account (internal or external).
-       */
-      destinationAccountId: string;
-
-      /**
-       * ID of the source account (internal or external).
-       */
-      sourceAccountId: string;
-    }
+    sourceAccountId: string;
   }
 }
 
@@ -1766,16 +1752,11 @@ export interface AgentListParams extends DefaultPaginationParams {
   updatedBefore?: string;
 }
 
-export interface AgentRetrieveApprovalsParams {
+export interface AgentListApprovalsParams extends DefaultPaginationParams {
   /**
    * Filter by agent ID
    */
   agentId?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
 
   /**
    * Filter by customer ID
@@ -1942,6 +1923,7 @@ export namespace AgentUpdatePolicyParams {
 
 Agents.Me = Me;
 Agents.DeviceCodes = DeviceCodes;
+Agents.Transactions = Transactions;
 Agents.Actions = Actions;
 
 export declare namespace Agents {
@@ -1950,33 +1932,35 @@ export declare namespace Agents {
     type AgentRetrieveResponse as AgentRetrieveResponse,
     type AgentUpdateResponse as AgentUpdateResponse,
     type AgentListResponse as AgentListResponse,
-    type AgentRetrieveApprovalsResponse as AgentRetrieveApprovalsResponse,
+    type AgentListApprovalsResponse as AgentListApprovalsResponse,
     type AgentUpdatePolicyResponse as AgentUpdatePolicyResponse,
     type AgentListResponsesDefaultPagination as AgentListResponsesDefaultPagination,
+    type AgentListApprovalsResponsesDefaultPagination as AgentListApprovalsResponsesDefaultPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
-    type AgentRetrieveApprovalsParams as AgentRetrieveApprovalsParams,
+    type AgentListApprovalsParams as AgentListApprovalsParams,
     type AgentUpdatePolicyParams as AgentUpdatePolicyParams,
   };
 
   export {
     Me as Me,
-    type MeListResponse as MeListResponse,
-    type MeRetrieveInternalAccountsResponse as MeRetrieveInternalAccountsResponse,
-    type MeTransferInResponse as MeTransferInResponse,
-    type MeTransferOutResponse as MeTransferOutResponse,
-    type MeRetrieveInternalAccountsParams as MeRetrieveInternalAccountsParams,
-    type MeTransferInParams as MeTransferInParams,
-    type MeTransferOutParams as MeTransferOutParams,
+    type MeRetrieveResponse as MeRetrieveResponse,
+    type MeCreateTransferInResponse as MeCreateTransferInResponse,
+    type MeCreateTransferOutResponse as MeCreateTransferOutResponse,
+    type MeCreateTransferInParams as MeCreateTransferInParams,
+    type MeCreateTransferOutParams as MeCreateTransferOutParams,
+    type MeListInternalAccountsParams as MeListInternalAccountsParams,
   };
 
   export {
     DeviceCodes as DeviceCodes,
-    type DeviceCodeDeviceCodesResponse as DeviceCodeDeviceCodesResponse,
+    type DeviceCodeGetStatusResponse as DeviceCodeGetStatusResponse,
     type DeviceCodeRedeemResponse as DeviceCodeRedeemResponse,
-    type DeviceCodeRetrieveStatusResponse as DeviceCodeRetrieveStatusResponse,
+    type DeviceCodeRegenerateResponse as DeviceCodeRegenerateResponse,
   };
+
+  export { Transactions as Transactions };
 
   export {
     Actions as Actions,
