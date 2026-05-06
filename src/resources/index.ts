@@ -3,6 +3,8 @@
 export * from './shared';
 export {
   Agents,
+  type AgentPolicy,
+  type AgentUsage,
   type AgentCreateResponse,
   type AgentRetrieveResponse,
   type AgentUpdateResponse,

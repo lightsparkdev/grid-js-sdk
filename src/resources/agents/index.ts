@@ -9,6 +9,8 @@ export {
 } from './actions';
 export {
   Agents,
+  type AgentPolicy,
+  type AgentUsage,
   type AgentCreateResponse,
   type AgentRetrieveResponse,
   type AgentUpdateResponse,
