@@ -19,7 +19,13 @@ import {
   DeviceCodes,
 } from './device-codes';
 import * as TransactionsAPI from './transactions';
-import { Transactions } from './transactions';
+import {
+  TransactionApproveParams,
+  TransactionApproveResponse,
+  TransactionRejectParams,
+  TransactionRejectResponse,
+  Transactions,
+} from './transactions';
 import * as MeAPI from './me/me';
 import {
   Me,
@@ -1960,7 +1966,13 @@ export declare namespace Agents {
     type DeviceCodeRegenerateResponse as DeviceCodeRegenerateResponse,
   };
 
-  export { Transactions as Transactions };
+  export {
+    Transactions as Transactions,
+    type TransactionApproveResponse as TransactionApproveResponse,
+    type TransactionRejectResponse as TransactionRejectResponse,
+    type TransactionApproveParams as TransactionApproveParams,
+    type TransactionRejectParams as TransactionRejectParams,
+  };
 
   export {
     Actions as Actions,

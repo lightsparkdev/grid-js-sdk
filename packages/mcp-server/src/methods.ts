@@ -564,6 +564,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/agents/{agentId}/device-codes',
   },
   {
+    clientCallName: 'client.agents.transactions.approve',
+    fullyQualifiedName: 'agents.transactions.approve',
+    httpMethod: 'post',
+    httpPath: '/agents/{agentId}/actions/{actionId}/approve',
+  },
+  {
+    clientCallName: 'client.agents.transactions.reject',
+    fullyQualifiedName: 'agents.transactions.reject',
+    httpMethod: 'post',
+    httpPath: '/agents/{agentId}/actions/{actionId}/reject',
+  },
+  {
     clientCallName: 'client.agents.actions.approve',
     fullyQualifiedName: 'agents.actions.approve',
     httpMethod: 'post',

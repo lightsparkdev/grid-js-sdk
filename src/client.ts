@@ -209,12 +209,17 @@ export interface ClientOptions {
   /**
    * API token authentication using format `<api token id>:<api client secret>`
    */
-  username?: string | undefined;
+  username?: string | null | undefined;
 
   /**
    * API token authentication using format `<api token id>:<api client secret>`
    */
-  password?: string | undefined;
+  password?: string | null | undefined;
+
+  /**
+   * Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations.
+   */
+  agentAccessToken?: string | null | undefined;
 
   /**
    * Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.
@@ -303,8 +308,9 @@ export interface ClientOptions {
  * API Client for interfacing with the Lightspark Grid API.
  */
 export class LightsparkGrid {
-  username: string;
-  password: string;
+  username: string | null;
+  password: string | null;
+  agentAccessToken: string | null;
   webhookSignature: string | null;
 
   baseURL: string;
@@ -322,8 +328,9 @@ export class LightsparkGrid {
   /**
    * API Client for interfacing with the Lightspark Grid API.
    *
-   * @param {string | undefined} [opts.username=process.env['GRID_CLIENT_ID'] ?? undefined]
-   * @param {string | undefined} [opts.password=process.env['GRID_CLIENT_SECRET'] ?? undefined]
+   * @param {string | null | undefined} [opts.username=process.env['GRID_CLIENT_ID'] ?? null]
+   * @param {string | null | undefined} [opts.password=process.env['GRID_CLIENT_SECRET'] ?? null]
+   * @param {string | null | undefined} [opts.agentAccessToken=process.env['GRID_AGENT_ACCESS_TOKEN'] ?? null]
    * @param {string | null | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_PUBKEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['LIGHTSPARK_GRID_BASE_URL'] ?? https://api.lightspark.com/grid/2025-10-13] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -335,25 +342,16 @@ export class LightsparkGrid {
    */
   constructor({
     baseURL = readEnv('LIGHTSPARK_GRID_BASE_URL'),
-    username = readEnv('GRID_CLIENT_ID'),
-    password = readEnv('GRID_CLIENT_SECRET'),
+    username = readEnv('GRID_CLIENT_ID') ?? null,
+    password = readEnv('GRID_CLIENT_SECRET') ?? null,
+    agentAccessToken = readEnv('GRID_AGENT_ACCESS_TOKEN') ?? null,
     webhookSignature = readEnv('GRID_WEBHOOK_PUBKEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (username === undefined) {
-      throw new Errors.LightsparkGridError(
-        "The GRID_CLIENT_ID environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an username option, like new LightsparkGrid({ username: 'My Username' }).",
-      );
-    }
-    if (password === undefined) {
-      throw new Errors.LightsparkGridError(
-        "The GRID_CLIENT_SECRET environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an password option, like new LightsparkGrid({ password: 'My Password' }).",
-      );
-    }
-
     const options: ClientOptions = {
       username,
       password,
+      agentAccessToken,
       webhookSignature,
       ...opts,
       baseURL: baseURL || `https://api.lightspark.com/grid/2025-10-13`,
@@ -390,6 +388,7 @@ export class LightsparkGrid {
 
     this.username = username;
     this.password = password;
+    this.agentAccessToken = agentAccessToken;
     this.webhookSignature = webhookSignature;
   }
 
@@ -408,6 +407,7 @@ export class LightsparkGrid {
       fetchOptions: this.fetchOptions,
       username: this.username,
       password: this.password,
+      agentAccessToken: this.agentAccessToken,
       webhookSignature: this.webhookSignature,
       ...options,
     });
@@ -426,11 +426,38 @@ export class LightsparkGrid {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.username && this.password && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    if (this.agentAccessToken && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    if (this.webhookSignature && values.get('x-grid-signature')) {
+      return;
+    }
+    if (nulls.has('x-grid-signature')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected one of username, password, agentAccessToken or webhookSignature to be set. Or for one of the "Authorization", "Authorization" or "X-Grid-Signature" headers to be explicitly omitted',
+    );
   }
 
   protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return buildHeaders([await this.basicAuth(opts), await this.webhookSignatureAuth(opts)]);
+    return buildHeaders([
+      await this.basicAuth(opts),
+      await this.agentAuth(opts),
+      await this.webhookSignatureAuth(opts),
+    ]);
   }
 
   protected async basicAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
@@ -445,6 +472,13 @@ export class LightsparkGrid {
     const credentials = `${this.username}:${this.password}`;
     const Authorization = `Basic ${toBase64(credentials)}`;
     return buildHeaders([{ Authorization }]);
+  }
+
+  protected async agentAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.agentAccessToken == null) {
+      return undefined;
+    }
+    return buildHeaders([{ Authorization: `Bearer ${this.agentAccessToken}` }]);
   }
 
   protected async webhookSignatureAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {

@@ -11,6 +11,7 @@ You can run the MCP Server directly via `npx`:
 ```sh
 export GRID_CLIENT_ID="My Username"
 export GRID_CLIENT_SECRET="My Password"
+export GRID_AGENT_ACCESS_TOKEN="My Agent Access Token"
 export GRID_WEBHOOK_PUBKEY="My Webhook Signature"
 npx -y @lightsparkdev/grid-mcp@latest
 ```
@@ -31,6 +32,7 @@ For clients with a configuration JSON, it might look something like this:
       "env": {
         "GRID_CLIENT_ID": "My Username",
         "GRID_CLIENT_SECRET": "My Password",
+        "GRID_AGENT_ACCESS_TOKEN": "My Agent Access Token",
         "GRID_WEBHOOK_PUBKEY": "My Webhook Signature"
       }
     }
@@ -43,14 +45,14 @@ For clients with a configuration JSON, it might look something like this:
 If you use Cursor, you can install the MCP server by using the button below. You will need to set your environment variables
 in Cursor's `mcp.json`, which can be found in Cursor Settings > Tools & MCP > New MCP Server.
 
-[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwiWC1HcmlkLVNpZ25hdHVyZSI6Ik15IFdlYmhvb2sgU2lnbmF0dXJlIn19)
+[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwieC1ncmlkLWFnZW50LWFjY2Vzcy10b2tlbiI6Ik15IEFnZW50IEFjY2VzcyBUb2tlbiIsIlgtR3JpZC1TaWduYXR1cmUiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)
 
 ### VS Code
 
 If you use MCP, you can install the MCP server by clicking the link below. You will need to set your environment variables
 in VS Code's `mcp.json`, which can be found via Command Palette > MCP: Open User Configuration.
 
-[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)
+[Open VS Code](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22x-grid-agent-access-token%22%3A%22My%20Agent%20Access%20Token%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)
 
 ### Claude Code
 
@@ -58,7 +60,7 @@ If you use Claude Code, you can install the MCP server by running the command be
 environment variables in Claude Code's `.claude.json`, which can be found in your home directory.
 
 ```
-claude mcp add lightsparkdev_grid_mcp_api --header "x-grid-client-id: My Username" --header "x-grid-client-secret: My Password" --header "X-Grid-Signature: My Webhook Signature" --transport http https://grid-mcp.stlmcp.com
+claude mcp add lightsparkdev_grid_mcp_api --header "x-grid-client-id: My Username" --header "x-grid-client-secret: My Password" --header "x-grid-agent-access-token: My Agent Access Token" --header "X-Grid-Signature: My Webhook Signature" --transport http https://grid-mcp.stlmcp.com
 ```
 
 ## Code Mode
@@ -82,13 +84,14 @@ and repeatably.
 
 Launching the client with `--transport=http` launches the server as a remote server using Streamable HTTP transport. The `--port` setting can choose the port it will run on, and the `--socket` setting allows it to run on a Unix socket.
 
-Authorization can be provided via the `Authorization` header using the Basic scheme.
+Authorization can be provided via the `Authorization` header using the Basic or Bearer scheme.
 
 Additionally, authorization can be provided via the following headers:
 | Header | Equivalent client option | Security scheme |
-| ---------------------- | ------------------------ | ---------------- |
+| --------------------------- | ------------------------ | ---------------- |
 | `x-grid-client-id` | `username` | BasicAuth |
 | `x-grid-client-secret` | `password` | BasicAuth |
+| `x-grid-agent-access-token` | `agentAccessToken` | AgentAuth |
 | `X-Grid-Signature` | `webhookSignature` | WebhookSignature |
 
 A configuration JSON for this server might look like this, assuming the server is hosted at `http://localhost:3000`:

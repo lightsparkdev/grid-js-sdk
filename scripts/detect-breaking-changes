@@ -42,6 +42,7 @@ TEST_PATHS=(
 	tests/api-resources/agents/me/external-accounts.test.ts
 	tests/api-resources/agents/me/actions.test.ts
 	tests/api-resources/agents/device-codes.test.ts
+	tests/api-resources/agents/transactions.test.ts
 	tests/api-resources/agents/actions.test.ts
 	tests/index.test.ts
 )

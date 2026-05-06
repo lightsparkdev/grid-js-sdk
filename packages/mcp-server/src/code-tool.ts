@@ -10,7 +10,7 @@ import {
   asTextContentResult,
 } from './types';
 import { Tool } from '@modelcontextprotocol/sdk/types.js';
-import { readEnv, requireValue } from './util';
+import { readEnv } from './util';
 import { WorkerInput, WorkerOutput } from './code-tool-types';
 import { getLogger } from './logger';
 import { SdkMethod } from './methods';
@@ -150,14 +150,9 @@ const remoteStainlessHandler = async ({
   const codeModeEndpoint = readEnv('CODE_MODE_ENDPOINT_URL') ?? 'https://api.stainless.com/api/ai/code-tool';
 
   const localClientEnvs = {
-    GRID_CLIENT_ID: requireValue(
-      readEnv('GRID_CLIENT_ID') ?? client.username,
-      'set GRID_CLIENT_ID environment variable or provide username client option',
-    ),
-    GRID_CLIENT_SECRET: requireValue(
-      readEnv('GRID_CLIENT_SECRET') ?? client.password,
-      'set GRID_CLIENT_SECRET environment variable or provide password client option',
-    ),
+    GRID_CLIENT_ID: readEnv('GRID_CLIENT_ID') ?? client.username ?? undefined,
+    GRID_CLIENT_SECRET: readEnv('GRID_CLIENT_SECRET') ?? client.password ?? undefined,
+    GRID_AGENT_ACCESS_TOKEN: readEnv('GRID_AGENT_ACCESS_TOKEN') ?? client.agentAccessToken ?? undefined,
     GRID_WEBHOOK_PUBKEY: readEnv('GRID_WEBHOOK_PUBKEY') ?? client.webhookSignature ?? undefined,
     LIGHTSPARK_GRID_BASE_URL: readEnv('LIGHTSPARK_GRID_BASE_URL') ?? client.baseURL ?? undefined,
   };
@@ -299,6 +294,7 @@ const localDenoHandler = async ({
         ...(client.baseURL != null ? { baseURL: client.baseURL } : undefined),
         ...(client.username != null ? { username: client.username } : undefined),
         ...(client.password != null ? { password: client.password } : undefined),
+        ...(client.agentAccessToken != null ? { agentAccessToken: client.agentAccessToken } : undefined),
         ...(client.webhookSignature != null ? { webhookSignature: client.webhookSignature } : undefined),
         defaultHeaders: {
           'X-Stainless-MCP': 'true',

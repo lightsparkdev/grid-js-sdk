@@ -616,6 +616,16 @@ Methods:
 
 ## Transactions
 
+Types:
+
+- <code><a href="./src/resources/agents/transactions.ts">TransactionApproveResponse</a></code>
+- <code><a href="./src/resources/agents/transactions.ts">TransactionRejectResponse</a></code>
+
+Methods:
+
+- <code title="post /agents/{agentId}/actions/{actionId}/approve">client.agents.transactions.<a href="./src/resources/agents/transactions.ts">approve</a>(actionID, { ...params }) -> TransactionApproveResponse</code>
+- <code title="post /agents/{agentId}/actions/{actionId}/reject">client.agents.transactions.<a href="./src/resources/agents/transactions.ts">reject</a>(actionID, { ...params }) -> TransactionRejectResponse</code>
+
 ## Actions
 
 Types:

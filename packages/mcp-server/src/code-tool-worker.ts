@@ -201,6 +201,8 @@ const fuse = new Fuse(
     'client.agents.deviceCodes.getStatus',
     'client.agents.deviceCodes.redeem',
     'client.agents.deviceCodes.regenerate',
+    'client.agents.transactions.approve',
+    'client.agents.transactions.reject',
     'client.agents.actions.approve',
     'client.agents.actions.reject',
   ],
