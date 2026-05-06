@@ -10,19 +10,18 @@ import { path } from '../../internal/utils/path';
  */
 export class DeviceCodes extends APIResource {
   /**
-   * Generate a new device code for an existing agent. Use this when the original
-   * device code has expired before being redeemed, or when the agent software needs
-   * to be reinstalled. Any previously issued unredeemed device codes for this agent
-   * are invalidated.
+   * Check whether a device code has been redeemed. Use this to poll for agent
+   * installation completion after creating an agent.
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.agents.deviceCodes.deviceCodes('agentId');
+   * const response = await client.agents.deviceCodes.getStatus(
+   *   'code',
+   * );
    * ```
    */
-  deviceCodes(agentID: string, options?: RequestOptions): APIPromise<DeviceCodeDeviceCodesResponse> {
-    return this._client.post(path`/agents/${agentID}/device-codes`, options);
+  getStatus(code: string, options?: RequestOptions): APIPromise<DeviceCodeGetStatusResponse> {
+    return this._client.get(path`/agents/device-codes/${code}/status`, options);
   }
 
   /**
@@ -44,38 +43,31 @@ export class DeviceCodes extends APIResource {
   }
 
   /**
-   * Check whether a device code has been redeemed. Use this to poll for agent
-   * installation completion after creating an agent.
+   * Generate a new device code for an existing agent. Use this when the original
+   * device code has expired before being redeemed, or when the agent software needs
+   * to be reinstalled. Any previously issued unredeemed device codes for this agent
+   * are invalidated.
    *
    * @example
    * ```ts
-   * const response =
-   *   await client.agents.deviceCodes.retrieveStatus('code');
+   * const response = await client.agents.deviceCodes.regenerate(
+   *   'agentId',
+   * );
    * ```
    */
-  retrieveStatus(code: string, options?: RequestOptions): APIPromise<DeviceCodeRetrieveStatusResponse> {
-    return this._client.get(path`/agents/device-codes/${code}/status`, options);
+  regenerate(agentID: string, options?: RequestOptions): APIPromise<DeviceCodeRegenerateResponse> {
+    return this._client.post(path`/agents/${agentID}/device-codes`, options);
   }
 }
 
-export interface DeviceCodeDeviceCodesResponse {
+export interface DeviceCodeGetStatusResponse {
   /**
-   * The agent this device code belongs to.
-   */
-  agentId: string;
-
-  /**
-   * Human-readable device code used to install and connect the agent software.
+   * The device code.
    */
   code: string;
 
   /**
-   * Timestamp when this device code expires.
-   */
-  expiresAt: string;
-
-  /**
-   * Whether this device code has already been redeemed by the agent.
+   * Whether this device code has been redeemed.
    */
   redeemed: boolean;
 }
@@ -256,22 +248,32 @@ export namespace DeviceCodeRedeemResponse {
   }
 }
 
-export interface DeviceCodeRetrieveStatusResponse {
+export interface DeviceCodeRegenerateResponse {
   /**
-   * The device code.
+   * The agent this device code belongs to.
+   */
+  agentId: string;
+
+  /**
+   * Human-readable device code used to install and connect the agent software.
    */
   code: string;
 
   /**
-   * Whether this device code has been redeemed.
+   * Timestamp when this device code expires.
+   */
+  expiresAt: string;
+
+  /**
+   * Whether this device code has already been redeemed by the agent.
    */
   redeemed: boolean;
 }
 
 export declare namespace DeviceCodes {
   export {
-    type DeviceCodeDeviceCodesResponse as DeviceCodeDeviceCodesResponse,
+    type DeviceCodeGetStatusResponse as DeviceCodeGetStatusResponse,
     type DeviceCodeRedeemResponse as DeviceCodeRedeemResponse,
-    type DeviceCodeRetrieveStatusResponse as DeviceCodeRetrieveStatusResponse,
+    type DeviceCodeRegenerateResponse as DeviceCodeRegenerateResponse,
   };
 }

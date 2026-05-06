@@ -7,14 +7,15 @@ export {
   type AgentRetrieveResponse,
   type AgentUpdateResponse,
   type AgentListResponse,
-  type AgentRetrieveApprovalsResponse,
+  type AgentListApprovalsResponse,
   type AgentUpdatePolicyResponse,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
-  type AgentRetrieveApprovalsParams,
+  type AgentListApprovalsParams,
   type AgentUpdatePolicyParams,
   type AgentListResponsesDefaultPagination,
+  type AgentListApprovalsResponsesDefaultPagination,
 } from './agents/agents';
 export { Auth } from './auth/auth';
 export {

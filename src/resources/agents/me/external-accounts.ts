@@ -3,7 +3,9 @@
 import { APIResource } from '../../../core/resource';
 import * as Shared from '../../shared';
 import * as ExternalAccountsAPI from '../../customers/external-accounts';
+import { ExternalAccountsDefaultPagination } from '../../customers/external-accounts';
 import { APIPromise } from '../../../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../../core/pagination';
 import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 import { path } from '../../../internal/utils/path';
@@ -33,6 +35,30 @@ export class ExternalAccounts extends APIResource {
   }
 
   /**
+   * Retrieve a paginated list of external accounts belonging to the authenticated
+   * agent's customer. Requires the MANAGE_EXTERNAL_ACCOUNTS permission in the
+   * agent's policy.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const externalAccount of client.agents.me.externalAccounts.list()) {
+   *   // ...
+   * }
+   * ```
+   */
+  list(
+    query: ExternalAccountListParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<ExternalAccountsDefaultPagination, ExternalAccountsAPI.ExternalAccount> {
+    return this._client.getAPIList(
+      '/agents/me/external-accounts',
+      DefaultPagination<ExternalAccountsAPI.ExternalAccount>,
+      { query, ...options },
+    );
+  }
+
+  /**
    * Delete an external account belonging to the authenticated agent's customer.
    * Requires the MANAGE_EXTERNAL_ACCOUNTS permission in the agent's policy.
    *
@@ -59,7 +85,7 @@ export class ExternalAccounts extends APIResource {
    * @example
    * ```ts
    * const externalAccount =
-   *   await client.agents.me.externalAccounts.externalAccounts({
+   *   await client.agents.me.externalAccounts.add({
    *     accountInfo: {
    *       accountType: 'USD_ACCOUNT',
    *       accountNumber: '12345678901',
@@ -82,55 +108,27 @@ export class ExternalAccounts extends APIResource {
    *   });
    * ```
    */
-  externalAccounts(
-    body: ExternalAccountExternalAccountsParams,
+  add(
+    body: ExternalAccountAddParams,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
     return this._client.post('/agents/me/external-accounts', { body, ...options });
   }
-
-  /**
-   * Retrieve a paginated list of external accounts belonging to the authenticated
-   * agent's customer. Requires the MANAGE_EXTERNAL_ACCOUNTS permission in the
-   * agent's policy.
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.agents.me.externalAccounts.retrieveExternalAccounts();
-   * ```
-   */
-  retrieveExternalAccounts(
-    query: ExternalAccountRetrieveExternalAccountsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<ExternalAccountRetrieveExternalAccountsResponse> {
-    return this._client.get('/agents/me/external-accounts', { query, ...options });
-  }
 }
 
-export interface ExternalAccountRetrieveExternalAccountsResponse {
+export interface ExternalAccountListParams extends DefaultPaginationParams {
   /**
-   * List of external accounts matching the filter criteria
+   * Filter by currency code
    */
-  data: Array<ExternalAccountsAPI.ExternalAccount>;
+  currency?: string;
 
   /**
-   * Indicates if more results are available beyond this page
+   * Maximum number of results to return (default 20, max 100)
    */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of external accounts matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
+  limit?: number;
 }
 
-export interface ExternalAccountExternalAccountsParams {
+export interface ExternalAccountAddParams {
   /**
    * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
    * `lightningAddress` must be provided.
@@ -209,27 +207,11 @@ export interface ExternalAccountExternalAccountsParams {
   platformAccountId?: string;
 }
 
-export interface ExternalAccountRetrieveExternalAccountsParams {
-  /**
-   * Filter by currency code
-   */
-  currency?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return (default 20, max 100)
-   */
-  limit?: number;
-}
-
 export declare namespace ExternalAccounts {
   export {
-    type ExternalAccountRetrieveExternalAccountsResponse as ExternalAccountRetrieveExternalAccountsResponse,
-    type ExternalAccountExternalAccountsParams as ExternalAccountExternalAccountsParams,
-    type ExternalAccountRetrieveExternalAccountsParams as ExternalAccountRetrieveExternalAccountsParams,
+    type ExternalAccountListParams as ExternalAccountListParams,
+    type ExternalAccountAddParams as ExternalAccountAddParams,
   };
 }
+
+export { type ExternalAccountsDefaultPagination };

@@ -129,8 +129,8 @@ describe('resource agents', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieveApprovals', async () => {
-    const responsePromise = client.agents.retrieveApprovals();
+  test.skip('listApprovals', async () => {
+    const responsePromise = client.agents.listApprovals();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -141,10 +141,10 @@ describe('resource agents', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieveApprovals: request options and params are passed correctly', async () => {
+  test.skip('listApprovals: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.agents.retrieveApprovals(
+      client.agents.listApprovals(
         {
           agentId: 'agentId',
           cursor: 'cursor',

@@ -4,6 +4,7 @@ import { APIResource } from '../../../core/resource';
 import * as QuotesAPI from '../../quotes';
 import * as TransferInAPI from '../../transfer-in';
 import * as InternalAccountsAPI from '../../sandbox/internal-accounts';
+import { InternalAccountsDefaultPagination } from '../../sandbox/internal-accounts';
 import * as ActionsAPI from './actions';
 import {
   ActionListParams,
@@ -13,17 +14,13 @@ import {
   Actions,
 } from './actions';
 import * as ExternalAccountsAPI from './external-accounts';
-import {
-  ExternalAccountExternalAccountsParams,
-  ExternalAccountRetrieveExternalAccountsParams,
-  ExternalAccountRetrieveExternalAccountsResponse,
-  ExternalAccounts,
-} from './external-accounts';
+import { ExternalAccountAddParams, ExternalAccountListParams, ExternalAccounts } from './external-accounts';
 import * as MeQuotesAPI from './quotes';
 import { QuoteCreateParams, QuoteExecuteParams, QuoteExecuteResponse, Quotes } from './quotes';
 import * as TransactionsAPI from './transactions';
 import { TransactionListParams, Transactions } from './transactions';
 import { APIPromise } from '../../../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../../core/pagination';
 import { buildHeaders } from '../../../internal/headers';
 import { RequestOptions } from '../../../internal/request-options';
 
@@ -33,10 +30,10 @@ import { RequestOptions } from '../../../internal/request-options';
 export class Me extends APIResource {
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
   quotes: MeQuotesAPI.Quotes = new MeQuotesAPI.Quotes(this._client);
-  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
   externalAccounts: ExternalAccountsAPI.ExternalAccounts = new ExternalAccountsAPI.ExternalAccounts(
     this._client,
   );
+  actions: ActionsAPI.Actions = new ActionsAPI.Actions(this._client);
 
   /**
    * Retrieve the authenticated agent's own profile, policy, and current usage. This
@@ -45,30 +42,11 @@ export class Me extends APIResource {
    *
    * @example
    * ```ts
-   * const mes = await client.agents.me.list();
+   * const me = await client.agents.me.retrieve();
    * ```
    */
-  list(options?: RequestOptions): APIPromise<MeListResponse> {
+  retrieve(options?: RequestOptions): APIPromise<MeRetrieveResponse> {
     return this._client.get('/agents/me', options);
-  }
-
-  /**
-   * Retrieve the internal accounts belonging to the customer this agent operates on
-   * behalf of. Use this to discover available source accounts for transfers and
-   * quotes, and to verify which accounts are accessible under the agent's
-   * `accountRestrictions` policy.
-   *
-   * @example
-   * ```ts
-   * const response =
-   *   await client.agents.me.retrieveInternalAccounts();
-   * ```
-   */
-  retrieveInternalAccounts(
-    query: MeRetrieveInternalAccountsParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<MeRetrieveInternalAccountsResponse> {
-    return this._client.get('/agents/me/internal-accounts', { query, ...options });
   }
 
   /**
@@ -84,7 +62,7 @@ export class Me extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.agents.me.transferIn({
+   * const response = await client.agents.me.createTransferIn({
    *   destination: {
    *     accountId:
    *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
@@ -97,7 +75,10 @@ export class Me extends APIResource {
    * });
    * ```
    */
-  transferIn(params: MeTransferInParams, options?: RequestOptions): APIPromise<MeTransferInResponse> {
+  createTransferIn(
+    params: MeCreateTransferInParams,
+    options?: RequestOptions,
+  ): APIPromise<MeCreateTransferInResponse> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/agents/me/transfer-in', {
       body,
@@ -119,7 +100,7 @@ export class Me extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.agents.me.transferOut({
+   * const response = await client.agents.me.createTransferOut({
    *   destination: {
    *     accountId:
    *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
@@ -132,7 +113,10 @@ export class Me extends APIResource {
    * });
    * ```
    */
-  transferOut(params: MeTransferOutParams, options?: RequestOptions): APIPromise<MeTransferOutResponse> {
+  createTransferOut(
+    params: MeCreateTransferOutParams,
+    options?: RequestOptions,
+  ): APIPromise<MeCreateTransferOutResponse> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/agents/me/transfer-out', {
       body,
@@ -143,13 +127,38 @@ export class Me extends APIResource {
       ]),
     });
   }
+
+  /**
+   * Retrieve the internal accounts belonging to the customer this agent operates on
+   * behalf of. Use this to discover available source accounts for transfers and
+   * quotes, and to verify which accounts are accessible under the agent's
+   * `accountRestrictions` policy.
+   *
+   * @example
+   * ```ts
+   * // Automatically fetches more pages as needed.
+   * for await (const internalAccount of client.agents.me.listInternalAccounts()) {
+   *   // ...
+   * }
+   * ```
+   */
+  listInternalAccounts(
+    query: MeListInternalAccountsParams | null | undefined = {},
+    options?: RequestOptions,
+  ): PagePromise<InternalAccountsDefaultPagination, InternalAccountsAPI.InternalAccount> {
+    return this._client.getAPIList(
+      '/agents/me/internal-accounts',
+      DefaultPagination<InternalAccountsAPI.InternalAccount>,
+      { query, ...options },
+    );
+  }
 }
 
 /**
  * A programmatic agent with scoped permissions and a spending policy, used to
  * automate payment workflows.
  */
-export interface MeListResponse {
+export interface MeRetrieveResponse {
   /**
    * System-generated unique identifier for the agent.
    */
@@ -186,7 +195,7 @@ export interface MeListResponse {
    * Policy governing what an agent can do, how it executes actions, and its spending
    * boundaries.
    */
-  policy: MeListResponse.Policy;
+  policy: MeRetrieveResponse.Policy;
 
   /**
    * Last update timestamp.
@@ -197,10 +206,10 @@ export interface MeListResponse {
    * Real-time counters tracking the agent's spending and transaction activity
    * against its policy limits.
    */
-  usage: MeListResponse.Usage;
+  usage: MeRetrieveResponse.Usage;
 }
 
-export namespace MeListResponse {
+export namespace MeRetrieveResponse {
   /**
    * Policy governing what an agent can do, how it executes actions, and its spending
    * boundaries.
@@ -384,35 +393,13 @@ export namespace MeListResponse {
   }
 }
 
-export interface MeRetrieveInternalAccountsResponse {
-  /**
-   * List of internal accounts matching the filter criteria
-   */
-  data: Array<InternalAccountsAPI.InternalAccount>;
-
-  /**
-   * Indicates if more results are available beyond this page
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true)
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of customers matching the criteria (excluding pagination)
-   */
-  totalCount?: number;
-}
-
 /**
  * An action submitted by an agent that may require platform approval before
  * execution. All agent-initiated operations (quote execution, transfers) are
  * represented as AgentActions, giving the platform a consistent object to approve,
  * reject, and audit regardless of the underlying operation type.
  */
-export interface MeTransferInResponse {
+export interface MeCreateTransferInResponse {
   /**
    * System-generated unique identifier for this action.
    */
@@ -489,10 +476,10 @@ export interface MeTransferInResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  transferDetails?: MeTransferInResponse.TransferDetails;
+  transferDetails?: MeCreateTransferInResponse.TransferDetails;
 }
 
-export namespace MeTransferInResponse {
+export namespace MeCreateTransferInResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
@@ -525,7 +512,7 @@ export namespace MeTransferInResponse {
  * represented as AgentActions, giving the platform a consistent object to approve,
  * reject, and audit regardless of the underlying operation type.
  */
-export interface MeTransferOutResponse {
+export interface MeCreateTransferOutResponse {
   /**
    * System-generated unique identifier for this action.
    */
@@ -602,10 +589,10 @@ export interface MeTransferOutResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
-  transferDetails?: MeTransferOutResponse.TransferDetails;
+  transferDetails?: MeCreateTransferOutResponse.TransferDetails;
 }
 
-export namespace MeTransferOutResponse {
+export namespace MeCreateTransferOutResponse {
   /**
    * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
    */
@@ -632,31 +619,7 @@ export namespace MeTransferOutResponse {
   }
 }
 
-export interface MeRetrieveInternalAccountsParams {
-  /**
-   * Filter by currency code
-   */
-  currency?: string;
-
-  /**
-   * Cursor for pagination (returned from previous request)
-   */
-  cursor?: string;
-
-  /**
-   * Maximum number of results to return (default 20, max 100)
-   */
-  limit?: number;
-
-  /**
-   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
-   * self-custodial wallet provisioned for the customer, or `INTERNAL_FIAT` /
-   * `INTERNAL_CRYPTO` for platform-managed holding accounts.
-   */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
-}
-
-export interface MeTransferInParams {
+export interface MeCreateTransferInParams {
   /**
    * Body param: Destination internal account details
    */
@@ -680,7 +643,7 @@ export interface MeTransferInParams {
   'Idempotency-Key'?: string;
 }
 
-export interface MeTransferOutParams {
+export interface MeCreateTransferOutParams {
   /**
    * Body param: Destination external account details
    */
@@ -704,20 +667,38 @@ export interface MeTransferOutParams {
   'Idempotency-Key'?: string;
 }
 
+export interface MeListInternalAccountsParams extends DefaultPaginationParams {
+  /**
+   * Filter by currency code
+   */
+  currency?: string;
+
+  /**
+   * Maximum number of results to return (default 20, max 100)
+   */
+  limit?: number;
+
+  /**
+   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
+   * self-custodial wallet provisioned for the customer, or `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for platform-managed holding accounts.
+   */
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+}
+
 Me.Transactions = Transactions;
 Me.Quotes = Quotes;
-Me.Actions = Actions;
 Me.ExternalAccounts = ExternalAccounts;
+Me.Actions = Actions;
 
 export declare namespace Me {
   export {
-    type MeListResponse as MeListResponse,
-    type MeRetrieveInternalAccountsResponse as MeRetrieveInternalAccountsResponse,
-    type MeTransferInResponse as MeTransferInResponse,
-    type MeTransferOutResponse as MeTransferOutResponse,
-    type MeRetrieveInternalAccountsParams as MeRetrieveInternalAccountsParams,
-    type MeTransferInParams as MeTransferInParams,
-    type MeTransferOutParams as MeTransferOutParams,
+    type MeRetrieveResponse as MeRetrieveResponse,
+    type MeCreateTransferInResponse as MeCreateTransferInResponse,
+    type MeCreateTransferOutResponse as MeCreateTransferOutResponse,
+    type MeCreateTransferInParams as MeCreateTransferInParams,
+    type MeCreateTransferOutParams as MeCreateTransferOutParams,
+    type MeListInternalAccountsParams as MeListInternalAccountsParams,
   };
 
   export { Transactions as Transactions, type TransactionListParams as TransactionListParams };
@@ -730,17 +711,18 @@ export declare namespace Me {
   };
 
   export {
+    ExternalAccounts as ExternalAccounts,
+    type ExternalAccountListParams as ExternalAccountListParams,
+    type ExternalAccountAddParams as ExternalAccountAddParams,
+  };
+
+  export {
     Actions as Actions,
     type ActionRetrieveResponse as ActionRetrieveResponse,
     type ActionListResponse as ActionListResponse,
     type ActionListResponsesDefaultPagination as ActionListResponsesDefaultPagination,
     type ActionListParams as ActionListParams,
   };
-
-  export {
-    ExternalAccounts as ExternalAccounts,
-    type ExternalAccountRetrieveExternalAccountsResponse as ExternalAccountRetrieveExternalAccountsResponse,
-    type ExternalAccountExternalAccountsParams as ExternalAccountExternalAccountsParams,
-    type ExternalAccountRetrieveExternalAccountsParams as ExternalAccountRetrieveExternalAccountsParams,
-  };
 }
+
+export { type InternalAccountsDefaultPagination };

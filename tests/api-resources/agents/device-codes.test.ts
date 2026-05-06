@@ -10,8 +10,8 @@ const client = new LightsparkGrid({
 
 describe('resource deviceCodes', () => {
   // Mock server tests are disabled
-  test.skip('deviceCodes', async () => {
-    const responsePromise = client.agents.deviceCodes.deviceCodes('agentId');
+  test.skip('getStatus', async () => {
+    const responsePromise = client.agents.deviceCodes.getStatus('code');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -34,8 +34,8 @@ describe('resource deviceCodes', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('retrieveStatus', async () => {
-    const responsePromise = client.agents.deviceCodes.retrieveStatus('code');
+  test.skip('regenerate', async () => {
+    const responsePromise = client.agents.deviceCodes.regenerate('agentId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
