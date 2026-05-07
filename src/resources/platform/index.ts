@@ -37,7 +37,6 @@ export {
   type XofAccountInfo,
   type ZarAccountInfo,
   type ZmwAccountInfo,
-  type ExternalAccountListResponse,
   type ExternalAccountCreateParams,
   type ExternalAccountListParams,
 } from './external-accounts';
