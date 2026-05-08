@@ -126,7 +126,17 @@ const del = async (req: express.Request, res: express.Response) => {
 };
 
 const redactHeaders = (headers: Record<string, any>) => {
-  const hiddenHeaders = /auth|cookie|key|token|x-stainless-mcp-client-envs/i;
+  // SECURITY MAINTENANCE CONTRACT: this regex matches header NAMES that
+  // may carry sensitive values; it is intentionally permissive (substring
+  // matches) so common conventions like *-secret, *-signature, *-api-key
+  // are caught automatically. When adding ANY new request header that
+  // could carry secrets (auth tokens, customer creds, signing material),
+  // verify substring match here AND extend the smoke test in
+  // docs/superpowers/plans/2026-05-07-lambda-migration.md Task 2.5 Step 3
+  // and Task 7 Step 5 with a probe value. Allowlist-by-substring will not
+  // catch novel naming conventions (e.g. X-Customer-Hmac); add explicit
+  // alternatives when you introduce them.
+  const hiddenHeaders = /auth|cookie|key|token|secret|signature|grid|stainless/i;
   const filtered = { ...headers };
   Object.keys(filtered).forEach((key) => {
     if (hiddenHeaders.test(key)) {
