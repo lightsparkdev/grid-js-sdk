@@ -197,21 +197,23 @@ export const streamableHTTPApp = ({
   app.get('/health', async (req: express.Request, res: express.Response) => {
     res.status(200).send('OK');
   });
-  app.get('/', get);
-  app.post('/', post({ clientOptions, mcpOptions }));
-  app.delete('/', del);
+  app.get('/mcp', get);
+  app.post('/mcp', post({ clientOptions, mcpOptions }));
+  app.delete('/mcp', del);
 
   return app;
 };
 
 export const launchStreamableHTTPServer = async ({
+  clientOptions,
   mcpOptions,
   port,
 }: {
+  clientOptions?: ClientOptions;
   mcpOptions: McpOptions;
   port: number | string | undefined;
 }) => {
-  const app = streamableHTTPApp({ mcpOptions });
+  const app = streamableHTTPApp({ ...(clientOptions && { clientOptions }), mcpOptions });
   const server = app.listen(port);
   const address = server.address();
 
