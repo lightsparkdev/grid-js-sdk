@@ -3,26 +3,21 @@
 export * from './shared';
 export {
   Agents,
-  type Agent,
-  type AgentAction,
-  type AgentActionListResponse,
-  type AgentActionRejectRequest,
-  type AgentCreateRequest,
-  type AgentCreateResponse,
-  type AgentDeviceCode,
-  type AgentDeviceCodeRedeemResponse,
-  type AgentDeviceCodeStatusResponse,
-  type AgentListResponse,
   type AgentPolicy,
-  type AgentUpdateRequest,
   type AgentUsage,
+  type AgentCreateResponse,
+  type AgentRetrieveResponse,
+  type AgentUpdateResponse,
+  type AgentListResponse,
+  type AgentListApprovalsResponse,
+  type AgentUpdatePolicyResponse,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
   type AgentListApprovalsParams,
   type AgentUpdatePolicyParams,
-  type AgentActionsDefaultPagination,
-  type AgentsDefaultPagination,
+  type AgentListResponsesDefaultPagination,
+  type AgentListApprovalsResponsesDefaultPagination,
 } from './agents/agents';
 export { Auth } from './auth/auth';
 export {
@@ -59,13 +54,10 @@ export {
   type CustomerType,
   type CustomerUpdate,
   type IndividualCustomerFields,
-  type InternalAccountExportRequest,
-  type InternalAccountExportResponse,
   type CustomerGetKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
-  type CustomerExportParams,
   type CustomerGetKYCLinkParams,
   type CustomerListInternalAccountsParams,
   type CustomerOneovesDefaultPagination,
@@ -83,6 +75,11 @@ export {
   type DocumentListResponsesDefaultPagination,
 } from './documents';
 export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
+export {
+  InternalAccounts,
+  type InternalAccountExportResponse,
+  type InternalAccountExportParams,
+} from './internal-accounts';
 export {
   Invitations,
   type CurrencyAmount,

@@ -16,11 +16,12 @@ export class DeviceCodes extends APIResource {
    *
    * @example
    * ```ts
-   * const agentDeviceCodeStatusResponse =
-   *   await client.agents.deviceCodes.getStatus('code');
+   * const response = await client.agents.deviceCodes.getStatus(
+   *   'code',
+   * );
    * ```
    */
-  getStatus(code: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentDeviceCodeStatusResponse> {
+  getStatus(code: string, options?: RequestOptions): APIPromise<DeviceCodeGetStatusResponse> {
     return this._client.get(path`/agents/device-codes/${code}/status`, options);
   }
 
@@ -33,11 +34,12 @@ export class DeviceCodes extends APIResource {
    *
    * @example
    * ```ts
-   * const agentDeviceCodeRedeemResponse =
-   *   await client.agents.deviceCodes.redeem('code');
+   * const response = await client.agents.deviceCodes.redeem(
+   *   'code',
+   * );
    * ```
    */
-  redeem(code: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentDeviceCodeRedeemResponse> {
+  redeem(code: string, options?: RequestOptions): APIPromise<DeviceCodeRedeemResponse> {
     return this._client.post(path`/agents/device-codes/${code}/redeem`, options);
   }
 
@@ -49,11 +51,79 @@ export class DeviceCodes extends APIResource {
    *
    * @example
    * ```ts
-   * const agentDeviceCode =
-   *   await client.agents.deviceCodes.regenerate('agentId');
+   * const response = await client.agents.deviceCodes.regenerate(
+   *   'agentId',
+   * );
    * ```
    */
-  regenerate(agentID: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentDeviceCode> {
+  regenerate(agentID: string, options?: RequestOptions): APIPromise<DeviceCodeRegenerateResponse> {
     return this._client.post(path`/agents/${agentID}/device-codes`, options);
   }
+}
+
+export interface DeviceCodeGetStatusResponse {
+  /**
+   * The device code.
+   */
+  code: string;
+
+  /**
+   * Whether this device code has been redeemed.
+   */
+  redeemed: boolean;
+}
+
+export interface DeviceCodeRedeemResponse {
+  /**
+   * Bearer token used to authenticate all subsequent API calls as this agent. Pass
+   * as `Authorization: Bearer <accessToken>`. This token is returned only once and
+   * must be stored securely — it cannot be retrieved again.
+   */
+  accessToken: string;
+
+  /**
+   * The agent's system-generated ID.
+   */
+  agentId: string;
+
+  /**
+   * The agent's name.
+   */
+  agentName: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentsAPI.AgentPolicy;
+}
+
+export interface DeviceCodeRegenerateResponse {
+  /**
+   * The agent this device code belongs to.
+   */
+  agentId: string;
+
+  /**
+   * Human-readable device code used to install and connect the agent software.
+   */
+  code: string;
+
+  /**
+   * Timestamp when this device code expires.
+   */
+  expiresAt: string;
+
+  /**
+   * Whether this device code has already been redeemed by the agent.
+   */
+  redeemed: boolean;
+}
+
+export declare namespace DeviceCodes {
+  export {
+    type DeviceCodeGetStatusResponse as DeviceCodeGetStatusResponse,
+    type DeviceCodeRedeemResponse as DeviceCodeRedeemResponse,
+    type DeviceCodeRegenerateResponse as DeviceCodeRegenerateResponse,
+  };
 }
