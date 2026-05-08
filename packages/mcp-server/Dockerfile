@@ -69,11 +69,26 @@ RUN chown -R nodejs:nodejs /deno-dir
 # Switch to non-root user
 USER nodejs
 
-# The MCP server uses stdio transport by default
-# No exposed ports needed for stdio communication
+# AWS Lambda Web Adapter — runs as a Lambda Extension and bridges Lambda
+# invocations to the local Express server on port 8000.
+COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.0 /lambda-adapter /opt/extensions/lambda-adapter
 
-# Set the entrypoint to the MCP server
+# Streamable HTTP on 0.0.0.0:8000/mcp.
+EXPOSE 8000
+
+ENV PORT=8000 \
+    READINESS_CHECK_PATH=/health \
+    AWS_LWA_INVOKE_MODE=response_stream \
+    AWS_LWA_PASS_THROUGH_PATH=/
+
 ENTRYPOINT ["node", "packages/mcp-server/dist/index.js"]
 
-# Allow passing arguments to the MCP server
-CMD []
+# Default to Stainless-hosted code-execution and docs-search. This is
+# deliberate: with auth_type=NONE on the Function URL and no per-request
+# authn, running local Deno workers (--code-execution-mode=local) would
+# expose a public, unauthenticated arbitrary-code-execution path on Lambda
+# (Deno --allow-env in code-tool.ts can read execution-role temp creds).
+# Stainless's hosted sandbox keeps untrusted code out of our compute. The
+# Lambda is configured with STAINLESS_API_KEY in Task 5; callers can
+# override with x-stainless-api-key per request.
+CMD ["--transport", "http", "--port", "8000"]
