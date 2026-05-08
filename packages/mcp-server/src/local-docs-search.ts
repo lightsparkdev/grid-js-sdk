@@ -119,7 +119,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "umaDomain": "mycompany.com",\n          "webhookEndpoint": "https://api.mycompany.com/webhooks/uma"\n        }\'',
+          'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "supportedCurrencies": [\n            {\n              "currencyCode": "USD",\n              "enabledTransactionTypes": [\n                "OUTGOING",\n                "INCOMING"\n              ],\n              "maxAmount": 1000000,\n              "minAmount": 100,\n              "requiredCounterpartyFields": [\n                {\n                  "mandatory": true,\n                  "name": "FULL_NAME"\n                },\n                {\n                  "mandatory": true,\n                  "name": "NATIONALITY"\n                },\n                {\n                  "mandatory": true,\n                  "name": "BIRTH_DATE"\n                }\n              ]\n            }\n          ],\n          "umaDomain": "mycompany.com",\n          "webhookEndpoint": "https://api.mycompany.com/webhooks/uma"\n        }\'',
       },
     },
   },
@@ -1061,7 +1061,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.lightspark.com/grid/2025-10-13/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 10000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Transfer between accounts, either internal or external.",\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
+          'curl https://api.lightspark.com/grid/2025-10-13/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 10000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Transfer between accounts, either internal or external.",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
       },
     },
   },
@@ -3139,7 +3139,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 1000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Invoice #1234 payment",\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
+          'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 1000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Invoice #1234 payment",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
       },
     },
   },
