@@ -172,14 +172,11 @@ export class Credentials extends APIResource {
    * request) along with the client-generated public key; this is also the
    * reauthentication path after a prior session expired. For `PASSKEY` credentials,
    * the client completes a WebAuthn assertion (`navigator.credentials.get()`)
-   * against the Grid-issued `challenge` returned from either
-   * `POST /auth/credentials` (first authentication) or
-   * `POST /auth/credentials/{id}/challenge` (reauthentication), and submits the
-   * resulting `assertion` along with the client-generated public key. The
-   * `requestId` that accompanied the challenge must be echoed in the `Request-Id`
-   * header so Grid can correlate the assertion with the pending challenge; Grid
-   * verifies the WebAuthn signature against the stored credential before issuing the
-   * session.
+   * against the Grid-issued `challenge` returned from
+   * `POST /auth/credentials/{id}/challenge`, and submits the resulting `assertion`
+   * with the `Request-Id` header. The `clientPublicKey` for `PASSKEY` credentials is
+   * supplied on the challenge call, where it is bound into the pending
+   * session-creation request.
    *
    * On success, the response contains an `encryptedSessionSigningKey` that is
    * encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp
@@ -568,9 +565,8 @@ export interface CredentialVerifyParams {
 
   /**
    * Header param: The `requestId` returned alongside the Grid-issued `challenge`
-   * from `POST /auth/credentials` or `POST /auth/credentials/{id}/challenge`, echoed
-   * back here so Grid can correlate the assertion with the pending challenge.
-   * Required when `type` is `PASSKEY`; ignored for `EMAIL_OTP` and `OAUTH`.
+   * from `POST /auth/credentials/{id}/challenge`, echoed back here so Grid can
+   * correlate the assertion with the pending challenge.
    */
   'Request-Id'?: string;
 }
