@@ -27,8 +27,8 @@ describe('resource sessions', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('delete', async () => {
-    const responsePromise = client.auth.sessions.delete('id');
+  test.skip('revoke', async () => {
+    const responsePromise = client.auth.sessions.revoke('id');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -39,10 +39,10 @@ describe('resource sessions', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('delete: request options and params are passed correctly', async () => {
+  test.skip('revoke: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.auth.sessions.delete(
+      client.auth.sessions.revoke(
         'id',
         {
           'Grid-Wallet-Signature':

@@ -53,12 +53,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/{customerId}',
   },
   {
-    clientCallName: 'client.customers.export',
-    fullyQualifiedName: 'customers.export',
-    httpMethod: 'post',
-    httpPath: '/internal-accounts/{id}/export',
-  },
-  {
     clientCallName: 'client.customers.getKYCLink',
     fullyQualifiedName: 'customers.getKYCLink',
     httpMethod: 'get',
@@ -384,16 +378,16 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/auth/credentials',
   },
   {
-    clientCallName: 'client.auth.credentials.delete',
-    fullyQualifiedName: 'auth.credentials.delete',
-    httpMethod: 'delete',
-    httpPath: '/auth/credentials/{id}',
-  },
-  {
-    clientCallName: 'client.auth.credentials.challenge',
-    fullyQualifiedName: 'auth.credentials.challenge',
+    clientCallName: 'client.auth.credentials.resendChallenge',
+    fullyQualifiedName: 'auth.credentials.resendChallenge',
     httpMethod: 'post',
     httpPath: '/auth/credentials/{id}/challenge',
+  },
+  {
+    clientCallName: 'client.auth.credentials.revoke',
+    fullyQualifiedName: 'auth.credentials.revoke',
+    httpMethod: 'delete',
+    httpPath: '/auth/credentials/{id}',
   },
   {
     clientCallName: 'client.auth.credentials.verify',
@@ -408,10 +402,16 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/auth/sessions',
   },
   {
-    clientCallName: 'client.auth.sessions.delete',
-    fullyQualifiedName: 'auth.sessions.delete',
+    clientCallName: 'client.auth.sessions.revoke',
+    fullyQualifiedName: 'auth.sessions.revoke',
     httpMethod: 'delete',
     httpPath: '/auth/sessions/{id}',
+  },
+  {
+    clientCallName: 'client.internalAccounts.export',
+    fullyQualifiedName: 'internalAccounts.export',
+    httpMethod: 'post',
+    httpPath: '/internal-accounts/{id}/export',
   },
   {
     clientCallName: 'client.agents.create',

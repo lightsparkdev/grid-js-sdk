@@ -3,9 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ExternalAccountsAPI from '../customers/external-accounts';
-import { ExternalAccountsDefaultPagination } from '../customers/external-accounts';
 import { APIPromise } from '../../core/api-promise';
-import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -77,21 +75,15 @@ export class ExternalAccounts extends APIResource {
    *
    * @example
    * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const externalAccount of client.platform.externalAccounts.list()) {
-   *   // ...
-   * }
+   * const externalAccounts =
+   *   await client.platform.externalAccounts.list();
    * ```
    */
   list(
     query: ExternalAccountListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<ExternalAccountsDefaultPagination, ExternalAccountsAPI.ExternalAccount> {
-    return this._client.getAPIList(
-      '/platform/external-accounts',
-      DefaultPagination<ExternalAccountsAPI.ExternalAccount>,
-      { query, ...options },
-    );
+  ): APIPromise<ExternalAccountListResponse> {
+    return this._client.get('/platform/external-accounts', { query, ...options });
   }
 
   /**
@@ -752,6 +744,28 @@ export interface ZmwAccountInfo {
   provider: string;
 }
 
+export interface ExternalAccountListResponse {
+  /**
+   * List of external accounts matching the filter criteria
+   */
+  data: Array<ExternalAccountsAPI.ExternalAccount>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of external accounts matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
+}
+
 export interface ExternalAccountCreateParams {
   /**
    * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
@@ -813,11 +827,16 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
-export interface ExternalAccountListParams extends DefaultPaginationParams {
+export interface ExternalAccountListParams {
   /**
    * Filter by currency code
    */
   currency?: string;
+
+  /**
+   * Cursor for pagination (returned from previous request)
+   */
+  cursor?: string;
 
   /**
    * Maximum number of results to return (default 20, max 100)
@@ -862,9 +881,8 @@ export declare namespace ExternalAccounts {
     type XofAccountInfo as XofAccountInfo,
     type ZarAccountInfo as ZarAccountInfo,
     type ZmwAccountInfo as ZmwAccountInfo,
+    type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 }
-
-export { type ExternalAccountsDefaultPagination };

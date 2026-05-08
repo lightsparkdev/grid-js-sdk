@@ -57,6 +57,11 @@ import {
 } from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
+  InternalAccountExportParams,
+  InternalAccountExportResponse,
+  InternalAccounts,
+} from './resources/internal-accounts';
+import {
   CurrencyAmount,
   InvitationClaimParams,
   InvitationCreateParams,
@@ -146,27 +151,22 @@ import {
   Webhooks,
 } from './resources/webhooks';
 import {
-  Agent,
-  AgentAction,
-  AgentActionListResponse,
-  AgentActionRejectRequest,
-  AgentActionsDefaultPagination,
   AgentCreateParams,
-  AgentCreateRequest,
   AgentCreateResponse,
-  AgentDeviceCode,
-  AgentDeviceCodeRedeemResponse,
-  AgentDeviceCodeStatusResponse,
   AgentListApprovalsParams,
+  AgentListApprovalsResponse,
+  AgentListApprovalsResponsesDefaultPagination,
   AgentListParams,
   AgentListResponse,
+  AgentListResponsesDefaultPagination,
   AgentPolicy,
+  AgentRetrieveResponse,
   AgentUpdateParams,
   AgentUpdatePolicyParams,
-  AgentUpdateRequest,
+  AgentUpdatePolicyResponse,
+  AgentUpdateResponse,
   AgentUsage,
   Agents,
-  AgentsDefaultPagination,
 } from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
@@ -175,7 +175,6 @@ import {
   Customer,
   CustomerCreate,
   CustomerCreateParams,
-  CustomerExportParams,
   CustomerGetKYCLinkParams,
   CustomerGetKYCLinkResponse,
   CustomerListInternalAccountsParams,
@@ -187,8 +186,6 @@ import {
   CustomerUpdateParams,
   Customers,
   IndividualCustomerFields,
-  InternalAccountExportRequest,
-  InternalAccountExportResponse,
 } from './resources/customers/customers';
 import {
   Platform,
@@ -1090,6 +1087,10 @@ export class LightsparkGrid {
   discoveries: API.Discoveries = new API.Discoveries(this);
   auth: API.Auth = new API.Auth(this);
   /**
+   * Internal account management endpoints for creating and managing internal accounts
+   */
+  internalAccounts: API.InternalAccounts = new API.InternalAccounts(this);
+  /**
    * Endpoints for creating and managing agents (experimental), called by the partner's backend using platform credentials. Covers the full agent lifecycle: creation, policy configuration, pausing, deletion, the device code installation flow, and approving or rejecting transactions initiated by agents.
    */
   agents: API.Agents = new API.Agents(this);
@@ -1115,6 +1116,7 @@ LightsparkGrid.Documents = Documents;
 LightsparkGrid.Verifications = Verifications;
 LightsparkGrid.Discoveries = Discoveries;
 LightsparkGrid.Auth = Auth;
+LightsparkGrid.InternalAccounts = InternalAccounts;
 LightsparkGrid.Agents = Agents;
 
 export declare namespace LightsparkGrid {
@@ -1144,14 +1146,11 @@ export declare namespace LightsparkGrid {
     type CustomerType as CustomerType,
     type CustomerUpdate as CustomerUpdate,
     type IndividualCustomerFields as IndividualCustomerFields,
-    type InternalAccountExportRequest as InternalAccountExportRequest,
-    type InternalAccountExportResponse as InternalAccountExportResponse,
     type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
-    type CustomerExportParams as CustomerExportParams,
     type CustomerGetKYCLinkParams as CustomerGetKYCLinkParams,
     type CustomerListInternalAccountsParams as CustomerListInternalAccountsParams,
   };
@@ -1309,22 +1308,23 @@ export declare namespace LightsparkGrid {
   export { Auth as Auth };
 
   export {
+    InternalAccounts as InternalAccounts,
+    type InternalAccountExportResponse as InternalAccountExportResponse,
+    type InternalAccountExportParams as InternalAccountExportParams,
+  };
+
+  export {
     Agents as Agents,
-    type Agent as Agent,
-    type AgentAction as AgentAction,
-    type AgentActionListResponse as AgentActionListResponse,
-    type AgentActionRejectRequest as AgentActionRejectRequest,
-    type AgentCreateRequest as AgentCreateRequest,
-    type AgentCreateResponse as AgentCreateResponse,
-    type AgentDeviceCode as AgentDeviceCode,
-    type AgentDeviceCodeRedeemResponse as AgentDeviceCodeRedeemResponse,
-    type AgentDeviceCodeStatusResponse as AgentDeviceCodeStatusResponse,
-    type AgentListResponse as AgentListResponse,
     type AgentPolicy as AgentPolicy,
-    type AgentUpdateRequest as AgentUpdateRequest,
     type AgentUsage as AgentUsage,
-    type AgentsDefaultPagination as AgentsDefaultPagination,
-    type AgentActionsDefaultPagination as AgentActionsDefaultPagination,
+    type AgentCreateResponse as AgentCreateResponse,
+    type AgentRetrieveResponse as AgentRetrieveResponse,
+    type AgentUpdateResponse as AgentUpdateResponse,
+    type AgentListResponse as AgentListResponse,
+    type AgentListApprovalsResponse as AgentListApprovalsResponse,
+    type AgentUpdatePolicyResponse as AgentUpdatePolicyResponse,
+    type AgentListResponsesDefaultPagination as AgentListResponsesDefaultPagination,
+    type AgentListApprovalsResponsesDefaultPagination as AgentListApprovalsResponsesDefaultPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,

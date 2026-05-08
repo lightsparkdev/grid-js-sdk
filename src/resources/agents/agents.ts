@@ -1,21 +1,42 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as AgentsAPI from './agents';
 import * as QuotesAPI from '../quotes';
 import * as Shared from '../shared';
 import * as TransferInAPI from '../transfer-in';
 import * as ActionsAPI from './actions';
-import { ActionApproveParams, ActionRejectParams, Actions } from './actions';
+import {
+  ActionApproveParams,
+  ActionApproveResponse,
+  ActionRejectParams,
+  ActionRejectResponse,
+  Actions,
+} from './actions';
 import * as DeviceCodesAPI from './device-codes';
-import { DeviceCodes } from './device-codes';
+import {
+  DeviceCodeGetStatusResponse,
+  DeviceCodeRedeemResponse,
+  DeviceCodeRegenerateResponse,
+  DeviceCodes,
+} from './device-codes';
 import * as TransactionsAPI from './transactions';
-import { TransactionApproveParams, TransactionRejectParams, Transactions } from './transactions';
+import {
+  TransactionApproveParams,
+  TransactionApproveResponse,
+  TransactionRejectParams,
+  TransactionRejectResponse,
+  Transactions,
+} from './transactions';
 import * as MeAPI from './me/me';
 import {
   Me,
   MeCreateTransferInParams,
+  MeCreateTransferInResponse,
   MeCreateTransferOutParams,
+  MeCreateTransferOutResponse,
   MeListInternalAccountsParams,
+  MeRetrieveResponse,
 } from './me/me';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
@@ -39,7 +60,7 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agentCreateResponse = await client.agents.create({
+   * const agent = await client.agents.create({
    *   customerId:
    *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
    *   name: 'Payroll Automation Agent',
@@ -66,7 +87,7 @@ export class Agents extends APIResource {
    * const agent = await client.agents.retrieve('agentId');
    * ```
    */
-  retrieve(agentID: string, options?: RequestOptions): APIPromise<Agent> {
+  retrieve(agentID: string, options?: RequestOptions): APIPromise<AgentRetrieveResponse> {
     return this._client.get(path`/agents/${agentID}`, options);
   }
 
@@ -78,7 +99,11 @@ export class Agents extends APIResource {
    * const agent = await client.agents.update('agentId');
    * ```
    */
-  update(agentID: string, body: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
+  update(
+    agentID: string,
+    body: AgentUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentUpdateResponse> {
     return this._client.patch(path`/agents/${agentID}`, { body, ...options });
   }
 
@@ -88,7 +113,7 @@ export class Agents extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const agent of client.agents.list()) {
+   * for await (const agentListResponse of client.agents.list()) {
    *   // ...
    * }
    * ```
@@ -96,8 +121,8 @@ export class Agents extends APIResource {
   list(
     query: AgentListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<AgentsDefaultPagination, Agent> {
-    return this._client.getAPIList('/agents', DefaultPagination<Agent>, { query, ...options });
+  ): PagePromise<AgentListResponsesDefaultPagination, AgentListResponse> {
+    return this._client.getAPIList('/agents', DefaultPagination<AgentListResponse>, { query, ...options });
   }
 
   /**
@@ -126,7 +151,7 @@ export class Agents extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const agentAction of client.agents.listApprovals()) {
+   * for await (const agentListApprovalsResponse of client.agents.listApprovals()) {
    *   // ...
    * }
    * ```
@@ -134,8 +159,8 @@ export class Agents extends APIResource {
   listApprovals(
     query: AgentListApprovalsParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<AgentActionsDefaultPagination, AgentAction> {
-    return this._client.getAPIList('/agents/approvals', DefaultPagination<AgentAction>, {
+  ): PagePromise<AgentListApprovalsResponsesDefaultPagination, AgentListApprovalsResponse> {
+    return this._client.getAPIList('/agents/approvals', DefaultPagination<AgentListApprovalsResponse>, {
       query,
       ...options,
     });
@@ -148,301 +173,23 @@ export class Agents extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.updatePolicy('agentId');
+   * const response = await client.agents.updatePolicy(
+   *   'agentId',
+   * );
    * ```
    */
-  updatePolicy(agentID: string, body: AgentUpdatePolicyParams, options?: RequestOptions): APIPromise<Agent> {
+  updatePolicy(
+    agentID: string,
+    body: AgentUpdatePolicyParams,
+    options?: RequestOptions,
+  ): APIPromise<AgentUpdatePolicyResponse> {
     return this._client.patch(path`/agents/${agentID}/policy`, { body, ...options });
   }
 }
 
-export type AgentsDefaultPagination = DefaultPagination<Agent>;
+export type AgentListResponsesDefaultPagination = DefaultPagination<AgentListResponse>;
 
-export type AgentActionsDefaultPagination = DefaultPagination<AgentAction>;
-
-/**
- * A programmatic agent with scoped permissions and a spending policy, used to
- * automate payment workflows.
- */
-export interface Agent {
-  /**
-   * System-generated unique identifier for the agent.
-   */
-  id: string;
-
-  /**
-   * Creation timestamp.
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the customer this agent operates on behalf of.
-   */
-  customerId: string;
-
-  /**
-   * Whether the agent has been installed and connected (i.e., its device code has
-   * been redeemed).
-   */
-  isConnected: boolean;
-
-  /**
-   * Whether the agent is currently paused. Paused agents cannot initiate any
-   * actions.
-   */
-  isPaused: boolean;
-
-  /**
-   * Human-readable name for the agent.
-   */
-  name: string;
-
-  /**
-   * Policy governing what an agent can do, how it executes actions, and its spending
-   * boundaries.
-   */
-  policy: AgentPolicy;
-
-  /**
-   * Last update timestamp.
-   */
-  updatedAt: string;
-
-  /**
-   * Real-time counters tracking the agent's spending and transaction activity
-   * against its policy limits.
-   */
-  usage: AgentUsage;
-}
-
-/**
- * An action submitted by an agent that may require platform approval before
- * execution. All agent-initiated operations (quote execution, transfers) are
- * represented as AgentActions, giving the platform a consistent object to approve,
- * reject, and audit regardless of the underlying operation type.
- */
-export interface AgentAction {
-  /**
-   * System-generated unique identifier for this action.
-   */
-  id: string;
-
-  /**
-   * The agent that submitted this action.
-   */
-  agentId: string;
-
-  /**
-   * When the action was submitted by the agent.
-   */
-  createdAt: string;
-
-  /**
-   * The customer on whose behalf the action was submitted.
-   */
-  customerId: string;
-
-  /**
-   * Platform-specific ID of the customer.
-   */
-  platformCustomerId: string;
-
-  /**
-   * Status of an agent action.
-   *
-   * | Status             | Description                                                            |
-   * | ------------------ | ---------------------------------------------------------------------- |
-   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
-   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
-   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
-   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
-   */
-  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
-
-  /**
-   * The type of action the agent is requesting.
-   *
-   * | Type            | Description                                              |
-   * | --------------- | -------------------------------------------------------- |
-   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
-   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
-   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
-   */
-  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
-
-  /**
-   * When the action was last updated.
-   */
-  updatedAt: string;
-
-  /**
-   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
-   * transfer actions. Contains the full amount, currency, destination, and rate
-   * details needed to present an approval decision to the user.
-   */
-  quote?: QuotesAPI.Quote;
-
-  /**
-   * Human-readable reason provided by the platform when rejecting the action. Only
-   * present when status is `REJECTED`.
-   */
-  rejectionReason?: string;
-
-  /**
-   * The resulting transaction, populated once the action has been approved and
-   * execution has begun. Absent while the action is `PENDING_APPROVAL` or
-   * `REJECTED`.
-   */
-  transaction?: TransferInAPI.Transaction;
-
-  /**
-   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
-   */
-  transferDetails?: Shared.AgentTransferDetails;
-}
-
-export interface AgentActionListResponse {
-  /**
-   * List of agent actions matching the filter criteria.
-   */
-  data: Array<AgentAction>;
-
-  /**
-   * Indicates if more results are available beyond this page.
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true).
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of actions matching the criteria (excluding pagination).
-   */
-  totalCount?: number;
-}
-
-export interface AgentActionRejectRequest {
-  /**
-   * Optional human-readable reason for the rejection, stored on the action and
-   * visible to the platform.
-   */
-  reason?: string;
-}
-
-export interface AgentCreateRequest {
-  /**
-   * The ID of the customer this agent will operate on behalf of.
-   */
-  customerId: string;
-
-  /**
-   * Human-readable name to identify the agent.
-   */
-  name: string;
-
-  /**
-   * Policy governing what an agent can do, how it executes actions, and its spending
-   * boundaries.
-   */
-  policy: AgentPolicy;
-}
-
-/**
- * Response returned when an agent is created, including the agent and a device
- * code for installation.
- */
-export interface AgentCreateResponse {
-  /**
-   * A programmatic agent with scoped permissions and a spending policy, used to
-   * automate payment workflows.
-   */
-  agent: Agent;
-
-  deviceCode: AgentDeviceCode;
-}
-
-export interface AgentDeviceCode {
-  /**
-   * The agent this device code belongs to.
-   */
-  agentId: string;
-
-  /**
-   * Human-readable device code used to install and connect the agent software.
-   */
-  code: string;
-
-  /**
-   * Timestamp when this device code expires.
-   */
-  expiresAt: string;
-
-  /**
-   * Whether this device code has already been redeemed by the agent.
-   */
-  redeemed: boolean;
-}
-
-export interface AgentDeviceCodeRedeemResponse {
-  /**
-   * Bearer token used to authenticate all subsequent API calls as this agent. Pass
-   * as `Authorization: Bearer <accessToken>`. This token is returned only once and
-   * must be stored securely — it cannot be retrieved again.
-   */
-  accessToken: string;
-
-  /**
-   * The agent's system-generated ID.
-   */
-  agentId: string;
-
-  /**
-   * The agent's name.
-   */
-  agentName: string;
-
-  /**
-   * Policy governing what an agent can do, how it executes actions, and its spending
-   * boundaries.
-   */
-  policy: AgentPolicy;
-}
-
-export interface AgentDeviceCodeStatusResponse {
-  /**
-   * The device code.
-   */
-  code: string;
-
-  /**
-   * Whether this device code has been redeemed.
-   */
-  redeemed: boolean;
-}
-
-export interface AgentListResponse {
-  /**
-   * List of agents matching the filter criteria.
-   */
-  data: Array<Agent>;
-
-  /**
-   * Indicates if more results are available beyond this page.
-   */
-  hasMore: boolean;
-
-  /**
-   * Cursor to retrieve the next page of results (only present if hasMore is true).
-   */
-  nextCursor?: string;
-
-  /**
-   * Total number of agents matching the criteria (excluding pagination).
-   */
-  totalCount?: number;
-}
+export type AgentListApprovalsResponsesDefaultPagination = DefaultPagination<AgentListApprovalsResponse>;
 
 /**
  * Policy governing what an agent can do, how it executes actions, and its spending
@@ -590,21 +337,6 @@ export namespace AgentPolicy {
 }
 
 /**
- * Partial update to an agent's basic fields. At least one field must be provided.
- */
-export interface AgentUpdateRequest {
-  /**
-   * Set to true to pause the agent or false to resume it.
-   */
-  isPaused?: boolean;
-
-  /**
-   * Updated name for the agent.
-   */
-  name?: string;
-}
-
-/**
  * Real-time counters tracking the agent's spending and transaction activity
  * against its policy limits.
  */
@@ -635,6 +367,405 @@ export interface AgentUsage {
    * The year-month (YYYY-MM) when monthly usage counters will reset.
    */
   monthlyResetMonth?: string;
+}
+
+/**
+ * Response returned when an agent is created, including the agent and a device
+ * code for installation.
+ */
+export interface AgentCreateResponse {
+  /**
+   * A programmatic agent with scoped permissions and a spending policy, used to
+   * automate payment workflows.
+   */
+  agent: AgentCreateResponse.Agent;
+
+  deviceCode: AgentCreateResponse.DeviceCode;
+}
+
+export namespace AgentCreateResponse {
+  /**
+   * A programmatic agent with scoped permissions and a spending policy, used to
+   * automate payment workflows.
+   */
+  export interface Agent {
+    /**
+     * System-generated unique identifier for the agent.
+     */
+    id: string;
+
+    /**
+     * Creation timestamp.
+     */
+    createdAt: string;
+
+    /**
+     * The ID of the customer this agent operates on behalf of.
+     */
+    customerId: string;
+
+    /**
+     * Whether the agent has been installed and connected (i.e., its device code has
+     * been redeemed).
+     */
+    isConnected: boolean;
+
+    /**
+     * Whether the agent is currently paused. Paused agents cannot initiate any
+     * actions.
+     */
+    isPaused: boolean;
+
+    /**
+     * Human-readable name for the agent.
+     */
+    name: string;
+
+    /**
+     * Policy governing what an agent can do, how it executes actions, and its spending
+     * boundaries.
+     */
+    policy: AgentsAPI.AgentPolicy;
+
+    /**
+     * Last update timestamp.
+     */
+    updatedAt: string;
+
+    /**
+     * Real-time counters tracking the agent's spending and transaction activity
+     * against its policy limits.
+     */
+    usage: AgentsAPI.AgentUsage;
+  }
+
+  export interface DeviceCode {
+    /**
+     * The agent this device code belongs to.
+     */
+    agentId: string;
+
+    /**
+     * Human-readable device code used to install and connect the agent software.
+     */
+    code: string;
+
+    /**
+     * Timestamp when this device code expires.
+     */
+    expiresAt: string;
+
+    /**
+     * Whether this device code has already been redeemed by the agent.
+     */
+    redeemed: boolean;
+  }
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentRetrieveResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentPolicy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentUsage;
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentUpdateResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentPolicy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentUsage;
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentListResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentPolicy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentUsage;
+}
+
+/**
+ * An action submitted by an agent that may require platform approval before
+ * execution. All agent-initiated operations (quote execution, transfers) are
+ * represented as AgentActions, giving the platform a consistent object to approve,
+ * reject, and audit regardless of the underlying operation type.
+ */
+export interface AgentListApprovalsResponse {
+  /**
+   * System-generated unique identifier for this action.
+   */
+  id: string;
+
+  /**
+   * The agent that submitted this action.
+   */
+  agentId: string;
+
+  /**
+   * When the action was submitted by the agent.
+   */
+  createdAt: string;
+
+  /**
+   * The customer on whose behalf the action was submitted.
+   */
+  customerId: string;
+
+  /**
+   * Platform-specific ID of the customer.
+   */
+  platformCustomerId: string;
+
+  /**
+   * Status of an agent action.
+   *
+   * | Status             | Description                                                            |
+   * | ------------------ | ---------------------------------------------------------------------- |
+   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
+   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
+   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
+   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
+   */
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
+
+  /**
+   * The type of action the agent is requesting.
+   *
+   * | Type            | Description                                              |
+   * | --------------- | -------------------------------------------------------- |
+   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
+   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
+   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
+   */
+  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
+
+  /**
+   * When the action was last updated.
+   */
+  updatedAt: string;
+
+  /**
+   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
+   * transfer actions. Contains the full amount, currency, destination, and rate
+   * details needed to present an approval decision to the user.
+   */
+  quote?: QuotesAPI.Quote;
+
+  /**
+   * Human-readable reason provided by the platform when rejecting the action. Only
+   * present when status is `REJECTED`.
+   */
+  rejectionReason?: string;
+
+  /**
+   * The resulting transaction, populated once the action has been approved and
+   * execution has begun. Absent while the action is `PENDING_APPROVAL` or
+   * `REJECTED`.
+   */
+  transaction?: TransferInAPI.Transaction;
+
+  /**
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   */
+  transferDetails?: Shared.AgentTransferDetails;
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface AgentUpdatePolicyResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentPolicy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentUsage;
 }
 
 export interface AgentCreateParams {
@@ -885,21 +1016,16 @@ Agents.Actions = Actions;
 
 export declare namespace Agents {
   export {
-    type Agent as Agent,
-    type AgentAction as AgentAction,
-    type AgentActionListResponse as AgentActionListResponse,
-    type AgentActionRejectRequest as AgentActionRejectRequest,
-    type AgentCreateRequest as AgentCreateRequest,
-    type AgentCreateResponse as AgentCreateResponse,
-    type AgentDeviceCode as AgentDeviceCode,
-    type AgentDeviceCodeRedeemResponse as AgentDeviceCodeRedeemResponse,
-    type AgentDeviceCodeStatusResponse as AgentDeviceCodeStatusResponse,
-    type AgentListResponse as AgentListResponse,
     type AgentPolicy as AgentPolicy,
-    type AgentUpdateRequest as AgentUpdateRequest,
     type AgentUsage as AgentUsage,
-    type AgentsDefaultPagination as AgentsDefaultPagination,
-    type AgentActionsDefaultPagination as AgentActionsDefaultPagination,
+    type AgentCreateResponse as AgentCreateResponse,
+    type AgentRetrieveResponse as AgentRetrieveResponse,
+    type AgentUpdateResponse as AgentUpdateResponse,
+    type AgentListResponse as AgentListResponse,
+    type AgentListApprovalsResponse as AgentListApprovalsResponse,
+    type AgentUpdatePolicyResponse as AgentUpdatePolicyResponse,
+    type AgentListResponsesDefaultPagination as AgentListResponsesDefaultPagination,
+    type AgentListApprovalsResponsesDefaultPagination as AgentListApprovalsResponsesDefaultPagination,
     type AgentCreateParams as AgentCreateParams,
     type AgentUpdateParams as AgentUpdateParams,
     type AgentListParams as AgentListParams,
@@ -909,21 +1035,33 @@ export declare namespace Agents {
 
   export {
     Me as Me,
+    type MeRetrieveResponse as MeRetrieveResponse,
+    type MeCreateTransferInResponse as MeCreateTransferInResponse,
+    type MeCreateTransferOutResponse as MeCreateTransferOutResponse,
     type MeCreateTransferInParams as MeCreateTransferInParams,
     type MeCreateTransferOutParams as MeCreateTransferOutParams,
     type MeListInternalAccountsParams as MeListInternalAccountsParams,
   };
 
-  export { DeviceCodes as DeviceCodes };
+  export {
+    DeviceCodes as DeviceCodes,
+    type DeviceCodeGetStatusResponse as DeviceCodeGetStatusResponse,
+    type DeviceCodeRedeemResponse as DeviceCodeRedeemResponse,
+    type DeviceCodeRegenerateResponse as DeviceCodeRegenerateResponse,
+  };
 
   export {
     Transactions as Transactions,
+    type TransactionApproveResponse as TransactionApproveResponse,
+    type TransactionRejectResponse as TransactionRejectResponse,
     type TransactionApproveParams as TransactionApproveParams,
     type TransactionRejectParams as TransactionRejectParams,
   };
 
   export {
     Actions as Actions,
+    type ActionApproveResponse as ActionApproveResponse,
+    type ActionRejectResponse as ActionRejectResponse,
     type ActionApproveParams as ActionApproveParams,
     type ActionRejectParams as ActionRejectParams,
   };

@@ -1,34 +1,49 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-export { Actions, type ActionApproveParams, type ActionRejectParams } from './actions';
+export {
+  Actions,
+  type ActionApproveResponse,
+  type ActionRejectResponse,
+  type ActionApproveParams,
+  type ActionRejectParams,
+} from './actions';
 export {
   Agents,
-  type Agent,
-  type AgentAction,
-  type AgentActionListResponse,
-  type AgentActionRejectRequest,
-  type AgentCreateRequest,
-  type AgentCreateResponse,
-  type AgentDeviceCode,
-  type AgentDeviceCodeRedeemResponse,
-  type AgentDeviceCodeStatusResponse,
-  type AgentListResponse,
   type AgentPolicy,
-  type AgentUpdateRequest,
   type AgentUsage,
+  type AgentCreateResponse,
+  type AgentRetrieveResponse,
+  type AgentUpdateResponse,
+  type AgentListResponse,
+  type AgentListApprovalsResponse,
+  type AgentUpdatePolicyResponse,
   type AgentCreateParams,
   type AgentUpdateParams,
   type AgentListParams,
   type AgentListApprovalsParams,
   type AgentUpdatePolicyParams,
-  type AgentActionsDefaultPagination,
-  type AgentsDefaultPagination,
+  type AgentListResponsesDefaultPagination,
+  type AgentListApprovalsResponsesDefaultPagination,
 } from './agents';
-export { DeviceCodes } from './device-codes';
+export {
+  DeviceCodes,
+  type DeviceCodeGetStatusResponse,
+  type DeviceCodeRedeemResponse,
+  type DeviceCodeRegenerateResponse,
+} from './device-codes';
 export {
   Me,
+  type MeRetrieveResponse,
+  type MeCreateTransferInResponse,
+  type MeCreateTransferOutResponse,
   type MeCreateTransferInParams,
   type MeCreateTransferOutParams,
   type MeListInternalAccountsParams,
 } from './me/index';
-export { Transactions, type TransactionApproveParams, type TransactionRejectParams } from './transactions';
+export {
+  Transactions,
+  type TransactionApproveResponse,
+  type TransactionRejectResponse,
+  type TransactionApproveParams,
+  type TransactionRejectParams,
+} from './transactions';

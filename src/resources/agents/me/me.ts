@@ -1,16 +1,24 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
+import * as QuotesAPI from '../../quotes';
+import * as Shared from '../../shared';
 import * as TransferInAPI from '../../transfer-in';
 import * as AgentsAPI from '../agents';
 import * as InternalAccountsAPI from '../../sandbox/internal-accounts';
 import { InternalAccountsDefaultPagination } from '../../sandbox/internal-accounts';
 import * as ActionsAPI from './actions';
-import { ActionListParams, Actions } from './actions';
+import {
+  ActionListParams,
+  ActionListResponse,
+  ActionListResponsesDefaultPagination,
+  ActionRetrieveResponse,
+  Actions,
+} from './actions';
 import * as ExternalAccountsAPI from './external-accounts';
 import { ExternalAccountAddParams, ExternalAccountListParams, ExternalAccounts } from './external-accounts';
-import * as QuotesAPI from './quotes';
-import { QuoteCreateParams, QuoteExecuteParams, Quotes } from './quotes';
+import * as MeQuotesAPI from './quotes';
+import { QuoteCreateParams, QuoteExecuteParams, QuoteExecuteResponse, Quotes } from './quotes';
 import * as TransactionsAPI from './transactions';
 import { TransactionListParams, Transactions } from './transactions';
 import { APIPromise } from '../../../core/api-promise';
@@ -23,7 +31,7 @@ import { RequestOptions } from '../../../internal/request-options';
  */
 export class Me extends APIResource {
   transactions: TransactionsAPI.Transactions = new TransactionsAPI.Transactions(this._client);
-  quotes: QuotesAPI.Quotes = new QuotesAPI.Quotes(this._client);
+  quotes: MeQuotesAPI.Quotes = new MeQuotesAPI.Quotes(this._client);
   externalAccounts: ExternalAccountsAPI.ExternalAccounts = new ExternalAccountsAPI.ExternalAccounts(
     this._client,
   );
@@ -36,10 +44,10 @@ export class Me extends APIResource {
    *
    * @example
    * ```ts
-   * const agent = await client.agents.me.retrieve();
+   * const me = await client.agents.me.retrieve();
    * ```
    */
-  retrieve(options?: RequestOptions): APIPromise<AgentsAPI.Agent> {
+  retrieve(options?: RequestOptions): APIPromise<MeRetrieveResponse> {
     return this._client.get('/agents/me', options);
   }
 
@@ -56,25 +64,23 @@ export class Me extends APIResource {
    *
    * @example
    * ```ts
-   * const agentAction = await client.agents.me.createTransferIn(
-   *   {
-   *     destination: {
-   *       accountId:
-   *         'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-   *     },
-   *     source: {
-   *       accountId:
-   *         'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
-   *     },
-   *     amount: 12550,
+   * const response = await client.agents.me.createTransferIn({
+   *   destination: {
+   *     accountId:
+   *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
    *   },
-   * );
+   *   source: {
+   *     accountId:
+   *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *   },
+   *   amount: 12550,
+   * });
    * ```
    */
   createTransferIn(
     params: MeCreateTransferInParams,
     options?: RequestOptions,
-  ): APIPromise<AgentsAPI.AgentAction> {
+  ): APIPromise<MeCreateTransferInResponse> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/agents/me/transfer-in', {
       body,
@@ -96,24 +102,23 @@ export class Me extends APIResource {
    *
    * @example
    * ```ts
-   * const agentAction =
-   *   await client.agents.me.createTransferOut({
-   *     destination: {
-   *       accountId:
-   *         'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
-   *     },
-   *     source: {
-   *       accountId:
-   *         'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-   *     },
-   *     amount: 12550,
-   *   });
+   * const response = await client.agents.me.createTransferOut({
+   *   destination: {
+   *     accountId:
+   *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *   },
+   *   source: {
+   *     accountId:
+   *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+   *   },
+   *   amount: 12550,
+   * });
    * ```
    */
   createTransferOut(
     params: MeCreateTransferOutParams,
     options?: RequestOptions,
-  ): APIPromise<AgentsAPI.AgentAction> {
+  ): APIPromise<MeCreateTransferOutResponse> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;
     return this._client.post('/agents/me/transfer-out', {
       body,
@@ -149,6 +154,233 @@ export class Me extends APIResource {
       { query, ...options },
     );
   }
+}
+
+/**
+ * A programmatic agent with scoped permissions and a spending policy, used to
+ * automate payment workflows.
+ */
+export interface MeRetrieveResponse {
+  /**
+   * System-generated unique identifier for the agent.
+   */
+  id: string;
+
+  /**
+   * Creation timestamp.
+   */
+  createdAt: string;
+
+  /**
+   * The ID of the customer this agent operates on behalf of.
+   */
+  customerId: string;
+
+  /**
+   * Whether the agent has been installed and connected (i.e., its device code has
+   * been redeemed).
+   */
+  isConnected: boolean;
+
+  /**
+   * Whether the agent is currently paused. Paused agents cannot initiate any
+   * actions.
+   */
+  isPaused: boolean;
+
+  /**
+   * Human-readable name for the agent.
+   */
+  name: string;
+
+  /**
+   * Policy governing what an agent can do, how it executes actions, and its spending
+   * boundaries.
+   */
+  policy: AgentsAPI.AgentPolicy;
+
+  /**
+   * Last update timestamp.
+   */
+  updatedAt: string;
+
+  /**
+   * Real-time counters tracking the agent's spending and transaction activity
+   * against its policy limits.
+   */
+  usage: AgentsAPI.AgentUsage;
+}
+
+/**
+ * An action submitted by an agent that may require platform approval before
+ * execution. All agent-initiated operations (quote execution, transfers) are
+ * represented as AgentActions, giving the platform a consistent object to approve,
+ * reject, and audit regardless of the underlying operation type.
+ */
+export interface MeCreateTransferInResponse {
+  /**
+   * System-generated unique identifier for this action.
+   */
+  id: string;
+
+  /**
+   * The agent that submitted this action.
+   */
+  agentId: string;
+
+  /**
+   * When the action was submitted by the agent.
+   */
+  createdAt: string;
+
+  /**
+   * The customer on whose behalf the action was submitted.
+   */
+  customerId: string;
+
+  /**
+   * Platform-specific ID of the customer.
+   */
+  platformCustomerId: string;
+
+  /**
+   * Status of an agent action.
+   *
+   * | Status             | Description                                                            |
+   * | ------------------ | ---------------------------------------------------------------------- |
+   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
+   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
+   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
+   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
+   */
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
+
+  /**
+   * The type of action the agent is requesting.
+   *
+   * | Type            | Description                                              |
+   * | --------------- | -------------------------------------------------------- |
+   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
+   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
+   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
+   */
+  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
+
+  /**
+   * When the action was last updated.
+   */
+  updatedAt: string;
+
+  /**
+   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
+   * transfer actions. Contains the full amount, currency, destination, and rate
+   * details needed to present an approval decision to the user.
+   */
+  quote?: QuotesAPI.Quote;
+
+  /**
+   * Human-readable reason provided by the platform when rejecting the action. Only
+   * present when status is `REJECTED`.
+   */
+  rejectionReason?: string;
+
+  /**
+   * The resulting transaction, populated once the action has been approved and
+   * execution has begun. Absent while the action is `PENDING_APPROVAL` or
+   * `REJECTED`.
+   */
+  transaction?: TransferInAPI.Transaction;
+
+  /**
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   */
+  transferDetails?: Shared.AgentTransferDetails;
+}
+
+/**
+ * An action submitted by an agent that may require platform approval before
+ * execution. All agent-initiated operations (quote execution, transfers) are
+ * represented as AgentActions, giving the platform a consistent object to approve,
+ * reject, and audit regardless of the underlying operation type.
+ */
+export interface MeCreateTransferOutResponse {
+  /**
+   * System-generated unique identifier for this action.
+   */
+  id: string;
+
+  /**
+   * The agent that submitted this action.
+   */
+  agentId: string;
+
+  /**
+   * When the action was submitted by the agent.
+   */
+  createdAt: string;
+
+  /**
+   * The customer on whose behalf the action was submitted.
+   */
+  customerId: string;
+
+  /**
+   * Platform-specific ID of the customer.
+   */
+  platformCustomerId: string;
+
+  /**
+   * Status of an agent action.
+   *
+   * | Status             | Description                                                            |
+   * | ------------------ | ---------------------------------------------------------------------- |
+   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
+   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
+   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
+   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
+   */
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
+
+  /**
+   * The type of action the agent is requesting.
+   *
+   * | Type            | Description                                              |
+   * | --------------- | -------------------------------------------------------- |
+   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
+   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
+   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
+   */
+  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
+
+  /**
+   * When the action was last updated.
+   */
+  updatedAt: string;
+
+  /**
+   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
+   * transfer actions. Contains the full amount, currency, destination, and rate
+   * details needed to present an approval decision to the user.
+   */
+  quote?: QuotesAPI.Quote;
+
+  /**
+   * Human-readable reason provided by the platform when rejecting the action. Only
+   * present when status is `REJECTED`.
+   */
+  rejectionReason?: string;
+
+  /**
+   * The resulting transaction, populated once the action has been approved and
+   * execution has begun. Absent while the action is `PENDING_APPROVAL` or
+   * `REJECTED`.
+   */
+  transaction?: TransferInAPI.Transaction;
+
+  /**
+   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   */
+  transferDetails?: Shared.AgentTransferDetails;
 }
 
 export interface MeCreateTransferInParams {
@@ -225,6 +457,9 @@ Me.Actions = Actions;
 
 export declare namespace Me {
   export {
+    type MeRetrieveResponse as MeRetrieveResponse,
+    type MeCreateTransferInResponse as MeCreateTransferInResponse,
+    type MeCreateTransferOutResponse as MeCreateTransferOutResponse,
     type MeCreateTransferInParams as MeCreateTransferInParams,
     type MeCreateTransferOutParams as MeCreateTransferOutParams,
     type MeListInternalAccountsParams as MeListInternalAccountsParams,
@@ -234,6 +469,7 @@ export declare namespace Me {
 
   export {
     Quotes as Quotes,
+    type QuoteExecuteResponse as QuoteExecuteResponse,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteExecuteParams as QuoteExecuteParams,
   };
@@ -244,7 +480,13 @@ export declare namespace Me {
     type ExternalAccountAddParams as ExternalAccountAddParams,
   };
 
-  export { Actions as Actions, type ActionListParams as ActionListParams };
+  export {
+    Actions as Actions,
+    type ActionRetrieveResponse as ActionRetrieveResponse,
+    type ActionListResponse as ActionListResponse,
+    type ActionListResponsesDefaultPagination as ActionListResponsesDefaultPagination,
+    type ActionListParams as ActionListParams,
+  };
 }
 
 export { type InternalAccountsDefaultPagination };
