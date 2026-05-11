@@ -34,7 +34,6 @@ TEST_PATHS=(
 	tests/api-resources/auth/auth.test.ts
 	tests/api-resources/auth/credentials.test.ts
 	tests/api-resources/auth/sessions.test.ts
-	tests/api-resources/internal-accounts.test.ts
 	tests/api-resources/agents/agents.test.ts
 	tests/api-resources/agents/me/me.test.ts
 	tests/api-resources/agents/me/transactions.test.ts
