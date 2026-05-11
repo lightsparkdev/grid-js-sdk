@@ -522,6 +522,7 @@ Types:
 Methods:
 
 - <code title="post /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">create</a>({ ...params }) -> AuthMethodResponse</code>
+- <code title="patch /auth/credentials/{id}">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">update</a>(id, { ...params }) -> AuthMethodResponse</code>
 - <code title="get /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">list</a>({ ...params }) -> AuthCredentialListResponse</code>
 - <code title="delete /auth/credentials/{id}">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">delete</a>(id, { ...params }) -> AuthSignedRequestChallenge</code>
 - <code title="post /auth/credentials/{id}/challenge">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">challenge</a>(id, { ...params }) -> AuthCredentialResponseOneOf</code>

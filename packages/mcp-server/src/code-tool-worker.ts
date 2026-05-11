@@ -173,6 +173,7 @@ const fuse = new Fuse(
     'client.auth.credentials.create',
     'client.auth.credentials.delete',
     'client.auth.credentials.list',
+    'client.auth.credentials.update',
     'client.auth.credentials.verify',
     'client.auth.sessions.delete',
     'client.auth.sessions.list',

@@ -62,6 +62,51 @@ export class Credentials extends APIResource {
   }
 
   /**
+   * Update mutable fields on an authentication credential for an Embedded Wallet
+   * internal account. Today this supports updating the email address used by an
+   * `EMAIL_OTP` credential.
+   *
+   * This is a two-step signed-retry flow:
+   *
+   * 1. Call `PATCH /auth/credentials/{id}` with the request body
+   *    `{ "email": "new.email@example.com" }` and no signature headers. Grid returns
+   *    `202` with `payloadToSign`, `requestId`, and `expiresAt`.
+   *
+   * 2. Use the session API keypair of a verified authentication credential on the
+   *    same internal account to build an API-key stamp over `payloadToSign`, then
+   *    retry with that full stamp as the `Grid-Wallet-Signature` header and the
+   *    `requestId` echoed back as the `Request-Id` header. The retry body must carry
+   *    the same update fields submitted in step 1. The signed retry returns `200`
+   *    with the updated `AuthMethod`.
+   *
+   * @example
+   * ```ts
+   * const authMethodResponse =
+   *   await client.auth.credentials.update('id', {
+   *     email: 'new.email@example.com',
+   *   });
+   * ```
+   */
+  update(
+    id: string,
+    params: CredentialUpdateParams,
+    options?: RequestOptions,
+  ): APIPromise<AuthMethodResponse> {
+    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
+    return this._client.patch(path`/auth/credentials/${id}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
+          ...(requestID != null ? { 'Request-Id': requestID } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
+  }
+
+  /**
    * Retrieve all authentication credentials registered on an Embedded Wallet
    * internal account.
    *
@@ -409,19 +454,20 @@ export interface AuthSession extends AuthMethod {
 /**
  * 202 response returned from Embedded Wallet Auth endpoints that require a signed
  * retry — `POST /auth/credentials` (adding an additional credential),
+ * `PATCH /auth/credentials/{id}` (updating a credential),
  * `DELETE /auth/credentials/{id}` (revoking a credential), and
  * `DELETE /auth/sessions/{id}` (revoking a session). Carries the signing fields
  * from `SignedRequestChallenge` plus the `type` of the authentication credential
- * involved (being added, being revoked, or that issued the session being revoked).
- * The client already knows the target resource id from the request path / body it
- * just sent, so nothing beyond `type` is echoed in the response.
+ * involved (being added, updated, revoked, or that issued the session being
+ * revoked). The client already knows the target resource id from the request path
+ * / body it just sent, so nothing beyond `type` is echoed in the response.
  */
 export interface AuthSignedRequestChallenge extends SignedRequestChallenge {
   /**
    * Credential type relevant to this challenge: the credential type being added
-   * (`POST /auth/credentials`), the credential type being revoked
-   * (`DELETE /auth/credentials/{id}`), or the type of credential that issued the
-   * session being revoked (`DELETE /auth/sessions/{id}`).
+   * (`POST /auth/credentials`), updated (`PATCH /auth/credentials/{id}`), or revoked
+   * (`DELETE /auth/credentials/{id}`). For session revocation, this is the type of
+   * credential that issued the session (`DELETE /auth/sessions/{id}`).
    */
   type: AuthMethodType;
 }
@@ -768,6 +814,27 @@ export interface CredentialCreateParams {
   'Request-Id'?: string;
 }
 
+export interface CredentialUpdateParams {
+  /**
+   * Body param: New email address to associate with the `EMAIL_OTP` credential.
+   */
+  email?: string;
+
+  /**
+   * Header param: Full API-key stamp built over the prior `payloadToSign` with the
+   * session API keypair of a verified authentication credential on the same internal
+   * account. Required on the signed retry; ignored on the initial call.
+   */
+  'Grid-Wallet-Signature'?: string;
+
+  /**
+   * Header param: The `requestId` returned in a prior `202` response, echoed back on
+   * the signed retry so the server can correlate it with the issued challenge.
+   * Required on the signed retry; must be paired with `Grid-Wallet-Signature`.
+   */
+  'Request-Id'?: string;
+}
+
 export interface CredentialListParams {
   /**
    * Internal account id whose authentication credentials to list.
@@ -848,6 +915,7 @@ export declare namespace Credentials {
     type PasskeyCredentialVerifyRequestFields as PasskeyCredentialVerifyRequestFields,
     type SignedRequestChallenge as SignedRequestChallenge,
     type CredentialCreateParams as CredentialCreateParams,
+    type CredentialUpdateParams as CredentialUpdateParams,
     type CredentialListParams as CredentialListParams,
     type CredentialDeleteParams as CredentialDeleteParams,
     type CredentialChallengeParams as CredentialChallengeParams,
