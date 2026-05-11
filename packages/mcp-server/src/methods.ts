@@ -378,6 +378,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/auth/credentials',
   },
   {
+    clientCallName: 'client.auth.credentials.update',
+    fullyQualifiedName: 'auth.credentials.update',
+    httpMethod: 'patch',
+    httpPath: '/auth/credentials/{id}',
+  },
+  {
     clientCallName: 'client.auth.credentials.list',
     fullyQualifiedName: 'auth.credentials.list',
     httpMethod: 'get',

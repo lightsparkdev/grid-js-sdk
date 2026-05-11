@@ -31,6 +31,7 @@ export {
   type PasskeyCredentialVerifyRequestFields,
   type SignedRequestChallenge,
   type CredentialCreateParams,
+  type CredentialUpdateParams,
   type CredentialListParams,
   type CredentialDeleteParams,
   type CredentialChallengeParams,
