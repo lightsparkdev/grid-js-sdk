@@ -213,24 +213,19 @@ export interface CadAccountInfo {
 }
 
 export interface CopAccountInfo {
+  accountType: 'COP_ACCOUNT';
+
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
   /**
    * The account number of the bank
    */
-  accountNumber: string;
-
-  accountType: 'COP_ACCOUNT';
+  accountNumber?: string;
 
   /**
-   * The bank account type
+   * The phone number in international format
    */
-  bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
+  phoneNumber?: string;
 }
 
 export interface DkkAccountInfo {
