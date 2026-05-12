@@ -174,8 +174,8 @@ describe('resource customers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('getKYCLink: only required params', async () => {
-    const responsePromise = client.customers.getKYCLink({ platformCustomerId: 'platformCustomerId' });
+  test.skip('generateKYCLink', async () => {
+    const responsePromise = client.customers.generateKYCLink('customerId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -186,11 +186,15 @@ describe('resource customers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('getKYCLink: required and optional params', async () => {
-    const response = await client.customers.getKYCLink({
-      platformCustomerId: 'platformCustomerId',
-      redirectUri: 'redirectUri',
-    });
+  test.skip('generateKYCLink: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.customers.generateKYCLink(
+        'customerId',
+        { redirectUri: 'https://app.example.com/onboarding/completed', 'Idempotency-Key': '<uuid>' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -220,5 +224,20 @@ describe('resource customers', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateInternalAccount', async () => {
+    const responsePromise = client.customers.updateInternalAccount(
+      'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
+      {},
+    );
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

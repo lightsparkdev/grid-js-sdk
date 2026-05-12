@@ -80,6 +80,12 @@ export interface InternalAccount {
    * empty, the internal account belongs to the platform.
    */
   customerId?: string;
+
+  /**
+   * Whether wallet privacy is enabled for the Embedded Wallet. Only present for
+   * `EMBEDDED_WALLET` internal accounts.
+   */
+  privateEnabled?: boolean;
 }
 
 export interface InternalAccountFundParams {

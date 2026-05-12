@@ -227,20 +227,39 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Generate a hosted KYC link to onboard a customer
+   * Generate a single-use hosted URL the customer can complete to verify their
+   * identity, and (where supported) a provider-specific `token` for embedding the
+   * verification flow directly via the provider's SDK.
+   *
+   * The customer must already exist — create them with `POST /customers` first.
+   * Calling this endpoint does not change the customer's `kycStatus`; the customer
+   * remains `PENDING` until they complete (or fail) the hosted flow.
+   *
+   * Each call returns a fresh link. Previously-issued links are not invalidated, but
+   * they remain single-use and will expire on their own. For request-level retry
+   * safety, include an `Idempotency-Key` header.
    *
    * @example
    * ```ts
-   * const response = await client.customers.getKYCLink({
-   *   platformCustomerId: 'platformCustomerId',
-   * });
+   * const response = await client.customers.generateKYCLink(
+   *   'customerId',
+   * );
    * ```
    */
-  getKYCLink(
-    query: CustomerGetKYCLinkParams,
+  generateKYCLink(
+    customerID: string,
+    params: CustomerGenerateKYCLinkParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CustomerGetKYCLinkResponse> {
-    return this._client.get('/customers/kyc-link', { query, ...options });
+  ): APIPromise<CustomerGenerateKYCLinkResponse> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params ?? {};
+    return this._client.post(path`/customers/${customerID}/kyc-link`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -268,6 +287,51 @@ export class Customers extends APIResource {
       DefaultPagination<InternalAccountsAPI.InternalAccount>,
       { query, ...options },
     );
+  }
+
+  /**
+   * Update mutable fields on an internal account. Today this supports updating the
+   * wallet privacy setting for an Embedded Wallet internal account.
+   *
+   * Updating wallet privacy is a two-step signed-retry flow:
+   *
+   * 1. Call `PATCH /internal-accounts/{id}` with the request body
+   *    `{ "privateEnabled": true }` and no signature headers. Grid returns `202`
+   *    with `payloadToSign`, `requestId`, and `expiresAt`.
+   *
+   * 2. Use the session API keypair of a verified authentication credential on the
+   *    same internal account to build an API-key stamp over `payloadToSign`, then
+   *    retry with that full stamp as the `Grid-Wallet-Signature` header and the
+   *    `requestId` echoed back as the `Request-Id` header. The retry body must carry
+   *    the same update fields submitted in step 1. The signed retry returns `200`
+   *    with the updated internal account.
+   *
+   * @example
+   * ```ts
+   * const internalAccount =
+   *   await client.customers.updateInternalAccount(
+   *     'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
+   *     { privateEnabled: true },
+   *   );
+   * ```
+   */
+  updateInternalAccount(
+    id: string,
+    params: CustomerUpdateInternalAccountParams,
+    options?: RequestOptions,
+  ): APIPromise<InternalAccountsAPI.InternalAccount> {
+    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
+    return this._client.patch(path`/internal-accounts/${id}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
+          ...(requestID != null ? { 'Request-Id': requestID } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 }
 
@@ -784,21 +848,39 @@ export interface InternalAccountExportResponse {
   encryptedWalletCredentials: string;
 }
 
-export interface CustomerGetKYCLinkResponse {
+/**
+ * A hosted KYC link that the customer can complete to verify their identity.
+ */
+export interface CustomerGenerateKYCLinkResponse {
   /**
-   * The customer id of the newly created customer on the system
+   * Time at which the hosted link expires and can no longer be used.
    */
-  customerId?: string;
+  expiresAt: string;
 
   /**
-   * A hosted KYC link for your customer to complete KYC
+   * Hosted URL the customer should be sent to in order to complete verification. The
+   * URL is single-use and expires at `expiresAt`. To generate a new link (for
+   * example, after the previous one expires or is abandoned), call this endpoint
+   * again.
    */
-  kycUrl?: string;
+  kycUrl: string;
 
   /**
-   * The platform id of the customer to onboard
+   * The KYC provider that will perform identity verification for the customer. Grid
+   * selects the provider based on the customer's region and platform configuration;
+   * the value is informational for platforms that want to integrate directly with
+   * the provider's SDK.
    */
-  platformCustomerId?: string;
+  provider: 'SUMSUB';
+
+  /**
+   * Provider-specific token that can be used in place of the hosted URL — for
+   * example, to embed the provider's SDK directly in your application. Only returned
+   * for providers that support direct SDK integration. Whether to use the hosted URL
+   * or the embedded SDK is up to you; both flows result in the same `kycStatus`
+   * update on the customer.
+   */
+  token?: string;
 }
 
 export interface CustomerCreateParams {
@@ -920,17 +1002,19 @@ export interface CustomerExportParams {
   'Request-Id'?: string;
 }
 
-export interface CustomerGetKYCLinkParams {
+export interface CustomerGenerateKYCLinkParams {
   /**
-   * The platform id of the customer to onboard
-   */
-  platformCustomerId: string;
-
-  /**
-   * An optional uri a customer will be redirected to after completing the hosted KYC
-   * flow
+   * Body param: URI the customer is redirected to after completing the hosted KYC
+   * flow. Must start with `https://` (or `http://` for local development). Embedded
+   * in the returned `kycUrl`.
    */
   redirectUri?: string;
+
+  /**
+   * Header param: A unique identifier for the request. If the same key is sent
+   * multiple times, the server will return the same response as the first request.
+   */
+  'Idempotency-Key'?: string;
 }
 
 export interface CustomerListInternalAccountsParams extends DefaultPaginationParams {
@@ -957,6 +1041,27 @@ export interface CustomerListInternalAccountsParams extends DefaultPaginationPar
   type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 }
 
+export interface CustomerUpdateInternalAccountParams {
+  /**
+   * Body param: Whether wallet privacy should be enabled for the Embedded Wallet.
+   */
+  privateEnabled?: boolean;
+
+  /**
+   * Header param: Full API-key stamp built over the prior `payloadToSign` with the
+   * session API keypair of a verified authentication credential on the target
+   * internal account. Required on the signed retry; ignored on the initial call.
+   */
+  'Grid-Wallet-Signature'?: string;
+
+  /**
+   * Header param: The `requestId` returned in a prior `202` response, echoed back on
+   * the signed retry so the server can correlate it with the issued challenge.
+   * Required on the signed retry; must be paired with `Grid-Wallet-Signature`.
+   */
+  'Request-Id'?: string;
+}
+
 Customers.ExternalAccounts = ExternalAccounts;
 Customers.Bulk = Bulk;
 
@@ -972,14 +1077,15 @@ export declare namespace Customers {
     type IndividualCustomerFields as IndividualCustomerFields,
     type InternalAccountExportRequest as InternalAccountExportRequest,
     type InternalAccountExportResponse as InternalAccountExportResponse,
-    type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
+    type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
     type CustomerExportParams as CustomerExportParams,
-    type CustomerGetKYCLinkParams as CustomerGetKYCLinkParams,
+    type CustomerGenerateKYCLinkParams as CustomerGenerateKYCLinkParams,
     type CustomerListInternalAccountsParams as CustomerListInternalAccountsParams,
+    type CustomerUpdateInternalAccountParams as CustomerUpdateInternalAccountParams,
   };
 
   export {

@@ -59,16 +59,22 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/internal-accounts/{id}/export',
   },
   {
-    clientCallName: 'client.customers.getKYCLink',
-    fullyQualifiedName: 'customers.getKYCLink',
-    httpMethod: 'get',
-    httpPath: '/customers/kyc-link',
+    clientCallName: 'client.customers.generateKYCLink',
+    fullyQualifiedName: 'customers.generateKYCLink',
+    httpMethod: 'post',
+    httpPath: '/customers/{customerId}/kyc-link',
   },
   {
     clientCallName: 'client.customers.listInternalAccounts',
     fullyQualifiedName: 'customers.listInternalAccounts',
     httpMethod: 'get',
     httpPath: '/customers/internal-accounts',
+  },
+  {
+    clientCallName: 'client.customers.updateInternalAccount',
+    fullyQualifiedName: 'customers.updateInternalAccount',
+    httpMethod: 'patch',
+    httpPath: '/internal-accounts/{id}',
   },
   {
     clientCallName: 'client.customers.externalAccounts.create',

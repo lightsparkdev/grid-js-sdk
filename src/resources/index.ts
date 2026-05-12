@@ -61,13 +61,14 @@ export {
   type IndividualCustomerFields,
   type InternalAccountExportRequest,
   type InternalAccountExportResponse,
-  type CustomerGetKYCLinkResponse,
+  type CustomerGenerateKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
   type CustomerExportParams,
-  type CustomerGetKYCLinkParams,
+  type CustomerGenerateKYCLinkParams,
   type CustomerListInternalAccountsParams,
+  type CustomerUpdateInternalAccountParams,
   type CustomerOneovesDefaultPagination,
 } from './customers/customers';
 export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';

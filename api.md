@@ -91,7 +91,7 @@ Types:
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerGetKYCLinkResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerGenerateKYCLinkResponse</a></code>
 
 Methods:
 
@@ -101,8 +101,9 @@ Methods:
 - <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
 - <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
 - <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
-- <code title="get /customers/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">getKYCLink</a>({ ...params }) -> CustomerGetKYCLinkResponse</code>
+- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> CustomerGenerateKYCLinkResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
+- <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
 
 ## ExternalAccounts
 
