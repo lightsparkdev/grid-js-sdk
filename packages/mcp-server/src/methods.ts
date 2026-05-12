@@ -420,6 +420,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/auth/sessions/{id}',
   },
   {
+    clientCallName: 'client.auth.sessions.refresh',
+    fullyQualifiedName: 'auth.sessions.refresh',
+    httpMethod: 'post',
+    httpPath: '/auth/sessions/{id}/refresh',
+  },
+  {
     clientCallName: 'client.agents.create',
     fullyQualifiedName: 'agents.create',
     httpMethod: 'post',

@@ -42,4 +42,5 @@ export {
   type SessionListResponse,
   type SessionListParams,
   type SessionDeleteParams,
+  type SessionRefreshParams,
 } from './sessions';

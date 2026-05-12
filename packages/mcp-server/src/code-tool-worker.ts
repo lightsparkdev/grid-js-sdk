@@ -177,6 +177,7 @@ const fuse = new Fuse(
     'client.auth.credentials.verify',
     'client.auth.sessions.delete',
     'client.auth.sessions.list',
+    'client.auth.sessions.refresh',
     'client.agents.create',
     'client.agents.delete',
     'client.agents.list',

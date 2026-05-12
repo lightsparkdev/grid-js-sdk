@@ -538,6 +538,7 @@ Methods:
 
 - <code title="get /auth/sessions">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">list</a>({ ...params }) -> SessionListResponse</code>
 - <code title="delete /auth/sessions/{id}">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">delete</a>(id, { ...params }) -> AuthSignedRequestChallenge</code>
+- <code title="post /auth/sessions/{id}/refresh">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">refresh</a>(id, { ...params }) -> AuthSession</code>
 
 # Agents
 

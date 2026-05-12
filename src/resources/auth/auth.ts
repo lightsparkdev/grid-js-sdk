@@ -39,7 +39,13 @@ import {
   SignedRequestChallenge,
 } from './credentials';
 import * as SessionsAPI from './sessions';
-import { SessionDeleteParams, SessionListParams, SessionListResponse, Sessions } from './sessions';
+import {
+  SessionDeleteParams,
+  SessionListParams,
+  SessionListResponse,
+  SessionRefreshParams,
+  Sessions,
+} from './sessions';
 
 export class Auth extends APIResource {
   credentials: CredentialsAPI.Credentials = new CredentialsAPI.Credentials(this._client);
@@ -92,5 +98,6 @@ export declare namespace Auth {
     type SessionListResponse as SessionListResponse,
     type SessionListParams as SessionListParams,
     type SessionDeleteParams as SessionDeleteParams,
+    type SessionRefreshParams as SessionRefreshParams,
   };
 }
