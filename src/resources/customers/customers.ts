@@ -995,9 +995,10 @@ export interface CustomerExportParams {
   'Grid-Wallet-Signature'?: string;
 
   /**
-   * Header param: The `requestId` returned in a prior `202` response, echoed back on
-   * the signed retry so the server can correlate it with the issued challenge.
-   * Required on the signed retry; must be paired with `Grid-Wallet-Signature`.
+   * Header param: The `requestId` returned in a prior `202` response, echoed back
+   * exactly on the signed retry so the server can correlate it with the issued
+   * challenge. Required on the signed retry; must be paired with
+   * `Grid-Wallet-Signature`.
    */
   'Request-Id'?: string;
 }
