@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as ExternalAccountsAPI from './external-accounts';
 import * as Shared from '../shared';
 import * as PlatformExternalAccountsAPI from '../platform/external-accounts';
 import { APIPromise } from '../../core/api-promise';
@@ -385,6 +386,7 @@ export interface ExternalAccountCreate {
     | Shared.HtgExternalAccountCreateInfo
     | Shared.JmdExternalAccountCreateInfo
     | Shared.PkrExternalAccountCreateInfo
+    | ExternalAccountCreate.SlvExternalAccountCreateInfo
     | SparkWalletInfo
     | LightningWalletInfo
     | SolanaWalletInfo
@@ -421,6 +423,72 @@ export interface ExternalAccountCreate {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccountCreate {
+  export interface SlvExternalAccountCreateInfo {
+    accountType: 'SLV_ACCOUNT';
+
+    beneficiary: SlvExternalAccountCreateInfo.SlvBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The account number of the bank (BANK_TRANSFER only)
+     */
+    accountNumber?: string;
+
+    /**
+     * The bank account type (BANK_TRANSFER only)
+     */
+    bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * The name of the bank (BANK_TRANSFER only)
+     */
+    bankName?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
+     */
+    phoneNumber?: string;
+  }
+
+  export namespace SlvExternalAccountCreateInfo {
+    export interface SlvBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 /**
@@ -469,7 +537,76 @@ export type ExternalAccountInfoOneOf =
   | GtqExternalAccountInfo
   | HtgExternalAccountInfo
   | JmdExternalAccountInfo
-  | PkrExternalAccountInfo;
+  | PkrExternalAccountInfo
+  | ExternalAccountInfoOneOf.SlvExternalAccountInfo;
+
+export namespace ExternalAccountInfoOneOf {
+  export interface SlvExternalAccountInfo {
+    accountType: 'SLV_ACCOUNT';
+
+    beneficiary: SlvExternalAccountInfo.SlvBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * The account number of the bank (BANK_TRANSFER only)
+     */
+    accountNumber?: string;
+
+    /**
+     * The bank account type (BANK_TRANSFER only)
+     */
+    bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * The name of the bank (BANK_TRANSFER only)
+     */
+    bankName?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
+     */
+    phoneNumber?: string;
+  }
+
+  export namespace SlvExternalAccountInfo {
+    export interface SlvBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+}
 
 export interface GbpBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1021,6 +1158,7 @@ export interface ExternalAccountCreateParams {
     | Shared.HtgExternalAccountCreateInfo
     | Shared.JmdExternalAccountCreateInfo
     | Shared.PkrExternalAccountCreateInfo
+    | ExternalAccountCreateParams.SlvExternalAccountCreateInfo
     | SparkWalletInfo
     | LightningWalletInfo
     | SolanaWalletInfo
@@ -1057,6 +1195,72 @@ export interface ExternalAccountCreateParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccountCreateParams {
+  export interface SlvExternalAccountCreateInfo {
+    accountType: 'SLV_ACCOUNT';
+
+    beneficiary: SlvExternalAccountCreateInfo.SlvBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The account number of the bank (BANK_TRANSFER only)
+     */
+    accountNumber?: string;
+
+    /**
+     * The bank account type (BANK_TRANSFER only)
+     */
+    bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * The name of the bank (BANK_TRANSFER only)
+     */
+    bankName?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
+     */
+    phoneNumber?: string;
+  }
+
+  export namespace SlvExternalAccountCreateInfo {
+    export interface SlvBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export interface ExternalAccountListParams extends DefaultPaginationParams {

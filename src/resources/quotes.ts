@@ -231,6 +231,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.PaymentHtgAccountInfo
     | PaymentInstructions.PaymentJmdAccountInfo
     | PaymentInstructions.PaymentPkrAccountInfo
+    | PaymentInstructions.PaymentSlvAccountInfo
     | PaymentInstructions.PaymentSparkWalletInfo
     | PaymentInstructions.PaymentLightningInvoiceInfo
     | PaymentInstructions.PaymentSolanaWalletInfo
@@ -343,6 +344,38 @@ export namespace PaymentInstructions {
   export interface PaymentJmdAccountInfo extends ExternalAccountsAPI.JmdAccountInfo {}
 
   export interface PaymentPkrAccountInfo extends ExternalAccountsAPI.PkrAccountInfo {}
+
+  export interface PaymentSlvAccountInfo {
+    accountType: 'SLV_ACCOUNT';
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The account number of the bank (BANK_TRANSFER only)
+     */
+    accountNumber?: string;
+
+    /**
+     * The bank account type (BANK_TRANSFER only)
+     */
+    bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * The name of the bank (BANK_TRANSFER only)
+     */
+    bankName?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
+     */
+    phoneNumber?: string;
+  }
 
   export interface PaymentSparkWalletInfo {
     accountType: 'SPARK_WALLET';
