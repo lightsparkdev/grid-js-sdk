@@ -708,8 +708,8 @@ export interface PasskeyAuthChallenge extends AuthMethod {
   expiresAt: string;
 
   /**
-   * Unique identifier for this pending passkey authentication request. Must be
-   * echoed as the `Request-Id` header on the subsequent
+   * Grid-issued `Request:<uuid>` identifier for this pending passkey authentication
+   * request. Echo this value exactly as the `Request-Id` header on the subsequent
    * `POST /auth/credentials/{id}/verify` call so Grid can correlate the assertion
    * with the issued challenge.
    */
@@ -788,9 +788,9 @@ export interface SignedRequestChallenge {
   payloadToSign: string;
 
   /**
-   * Unique identifier for this request. Must be echoed in the `Request-Id` header on
-   * the signed retry so the server can correlate the retry with the issued
-   * challenge.
+   * Grid-issued `Request:<uuid>` identifier for this pending request. Echo this
+   * value exactly in the `Request-Id` header on the signed retry so the server can
+   * correlate the retry with the issued challenge.
    */
   requestId: string;
 }
@@ -809,10 +809,10 @@ export interface CredentialCreateParams {
   'Grid-Wallet-Signature'?: string;
 
   /**
-   * Header param: The `requestId` returned in a prior `202` response, echoed back on
-   * the signed retry so the server can correlate it with the issued challenge.
-   * Required on the signed retry when registering a credential; must be paired with
-   * `Grid-Wallet-Signature`.
+   * Header param: The `requestId` returned in a prior `202` response, echoed back
+   * exactly on the signed retry so the server can correlate it with the issued
+   * challenge. Required on the signed retry when registering a credential; must be
+   * paired with `Grid-Wallet-Signature`.
    */
   'Request-Id'?: string;
 }
@@ -855,9 +855,9 @@ export interface CredentialDeleteParams {
   'Grid-Wallet-Signature'?: string;
 
   /**
-   * The `requestId` returned in a prior `202` response, echoed back on the signed
-   * retry so the server can correlate it with the issued challenge. Required on the
-   * signed retry; must be paired with `Grid-Wallet-Signature`.
+   * The `requestId` returned in a prior `202` response, echoed back exactly on the
+   * signed retry so the server can correlate it with the issued challenge. Required
+   * on the signed retry; must be paired with `Grid-Wallet-Signature`.
    */
   'Request-Id'?: string;
 }
@@ -882,8 +882,8 @@ export interface CredentialVerifyParams {
 
   /**
    * Header param: The `requestId` returned alongside the Grid-issued `challenge`
-   * from `POST /auth/credentials/{id}/challenge`, echoed back here so Grid can
-   * correlate the assertion with the pending challenge.
+   * from `POST /auth/credentials/{id}/challenge`, echoed back exactly here so Grid
+   * can correlate the assertion with the pending challenge.
    */
   'Request-Id'?: string;
 }
