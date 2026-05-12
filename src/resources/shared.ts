@@ -3,14 +3,14 @@
 import * as ExternalAccountsAPI from './customers/external-accounts';
 
 export interface AedBeneficiary {
+  address: ExternalAccountsAPI.Address;
+
   beneficiaryType: 'INDIVIDUAL';
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
-
-  address?: ExternalAccountsAPI.Address;
 
   /**
    * The birth date of the beneficiary
@@ -302,16 +302,6 @@ export interface CopBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
   /**
-   * The identity document number
-   */
-  documentNumber: string;
-
-  /**
-   * The type of identity document (e.g., national ID, passport)
-   */
-  documentType: string;
-
-  /**
    * The full name of the beneficiary
    */
   fullName: string;
@@ -345,24 +335,19 @@ export interface CopBeneficiary {
 }
 
 export interface CopExternalAccountCreateInfo {
+  accountType: 'COP_ACCOUNT';
+
+  beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
   /**
    * The account number of the bank
    */
-  accountNumber: string;
-
-  accountType: 'COP_ACCOUNT';
+  accountNumber?: string;
 
   /**
-   * The bank account type
+   * The phone number in international format
    */
-  bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
-  beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  phoneNumber?: string;
 }
 
 export interface DkkExternalAccountCreateInfo {
