@@ -280,6 +280,20 @@ export const launchStreamableHTTPServer = async ({
   mcpOptions: McpOptions;
   port: number | string | undefined;
 }) => {
+  // Fail-closed guard: if running on AWS Lambda with HTTP transport, ORIGIN_SECRET
+  // MUST be set. Without it, the middleware no-ops and /mcp becomes wide open to
+  // direct Function URL hits — bypassing CloudFront's WAF and origin gate. Fail
+  // at boot so a missing env var surfaces as an InitError rather than silent
+  // exposure. AWS_LAMBDA_FUNCTION_NAME is set by the Lambda runtime on every
+  // invocation and is never present in local dev, so this check correctly
+  // scopes to production deploys without breaking local HTTP-transport testing.
+  if (process.env.AWS_LAMBDA_FUNCTION_NAME && !process.env.ORIGIN_SECRET) {
+    throw new Error(
+      'ORIGIN_SECRET must be set when running HTTP transport on AWS Lambda. ' +
+        'Without it, the origin-secret middleware no-ops and /mcp is unguarded. ' +
+        'Set ORIGIN_SECRET in the Lambda environment configuration.',
+    );
+  }
   const app = streamableHTTPApp({ ...(clientOptions && { clientOptions }), mcpOptions });
   const server = app.listen(port);
   const address = server.address();
@@ -293,4 +307,6 @@ export const launchStreamableHTTPServer = async ({
   } else {
     logger.info(`MCP Server running on streamable HTTP on port ${port}`);
   }
+
+  return server;
 };

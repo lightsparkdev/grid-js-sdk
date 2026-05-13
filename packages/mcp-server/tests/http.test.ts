@@ -118,7 +118,7 @@ describe('originSecretMiddleware', () => {
 
 import type { AddressInfo } from 'net';
 import type { McpOptions } from '../src/options';
-import { streamableHTTPApp } from '../src/http';
+import { streamableHTTPApp, launchStreamableHTTPServer } from '../src/http';
 
 describe('streamableHTTPApp /health bypass', () => {
   const minimalMcpOptions = {
@@ -159,6 +159,62 @@ describe('streamableHTTPApp /health bypass', () => {
       expect(res.status).toBe(403);
     } finally {
       await new Promise<void>((resolve) => server.close(() => resolve()));
+    }
+  });
+});
+
+describe('launchStreamableHTTPServer fail-closed guard', () => {
+  const originalLambdaName = process.env.AWS_LAMBDA_FUNCTION_NAME;
+  const originalSecret = process.env.ORIGIN_SECRET;
+  const minimalMcpOptions = {
+    transport: 'http',
+    port: 0,
+    code: { allowHttpGets: false, allowedMethods: [], blockedMethods: [] },
+  } as unknown as McpOptions;
+
+  afterEach(() => {
+    if (originalLambdaName === undefined) delete process.env.AWS_LAMBDA_FUNCTION_NAME;
+    else process.env.AWS_LAMBDA_FUNCTION_NAME = originalLambdaName;
+    if (originalSecret === undefined) delete process.env.ORIGIN_SECRET;
+    else process.env.ORIGIN_SECRET = originalSecret;
+  });
+
+  it('throws when running on Lambda without ORIGIN_SECRET', async () => {
+    process.env.AWS_LAMBDA_FUNCTION_NAME = 'grid-mcp';
+    delete process.env.ORIGIN_SECRET;
+    await expect(
+      launchStreamableHTTPServer({
+        mcpOptions: minimalMcpOptions,
+        port: 0,
+      }),
+    ).rejects.toThrow(/ORIGIN_SECRET must be set/);
+  });
+
+  it('does not throw when ORIGIN_SECRET is set on Lambda', async () => {
+    process.env.AWS_LAMBDA_FUNCTION_NAME = 'grid-mcp';
+    process.env.ORIGIN_SECRET = 'a-secret-value';
+    const server = await launchStreamableHTTPServer({
+      mcpOptions: minimalMcpOptions,
+      port: 0,
+    });
+    try {
+      expect(server).toBeDefined();
+    } finally {
+      await new Promise<void>((resolve) => server!.close(() => resolve()));
+    }
+  });
+
+  it('does not throw in local dev when AWS_LAMBDA_FUNCTION_NAME is unset', async () => {
+    delete process.env.AWS_LAMBDA_FUNCTION_NAME;
+    delete process.env.ORIGIN_SECRET;
+    const server = await launchStreamableHTTPServer({
+      mcpOptions: minimalMcpOptions,
+      port: 0,
+    });
+    try {
+      expect(server).toBeDefined();
+    } finally {
+      await new Promise<void>((resolve) => server!.close(() => resolve()));
     }
   });
 });
