@@ -18,14 +18,37 @@ terraform {
 
 provider "aws" {
   region  = "us-west-2"
-  profile = "dev"
+  profile = "prod"
 
   default_tags {
     tags = {
       Service     = "grid-mcp"
       Environment = "prod"
       ManagedBy   = "terraform"
-      Team        = "platform-engineering"
+      Team        = "production-engineering"
+      Repository  = "https://github.com/lightsparkdev/grid-js-sdk"
+    }
+  }
+}
+
+# us-east-1 provider for CloudFront-adjacent resources (ACM cert + WAF web ACL).
+# CloudFront requires both to live in us-east-1 regardless of the workload region.
+#
+# DEPLOY-TIME: when migrating to prod, change `profile = "dev"` to the prod
+# profile here AND in the default `provider "aws"` block above AND in the
+# `terraform { backend "s3" { ... profile = "dev" } }` block. The plan
+# (Task 2 Step 0a) details the migration steps including state migration.
+provider "aws" {
+  alias   = "use1"
+  region  = "us-east-1"
+  profile = "prod"
+
+  default_tags {
+    tags = {
+      Service     = "grid-mcp"
+      Environment = "prod"
+      ManagedBy   = "terraform"
+      Team        = "production-engineering"
       Repository  = "https://github.com/lightsparkdev/grid-js-sdk"
     }
   }
