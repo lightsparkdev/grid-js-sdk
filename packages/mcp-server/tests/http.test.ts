@@ -145,13 +145,13 @@ describe('streamableHTTPApp /health bypass', () => {
     }
   });
 
-  it('returns 403 on /mcp without origin secret when ORIGIN_SECRET is set', async () => {
+  it('returns 403 on POST / without origin secret when ORIGIN_SECRET is set', async () => {
     process.env.ORIGIN_SECRET = 'an-irrelevant-secret-value';
     const app = streamableHTTPApp({ mcpOptions: minimalMcpOptions });
     const server = app.listen(0);
     try {
       const addr = server.address() as AddressInfo;
-      const res = await fetch(`http://127.0.0.1:${addr.port}/mcp`, {
+      const res = await fetch(`http://127.0.0.1:${addr.port}/`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: '{}',

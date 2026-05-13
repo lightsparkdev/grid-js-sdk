@@ -263,10 +263,15 @@ export const streamableHTTPApp = ({
   app.get('/health', async (req: express.Request, res: express.Response) => {
     res.status(200).send('OK');
   });
-  app.use('/mcp', originSecretMiddleware(process.env['ORIGIN_SECRET']));
-  app.get('/mcp', get);
-  app.post('/mcp', post({ clientOptions, mcpOptions }));
-  app.delete('/mcp', del);
+  // Per-route secret gating on the three MCP methods at root. Per-route
+  // (rather than app.use(secret)) makes the /health bypass explicit and
+  // immune to future route-registration reordering — a global mount that
+  // relies on Express's "/health registered first" ordering would silently
+  // gate /health if someone moved the registration.
+  const secret = originSecretMiddleware(process.env['ORIGIN_SECRET']);
+  app.get('/', secret, get);
+  app.post('/', secret, post({ clientOptions, mcpOptions }));
+  app.delete('/', secret, del);
 
   return app;
 };

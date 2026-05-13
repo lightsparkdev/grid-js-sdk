@@ -1,6 +1,6 @@
 output "grid_mcp_custom_domain_url" {
-  description = "Public HTTPS URL for the Grid MCP server. POST /mcp with x-grid-* headers. This is the customer-facing URL — share this, not the lambda-url one."
-  value       = "https://${var.custom_domain}/mcp"
+  description = "Public HTTPS URL for the Grid MCP server. POST to the root path with x-grid-* headers (no /mcp suffix — the subdomain names the service). This is the customer-facing URL — share this, not the lambda-url one."
+  value       = "https://${var.custom_domain}"
 }
 
 output "grid_mcp_lambda_function_url" {
