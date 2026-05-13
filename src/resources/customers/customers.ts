@@ -582,8 +582,7 @@ export namespace CustomerOneOf {
   export interface IndividualCustomer extends CustomersAPI.Customer, CustomersAPI.IndividualCustomerFields {}
 
   export interface BusinessCustomer
-    extends CustomersAPI.Customer,
-      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
+    extends CustomersAPI.Customer, Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
     /**
@@ -711,12 +710,10 @@ export interface CustomerCreateParams {
 
 export namespace CustomerCreateParams {
   export interface IndividualCustomerCreateRequest
-    extends CustomersAPI.CustomerCreate,
-      CustomersAPI.IndividualCustomerFields {}
+    extends CustomersAPI.CustomerCreate, CustomersAPI.IndividualCustomerFields {}
 
   export interface BusinessCustomerCreateRequest
-    extends CustomersAPI.CustomerCreate,
-      Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
+    extends CustomersAPI.CustomerCreate, Omit<CustomersAPI.BusinessCustomerFields, 'businessInfo'> {
     /**
      * Additional information required for business entities
      */
@@ -732,12 +729,10 @@ export interface CustomerUpdateParams {
 
 export namespace CustomerUpdateParams {
   export interface IndividualCustomerUpdateRequest
-    extends CustomersAPI.CustomerUpdate,
-      CustomersAPI.IndividualCustomerFields {}
+    extends CustomersAPI.CustomerUpdate, CustomersAPI.IndividualCustomerFields {}
 
   export interface BusinessCustomerUpdateRequest
-    extends CustomersAPI.CustomerUpdate,
-      CustomersAPI.BusinessCustomerFields {}
+    extends CustomersAPI.CustomerUpdate, CustomersAPI.BusinessCustomerFields {}
 }
 
 export interface CustomerListParams extends DefaultPaginationParams {
