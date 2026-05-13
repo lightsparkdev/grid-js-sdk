@@ -109,7 +109,7 @@ data "aws_iam_policy_document" "ecr_lambda_pull" {
     condition {
       test     = "StringLike"
       variable = "aws:sourceArn"
-      values   = ["arn:aws:lambda:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:function:*"]
+      values   = ["arn:aws:lambda:${data.aws_region.current.id}:${data.aws_caller_identity.current.account_id}:function:*"]
     }
   }
 }
@@ -145,6 +145,7 @@ resource "aws_lambda_function" "grid_mcp" {
   environment {
     variables = {
       STAINLESS_API_KEY = var.stainless_api_key
+      ORIGIN_SECRET     = var.cloudfront_origin_secret
     }
   }
 
