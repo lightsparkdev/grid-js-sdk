@@ -200,14 +200,15 @@ resource "aws_lambda_permission" "public_invoke" {
 # require BOTH lambda:InvokeFunctionUrl AND lambda:InvokeFunction. With only
 # the URL-form permission, CloudFront-routed requests intermittently return
 # 403 AccessDeniedException, while direct hits to the bare Function URL
-# (which use a different internal code path) succeed. This permission has
-# no auth-type condition because lambda:InvokeFunction is the lower-level
-# invocation action that Lambda's CloudFront proxy path resolves to.
+# (which use a different internal code path) succeed. Keep it constrained to
+# Function URL traffic so generic InvokeFunction calls cannot bypass the
+# CloudFront/WAF/origin-secret path.
 resource "aws_lambda_permission" "public_invoke_function" {
-  statement_id  = "FunctionURLAllowPublicInvokeFunction"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.grid_mcp.function_name
-  principal     = "*"
+  statement_id             = "FunctionURLAllowPublicInvokeFunction"
+  action                   = "lambda:InvokeFunction"
+  function_name            = aws_lambda_function.grid_mcp.function_name
+  principal                = "*"
+  invoked_via_function_url = true
 }
 
 # CloudWatch alarms — minimal post-deploy visibility so a production

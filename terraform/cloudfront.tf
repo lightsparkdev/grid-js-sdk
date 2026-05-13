@@ -197,6 +197,17 @@ resource "aws_wafv2_web_acl" "grid_mcp" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesCommonRuleSet"
         vendor_name = "AWS"
+
+        # MCP execute payloads commonly exceed the managed rule's 8 KB
+        # SizeRestrictions_BODY threshold. Keep visibility via labels/metrics
+        # without blocking legitimate JSON-RPC requests at the edge.
+        rule_action_override {
+          name = "SizeRestrictions_BODY"
+
+          action_to_use {
+            count {}
+          }
+        }
       }
     }
     visibility_config {
