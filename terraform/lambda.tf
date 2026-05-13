@@ -145,7 +145,7 @@ resource "aws_lambda_function" "grid_mcp" {
   environment {
     variables = {
       STAINLESS_API_KEY = var.stainless_api_key
-      ORIGIN_SECRET     = var.cloudfront_origin_secret
+      ORIGIN_SECRET     = data.aws_ssm_parameter.cloudfront_origin_secret.value
     }
   }
 

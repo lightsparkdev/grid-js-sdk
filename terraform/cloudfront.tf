@@ -30,16 +30,25 @@ variable "waf_rate_limit_per_5min" {
   }
 }
 
-variable "cloudfront_origin_secret" {
-  type        = string
-  description = "Shared secret injected by CloudFront into every origin request as the X-Origin-Secret header. The Express server in packages/mcp-server/src/http.ts validates this header to reject direct hits on the bare Lambda Function URL (auth_type=NONE). Generate with: openssl rand -hex 32. Provide via TF_VAR_cloudfront_origin_secret or terraform.auto.tfvars (gitignored)."
-  sensitive   = true
-  nullable    = false
-
-  validation {
-    condition     = length(var.cloudfront_origin_secret) >= 32
-    error_message = "cloudfront_origin_secret must be at least 32 characters to provide adequate brute-force resistance."
-  }
+# SSM parameter sourcing the shared secret CloudFront injects into every
+# origin request as the X-Origin-Secret header. The Express server in
+# packages/mcp-server/src/http.ts validates this header (timing-safe) and
+# rejects /mcp requests that don't carry the matching value.
+#
+# The parameter is operator-managed (created/rotated out-of-band) so the
+# secret value never lands in terraform.auto.tfvars or any other on-disk
+# config. Rotation procedure: `aws ssm put-parameter --overwrite ...` then
+# `terraform apply` — the new value flows through to both the Lambda env
+# var (ORIGIN_SECRET) and the CloudFront custom_header value atomically in
+# the next apply.
+#
+# Note: the resolved value DOES land in terraform state (encrypted at rest
+# in the S3 backend) and in the Lambda function configuration (encrypted
+# with the grid_mcp_lambda_env CMK). Operators running `terraform apply`
+# need ssm:GetParameter on this parameter AND kms:Decrypt on the SSM
+# default key (alias/aws/ssm).
+data "aws_ssm_parameter" "cloudfront_origin_secret" {
+  name = "/grid-mcp/cloudfront-origin-secret"
 }
 
 # ----------------------------------------------------------------------------
@@ -233,7 +242,7 @@ resource "aws_cloudfront_distribution" "grid_mcp" {
     # gate that ensures only CloudFront-routed requests reach the app.
     custom_header {
       name  = "X-Origin-Secret"
-      value = var.cloudfront_origin_secret
+      value = data.aws_ssm_parameter.cloudfront_origin_secret.value
     }
 
     custom_origin_config {
