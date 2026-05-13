@@ -263,7 +263,7 @@ export const streamableHTTPApp = ({
   app.get('/health', async (req: express.Request, res: express.Response) => {
     res.status(200).send('OK');
   });
-  app.use('/mcp', originSecretMiddleware(process.env.ORIGIN_SECRET));
+  app.use('/mcp', originSecretMiddleware(process.env['ORIGIN_SECRET']));
   app.get('/mcp', get);
   app.post('/mcp', post({ clientOptions, mcpOptions }));
   app.delete('/mcp', del);
@@ -287,7 +287,7 @@ export const launchStreamableHTTPServer = async ({
   // exposure. AWS_LAMBDA_FUNCTION_NAME is set by the Lambda runtime on every
   // invocation and is never present in local dev, so this check correctly
   // scopes to production deploys without breaking local HTTP-transport testing.
-  if (process.env.AWS_LAMBDA_FUNCTION_NAME && !process.env.ORIGIN_SECRET) {
+  if (process.env['AWS_LAMBDA_FUNCTION_NAME'] && !process.env['ORIGIN_SECRET']) {
     throw new Error(
       'ORIGIN_SECRET must be set when running HTTP transport on AWS Lambda. ' +
         'Without it, the origin-secret middleware no-ops and /mcp is unguarded. ' +
