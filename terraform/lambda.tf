@@ -179,6 +179,22 @@ resource "aws_lambda_function_url" "grid_mcp" {
   # Both are tracked in Task 11 follow-ups.
 }
 
+# Public-invoke resource-based policy. Setting authorization_type=NONE on the
+# Function URL is necessary but NOT sufficient: Lambda still requires an
+# explicit resource-based policy granting principal="*" with the matching
+# function_url_auth_type condition. Without this, every request — direct or
+# CloudFront-proxied — returns 403 AccessDeniedException ("Function URL
+# authorization issues") regardless of auth_type. The gate against random
+# direct hits is the X-Origin-Secret check in src/http.ts; the bare URL is
+# intentionally publicly invokable at the IAM layer.
+resource "aws_lambda_permission" "public_invoke" {
+  statement_id           = "FunctionURLAllowPublicAccess"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.grid_mcp.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
 # CloudWatch alarms — minimal post-deploy visibility so a production
 # regression (5xx, throttle exhaustion, or Stainless 401 storm) is
 # actually noticed instead of waiting for customer reports.
