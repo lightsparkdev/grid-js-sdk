@@ -96,6 +96,9 @@ describe('resource customers', () => {
         kycStatus: 'APPROVED',
         nationality: 'US',
       },
+      'Grid-Wallet-Signature':
+        'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
+      'Request-Id': 'Request:019542f5-b3e7-1d02-0000-000000000010',
     });
   });
 

@@ -117,7 +117,31 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Update a customer's metadata by their system-generated ID
+   * Update a customer's metadata by their system-generated ID.
+   *
+   * Most customer updates complete synchronously and return `200` with the updated
+   * customer. If the request changes `email` for a customer that has one or more
+   * tied Embedded Wallet internal accounts with `EMAIL_OTP` credentials, the email
+   * change uses the two-step signed-retry flow so the customer's wallet session
+   * authorizes the authentication credential update. On the signed retry, Grid
+   * updates the customer email and every tied `EMAIL_OTP` credential across all tied
+   * Embedded Wallets as one logical operation. If any tied credential cannot be
+   * updated, the customer email is not changed.
+   *
+   * For an Embedded Wallet email update:
+   *
+   * 1. Call `PATCH /customers/{customerId}` with the full update body and no
+   *    signature headers. Grid returns `202` with `payloadToSign`, `requestId`, and
+   *    `expiresAt`. The pending challenge binds the submitted update fields and the
+   *    set of tied Embedded Wallet email OTP credentials that must be updated.
+   *
+   * 2. Use the session API keypair of a verified authentication credential on one of
+   *    the customer's tied Embedded Wallets to build an API-key stamp over
+   *    `payloadToSign`, then retry the same request with that full stamp as the
+   *    `Grid-Wallet-Signature` header and the `requestId` echoed back as the
+   *    `Request-Id` header. The retry body must carry the same update fields
+   *    submitted in step 1. The signed retry returns `200` with the updated
+   *    customer.
    *
    * @example
    * ```ts
@@ -132,8 +156,22 @@ export class Customers extends APIResource {
     params: CustomerUpdateParams,
     options?: RequestOptions,
   ): APIPromise<CustomerOneOf> {
-    const { UpdateCustomerRequest } = params;
-    return this._client.patch(path`/customers/${customerID}`, { body: UpdateCustomerRequest, ...options });
+    const {
+      UpdateCustomerRequest,
+      'Grid-Wallet-Signature': gridWalletSignature,
+      'Request-Id': requestID,
+    } = params;
+    return this._client.patch(path`/customers/${customerID}`, {
+      body: UpdateCustomerRequest,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
+          ...(requestID != null ? { 'Request-Id': requestID } : undefined),
+        },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
@@ -760,6 +798,12 @@ export namespace CustomerOneOf {
  */
 export type CustomerType = 'INDIVIDUAL' | 'BUSINESS';
 
+/**
+ * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
+ * customer with tied Embedded Wallet internal accounts, Grid updates the customer
+ * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
+ * through the endpoint's signed-retry flow.
+ */
 export interface CustomerUpdate {
   /**
    * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
@@ -770,7 +814,9 @@ export interface CustomerUpdate {
   currencies?: Array<string>;
 
   /**
-   * Email address for the customer.
+   * Email address for the customer. For customers with tied Embedded Wallet internal
+   * accounts, changing this value also updates every tied `EMAIL_OTP` credential
+   * across all tied Embedded Wallets.
    */
   email?: string;
 
@@ -905,16 +951,51 @@ export namespace CustomerCreateParams {
 }
 
 export interface CustomerUpdateParams {
+  /**
+   * Body param: Request body for `PATCH /customers/{customerId}`. When `email`
+   * changes for a customer with tied Embedded Wallet internal accounts, Grid updates
+   * the customer email and every tied `EMAIL_OTP` credential across all tied
+   * Embedded Wallets through the endpoint's signed-retry flow.
+   */
   UpdateCustomerRequest:
     | CustomerUpdateParams.IndividualCustomerUpdateRequest
     | CustomerUpdateParams.BusinessCustomerUpdateRequest;
+
+  /**
+   * Header param: Full API-key stamp built over the prior `payloadToSign` with the
+   * session API keypair of a verified authentication credential on one of the
+   * customer's tied Embedded Wallets. Required on the signed retry for Embedded
+   * Wallet email updates; ignored on the initial call and on customer updates that
+   * complete synchronously.
+   */
+  'Grid-Wallet-Signature'?: string;
+
+  /**
+   * Header param: The `requestId` returned in a prior `202` response, echoed back on
+   * the signed retry so the server can correlate it with the issued challenge.
+   * Required on the signed retry for Embedded Wallet email updates; must be paired
+   * with `Grid-Wallet-Signature`.
+   */
+  'Request-Id'?: string;
 }
 
 export namespace CustomerUpdateParams {
+  /**
+   * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
+   * customer with tied Embedded Wallet internal accounts, Grid updates the customer
+   * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
+   * through the endpoint's signed-retry flow.
+   */
   export interface IndividualCustomerUpdateRequest
     extends CustomersAPI.CustomerUpdate,
       CustomersAPI.IndividualCustomerFields {}
 
+  /**
+   * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
+   * customer with tied Embedded Wallet internal accounts, Grid updates the customer
+   * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
+   * through the endpoint's signed-retry flow.
+   */
   export interface BusinessCustomerUpdateRequest
     extends CustomersAPI.CustomerUpdate,
       CustomersAPI.BusinessCustomerFields {}
