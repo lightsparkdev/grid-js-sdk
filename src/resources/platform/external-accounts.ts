@@ -218,12 +218,22 @@ export interface CopAccountInfo {
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The account number of the bank
+   * The account number of the bank (BANK_TRANSFER only)
    */
   accountNumber?: string;
 
   /**
-   * The phone number in international format
+   * The bank account type (BANK_TRANSFER only)
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank (BANK_TRANSFER only)
+   */
+  bankName?: string;
+
+  /**
+   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
    */
   phoneNumber?: string;
 }

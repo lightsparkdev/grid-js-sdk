@@ -319,6 +319,18 @@ export interface CopBeneficiary {
   countryOfResidence?: string;
 
   /**
+   * Identity document number — required by most Colombian banks
+   */
+  documentNumber?: string;
+
+  /**
+   * Identity document type — required by most Colombian banks. CC: Cédula de
+   * Ciudadanía, CE: Cédula de Extranjería, TI: Tarjeta de Identidad, NIT: Número de
+   * Identificación Tributaria, PP: Passport
+   */
+  documentType?: 'CC' | 'CE' | 'TI' | 'NIT' | 'PP';
+
+  /**
    * The email of the beneficiary
    */
   email?: string;
@@ -340,12 +352,22 @@ export interface CopExternalAccountCreateInfo {
   beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
-   * The account number of the bank
+   * The account number of the bank (BANK_TRANSFER only)
    */
   accountNumber?: string;
 
   /**
-   * The phone number in international format
+   * The bank account type (BANK_TRANSFER only)
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank (BANK_TRANSFER only)
+   */
+  bankName?: string;
+
+  /**
+   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
    */
   phoneNumber?: string;
 }
