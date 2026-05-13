@@ -195,6 +195,21 @@ resource "aws_lambda_permission" "public_invoke" {
   function_url_auth_type = "NONE"
 }
 
+# Companion permission for invoke_mode=RESPONSE_STREAM. Empirically, requests
+# routed through CloudFront to a Function URL with invoke_mode=RESPONSE_STREAM
+# require BOTH lambda:InvokeFunctionUrl AND lambda:InvokeFunction. With only
+# the URL-form permission, CloudFront-routed requests intermittently return
+# 403 AccessDeniedException, while direct hits to the bare Function URL
+# (which use a different internal code path) succeed. This permission has
+# no auth-type condition because lambda:InvokeFunction is the lower-level
+# invocation action that Lambda's CloudFront proxy path resolves to.
+resource "aws_lambda_permission" "public_invoke_function" {
+  statement_id  = "FunctionURLAllowPublicInvokeFunction"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.grid_mcp.function_name
+  principal     = "*"
+}
+
 # CloudWatch alarms — minimal post-deploy visibility so a production
 # regression (5xx, throttle exhaustion, or Stainless 401 storm) is
 # actually noticed instead of waiting for customer reports.
