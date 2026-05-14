@@ -58,6 +58,22 @@ export interface InternalAccount {
   fundingPaymentInstructions: Array<QuotesAPI.PaymentInstructions>;
 
   /**
+   * Status of a Grid internal account. The status determines whether the account can
+   * send or receive payments.
+   *
+   * - `PENDING`: The account is under review and is being provisioned. The account
+   *   cannot send or receive payments until provisioning completes.
+   * - `ACTIVE`: The account is ready to send and receive payments.
+   * - `CLOSED`: The account cannot send or receive payments. A customer can initiate
+   *   the closing of an internal account, after which the account transitions to
+   *   this status.
+   * - `FROZEN`: The account cannot send or receive payments. Grid may freeze an
+   *   account in response to compliance or fraud signals; payments are blocked while
+   *   the account remains frozen.
+   */
+  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+
+  /**
    * Classification of an internal account.
    *
    * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
