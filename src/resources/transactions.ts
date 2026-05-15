@@ -98,7 +98,11 @@ export interface BaseTransactionSource {
 }
 
 /**
- * Details about the rate and fees for an incoming transaction.
+ * Details about the rate and fees for an incoming transaction. Note:
+ * `gridApiFixedFee` is denominated in the receiving currency, so its equivalent
+ * value in the sending currency fluctuates with the FX rate. As a result, the
+ * total fee on a subsequent quote for the same transfer may differ even if the
+ * underlying fee structure is unchanged.
  */
 export interface IncomingRateDetails {
   /**
