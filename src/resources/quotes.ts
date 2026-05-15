@@ -152,7 +152,11 @@ export interface Currency {
 }
 
 /**
- * Details about the rate and fees for an outgoing transaction or quote.
+ * Details about the rate and fees for an outgoing transaction or quote. Note:
+ * `counterpartyFixedFee` is denominated in the receiving currency, so its
+ * equivalent value in the sending currency fluctuates with the FX rate. As a
+ * result, the total fee on a subsequent quote for the same transfer may differ
+ * even if the underlying fee structure is unchanged.
  */
 export interface OutgoingRateDetails {
   /**
@@ -521,7 +525,10 @@ export interface Quote {
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
-   * (eg. cents).
+   * (eg. cents). Note: this value may fluctuate between quotes — some underlying fee
+   * components are defined in the receiving currency, so their equivalent in the
+   * sending currency moves with the FX rate. The fees shown here are locked only for
+   * the lifetime of this quote.
    */
   feesIncluded: number;
 
