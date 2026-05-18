@@ -352,23 +352,32 @@ export interface ExternalAccountCreate {
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
     | Shared.BrlExternalAccountCreateInfo
     | Shared.BwpExternalAccountCreateInfo
     | Shared.CadExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
     | Shared.DkkExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
     | Shared.EurExternalAccountCreateInfo
     | Shared.GbpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
     | Shared.HkdExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
     | Shared.IdrExternalAccountCreateInfo
     | Shared.InrExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
     | Shared.KesExternalAccountCreateInfo
     | Shared.MwkExternalAccountCreateInfo
     | Shared.MxnExternalAccountCreateInfo
     | Shared.MyrExternalAccountCreateInfo
     | Shared.NgnExternalAccountCreateInfo
     | Shared.PhpExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
     | Shared.RwfExternalAccountCreateInfo
     | Shared.SgdExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
     | Shared.ThbExternalAccountCreateInfo
     | Shared.TzsExternalAccountCreateInfo
     | Shared.UgxExternalAccountCreateInfo
@@ -378,22 +387,14 @@ export interface ExternalAccountCreate {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | Shared.BdtExternalAccountCreateInfo
-    | Shared.CopExternalAccountCreateInfo
-    | Shared.EgpExternalAccountCreateInfo
-    | Shared.GhsExternalAccountCreateInfo
-    | Shared.GtqExternalAccountCreateInfo
-    | Shared.HtgExternalAccountCreateInfo
-    | Shared.JmdExternalAccountCreateInfo
-    | Shared.PkrExternalAccountCreateInfo
-    | Shared.SlvExternalAccountCreateInfo
-    | SparkWalletInfo
-    | LightningWalletInfo
-    | SolanaWalletInfo
-    | TronWalletInfo
-    | PolygonWalletInfo
+    | ExternalAccountCreate.SwiftExternalAccountCreateInfo
     | BaseWalletInfo
-    | Shared.EthereumWalletExternalAccountInfo;
+    | Shared.EthereumWalletExternalAccountInfo
+    | LightningWalletInfo
+    | PolygonWalletInfo
+    | SolanaWalletInfo
+    | SparkWalletInfo
+    | TronWalletInfo;
 
   /**
    * The ISO 4217 currency code
@@ -425,54 +426,128 @@ export interface ExternalAccountCreate {
   platformAccountId?: string;
 }
 
+export namespace ExternalAccountCreate {
+  export interface SwiftExternalAccountCreateInfo {
+    accountType: 'SWIFT_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: SwiftExternalAccountCreateInfo.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The ISO 3166-1 alpha-2 country code of the bank account
+     */
+    country: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode: string;
+
+    /**
+     * The bank account number. Required for most corridors. Use iban instead for
+     * IBAN-only corridors (e.g. BR, GB).
+     */
+    accountNumber?: string;
+
+    /**
+     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+     * Use accountNumber for all other corridors.
+     */
+    iban?: string;
+  }
+
+  export namespace SwiftExternalAccountCreateInfo {
+    export interface SwiftBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+}
+
 /**
  * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
  * `lightningAddress` must be provided.
  */
 export type ExternalAccountInfoOneOf =
+  | AedExternalAccountInfo
+  | BdtExternalAccountInfo
   | BrlExternalAccountInfo
+  | BwpExternalAccountInfo
   | CadExternalAccountInfo
+  | CopExternalAccountInfo
   | DkkExternalAccountInfo
+  | EgpExternalAccountInfo
   | EurExternalAccountInfo
   | GbpExternalAccountInfo
+  | GhsExternalAccountInfo
+  | GtqExternalAccountInfo
   | HkdExternalAccountInfo
+  | HtgExternalAccountInfo
   | IdrExternalAccountInfo
   | InrExternalAccountInfo
+  | JmdExternalAccountInfo
   | KesExternalAccountInfo
   | MwkExternalAccountInfo
   | MxnExternalAccountInfo
   | MyrExternalAccountInfo
   | NgnExternalAccountInfo
   | PhpExternalAccountInfo
+  | PkrExternalAccountInfo
   | RwfExternalAccountInfo
   | SgdExternalAccountInfo
+  | ExternalAccountInfoOneOf.SlvExternalAccountInfo
   | ThbExternalAccountInfo
   | TzsExternalAccountInfo
   | UgxExternalAccountInfo
   | UsdExternalAccountInfo
   | VndExternalAccountInfo
+  | XafExternalAccountInfo
   | XofExternalAccountInfo
   | ZarExternalAccountInfo
   | ZmwExternalAccountInfo
-  | SparkWalletInfo
-  | LightningWalletInfo
-  | SolanaWalletInfo
-  | TronWalletInfo
-  | PolygonWalletInfo
+  | ExternalAccountInfoOneOf.SwiftExternalAccountInfo
   | BaseWalletInfo
   | Shared.EthereumWalletExternalAccountInfo
-  | AedExternalAccountInfo
-  | BwpExternalAccountInfo
-  | XafExternalAccountInfo
-  | BdtExternalAccountInfo
-  | CopExternalAccountInfo
-  | EgpExternalAccountInfo
-  | GhsExternalAccountInfo
-  | GtqExternalAccountInfo
-  | HtgExternalAccountInfo
-  | JmdExternalAccountInfo
-  | PkrExternalAccountInfo
-  | ExternalAccountInfoOneOf.SlvExternalAccountInfo;
+  | LightningWalletInfo
+  | PolygonWalletInfo
+  | SolanaWalletInfo
+  | SparkWalletInfo
+  | TronWalletInfo;
 
 export namespace ExternalAccountInfoOneOf {
   export interface SlvExternalAccountInfo {
@@ -501,6 +576,79 @@ export namespace ExternalAccountInfoOneOf {
      * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
      */
     phoneNumber?: string;
+  }
+
+  export interface SwiftExternalAccountInfo {
+    accountType: 'SWIFT_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: SwiftExternalAccountInfo.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The ISO 3166-1 alpha-2 country code of the bank account
+     */
+    country: string;
+
+    paymentRails: Array<'SWIFT'>;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode: string;
+
+    /**
+     * The bank account number. Required for most corridors. Use iban instead for
+     * IBAN-only corridors (e.g. BR, GB).
+     */
+    accountNumber?: string;
+
+    /**
+     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+     * Use accountNumber for all other corridors.
+     */
+    iban?: string;
+  }
+
+  export namespace SwiftExternalAccountInfo {
+    export interface SwiftBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
   }
 }
 
@@ -1020,23 +1168,32 @@ export interface ExternalAccountCreateParams {
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
     | Shared.BrlExternalAccountCreateInfo
     | Shared.BwpExternalAccountCreateInfo
     | Shared.CadExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
     | Shared.DkkExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
     | Shared.EurExternalAccountCreateInfo
     | Shared.GbpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
     | Shared.HkdExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
     | Shared.IdrExternalAccountCreateInfo
     | Shared.InrExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
     | Shared.KesExternalAccountCreateInfo
     | Shared.MwkExternalAccountCreateInfo
     | Shared.MxnExternalAccountCreateInfo
     | Shared.MyrExternalAccountCreateInfo
     | Shared.NgnExternalAccountCreateInfo
     | Shared.PhpExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
     | Shared.RwfExternalAccountCreateInfo
     | Shared.SgdExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
     | Shared.ThbExternalAccountCreateInfo
     | Shared.TzsExternalAccountCreateInfo
     | Shared.UgxExternalAccountCreateInfo
@@ -1046,22 +1203,14 @@ export interface ExternalAccountCreateParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | Shared.BdtExternalAccountCreateInfo
-    | Shared.CopExternalAccountCreateInfo
-    | Shared.EgpExternalAccountCreateInfo
-    | Shared.GhsExternalAccountCreateInfo
-    | Shared.GtqExternalAccountCreateInfo
-    | Shared.HtgExternalAccountCreateInfo
-    | Shared.JmdExternalAccountCreateInfo
-    | Shared.PkrExternalAccountCreateInfo
-    | Shared.SlvExternalAccountCreateInfo
-    | SparkWalletInfo
-    | LightningWalletInfo
-    | SolanaWalletInfo
-    | TronWalletInfo
-    | PolygonWalletInfo
+    | ExternalAccountCreateParams.SwiftExternalAccountCreateInfo
     | BaseWalletInfo
-    | Shared.EthereumWalletExternalAccountInfo;
+    | Shared.EthereumWalletExternalAccountInfo
+    | LightningWalletInfo
+    | PolygonWalletInfo
+    | SolanaWalletInfo
+    | SparkWalletInfo
+    | TronWalletInfo;
 
   /**
    * The ISO 4217 currency code
@@ -1091,6 +1240,79 @@ export interface ExternalAccountCreateParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccountCreateParams {
+  export interface SwiftExternalAccountCreateInfo {
+    accountType: 'SWIFT_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: SwiftExternalAccountCreateInfo.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The ISO 3166-1 alpha-2 country code of the bank account
+     */
+    country: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode: string;
+
+    /**
+     * The bank account number. Required for most corridors. Use iban instead for
+     * IBAN-only corridors (e.g. BR, GB).
+     */
+    accountNumber?: string;
+
+    /**
+     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+     * Use accountNumber for all other corridors.
+     */
+    iban?: string;
+  }
+
+  export namespace SwiftExternalAccountCreateInfo {
+    export interface SwiftBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export interface ExternalAccountListParams extends DefaultPaginationParams {
