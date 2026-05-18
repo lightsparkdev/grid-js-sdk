@@ -88,6 +88,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.retrieve\n\nputs(platform_config)',
       },
+      cli: {
+        method: 'config retrieve',
+        example: "grid config retrieve \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'config->retrieve',
         example:
@@ -147,6 +151,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.update\n\nputs(platform_config)',
       },
+      cli: {
+        method: 'config update',
+        example: "grid config update \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'config->update',
         example:
@@ -204,6 +212,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.create(create_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
+      },
+      cli: {
+        method: 'customers create',
+        example:
+          "grid customers create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --create-customer-request '{customerType: INDIVIDUAL}'",
       },
       php: {
         method: 'customers->create',
@@ -274,6 +287,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list\n\nputs(page)',
       },
+      cli: {
+        method: 'customers list',
+        example: "grid customers list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'customers->list',
         example:
@@ -328,6 +345,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.retrieve("customerId")\n\nputs(customer_one_of)',
+      },
+      cli: {
+        method: 'customers retrieve',
+        example:
+          "grid customers retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id customerId",
       },
       php: {
         method: 'customers->retrieve',
@@ -390,6 +412,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.update("customerId", update_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
       },
+      cli: {
+        method: 'customers update',
+        example:
+          "grid customers update \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id customerId \\\n  --update-customer-request '{customerType: INDIVIDUAL}'",
+      },
       php: {
         method: 'customers->update',
         example:
@@ -444,6 +471,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.delete("customerId")\n\nputs(customer_one_of)',
+      },
+      cli: {
+        method: 'customers delete',
+        example:
+          "grid customers delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id customerId",
       },
       php: {
         method: 'customers->delete',
@@ -507,6 +539,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list_internal_accounts\n\nputs(page)',
       },
+      cli: {
+        method: 'customers list_internal_accounts',
+        example:
+          "grid customers list-internal-accounts \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'customers->listInternalAccounts',
         example:
@@ -566,6 +603,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.export',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account_export_response = lightspark_grid.customers.export(\n  "id",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(internal_account_export_response)',
+      },
+      cli: {
+        method: 'customers export',
+        example:
+          "grid customers export \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id \\\n  --client-public-key 04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",
       },
       php: {
         method: 'customers->export',
@@ -628,6 +670,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.customers.update_internal_account("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n\nputs(internal_account)',
       },
+      cli: {
+        method: 'customers update_internal_account',
+        example:
+          "grid customers update-internal-account \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id InternalAccount:019542f5-b3e7-1d02-0000-000000000002",
+      },
       php: {
         method: 'customers->updateInternalAccount',
         example:
@@ -682,6 +729,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.generate_kyc_link',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.generate_kyc_link("customerId")\n\nputs(response)',
+      },
+      cli: {
+        method: 'customers generate_kyc_link',
+        example:
+          "grid customers generate-kyc-link \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id customerId",
       },
       php: {
         method: 'customers->generateKYCLink',
@@ -738,6 +790,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.external_accounts.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'external_accounts list',
+        example:
+          "grid customers:external-accounts list \\\n  --username 'My Username' \\\n  --password 'My Password'",
       },
       php: {
         method: 'customers->externalAccounts->list',
@@ -800,6 +857,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      cli: {
+        method: 'external_accounts create',
+        example:
+          "grid customers:external-accounts create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --account-info \"{accountNumber: '12345678901', accountType: USD_ACCOUNT, beneficiary: {beneficiaryType: INDIVIDUAL, fullName: John Doe}, routingNumber: '123456789'}\" \\\n  --currency USD",
+      },
       php: {
         method: 'customers->externalAccounts->create',
         example:
@@ -855,6 +917,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      cli: {
+        method: 'external_accounts retrieve',
+        example:
+          "grid customers:external-accounts retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --external-account-id externalAccountId",
+      },
       php: {
         method: 'customers->externalAccounts->retrieve',
         example:
@@ -907,6 +974,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.customers.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      cli: {
+        method: 'external_accounts delete',
+        example:
+          "grid customers:external-accounts delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --external-account-id externalAccountId",
       },
       php: {
         method: 'customers->externalAccounts->delete',
@@ -962,6 +1034,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.bulk.upload_csv',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.upload_csv(file: StringIO.new("Example data"))\n\nputs(response)',
+      },
+      cli: {
+        method: 'bulk upload_csv',
+        example:
+          "grid customers:bulk upload-csv \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --file 'Example data'",
       },
       php: {
         method: 'customers->bulk->uploadCsv',
@@ -1019,6 +1096,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.get_job_status("jobId")\n\nputs(response)',
       },
+      cli: {
+        method: 'bulk get_job_status',
+        example:
+          "grid customers:bulk get-job-status \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --job-id jobId",
+      },
       php: {
         method: 'customers->bulk->getJobStatus',
         example:
@@ -1075,6 +1157,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.platform.list_internal_accounts\n\nputs(response)',
       },
+      cli: {
+        method: 'platform list_internal_accounts',
+        example:
+          "grid platform list-internal-accounts \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'platform->listInternalAccounts',
         example:
@@ -1130,6 +1217,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.platform.external_accounts.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'external_accounts list',
+        example:
+          "grid platform:external-accounts list \\\n  --username 'My Username' \\\n  --password 'My Password'",
       },
       php: {
         method: 'platform->externalAccounts->list',
@@ -1190,6 +1282,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      cli: {
+        method: 'external_accounts create',
+        example:
+          "grid platform:external-accounts create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --account-info \"{accountNumber: '12345678901', accountType: USD_ACCOUNT, beneficiary: {beneficiaryType: INDIVIDUAL, fullName: John Doe}, routingNumber: '123456789'}\" \\\n  --currency USD",
+      },
       php: {
         method: 'platform->externalAccounts->create',
         example:
@@ -1245,6 +1342,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      cli: {
+        method: 'external_accounts retrieve',
+        example:
+          "grid platform:external-accounts retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --external-account-id externalAccountId",
+      },
       php: {
         method: 'platform->externalAccounts->retrieve',
         example:
@@ -1297,6 +1399,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.platform.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      cli: {
+        method: 'external_accounts delete',
+        example:
+          "grid platform:external-accounts delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --external-account-id externalAccountId",
       },
       php: {
         method: 'platform->externalAccounts->delete',
@@ -1359,6 +1466,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_in.create(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(transaction)',
       },
+      cli: {
+        method: 'transfer_in create',
+        example:
+          "grid transfer-in create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --destination '{accountId: InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123}' \\\n  --source '{accountId: ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965}'",
+      },
       php: {
         method: 'transferIn->create',
         example:
@@ -1419,6 +1531,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_out.create(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(transaction)',
       },
+      cli: {
+        method: 'transfer_out create',
+        example:
+          "grid transfer-out create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --destination '{accountId: ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965}' \\\n  --source '{accountId: InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123}'",
+      },
       php: {
         method: 'transferOut->create',
         example:
@@ -1474,6 +1591,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver.lookup_uma',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_uma("receiverUmaAddress")\n\nputs(response)',
+      },
+      cli: {
+        method: 'receiver lookup_uma',
+        example:
+          "grid receiver lookup-uma \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --receiver-uma-address receiverUmaAddress",
       },
       php: {
         method: 'receiver->lookupUma',
@@ -1531,6 +1653,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_external_account("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n\nputs(response)',
       },
+      cli: {
+        method: 'receiver lookup_external_account',
+        example:
+          "grid receiver lookup-external-account \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --account-id ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",
+      },
       php: {
         method: 'receiver->lookupExternalAccount',
         example:
@@ -1586,6 +1713,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.retrieve("quoteId")\n\nputs(quote)',
+      },
+      cli: {
+        method: 'quotes retrieve',
+        example:
+          "grid quotes retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --quote-id quoteId",
       },
       php: {
         method: 'quotes->retrieve',
@@ -1654,6 +1786,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 10000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
       },
+      cli: {
+        method: 'quotes create',
+        example:
+          "grid quotes create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --destination '{accountId: ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123, destinationType: ACCOUNT}' \\\n  --locked-currency-amount 10000 \\\n  --locked-currency-side SENDING \\\n  --source '{accountId: InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965, sourceType: ACCOUNT}'",
+      },
       php: {
         method: 'quotes->create',
         example:
@@ -1709,6 +1846,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.execute',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(quote)',
+      },
+      cli: {
+        method: 'quotes execute',
+        example:
+          "grid quotes execute \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --quote-id Quote:019542f5-b3e7-1d02-0000-000000000001",
       },
       php: {
         method: 'quotes->execute',
@@ -1780,6 +1922,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.transactions.list\n\nputs(page)',
       },
+      cli: {
+        method: 'transactions list',
+        example: "grid transactions list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'transactions->list',
         example:
@@ -1834,6 +1980,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transactions.retrieve("transactionId")\n\nputs(transaction)',
+      },
+      cli: {
+        method: 'transactions retrieve',
+        example:
+          "grid transactions retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --transaction-id transactionId",
       },
       php: {
         method: 'transactions->retrieve',
@@ -1891,6 +2042,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.approve("transactionId")\n\nputs(incoming_transaction)',
       },
+      cli: {
+        method: 'transactions approve',
+        example:
+          "grid transactions approve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --transaction-id transactionId",
+      },
       php: {
         method: 'transactions->approve',
         example:
@@ -1947,6 +2103,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.reject("transactionId")\n\nputs(incoming_transaction)',
       },
+      cli: {
+        method: 'transactions reject',
+        example:
+          "grid transactions reject \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --transaction-id transactionId",
+      },
       php: {
         method: 'transactions->reject',
         example:
@@ -2002,6 +2163,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.create(inviter_uma: "$inviter@uma.domain")\n\nputs(uma_invitation)',
       },
+      cli: {
+        method: 'invitations create',
+        example:
+          "grid invitations create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --inviter-uma '$inviter@uma.domain'",
+      },
       php: {
         method: 'invitations->create',
         example:
@@ -2056,6 +2222,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.retrieve("invitationCode")\n\nputs(uma_invitation)',
+      },
+      cli: {
+        method: 'invitations retrieve',
+        example:
+          "grid invitations retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --invitation-code invitationCode",
       },
       php: {
         method: 'invitations->retrieve',
@@ -2113,6 +2284,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.claim("invitationCode", invitee_uma: "$invitee@uma.domain")\n\nputs(uma_invitation)',
       },
+      cli: {
+        method: 'invitations claim',
+        example:
+          "grid invitations claim \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --invitation-code invitationCode \\\n  --invitee-uma '$invitee@uma.domain'",
+      },
       php: {
         method: 'invitations->claim',
         example:
@@ -2169,6 +2345,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.cancel("invitationCode")\n\nputs(uma_invitation)',
       },
+      cli: {
+        method: 'invitations cancel',
+        example:
+          "grid invitations cancel \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --invitation-code invitationCode",
+      },
       php: {
         method: 'invitations->cancel',
         example:
@@ -2224,6 +2405,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.send_funds',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\noutgoing_transaction = lightspark_grid.sandbox.send_funds(\n  currency_code: "USD",\n  quote_id: "Quote:019542f5-b3e7-1d02-0000-000000000006"\n)\n\nputs(outgoing_transaction)',
+      },
+      cli: {
+        method: 'sandbox send_funds',
+        example:
+          "grid sandbox send-funds \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --currency-code USD \\\n  --quote-id Quote:019542f5-b3e7-1d02-0000-000000000006",
       },
       php: {
         method: 'sandbox->sendFunds',
@@ -2287,6 +2473,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.sandbox.uma.receive_payment(\n  receiving_currency_amount: 1000,\n  receiving_currency_code: "USD",\n  sender_uma_address: "$success.usd@sandbox.grid.uma.money"\n)\n\nputs(incoming_transaction)',
       },
+      cli: {
+        method: 'uma receive_payment',
+        example:
+          "grid sandbox:uma receive-payment \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --receiving-currency-amount 1000 \\\n  --receiving-currency-code USD \\\n  --sender-uma-address '$success.usd@sandbox.grid.uma.money'",
+      },
       php: {
         method: 'sandbox->uma->receivePayment',
         example:
@@ -2343,6 +2534,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.sandbox.internal_accounts.fund(\n  "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n  amount: 100000\n)\n\nputs(internal_account)',
       },
+      cli: {
+        method: 'internal_accounts fund',
+        example:
+          "grid sandbox:internal-accounts fund \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --account-id InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123 \\\n  --amount 100000",
+      },
       php: {
         method: 'sandbox->internalAccounts->fund',
         example:
@@ -2395,6 +2591,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.webhooks.send_test',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.webhooks.send_test\n\nputs(response)',
+      },
+      cli: {
+        method: 'webhooks send_test',
+        example:
+          "grid sandbox:webhooks send-test \\\n  --username 'My Username' \\\n  --password 'My Password'",
       },
       php: {
         method: 'sandbox->webhooks->sendTest',
@@ -2459,6 +2660,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.uma_providers.list\n\nputs(page)',
       },
+      cli: {
+        method: 'uma_providers list',
+        example: "grid uma-providers list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'umaProviders->list',
         example:
@@ -2513,6 +2718,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.create(name: "Sandbox read-only", permissions: [:VIEW])\n\nputs(api_token)',
+      },
+      cli: {
+        method: 'tokens create',
+        example:
+          "grid tokens create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --name 'Sandbox read-only' \\\n  --permission VIEW",
       },
       php: {
         method: 'tokens->create',
@@ -2578,6 +2788,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.tokens.list\n\nputs(page)',
       },
+      cli: {
+        method: 'tokens list',
+        example: "grid tokens list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'tokens->list',
         example:
@@ -2633,6 +2847,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.retrieve("tokenId")\n\nputs(api_token)',
       },
+      cli: {
+        method: 'tokens retrieve',
+        example:
+          "grid tokens retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --token-id tokenId",
+      },
       php: {
         method: 'tokens->retrieve',
         example:
@@ -2685,6 +2904,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.tokens.delete("tokenId")\n\nputs(result)',
+      },
+      cli: {
+        method: 'tokens delete',
+        example:
+          "grid tokens delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --token-id tokenId",
       },
       php: {
         method: 'tokens->delete',
@@ -2742,6 +2966,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexchange_rates = lightspark_grid.exchange_rates.list\n\nputs(exchange_rates)',
       },
+      cli: {
+        method: 'exchange_rates list',
+        example: "grid exchange-rates list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'exchangeRates->list',
         example:
@@ -2790,6 +3018,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'webhooks.unwrap',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.webhooks.unwrap\n\nputs(result)',
+      },
+      cli: {
+        example: "grid webhooks unwrap \\\n  --username 'My Username' \\\n  --password 'My Password'",
       },
       php: {
         method: 'webhooks->unwrap',
@@ -2846,6 +3077,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'crypto.estimate_withdrawal_fee',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.crypto.estimate_withdrawal_fee(\n  amount: 1000000,\n  crypto_network: "SOLANA",\n  currency: "USDC",\n  destination_address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n  internal_account_id: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'crypto estimate_withdrawal_fee',
+        example:
+          "grid crypto estimate-withdrawal-fee \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --amount 1000000 \\\n  --crypto-network SOLANA \\\n  --currency USDC \\\n  --destination-address 7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU \\\n  --internal-account-id InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",
       },
       php: {
         method: 'crypto->estimateWithdrawalFee',
@@ -2908,6 +3144,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  ownership_percentage: 51,\n  personal_info: {\n    address: {country: "US", line1: "123 Main Street", postalCode: "94105"},\n    birthDate: "1978-06-15",\n    firstName: "Jane",\n    identifier: "123-45-6789",\n    idType: :SSN,\n    lastName: "Smith",\n    nationality: "US"\n  },\n  roles: [:UBO, :DIRECTOR]\n)\n\nputs(beneficial_owner)',
       },
+      cli: {
+        method: 'beneficial_owners create',
+        example:
+          "grid beneficial-owners create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id Customer:019542f5-b3e7-1d02-0000-000000000001 \\\n  --ownership-percentage 51 \\\n  --personal-info \"{address: {country: US, line1: 123 Main Street, postalCode: '94105'}, birthDate: '1978-06-15', firstName: Jane, identifier: 123-45-6789, idType: SSN, lastName: Smith, nationality: US}\" \\\n  --role UBO \\\n  --role DIRECTOR",
+      },
       php: {
         method: 'beneficialOwners->create',
         example:
@@ -2963,6 +3204,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.beneficial_owners.list(customer_id: "customerId")\n\nputs(page)',
       },
+      cli: {
+        method: 'beneficial_owners list',
+        example:
+          "grid beneficial-owners list \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id customerId",
+      },
       php: {
         method: 'beneficialOwners->list',
         example:
@@ -3017,6 +3263,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.retrieve("beneficialOwnerId")\n\nputs(beneficial_owner)',
+      },
+      cli: {
+        method: 'beneficial_owners retrieve',
+        example:
+          "grid beneficial-owners retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --beneficial-owner-id beneficialOwnerId",
       },
       php: {
         method: 'beneficialOwners->retrieve',
@@ -3077,6 +3328,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.update',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.update("beneficialOwnerId")\n\nputs(beneficial_owner)',
+      },
+      cli: {
+        method: 'beneficial_owners update',
+        example:
+          "grid beneficial-owners update \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --beneficial-owner-id beneficialOwnerId",
       },
       php: {
         method: 'beneficialOwners->update',
@@ -3141,6 +3397,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  country: "US",\n  document_holder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
       },
+      cli: {
+        method: 'documents upload',
+        example:
+          "grid documents upload \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --country US \\\n  --document-holder BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n  --document-type PASSPORT \\\n  --file 'Example data'",
+      },
       php: {
         method: 'documents->upload',
         example:
@@ -3196,6 +3457,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.documents.list\n\nputs(page)',
       },
+      cli: {
+        method: 'documents list',
+        example: "grid documents list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'documents->list',
         example:
@@ -3250,6 +3515,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndocument = lightspark_grid.documents.retrieve("documentId")\n\nputs(document)',
+      },
+      cli: {
+        method: 'documents retrieve',
+        example:
+          "grid documents retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --document-id documentId",
       },
       php: {
         method: 'documents->retrieve',
@@ -3314,6 +3584,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  country: "US",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
       },
+      cli: {
+        method: 'documents replace',
+        example:
+          "grid documents replace \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --document-id documentId \\\n  --country US \\\n  --document-type PASSPORT \\\n  --file 'Example data'",
+      },
       php: {
         method: 'documents->replace',
         example:
@@ -3367,6 +3642,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.documents.delete("documentId")\n\nputs(result)',
+      },
+      cli: {
+        method: 'documents delete',
+        example:
+          "grid documents delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --document-id documentId",
       },
       php: {
         method: 'documents->delete',
@@ -3424,6 +3704,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.verifications.submit(customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(response)',
       },
+      cli: {
+        method: 'verifications submit',
+        example:
+          "grid verifications submit \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id Customer:019542f5-b3e7-1d02-0000-000000000001",
+      },
       php: {
         method: 'verifications->submit',
         example:
@@ -3478,6 +3763,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.verifications.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'verifications list',
+        example: "grid verifications list \\\n  --username 'My Username' \\\n  --password 'My Password'",
       },
       php: {
         method: 'verifications->list',
@@ -3534,6 +3823,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nverification = lightspark_grid.verifications.retrieve("verificationId")\n\nputs(verification)',
       },
+      cli: {
+        method: 'verifications retrieve',
+        example:
+          "grid verifications retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --verification-id verificationId",
+      },
       php: {
         method: 'verifications->retrieve',
         example:
@@ -3588,6 +3882,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndiscoveries = lightspark_grid.discoveries.list\n\nputs(discoveries)',
+      },
+      cli: {
+        method: 'discoveries list',
+        example: "grid discoveries list \\\n  --username 'My Username' \\\n  --password 'My Password'",
       },
       php: {
         method: 'discoveries->list',
@@ -3649,6 +3947,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_method_response = lightspark_grid.auth.credentials.create(\n  auth_credential_create_request: {accountId: "InternalAccount:019542f5-b3e7-1d02-0000-000000000002", type: :EMAIL_OTP}\n)\n\nputs(auth_method_response)',
       },
+      cli: {
+        method: 'credentials create',
+        example:
+          "grid auth:credentials create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --auth-credential-create-request '{accountId: InternalAccount:019542f5-b3e7-1d02-0000-000000000002, type: EMAIL_OTP}'",
+      },
       php: {
         method: 'auth->credentials->create',
         example:
@@ -3709,6 +4012,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.credentials.verify(\n  "id",\n  auth_credential_verify_request: {\n    clientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n    otp: "123456",\n    type: :EMAIL_OTP\n  }\n)\n\nputs(auth_session)',
       },
+      cli: {
+        method: 'credentials verify',
+        example:
+          "grid auth:credentials verify \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id \\\n  --auth-credential-verify-request \"{clientPublicKey: 04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2, otp: '123456', type: EMAIL_OTP}\"",
+      },
       php: {
         method: 'auth->credentials->verify',
         example:
@@ -3764,6 +4072,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.credentials.challenge',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_response_one_of = lightspark_grid.auth.credentials.challenge("id")\n\nputs(auth_credential_response_one_of)',
+      },
+      cli: {
+        method: 'credentials challenge',
+        example:
+          "grid auth:credentials challenge \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id",
       },
       php: {
         method: 'auth->credentials->challenge',
@@ -3821,6 +4134,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_list_response = lightspark_grid.auth.credentials.list(account_id: "accountId")\n\nputs(auth_credential_list_response)',
       },
+      cli: {
+        method: 'credentials list',
+        example:
+          "grid auth:credentials list \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --account-id accountId",
+      },
       php: {
         method: 'auth->credentials->list',
         example:
@@ -3875,6 +4193,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.credentials.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.credentials.delete("id")\n\nputs(auth_signed_request_challenge)',
+      },
+      cli: {
+        method: 'credentials delete',
+        example:
+          "grid auth:credentials delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id",
       },
       php: {
         method: 'auth->credentials->delete',
@@ -3931,6 +4254,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nsession_list_response = lightspark_grid.auth.sessions.list(account_id: "accountId")\n\nputs(session_list_response)',
       },
+      cli: {
+        method: 'sessions list',
+        example:
+          "grid auth:sessions list \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --account-id accountId",
+      },
       php: {
         method: 'auth->sessions->list',
         example:
@@ -3985,6 +4313,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.sessions.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.sessions.delete("id")\n\nputs(auth_signed_request_challenge)',
+      },
+      cli: {
+        method: 'sessions delete',
+        example:
+          "grid auth:sessions delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id",
       },
       php: {
         method: 'auth->sessions->delete',
@@ -4047,6 +4380,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.sessions.refresh(\n  "Session:019542f5-b3e7-1d02-0000-000000000003",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(auth_session)',
       },
+      cli: {
+        method: 'sessions refresh',
+        example:
+          "grid auth:sessions refresh \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id Session:019542f5-b3e7-1d02-0000-000000000003 \\\n  --client-public-key 04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",
+      },
       php: {
         method: 'auth->sessions->refresh',
         example:
@@ -4106,6 +4444,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_create_response = lightspark_grid.agents.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  name: "Payroll Automation Agent",\n  policy: {\n    defaultExecutionMode: :AUTO,\n    permissions: [:VIEW_TRANSACTIONS],\n    spendingLimits: {currency: "USD", perTransactionLimit: 50000}\n  }\n)\n\nputs(agent_create_response)',
+      },
+      cli: {
+        method: 'agents create',
+        example:
+          "grid agents create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --customer-id Customer:019542f5-b3e7-1d02-0000-000000000001 \\\n  --name 'Payroll Automation Agent' \\\n  --policy '{defaultExecutionMode: AUTO, permissions: [VIEW_TRANSACTIONS], spendingLimits: {currency: USD, perTransactionLimit: 50000}}'",
       },
       php: {
         method: 'agents->create',
@@ -4172,6 +4515,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list\n\nputs(page)',
       },
+      cli: {
+        method: 'agents list',
+        example: "grid agents list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'agents->list',
         example:
@@ -4236,6 +4583,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list_approvals\n\nputs(page)',
       },
+      cli: {
+        method: 'agents list_approvals',
+        example: "grid agents list-approvals \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
       php: {
         method: 'agents->listApprovals',
         example:
@@ -4290,6 +4641,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.retrieve("agentId")\n\nputs(agent)',
+      },
+      cli: {
+        method: 'agents retrieve',
+        example:
+          "grid agents retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId",
       },
       php: {
         method: 'agents->retrieve',
@@ -4346,6 +4702,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update("agentId")\n\nputs(agent)',
       },
+      cli: {
+        method: 'agents update',
+        example:
+          "grid agents update \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId",
+      },
       php: {
         method: 'agents->update',
         example:
@@ -4398,6 +4759,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.agents.delete("agentId")\n\nputs(result)',
+      },
+      cli: {
+        method: 'agents delete',
+        example:
+          "grid agents delete \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId",
       },
       php: {
         method: 'agents->delete',
@@ -4462,6 +4828,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update_policy("agentId")\n\nputs(agent)',
       },
+      cli: {
+        method: 'agents update_policy',
+        example:
+          "grid agents update-policy \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId",
+      },
       php: {
         method: 'agents->updatePolicy',
         example:
@@ -4516,6 +4887,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent = lightspark_grid.agents.me.retrieve\n\nputs(agent)',
+      },
+      cli: {
+        method: 'me retrieve',
+        example: "grid agents:me retrieve \\\n  --agent-access-token 'My Agent Access Token'",
       },
       php: {
         method: 'agents->me->retrieve',
@@ -4578,6 +4953,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_in(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(agent_action)',
       },
+      cli: {
+        method: 'me create_transfer_in',
+        example:
+          "grid agents:me create-transfer-in \\\n  --agent-access-token 'My Agent Access Token' \\\n  --destination '{accountId: InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123}' \\\n  --source '{accountId: ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965}'",
+      },
       php: {
         method: 'agents->me->createTransferIn',
         example:
@@ -4639,6 +5019,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_out(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(agent_action)',
       },
+      cli: {
+        method: 'me create_transfer_out',
+        example:
+          "grid agents:me create-transfer-out \\\n  --agent-access-token 'My Agent Access Token' \\\n  --destination '{accountId: ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965}' \\\n  --source '{accountId: InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123}'",
+      },
       php: {
         method: 'agents->me->createTransferOut',
         example:
@@ -4699,6 +5084,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.list_internal_accounts',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.list_internal_accounts\n\nputs(page)',
+      },
+      cli: {
+        method: 'me list_internal_accounts',
+        example: "grid agents:me list-internal-accounts \\\n  --agent-access-token 'My Agent Access Token'",
       },
       php: {
         method: 'agents->me->listInternalAccounts',
@@ -4768,6 +5157,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.transactions.list\n\nputs(page)',
       },
+      cli: {
+        method: 'transactions list',
+        example: "grid agents:me:transactions list \\\n  --agent-access-token 'My Agent Access Token'",
+      },
       php: {
         method: 'agents->me->transactions->list',
         example:
@@ -4823,6 +5216,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.transactions.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\ntransaction = lightspark_grid.agents.me.transactions.retrieve("transactionId")\n\nputs(transaction)',
+      },
+      cli: {
+        method: 'transactions retrieve',
+        example:
+          "grid agents:me:transactions retrieve \\\n  --agent-access-token 'My Agent Access Token' \\\n  --transaction-id transactionId",
       },
       php: {
         method: 'agents->me->transactions->retrieve',
@@ -4891,6 +5289,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 1000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
       },
+      cli: {
+        method: 'quotes create',
+        example:
+          "grid agents:me:quotes create \\\n  --agent-access-token 'My Agent Access Token' \\\n  --destination '{accountId: ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123, destinationType: ACCOUNT}' \\\n  --locked-currency-amount 1000 \\\n  --locked-currency-side SENDING \\\n  --source '{accountId: InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965, sourceType: ACCOUNT}'",
+      },
       php: {
         method: 'agents->me->quotes->create',
         example:
@@ -4946,6 +5349,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.quotes.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.retrieve("quoteId")\n\nputs(quote)',
+      },
+      cli: {
+        method: 'quotes retrieve',
+        example:
+          "grid agents:me:quotes retrieve \\\n  --agent-access-token 'My Agent Access Token' \\\n  --quote-id quoteId",
       },
       php: {
         method: 'agents->me->quotes->retrieve',
@@ -5003,6 +5411,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(agent_action)',
       },
+      cli: {
+        method: 'quotes execute',
+        example:
+          "grid agents:me:quotes execute \\\n  --agent-access-token 'My Agent Access Token' \\\n  --quote-id Quote:019542f5-b3e7-1d02-0000-000000000001",
+      },
       php: {
         method: 'agents->me->quotes->execute',
         example:
@@ -5058,6 +5471,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.external_accounts.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'external_accounts list',
+        example: "grid agents:me:external-accounts list \\\n  --agent-access-token 'My Agent Access Token'",
       },
       php: {
         method: 'agents->me->externalAccounts->list',
@@ -5121,6 +5538,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.add(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      cli: {
+        method: 'external_accounts add',
+        example:
+          "grid agents:me:external-accounts add \\\n  --agent-access-token 'My Agent Access Token' \\\n  --account-info \"{accountNumber: '12345678901', accountType: USD_ACCOUNT, beneficiary: {beneficiaryType: INDIVIDUAL, fullName: John Doe}, routingNumber: '123456789'}\" \\\n  --currency USD",
+      },
       php: {
         method: 'agents->me->externalAccounts->add',
         example:
@@ -5177,6 +5599,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      cli: {
+        method: 'external_accounts retrieve',
+        example:
+          "grid agents:me:external-accounts retrieve \\\n  --agent-access-token 'My Agent Access Token' \\\n  --external-account-id externalAccountId",
+      },
       php: {
         method: 'agents->me->externalAccounts->retrieve',
         example:
@@ -5230,6 +5657,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nresult = lightspark_grid.agents.me.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      cli: {
+        method: 'external_accounts delete',
+        example:
+          "grid agents:me:external-accounts delete \\\n  --agent-access-token 'My Agent Access Token' \\\n  --external-account-id externalAccountId",
       },
       php: {
         method: 'agents->me->externalAccounts->delete',
@@ -5291,6 +5723,10 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.actions.list\n\nputs(page)',
       },
+      cli: {
+        method: 'actions list',
+        example: "grid agents:me:actions list \\\n  --agent-access-token 'My Agent Access Token'",
+      },
       php: {
         method: 'agents->me->actions->list',
         example:
@@ -5347,6 +5783,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.actions.retrieve("actionId")\n\nputs(agent_action)',
       },
+      cli: {
+        method: 'actions retrieve',
+        example:
+          "grid agents:me:actions retrieve \\\n  --agent-access-token 'My Agent Access Token' \\\n  --action-id actionId",
+      },
       php: {
         method: 'agents->me->actions->retrieve',
         example:
@@ -5402,6 +5843,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code = lightspark_grid.agents.device_codes.regenerate("agentId")\n\nputs(agent_device_code)',
       },
+      cli: {
+        method: 'device_codes regenerate',
+        example:
+          "grid agents:device-codes regenerate \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId",
+      },
       php: {
         method: 'agents->deviceCodes->regenerate',
         example:
@@ -5456,6 +5902,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.device_codes.get_status',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_status_response = lightspark_grid.agents.device_codes.get_status("code")\n\nputs(agent_device_code_status_response)',
+      },
+      cli: {
+        method: 'device_codes get_status',
+        example:
+          "grid agents:device-codes get-status \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --code code",
       },
       php: {
         method: 'agents->deviceCodes->getStatus',
@@ -5513,6 +5964,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_redeem_response = lightspark_grid.agents.device_codes.redeem("code")\n\nputs(agent_device_code_redeem_response)',
       },
+      cli: {
+        method: 'device_codes redeem',
+        example:
+          "grid agents:device-codes redeem \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --code code",
+      },
       php: {
         method: 'agents->deviceCodes->redeem',
         example:
@@ -5568,6 +6024,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.transactions.approve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
+      cli: {
+        method: 'transactions approve',
+        example:
+          "grid agents:transactions approve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId \\\n  --action-id actionId",
       },
       php: {
         method: 'agents->transactions->approve',
@@ -5625,6 +6086,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
+      cli: {
+        method: 'transactions reject',
+        example:
+          "grid agents:transactions reject \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId \\\n  --action-id actionId",
+      },
       php: {
         method: 'agents->transactions->reject',
         example:
@@ -5680,6 +6146,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.actions.approve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
+      cli: {
+        method: 'actions approve',
+        example:
+          "grid agents:actions approve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId \\\n  --action-id actionId",
       },
       php: {
         method: 'agents->actions->approve',
@@ -5737,6 +6208,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
+      cli: {
+        method: 'actions reject',
+        example:
+          "grid agents:actions reject \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --agent-id agentId \\\n  --action-id actionId",
+      },
       php: {
         method: 'agents->actions->reject',
         example:
@@ -5756,6 +6232,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'cli',
+    content:
+      "# Lightspark Grid CLI\n\nThe official CLI for the [Lightspark Grid REST API](grid.lightspark.com).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/stainless-sdks/grid-cli/cmd/grid@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\ngrid [resource] <command> [flags...]\n~~~\n\n~~~sh\ngrid quotes create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --destination '{accountId: ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123, destinationType: ACCOUNT}' \\\n  --locked-currency-amount 10000 \\\n  --locked-currency-side SENDING \\\n  --source '{accountId: InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965, sourceType: ACCOUNT}'\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Required | Default value |\n| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------------- |\n| `GRID_CLIENT_ID`          | API token authentication using format `<api token id>:<api client secret>`                                                                                                                                                                                                                                                                                                                                                                                                     | no       | `null`        |\n| `GRID_CLIENT_SECRET`      | API token authentication using format `<api token id>:<api client secret>`                                                                                                                                                                                                                                                                                                                                                                                                     | no       | `null`        |\n| `GRID_AGENT_ACCESS_TOKEN` | Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations.                                                                                                                                                                                                                                                                                                 | no       | `null`        |\n| `GRID_WEBHOOK_PUBKEY`     | Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.\n\nTo verify the signature:\n1. Get the Grid public key provided to you during integration\n2. Decode the base64 signature from the header\n3. Create a SHA-256 hash of the request body\n4. Verify the signature using the public key and the hash\n\nIf the signature verification succeeds, the webhook is authentic. If not, it should be rejected.\n | no       | `null`        |\n\n### Global flags\n\n- `--username` - API token authentication using format `<api token id>:<api client secret>` (can also be set with `GRID_CLIENT_ID` env var)\n- `--password` - API token authentication using format `<api token id>:<api client secret>` (can also be set with `GRID_CLIENT_SECRET` env var)\n- `--agent-access-token` - Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations. (can also be set with `GRID_AGENT_ACCESS_TOKEN` env var)\n- `--webhook-signature` - Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.\n\nTo verify the signature:\n1. Get the Grid public key provided to you during integration\n2. Decode the base64 signature from the header\n3. Create a SHA-256 hash of the request body\n4. Verify the signature using the public key and the hash\n\nIf the signature verification succeeds, the webhook is authentic. If not, it should be rejected.\n (can also be set with `GRID_WEBHOOK_PUBKEY` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\ngrid <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\ngrid <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\ngrid <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\ngrid <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\ngrid <command> --arg @data://file.txt\n~~~\n\n## Linking different Go SDK versions\n\nYou can link the CLI against a different version of the Lightspark Grid Go SDK\nfor development purposes using the `./scripts/link` script.\n\nTo link to a specific version from a repository (version can be a branch,\ngit tag, or commit hash):\n\n~~~bash\n./scripts/link github.com/org/repo@version\n~~~\n\nTo link to a local copy of the SDK:\n\n~~~bash\n./scripts/link ../path/to/grid-go\n~~~\n\nIf you run the link script without any arguments, it will default to `../grid-go`.\n",
+  },
   {
     language: 'csharp',
     content:
