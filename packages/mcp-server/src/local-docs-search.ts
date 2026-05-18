@@ -88,6 +88,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.retrieve\n\nputs(platform_config)',
       },
+      php: {
+        method: 'config->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$platformConfig = $client->config->retrieve();\n\nvar_dump($platformConfig);",
+      },
       csharp: {
         method: 'Config.Retrieve',
         example:
@@ -142,6 +147,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.update\n\nputs(platform_config)',
       },
+      php: {
+        method: 'config->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$platformConfig = $client->config->update(\n  supportedCurrencies: [\n    [\n      'currencyCode' => 'USD',\n      'enabledTransactionTypes' => [\n        TransactionType::OUTGOING, TransactionType::INCOMING\n      ],\n      'maxAmount' => 1000000,\n      'minAmount' => 100,\n      'requiredCounterpartyFields' => [\n        ['mandatory' => true, 'name' => CustomerInfoFieldName::FULL_NAME],\n        ['mandatory' => true, 'name' => CustomerInfoFieldName::NATIONALITY],\n        ['mandatory' => true, 'name' => CustomerInfoFieldName::BIRTH_DATE],\n      ],\n    ],\n  ],\n  umaDomain: 'mycompany.com',\n  webhookEndpoint: 'https://api.mycompany.com/webhooks/uma',\n);\n\nvar_dump($platformConfig);",
+      },
       csharp: {
         method: 'Config.Update',
         example:
@@ -194,6 +204,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.create(create_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
+      },
+      php: {
+        method: 'customers->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->create(\n  createCustomerRequest: [\n    'currencies' => ['USD', 'USDC'],\n    'email' => 'john.doe@example.com',\n    'platformCustomerID' => 'ind-9f84e0c2',\n    'region' => 'US',\n    'umaAddress' => '$john.doe@uma.domain.com',\n    'customerType' => 'INDIVIDUAL',\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1990-01-15',\n    'fullName' => 'Jane Smith',\n    'kycStatus' => 'APPROVED',\n    'nationality' => 'US',\n  ],\n);\n\nvar_dump($customerOneOf);",
       },
       csharp: {
         method: 'Customers.Create',
@@ -259,6 +274,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list\n\nputs(page)',
       },
+      php: {
+        method: 'customers->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->customers->list(\n  createdAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  createdBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  currency: 'currency',\n  cursor: 'cursor',\n  customerType: CustomerType::INDIVIDUAL,\n  isIncludingDeleted: true,\n  limit: 1,\n  platformCustomerID: 'platformCustomerId',\n  region: 'region',\n  umaAddress: 'umaAddress',\n  updatedAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  updatedBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Customers.List',
         example:
@@ -308,6 +328,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.retrieve("customerId")\n\nputs(customer_one_of)',
+      },
+      php: {
+        method: 'customers->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->retrieve('customerId');\n\nvar_dump($customerOneOf);",
       },
       csharp: {
         method: 'Customers.Retrieve',
@@ -365,6 +390,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.update("customerId", update_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
       },
+      php: {
+        method: 'customers->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->update(\n  'customerId',\n  updateCustomerRequest: [\n    'currencies' => ['USD', 'EUR', 'USDC'],\n    'email' => 'john.doe@example.com',\n    'umaAddress' => '$john.doe@uma.domain.com',\n    'customerType' => 'INDIVIDUAL',\n    'address' => [\n      'country' => 'US',\n      'line1' => '456 Market St',\n      'postalCode' => '94103',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1985-06-15',\n    'fullName' => 'John Smith',\n    'kycStatus' => 'APPROVED',\n    'nationality' => 'US',\n  ],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:019542f5-b3e7-1d02-0000-000000000010',\n);\n\nvar_dump($customerOneOf);",
+      },
       csharp: {
         method: 'Customers.Update',
         example:
@@ -414,6 +444,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.delete("customerId")\n\nputs(customer_one_of)',
+      },
+      php: {
+        method: 'customers->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->delete('customerId');\n\nvar_dump($customerOneOf);",
       },
       csharp: {
         method: 'Customers.Delete',
@@ -472,6 +507,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list_internal_accounts\n\nputs(page)',
       },
+      php: {
+        method: 'customers->listInternalAccounts',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->customers->listInternalAccounts(\n  currency: 'currency',\n  cursor: 'cursor',\n  customerID: 'customerId',\n  limit: 1,\n  type: 'INTERNAL_FIAT',\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Customers.ListInternalAccounts',
         example:
@@ -526,6 +566,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.export',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account_export_response = lightspark_grid.customers.export(\n  "id",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(internal_account_export_response)',
+      },
+      php: {
+        method: 'customers->export',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$internalAccountExportResponse = $client->customers->export(\n  'id',\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($internalAccountExportResponse);",
       },
       csharp: {
         method: 'Customers.Export',
@@ -583,6 +628,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.customers.update_internal_account("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n\nputs(internal_account)',
       },
+      php: {
+        method: 'customers->updateInternalAccount',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$internalAccount = $client->customers->updateInternalAccount(\n  'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n  privateEnabled: true,\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:019542f5-b3e7-1d02-0000-000000000010',\n);\n\nvar_dump($internalAccount);",
+      },
       csharp: {
         method: 'Customers.UpdateInternalAccount',
         example:
@@ -632,6 +682,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.generate_kyc_link',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.generate_kyc_link("customerId")\n\nputs(response)',
+      },
+      php: {
+        method: 'customers->generateKYCLink',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->customers->generateKYCLink(\n  'customerId',\n  redirectUri: 'https://app.example.com/onboarding/completed',\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Customers.GenerateKycLink',
@@ -683,6 +738,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.external_accounts.list\n\nputs(page)',
+      },
+      php: {
+        method: 'customers->externalAccounts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->customers->externalAccounts->list(\n  currency: 'currency', cursor: 'cursor', customerID: 'customerId', limit: 1\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'Customers.ExternalAccounts.List',
@@ -740,6 +800,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      php: {
+        method: 'customers->externalAccounts->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->customers->externalAccounts->create(\n  accountInfo: [\n    'accountNumber' => '12345678901',\n    'accountType' => 'USD_ACCOUNT',\n    'beneficiary' => [\n      'beneficiaryType' => 'INDIVIDUAL',\n      'fullName' => 'John Doe',\n      'address' => [\n        'country' => 'US',\n        'line1' => '123 Main Street',\n        'postalCode' => '94105',\n        'city' => 'San Francisco',\n        'line2' => 'Apt 4B',\n        'state' => 'CA',\n      ],\n      'birthDate' => '1990-01-15',\n      'countryOfResidence' => 'countryOfResidence',\n      'email' => 'email',\n      'nationality' => 'US',\n      'phoneNumber' => 'phoneNumber',\n    ],\n    'routingNumber' => '123456789',\n  ],\n  currency: 'USD',\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  defaultUmaDepositAccount: true,\n  platformAccountID: 'ext_acc_123456',\n);\n\nvar_dump($externalAccount);",
+      },
       csharp: {
         method: 'Customers.ExternalAccounts.Create',
         example:
@@ -790,6 +855,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      php: {
+        method: 'customers->externalAccounts->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->customers->externalAccounts->retrieve(\n  'externalAccountId'\n);\n\nvar_dump($externalAccount);",
+      },
       csharp: {
         method: 'Customers.ExternalAccounts.Retrieve',
         example:
@@ -837,6 +907,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.customers.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      php: {
+        method: 'customers->externalAccounts->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->customers->externalAccounts->delete('externalAccountId');\n\nvar_dump($result);",
       },
       csharp: {
         method: 'Customers.ExternalAccounts.Delete',
@@ -887,6 +962,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.bulk.upload_csv',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.upload_csv(file: StringIO.new("Example data"))\n\nputs(response)',
+      },
+      php: {
+        method: 'customers->bulk->uploadCsv',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->customers->bulk->uploadCsv(\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Customers.Bulk.UploadCsv',
@@ -939,6 +1019,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.get_job_status("jobId")\n\nputs(response)',
       },
+      php: {
+        method: 'customers->bulk->getJobStatus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->customers->bulk->getJobStatus('jobId');\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Customers.Bulk.GetJobStatus',
         example:
@@ -990,6 +1075,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.platform.list_internal_accounts\n\nputs(response)',
       },
+      php: {
+        method: 'platform->listInternalAccounts',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->platform->listInternalAccounts(\n  currency: 'currency', type: 'INTERNAL_FIAT'\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Platform.ListInternalAccounts',
         example:
@@ -1040,6 +1130,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.platform.external_accounts.list\n\nputs(page)',
+      },
+      php: {
+        method: 'platform->externalAccounts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->platform->externalAccounts->list(\n  currency: 'currency', cursor: 'cursor', limit: 1\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'Platform.ExternalAccounts.List',
@@ -1095,6 +1190,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      php: {
+        method: 'platform->externalAccounts->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->platform->externalAccounts->create(\n  accountInfo: [\n    'accountNumber' => '12345678901',\n    'accountType' => 'USD_ACCOUNT',\n    'beneficiary' => [\n      'beneficiaryType' => 'INDIVIDUAL',\n      'fullName' => 'John Doe',\n      'address' => [\n        'country' => 'US',\n        'line1' => '123 Main Street',\n        'postalCode' => '94105',\n        'city' => 'San Francisco',\n        'line2' => 'Apt 4B',\n        'state' => 'CA',\n      ],\n      'birthDate' => '1990-01-15',\n      'countryOfResidence' => 'countryOfResidence',\n      'email' => 'email',\n      'nationality' => 'US',\n      'phoneNumber' => 'phoneNumber',\n    ],\n    'routingNumber' => '123456789',\n  ],\n  currency: 'USD',\n  platformAccountID: 'ext_acc_123456',\n);\n\nvar_dump($externalAccount);",
+      },
       csharp: {
         method: 'Platform.ExternalAccounts.Create',
         example:
@@ -1145,6 +1245,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      php: {
+        method: 'platform->externalAccounts->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->platform->externalAccounts->retrieve(\n  'externalAccountId'\n);\n\nvar_dump($externalAccount);",
+      },
       csharp: {
         method: 'Platform.ExternalAccounts.Retrieve',
         example:
@@ -1192,6 +1297,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.platform.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      php: {
+        method: 'platform->externalAccounts->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->platform->externalAccounts->delete('externalAccountId');\n\nvar_dump($result);",
       },
       csharp: {
         method: 'Platform.ExternalAccounts.Delete',
@@ -1249,6 +1359,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_in.create(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(transaction)',
       },
+      php: {
+        method: 'transferIn->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transferIn->create(\n  destination: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  source: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965'\n  ],\n  amount: 12550,\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($transaction);",
+      },
       csharp: {
         method: 'TransferIn.Create',
         example:
@@ -1304,6 +1419,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_out.create(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(transaction)',
       },
+      php: {
+        method: 'transferOut->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transferOut->create(\n  destination: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965'\n  ],\n  source: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  amount: 12550,\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($transaction);",
+      },
       csharp: {
         method: 'TransferOut.Create',
         example:
@@ -1354,6 +1474,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver.lookup_uma',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_uma("receiverUmaAddress")\n\nputs(response)',
+      },
+      php: {
+        method: 'receiver->lookupUma',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->receiver->lookupUma(\n  'receiverUmaAddress',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Receiver.LookupUma',
@@ -1406,6 +1531,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_external_account("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n\nputs(response)',
       },
+      php: {
+        method: 'receiver->lookupExternalAccount',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->receiver->lookupExternalAccount(\n  'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Receiver.LookupExternalAccount',
         example:
@@ -1456,6 +1586,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.retrieve("quoteId")\n\nputs(quote)',
+      },
+      php: {
+        method: 'quotes->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$quote = $client->quotes->retrieve('quoteId');\n\nvar_dump($quote);",
       },
       csharp: {
         method: 'Quotes.Retrieve',
@@ -1519,6 +1654,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 10000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
       },
+      php: {
+        method: 'quotes->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$quote = $client->quotes->create(\n  destination: [\n    'accountID' => 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n    'destinationType' => 'ACCOUNT',\n    'paymentRail' => 'ACH',\n  ],\n  lockedCurrencyAmount: 10000,\n  lockedCurrencySide: 'SENDING',\n  source: [\n    'accountID' => 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    'sourceType' => 'ACCOUNT',\n    'customerID' => 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  ],\n  description: 'Transfer between accounts, either internal or external.',\n  immediatelyExecute: false,\n  lookupID: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',\n  purposeOfPayment: 'GIFT',\n  senderCustomerInfo: ['FULL_NAME' => 'bar', 'NATIONALITY' => 'bar'],\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($quote);",
+      },
       csharp: {
         method: 'Quotes.Create',
         example:
@@ -1569,6 +1709,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.execute',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(quote)',
+      },
+      php: {
+        method: 'quotes->execute',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$quote = $client->quotes->execute(\n  'Quote:019542f5-b3e7-1d02-0000-000000000001',\n  gridWalletSignature: 'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($quote);",
       },
       csharp: {
         method: 'Quotes.Execute',
@@ -1635,6 +1780,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.transactions.list\n\nputs(page)',
       },
+      php: {
+        method: 'transactions->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->transactions->list(\n  accountIdentifier: 'accountIdentifier',\n  cursor: 'cursor',\n  customerID: 'customerId',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  platformCustomerID: 'platformCustomerId',\n  receiverAccountIdentifier: 'receiverAccountIdentifier',\n  reference: 'reference',\n  senderAccountIdentifier: 'senderAccountIdentifier',\n  sortOrder: 'asc',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  status: TransactionStatus::CREATED,\n  type: TransactionType::INCOMING,\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Transactions.List',
         example:
@@ -1684,6 +1834,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transactions.retrieve("transactionId")\n\nputs(transaction)',
+      },
+      php: {
+        method: 'transactions->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transactions->retrieve('transactionId');\n\nvar_dump($transaction);",
       },
       csharp: {
         method: 'Transactions.Retrieve',
@@ -1736,6 +1891,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.approve("transactionId")\n\nputs(incoming_transaction)',
       },
+      php: {
+        method: 'transactions->approve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$incomingTransaction = $client->transactions->approve(\n  'transactionId', receiverCustomerInfo: ['foo' => 'bar']\n);\n\nvar_dump($incomingTransaction);",
+      },
       csharp: {
         method: 'Transactions.Approve',
         example:
@@ -1787,6 +1947,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.reject("transactionId")\n\nputs(incoming_transaction)',
       },
+      php: {
+        method: 'transactions->reject',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$incomingTransaction = $client->transactions->reject(\n  'transactionId', reason: 'RESTRICTED_JURISDICTION'\n);\n\nvar_dump($incomingTransaction);",
+      },
       csharp: {
         method: 'Transactions.Reject',
         example:
@@ -1837,6 +2002,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.create(inviter_uma: "$inviter@uma.domain")\n\nputs(uma_invitation)',
       },
+      php: {
+        method: 'invitations->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->create(\n  inviterUma: '$inviter@uma.domain',\n  amountToSend: 12550,\n  expiresAt: new \\DateTimeImmutable('2025-09-01T14:30:00Z'),\n  firstName: 'Alice',\n);\n\nvar_dump($umaInvitation);",
+      },
       csharp: {
         method: 'Invitations.Create',
         example:
@@ -1886,6 +2056,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.retrieve("invitationCode")\n\nputs(uma_invitation)',
+      },
+      php: {
+        method: 'invitations->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->retrieve('invitationCode');\n\nvar_dump($umaInvitation);",
       },
       csharp: {
         method: 'Invitations.Retrieve',
@@ -1938,6 +2113,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.claim("invitationCode", invitee_uma: "$invitee@uma.domain")\n\nputs(uma_invitation)',
       },
+      php: {
+        method: 'invitations->claim',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->claim(\n  'invitationCode', inviteeUma: '$invitee@uma.domain'\n);\n\nvar_dump($umaInvitation);",
+      },
       csharp: {
         method: 'Invitations.Claim',
         example:
@@ -1989,6 +2169,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.cancel("invitationCode")\n\nputs(uma_invitation)',
       },
+      php: {
+        method: 'invitations->cancel',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->cancel('invitationCode');\n\nvar_dump($umaInvitation);",
+      },
       csharp: {
         method: 'Invitations.Cancel',
         example:
@@ -2039,6 +2224,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.send_funds',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\noutgoing_transaction = lightspark_grid.sandbox.send_funds(\n  currency_code: "USD",\n  quote_id: "Quote:019542f5-b3e7-1d02-0000-000000000006"\n)\n\nputs(outgoing_transaction)',
+      },
+      php: {
+        method: 'sandbox->sendFunds',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$outgoingTransaction = $client->sandbox->sendFunds(\n  currencyCode: 'USD',\n  quoteID: 'Quote:019542f5-b3e7-1d02-0000-000000000006',\n  currencyAmount: 1000,\n);\n\nvar_dump($outgoingTransaction);",
       },
       csharp: {
         method: 'Sandbox.SendFunds',
@@ -2097,6 +2287,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.sandbox.uma.receive_payment(\n  receiving_currency_amount: 1000,\n  receiving_currency_code: "USD",\n  sender_uma_address: "$success.usd@sandbox.grid.uma.money"\n)\n\nputs(incoming_transaction)',
       },
+      php: {
+        method: 'sandbox->uma->receivePayment',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$incomingTransaction = $client->sandbox->uma->receivePayment(\n  receivingCurrencyAmount: 1000,\n  receivingCurrencyCode: 'USD',\n  senderUmaAddress: '$success.usd@sandbox.grid.uma.money',\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  receiverUmaAddress: '$receiver@uma.domain',\n);\n\nvar_dump($incomingTransaction);",
+      },
       csharp: {
         method: 'Sandbox.Uma.ReceivePayment',
         example:
@@ -2148,6 +2343,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.sandbox.internal_accounts.fund(\n  "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n  amount: 100000\n)\n\nputs(internal_account)',
       },
+      php: {
+        method: 'sandbox->internalAccounts->fund',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$internalAccount = $client->sandbox->internalAccounts->fund(\n  'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', amount: 100000\n);\n\nvar_dump($internalAccount);",
+      },
       csharp: {
         method: 'Sandbox.InternalAccounts.Fund',
         example:
@@ -2195,6 +2395,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.webhooks.send_test',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.webhooks.send_test\n\nputs(response)',
+      },
+      php: {
+        method: 'sandbox->webhooks->sendTest',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->sandbox->webhooks->sendTest();\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Sandbox.Webhooks.SendTest',
@@ -2254,6 +2459,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.uma_providers.list\n\nputs(page)',
       },
+      php: {
+        method: 'umaProviders->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->umaProviders->list(\n  countryCode: 'US',\n  currencyCode: 'USD',\n  cursor: 'cursor',\n  hasBlockedProviders: true,\n  limit: 1,\n  sortOrder: 'asc',\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'UmaProviders.List',
         example:
@@ -2303,6 +2513,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.create(name: "Sandbox read-only", permissions: [:VIEW])\n\nputs(api_token)',
+      },
+      php: {
+        method: 'tokens->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$apiToken = $client->tokens->create(\n  name: 'Sandbox read-only', permissions: [Permission::VIEW]\n);\n\nvar_dump($apiToken);",
       },
       csharp: {
         method: 'Tokens.Create',
@@ -2363,6 +2578,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.tokens.list\n\nputs(page)',
       },
+      php: {
+        method: 'tokens->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->tokens->list(\n  createdAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  createdBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  cursor: 'cursor',\n  limit: 1,\n  name: 'name',\n  updatedAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  updatedBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Tokens.List',
         example:
@@ -2413,6 +2633,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.retrieve("tokenId")\n\nputs(api_token)',
       },
+      php: {
+        method: 'tokens->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$apiToken = $client->tokens->retrieve('tokenId');\n\nvar_dump($apiToken);",
+      },
       csharp: {
         method: 'Tokens.Retrieve',
         example:
@@ -2460,6 +2685,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.tokens.delete("tokenId")\n\nputs(result)',
+      },
+      php: {
+        method: 'tokens->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->tokens->delete('tokenId');\n\nvar_dump($result);",
       },
       csharp: {
         method: 'Tokens.Delete',
@@ -2512,6 +2742,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexchange_rates = lightspark_grid.exchange_rates.list\n\nputs(exchange_rates)',
       },
+      php: {
+        method: 'exchangeRates->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$exchangeRates = $client->exchangeRates->list(\n  destinationCurrency: ['string'],\n  sendingAmount: 0,\n  sourceCurrency: 'sourceCurrency',\n);\n\nvar_dump($exchangeRates);",
+      },
       csharp: {
         method: 'ExchangeRates.List',
         example:
@@ -2555,6 +2790,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'webhooks.unwrap',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.webhooks.unwrap\n\nputs(result)',
+      },
+      php: {
+        method: 'webhooks->unwrap',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->webhooks->unwrap();\n\nvar_dump($result);",
       },
       csharp: {
         example: 'WebhookUnwrapParams parameters = new();\n\nawait client.Webhooks.Unwrap(parameters);',
@@ -2606,6 +2846,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'crypto.estimate_withdrawal_fee',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.crypto.estimate_withdrawal_fee(\n  amount: 1000000,\n  crypto_network: "SOLANA",\n  currency: "USDC",\n  destination_address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n  internal_account_id: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n)\n\nputs(response)',
+      },
+      php: {
+        method: 'crypto->estimateWithdrawalFee',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->crypto->estimateWithdrawalFee(\n  amount: 1000000,\n  cryptoNetwork: 'SOLANA',\n  currency: 'USDC',\n  destinationAddress: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',\n  internalAccountID: 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Crypto.EstimateWithdrawalFee',
@@ -2663,6 +2908,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  ownership_percentage: 51,\n  personal_info: {\n    address: {country: "US", line1: "123 Main Street", postalCode: "94105"},\n    birthDate: "1978-06-15",\n    firstName: "Jane",\n    identifier: "123-45-6789",\n    idType: :SSN,\n    lastName: "Smith",\n    nationality: "US"\n  },\n  roles: [:UBO, :DIRECTOR]\n)\n\nputs(beneficial_owner)',
       },
+      php: {
+        method: 'beneficialOwners->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$beneficialOwner = $client->beneficialOwners->create(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  ownershipPercentage: 51,\n  personalInfo: [\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1978-06-15',\n    'firstName' => 'Jane',\n    'identifier' => '123-45-6789',\n    'idType' => 'SSN',\n    'lastName' => 'Smith',\n    'nationality' => 'US',\n    'countryOfIssuance' => 'US',\n    'email' => 'jane.smith@acmecorp.com',\n    'middleName' => 'Marie',\n    'phoneNumber' => '+14155550192',\n  ],\n  roles: ['UBO', 'DIRECTOR'],\n);\n\nvar_dump($beneficialOwner);",
+      },
       csharp: {
         method: 'BeneficialOwners.Create',
         example:
@@ -2713,6 +2963,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.beneficial_owners.list(customer_id: "customerId")\n\nputs(page)',
       },
+      php: {
+        method: 'beneficialOwners->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->beneficialOwners->list(\n  customerID: 'customerId', cursor: 'cursor', limit: 1\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'BeneficialOwners.List',
         example:
@@ -2762,6 +3017,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.retrieve("beneficialOwnerId")\n\nputs(beneficial_owner)',
+      },
+      php: {
+        method: 'beneficialOwners->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$beneficialOwner = $client->beneficialOwners->retrieve('beneficialOwnerId');\n\nvar_dump($beneficialOwner);",
       },
       csharp: {
         method: 'BeneficialOwners.Retrieve',
@@ -2817,6 +3077,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.update',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.update("beneficialOwnerId")\n\nputs(beneficial_owner)',
+      },
+      php: {
+        method: 'beneficialOwners->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$beneficialOwner = $client->beneficialOwners->update(\n  'beneficialOwnerId',\n  ownershipPercentage: 51,\n  personalInfo: [\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1978-06-15',\n    'countryOfIssuance' => 'US',\n    'email' => 'jane.smith@acmecorp.com',\n    'firstName' => 'Jane',\n    'identifier' => '123-45-6789',\n    'idType' => 'SSN',\n    'lastName' => 'Smith',\n    'middleName' => 'Marie',\n    'nationality' => 'US',\n    'phoneNumber' => '+14155550192',\n  ],\n  roles: ['UBO', 'DIRECTOR'],\n);\n\nvar_dump($beneficialOwner);",
       },
       csharp: {
         method: 'BeneficialOwners.Update',
@@ -2876,6 +3141,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  country: "US",\n  document_holder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
       },
+      php: {
+        method: 'documents->upload',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->documents->upload(\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentType: 'PASSPORT',\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  documentNumber: 'A12345678',\n  side: 'FRONT',\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Documents.Upload',
         example:
@@ -2926,6 +3196,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.documents.list\n\nputs(page)',
       },
+      php: {
+        method: 'documents->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->documents->list(\n  cursor: 'cursor', documentHolder: 'documentHolder', limit: 1\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Documents.List',
         example:
@@ -2975,6 +3250,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndocument = lightspark_grid.documents.retrieve("documentId")\n\nputs(document)',
+      },
+      php: {
+        method: 'documents->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$document = $client->documents->retrieve('documentId');\n\nvar_dump($document);",
       },
       csharp: {
         method: 'Documents.Retrieve',
@@ -3034,6 +3314,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  country: "US",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
       },
+      php: {
+        method: 'documents->replace',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->documents->replace(\n  'documentId',\n  country: 'US',\n  documentType: 'PASSPORT',\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  documentNumber: 'A12345678',\n  side: 'FRONT',\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Documents.Replace',
         example:
@@ -3082,6 +3367,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.documents.delete("documentId")\n\nputs(result)',
+      },
+      php: {
+        method: 'documents->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->documents->delete('documentId');\n\nvar_dump($result);",
       },
       csharp: {
         method: 'Documents.Delete',
@@ -3134,6 +3424,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.verifications.submit(customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(response)',
       },
+      php: {
+        method: 'verifications->submit',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->verifications->submit(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001'\n);\n\nvar_dump($response);",
+      },
       csharp: {
         method: 'Verifications.Submit',
         example:
@@ -3183,6 +3478,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.verifications.list\n\nputs(page)',
+      },
+      php: {
+        method: 'verifications->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->verifications->list(\n  cursor: 'cursor',\n  customerID: 'customerId',\n  limit: 1,\n  verificationStatus: 'RESOLVE_ERRORS',\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'Verifications.List',
@@ -3234,6 +3534,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nverification = lightspark_grid.verifications.retrieve("verificationId")\n\nputs(verification)',
       },
+      php: {
+        method: 'verifications->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$verification = $client->verifications->retrieve('verificationId');\n\nvar_dump($verification);",
+      },
       csharp: {
         method: 'Verifications.Retrieve',
         example:
@@ -3283,6 +3588,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndiscoveries = lightspark_grid.discoveries.list\n\nputs(discoveries)',
+      },
+      php: {
+        method: 'discoveries->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$discoveries = $client->discoveries->list(\n  country: 'country', currency: 'currency'\n);\n\nvar_dump($discoveries);",
       },
       csharp: {
         method: 'Discoveries.List',
@@ -3339,6 +3649,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_method_response = lightspark_grid.auth.credentials.create(\n  auth_credential_create_request: {accountId: "InternalAccount:019542f5-b3e7-1d02-0000-000000000002", type: :EMAIL_OTP}\n)\n\nputs(auth_method_response)',
       },
+      php: {
+        method: 'auth->credentials->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authMethodResponse = $client->auth->credentials->create(\n  authCredentialCreateRequest: [\n    'accountID' => 'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n    'type' => 'EMAIL_OTP',\n  ],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authMethodResponse);",
+      },
       csharp: {
         method: 'Auth.Credentials.Create',
         example:
@@ -3394,6 +3709,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.credentials.verify(\n  "id",\n  auth_credential_verify_request: {\n    clientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n    otp: "123456",\n    type: :EMAIL_OTP\n  }\n)\n\nputs(auth_session)',
       },
+      php: {
+        method: 'auth->credentials->verify',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSession = $client->auth->credentials->verify(\n  'id',\n  authCredentialVerifyRequest: [\n    'clientPublicKey' => '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n    'otp' => '123456',\n    'type' => 'EMAIL_OTP',\n  ],\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authSession);",
+      },
       csharp: {
         method: 'Auth.Credentials.Verify',
         example:
@@ -3444,6 +3764,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.credentials.challenge',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_response_one_of = lightspark_grid.auth.credentials.challenge("id")\n\nputs(auth_credential_response_one_of)',
+      },
+      php: {
+        method: 'auth->credentials->challenge',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authCredentialResponseOneOf = $client->auth->credentials->challenge(\n  'id',\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n);\n\nvar_dump($authCredentialResponseOneOf);",
       },
       csharp: {
         method: 'Auth.Credentials.Challenge',
@@ -3496,6 +3821,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_list_response = lightspark_grid.auth.credentials.list(account_id: "accountId")\n\nputs(auth_credential_list_response)',
       },
+      php: {
+        method: 'auth->credentials->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authCredentialListResponse = $client->auth->credentials->list(\n  accountID: 'accountId'\n);\n\nvar_dump($authCredentialListResponse);",
+      },
       csharp: {
         method: 'Auth.Credentials.List',
         example:
@@ -3545,6 +3875,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.credentials.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.credentials.delete("id")\n\nputs(auth_signed_request_challenge)',
+      },
+      php: {
+        method: 'auth->credentials->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSignedRequestChallenge = $client->auth->credentials->delete(\n  'id',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authSignedRequestChallenge);",
       },
       csharp: {
         method: 'Auth.Credentials.Delete',
@@ -3596,6 +3931,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nsession_list_response = lightspark_grid.auth.sessions.list(account_id: "accountId")\n\nputs(session_list_response)',
       },
+      php: {
+        method: 'auth->sessions->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$sessionListResponse = $client->auth->sessions->list(accountID: 'accountId');\n\nvar_dump($sessionListResponse);",
+      },
       csharp: {
         method: 'Auth.Sessions.List',
         example:
@@ -3645,6 +3985,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.sessions.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.sessions.delete("id")\n\nputs(auth_signed_request_challenge)',
+      },
+      php: {
+        method: 'auth->sessions->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSignedRequestChallenge = $client->auth->sessions->delete(\n  'id',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authSignedRequestChallenge);",
       },
       csharp: {
         method: 'Auth.Sessions.Delete',
@@ -3702,6 +4047,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.sessions.refresh(\n  "Session:019542f5-b3e7-1d02-0000-000000000003",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(auth_session)',
       },
+      php: {
+        method: 'auth->sessions->refresh',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSession = $client->auth->sessions->refresh(\n  'Session:019542f5-b3e7-1d02-0000-000000000003',\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',\n  requestID: 'Request:019542f5-b3e7-1d02-0000-000000000010',\n);\n\nvar_dump($authSession);",
+      },
       csharp: {
         method: 'Auth.Sessions.Refresh',
         example:
@@ -3756,6 +4106,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_create_response = lightspark_grid.agents.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  name: "Payroll Automation Agent",\n  policy: {\n    defaultExecutionMode: :AUTO,\n    permissions: [:VIEW_TRANSACTIONS],\n    spendingLimits: {currency: "USD", perTransactionLimit: 50000}\n  }\n)\n\nputs(agent_create_response)',
+      },
+      php: {
+        method: 'agents->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentCreateResponse = $client->agents->create(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  name: 'Payroll Automation Agent',\n  policy: [\n    'defaultExecutionMode' => 'AUTO',\n    'permissions' => ['VIEW_TRANSACTIONS'],\n    'spendingLimits' => [\n      'currency' => 'USD',\n      'perTransactionLimit' => 50000,\n      'dailyLimit' => 500000,\n      'dailyTransactionLimit' => 10,\n      'monthlyLimit' => 5000000,\n    ],\n    'accountRestrictions' => [\n      'accountRules' => [\n        [\n          'accountID' => 'Account:019542f5-b3e7-1d02-0000-000000000001',\n          'executionMode' => 'AUTO',\n          'perTransactionLimit' => 10000,\n        ],\n      ],\n      'allowedAccountIDs' => ['Account:019542f5-b3e7-1d02-0000-000000000001'],\n    ],\n    'approvalThresholds' => ['amount' => 100000, 'currency' => 'USD'],\n  ],\n);\n\nvar_dump($agentCreateResponse);",
       },
       csharp: {
         method: 'Agents.Create',
@@ -3817,6 +4172,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list\n\nputs(page)',
       },
+      php: {
+        method: 'agents->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->agents->list(\n  createdAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  createdBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  cursor: 'cursor',\n  customerID: 'customerId',\n  isConnected: true,\n  isPaused: true,\n  limit: 1,\n  updatedAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  updatedBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Agents.List',
         example:
@@ -3876,6 +4236,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list_approvals\n\nputs(page)',
       },
+      php: {
+        method: 'agents->listApprovals',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->agents->listApprovals(\n  agentID: 'agentId',\n  cursor: 'cursor',\n  customerID: 'customerId',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  sortOrder: 'asc',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Agents.ListApprovals',
         example:
@@ -3925,6 +4290,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.retrieve("agentId")\n\nputs(agent)',
+      },
+      php: {
+        method: 'agents->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agent = $client->agents->retrieve('agentId');\n\nvar_dump($agent);",
       },
       csharp: {
         method: 'Agents.Retrieve',
@@ -3976,6 +4346,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update("agentId")\n\nputs(agent)',
       },
+      php: {
+        method: 'agents->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agent = $client->agents->update(\n  'agentId', isPaused: true, name: 'Updated Payroll Agent'\n);\n\nvar_dump($agent);",
+      },
       csharp: {
         method: 'Agents.Update',
         example:
@@ -4023,6 +4398,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.agents.delete("agentId")\n\nputs(result)',
+      },
+      php: {
+        method: 'agents->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->agents->delete('agentId');\n\nvar_dump($result);",
       },
       csharp: {
         method: 'Agents.Delete',
@@ -4082,6 +4462,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update_policy("agentId")\n\nputs(agent)',
       },
+      php: {
+        method: 'agents->updatePolicy',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agent = $client->agents->updatePolicy(\n  'agentId',\n  accountRestrictions: [\n    'accountRules' => [\n      [\n        'accountID' => 'Account:019542f5-b3e7-1d02-0000-000000000001',\n        'executionMode' => 'AUTO',\n        'perTransactionLimit' => 10000,\n      ],\n    ],\n    'allowedAccountIDs' => ['Account:019542f5-b3e7-1d02-0000-000000000001'],\n  ],\n  approvalThresholds: ['amount' => 100000, 'currency' => 'USD'],\n  defaultExecutionMode: 'AUTO',\n  permissions: ['VIEW_TRANSACTIONS'],\n  spendingLimits: [\n    'currency' => 'USD',\n    'dailyLimit' => 500000,\n    'dailyTransactionLimit' => 10,\n    'monthlyLimit' => 5000000,\n    'perTransactionLimit' => 50000,\n  ],\n);\n\nvar_dump($agent);",
+      },
       csharp: {
         method: 'Agents.UpdatePolicy',
         example:
@@ -4131,6 +4516,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent = lightspark_grid.agents.me.retrieve\n\nputs(agent)',
+      },
+      php: {
+        method: 'agents->me->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agent = $client->agents->me->retrieve();\n\nvar_dump($agent);",
       },
       csharp: {
         method: 'Agents.Me.Retrieve',
@@ -4188,6 +4578,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_in(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(agent_action)',
       },
+      php: {
+        method: 'agents->me->createTransferIn',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->createTransferIn(\n  destination: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  source: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965'\n  ],\n  amount: 12550,\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($agentAction);",
+      },
       csharp: {
         method: 'Agents.Me.CreateTransferIn',
         example:
@@ -4244,6 +4639,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_out(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(agent_action)',
       },
+      php: {
+        method: 'agents->me->createTransferOut',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->createTransferOut(\n  destination: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965'\n  ],\n  source: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  amount: 12550,\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($agentAction);",
+      },
       csharp: {
         method: 'Agents.Me.CreateTransferOut',
         example:
@@ -4299,6 +4699,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.list_internal_accounts',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.list_internal_accounts\n\nputs(page)',
+      },
+      php: {
+        method: 'agents->me->listInternalAccounts',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->listInternalAccounts(\n  currency: 'currency', cursor: 'cursor', limit: 1, type: 'INTERNAL_FIAT'\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'Agents.Me.ListInternalAccounts',
@@ -4363,6 +4768,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.transactions.list\n\nputs(page)',
       },
+      php: {
+        method: 'agents->me->transactions->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->transactions->list(\n  accountIdentifier: 'accountIdentifier',\n  cursor: 'cursor',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  receiverAccountIdentifier: 'receiverAccountIdentifier',\n  reference: 'reference',\n  senderAccountIdentifier: 'senderAccountIdentifier',\n  sortOrder: 'asc',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  status: TransactionStatus::CREATED,\n  type: TransactionType::INCOMING,\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Agents.Me.Transactions.List',
         example:
@@ -4413,6 +4823,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.transactions.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\ntransaction = lightspark_grid.agents.me.transactions.retrieve("transactionId")\n\nputs(transaction)',
+      },
+      php: {
+        method: 'agents->me->transactions->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$transaction = $client->agents->me->transactions->retrieve('transactionId');\n\nvar_dump($transaction);",
       },
       csharp: {
         method: 'Agents.Me.Transactions.Retrieve',
@@ -4476,6 +4891,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 1000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
       },
+      php: {
+        method: 'agents->me->quotes->create',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$quote = $client->agents->me->quotes->create(\n  destination: [\n    'accountID' => 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n    'destinationType' => 'ACCOUNT',\n    'paymentRail' => 'ACH',\n  ],\n  lockedCurrencyAmount: 1000,\n  lockedCurrencySide: 'SENDING',\n  source: [\n    'accountID' => 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    'sourceType' => 'ACCOUNT',\n    'customerID' => 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  ],\n  description: 'Invoice #1234 payment',\n  immediatelyExecute: false,\n  lookupID: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',\n  purposeOfPayment: 'GIFT',\n  senderCustomerInfo: ['FULL_NAME' => 'bar', 'NATIONALITY' => 'bar'],\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($quote);",
+      },
       csharp: {
         method: 'Agents.Me.Quotes.Create',
         example:
@@ -4526,6 +4946,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.quotes.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.retrieve("quoteId")\n\nputs(quote)',
+      },
+      php: {
+        method: 'agents->me->quotes->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$quote = $client->agents->me->quotes->retrieve('quoteId');\n\nvar_dump($quote);",
       },
       csharp: {
         method: 'Agents.Me.Quotes.Retrieve',
@@ -4578,6 +5003,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(agent_action)',
       },
+      php: {
+        method: 'agents->me->quotes->execute',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->quotes->execute(\n  'Quote:019542f5-b3e7-1d02-0000-000000000001',\n  gridWalletSignature: 'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($agentAction);",
+      },
       csharp: {
         method: 'Agents.Me.Quotes.Execute',
         example:
@@ -4628,6 +5058,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.external_accounts.list\n\nputs(page)',
+      },
+      php: {
+        method: 'agents->me->externalAccounts->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->externalAccounts->list(\n  currency: 'currency', cursor: 'cursor', limit: 1\n);\n\nvar_dump($page);",
       },
       csharp: {
         method: 'Agents.Me.ExternalAccounts.List',
@@ -4686,6 +5121,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.add(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      php: {
+        method: 'agents->me->externalAccounts->add',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$externalAccount = $client->agents->me->externalAccounts->add(\n  accountInfo: [\n    'accountNumber' => '12345678901',\n    'accountType' => 'USD_ACCOUNT',\n    'beneficiary' => [\n      'beneficiaryType' => 'INDIVIDUAL',\n      'fullName' => 'John Doe',\n      'address' => [\n        'country' => 'US',\n        'line1' => '123 Main Street',\n        'postalCode' => '94105',\n        'city' => 'San Francisco',\n        'line2' => 'Apt 4B',\n        'state' => 'CA',\n      ],\n      'birthDate' => '1990-01-15',\n      'countryOfResidence' => 'countryOfResidence',\n      'email' => 'email',\n      'nationality' => 'US',\n      'phoneNumber' => 'phoneNumber',\n    ],\n    'routingNumber' => '123456789',\n  ],\n  currency: 'USD',\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  defaultUmaDepositAccount: true,\n  platformAccountID: 'ext_acc_123456',\n);\n\nvar_dump($externalAccount);",
+      },
       csharp: {
         method: 'Agents.Me.ExternalAccounts.Add',
         example:
@@ -4737,6 +5177,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      php: {
+        method: 'agents->me->externalAccounts->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$externalAccount = $client->agents->me->externalAccounts->retrieve(\n  'externalAccountId'\n);\n\nvar_dump($externalAccount);",
+      },
       csharp: {
         method: 'Agents.Me.ExternalAccounts.Retrieve',
         example:
@@ -4785,6 +5230,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nresult = lightspark_grid.agents.me.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      php: {
+        method: 'agents->me->externalAccounts->delete',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$result = $client->agents->me->externalAccounts->delete('externalAccountId');\n\nvar_dump($result);",
       },
       csharp: {
         method: 'Agents.Me.ExternalAccounts.Delete',
@@ -4841,6 +5291,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.actions.list\n\nputs(page)',
       },
+      php: {
+        method: 'agents->me->actions->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->actions->list(\n  cursor: 'cursor', limit: 1, status: 'PENDING_APPROVAL'\n);\n\nvar_dump($page);",
+      },
       csharp: {
         method: 'Agents.Me.Actions.List',
         example:
@@ -4892,6 +5347,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.actions.retrieve("actionId")\n\nputs(agent_action)',
       },
+      php: {
+        method: 'agents->me->actions->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->actions->retrieve('actionId');\n\nvar_dump($agentAction);",
+      },
       csharp: {
         method: 'Agents.Me.Actions.Retrieve',
         example:
@@ -4942,6 +5402,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code = lightspark_grid.agents.device_codes.regenerate("agentId")\n\nputs(agent_device_code)',
       },
+      php: {
+        method: 'agents->deviceCodes->regenerate',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentDeviceCode = $client->agents->deviceCodes->regenerate('agentId');\n\nvar_dump($agentDeviceCode);",
+      },
       csharp: {
         method: 'Agents.DeviceCodes.Regenerate',
         example:
@@ -4991,6 +5456,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.device_codes.get_status',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_status_response = lightspark_grid.agents.device_codes.get_status("code")\n\nputs(agent_device_code_status_response)',
+      },
+      php: {
+        method: 'agents->deviceCodes->getStatus',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentDeviceCodeStatusResponse = $client->agents->deviceCodes->getStatus(\n  'code'\n);\n\nvar_dump($agentDeviceCodeStatusResponse);",
       },
       csharp: {
         method: 'Agents.DeviceCodes.GetStatus',
@@ -5043,6 +5513,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_redeem_response = lightspark_grid.agents.device_codes.redeem("code")\n\nputs(agent_device_code_redeem_response)',
       },
+      php: {
+        method: 'agents->deviceCodes->redeem',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentDeviceCodeRedeemResponse = $client->agents->deviceCodes->redeem('code');\n\nvar_dump($agentDeviceCodeRedeemResponse);",
+      },
       csharp: {
         method: 'Agents.DeviceCodes.Redeem',
         example:
@@ -5093,6 +5568,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.transactions.approve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
+      php: {
+        method: 'agents->transactions->approve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->transactions->approve(\n  'actionId', agentID: 'agentId'\n);\n\nvar_dump($agentAction);",
       },
       csharp: {
         method: 'Agents.Transactions.Approve',
@@ -5145,6 +5625,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
+      php: {
+        method: 'agents->transactions->reject',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->transactions->reject(\n  'actionId',\n  agentID: 'agentId',\n  reason: 'Transaction amount exceeds customer\\'s current risk limit.',\n);\n\nvar_dump($agentAction);",
+      },
       csharp: {
         method: 'Agents.Transactions.Reject',
         example:
@@ -5195,6 +5680,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.actions.approve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
+      php: {
+        method: 'agents->actions->approve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->actions->approve(\n  'actionId', agentID: 'agentId'\n);\n\nvar_dump($agentAction);",
       },
       csharp: {
         method: 'Agents.Actions.Approve',
@@ -5247,6 +5737,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
+      php: {
+        method: 'agents->actions->reject',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->actions->reject(\n  'actionId',\n  agentID: 'agentId',\n  reason: 'Transaction amount exceeds customer\\'s current risk limit.',\n);\n\nvar_dump($agentAction);",
+      },
       csharp: {
         method: 'Agents.Actions.Reject',
         example:
@@ -5275,6 +5770,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'kotlin',
     content:
       '# Lightspark Grid Kotlin API Library\n\n<!-- x-release-please-start-version -->\n[![Maven Central](https://img.shields.io/maven-central/v/com.lightspark.grid/lightspark-grid-kotlin)](https://central.sonatype.com/artifact/com.lightspark.grid/lightspark-grid-kotlin/0.0.1)\n[![javadoc](https://javadoc.io/badge2/com.lightspark.grid/lightspark-grid-kotlin/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.lightspark.grid/lightspark-grid-kotlin/0.0.1)\n<!-- x-release-please-end -->\n\nThe Lightspark Grid Kotlin SDK provides convenient access to the [Lightspark Grid REST API](grid.lightspark.com)   from applications written in Kotlin.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwieC1ncmlkLWFnZW50LWFjY2Vzcy10b2tlbiI6Ik15IEFnZW50IEFjY2VzcyBUb2tlbiIsIlgtR3JpZC1TaWduYXR1cmUiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22x-grid-agent-access-token%22%3A%22My%20Agent%20Access%20Token%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n<!-- x-release-please-start-version -->\n\nKDocs are available on [javadoc.io](https://javadoc.io/doc/com.lightspark.grid/lightspark-grid-kotlin/0.0.1).\n\n<!-- x-release-please-end -->\n\n## Installation\n\n<!-- x-release-please-start-version -->\n\n### Gradle\n\n~~~kotlin\nimplementation("com.lightspark.grid:lightspark-grid-kotlin:0.0.1")\n~~~\n\n### Maven\n\n~~~xml\n<dependency>\n  <groupId>com.lightspark.grid</groupId>\n  <artifactId>lightspark-grid-kotlin</artifactId>\n  <version>0.0.1</version>\n</dependency>\n~~~\n\n<!-- x-release-please-end -->\n\n## Requirements\n\nThis library requires Java 8 or later.\n\n## Usage\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\n// Configures using the `lightsparkgrid.gridClientId`, `lightsparkgrid.gridClientSecret`, `lightsparkgrid.gridAgentAccessToken`, `lightsparkgrid.gridWebhookPubkey` and `lightsparkgrid.baseUrl` system properties\n// Or configures using the `GRID_CLIENT_ID`, `GRID_CLIENT_SECRET`, `GRID_AGENT_ACCESS_TOKEN`, `GRID_WEBHOOK_PUBKEY` and `LIGHTSPARK_GRID_BASE_URL` environment variables\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .destination(QuoteDestinationOneOf.AccountDestination.builder()\n        .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .build())\n    .lockedCurrencyAmount(10000L)\n    .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n    .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n        .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n        .build())\n    .build()\nval quote: Quote = client.quotes().create(params)\n```\n\n## Client configuration\n\nConfigure the client using system properties or environment variables:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\n\n// Configures using the `lightsparkgrid.gridClientId`, `lightsparkgrid.gridClientSecret`, `lightsparkgrid.gridAgentAccessToken`, `lightsparkgrid.gridWebhookPubkey` and `lightsparkgrid.baseUrl` system properties\n// Or configures using the `GRID_CLIENT_ID`, `GRID_CLIENT_SECRET`, `GRID_AGENT_ACCESS_TOKEN`, `GRID_WEBHOOK_PUBKEY` and `LIGHTSPARK_GRID_BASE_URL` environment variables\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n```\n\nOr manually:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .username("My Username")\n    .password("My Password")\n    .build()\n```\n\nOr using a combination of the two approaches:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    // Configures using the `lightsparkgrid.gridClientId`, `lightsparkgrid.gridClientSecret`, `lightsparkgrid.gridAgentAccessToken`, `lightsparkgrid.gridWebhookPubkey` and `lightsparkgrid.baseUrl` system properties\n    // Or configures using the `GRID_CLIENT_ID`, `GRID_CLIENT_SECRET`, `GRID_AGENT_ACCESS_TOKEN`, `GRID_WEBHOOK_PUBKEY` and `LIGHTSPARK_GRID_BASE_URL` environment variables\n    .fromEnv()\n    .username("My Username")\n    .build()\n```\n\nSee this table for the available options:\n\n| Setter             | System property                       | Environment variable       | Required | Default value                                  |\n| ------------------ | ------------------------------------- | -------------------------- | -------- | ---------------------------------------------- |\n| `username`         | `lightsparkgrid.gridClientId`         | `GRID_CLIENT_ID`           | false    | -                                              |\n| `password`         | `lightsparkgrid.gridClientSecret`     | `GRID_CLIENT_SECRET`       | false    | -                                              |\n| `agentAccessToken` | `lightsparkgrid.gridAgentAccessToken` | `GRID_AGENT_ACCESS_TOKEN`  | false    | -                                              |\n| `webhookSignature` | `lightsparkgrid.gridWebhookPubkey`    | `GRID_WEBHOOK_PUBKEY`      | false    | -                                              |\n| `baseUrl`          | `lightsparkgrid.baseUrl`              | `LIGHTSPARK_GRID_BASE_URL` | true     | `"https://api.lightspark.com/grid/2025-10-13"` |\n\nSystem properties take precedence over environment variables.\n\n> [!TIP]\n> Don\'t create more than one client in the same application. Each client has a connection pool and\n> thread pools, which are more efficient to share between requests.\n\n### Modifying configuration\n\nTo temporarily use a modified client configuration, while reusing the same connection and thread       pools, call `withOptions()` on any client or service:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\n\nval clientWithOptions: LightsparkGridClient = client.withOptions {\n    it.baseUrl("https://example.com")\n    it.maxRetries(42)\n}\n```\n\nThe `withOptions()` method does not affect the original client or service.\n\n## Requests and responses\n\nTo send a request to the Lightspark Grid API, build an instance of some `Params` class and pass it to the     corresponding client method. When the response is received, it will be deserialized into an instance of     a Kotlin class.\n\nFor example, `client.quotes().create(...)` should be called with an instance of `QuoteCreateParams`, and it     will return an instance of `Quote`.\n\n## Immutability\n\nEach class in the SDK has an associated   [builder](https://blogs.oracle.com/javamagazine/post/exploring-joshua-blochs-builder-design-pattern-in-java)   or factory method for constructing it.\n\nEach class is [immutable](https://docs.oracle.com/javase/tutorial/essential/concurrency/immutable.html)   once constructed. If the class has an associated builder, then it has a `toBuilder()` method, which can   be used to convert it back to a builder for making a modified copy.\n\nBecause each class is immutable, builder modification will _never_ affect already built class instances.\n\n## Asynchronous execution\n\nThe default client is synchronous. To switch to asynchronous execution, call the `async()` method:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\n// Configures using the `lightsparkgrid.gridClientId`, `lightsparkgrid.gridClientSecret`, `lightsparkgrid.gridAgentAccessToken`, `lightsparkgrid.gridWebhookPubkey` and `lightsparkgrid.baseUrl` system properties\n// Or configures using the `GRID_CLIENT_ID`, `GRID_CLIENT_SECRET`, `GRID_AGENT_ACCESS_TOKEN`, `GRID_WEBHOOK_PUBKEY` and `LIGHTSPARK_GRID_BASE_URL` environment variables\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .destination(QuoteDestinationOneOf.AccountDestination.builder()\n        .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .build())\n    .lockedCurrencyAmount(10000L)\n    .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n    .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n        .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n        .build())\n    .build()\nval quote: Quote = client.async().quotes().create(params)\n```\n\nOr create an asynchronous client from the beginning:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClientAsync\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClientAsync\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\n// Configures using the `lightsparkgrid.gridClientId`, `lightsparkgrid.gridClientSecret`, `lightsparkgrid.gridAgentAccessToken`, `lightsparkgrid.gridWebhookPubkey` and `lightsparkgrid.baseUrl` system properties\n// Or configures using the `GRID_CLIENT_ID`, `GRID_CLIENT_SECRET`, `GRID_AGENT_ACCESS_TOKEN`, `GRID_WEBHOOK_PUBKEY` and `LIGHTSPARK_GRID_BASE_URL` environment variables\nval client: LightsparkGridClientAsync = LightsparkGridOkHttpClientAsync.fromEnv()\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .destination(QuoteDestinationOneOf.AccountDestination.builder()\n        .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .build())\n    .lockedCurrencyAmount(10000L)\n    .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n    .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n        .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n        .build())\n    .build()\nval quote: Quote = client.quotes().create(params)\n```\n\nThe asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).\n\n\n\n## File uploads\n\nThe SDK defines methods that accept files.\n\nTo upload a file, pass a [`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html):\n\n```kotlin\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvParams\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvResponse\nimport java.nio.file.Paths\n\nval params: BulkUploadCsvParams = BulkUploadCsvParams.builder()\n    .file(Paths.get("/path/to/file"))\n    .build()\nval response: BulkUploadCsvResponse = client.customers().bulk().uploadCsv(params)\n```\n\nOr an arbitrary [`InputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/InputStream.html):\n\n```kotlin\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvParams\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvResponse\nimport java.net.URL\n\nval params: BulkUploadCsvParams = BulkUploadCsvParams.builder()\n    .file(URL("https://example.com//path/to/file").openStream())\n    .build()\nval response: BulkUploadCsvResponse = client.customers().bulk().uploadCsv(params)\n```\n\nOr a `ByteArray`:\n\n```kotlin\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvParams\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvResponse\n\nval params: BulkUploadCsvParams = BulkUploadCsvParams.builder()\n    .file("content".toByteArray())\n    .build()\nval response: BulkUploadCsvResponse = client.customers().bulk().uploadCsv(params)\n```\n\nNote that when passing a non-`Path` its filename is unknown so it will not be included in the request.     To manually set a filename, pass a [`MultipartField`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/core/Values.kt):\n\n```kotlin\nimport com.lightspark.grid.core.MultipartField\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvParams\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvResponse\nimport java.io.InputStream\nimport java.net.URL\n\nval params: BulkUploadCsvParams = BulkUploadCsvParams.builder()\n    .file(MultipartField.builder<InputStream>()\n        .value(URL("https://example.com//path/to/file").openStream())\n        .filename("/path/to/file")\n        .build())\n    .build()\nval response: BulkUploadCsvResponse = client.customers().bulk().uploadCsv(params)\n```\n\n\n\n## Raw responses\n\nThe SDK defines methods that deserialize responses into instances of Kotlin classes.       However, these methods don\'t provide access to the response headers, status code, or the raw response       body.\n\nTo access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:\n\n```kotlin\nimport com.lightspark.grid.core.http.Headers\nimport com.lightspark.grid.core.http.HttpResponseFor\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .destination(QuoteDestinationOneOf.AccountDestination.builder()\n        .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .build())\n    .lockedCurrencyAmount(10000L)\n    .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n    .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n        .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n        .build())\n    .build()\nval quote: HttpResponseFor<Quote> = client.quotes().withRawResponse().create(params)\n\nval statusCode: Int = quote.statusCode()\nval headers: Headers = quote.headers()\n```\n\nYou can still deserialize the response into an instance of a Kotlin class if needed:\n\n```kotlin\nimport com.lightspark.grid.models.quotes.Quote\n\nval parsedQuote: Quote = quote.parse()\n```\n\n## Error handling\n\nThe SDK throws custom unchecked exception types:\n\n- [`LightsparkGridServiceException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/LightsparkGridServiceException.kt): Base class for HTTP errors. See this table for which exception       subclass is thrown for each HTTP status code:\n\n  | Status | Exception                                          |\n  | ------ | -------------------------------------------------- |\n  | 400    | [`BadRequestException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/BadRequestException.kt)           |\n  | 401    | [`UnauthorizedException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/UnauthorizedException.kt)         |\n  | 403    | [`PermissionDeniedException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/PermissionDeniedException.kt)     |\n  | 404    | [`NotFoundException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/NotFoundException.kt)             |\n  | 422    | [`UnprocessableEntityException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/UnprocessableEntityException.kt)  |\n  | 429    | [`RateLimitException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/RateLimitException.kt)            |\n  | 5xx    | [`InternalServerException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/InternalServerException.kt)       |\n  | others | [`UnexpectedStatusCodeException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/UnexpectedStatusCodeException.kt) |\n\n- [`LightsparkGridIoException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/LightsparkGridIoException.kt): I/O networking errors.\n\n- [`LightsparkGridRetryableException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/LightsparkGridRetryableException.kt): Generic error indicating a failure that could be retried by the client.\n\n- [`LightsparkGridInvalidDataException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/LightsparkGridInvalidDataException.kt): Failure to interpret successfully parsed data. For example,       when accessing a property that\'s supposed to be required, but the API unexpectedly omitted it from the       response.\n\n- [`LightsparkGridException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/LightsparkGridException.kt): Base class for all exceptions. Most errors will result in one of the       previously mentioned ones, but completely generic errors may be thrown using the base class.\n\n## Pagination\n\nThe SDK defines methods that return a paginated lists of results. It provides convenient ways to access     the results either one page at a time or item-by-item across all pages.\n\n### Auto-pagination\n\nTo iterate through all results across all pages, use the `autoPager()` method, which automatically     fetches more pages as needed.\n\nWhen using the synchronous client, the method returns a [`Sequence`](https://kotlinlang.org/docs/sequences.html)\n\n```kotlin\nimport com.lightspark.grid.models.customers.CustomerListPage\n\nval page: CustomerListPage = client.customers().list()\npage.autoPager()\n    .take(50)\n    .forEach { customer -> println(customer) }\n```\n\nWhen using the asynchronous client, the method returns a [`Flow`](https://kotlinlang.org/docs/flow.html):\n\n```kotlin\nimport com.lightspark.grid.models.customers.CustomerListPageAsync\n\nval page: CustomerListPageAsync = client.async().customers().list()\npage.autoPager()\n    .take(50)\n    .forEach { customer -> println(customer) }\n```\n\n### Manual pagination\n\nTo access individual page items and manually request the next page, use the `items()`,\n`hasNextPage()`, and `nextPage()` methods:\n\n```kotlin\nimport com.lightspark.grid.models.customers.CustomerListPage\nimport com.lightspark.grid.models.customers.CustomerOneOf\n\nval page: CustomerListPage = client.customers().list()\nwhile (true) {\n    for (customer in page.items()) {\n        println(customer)\n    }\n\n    if (!page.hasNextPage()) {\n        break\n    }\n\n    page = page.nextPage()\n}\n```\n\n## Logging\n\nEnable logging by setting the `LIGHTSPARK_GRID_LOG` environment variable to   `info`:\n\n```sh\nexport LIGHTSPARK_GRID_LOG=info\n```\n\nOr to `debug` for more verbose logging:\n\n```sh\nexport LIGHTSPARK_GRID_LOG=debug\n```\n\nOr configure the client manually using the `logLevel` method:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.core.LogLevel\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    .logLevel(LogLevel.INFO)\n    .build()\n```\n\n## ProGuard and R8\n\nAlthough the SDK uses reflection, it is still usable with     [ProGuard](https://github.com/Guardsquare/proguard) and     [R8](https://developer.android.com/topic/performance/app-optimization/enable-app-optimization) because     `lightspark-grid-kotlin-core` is published with a     [configuration file](lightspark-grid-kotlin-core/src/main/resources/META-INF/proguard/lightspark-grid-kotlin-core.pro) containing     [keep rules](https://www.guardsquare.com/manual/configuration/usage).\n\nProGuard and R8 should automatically detect and use the published rules, but you can also manually copy     the keep rules if necessary.\n\n\n\n\n\n## Jackson\n\nThe SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON     serialization/deserialization. It is compatible with version 2.13.4 or higher,     but depends on version 2.18.2 by default.\n\nThe SDK throws an exception if it detects an incompatible Jackson version at runtime (e.g. if the     default version was overridden in your Maven or Gradle config).\n\nIf the SDK threw an exception, but you\'re _certain_ the version is compatible, then disable the version     check using the `checkJacksonVersionCompatibility` on [`LightsparkGridOkHttpClient`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClient.kt) or     [`LightsparkGridOkHttpClientAsync`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClientAsync.kt).\n\n> [!CAUTION]\n> We make no guarantee that the SDK works correctly when the Jackson version check is disabled.\n\nAlso note that there are bugs in older Jackson versions that can affect the SDK. We don\'t work around all     Jackson bugs ([example](https://github.com/FasterXML/jackson-databind/issues/3240)) and expect users to     upgrade Jackson for those instead.\n\n## Network options\n\n### Retries\n\nThe SDK automatically retries 2 times by default, with a short exponential backoff between requests.\n\nOnly the following error types are retried:\n- Connection errors (for example, due to a network connectivity problem)\n- 408 Request Timeout\n- 409 Conflict\n- 429 Rate Limit\n- 5xx Internal\n\nThe API may also explicitly instruct the SDK to retry or not retry a request.\n\nTo set a custom number of retries, configure the client using the `maxRetries` method:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    .maxRetries(4)\n    .build()\n```\n\n### Timeouts\n\nRequests time out after 1 minute by default.\n\nTo set a custom timeout, configure the method call using the `timeout` method:\n\n```kotlin\nimport com.lightspark.grid.models.quotes.Quote\n\nval quote: Quote = client.quotes().create(\n  params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()\n)\n```\n\nOr configure the default for all method calls at the client level:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport java.time.Duration\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    .timeout(Duration.ofSeconds(30))\n    .build()\n```\n\n### Proxies\n\nTo route requests through a proxy, configure the client using the `proxy` method:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport java.net.InetSocketAddress\nimport java.net.Proxy\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    .proxy(Proxy(\n      Proxy.Type.HTTP, InetSocketAddress(\n        "https://example.com", 8080\n      )\n    ))\n    .build()\n```\n\nIf the proxy responds with `407 Proxy Authentication Required`, supply credentials by also   configuring `proxyAuthenticator`:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.core.http.ProxyAuthenticator\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    .proxy(...)\n    // Or a custom implementation of `ProxyAuthenticator`.\n    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))\n    .build()\n```\n\n### Connection pooling\n\nTo customize the underlying OkHttp connection pool, configure the client using the   `maxIdleConnections` and `keepAliveDuration` methods:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport java.time.Duration\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.\n    .maxIdleConnections(10)\n    .keepAliveDuration(Duration.ofMinutes(2))\n    .build()\n```\n\nIf both options are unset, OkHttp\'s default connection pool settings are used.\n\n### HTTPS\n\n> [!NOTE]\n> Most applications should not call these methods, and instead use the system defaults. The defaults include\n> special optimizations that can be lost if the implementations are modified.\n\nTo configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`,   `trustManager`, and `hostnameVerifier` methods:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    // If `sslSocketFactory` is set, then `trustManager` must be set, and vice versa.\n    .sslSocketFactory(yourSSLSocketFactory)\n    .trustManager(yourTrustManager)\n    .hostnameVerifier(yourHostnameVerifier)\n    .build()\n```\n\n\n\n### Custom HTTP client\n\nThe SDK consists of three artifacts:\n- `lightspark-grid-kotlin-core`\n  - Contains core SDK logic\n  - Does not depend on [OkHttp](https://square.github.io/okhttp)\n  - Exposes [`LightsparkGridClient`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClient.kt), [`LightsparkGridClientAsync`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientAsync.kt),             [`LightsparkGridClientImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientImpl.kt), and [`LightsparkGridClientAsyncImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientAsyncImpl.kt), all of which can             work with any HTTP client\n- `lightspark-grid-kotlin-client-okhttp`\n  - Depends on [OkHttp](https://square.github.io/okhttp)\n  - Exposes [`LightsparkGridOkHttpClient`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClient.kt) and [`LightsparkGridOkHttpClientAsync`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClientAsync.kt), which             provide a way to construct [`LightsparkGridClientImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientImpl.kt) and             [`LightsparkGridClientAsyncImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientAsyncImpl.kt), respectively, using OkHttp\n- `lightspark-grid-kotlin`\n  - Depends on and exposes the APIs of both `lightspark-grid-kotlin-core` and `lightspark-grid-kotlin-client-okhttp`\n  - Does not have its own logic\n\nThis structure allows replacing the SDK\'s default HTTP client without pulling in unnecessary dependencies.\n\n#### Customized [`OkHttpClient`](https://square.github.io/okhttp/3.x/okhttp/okhttp3/OkHttpClient.html)\n\n> [!TIP]\n> Try the available [network options](#network-options) before replacing the default client.\n\nTo use a customized `OkHttpClient`:\n\n1. Replace your [`lightspark-grid-kotlin` dependency](#installation) with `lightspark-grid-kotlin-core`\n2. Copy `lightspark-grid-kotlin-client-okhttp`\'s [`OkHttpClient`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/OkHttpClient.kt) class into your code and        customize it\n3. Construct [`LightsparkGridClientImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientImpl.kt) or [`LightsparkGridClientAsyncImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientAsyncImpl.kt), similarly to        [`LightsparkGridOkHttpClient`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClient.kt) or [`LightsparkGridOkHttpClientAsync`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClientAsync.kt), using your        customized client\n\n### Completely custom HTTP client\n\nTo use a completely custom HTTP client:\n\n1. Replace your [`lightspark-grid-kotlin` dependency](#installation) with `lightspark-grid-kotlin-core`\n2. Write a class that implements the [`HttpClient`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/core/http/HttpClient.kt) interface\n3. Construct [`LightsparkGridClientImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientImpl.kt) or [`LightsparkGridClientAsyncImpl`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/client/LightsparkGridClientAsyncImpl.kt), similarly to        [`LightsparkGridOkHttpClient`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClient.kt) or [`LightsparkGridOkHttpClientAsync`](lightspark-grid-kotlin-client-okhttp/src/main/kotlin/com/lightspark/grid/client/okhttp/LightsparkGridOkHttpClientAsync.kt), using your new        client class\n\n## Undocumented API functionality\n\nThe SDK is typed for convenient usage of the documented API. However, it also supports working with undocumented or not yet supported parts of the API.\n\n### Parameters\n\nTo set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or       `putAdditionalBodyProperty` methods on any `Params` class:\n\n```kotlin\nimport com.lightspark.grid.core.JsonValue\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .putAdditionalHeader("Secret-Header", "42")\n    .putAdditionalQueryParam("secret_query_param", "42")\n    .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))\n    .build()\n```\n\nThese can be accessed on the built object later using the `_additionalHeaders()`,       `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.\n\nTo set undocumented parameters on _nested_ headers, query params, or body classes, call the         `putAdditionalProperty` method on the nested class:\n\n```kotlin\nimport com.lightspark.grid.core.JsonValue\nimport com.lightspark.grid.models.transferin.InternalAccountReference\nimport com.lightspark.grid.models.transferin.TransferInCreateParams\n\nval params: TransferInCreateParams = TransferInCreateParams.builder()\n    .destination(InternalAccountReference.builder()\n        .putAdditionalProperty("secretProperty", JsonValue.from("42"))\n        .build())\n    .build()\n```\n\nThese properties can be accessed on the nested built object later using the         `_additionalProperties()` method.\n\nTo set a documented parameter or property to an undocumented or not yet supported _value_, pass a       [`JsonValue`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/core/Values.kt) object to its setter:\n\n```kotlin\nimport com.lightspark.grid.core.JsonValue\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .destination(JsonValue.from(42))\n    .lockedCurrencyAmount(10000L)\n    .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n    .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n        .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n        .build())\n    .build()\n```\n\nThe most straightforward way to create a [`JsonValue`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/core/Values.kt) is using its       `from(...)` method:\n\n```kotlin\nimport com.lightspark.grid.core.JsonValue\n\n// Create primitive JSON values\nval nullValue: JsonValue = JsonValue.from(null)\nval booleanValue: JsonValue = JsonValue.from(true)\nval numberValue: JsonValue = JsonValue.from(42)\nval stringValue: JsonValue = JsonValue.from("Hello World!")\n\n// Create a JSON array value equivalent to `["Hello", "World"]`\nval arrayValue: JsonValue = JsonValue.from(listOf(\n  "Hello", "World"\n))\n\n// Create a JSON object value equivalent to `{ "a": 1, "b": 2 }`\nval objectValue: JsonValue = JsonValue.from(mapOf(\n  "a" to 1, "b" to 2\n))\n\n// Create an arbitrarily nested JSON equivalent to:\n// {\n//   "a": [1, 2],\n//   "b": [3, 4]\n// }\nval complexValue: JsonValue = JsonValue.from(mapOf(\n  "a" to listOf(\n    1, 2\n  ), "b" to listOf(\n    3, 4\n  )\n))\n```\n\nNormally a `Builder` class\'s `build` method will throw         [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html)         if any required parameter or property is unset.\n\nTo forcibly omit a required parameter or property, pass [`JsonMissing`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/core/Values.kt):\n\n```kotlin\nimport com.lightspark.grid.core.JsonMissing\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nval params: QuoteCreateParams = QuoteCreateParams.builder()\n    .lockedCurrencyAmount(10000L)\n    .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n    .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n        .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n        .build())\n    .destination(JsonMissing.of())\n    .build()\n```\n\n### Response properties\n\nTo access undocumented response properties, call the `_additionalProperties()` method:\n\n```kotlin\nimport com.lightspark.grid.core.JsonBoolean\nimport com.lightspark.grid.core.JsonNull\nimport com.lightspark.grid.core.JsonNumber\nimport com.lightspark.grid.core.JsonValue\n\nval additionalProperties: Map<String, JsonValue> = client.quotes().create(params)._additionalProperties()\nval secretPropertyValue: JsonValue = additionalProperties.get("secretProperty")\n\nval result = when (secretPropertyValue) {\n    is JsonNull -> "It\'s null!"\n    is JsonBoolean -> "It\'s a boolean!"\n    is JsonNumber -> "It\'s a number!"\n    // Other types include `JsonMissing`, `JsonString`, `JsonArray`, and `JsonObject`\n    else -> "It\'s something else!"\n}\n```\n\nTo access a property\'s raw JSON value, which may be undocumented, call its `_` prefixed method:\n\n```kotlin\nimport com.lightspark.grid.core.JsonField\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\n\nval destination: JsonField<QuoteDestinationOneOf> = client.quotes().create(params)._destination()\n\nif (destination.isMissing()) {\n  // The property is absent from the JSON response\n} else if (destination.isNull()) {\n  // The property was set to literal null\n} else {\n  // Check if value was provided as a string\n  // Other methods include `asNumber()`, `asBoolean()`, etc.\n  val jsonString: String? = destination.asString();\n\n  // Try to deserialize into a custom type\n  val myObject: MyClass = destination.asUnknown()!!.convert(MyClass::class.java)\n}\n```\n\n### Response validation\n\nIn rare cases, the API may return a response that doesn\'t match the expected type. For example, the SDK     may expect a property to contain a `String`, but the API could return something else.\n\nBy default, the SDK will not throw an exception in this case. It will throw     [`LightsparkGridInvalidDataException`](lightspark-grid-kotlin-core/src/main/kotlin/com/lightspark/grid/errors/LightsparkGridInvalidDataException.kt) only if you directly access the property.\n\nValidating the response is _not_ forwards compatible with new types from the API for existing fields.\n\nIf you would still prefer to check that the response is completely well-typed upfront, then either call     `validate()`:\n\n```kotlin\nimport com.lightspark.grid.models.quotes.Quote\n\nval quote: Quote = client.quotes().create(params).validate()\n```\n\nOr configure the method call to validate the response using the `responseValidation` method:\n\n```kotlin\nimport com.lightspark.grid.models.quotes.Quote\n\nval quote: Quote = client.quotes().create(\n  params, RequestOptions.builder().responseValidation(true).build()\n)\n```\n\nOr configure the default for all method calls at the client level:\n\n```kotlin\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\n\nval client: LightsparkGridClient = LightsparkGridOkHttpClient.builder()\n    .fromEnv()\n    .responseValidation(true)\n    .build()\n```\n\n## FAQ\n\n### Why don\'t you use plain `enum` classes?\n\nKotlin `enum` classes are not trivially   [forwards compatible](https://www.stainless.com/blog/making-java-enums-forwards-compatible). Using them in   the SDK could cause runtime exceptions if the API is updated to respond with a new enum value.\n\n### Why do you represent fields using `JsonField<T>` instead of just plain `T`?\n\nUsing `JsonField<T>` enables a few features:\n\n- Allowing usage of [undocumented API functionality](#undocumented-api-functionality)\n- Lazily [validating the API response against the expected shape](#response-validation)\n- Representing absent vs explicitly null values\n\n### Why don\'t you use [`data` classes](https://kotlinlang.org/docs/data-classes.html)?\n\nIt is not [backwards compatible to add new fields to a data class](https://kotlinlang.org/docs/api-guidelines-backward-compatibility.html#avoid-using-data-classes-in-your-api)   and we don\'t want to introduce a breaking change every time we add a field to a class.\n\n### Why don\'t you use checked exceptions?\n\nChecked exceptions are widely considered a mistake in the Java programming language. In fact, they were   omitted from Kotlin for this reason.\n\nChecked exceptions:\n\n- Are verbose to handle\n- Encourage error handling at the wrong level of abstraction, where nothing can be done about the error\n- Are tedious to propagate due to the [function coloring problem](https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function)\n- Don\'t play well with lambdas (also due to the function coloring problem)\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/lightsparkdev/grid-kotlin-sdk/issues) with questions, bugs, or suggestions.\n',
+  },
+  {
+    language: 'php',
+    content:
+      "# Lightspark Grid PHP API Library\n\nThe Lightspark Grid PHP library provides convenient access to the Lightspark Grid REST API from any PHP 8.1.0+ application.\n\n## Installation\n\nTo use this package, install via Composer by adding the following to your application's `composer.json`:\n\n```json\n{\n  \"repositories\": [\n    {\n      \"type\": \"vcs\",\n      \"url\": \"git@github.com:stainless-sdks/grid-php.git\"\n    }\n  ],\n  \"require\": {\n    \"org-placeholder/grid\": \"dev-main\"\n  }\n}\n```\n\n## Usage\n\n```php\n<?php\n\n$client = new Client(\n  username: getenv('GRID_CLIENT_ID') ?: 'My Username',\n  password: getenv('GRID_CLIENT_SECRET') ?: 'My Password',\n);\n\n$quote = $client->quotes->create(\n  destination: [\n    'destinationType' => 'ACCOUNT',\n    'accountID' => 'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n  ],\n  lockedCurrencyAmount: 10000,\n  lockedCurrencySide: 'SENDING',\n  source: [\n    'sourceType' => 'ACCOUNT',\n    'accountID' => 'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  ],\n);\n\nvar_dump($quote->id);\n```",
   },
   {
     language: 'python',
