@@ -78,6 +78,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.config.ConfigRetrieveParams\nimport com.lightspark.grid.models.config.PlatformConfig\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val platformConfig: PlatformConfig = client.config().retrieve()\n}',
       },
+      ruby: {
+        method: 'config.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.retrieve\n\nputs(platform_config)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -117,6 +122,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.config.ConfigUpdateParams\nimport com.lightspark.grid.models.config.PlatformConfig\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val platformConfig: PlatformConfig = client.config().update()\n}',
       },
+      ruby: {
+        method: 'config.update',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.update\n\nputs(platform_config)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "supportedCurrencies": [\n            {\n              "currencyCode": "USD",\n              "enabledTransactionTypes": [\n                "OUTGOING",\n                "INCOMING"\n              ],\n              "maxAmount": 1000000,\n              "minAmount": 100,\n              "requiredCounterpartyFields": [\n                {\n                  "mandatory": true,\n                  "name": "FULL_NAME"\n                },\n                {\n                  "mandatory": true,\n                  "name": "NATIONALITY"\n                },\n                {\n                  "mandatory": true,\n                  "name": "BIRTH_DATE"\n                }\n              ]\n            }\n          ],\n          "umaDomain": "mycompany.com",\n          "webhookEndpoint": "https://api.mycompany.com/webhooks/uma"\n        }\'',
@@ -154,6 +164,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().create',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerCreateParams\nimport com.lightspark.grid.models.customers.CustomerOneOf\nimport com.lightspark.grid.models.customers.IndividualCustomerFields\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CustomerCreateParams.CreateCustomerRequest.Individual = CustomerCreateParams.CreateCustomerRequest.Individual.builder()\n        .customerType(IndividualCustomerFields.CustomerType.INDIVIDUAL)\n        .build()\n    val customerOneOf: CustomerOneOf = client.customers().create(params)\n}',
+      },
+      ruby: {
+        method: 'customers.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.create(create_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
       },
       http: {
         example:
@@ -204,6 +219,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerListPage\nimport com.lightspark.grid.models.customers.CustomerListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: CustomerListPage = client.customers().list()\n}',
       },
+      ruby: {
+        method: 'customers.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -238,6 +258,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerOneOf\nimport com.lightspark.grid.models.customers.CustomerRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val customerOneOf: CustomerOneOf = client.customers().retrieve("customerId")\n}',
+      },
+      ruby: {
+        method: 'customers.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.retrieve("customerId")\n\nputs(customer_one_of)',
       },
       http: {
         example:
@@ -280,6 +305,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerOneOf\nimport com.lightspark.grid.models.customers.CustomerUpdateParams\nimport com.lightspark.grid.models.customers.IndividualCustomerFields\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CustomerUpdateParams = CustomerUpdateParams.builder()\n        .customerId("customerId")\n        .updateCustomerRequest(CustomerUpdateParams.UpdateCustomerRequest.Individual.builder()\n            .customerType(IndividualCustomerFields.CustomerType.INDIVIDUAL)\n            .build())\n        .build()\n    val customerOneOf: CustomerOneOf = client.customers().update(params)\n}',
       },
+      ruby: {
+        method: 'customers.update',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.update("customerId", update_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/$CUSTOMER_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "currencies": [\n            "USD",\n            "EUR",\n            "USDC"\n          ],\n          "email": "john.doe@example.com",\n          "umaAddress": "$john.doe@uma.domain.com",\n          "customerType": "INDIVIDUAL",\n          "address": {\n            "country": "US",\n            "line1": "456 Market St",\n            "postalCode": "94103",\n            "city": "San Francisco",\n            "line2": "Apt 4B",\n            "state": "CA"\n          },\n          "birthDate": "1985-06-15",\n          "fullName": "John Smith",\n          "kycStatus": "APPROVED",\n          "nationality": "US"\n        }\'',
@@ -314,6 +344,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerDeleteParams\nimport com.lightspark.grid.models.customers.CustomerOneOf\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val customerOneOf: CustomerOneOf = client.customers().delete("customerId")\n}',
+      },
+      ruby: {
+        method: 'customers.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.delete("customerId")\n\nputs(customer_one_of)',
       },
       http: {
         example:
@@ -357,6 +392,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerListInternalAccountsPage\nimport com.lightspark.grid.models.customers.CustomerListInternalAccountsParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: CustomerListInternalAccountsPage = client.customers().listInternalAccounts()\n}',
       },
+      ruby: {
+        method: 'customers.list_internal_accounts',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list_internal_accounts\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/internal-accounts \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -396,6 +436,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().export',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerExportParams\nimport com.lightspark.grid.models.customers.InternalAccountExportRequest\nimport com.lightspark.grid.models.customers.InternalAccountExportResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CustomerExportParams = CustomerExportParams.builder()\n        .id("id")\n        .internalAccountExportRequest(InternalAccountExportRequest.builder()\n            .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n            .build())\n        .build()\n    val internalAccountExportResponse: InternalAccountExportResponse = client.customers().export(params)\n}',
+      },
+      ruby: {
+        method: 'customers.export',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account_export_response = lightspark_grid.customers.export(\n  "id",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(internal_account_export_response)',
       },
       http: {
         example:
@@ -438,6 +483,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerUpdateInternalAccountParams\nimport com.lightspark.grid.models.sandbox.internalaccounts.InternalAccount\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val internalAccount: InternalAccount = client.customers().updateInternalAccount("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n}',
       },
+      ruby: {
+        method: 'customers.update_internal_account',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.customers.update_internal_account("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n\nputs(internal_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/internal-accounts/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "privateEnabled": true\n        }\'',
@@ -472,6 +522,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().generateKycLink',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerGenerateKycLinkParams\nimport com.lightspark.grid.models.customers.CustomerGenerateKycLinkResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: CustomerGenerateKycLinkResponse = client.customers().generateKycLink("customerId")\n}',
+      },
+      ruby: {
+        method: 'customers.generate_kyc_link',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.generate_kyc_link("customerId")\n\nputs(response)',
       },
       http: {
         example:
@@ -508,6 +563,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().externalAccounts().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountListPage\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ExternalAccountListPage = client.customers().externalAccounts().list()\n}',
+      },
+      ruby: {
+        method: 'customers.external_accounts.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.external_accounts.list\n\nputs(page)',
       },
       http: {
         example:
@@ -550,6 +610,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.UsdExternalAccountCreateInfo\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountCreate\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ExternalAccountCreate = ExternalAccountCreate.builder()\n        .accountInfo(UsdExternalAccountCreateInfo.builder()\n            .accountNumber("12345678901")\n            .accountType(UsdExternalAccountCreateInfo.AccountType.USD_ACCOUNT)\n            .individualBeneficiary("John Doe")\n            .routingNumber("123456789")\n            .build())\n        .currency("USD")\n        .build()\n    val externalAccount: ExternalAccount = client.customers().externalAccounts().create(params)\n}',
       },
+      ruby: {
+        method: 'customers.external_accounts.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountInfo": {\n            "accountNumber": "12345678901",\n            "accountType": "USD_ACCOUNT",\n            "beneficiary": {\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "John Doe",\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105",\n                "city": "San Francisco",\n                "state": "CA"\n              },\n              "birthDate": "1990-01-15",\n              "nationality": "US"\n            },\n            "routingNumber": "123456789"\n          },\n          "currency": "USD",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -585,6 +650,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val externalAccount: ExternalAccount = client.customers().externalAccounts().retrieve("externalAccountId")\n}',
       },
+      ruby: {
+        method: 'customers.external_accounts.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -617,6 +687,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().externalAccounts().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.customers().externalAccounts().delete("externalAccountId")\n}',
+      },
+      ruby: {
+        method: 'customers.external_accounts.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.customers.external_accounts.delete("externalAccountId")\n\nputs(result)',
       },
       http: {
         example:
@@ -652,6 +727,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().bulk().uploadCsv',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvParams\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: BulkUploadCsvParams = BulkUploadCsvParams.builder()\n        .file("Example data".byteInputStream())\n        .build()\n    val response: BulkUploadCsvResponse = client.customers().bulk().uploadCsv(params)\n}',
+      },
+      ruby: {
+        method: 'customers.bulk.upload_csv',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.upload_csv(file: StringIO.new("Example data"))\n\nputs(response)',
       },
       http: {
         example:
@@ -689,6 +769,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.bulk.BulkGetJobStatusParams\nimport com.lightspark.grid.models.customers.bulk.BulkGetJobStatusResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: BulkGetJobStatusResponse = client.customers().bulk().getJobStatus("jobId")\n}',
       },
+      ruby: {
+        method: 'customers.bulk.get_job_status',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.get_job_status("jobId")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/bulk/jobs/$JOB_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -725,6 +810,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.platform.PlatformListInternalAccountsParams\nimport com.lightspark.grid.models.platform.PlatformListInternalAccountsResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: PlatformListInternalAccountsResponse = client.platform().listInternalAccounts()\n}',
       },
+      ruby: {
+        method: 'platform.list_internal_accounts',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.platform.list_internal_accounts\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/internal-accounts \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -760,6 +850,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform().externalAccounts().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountListPage\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ExternalAccountListPage = client.platform().externalAccounts().list()\n}',
+      },
+      ruby: {
+        method: 'platform.external_accounts.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.platform.external_accounts.list\n\nputs(page)',
       },
       http: {
         example:
@@ -800,6 +895,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.UsdExternalAccountCreateInfo\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ExternalAccountCreateParams = ExternalAccountCreateParams.builder()\n        .accountInfo(UsdExternalAccountCreateInfo.builder()\n            .accountNumber("12345678901")\n            .accountType(UsdExternalAccountCreateInfo.AccountType.USD_ACCOUNT)\n            .individualBeneficiary("John Doe")\n            .routingNumber("123456789")\n            .build())\n        .currency("USD")\n        .build()\n    val externalAccount: ExternalAccount = client.platform().externalAccounts().create(params)\n}',
       },
+      ruby: {
+        method: 'platform.external_accounts.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountInfo": {\n            "accountNumber": "12345678901",\n            "accountType": "USD_ACCOUNT",\n            "beneficiary": {\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "John Doe",\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105",\n                "city": "San Francisco",\n                "state": "CA"\n              },\n              "birthDate": "1990-01-15",\n              "nationality": "US"\n            },\n            "routingNumber": "123456789"\n          },\n          "currency": "USD",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -835,6 +935,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val externalAccount: ExternalAccount = client.platform().externalAccounts().retrieve("externalAccountId")\n}',
       },
+      ruby: {
+        method: 'platform.external_accounts.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -867,6 +972,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform().externalAccounts().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.platform().externalAccounts().delete("externalAccountId")\n}',
+      },
+      ruby: {
+        method: 'platform.external_accounts.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.platform.external_accounts.delete("externalAccountId")\n\nputs(result)',
       },
       http: {
         example:
@@ -909,6 +1019,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\nimport com.lightspark.grid.models.transferin.Transaction\nimport com.lightspark.grid.models.transferin.TransferInCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransferInCreateParams = TransferInCreateParams.builder()\n        .destination(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .source(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val transaction: Transaction = client.transferIn().create(params)\n}',
       },
+      ruby: {
+        method: 'transfer_in.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_in.create(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(transaction)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transfer-in \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "source": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "amount": 12550\n        }\'',
@@ -949,6 +1064,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\nimport com.lightspark.grid.models.transferin.Transaction\nimport com.lightspark.grid.models.transferout.TransferOutCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransferOutCreateParams = TransferOutCreateParams.builder()\n        .destination(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .source(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .build()\n    val transaction: Transaction = client.transferOut().create(params)\n}',
       },
+      ruby: {
+        method: 'transfer_out.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_out.create(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(transaction)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transfer-out \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "source": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "amount": 12550\n        }\'',
@@ -984,6 +1104,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver().lookupUma',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.receiver.ReceiverLookupUmaParams\nimport com.lightspark.grid.models.receiver.ReceiverLookupUmaResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: ReceiverLookupUmaResponse = client.receiver().lookupUma("receiverUmaAddress")\n}',
+      },
+      ruby: {
+        method: 'receiver.lookup_uma',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_uma("receiverUmaAddress")\n\nputs(response)',
       },
       http: {
         example:
@@ -1021,6 +1146,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.receiver.ReceiverLookupExternalAccountParams\nimport com.lightspark.grid.models.receiver.ReceiverLookupExternalAccountResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: ReceiverLookupExternalAccountResponse = client.receiver().lookupExternalAccount("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n}',
       },
+      ruby: {
+        method: 'receiver.lookup_external_account',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_external_account("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/receiver/external-account/$ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1056,6 +1186,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val quote: Quote = client.quotes().retrieve("quoteId")\n}',
+      },
+      ruby: {
+        method: 'quotes.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.retrieve("quoteId")\n\nputs(quote)',
       },
       http: {
         example:
@@ -1104,6 +1239,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: QuoteCreateParams = QuoteCreateParams.builder()\n        .destination(QuoteDestinationOneOf.AccountDestination.builder()\n            .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .lockedCurrencyAmount(10000L)\n        .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n        .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n            .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val quote: Quote = client.quotes().create(params)\n}',
       },
+      ruby: {
+        method: 'quotes.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 10000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 10000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Transfer between accounts, either internal or external.",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
@@ -1139,6 +1279,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes().execute',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteExecuteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val quote: Quote = client.quotes().execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n}',
+      },
+      ruby: {
+        method: 'quotes.execute',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(quote)',
       },
       http: {
         example:
@@ -1190,6 +1335,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.TransactionListPage\nimport com.lightspark.grid.models.transactions.TransactionListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: TransactionListPage = client.transactions().list()\n}',
       },
+      ruby: {
+        method: 'transactions.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.transactions.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1224,6 +1374,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.TransactionRetrieveParams\nimport com.lightspark.grid.models.transferin.Transaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val transaction: Transaction = client.transactions().retrieve("transactionId")\n}',
+      },
+      ruby: {
+        method: 'transactions.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transactions.retrieve("transactionId")\n\nputs(transaction)',
       },
       http: {
         example:
@@ -1261,6 +1416,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.IncomingTransaction\nimport com.lightspark.grid.models.transactions.TransactionApproveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val incomingTransaction: IncomingTransaction = client.transactions().approve("transactionId")\n}',
       },
+      ruby: {
+        method: 'transactions.approve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.approve("transactionId")\n\nputs(incoming_transaction)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/approve \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1297,6 +1457,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.IncomingTransaction\nimport com.lightspark.grid.models.transactions.TransactionRejectParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val incomingTransaction: IncomingTransaction = client.transactions().reject("transactionId")\n}',
       },
+      ruby: {
+        method: 'transactions.reject',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.reject("transactionId")\n\nputs(incoming_transaction)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1332,6 +1497,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationCreateParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: InvitationCreateParams = InvitationCreateParams.builder()\n        .inviterUma("\\$inviter@uma.domain")\n        .build()\n    val umaInvitation: UmaInvitation = client.invitations().create(params)\n}',
       },
+      ruby: {
+        method: 'invitations.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.create(inviter_uma: "$inviter@uma.domain")\n\nputs(uma_invitation)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "inviterUma": "$inviter@uma.domain",\n          "amountToSend": 12550,\n          "expiresAt": "2025-09-01T14:30:00Z",\n          "firstName": "Alice"\n        }\'',
@@ -1366,6 +1536,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationRetrieveParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val umaInvitation: UmaInvitation = client.invitations().retrieve("invitationCode")\n}',
+      },
+      ruby: {
+        method: 'invitations.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.retrieve("invitationCode")\n\nputs(uma_invitation)',
       },
       http: {
         example:
@@ -1403,6 +1578,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationClaimParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: InvitationClaimParams = InvitationClaimParams.builder()\n        .invitationCode("invitationCode")\n        .inviteeUma("\\$invitee@uma.domain")\n        .build()\n    val umaInvitation: UmaInvitation = client.invitations().claim(params)\n}',
       },
+      ruby: {
+        method: 'invitations.claim',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.claim("invitationCode", invitee_uma: "$invitee@uma.domain")\n\nputs(uma_invitation)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations/$INVITATION_CODE/claim \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "inviteeUma": "$invitee@uma.domain"\n        }\'',
@@ -1439,6 +1619,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationCancelParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val umaInvitation: UmaInvitation = client.invitations().cancel("invitationCode")\n}',
       },
+      ruby: {
+        method: 'invitations.cancel',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.cancel("invitationCode")\n\nputs(uma_invitation)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations/$INVITATION_CODE/cancel \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1474,6 +1659,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox().sendFunds',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.SandboxSendFundsParams\nimport com.lightspark.grid.models.transactions.OutgoingTransaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SandboxSendFundsParams = SandboxSendFundsParams.builder()\n        .currencyCode("USD")\n        .quoteId("Quote:019542f5-b3e7-1d02-0000-000000000006")\n        .build()\n    val outgoingTransaction: OutgoingTransaction = client.sandbox().sendFunds(params)\n}',
+      },
+      ruby: {
+        method: 'sandbox.send_funds',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\noutgoing_transaction = lightspark_grid.sandbox.send_funds(\n  currency_code: "USD",\n  quote_id: "Quote:019542f5-b3e7-1d02-0000-000000000006"\n)\n\nputs(outgoing_transaction)',
       },
       http: {
         example:
@@ -1517,6 +1707,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.uma.UmaReceivePaymentParams\nimport com.lightspark.grid.models.transactions.IncomingTransaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: UmaReceivePaymentParams = UmaReceivePaymentParams.builder()\n        .receivingCurrencyAmount(1000L)\n        .receivingCurrencyCode("USD")\n        .senderUmaAddress("\\$success.usd@sandbox.grid.uma.money")\n        .build()\n    val incomingTransaction: IncomingTransaction = client.sandbox().uma().receivePayment(params)\n}',
       },
+      ruby: {
+        method: 'sandbox.uma.receive_payment',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.sandbox.uma.receive_payment(\n  receiving_currency_amount: 1000,\n  receiving_currency_code: "USD",\n  sender_uma_address: "$success.usd@sandbox.grid.uma.money"\n)\n\nputs(incoming_transaction)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/uma/receive \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "receivingCurrencyAmount": 1000,\n          "receivingCurrencyCode": "USD",\n          "senderUmaAddress": "$success.usd@sandbox.grid.uma.money",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "receiverUmaAddress": "$receiver@uma.domain"\n        }\'',
@@ -1553,6 +1748,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.internalaccounts.InternalAccount\nimport com.lightspark.grid.models.sandbox.internalaccounts.InternalAccountFundParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: InternalAccountFundParams = InternalAccountFundParams.builder()\n        .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .amount(100000L)\n        .build()\n    val internalAccount: InternalAccount = client.sandbox().internalAccounts().fund(params)\n}',
       },
+      ruby: {
+        method: 'sandbox.internal_accounts.fund',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.sandbox.internal_accounts.fund(\n  "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n  amount: 100000\n)\n\nputs(internal_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/internal-accounts/$ACCOUNT_ID/fund \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 100000\n        }\'',
@@ -1585,6 +1785,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox().webhooks().sendTest',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.webhooks.WebhookSendTestParams\nimport com.lightspark.grid.models.sandbox.webhooks.WebhookSendTestResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: WebhookSendTestResponse = client.sandbox().webhooks().sendTest()\n}',
+      },
+      ruby: {
+        method: 'sandbox.webhooks.send_test',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.webhooks.send_test\n\nputs(response)',
       },
       http: {
         example:
@@ -1629,6 +1834,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.umaproviders.UmaProviderListPage\nimport com.lightspark.grid.models.umaproviders.UmaProviderListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: UmaProviderListPage = client.umaProviders().list()\n}',
       },
+      ruby: {
+        method: 'uma_providers.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.uma_providers.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/uma-providers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1663,6 +1873,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens().create',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.ApiToken\nimport com.lightspark.grid.models.tokens.Permission\nimport com.lightspark.grid.models.tokens.TokenCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TokenCreateParams = TokenCreateParams.builder()\n        .name("Sandbox read-only")\n        .addPermission(Permission.VIEW)\n        .build()\n    val apiToken: ApiToken = client.tokens().create(params)\n}',
+      },
+      ruby: {
+        method: 'tokens.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.create(name: "Sandbox read-only", permissions: [:VIEW])\n\nputs(api_token)',
       },
       http: {
         example:
@@ -1708,6 +1923,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.TokenListPage\nimport com.lightspark.grid.models.tokens.TokenListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: TokenListPage = client.tokens().list()\n}',
       },
+      ruby: {
+        method: 'tokens.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.tokens.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/tokens \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1743,6 +1963,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.ApiToken\nimport com.lightspark.grid.models.tokens.TokenRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val apiToken: ApiToken = client.tokens().retrieve("tokenId")\n}',
       },
+      ruby: {
+        method: 'tokens.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.retrieve("tokenId")\n\nputs(api_token)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/tokens/$TOKEN_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1775,6 +2000,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.TokenDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.tokens().delete("tokenId")\n}',
+      },
+      ruby: {
+        method: 'tokens.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.tokens.delete("tokenId")\n\nputs(result)',
       },
       http: {
         example:
@@ -1812,6 +2042,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.exchangerates.ExchangeRateListParams\nimport com.lightspark.grid.models.exchangerates.ExchangeRateListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val exchangeRates: ExchangeRateListResponse = client.exchangeRates().list()\n}',
       },
+      ruby: {
+        method: 'exchange_rates.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexchange_rates = lightspark_grid.exchange_rates.list\n\nputs(exchange_rates)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/exchange-rates \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1840,6 +2075,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       kotlin: {
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.webhooks.WebhookUnwrapParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.webhooks().unwrap()\n}',
+      },
+      ruby: {
+        method: 'webhooks.unwrap',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.webhooks.unwrap\n\nputs(result)',
       },
     },
   },
@@ -1878,6 +2118,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'crypto().estimateWithdrawalFee',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.crypto.CryptoEstimateWithdrawalFeeParams\nimport com.lightspark.grid.models.crypto.CryptoEstimateWithdrawalFeeResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CryptoEstimateWithdrawalFeeParams = CryptoEstimateWithdrawalFeeParams.builder()\n        .amount(1000000L)\n        .cryptoNetwork("SOLANA")\n        .currency("USDC")\n        .destinationAddress("7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU")\n        .internalAccountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .build()\n    val response: CryptoEstimateWithdrawalFeeResponse = client.crypto().estimateWithdrawalFee(params)\n}',
+      },
+      ruby: {
+        method: 'crypto.estimate_withdrawal_fee',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.crypto.estimate_withdrawal_fee(\n  amount: 1000000,\n  crypto_network: "SOLANA",\n  currency: "USDC",\n  destination_address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n  internal_account_id: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n)\n\nputs(response)',
       },
       http: {
         example:
@@ -1920,6 +2165,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerCreateParams\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerCreateResponse\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerPersonalInfo\nimport com.lightspark.grid.models.customers.externalaccounts.Address\nimport java.time.LocalDate\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: BeneficialOwnerCreateParams = BeneficialOwnerCreateParams.builder()\n        .customerId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .ownershipPercentage(51L)\n        .personalInfo(BeneficialOwnerPersonalInfo.builder()\n            .address(Address.builder()\n                .country("US")\n                .line1("123 Main Street")\n                .postalCode("94105")\n                .build())\n            .birthDate(LocalDate.parse("1978-06-15"))\n            .firstName("Jane")\n            .identifier("123-45-6789")\n            .idType(BeneficialOwnerPersonalInfo.IdType.SSN)\n            .lastName("Smith")\n            .nationality("US")\n            .build())\n        .addRole(BeneficialOwnerCreateParams.Role.UBO)\n        .addRole(BeneficialOwnerCreateParams.Role.DIRECTOR)\n        .build()\n    val beneficialOwner: BeneficialOwnerCreateResponse = client.beneficialOwners().create(params)\n}',
       },
+      ruby: {
+        method: 'beneficial_owners.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  ownership_percentage: 51,\n  personal_info: {\n    address: {country: "US", line1: "123 Main Street", postalCode: "94105"},\n    birthDate: "1978-06-15",\n    firstName: "Jane",\n    identifier: "123-45-6789",\n    idType: :SSN,\n    lastName: "Smith",\n    nationality: "US"\n  },\n  roles: [:UBO, :DIRECTOR]\n)\n\nputs(beneficial_owner)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "ownershipPercentage": 51,\n          "personalInfo": {\n            "address": {\n              "country": "US",\n              "line1": "123 Main Street",\n              "postalCode": "94105"\n            },\n            "birthDate": "1978-06-15",\n            "firstName": "Jane",\n            "identifier": "123-45-6789",\n            "idType": "SSN",\n            "lastName": "Smith",\n            "nationality": "US"\n          },\n          "roles": [\n            "UBO",\n            "DIRECTOR"\n          ]\n        }\'',
@@ -1955,6 +2205,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerListPage\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: BeneficialOwnerListParams = BeneficialOwnerListParams.builder()\n        .customerId("customerId")\n        .build()\n    val page: BeneficialOwnerListPage = client.beneficialOwners().list(params)\n}',
       },
+      ruby: {
+        method: 'beneficial_owners.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.beneficial_owners.list(customer_id: "customerId")\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1989,6 +2244,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficialOwners().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerRetrieveParams\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val beneficialOwner: BeneficialOwnerRetrieveResponse = client.beneficialOwners().retrieve("beneficialOwnerId")\n}',
+      },
+      ruby: {
+        method: 'beneficial_owners.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.retrieve("beneficialOwnerId")\n\nputs(beneficial_owner)',
       },
       http: {
         example:
@@ -2029,6 +2289,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficialOwners().update',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerUpdateParams\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerUpdateResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val beneficialOwner: BeneficialOwnerUpdateResponse = client.beneficialOwners().update("beneficialOwnerId")\n}',
+      },
+      ruby: {
+        method: 'beneficial_owners.update',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.update("beneficialOwnerId")\n\nputs(beneficial_owner)',
       },
       http: {
         example:
@@ -2073,6 +2338,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentUploadParams\nimport com.lightspark.grid.models.documents.DocumentUploadResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentUploadParams = DocumentUploadParams.builder()\n        .country("US")\n        .documentHolder("BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001")\n        .documentType(DocumentUploadParams.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .build()\n    val response: DocumentUploadResponse = client.documents().upload(params)\n}',
       },
+      ruby: {
+        method: 'documents.upload',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  country: "US",\n  document_holder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
+      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentHolder=BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F documentNumber=A12345678 \\\n    -F side=FRONT",
@@ -2108,6 +2378,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentListPage\nimport com.lightspark.grid.models.documents.DocumentListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: DocumentListPage = client.documents().list()\n}',
       },
+      ruby: {
+        method: 'documents.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.documents.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2142,6 +2417,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentRetrieveParams\nimport com.lightspark.grid.models.documents.DocumentRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val document: DocumentRetrieveResponse = client.documents().retrieve("documentId")\n}',
+      },
+      ruby: {
+        method: 'documents.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndocument = lightspark_grid.documents.retrieve("documentId")\n\nputs(document)',
       },
       http: {
         example:
@@ -2186,6 +2466,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentReplaceParams\nimport com.lightspark.grid.models.documents.DocumentReplaceResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentReplaceParams = DocumentReplaceParams.builder()\n        .documentId("documentId")\n        .country("US")\n        .documentType(DocumentReplaceParams.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .build()\n    val response: DocumentReplaceResponse = client.documents().replace(params)\n}',
       },
+      ruby: {
+        method: 'documents.replace',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  country: "US",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
+      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/documents/$DOCUMENT_ID \\\n    -X PUT \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F documentNumber=A12345678 \\\n    -F side=FRONT",
@@ -2219,6 +2504,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.documents().delete("documentId")\n}',
+      },
+      ruby: {
+        method: 'documents.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.documents.delete("documentId")\n\nputs(result)',
       },
       http: {
         example:
@@ -2256,6 +2546,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.verifications.VerificationSubmitParams\nimport com.lightspark.grid.models.verifications.VerificationSubmitResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: VerificationSubmitParams = VerificationSubmitParams.builder()\n        .customerId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .build()\n    val response: VerificationSubmitResponse = client.verifications().submit(params)\n}',
       },
+      ruby: {
+        method: 'verifications.submit',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.verifications.submit(customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/verifications \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001"\n        }\'',
@@ -2290,6 +2585,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.verifications.VerificationListPage\nimport com.lightspark.grid.models.verifications.VerificationListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: VerificationListPage = client.verifications().list()\n}',
+      },
+      ruby: {
+        method: 'verifications.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.verifications.list\n\nputs(page)',
       },
       http: {
         example:
@@ -2326,6 +2626,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.verifications.VerificationRetrieveParams\nimport com.lightspark.grid.models.verifications.VerificationRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val verification: VerificationRetrieveResponse = client.verifications().retrieve("verificationId")\n}',
       },
+      ruby: {
+        method: 'verifications.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nverification = lightspark_grid.verifications.retrieve("verificationId")\n\nputs(verification)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/verifications/$VERIFICATION_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2360,6 +2665,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.discoveries.DiscoveryListParams\nimport com.lightspark.grid.models.discoveries.DiscoveryListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val discoveries: DiscoveryListResponse = client.discoveries().list()\n}',
+      },
+      ruby: {
+        method: 'discoveries.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndiscoveries = lightspark_grid.discoveries.list\n\nputs(discoveries)',
       },
       http: {
         example:
@@ -2401,6 +2711,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthMethodResponse\nimport com.lightspark.grid.models.auth.credentials.EmailOtpCredentialCreateRequest\nimport com.lightspark.grid.models.auth.credentials.EmailOtpCredentialCreateRequestFields\nimport com.lightspark.grid.models.auth.credentials.OAuthCredentialCreateRequest\nimport com.lightspark.grid.models.auth.credentials.PasskeyCredentialCreateRequest\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: EmailOtpCredentialCreateRequest = EmailOtpCredentialCreateRequest.builder()\n        .accountId("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n        .type(EmailOtpCredentialCreateRequestFields.Type.EMAIL_OTP)\n        .build()\n    val authMethodResponse: AuthMethodResponse = client.auth().credentials().create(params)\n}',
       },
+      ruby: {
+        method: 'auth.credentials.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_method_response = lightspark_grid.auth.credentials.create(\n  auth_credential_create_request: {accountId: "InternalAccount:019542f5-b3e7-1d02-0000-000000000002", type: :EMAIL_OTP}\n)\n\nputs(auth_method_response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountId": "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n          "type": "EMAIL_OTP"\n        }\'',
@@ -2441,6 +2756,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSession\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyParams\nimport com.lightspark.grid.models.auth.credentials.EmailOtpCredentialVerifyRequestFields\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialVerifyParams = CredentialVerifyParams.builder()\n        .id("id")\n        .authCredentialVerifyRequest(EmailOtpCredentialVerifyRequestFields.builder()\n            .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n            .otp("123456")\n            .type(EmailOtpCredentialVerifyRequestFields.Type.EMAIL_OTP)\n            .build())\n        .build()\n    val authSession: AuthSession = client.auth().credentials().verify(params)\n}',
       },
+      ruby: {
+        method: 'auth.credentials.verify',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.credentials.verify(\n  "id",\n  auth_credential_verify_request: {\n    clientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n    otp: "123456",\n    type: :EMAIL_OTP\n  }\n)\n\nputs(auth_session)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials/$ID/verify \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "clientPublicKey": "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n          "otp": "123456",\n          "type": "EMAIL_OTP"\n        }\'',
@@ -2476,6 +2796,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth().credentials().challenge',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthCredentialResponseOneOf\nimport com.lightspark.grid.models.auth.credentials.CredentialChallengeParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val authCredentialResponseOneOf: AuthCredentialResponseOneOf = client.auth().credentials().challenge("id")\n}',
+      },
+      ruby: {
+        method: 'auth.credentials.challenge',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_response_one_of = lightspark_grid.auth.credentials.challenge("id")\n\nputs(auth_credential_response_one_of)',
       },
       http: {
         example:
@@ -2513,6 +2838,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthCredentialListResponse\nimport com.lightspark.grid.models.auth.credentials.CredentialListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialListParams = CredentialListParams.builder()\n        .accountId("accountId")\n        .build()\n    val authCredentialListResponse: AuthCredentialListResponse = client.auth().credentials().list(params)\n}',
       },
+      ruby: {
+        method: 'auth.credentials.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_list_response = lightspark_grid.auth.credentials.list(account_id: "accountId")\n\nputs(auth_credential_list_response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2547,6 +2877,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth().credentials().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSignedRequestChallenge\nimport com.lightspark.grid.models.auth.credentials.CredentialDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val authSignedRequestChallenge: AuthSignedRequestChallenge = client.auth().credentials().delete("id")\n}',
+      },
+      ruby: {
+        method: 'auth.credentials.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.credentials.delete("id")\n\nputs(auth_signed_request_challenge)',
       },
       http: {
         example:
@@ -2583,6 +2918,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.sessions.SessionListParams\nimport com.lightspark.grid.models.auth.sessions.SessionListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SessionListParams = SessionListParams.builder()\n        .accountId("accountId")\n        .build()\n    val sessionListResponse: SessionListResponse = client.auth().sessions().list(params)\n}',
       },
+      ruby: {
+        method: 'auth.sessions.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nsession_list_response = lightspark_grid.auth.sessions.list(account_id: "accountId")\n\nputs(session_list_response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2617,6 +2957,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth().sessions().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSignedRequestChallenge\nimport com.lightspark.grid.models.auth.sessions.SessionDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val authSignedRequestChallenge: AuthSignedRequestChallenge = client.auth().sessions().delete("id")\n}',
+      },
+      ruby: {
+        method: 'auth.sessions.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.sessions.delete("id")\n\nputs(auth_signed_request_challenge)',
       },
       http: {
         example:
@@ -2659,6 +3004,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSession\nimport com.lightspark.grid.models.auth.sessions.SessionRefreshParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SessionRefreshParams = SessionRefreshParams.builder()\n        .id("Session:019542f5-b3e7-1d02-0000-000000000003")\n        .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n        .build()\n    val authSession: AuthSession = client.auth().sessions().refresh(params)\n}',
       },
+      ruby: {
+        method: 'auth.sessions.refresh',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.sessions.refresh(\n  "Session:019542f5-b3e7-1d02-0000-000000000003",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(auth_session)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions/$ID/refresh \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "clientPublicKey": "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n        }\'',
@@ -2698,6 +3048,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().create',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentCreateRequest\nimport com.lightspark.grid.models.agents.AgentCreateResponse\nimport com.lightspark.grid.models.agents.AgentPolicy\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: AgentCreateRequest = AgentCreateRequest.builder()\n        .customerId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .name("Payroll Automation Agent")\n        .policy(AgentPolicy.builder()\n            .defaultExecutionMode(AgentPolicy.DefaultExecutionMode.AUTO)\n            .addPermission(AgentPolicy.Permission.VIEW_TRANSACTIONS)\n            .spendingLimits(AgentPolicy.SpendingLimits.builder()\n                .currency("USD")\n                .perTransactionLimit(50000L)\n                .build())\n            .build())\n        .build()\n    val agentCreateResponse: AgentCreateResponse = client.agents().create(params)\n}',
+      },
+      ruby: {
+        method: 'agents.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_create_response = lightspark_grid.agents.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  name: "Payroll Automation Agent",\n  policy: {\n    defaultExecutionMode: :AUTO,\n    permissions: [:VIEW_TRANSACTIONS],\n    spendingLimits: {currency: "USD", perTransactionLimit: 50000}\n  }\n)\n\nputs(agent_create_response)',
       },
       http: {
         example:
@@ -2744,6 +3099,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentListPage\nimport com.lightspark.grid.models.agents.AgentListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: AgentListPage = client.agents().list()\n}',
       },
+      ruby: {
+        method: 'agents.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2788,6 +3148,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentListApprovalsPage\nimport com.lightspark.grid.models.agents.AgentListApprovalsParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: AgentListApprovalsPage = client.agents().listApprovals()\n}',
       },
+      ruby: {
+        method: 'agents.list_approvals',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list_approvals\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/approvals \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2822,6 +3187,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.AgentRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agent: Agent = client.agents().retrieve("agentId")\n}',
+      },
+      ruby: {
+        method: 'agents.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.retrieve("agentId")\n\nputs(agent)',
       },
       http: {
         example:
@@ -2858,6 +3228,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.AgentUpdateParams\nimport com.lightspark.grid.models.agents.AgentUpdateRequest\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: AgentUpdateParams = AgentUpdateParams.builder()\n        .agentId("agentId")\n        .agentUpdateRequest(AgentUpdateRequest.builder().build())\n        .build()\n    val agent: Agent = client.agents().update(params)\n}',
       },
+      ruby: {
+        method: 'agents.update',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update("agentId")\n\nputs(agent)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "isPaused": true,\n          "name": "Updated Payroll Agent"\n        }\'',
@@ -2890,6 +3265,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.agents().delete("agentId")\n}',
+      },
+      ruby: {
+        method: 'agents.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.agents.delete("agentId")\n\nputs(result)',
       },
       http: {
         example:
@@ -2934,6 +3314,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.AgentUpdatePolicyParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agent: Agent = client.agents().updatePolicy("agentId")\n}',
       },
+      ruby: {
+        method: 'agents.update_policy',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update_policy("agentId")\n\nputs(agent)',
+      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/policy \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -d '{}'",
@@ -2968,6 +3353,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.me.MeRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agent: Agent = client.agents().me().retrieve()\n}',
+      },
+      ruby: {
+        method: 'agents.me.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent = lightspark_grid.agents.me.retrieve\n\nputs(agent)',
       },
       http: {
         example:
@@ -3010,6 +3400,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.MeCreateTransferInParams\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: MeCreateTransferInParams = MeCreateTransferInParams.builder()\n        .destination(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .source(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val agentAction: AgentAction = client.agents().me().createTransferIn(params)\n}',
       },
+      ruby: {
+        method: 'agents.me.create_transfer_in',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_in(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(agent_action)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transfer-in \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "source": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "amount": 12550\n        }\'',
@@ -3051,6 +3446,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.MeCreateTransferOutParams\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: MeCreateTransferOutParams = MeCreateTransferOutParams.builder()\n        .destination(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .source(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .build()\n    val agentAction: AgentAction = client.agents().me().createTransferOut(params)\n}',
       },
+      ruby: {
+        method: 'agents.me.create_transfer_out',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_out(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(agent_action)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transfer-out \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "source": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "amount": 12550\n        }\'',
@@ -3091,6 +3491,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().listInternalAccounts',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.MeListInternalAccountsPage\nimport com.lightspark.grid.models.agents.me.MeListInternalAccountsParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: MeListInternalAccountsPage = client.agents().me().listInternalAccounts()\n}',
+      },
+      ruby: {
+        method: 'agents.me.list_internal_accounts',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.list_internal_accounts\n\nputs(page)',
       },
       http: {
         example:
@@ -3140,6 +3545,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.transactions.TransactionListPage\nimport com.lightspark.grid.models.agents.me.transactions.TransactionListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: TransactionListPage = client.agents().me().transactions().list()\n}',
       },
+      ruby: {
+        method: 'agents.me.transactions.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.transactions.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transactions \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -3175,6 +3585,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().transactions().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.transactions.TransactionRetrieveParams\nimport com.lightspark.grid.models.transferin.Transaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val transaction: Transaction = client.agents().me().transactions().retrieve("transactionId")\n}',
+      },
+      ruby: {
+        method: 'agents.me.transactions.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\ntransaction = lightspark_grid.agents.me.transactions.retrieve("transactionId")\n\nputs(transaction)',
       },
       http: {
         example:
@@ -3223,6 +3638,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: QuoteCreateParams = QuoteCreateParams.builder()\n        .destination(QuoteDestinationOneOf.AccountDestination.builder()\n            .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .lockedCurrencyAmount(1000L)\n        .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n        .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n            .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val quote: Quote = client.agents().me().quotes().create(params)\n}',
       },
+      ruby: {
+        method: 'agents.me.quotes.create',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 1000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 1000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Invoice #1234 payment",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
@@ -3258,6 +3678,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().quotes().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.quotes.QuoteRetrieveParams\nimport com.lightspark.grid.models.quotes.Quote\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val quote: Quote = client.agents().me().quotes().retrieve("quoteId")\n}',
+      },
+      ruby: {
+        method: 'agents.me.quotes.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.retrieve("quoteId")\n\nputs(quote)',
       },
       http: {
         example:
@@ -3295,6 +3720,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.quotes.QuoteExecuteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentAction: AgentAction = client.agents().me().quotes().execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n}',
       },
+      ruby: {
+        method: 'agents.me.quotes.execute',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(agent_action)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes/$QUOTE_ID/execute \\\n    -X POST \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -3330,6 +3760,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().externalAccounts().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountListPage\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ExternalAccountListPage = client.agents().me().externalAccounts().list()\n}',
+      },
+      ruby: {
+        method: 'agents.me.external_accounts.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.external_accounts.list\n\nputs(page)',
       },
       http: {
         example:
@@ -3373,6 +3808,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.UsdExternalAccountCreateInfo\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountCreate\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ExternalAccountCreate = ExternalAccountCreate.builder()\n        .accountInfo(UsdExternalAccountCreateInfo.builder()\n            .accountNumber("12345678901")\n            .accountType(UsdExternalAccountCreateInfo.AccountType.USD_ACCOUNT)\n            .individualBeneficiary("John Doe")\n            .routingNumber("123456789")\n            .build())\n        .currency("USD")\n        .build()\n    val externalAccount: ExternalAccount = client.agents().me().externalAccounts().add(params)\n}',
       },
+      ruby: {
+        method: 'agents.me.external_accounts.add',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.add(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "accountInfo": {\n            "accountNumber": "12345678901",\n            "accountType": "USD_ACCOUNT",\n            "beneficiary": {\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "John Doe",\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105",\n                "city": "San Francisco",\n                "state": "CA"\n              },\n              "birthDate": "1990-01-15",\n              "nationality": "US"\n            },\n            "routingNumber": "123456789"\n          },\n          "currency": "USD",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -3409,6 +3849,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountRetrieveParams\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val externalAccount: ExternalAccount = client.agents().me().externalAccounts().retrieve("externalAccountId")\n}',
       },
+      ruby: {
+        method: 'agents.me.external_accounts.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -3442,6 +3887,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().externalAccounts().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.agents().me().externalAccounts().delete("externalAccountId")\n}',
+      },
+      ruby: {
+        method: 'agents.me.external_accounts.delete',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nresult = lightspark_grid.agents.me.external_accounts.delete("externalAccountId")\n\nputs(result)',
       },
       http: {
         example:
@@ -3483,6 +3933,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.actions.ActionListPage\nimport com.lightspark.grid.models.agents.me.actions.ActionListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ActionListPage = client.agents().me().actions().list()\n}',
       },
+      ruby: {
+        method: 'agents.me.actions.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.actions.list\n\nputs(page)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/actions \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -3519,6 +3974,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.actions.ActionRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentAction: AgentAction = client.agents().me().actions().retrieve("actionId")\n}',
       },
+      ruby: {
+        method: 'agents.me.actions.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.actions.retrieve("actionId")\n\nputs(agent_action)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/actions/$ACTION_ID \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -3554,6 +4014,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeviceCode\nimport com.lightspark.grid.models.agents.devicecodes.DeviceCodeRegenerateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentDeviceCode: AgentDeviceCode = client.agents().deviceCodes().regenerate("agentId")\n}',
       },
+      ruby: {
+        method: 'agents.device_codes.regenerate',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code = lightspark_grid.agents.device_codes.regenerate("agentId")\n\nputs(agent_device_code)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/device-codes \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3588,6 +4053,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().deviceCodes().getStatus',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeviceCodeStatusResponse\nimport com.lightspark.grid.models.agents.devicecodes.DeviceCodeGetStatusParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentDeviceCodeStatusResponse: AgentDeviceCodeStatusResponse = client.agents().deviceCodes().getStatus("code")\n}',
+      },
+      ruby: {
+        method: 'agents.device_codes.get_status',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_status_response = lightspark_grid.agents.device_codes.get_status("code")\n\nputs(agent_device_code_status_response)',
       },
       http: {
         example:
@@ -3625,6 +4095,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeviceCodeRedeemResponse\nimport com.lightspark.grid.models.agents.devicecodes.DeviceCodeRedeemParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentDeviceCodeRedeemResponse: AgentDeviceCodeRedeemResponse = client.agents().deviceCodes().redeem("code")\n}',
       },
+      ruby: {
+        method: 'agents.device_codes.redeem',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_redeem_response = lightspark_grid.agents.device_codes.redeem("code")\n\nputs(agent_device_code_redeem_response)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/device-codes/$CODE/redeem \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3660,6 +4135,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().transactions().approve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.transactions.TransactionApproveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransactionApproveParams = TransactionApproveParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().transactions().approve(params)\n}',
+      },
+      ruby: {
+        method: 'agents.transactions.approve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
       http: {
         example:
@@ -3697,6 +4177,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.transactions.TransactionRejectParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransactionRejectParams = TransactionRejectParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().transactions().reject(params)\n}',
       },
+      ruby: {
+        method: 'agents.transactions.reject',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3732,6 +4217,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().actions().approve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.actions.ActionApproveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ActionApproveParams = ActionApproveParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().actions().approve(params)\n}',
+      },
+      ruby: {
+        method: 'agents.actions.approve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
       http: {
         example:
@@ -3769,6 +4259,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.actions.ActionRejectParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ActionRejectParams = ActionRejectParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().actions().reject(params)\n}',
       },
+      ruby: {
+        method: 'agents.actions.reject',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3787,6 +4282,11 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'python',
     content:
       '# Lightspark Grid Python API library\n\n<!-- prettier-ignore -->\n[![PyPI version](https://img.shields.io/pypi/v/grid.svg?label=pypi%20(stable))](https://pypi.org/project/grid/)\n\nThe Lightspark Grid Python library provides convenient access to the Lightspark Grid REST API from any Python 3.9+\napplication. The library includes type definitions for all request params and response fields,\nand offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwieC1ncmlkLWFnZW50LWFjY2Vzcy10b2tlbiI6Ik15IEFnZW50IEFjY2VzcyBUb2tlbiIsIlgtR3JpZC1TaWduYXR1cmUiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22x-grid-agent-access-token%22%3A%22My%20Agent%20Access%20Token%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\n The full API of this library can be found in [api.md](api.md).\n\n## Installation\n\n```sh\n# install from this staging repo\npip install git+ssh://git@github.com/stainless-sdks/grid-python.git\n```\n> [!NOTE]\n> Once this package is [published to PyPI](https://www.stainless.com/docs/guides/publish), this will become: `pip install grid`\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```python\nimport os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\n\nquote = client.quotes.create(\n    destination={\n        "destination_type": "ACCOUNT",\n        "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    },\n    locked_currency_amount=10000,\n    locked_currency_side="SENDING",\n    source={\n        "source_type": "ACCOUNT",\n        "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n    },\n)\nprint(quote.id)\n```\n\nWhile you can provide a `username` keyword argument,\nwe recommend using [python-dotenv](https://pypi.org/project/python-dotenv/)\nto add `GRID_CLIENT_ID="My Username"` to your `.env` file\nso that your Username is not stored in source control.\n\n## Async usage\n\nSimply import `AsyncLightsparkGrid` instead of `LightsparkGrid` and use `await` with each API call:\n\n```python\nimport os\nimport asyncio\nfrom grid import AsyncLightsparkGrid\n\nclient = AsyncLightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\n\nasync def main() -> None:\n  quote = await client.quotes.create(\n      destination={\n          "destination_type": "ACCOUNT",\n          "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n      },\n      locked_currency_amount=10000,\n      locked_currency_side="SENDING",\n      source={\n          "source_type": "ACCOUNT",\n          "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n      },\n  )\n  print(quote.id)\n\nasyncio.run(main())\n```\n\nFunctionality between the synchronous and asynchronous clients is otherwise identical.\n\n### With aiohttp\n\nBy default, the async client uses `httpx` for HTTP requests. However, for improved concurrency performance you may also use `aiohttp` as the HTTP backend.\n\nYou can enable this by installing `aiohttp`:\n\n```sh\n# install from this staging repo\npip install \'grid[aiohttp] @ git+ssh://git@github.com/stainless-sdks/grid-python.git\'\n```\n\nThen you can enable it by instantiating the client with `http_client=DefaultAioHttpClient()`:\n\n```python\nimport os\nimport asyncio\nfrom grid import DefaultAioHttpClient\nfrom grid import AsyncLightsparkGrid\n\nasync def main() -> None:\n  async with AsyncLightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n    http_client=DefaultAioHttpClient(),\n) as client:\n    quote = await client.quotes.create(\n        destination={\n            "destination_type": "ACCOUNT",\n            "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n        },\n        locked_currency_amount=10000,\n        locked_currency_side="SENDING",\n        source={\n            "source_type": "ACCOUNT",\n            "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n        },\n    )\n    print(quote.id)\n\nasyncio.run(main())\n```\n\n\n\n## Using types\n\nNested request parameters are [TypedDicts](https://docs.python.org/3/library/typing.html#typing.TypedDict). Responses are [Pydantic models](https://docs.pydantic.dev) which also provide helper methods for things like:\n\n- Serializing back into JSON, `model.to_json()`\n- Converting to a dictionary, `model.to_dict()`\n\nTyped requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.\n\n## Pagination\n\nList methods in the Lightspark Grid API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```python\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid()\n\nall_customers = []\n# Automatically fetches more pages as needed.\nfor customer in client.customers.list():\n    # Do something with customer here\n    all_customers.append(customer)\nprint(all_customers)\n```\n\nOr, asynchronously:\n\n```python\nimport asyncio\nfrom grid import AsyncLightsparkGrid\n\nclient = AsyncLightsparkGrid()\n\nasync def main() -> None:\n    all_customers = []\n    # Iterate through items across all pages, issuing requests as needed.\n    async for customer in client.customers.list():\n        all_customers.append(customer)\n    print(all_customers)\n\nasyncio.run(main())\n```\n\nAlternatively, you can use the `.has_next_page()`, `.next_page_info()`, or  `.get_next_page()` methods for more granular control working with pages:\n\n```python\nfirst_page = await client.customers.list()\nif first_page.has_next_page():\n    print(f"will fetch next page using these details: {first_page.next_page_info()}")\n    next_page = await first_page.get_next_page()\n    print(f"number of items we just fetched: {len(next_page.data)}")\n\n# Remove `await` for non-async usage.\n```\n\nOr just work directly with the returned data:\n\n```python\nfirst_page = await client.customers.list()\n\nprint(f"next page cursor: {first_page.next_cursor}") # => "next page cursor: ..."\nfor customer in first_page.data:\n    print(customer)\n\n# Remove `await` for non-async usage.\n```\n\n## Nested params\n\nNested parameters are dictionaries, typed using `TypedDict`, for example:\n\n```python\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid()\n\ntransaction = client.transfer_in.create(\n    destination={\n        "account_id": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n    },\n    source={\n        "account_id": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n    },\n)\nprint(transaction.destination)\n```\n\n## File uploads\n\nRequest parameters that correspond to file uploads can be passed as `bytes`, or a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance or a tuple of `(filename, contents, media type)`.\n\n```python\nfrom pathlib import Path\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid()\n\nclient.customers.bulk.upload_csv(\n    file=Path("/path/to/file"),\n)\n```\n\nThe async client uses the exact same interface. If you pass a [`PathLike`](https://docs.python.org/3/library/os.html#os.PathLike) instance, the file contents will be read asynchronously automatically.\n\n## Handling errors\n\nWhen the library is unable to connect to the API (for example, due to network connection problems or a timeout), a subclass of `grid.APIConnectionError` is raised.\n\nWhen the API returns a non-success status code (that is, 4xx or 5xx\nresponse), a subclass of `grid.APIStatusError` is raised, containing `status_code` and `response` properties.\n\nAll errors inherit from `grid.APIError`.\n\n```python\nimport grid\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid()\n\ntry:\n    client.quotes.create(\n        destination={\n            "destination_type": "ACCOUNT",\n            "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n        },\n        locked_currency_amount=10000,\n        locked_currency_side="SENDING",\n        source={\n            "source_type": "ACCOUNT",\n            "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n        },\n    )\nexcept grid.APIConnectionError as e:\n    print("The server could not be reached")\n    print(e.__cause__) # an underlying Exception, likely raised within httpx.\nexcept grid.RateLimitError as e:\n    print("A 429 status code was received; we should back off a bit.")\nexcept grid.APIStatusError as e:\n    print("Another non-200-range status code was received")\n    print(e.status_code)\n    print(e.response)\n```\n\nError codes are as follows:\n\n| Status Code | Error Type                 |\n| ----------- | -------------------------- |\n| 400         | `BadRequestError`          |\n| 401         | `AuthenticationError`      |\n| 403         | `PermissionDeniedError`    |\n| 404         | `NotFoundError`            |\n| 422         | `UnprocessableEntityError` |\n| 429         | `RateLimitError`           |\n| >=500       | `InternalServerError`      |\n| N/A         | `APIConnectionError`       |\n\n### Retries\n\nCertain errors are automatically retried 2 times by default, with a short exponential backoff.\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict,\n429 Rate Limit, and >=500 Internal errors are all retried by default.\n\nYou can use the `max_retries` option to configure or disable retry settings:\n\n```python\nfrom grid import LightsparkGrid\n\n# Configure the default for all requests:\nclient = LightsparkGrid(\n    # default is 2\n    max_retries=0,\n)\n\n# Or, configure per-request:\nclient.with_options(max_retries = 5).quotes.create(\n    destination={\n        "destination_type": "ACCOUNT",\n        "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    },\n    locked_currency_amount=10000,\n    locked_currency_side="SENDING",\n    source={\n        "source_type": "ACCOUNT",\n        "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n    },\n)\n```\n\n### Timeouts\n\nBy default requests time out after 1 minute. You can configure this with a `timeout` option,\nwhich accepts a float or an [`httpx.Timeout`](https://www.python-httpx.org/advanced/timeouts/#fine-tuning-the-configuration) object:\n\n```python\nfrom grid import LightsparkGrid\n\n# Configure the default for all requests:\nclient = LightsparkGrid(\n    # 20 seconds (default is 1 minute)\n    timeout=20.0,\n)\n\n# More granular control:\nclient = LightsparkGrid(\n    timeout=httpx.Timeout(60.0, read=5.0, write=10.0, connect=2.0),\n)\n\n# Override per-request:\nclient.with_options(timeout = 5.0).quotes.create(\n    destination={\n        "destination_type": "ACCOUNT",\n        "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    },\n    locked_currency_amount=10000,\n    locked_currency_side="SENDING",\n    source={\n        "source_type": "ACCOUNT",\n        "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n    },\n)\n```\n\nOn timeout, an `APITimeoutError` is thrown.\n\nNote that requests that time out are [retried twice by default](#retries).\n\n\n\n## Advanced\n\n### Logging\n\nWe use the standard library [`logging`](https://docs.python.org/3/library/logging.html) module.\n\nYou can enable logging by setting the environment variable `LIGHTSPARK_GRID_LOG` to `info`.\n\n```shell\n$ export LIGHTSPARK_GRID_LOG=info\n```\n\nOr to `debug` for more verbose logging.\n\n### How to tell whether `None` means `null` or missing\n\nIn an API response, a field may be explicitly `null`, or missing entirely; in either case, its value is `None` in this library. You can differentiate the two cases with `.model_fields_set`:\n\n```py\nif response.my_field is None:\n  if \'my_field\' not in response.model_fields_set:\n    print(\'Got json like {}, without a "my_field" key present at all.\')\n  else:\n    print(\'Got json like {"my_field": null}.\')\n```\n\n### Accessing raw response data (e.g. headers)\n\nThe "raw" Response object can be accessed by prefixing `.with_raw_response.` to any HTTP method call, e.g.,\n\n```py\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid()\nresponse = client.quotes.with_raw_response.create(\n    destination={\n        "destination_type": "ACCOUNT",\n        "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    },\n    locked_currency_amount=10000,\n    locked_currency_side="SENDING",\n    source={\n        "source_type": "ACCOUNT",\n        "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n    },\n)\nprint(response.headers.get(\'X-My-Header\'))\n\nquote = response.parse()  # get the object that `quotes.create()` would have returned\nprint(quote.id)\n```\n\nThese methods return an [`APIResponse`](https://github.com/stainless-sdks/grid-python/tree/main/src/grid/_response.py) object.\n\nThe async client returns an [`AsyncAPIResponse`](https://github.com/stainless-sdks/grid-python/tree/main/src/grid/_response.py) with the same structure, the only difference being `await`able methods for reading the response content.\n\n#### `.with_streaming_response`\n\nThe above interface eagerly reads the full response body when you make the request, which may not always be what you want.\n\nTo stream the response body, use `.with_streaming_response` instead, which requires a context manager and only reads the response body once you call `.read()`, `.text()`, `.json()`, `.iter_bytes()`, `.iter_text()`, `.iter_lines()` or `.parse()`. In the async client, these are async methods.\n\n```python\nwith client.quotes.with_streaming_response.create(\n    destination={\n        "destination_type": "ACCOUNT",\n        "account_id": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    },\n    locked_currency_amount=10000,\n    locked_currency_side="SENDING",\n    source={\n        "source_type": "ACCOUNT",\n        "account_id": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n    },\n) as response :\n    print(response.headers.get(\'X-My-Header\'))\n\n    for line in response.iter_lines():\n      print(line)\n```\n\nThe context manager is required so that the response will reliably be closed.\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API.\n\nIf you need to access undocumented endpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can make requests using `client.get`, `client.post`, and other\nhttp verbs. Options on the client will be respected (such as retries) when making this request.\n\n```py\nimport httpx\n\nresponse = client.post(\n    "/foo",\n    cast_to=httpx.Response,\n    body={"my_param": True},\n)\n\nprint(response.headers.get("x-foo"))\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` request\noptions.\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you can access the extra fields like `response.unknown_prop`. You\ncan also get all the extra fields on the Pydantic model as a dict with\n[`response.model_extra`](https://docs.pydantic.dev/latest/api/base_model/#pydantic.BaseModel.model_extra).\n\n### Configuring the HTTP client\n\nYou can directly override the [httpx client](https://www.python-httpx.org/api/#client) to customize it for your use case, including:\n\n- Support for [proxies](https://www.python-httpx.org/advanced/proxies/)\n- Custom [transports](https://www.python-httpx.org/advanced/transports/)\n- Additional [advanced](https://www.python-httpx.org/advanced/clients/) functionality\n\n```python\nimport httpx\nfrom grid import LightsparkGrid, DefaultHttpxClient\n\nclient = LightsparkGrid(\n    # Or use the `LIGHTSPARK_GRID_BASE_URL` env var\n    base_url="http://my.test.server.example.com:8083",\n    http_client=DefaultHttpxClient(proxy="http://my.test.proxy.example.com", transport=httpx.HTTPTransport(local_address="0.0.0.0")),\n)\n```\n\nYou can also customize the client on a per-request basis by using `with_options()`:\n\n```python\nclient.with_options(http_client=DefaultHttpxClient(...))\n```\n\n### Managing HTTP resources\n\nBy default the library closes underlying HTTP connections whenever the client is [garbage collected](https://docs.python.org/3/reference/datamodel.html#object.__del__). You can manually close the client using the `.close()` method if desired, or with a context manager that closes when exiting.\n\n```py\nfrom grid import LightsparkGrid\n\nwith LightsparkGrid() as client:\n  # make requests here\n  ...\n\n# HTTP client is now closed\n```\n\n## Versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes that only affect static types, without breaking runtime behavior.\n2. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n3. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/grid-python/issues) with questions, bugs, or suggestions.\n\n### Determining the installed version\n\nIf you\'ve upgraded to the latest version but aren\'t seeing any new features you were expecting then your python environment is likely still using an older version.\n\nYou can determine the version that is being used at runtime with:\n\n```py\nimport grid\nprint(grid.__version__)\n```\n\n## Requirements\n\nPython 3.9 or higher.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
+  {
+    language: 'ruby',
+    content:
+      '# Lightspark Grid Ruby API library\n\nThe Lightspark Grid Ruby library provides convenient access to the Lightspark Grid REST API from any Ruby 3.2.0+ application. It ships with comprehensive types & docstrings in Yard, RBS, and RBI – [see below](https://github.com/stainless-sdks/grid-ruby#Sorbet) for usage with Sorbet. The standard library\'s `net/http` is used as the HTTP transport, with connection pooling via the `connection_pool` gem.\n\n\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwieC1ncmlkLWFnZW50LWFjY2Vzcy10b2tlbiI6Ik15IEFnZW50IEFjY2VzcyBUb2tlbiIsIlgtR3JpZC1TaWduYXR1cmUiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22x-grid-agent-access-token%22%3A%22My%20Agent%20Access%20Token%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Documentation\n\nDocumentation for releases of this gem can be found [on RubyDoc](https://gemdocs.org/gems/grid).\n\n\n\n## Installation\n\nTo use this gem, install via Bundler by adding the following to your application\'s `Gemfile`:\n\n```ruby\ngem "grid", "~> 0.0.1"\n```\n\n## Usage\n\n```ruby\nrequire "bundler/setup"\nrequire "grid"\n\nlightspark_grid = Grid::Client.new(\n  username: ENV["GRID_CLIENT_ID"], # This is the default and can be omitted\n  password: ENV["GRID_CLIENT_SECRET"] # This is the default and can be omitted\n)\n\nquote = lightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(quote.id)\n```\n\n\n\n### Pagination\n\nList methods in the Lightspark Grid API are paginated.\n\nThis library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:\n\n```ruby\npage = lightspark_grid.customers.list\n\n# Fetch single item from page.\ncustomer = page.data[0]\nputs(customer)\n\n# Automatically fetches more pages as needed.\npage.auto_paging_each do |customer|\n  puts(customer)\nend\n```\n\nAlternatively, you can use the `#next_page?` and `#next_page` methods for more granular control working with pages.\n\n```ruby\nif page.next_page?\n  new_page = page.next_page\n  puts(new_page.data[0])\nend\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads can be passed as raw contents, a [`Pathname`](https://rubyapi.org/3.2/o/pathname) instance, [`StringIO`](https://rubyapi.org/3.2/o/stringio), or more.\n\n```ruby\nrequire "pathname"\n\n# Use `Pathname` to send the filename and/or avoid paging a large file into memory:\nresponse = lightspark_grid.customers.bulk.upload_csv(file: Pathname("/path/to/file"))\n\n# Alternatively, pass file contents or a `StringIO` directly:\nresponse = lightspark_grid.customers.bulk.upload_csv(file: File.read("/path/to/file"))\n\n# Or, to control the filename and/or content type:\nfile = Grid::FilePart.new(File.read("/path/to/file"), filename: "/path/to/file", content_type: "…")\nresponse = lightspark_grid.customers.bulk.upload_csv(file: file)\n\nputs(response.jobId)\n```\n\nNote that you can also pass a raw `IO` descriptor, but this disables retries, as the library can\'t be sure if the descriptor is a file or pipe (which cannot be rewound).\n\n### Handling errors\n\nWhen the library is unable to connect to the API, or if the API returns a non-success status code (i.e., 4xx or 5xx response), a subclass of `Grid::Errors::APIError` will be thrown:\n\n```ruby\nbegin\n  quote = lightspark_grid.quotes.create(\n    destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n    locked_currency_amount: 10000,\n    locked_currency_side: "SENDING",\n    source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n  )\nrescue Grid::Errors::APIConnectionError => e\n  puts("The server could not be reached")\n  puts(e.cause)  # an underlying Exception, likely raised within `net/http`\nrescue Grid::Errors::RateLimitError => e\n  puts("A 429 status code was received; we should back off a bit.")\nrescue Grid::Errors::APIStatusError => e\n  puts("Another non-200-range status code was received")\n  puts(e.status)\nend\n```\n\nError codes are as follows:\n\n| Cause            | Error Type                 |\n| ---------------- | -------------------------- |\n| HTTP 400         | `BadRequestError`          |\n| HTTP 401         | `AuthenticationError`      |\n| HTTP 403         | `PermissionDeniedError`    |\n| HTTP 404         | `NotFoundError`            |\n| HTTP 409         | `ConflictError`            |\n| HTTP 422         | `UnprocessableEntityError` |\n| HTTP 429         | `RateLimitError`           |\n| HTTP >= 500      | `InternalServerError`      |\n| Other HTTP error | `APIStatusError`           |\n| Timeout          | `APITimeoutError`          |\n| Network error    | `APIConnectionError`       |\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\n\nConnection errors (for example, due to a network connectivity problem), 408 Request Timeout, 409 Conflict, 429 Rate Limit, >=500 Internal errors, and timeouts will all be retried by default.\n\nYou can use the `max_retries` option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\nlightspark_grid = Grid::Client.new(\n  max_retries: 0 # default is 2\n)\n\n# Or, configure per-request:\nlightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  request_options: {max_retries: 5}\n)\n```\n\n### Timeouts\n\nBy default, requests will time out after 60 seconds. You can use the timeout option to configure or disable this:\n\n```ruby\n# Configure the default for all requests:\nlightspark_grid = Grid::Client.new(\n  timeout: nil # default is 60\n)\n\n# Or, configure per-request:\nlightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  request_options: {timeout: 5}\n)\n```\n\nOn timeout, `Grid::Errors::APITimeoutError` is raised.\n\nNote that requests that time out are retried by default.\n\n## Advanced concepts\n\n### BaseModel\n\nAll parameter and response objects inherit from `Grid::Internal::Type::BaseModel`, which provides several conveniences, including:\n\n1. All fields, including unknown ones, are accessible with `obj[:prop]` syntax, and can be destructured with `obj => {prop: prop}` or pattern-matching syntax.\n\n2. Structural equivalence for equality; if two API calls return the same values, comparing the responses with == will return true.\n\n3. Both instances and the classes themselves can be pretty-printed.\n\n4. Helpers such as `#to_h`, `#deep_to_h`, `#to_json`, and `#to_yaml`.\n\n### Making custom or undocumented requests\n\n#### Undocumented properties\n\nYou can send undocumented parameters to any endpoint, and read undocumented response properties, like so:\n\nNote: the `extra_` parameters of the same name overrides the documented parameters.\n\n```ruby\nquote =\n  lightspark_grid.quotes.create(\n    destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n    locked_currency_amount: 10000,\n    locked_currency_side: "SENDING",\n    source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n    request_options: {\n      extra_query: {my_query_parameter: value},\n      extra_body: {my_body_parameter: value},\n      extra_headers: {"my-header": value}\n    }\n  )\n\nputs(quote[:my_undocumented_property])\n```\n\n#### Undocumented request params\n\nIf you want to explicitly send an extra param, you can do so with the `extra_query`, `extra_body`, and `extra_headers` under the `request_options:` parameter when making a request, as seen in the examples above.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints while retaining the benefit of auth, retries, and so on, you can make requests using `client.request`, like so:\n\n```ruby\nresponse = client.request(\n  method: :post,\n  path: \'/undocumented/endpoint\',\n  query: {"dog": "woof"},\n  headers: {"useful-header": "interesting-value"},\n  body: {"hello": "world"}\n)\n```\n\n### Concurrency & connection pooling\n\nThe `Grid::Client` instances are threadsafe, but are only are fork-safe when there are no in-flight HTTP requests.\n\nEach instance of `Grid::Client` has its own HTTP connection pool with a default size of 99. As such, we recommend instantiating the client once per application in most settings.\n\nWhen all available connections from the pool are checked out, requests wait for a new connection to become available, with queue time counting towards the request timeout.\n\nUnless otherwise specified, other classes in the SDK do not have locks protecting their underlying data structure.\n\n## Sorbet\n\nThis library provides comprehensive [RBI](https://sorbet.org/docs/rbi) definitions, and has no dependency on sorbet-runtime.\n\nYou can provide typesafe request parameters like so:\n\n```ruby\nlightspark_grid.quotes.create(\n  destination: Grid::QuoteDestinationOneOf::AccountDestination.new(\n    account_id: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n  ),\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: Grid::QuoteSourceOneOf::AccountQuoteSource.new(\n    account_id: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n  )\n)\n```\n\nOr, equivalently:\n\n```ruby\n# Hashes work, but are not typesafe:\nlightspark_grid.quotes.create(\n  destination: {destinationType: "ACCOUNT", accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: {sourceType: "ACCOUNT", accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\n# You can also splat a full Params class:\nparams = Grid::QuoteCreateParams.new(\n  destination: Grid::QuoteDestinationOneOf::AccountDestination.new(\n    account_id: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n  ),\n  locked_currency_amount: 10000,\n  locked_currency_side: "SENDING",\n  source: Grid::QuoteSourceOneOf::AccountQuoteSource.new(\n    account_id: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n  )\n)\nlightspark_grid.quotes.create(**params)\n```\n\n### Enums\n\nSince this library does not depend on `sorbet-runtime`, it cannot provide [`T::Enum`](https://sorbet.org/docs/tenum) instances. Instead, we provide "tagged symbols" instead, which is always a primitive at runtime:\n\n```ruby\n# :INDIVIDUAL\nputs(Grid::CustomerType::INDIVIDUAL)\n\n# Revealed type: `T.all(Grid::CustomerType, Symbol)`\nT.reveal_type(Grid::CustomerType::INDIVIDUAL)\n```\n\nEnum parameters have a "relaxed" type, so you can either pass in enum constants or their literal value:\n\n```ruby\n# Using the enum constants preserves the tagged type information:\nlightspark_grid.customers.list(\n  customer_type: Grid::CustomerType::INDIVIDUAL,\n  # …\n)\n\n# Literal values are also permissible:\nlightspark_grid.customers.list(\n  customer_type: :INDIVIDUAL,\n  # …\n)\n```\n\n## Versioning\n\nThis package follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions. As the library is in initial development and has a major version of `0`, APIs may change at any time.\n\nThis package considers improvements to the (non-runtime) `*.rbi` and `*.rbs` type definitions to be non-breaking changes.\n\n## Requirements\n\nRuby 3.2.0 or higher.\n\n## Contributing\n\nSee [the contributing documentation](https://github.com/stainless-sdks/grid-ruby/tree/main/CONTRIBUTING.md).\n',
   },
   {
     language: 'typescript',
