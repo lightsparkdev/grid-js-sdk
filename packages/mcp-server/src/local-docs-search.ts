@@ -88,6 +88,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.retrieve\n\nputs(platform_config)',
       },
+      csharp: {
+        method: 'Config.Retrieve',
+        example:
+          'ConfigRetrieveParams parameters = new();\n\nvar platformConfig = await client.Config.Retrieve(parameters);\n\nConsole.WriteLine(platformConfig);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -137,6 +142,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nplatform_config = lightspark_grid.config.update\n\nputs(platform_config)',
       },
+      csharp: {
+        method: 'Config.Update',
+        example:
+          'ConfigUpdateParams parameters = new();\n\nvar platformConfig = await client.Config.Update(parameters);\n\nConsole.WriteLine(platformConfig);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "supportedCurrencies": [\n            {\n              "currencyCode": "USD",\n              "enabledTransactionTypes": [\n                "OUTGOING",\n                "INCOMING"\n              ],\n              "maxAmount": 1000000,\n              "minAmount": 100,\n              "requiredCounterpartyFields": [\n                {\n                  "mandatory": true,\n                  "name": "FULL_NAME"\n                },\n                {\n                  "mandatory": true,\n                  "name": "NATIONALITY"\n                },\n                {\n                  "mandatory": true,\n                  "name": "BIRTH_DATE"\n                }\n              ]\n            }\n          ],\n          "umaDomain": "mycompany.com",\n          "webhookEndpoint": "https://api.mycompany.com/webhooks/uma"\n        }\'',
@@ -184,6 +194,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.create(create_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
+      },
+      csharp: {
+        method: 'Customers.Create',
+        example:
+          'CustomerCreateParams parameters = new()\n{\n    CreateCustomerRequest = new Individual()\n    {\n        Currencies =\n        [\n            "USD", "USDC"\n        ],\n        Email = "john.doe@example.com",\n        PlatformCustomerID = "ind-9f84e0c2",\n        Region = "US",\n        UmaAddress = "$john.doe@uma.domain.com",\n        CustomerType = CustomerType.Individual,\n        Address = new()\n        {\n            Country = "US",\n            Line1 = "123 Main Street",\n            PostalCode = "94105",\n            City = "San Francisco",\n            Line2 = "Apt 4B",\n            State = "CA",\n        },\n        BirthDate = "1990-01-15",\n        FullName = "Jane Smith",\n        KycStatus = KycStatus.Approved,\n        Nationality = "US",\n    },\n};\n\nvar customerOneOf = await client.Customers.Create(parameters);\n\nConsole.WriteLine(customerOneOf);',
       },
       http: {
         example:
@@ -244,6 +259,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Customers.List',
+        example:
+          'CustomerListParams parameters = new();\n\nvar page = await client.Customers.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -288,6 +308,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.retrieve("customerId")\n\nputs(customer_one_of)',
+      },
+      csharp: {
+        method: 'Customers.Retrieve',
+        example:
+          'CustomerRetrieveParams parameters = new() { CustomerID = "customerId" };\n\nvar customerOneOf = await client.Customers.Retrieve(parameters);\n\nConsole.WriteLine(customerOneOf);',
       },
       http: {
         example:
@@ -340,6 +365,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.update("customerId", update_customer_request: {customerType: :INDIVIDUAL})\n\nputs(customer_one_of)',
       },
+      csharp: {
+        method: 'Customers.Update',
+        example:
+          'CustomerUpdateParams parameters = new()\n{\n    CustomerID = "customerId",\n    UpdateCustomerRequest = new Individual()\n    {\n        Currencies =\n        [\n            "USD", "EUR", "USDC"\n        ],\n        Email = "john.doe@example.com",\n        UmaAddress = "$john.doe@uma.domain.com",\n        CustomerType = CustomerType.Individual,\n        Address = new()\n        {\n            Country = "US",\n            Line1 = "456 Market St",\n            PostalCode = "94103",\n            City = "San Francisco",\n            Line2 = "Apt 4B",\n            State = "CA",\n        },\n        BirthDate = "1985-06-15",\n        FullName = "John Smith",\n        KycStatus = KycStatus.Approved,\n        Nationality = "US",\n    },\n};\n\nvar customerOneOf = await client.Customers.Update(parameters);\n\nConsole.WriteLine(customerOneOf);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/$CUSTOMER_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "currencies": [\n            "USD",\n            "EUR",\n            "USDC"\n          ],\n          "email": "john.doe@example.com",\n          "umaAddress": "$john.doe@uma.domain.com",\n          "customerType": "INDIVIDUAL",\n          "address": {\n            "country": "US",\n            "line1": "456 Market St",\n            "postalCode": "94103",\n            "city": "San Francisco",\n            "line2": "Apt 4B",\n            "state": "CA"\n          },\n          "birthDate": "1985-06-15",\n          "fullName": "John Smith",\n          "kycStatus": "APPROVED",\n          "nationality": "US"\n        }\'',
@@ -384,6 +414,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncustomer_one_of = lightspark_grid.customers.delete("customerId")\n\nputs(customer_one_of)',
+      },
+      csharp: {
+        method: 'Customers.Delete',
+        example:
+          'CustomerDeleteParams parameters = new() { CustomerID = "customerId" };\n\nvar customerOneOf = await client.Customers.Delete(parameters);\n\nConsole.WriteLine(customerOneOf);',
       },
       http: {
         example:
@@ -437,6 +472,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.list_internal_accounts\n\nputs(page)',
       },
+      csharp: {
+        method: 'Customers.ListInternalAccounts',
+        example:
+          'CustomerListInternalAccountsParams parameters = new();\n\nvar page = await client.Customers.ListInternalAccounts(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/internal-accounts \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -486,6 +526,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.export',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account_export_response = lightspark_grid.customers.export(\n  "id",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(internal_account_export_response)',
+      },
+      csharp: {
+        method: 'Customers.Export',
+        example:
+          'CustomerExportParams parameters = new()\n{\n    ID = "id",\n    ClientPublicKey = "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n};\n\nvar internalAccountExportResponse = await client.Customers.Export(parameters);\n\nConsole.WriteLine(internalAccountExportResponse);',
       },
       http: {
         example:
@@ -538,6 +583,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.customers.update_internal_account("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n\nputs(internal_account)',
       },
+      csharp: {
+        method: 'Customers.UpdateInternalAccount',
+        example:
+          'CustomerUpdateInternalAccountParams parameters = new()\n{\n    ID = "InternalAccount:019542f5-b3e7-1d02-0000-000000000002"\n};\n\nvar internalAccount = await client.Customers.UpdateInternalAccount(parameters);\n\nConsole.WriteLine(internalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/internal-accounts/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "privateEnabled": true\n        }\'',
@@ -582,6 +632,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.generate_kyc_link',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.generate_kyc_link("customerId")\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Customers.GenerateKycLink',
+        example:
+          'CustomerGenerateKycLinkParams parameters = new() { CustomerID = "customerId" };\n\nvar response = await client.Customers.GenerateKycLink(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -628,6 +683,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.customers.external_accounts.list\n\nputs(page)',
+      },
+      csharp: {
+        method: 'Customers.ExternalAccounts.List',
+        example:
+          'ExternalAccountListParams parameters = new();\n\nvar page = await client.Customers.ExternalAccounts.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -680,6 +740,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      csharp: {
+        method: 'Customers.ExternalAccounts.Create',
+        example:
+          'ExternalAccountCreateParams parameters = new()\n{\n    AccountInfo = new UsdExternalAccountCreateInfo()\n    {\n        AccountNumber = "12345678901",\n        AccountType = AccountType.UsdAccount,\n        Beneficiary = new UsdBeneficiary()\n        {\n            BeneficiaryType = BeneficiaryType.Individual,\n            FullName = "John Doe",\n            Address = new()\n            {\n                Country = "US",\n                Line1 = "123 Main Street",\n                PostalCode = "94105",\n                City = "San Francisco",\n                Line2 = "Apt 4B",\n                State = "CA",\n            },\n            BirthDate = "1990-01-15",\n            CountryOfResidence = "countryOfResidence",\n            Email = "email",\n            Nationality = "US",\n            PhoneNumber = "phoneNumber",\n        },\n        RoutingNumber = "123456789",\n    },\n    Currency = "USD",\n};\n\nvar externalAccount = await client.Customers.ExternalAccounts.Create(parameters);\n\nConsole.WriteLine(externalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountInfo": {\n            "accountNumber": "12345678901",\n            "accountType": "USD_ACCOUNT",\n            "beneficiary": {\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "John Doe",\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105",\n                "city": "San Francisco",\n                "state": "CA"\n              },\n              "birthDate": "1990-01-15",\n              "nationality": "US"\n            },\n            "routingNumber": "123456789"\n          },\n          "currency": "USD",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -725,6 +790,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.customers.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      csharp: {
+        method: 'Customers.ExternalAccounts.Retrieve',
+        example:
+          'ExternalAccountRetrieveParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nvar externalAccount = await client.Customers.ExternalAccounts.Retrieve(parameters);\n\nConsole.WriteLine(externalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -767,6 +837,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.customers.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      csharp: {
+        method: 'Customers.ExternalAccounts.Delete',
+        example:
+          'ExternalAccountDeleteParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nawait client.Customers.ExternalAccounts.Delete(parameters);',
       },
       http: {
         example:
@@ -812,6 +887,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers.bulk.upload_csv',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.upload_csv(file: StringIO.new("Example data"))\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Customers.Bulk.UploadCsv',
+        example:
+          'BulkUploadCsvParams parameters = new()\n{\n    File = Encoding.UTF8.GetBytes("Example data")\n};\n\nvar response = await client.Customers.Bulk.UploadCsv(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -859,6 +939,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.customers.bulk.get_job_status("jobId")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Customers.Bulk.GetJobStatus',
+        example:
+          'BulkGetJobStatusParams parameters = new() { JobID = "jobId" };\n\nvar response = await client.Customers.Bulk.GetJobStatus(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/bulk/jobs/$JOB_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -905,6 +990,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.platform.list_internal_accounts\n\nputs(response)',
       },
+      csharp: {
+        method: 'Platform.ListInternalAccounts',
+        example:
+          'PlatformListInternalAccountsParams parameters = new();\n\nvar response = await client.Platform.ListInternalAccounts(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/internal-accounts \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -950,6 +1040,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.platform.external_accounts.list\n\nputs(page)',
+      },
+      csharp: {
+        method: 'Platform.ExternalAccounts.List',
+        example:
+          'ExternalAccountListParams parameters = new();\n\nvar page = await client.Platform.ExternalAccounts.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -1000,6 +1095,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.create(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      csharp: {
+        method: 'Platform.ExternalAccounts.Create',
+        example:
+          'ExternalAccountCreateParams parameters = new()\n{\n    AccountInfo = new UsdExternalAccountCreateInfo()\n    {\n        AccountNumber = "12345678901",\n        AccountType = AccountType.UsdAccount,\n        Beneficiary = new UsdBeneficiary()\n        {\n            BeneficiaryType = BeneficiaryType.Individual,\n            FullName = "John Doe",\n            Address = new()\n            {\n                Country = "US",\n                Line1 = "123 Main Street",\n                PostalCode = "94105",\n                City = "San Francisco",\n                Line2 = "Apt 4B",\n                State = "CA",\n            },\n            BirthDate = "1990-01-15",\n            CountryOfResidence = "countryOfResidence",\n            Email = "email",\n            Nationality = "US",\n            PhoneNumber = "phoneNumber",\n        },\n        RoutingNumber = "123456789",\n    },\n    Currency = "USD",\n};\n\nvar externalAccount = await client.Platform.ExternalAccounts.Create(parameters);\n\nConsole.WriteLine(externalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountInfo": {\n            "accountNumber": "12345678901",\n            "accountType": "USD_ACCOUNT",\n            "beneficiary": {\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "John Doe",\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105",\n                "city": "San Francisco",\n                "state": "CA"\n              },\n              "birthDate": "1990-01-15",\n              "nationality": "US"\n            },\n            "routingNumber": "123456789"\n          },\n          "currency": "USD",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -1045,6 +1145,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexternal_account = lightspark_grid.platform.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      csharp: {
+        method: 'Platform.ExternalAccounts.Retrieve',
+        example:
+          'ExternalAccountRetrieveParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nvar externalAccount = await client.Platform.ExternalAccounts.Retrieve(parameters);\n\nConsole.WriteLine(externalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1087,6 +1192,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.platform.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      csharp: {
+        method: 'Platform.ExternalAccounts.Delete',
+        example:
+          'ExternalAccountDeleteParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nawait client.Platform.ExternalAccounts.Delete(parameters);',
       },
       http: {
         example:
@@ -1139,6 +1249,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_in.create(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(transaction)',
       },
+      csharp: {
+        method: 'TransferIn.Create',
+        example:
+          'TransferInCreateParams parameters = new()\n{\n    Destination = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n    Source = new("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"),\n};\n\nvar transaction = await client.TransferIn.Create(parameters);\n\nConsole.WriteLine(transaction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transfer-in \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "source": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "amount": 12550\n        }\'',
@@ -1189,6 +1304,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transfer_out.create(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(transaction)',
       },
+      csharp: {
+        method: 'TransferOut.Create',
+        example:
+          'TransferOutCreateParams parameters = new()\n{\n    Destination = new("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"),\n    Source = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n};\n\nvar transaction = await client.TransferOut.Create(parameters);\n\nConsole.WriteLine(transaction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transfer-out \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "source": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "amount": 12550\n        }\'',
@@ -1234,6 +1354,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver.lookup_uma',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_uma("receiverUmaAddress")\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Receiver.LookupUma',
+        example:
+          'ReceiverLookupUmaParams parameters = new()\n{\n    ReceiverUmaAddress = "receiverUmaAddress"\n};\n\nvar response = await client.Receiver.LookupUma(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -1281,6 +1406,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.receiver.lookup_external_account("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Receiver.LookupExternalAccount',
+        example:
+          'ReceiverLookupExternalAccountParams parameters = new()\n{\n    AccountID = "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n};\n\nvar response = await client.Receiver.LookupExternalAccount(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/receiver/external-account/$ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1326,6 +1456,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.retrieve("quoteId")\n\nputs(quote)',
+      },
+      csharp: {
+        method: 'Quotes.Retrieve',
+        example:
+          'QuoteRetrieveParams parameters = new() { QuoteID = "quoteId" };\n\nvar quote = await client.Quotes.Retrieve(parameters);\n\nConsole.WriteLine(quote);',
       },
       http: {
         example:
@@ -1384,6 +1519,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 10000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
       },
+      csharp: {
+        method: 'Quotes.Create',
+        example:
+          'QuoteCreateParams parameters = new()\n{\n    Destination = new AccountDestination()\n    {\n        AccountID = "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n        PaymentRail = PaymentRail.Ach,\n    },\n    LockedCurrencyAmount = 10000,\n    LockedCurrencySide = LockedCurrencySide.Sending,\n    Source = new AccountQuoteSource()\n    {\n        AccountID = "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n        CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    },\n};\n\nvar quote = await client.Quotes.Create(parameters);\n\nConsole.WriteLine(quote);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 10000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Transfer between accounts, either internal or external.",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
@@ -1429,6 +1569,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes.execute',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nquote = lightspark_grid.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(quote)',
+      },
+      csharp: {
+        method: 'Quotes.Execute',
+        example:
+          'QuoteExecuteParams parameters = new()\n{\n    QuoteID = "Quote:019542f5-b3e7-1d02-0000-000000000001"\n};\n\nvar quote = await client.Quotes.Execute(parameters);\n\nConsole.WriteLine(quote);',
       },
       http: {
         example:
@@ -1490,6 +1635,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.transactions.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Transactions.List',
+        example:
+          'TransactionListParams parameters = new();\n\nvar page = await client.Transactions.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1534,6 +1684,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transactions.retrieve("transactionId")\n\nputs(transaction)',
+      },
+      csharp: {
+        method: 'Transactions.Retrieve',
+        example:
+          'TransactionRetrieveParams parameters = new()\n{\n    TransactionID = "transactionId"\n};\n\nvar transaction = await client.Transactions.Retrieve(parameters);\n\nConsole.WriteLine(transaction);',
       },
       http: {
         example:
@@ -1581,6 +1736,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.approve("transactionId")\n\nputs(incoming_transaction)',
       },
+      csharp: {
+        method: 'Transactions.Approve',
+        example:
+          'TransactionApproveParams parameters = new() { TransactionID = "transactionId" };\n\nvar incomingTransaction = await client.Transactions.Approve(parameters);\n\nConsole.WriteLine(incomingTransaction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/approve \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1627,6 +1787,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.transactions.reject("transactionId")\n\nputs(incoming_transaction)',
       },
+      csharp: {
+        method: 'Transactions.Reject',
+        example:
+          'TransactionRejectParams parameters = new() { TransactionID = "transactionId" };\n\nvar incomingTransaction = await client.Transactions.Reject(parameters);\n\nConsole.WriteLine(incomingTransaction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1672,6 +1837,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.create(inviter_uma: "$inviter@uma.domain")\n\nputs(uma_invitation)',
       },
+      csharp: {
+        method: 'Invitations.Create',
+        example:
+          'InvitationCreateParams parameters = new()\n{\n    InviterUma = "$inviter@uma.domain"\n};\n\nvar umaInvitation = await client.Invitations.Create(parameters);\n\nConsole.WriteLine(umaInvitation);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "inviterUma": "$inviter@uma.domain",\n          "amountToSend": 12550,\n          "expiresAt": "2025-09-01T14:30:00Z",\n          "firstName": "Alice"\n        }\'',
@@ -1716,6 +1886,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.retrieve("invitationCode")\n\nputs(uma_invitation)',
+      },
+      csharp: {
+        method: 'Invitations.Retrieve',
+        example:
+          'InvitationRetrieveParams parameters = new()\n{\n    InvitationCode = "invitationCode"\n};\n\nvar umaInvitation = await client.Invitations.Retrieve(parameters);\n\nConsole.WriteLine(umaInvitation);',
       },
       http: {
         example:
@@ -1763,6 +1938,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.claim("invitationCode", invitee_uma: "$invitee@uma.domain")\n\nputs(uma_invitation)',
       },
+      csharp: {
+        method: 'Invitations.Claim',
+        example:
+          'InvitationClaimParams parameters = new()\n{\n    InvitationCode = "invitationCode",\n    InviteeUma = "$invitee@uma.domain",\n};\n\nvar umaInvitation = await client.Invitations.Claim(parameters);\n\nConsole.WriteLine(umaInvitation);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations/$INVITATION_CODE/claim \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "inviteeUma": "$invitee@uma.domain"\n        }\'',
@@ -1809,6 +1989,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\numa_invitation = lightspark_grid.invitations.cancel("invitationCode")\n\nputs(uma_invitation)',
       },
+      csharp: {
+        method: 'Invitations.Cancel',
+        example:
+          'InvitationCancelParams parameters = new() { InvitationCode = "invitationCode" };\n\nvar umaInvitation = await client.Invitations.Cancel(parameters);\n\nConsole.WriteLine(umaInvitation);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations/$INVITATION_CODE/cancel \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1854,6 +2039,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.send_funds',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\noutgoing_transaction = lightspark_grid.sandbox.send_funds(\n  currency_code: "USD",\n  quote_id: "Quote:019542f5-b3e7-1d02-0000-000000000006"\n)\n\nputs(outgoing_transaction)',
+      },
+      csharp: {
+        method: 'Sandbox.SendFunds',
+        example:
+          'SandboxSendFundsParams parameters = new()\n{\n    CurrencyCode = "USD",\n    QuoteID = "Quote:019542f5-b3e7-1d02-0000-000000000006",\n};\n\nvar outgoingTransaction = await client.Sandbox.SendFunds(parameters);\n\nConsole.WriteLine(outgoingTransaction);',
       },
       http: {
         example:
@@ -1907,6 +2097,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nincoming_transaction = lightspark_grid.sandbox.uma.receive_payment(\n  receiving_currency_amount: 1000,\n  receiving_currency_code: "USD",\n  sender_uma_address: "$success.usd@sandbox.grid.uma.money"\n)\n\nputs(incoming_transaction)',
       },
+      csharp: {
+        method: 'Sandbox.Uma.ReceivePayment',
+        example:
+          'UmaReceivePaymentParams parameters = new()\n{\n    ReceivingCurrencyAmount = 1000,\n    ReceivingCurrencyCode = "USD",\n    SenderUmaAddress = "$success.usd@sandbox.grid.uma.money",\n};\n\nvar incomingTransaction = await client.Sandbox.Uma.ReceivePayment(parameters);\n\nConsole.WriteLine(incomingTransaction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/uma/receive \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "receivingCurrencyAmount": 1000,\n          "receivingCurrencyCode": "USD",\n          "senderUmaAddress": "$success.usd@sandbox.grid.uma.money",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "receiverUmaAddress": "$receiver@uma.domain"\n        }\'',
@@ -1953,6 +2148,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ninternal_account = lightspark_grid.sandbox.internal_accounts.fund(\n  "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n  amount: 100000\n)\n\nputs(internal_account)',
       },
+      csharp: {
+        method: 'Sandbox.InternalAccounts.Fund',
+        example:
+          'InternalAccountFundParams parameters = new()\n{\n    AccountID = "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    Amount = 100000,\n};\n\nvar internalAccount = await client.Sandbox.InternalAccounts.Fund(parameters);\n\nConsole.WriteLine(internalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/internal-accounts/$ACCOUNT_ID/fund \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 100000\n        }\'',
@@ -1995,6 +2195,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox.webhooks.send_test',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.webhooks.send_test\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Sandbox.Webhooks.SendTest',
+        example:
+          'WebhookSendTestParams parameters = new();\n\nvar response = await client.Sandbox.Webhooks.SendTest(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -2049,6 +2254,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.uma_providers.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'UmaProviders.List',
+        example:
+          'UmaProviderListParams parameters = new();\n\nvar page = await client.UmaProviders.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/uma-providers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2093,6 +2303,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.create(name: "Sandbox read-only", permissions: [:VIEW])\n\nputs(api_token)',
+      },
+      csharp: {
+        method: 'Tokens.Create',
+        example:
+          'TokenCreateParams parameters = new()\n{\n    Name = "Sandbox read-only",\n    Permissions =\n    [\n        Permission.View\n    ],\n};\n\nvar apiToken = await client.Tokens.Create(parameters);\n\nConsole.WriteLine(apiToken);',
       },
       http: {
         example:
@@ -2148,6 +2363,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.tokens.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Tokens.List',
+        example:
+          'TokenListParams parameters = new();\n\nvar page = await client.Tokens.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/tokens \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2193,6 +2413,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\napi_token = lightspark_grid.tokens.retrieve("tokenId")\n\nputs(api_token)',
       },
+      csharp: {
+        method: 'Tokens.Retrieve',
+        example:
+          'TokenRetrieveParams parameters = new() { TokenID = "tokenId" };\n\nvar apiToken = await client.Tokens.Retrieve(parameters);\n\nConsole.WriteLine(apiToken);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/tokens/$TOKEN_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2235,6 +2460,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.tokens.delete("tokenId")\n\nputs(result)',
+      },
+      csharp: {
+        method: 'Tokens.Delete',
+        example:
+          'TokenDeleteParams parameters = new() { TokenID = "tokenId" };\n\nawait client.Tokens.Delete(parameters);',
       },
       http: {
         example:
@@ -2282,6 +2512,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nexchange_rates = lightspark_grid.exchange_rates.list\n\nputs(exchange_rates)',
       },
+      csharp: {
+        method: 'ExchangeRates.List',
+        example:
+          'ExchangeRateListParams parameters = new();\n\nvar exchangeRates = await client.ExchangeRates.List(parameters);\n\nConsole.WriteLine(exchangeRates);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/exchange-rates \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2320,6 +2555,9 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'webhooks.unwrap',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.webhooks.unwrap\n\nputs(result)',
+      },
+      csharp: {
+        example: 'WebhookUnwrapParams parameters = new();\n\nawait client.Webhooks.Unwrap(parameters);',
       },
     },
   },
@@ -2368,6 +2606,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'crypto.estimate_withdrawal_fee',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.crypto.estimate_withdrawal_fee(\n  amount: 1000000,\n  crypto_network: "SOLANA",\n  currency: "USDC",\n  destination_address: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n  internal_account_id: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n)\n\nputs(response)',
+      },
+      csharp: {
+        method: 'Crypto.EstimateWithdrawalFee',
+        example:
+          'CryptoEstimateWithdrawalFeeParams parameters = new()\n{\n    Amount = 1000000,\n    CryptoNetwork = "SOLANA",\n    Currency = "USDC",\n    DestinationAddress = "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n    InternalAccountID = "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n};\n\nvar response = await client.Crypto.EstimateWithdrawalFee(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -2420,6 +2663,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  ownership_percentage: 51,\n  personal_info: {\n    address: {country: "US", line1: "123 Main Street", postalCode: "94105"},\n    birthDate: "1978-06-15",\n    firstName: "Jane",\n    identifier: "123-45-6789",\n    idType: :SSN,\n    lastName: "Smith",\n    nationality: "US"\n  },\n  roles: [:UBO, :DIRECTOR]\n)\n\nputs(beneficial_owner)',
       },
+      csharp: {
+        method: 'BeneficialOwners.Create',
+        example:
+          'BeneficialOwnerCreateParams parameters = new()\n{\n    CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    OwnershipPercentage = 51,\n    PersonalInfo = new()\n    {\n        Address = new()\n        {\n            Country = "US",\n            Line1 = "123 Main Street",\n            PostalCode = "94105",\n            City = "San Francisco",\n            Line2 = "Apt 4B",\n            State = "CA",\n        },\n        BirthDate = "1978-06-15",\n        FirstName = "Jane",\n        Identifier = "123-45-6789",\n        IDType = IDType.Ssn,\n        LastName = "Smith",\n        Nationality = "US",\n        CountryOfIssuance = "US",\n        Email = "jane.smith@acmecorp.com",\n        MiddleName = "Marie",\n        PhoneNumber = "+14155550192",\n    },\n    Roles =\n    [\n        Role.Ubo, Role.Director\n    ],\n};\n\nvar beneficialOwner = await client.BeneficialOwners.Create(parameters);\n\nConsole.WriteLine(beneficialOwner);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "ownershipPercentage": 51,\n          "personalInfo": {\n            "address": {\n              "country": "US",\n              "line1": "123 Main Street",\n              "postalCode": "94105"\n            },\n            "birthDate": "1978-06-15",\n            "firstName": "Jane",\n            "identifier": "123-45-6789",\n            "idType": "SSN",\n            "lastName": "Smith",\n            "nationality": "US"\n          },\n          "roles": [\n            "UBO",\n            "DIRECTOR"\n          ]\n        }\'',
@@ -2465,6 +2713,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.beneficial_owners.list(customer_id: "customerId")\n\nputs(page)',
       },
+      csharp: {
+        method: 'BeneficialOwners.List',
+        example:
+          'BeneficialOwnerListParams parameters = new() { CustomerID = "customerId" };\n\nvar page = await client.BeneficialOwners.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2509,6 +2762,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.retrieve("beneficialOwnerId")\n\nputs(beneficial_owner)',
+      },
+      csharp: {
+        method: 'BeneficialOwners.Retrieve',
+        example:
+          'BeneficialOwnerRetrieveParams parameters = new()\n{\n    BeneficialOwnerID = "beneficialOwnerId"\n};\n\nvar beneficialOwner = await client.BeneficialOwners.Retrieve(parameters);\n\nConsole.WriteLine(beneficialOwner);',
       },
       http: {
         example:
@@ -2559,6 +2817,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficial_owners.update',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nbeneficial_owner = lightspark_grid.beneficial_owners.update("beneficialOwnerId")\n\nputs(beneficial_owner)',
+      },
+      csharp: {
+        method: 'BeneficialOwners.Update',
+        example:
+          'BeneficialOwnerUpdateParams parameters = new()\n{\n    BeneficialOwnerID = "beneficialOwnerId"\n};\n\nvar beneficialOwner = await client.BeneficialOwners.Update(parameters);\n\nConsole.WriteLine(beneficialOwner);',
       },
       http: {
         example:
@@ -2613,6 +2876,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  country: "US",\n  document_holder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
       },
+      csharp: {
+        method: 'Documents.Upload',
+        example:
+          'DocumentUploadParams parameters = new()\n{\n    Country = "US",\n    DocumentHolder = "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n    DocumentType = DocumentType.Passport,\n    File = Encoding.UTF8.GetBytes("Example data"),\n};\n\nvar response = await client.Documents.Upload(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentHolder=BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F documentNumber=A12345678 \\\n    -F side=FRONT",
@@ -2658,6 +2926,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.documents.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Documents.List',
+        example:
+          'DocumentListParams parameters = new();\n\nvar page = await client.Documents.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2702,6 +2975,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndocument = lightspark_grid.documents.retrieve("documentId")\n\nputs(document)',
+      },
+      csharp: {
+        method: 'Documents.Retrieve',
+        example:
+          'DocumentRetrieveParams parameters = new() { DocumentID = "documentId" };\n\nvar document = await client.Documents.Retrieve(parameters);\n\nConsole.WriteLine(document);',
       },
       http: {
         example:
@@ -2756,6 +3034,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  country: "US",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
       },
+      csharp: {
+        method: 'Documents.Replace',
+        example:
+          'DocumentReplaceParams parameters = new()\n{\n    DocumentID = "documentId",\n    Country = "US",\n    DocumentType = DocumentType.Passport,\n    File = Encoding.UTF8.GetBytes("Example data"),\n};\n\nvar response = await client.Documents.Replace(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/documents/$DOCUMENT_ID \\\n    -X PUT \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F documentNumber=A12345678 \\\n    -F side=FRONT",
@@ -2799,6 +3082,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.documents.delete("documentId")\n\nputs(result)',
+      },
+      csharp: {
+        method: 'Documents.Delete',
+        example:
+          'DocumentDeleteParams parameters = new() { DocumentID = "documentId" };\n\nawait client.Documents.Delete(parameters);',
       },
       http: {
         example:
@@ -2846,6 +3134,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.verifications.submit(customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(response)',
       },
+      csharp: {
+        method: 'Verifications.Submit',
+        example:
+          'VerificationSubmitParams parameters = new()\n{\n    CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001"\n};\n\nvar response = await client.Verifications.Submit(parameters);\n\nConsole.WriteLine(response);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/verifications \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001"\n        }\'',
@@ -2890,6 +3183,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.verifications.list\n\nputs(page)',
+      },
+      csharp: {
+        method: 'Verifications.List',
+        example:
+          'VerificationListParams parameters = new();\n\nvar page = await client.Verifications.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -2936,6 +3234,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nverification = lightspark_grid.verifications.retrieve("verificationId")\n\nputs(verification)',
       },
+      csharp: {
+        method: 'Verifications.Retrieve',
+        example:
+          'VerificationRetrieveParams parameters = new()\n{\n    VerificationID = "verificationId"\n};\n\nvar verification = await client.Verifications.Retrieve(parameters);\n\nConsole.WriteLine(verification);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/verifications/$VERIFICATION_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2980,6 +3283,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ndiscoveries = lightspark_grid.discoveries.list\n\nputs(discoveries)',
+      },
+      csharp: {
+        method: 'Discoveries.List',
+        example:
+          'DiscoveryListParams parameters = new();\n\nvar discoveries = await client.Discoveries.List(parameters);\n\nConsole.WriteLine(discoveries);',
       },
       http: {
         example:
@@ -3031,6 +3339,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_method_response = lightspark_grid.auth.credentials.create(\n  auth_credential_create_request: {accountId: "InternalAccount:019542f5-b3e7-1d02-0000-000000000002", type: :EMAIL_OTP}\n)\n\nputs(auth_method_response)',
       },
+      csharp: {
+        method: 'Auth.Credentials.Create',
+        example:
+          'CredentialCreateParams parameters = new()\n{\n    AuthCredentialCreateRequest = new EmailOtpCredentialCreateRequest()\n    {\n        AccountID = "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n        Type = Type.EmailOtp,\n    },\n};\n\nvar authMethodResponse = await client.Auth.Credentials.Create(parameters);\n\nConsole.WriteLine(authMethodResponse);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountId": "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n          "type": "EMAIL_OTP"\n        }\'',
@@ -3081,6 +3394,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.credentials.verify(\n  "id",\n  auth_credential_verify_request: {\n    clientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n    otp: "123456",\n    type: :EMAIL_OTP\n  }\n)\n\nputs(auth_session)',
       },
+      csharp: {
+        method: 'Auth.Credentials.Verify',
+        example:
+          'CredentialVerifyParams parameters = new()\n{\n    ID = "id",\n    AuthCredentialVerifyRequest = new EmailOtpCredentialVerifyRequestFields()\n    {\n        ClientPublicKey = "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n        Otp = "123456",\n        Type = Type.EmailOtp,\n    },\n};\n\nvar authSession = await client.Auth.Credentials.Verify(parameters);\n\nConsole.WriteLine(authSession);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials/$ID/verify \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "clientPublicKey": "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n          "otp": "123456",\n          "type": "EMAIL_OTP"\n        }\'',
@@ -3126,6 +3444,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.credentials.challenge',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_response_one_of = lightspark_grid.auth.credentials.challenge("id")\n\nputs(auth_credential_response_one_of)',
+      },
+      csharp: {
+        method: 'Auth.Credentials.Challenge',
+        example:
+          'CredentialChallengeParams parameters = new() { ID = "id" };\n\nvar authCredentialResponseOneOf = await client.Auth.Credentials.Challenge(parameters);\n\nConsole.WriteLine(authCredentialResponseOneOf);',
       },
       http: {
         example:
@@ -3173,6 +3496,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_credential_list_response = lightspark_grid.auth.credentials.list(account_id: "accountId")\n\nputs(auth_credential_list_response)',
       },
+      csharp: {
+        method: 'Auth.Credentials.List',
+        example:
+          'CredentialListParams parameters = new() { AccountID = "accountId" };\n\nvar authCredentialListResponse = await client.Auth.Credentials.List(parameters);\n\nConsole.WriteLine(authCredentialListResponse);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3217,6 +3545,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.credentials.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.credentials.delete("id")\n\nputs(auth_signed_request_challenge)',
+      },
+      csharp: {
+        method: 'Auth.Credentials.Delete',
+        example:
+          'CredentialDeleteParams parameters = new() { ID = "id" };\n\nvar authSignedRequestChallenge = await client.Auth.Credentials.Delete(parameters);\n\nConsole.WriteLine(authSignedRequestChallenge);',
       },
       http: {
         example:
@@ -3263,6 +3596,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nsession_list_response = lightspark_grid.auth.sessions.list(account_id: "accountId")\n\nputs(session_list_response)',
       },
+      csharp: {
+        method: 'Auth.Sessions.List',
+        example:
+          'SessionListParams parameters = new() { AccountID = "accountId" };\n\nvar sessionListResponse = await client.Auth.Sessions.List(parameters);\n\nConsole.WriteLine(sessionListResponse);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3307,6 +3645,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth.sessions.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_signed_request_challenge = lightspark_grid.auth.sessions.delete("id")\n\nputs(auth_signed_request_challenge)',
+      },
+      csharp: {
+        method: 'Auth.Sessions.Delete',
+        example:
+          'SessionDeleteParams parameters = new() { ID = "id" };\n\nvar authSignedRequestChallenge = await client.Auth.Sessions.Delete(parameters);\n\nConsole.WriteLine(authSignedRequestChallenge);',
       },
       http: {
         example:
@@ -3359,6 +3702,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nauth_session = lightspark_grid.auth.sessions.refresh(\n  "Session:019542f5-b3e7-1d02-0000-000000000003",\n  client_public_key: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n)\n\nputs(auth_session)',
       },
+      csharp: {
+        method: 'Auth.Sessions.Refresh',
+        example:
+          'SessionRefreshParams parameters = new()\n{\n    ID = "Session:019542f5-b3e7-1d02-0000-000000000003",\n    ClientPublicKey = "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n};\n\nvar authSession = await client.Auth.Sessions.Refresh(parameters);\n\nConsole.WriteLine(authSession);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions/$ID/refresh \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "clientPublicKey": "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n        }\'',
@@ -3408,6 +3756,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.create',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_create_response = lightspark_grid.agents.create(\n  customer_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  name: "Payroll Automation Agent",\n  policy: {\n    defaultExecutionMode: :AUTO,\n    permissions: [:VIEW_TRANSACTIONS],\n    spendingLimits: {currency: "USD", perTransactionLimit: 50000}\n  }\n)\n\nputs(agent_create_response)',
+      },
+      csharp: {
+        method: 'Agents.Create',
+        example:
+          'AgentCreateParams parameters = new()\n{\n    CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    Name = "Payroll Automation Agent",\n    Policy = new()\n    {\n        DefaultExecutionMode = DefaultExecutionMode.Auto,\n        Permissions =\n        [\n            Permission.ViewTransactions\n        ],\n        SpendingLimits = new()\n        {\n            Currency = "USD",\n            PerTransactionLimit = 50000,\n            DailyLimit = 500000,\n            DailyTransactionLimit = 10,\n            MonthlyLimit = 5000000,\n        },\n        AccountRestrictions = new()\n        {\n            AccountRules =\n            [\n                new()\n                {\n                    AccountID = "Account:019542f5-b3e7-1d02-0000-000000000001",\n                    ExecutionMode = ExecutionMode.Auto,\n                    PerTransactionLimit = 10000,\n                },\n            ],\n            AllowedAccountIds =\n            [\n                "Account:019542f5-b3e7-1d02-0000-000000000001"\n            ],\n        },\n        ApprovalThresholds = new()\n        {\n            Amount = 100000,\n            Currency = "USD",\n        },\n    },\n};\n\nvar agentCreateResponse = await client.Agents.Create(parameters);\n\nConsole.WriteLine(agentCreateResponse);',
       },
       http: {
         example:
@@ -3464,6 +3817,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Agents.List',
+        example:
+          'AgentListParams parameters = new();\n\nvar page = await client.Agents.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3518,6 +3876,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.agents.list_approvals\n\nputs(page)',
       },
+      csharp: {
+        method: 'Agents.ListApprovals',
+        example:
+          'AgentListApprovalsParams parameters = new();\n\nvar page = await client.Agents.ListApprovals(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/approvals \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3562,6 +3925,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.retrieve("agentId")\n\nputs(agent)',
+      },
+      csharp: {
+        method: 'Agents.Retrieve',
+        example:
+          'AgentRetrieveParams parameters = new() { AgentID = "agentId" };\n\nvar agent = await client.Agents.Retrieve(parameters);\n\nConsole.WriteLine(agent);',
       },
       http: {
         example:
@@ -3608,6 +3976,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update("agentId")\n\nputs(agent)',
       },
+      csharp: {
+        method: 'Agents.Update',
+        example:
+          'AgentUpdateParams parameters = new() { AgentID = "agentId" };\n\nvar agent = await client.Agents.Update(parameters);\n\nConsole.WriteLine(agent);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "isPaused": true,\n          "name": "Updated Payroll Agent"\n        }\'',
@@ -3650,6 +4023,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresult = lightspark_grid.agents.delete("agentId")\n\nputs(result)',
+      },
+      csharp: {
+        method: 'Agents.Delete',
+        example:
+          'AgentDeleteParams parameters = new() { AgentID = "agentId" };\n\nawait client.Agents.Delete(parameters);',
       },
       http: {
         example:
@@ -3704,6 +4082,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent = lightspark_grid.agents.update_policy("agentId")\n\nputs(agent)',
       },
+      csharp: {
+        method: 'Agents.UpdatePolicy',
+        example:
+          'AgentUpdatePolicyParams parameters = new() { AgentID = "agentId" };\n\nvar agent = await client.Agents.UpdatePolicy(parameters);\n\nConsole.WriteLine(agent);',
+      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/policy \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -d '{}'",
@@ -3748,6 +4131,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent = lightspark_grid.agents.me.retrieve\n\nputs(agent)',
+      },
+      csharp: {
+        method: 'Agents.Me.Retrieve',
+        example:
+          'MeRetrieveParams parameters = new();\n\nvar agent = await client.Agents.Me.Retrieve(parameters);\n\nConsole.WriteLine(agent);',
       },
       http: {
         example:
@@ -3800,6 +4188,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_in(\n  destination: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"},\n  source: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"}\n)\n\nputs(agent_action)',
       },
+      csharp: {
+        method: 'Agents.Me.CreateTransferIn',
+        example:
+          'MeCreateTransferInParams parameters = new()\n{\n    Destination = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n    Source = new("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"),\n};\n\nvar agentAction = await client.Agents.Me.CreateTransferIn(parameters);\n\nConsole.WriteLine(agentAction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transfer-in \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "source": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "amount": 12550\n        }\'',
@@ -3851,6 +4244,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.create_transfer_out(\n  destination: {accountId: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"},\n  source: {accountId: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"}\n)\n\nputs(agent_action)',
       },
+      csharp: {
+        method: 'Agents.Me.CreateTransferOut',
+        example:
+          'MeCreateTransferOutParams parameters = new()\n{\n    Destination = new("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"),\n    Source = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n};\n\nvar agentAction = await client.Agents.Me.CreateTransferOut(parameters);\n\nConsole.WriteLine(agentAction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transfer-out \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "source": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "amount": 12550\n        }\'',
@@ -3901,6 +4299,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.list_internal_accounts',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.list_internal_accounts\n\nputs(page)',
+      },
+      csharp: {
+        method: 'Agents.Me.ListInternalAccounts',
+        example:
+          'MeListInternalAccountsParams parameters = new();\n\nvar page = await client.Agents.Me.ListInternalAccounts(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -3960,6 +4363,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.transactions.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Agents.Me.Transactions.List',
+        example:
+          'TransactionListParams parameters = new();\n\nvar page = await client.Agents.Me.Transactions.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transactions \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -4005,6 +4413,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.transactions.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\ntransaction = lightspark_grid.agents.me.transactions.retrieve("transactionId")\n\nputs(transaction)',
+      },
+      csharp: {
+        method: 'Agents.Me.Transactions.Retrieve',
+        example:
+          'TransactionRetrieveParams parameters = new()\n{\n    TransactionID = "transactionId"\n};\n\nvar transaction = await client.Agents.Me.Transactions.Retrieve(parameters);\n\nConsole.WriteLine(transaction);',
       },
       http: {
         example:
@@ -4063,6 +4476,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.create(\n  destination: {accountId: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123", destinationType: :ACCOUNT},\n  locked_currency_amount: 1000,\n  locked_currency_side: :SENDING,\n  source: {accountId: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965", sourceType: :ACCOUNT}\n)\n\nputs(quote)',
       },
+      csharp: {
+        method: 'Agents.Me.Quotes.Create',
+        example:
+          'QuoteCreateParams parameters = new()\n{\n    Destination = new AccountDestination()\n    {\n        AccountID = "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n        PaymentRail = PaymentRail.Ach,\n    },\n    LockedCurrencyAmount = 1000,\n    LockedCurrencySide = LockedCurrencySide.Sending,\n    Source = new AccountQuoteSource()\n    {\n        AccountID = "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n        CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    },\n};\n\nvar quote = await client.Agents.Me.Quotes.Create(parameters);\n\nConsole.WriteLine(quote);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n            "destinationType": "ACCOUNT"\n          },\n          "lockedCurrencyAmount": 1000,\n          "lockedCurrencySide": "SENDING",\n          "source": {\n            "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n            "sourceType": "ACCOUNT"\n          },\n          "description": "Invoice #1234 payment",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
@@ -4108,6 +4526,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.quotes.retrieve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nquote = lightspark_grid.agents.me.quotes.retrieve("quoteId")\n\nputs(quote)',
+      },
+      csharp: {
+        method: 'Agents.Me.Quotes.Retrieve',
+        example:
+          'QuoteRetrieveParams parameters = new() { QuoteID = "quoteId" };\n\nvar quote = await client.Agents.Me.Quotes.Retrieve(parameters);\n\nConsole.WriteLine(quote);',
       },
       http: {
         example:
@@ -4155,6 +4578,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.quotes.execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n\nputs(agent_action)',
       },
+      csharp: {
+        method: 'Agents.Me.Quotes.Execute',
+        example:
+          'QuoteExecuteParams parameters = new()\n{\n    QuoteID = "Quote:019542f5-b3e7-1d02-0000-000000000001"\n};\n\nvar agentAction = await client.Agents.Me.Quotes.Execute(parameters);\n\nConsole.WriteLine(agentAction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes/$QUOTE_ID/execute \\\n    -X POST \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -4200,6 +4628,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.external_accounts.list',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.external_accounts.list\n\nputs(page)',
+      },
+      csharp: {
+        method: 'Agents.Me.ExternalAccounts.List',
+        example:
+          'ExternalAccountListParams parameters = new();\n\nvar page = await client.Agents.Me.ExternalAccounts.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -4253,6 +4686,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.add(\n  account_info: {\n    accountNumber: "12345678901",\n    accountType: :USD_ACCOUNT,\n    beneficiary: {beneficiaryType: :INDIVIDUAL, fullName: "John Doe"},\n    routingNumber: "123456789"\n  },\n  currency: "USD"\n)\n\nputs(external_account)',
       },
+      csharp: {
+        method: 'Agents.Me.ExternalAccounts.Add',
+        example:
+          'ExternalAccountAddParams parameters = new()\n{\n    AccountInfo = new UsdExternalAccountCreateInfo()\n    {\n        AccountNumber = "12345678901",\n        AccountType = AccountType.UsdAccount,\n        Beneficiary = new UsdBeneficiary()\n        {\n            BeneficiaryType = BeneficiaryType.Individual,\n            FullName = "John Doe",\n            Address = new()\n            {\n                Country = "US",\n                Line1 = "123 Main Street",\n                PostalCode = "94105",\n                City = "San Francisco",\n                Line2 = "Apt 4B",\n                State = "CA",\n            },\n            BirthDate = "1990-01-15",\n            CountryOfResidence = "countryOfResidence",\n            Email = "email",\n            Nationality = "US",\n            PhoneNumber = "phoneNumber",\n        },\n        RoutingNumber = "123456789",\n    },\n    Currency = "USD",\n};\n\nvar externalAccount = await client.Agents.Me.ExternalAccounts.Add(parameters);\n\nConsole.WriteLine(externalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "accountInfo": {\n            "accountNumber": "12345678901",\n            "accountType": "USD_ACCOUNT",\n            "beneficiary": {\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "John Doe",\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105",\n                "city": "San Francisco",\n                "state": "CA"\n              },\n              "birthDate": "1990-01-15",\n              "nationality": "US"\n            },\n            "routingNumber": "123456789"\n          },\n          "currency": "USD",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -4299,6 +4737,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nexternal_account = lightspark_grid.agents.me.external_accounts.retrieve("externalAccountId")\n\nputs(external_account)',
       },
+      csharp: {
+        method: 'Agents.Me.ExternalAccounts.Retrieve',
+        example:
+          'ExternalAccountRetrieveParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nvar externalAccount = await client.Agents.Me.ExternalAccounts.Retrieve(parameters);\n\nConsole.WriteLine(externalAccount);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -4342,6 +4785,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.me.external_accounts.delete',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nresult = lightspark_grid.agents.me.external_accounts.delete("externalAccountId")\n\nputs(result)',
+      },
+      csharp: {
+        method: 'Agents.Me.ExternalAccounts.Delete',
+        example:
+          'ExternalAccountDeleteParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nawait client.Agents.Me.ExternalAccounts.Delete(parameters);',
       },
       http: {
         example:
@@ -4393,6 +4841,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\npage = lightspark_grid.agents.me.actions.list\n\nputs(page)',
       },
+      csharp: {
+        method: 'Agents.Me.Actions.List',
+        example:
+          'ActionListParams parameters = new();\n\nvar page = await client.Agents.Me.Actions.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/actions \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -4439,6 +4892,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(agent_access_token: "My Agent Access Token")\n\nagent_action = lightspark_grid.agents.me.actions.retrieve("actionId")\n\nputs(agent_action)',
       },
+      csharp: {
+        method: 'Agents.Me.Actions.Retrieve',
+        example:
+          'ActionRetrieveParams parameters = new() { ActionID = "actionId" };\n\nvar agentAction = await client.Agents.Me.Actions.Retrieve(parameters);\n\nConsole.WriteLine(agentAction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/actions/$ACTION_ID \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -4484,6 +4942,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code = lightspark_grid.agents.device_codes.regenerate("agentId")\n\nputs(agent_device_code)',
       },
+      csharp: {
+        method: 'Agents.DeviceCodes.Regenerate',
+        example:
+          'DeviceCodeRegenerateParams parameters = new() { AgentID = "agentId" };\n\nvar agentDeviceCode = await client.Agents.DeviceCodes.Regenerate(parameters);\n\nConsole.WriteLine(agentDeviceCode);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/device-codes \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4528,6 +4991,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.device_codes.get_status',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_status_response = lightspark_grid.agents.device_codes.get_status("code")\n\nputs(agent_device_code_status_response)',
+      },
+      csharp: {
+        method: 'Agents.DeviceCodes.GetStatus',
+        example:
+          'DeviceCodeGetStatusParams parameters = new() { Code = "code" };\n\nvar agentDeviceCodeStatusResponse = await client.Agents.DeviceCodes.GetStatus(parameters);\n\nConsole.WriteLine(agentDeviceCodeStatusResponse);',
       },
       http: {
         example:
@@ -4575,6 +5043,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_device_code_redeem_response = lightspark_grid.agents.device_codes.redeem("code")\n\nputs(agent_device_code_redeem_response)',
       },
+      csharp: {
+        method: 'Agents.DeviceCodes.Redeem',
+        example:
+          'DeviceCodeRedeemParams parameters = new() { Code = "code" };\n\nvar agentDeviceCodeRedeemResponse = await client.Agents.DeviceCodes.Redeem(parameters);\n\nConsole.WriteLine(agentDeviceCodeRedeemResponse);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/device-codes/$CODE/redeem \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4620,6 +5093,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.transactions.approve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
+      csharp: {
+        method: 'Agents.Transactions.Approve',
+        example:
+          'TransactionApproveParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Transactions.Approve(parameters);\n\nConsole.WriteLine(agentAction);',
       },
       http: {
         example:
@@ -4667,6 +5145,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.transactions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
+      csharp: {
+        method: 'Agents.Transactions.Reject',
+        example:
+          'TransactionRejectParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Transactions.Reject(parameters);\n\nConsole.WriteLine(agentAction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4712,6 +5195,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents.actions.approve',
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.approve("actionId", agent_id: "agentId")\n\nputs(agent_action)',
+      },
+      csharp: {
+        method: 'Agents.Actions.Approve',
+        example:
+          'ActionApproveParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Actions.Approve(parameters);\n\nConsole.WriteLine(agentAction);',
       },
       http: {
         example:
@@ -4759,6 +5247,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nagent_action = lightspark_grid.agents.actions.reject("actionId", agent_id: "agentId")\n\nputs(agent_action)',
       },
+      csharp: {
+        method: 'Agents.Actions.Reject',
+        example:
+          'ActionRejectParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Actions.Reject(parameters);\n\nConsole.WriteLine(agentAction);',
+      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4768,6 +5261,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'csharp',
+    content:
+      '# Lightspark Grid C# API Library\n\nThe Lightspark Grid C# SDK provides convenient access to the [Lightspark Grid REST API](grid.lightspark.com) from applications written in   C#.\n\n## Installation\n\n```bash\ngit clone git@github.com:stainless-sdks/grid-csharp.git\ndotnet add reference grid-csharp/src/Grid\n```\n\n## Requirements\n\nThis library requires .NET Standard 2.0 or later.\n\n## Usage\n\nSee the [`examples`](examples) directory for complete and runnable examples.\n\n```csharp\nLightsparkGridClient client = new();\n\nQuoteCreateParams parameters = new()\n{\n    Destination = new AccountDestination(\n        "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n    ),\n    LockedCurrencyAmount = 10000,\n    LockedCurrencySide = LockedCurrencySide.Sending,\n    Source = new AccountQuoteSource(\n        "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n    ),\n};\n\nvar quote = await client.Quotes.Create(parameters);\n\nConsole.WriteLine(quote);\n```',
+  },
   {
     language: 'go',
     content:
