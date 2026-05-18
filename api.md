@@ -47,6 +47,8 @@ Types:
 - <code><a href="./src/resources/shared.ts">RwfBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">RwfExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">SgdExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">SlvBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">SlvExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">ThbExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">TzsBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">TzsExternalAccountCreateInfo</a></code>

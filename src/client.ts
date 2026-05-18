@@ -1379,6 +1379,8 @@ export declare namespace LightsparkGrid {
   export type RwfBeneficiary = API.RwfBeneficiary;
   export type RwfExternalAccountCreateInfo = API.RwfExternalAccountCreateInfo;
   export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
+  export type SlvBeneficiary = API.SlvBeneficiary;
+  export type SlvExternalAccountCreateInfo = API.SlvExternalAccountCreateInfo;
   export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
   export type TzsBeneficiary = API.TzsBeneficiary;
   export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;
