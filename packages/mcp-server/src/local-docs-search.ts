@@ -78,6 +78,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.config.ConfigRetrieveParams\nimport com.lightspark.grid.models.config.PlatformConfig\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val platformConfig: PlatformConfig = client.config().retrieve()\n}',
       },
+      go: {
+        method: 'client.Config.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tplatformConfig, err := client.Config.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", platformConfig.ID)\n}\n',
+      },
       ruby: {
         method: 'config.retrieve',
         example:
@@ -122,6 +127,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.config.ConfigUpdateParams\nimport com.lightspark.grid.models.config.PlatformConfig\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val platformConfig: PlatformConfig = client.config().update()\n}',
       },
+      go: {
+        method: 'client.Config.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tplatformConfig, err := client.Config.Update(context.TODO(), grid.ConfigUpdateParams{\n\t\tSupportedCurrencies: []grid.PlatformCurrencyConfigParam{{\n\t\t\tCurrencyCode:            "USD",\n\t\t\tMinAmount:               100,\n\t\t\tMaxAmount:               1000000,\n\t\t\tEnabledTransactionTypes: []grid.TransactionType{grid.TransactionTypeOutgoing, grid.TransactionTypeIncoming},\n\t\t\tRequiredCounterpartyFields: []grid.CounterpartyFieldDefinitionParam{{\n\t\t\t\tName:      grid.CustomerInfoFieldNameFullName,\n\t\t\t\tMandatory: true,\n\t\t\t}, {\n\t\t\t\tName:      grid.CustomerInfoFieldNameNationality,\n\t\t\t\tMandatory: true,\n\t\t\t}, {\n\t\t\t\tName:      grid.CustomerInfoFieldNameBirthDate,\n\t\t\t\tMandatory: true,\n\t\t\t}},\n\t\t}},\n\t\tUmaDomain:       grid.String("mycompany.com"),\n\t\tWebhookEndpoint: grid.String("https://api.mycompany.com/webhooks/uma"),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", platformConfig.ID)\n}\n',
+      },
       ruby: {
         method: 'config.update',
         example:
@@ -164,6 +174,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().create',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerCreateParams\nimport com.lightspark.grid.models.customers.CustomerOneOf\nimport com.lightspark.grid.models.customers.IndividualCustomerFields\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CustomerCreateParams.CreateCustomerRequest.Individual = CustomerCreateParams.CreateCustomerRequest.Individual.builder()\n        .customerType(IndividualCustomerFields.CustomerType.INDIVIDUAL)\n        .build()\n    val customerOneOf: CustomerOneOf = client.customers().create(params)\n}',
+      },
+      go: {
+        method: 'client.Customers.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tcustomerOneOf, err := client.Customers.New(context.TODO(), grid.CustomerNewParams{\n\t\tOfIndividual: &grid.CustomerNewParamsCreateCustomerRequestIndividual{\n\t\t\tCustomerCreateParam: grid.CustomerCreateParam{},\n\t\t\tIndividualCustomerFieldsParam: grid.IndividualCustomerFieldsParam{\n\t\t\t\tCustomerType: grid.IndividualCustomerFieldsCustomerTypeIndividual,\n\t\t\t},\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", customerOneOf)\n}\n',
       },
       ruby: {
         method: 'customers.create',
@@ -219,6 +234,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerListPage\nimport com.lightspark.grid.models.customers.CustomerListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: CustomerListPage = client.customers().list()\n}',
       },
+      go: {
+        method: 'client.Customers.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Customers.List(context.TODO(), grid.CustomerListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'customers.list',
         example:
@@ -258,6 +278,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerOneOf\nimport com.lightspark.grid.models.customers.CustomerRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val customerOneOf: CustomerOneOf = client.customers().retrieve("customerId")\n}',
+      },
+      go: {
+        method: 'client.Customers.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tcustomerOneOf, err := client.Customers.Get(context.TODO(), "customerId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", customerOneOf)\n}\n',
       },
       ruby: {
         method: 'customers.retrieve',
@@ -305,6 +330,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerOneOf\nimport com.lightspark.grid.models.customers.CustomerUpdateParams\nimport com.lightspark.grid.models.customers.IndividualCustomerFields\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CustomerUpdateParams = CustomerUpdateParams.builder()\n        .customerId("customerId")\n        .updateCustomerRequest(CustomerUpdateParams.UpdateCustomerRequest.Individual.builder()\n            .customerType(IndividualCustomerFields.CustomerType.INDIVIDUAL)\n            .build())\n        .build()\n    val customerOneOf: CustomerOneOf = client.customers().update(params)\n}',
       },
+      go: {
+        method: 'client.Customers.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tcustomerOneOf, err := client.Customers.Update(\n\t\tcontext.TODO(),\n\t\t"customerId",\n\t\tgrid.CustomerUpdateParams{\n\t\t\tOfIndividual: &grid.CustomerUpdateParamsUpdateCustomerRequestIndividual{\n\t\t\t\tCustomerUpdateParam: grid.CustomerUpdateParam{},\n\t\t\t\tIndividualCustomerFieldsParam: grid.IndividualCustomerFieldsParam{\n\t\t\t\t\tCustomerType: grid.IndividualCustomerFieldsCustomerTypeIndividual,\n\t\t\t\t},\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", customerOneOf)\n}\n',
+      },
       ruby: {
         method: 'customers.update',
         example:
@@ -344,6 +374,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerDeleteParams\nimport com.lightspark.grid.models.customers.CustomerOneOf\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val customerOneOf: CustomerOneOf = client.customers().delete("customerId")\n}',
+      },
+      go: {
+        method: 'client.Customers.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tcustomerOneOf, err := client.Customers.Delete(context.TODO(), "customerId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", customerOneOf)\n}\n',
       },
       ruby: {
         method: 'customers.delete',
@@ -392,6 +427,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerListInternalAccountsPage\nimport com.lightspark.grid.models.customers.CustomerListInternalAccountsParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: CustomerListInternalAccountsPage = client.customers().listInternalAccounts()\n}',
       },
+      go: {
+        method: 'client.Customers.ListInternalAccounts',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Customers.ListInternalAccounts(context.TODO(), grid.CustomerListInternalAccountsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'customers.list_internal_accounts',
         example:
@@ -436,6 +476,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().export',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerExportParams\nimport com.lightspark.grid.models.customers.InternalAccountExportRequest\nimport com.lightspark.grid.models.customers.InternalAccountExportResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CustomerExportParams = CustomerExportParams.builder()\n        .id("id")\n        .internalAccountExportRequest(InternalAccountExportRequest.builder()\n            .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n            .build())\n        .build()\n    val internalAccountExportResponse: InternalAccountExportResponse = client.customers().export(params)\n}',
+      },
+      go: {
+        method: 'client.Customers.Export',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tinternalAccountExportResponse, err := client.Customers.Export(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgrid.CustomerExportParams{\n\t\t\tInternalAccountExportRequest: grid.InternalAccountExportRequestParam{\n\t\t\t\tClientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", internalAccountExportResponse.ID)\n}\n',
       },
       ruby: {
         method: 'customers.export',
@@ -483,6 +528,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerUpdateInternalAccountParams\nimport com.lightspark.grid.models.sandbox.internalaccounts.InternalAccount\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val internalAccount: InternalAccount = client.customers().updateInternalAccount("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n}',
       },
+      go: {
+        method: 'client.Customers.UpdateInternalAccount',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tinternalAccount, err := client.Customers.UpdateInternalAccount(\n\t\tcontext.TODO(),\n\t\t"InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n\t\tgrid.CustomerUpdateInternalAccountParams{\n\t\t\tPrivateEnabled: grid.Bool(true),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", internalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'customers.update_internal_account',
         example:
@@ -522,6 +572,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().generateKycLink',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.CustomerGenerateKycLinkParams\nimport com.lightspark.grid.models.customers.CustomerGenerateKycLinkResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: CustomerGenerateKycLinkResponse = client.customers().generateKycLink("customerId")\n}',
+      },
+      go: {
+        method: 'client.Customers.GenerateKYCLink',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Customers.GenerateKYCLink(\n\t\tcontext.TODO(),\n\t\t"customerId",\n\t\tgrid.CustomerGenerateKYCLinkParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Provider)\n}\n',
       },
       ruby: {
         method: 'customers.generate_kyc_link',
@@ -563,6 +618,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().externalAccounts().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountListPage\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ExternalAccountListPage = client.customers().externalAccounts().list()\n}',
+      },
+      go: {
+        method: 'client.Customers.ExternalAccounts.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Customers.ExternalAccounts.List(context.TODO(), grid.CustomerExternalAccountListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       ruby: {
         method: 'customers.external_accounts.list',
@@ -610,6 +670,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.UsdExternalAccountCreateInfo\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountCreate\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ExternalAccountCreate = ExternalAccountCreate.builder()\n        .accountInfo(UsdExternalAccountCreateInfo.builder()\n            .accountNumber("12345678901")\n            .accountType(UsdExternalAccountCreateInfo.AccountType.USD_ACCOUNT)\n            .individualBeneficiary("John Doe")\n            .routingNumber("123456789")\n            .build())\n        .currency("USD")\n        .build()\n    val externalAccount: ExternalAccount = client.customers().externalAccounts().create(params)\n}',
       },
+      go: {
+        method: 'client.Customers.ExternalAccounts.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n\t"github.com/stainless-sdks/grid-go/shared"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\texternalAccount, err := client.Customers.ExternalAccounts.New(context.TODO(), grid.CustomerExternalAccountNewParams{\n\t\tExternalAccountCreate: grid.ExternalAccountCreateParam{\n\t\t\tAccountInfo: grid.ExternalAccountCreateAccountInfoUnionParam{\n\t\t\t\tOfUsdAccount: &shared.UsdExternalAccountCreateInfoParam{\n\t\t\t\t\tAccountNumber: "12345678901",\n\t\t\t\t\tAccountType:   shared.UsdExternalAccountCreateInfoAccountTypeUsdAccount,\n\t\t\t\t\tBeneficiary: shared.UsdExternalAccountCreateInfoBeneficiaryUnionParam{\n\t\t\t\t\t\tOfIndividual: &grid.UsdBeneficiaryParam{\n\t\t\t\t\t\t\tBeneficiaryType: grid.UsdBeneficiaryBeneficiaryTypeIndividual,\n\t\t\t\t\t\t\tFullName:        "John Doe",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\tRoutingNumber: "123456789",\n\t\t\t\t},\n\t\t\t},\n\t\t\tCurrency: "USD",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", externalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'customers.external_accounts.create',
         example:
@@ -650,6 +715,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val externalAccount: ExternalAccount = client.customers().externalAccounts().retrieve("externalAccountId")\n}',
       },
+      go: {
+        method: 'client.Customers.ExternalAccounts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\texternalAccount, err := client.Customers.ExternalAccounts.Get(context.TODO(), "externalAccountId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", externalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'customers.external_accounts.retrieve',
         example:
@@ -687,6 +757,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().externalAccounts().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.customers().externalAccounts().delete("externalAccountId")\n}',
+      },
+      go: {
+        method: 'client.Customers.ExternalAccounts.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\terr := client.Customers.ExternalAccounts.Delete(context.TODO(), "externalAccountId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'customers.external_accounts.delete',
@@ -727,6 +802,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers().bulk().uploadCsv',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvParams\nimport com.lightspark.grid.models.customers.bulk.BulkUploadCsvResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: BulkUploadCsvParams = BulkUploadCsvParams.builder()\n        .file("Example data".byteInputStream())\n        .build()\n    val response: BulkUploadCsvResponse = client.customers().bulk().uploadCsv(params)\n}',
+      },
+      go: {
+        method: 'client.Customers.Bulk.UploadCsv',
+        example:
+          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Customers.Bulk.UploadCsv(context.TODO(), grid.CustomerBulkUploadCsvParams{\n\t\tFile: io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.JobID)\n}\n',
       },
       ruby: {
         method: 'customers.bulk.upload_csv',
@@ -769,6 +849,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.bulk.BulkGetJobStatusParams\nimport com.lightspark.grid.models.customers.bulk.BulkGetJobStatusResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: BulkGetJobStatusResponse = client.customers().bulk().getJobStatus("jobId")\n}',
       },
+      go: {
+        method: 'client.Customers.Bulk.GetJobStatus',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Customers.Bulk.GetJobStatus(context.TODO(), "jobId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
       ruby: {
         method: 'customers.bulk.get_job_status',
         example:
@@ -810,6 +895,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.platform.PlatformListInternalAccountsParams\nimport com.lightspark.grid.models.platform.PlatformListInternalAccountsResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: PlatformListInternalAccountsResponse = client.platform().listInternalAccounts()\n}',
       },
+      go: {
+        method: 'client.Platform.ListInternalAccounts',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Platform.ListInternalAccounts(context.TODO(), grid.PlatformListInternalAccountsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.Data)\n}\n',
+      },
       ruby: {
         method: 'platform.list_internal_accounts',
         example:
@@ -850,6 +940,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform().externalAccounts().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountListPage\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ExternalAccountListPage = client.platform().externalAccounts().list()\n}',
+      },
+      go: {
+        method: 'client.Platform.ExternalAccounts.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Platform.ExternalAccounts.List(context.TODO(), grid.PlatformExternalAccountListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       ruby: {
         method: 'platform.external_accounts.list',
@@ -895,6 +990,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.UsdExternalAccountCreateInfo\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ExternalAccountCreateParams = ExternalAccountCreateParams.builder()\n        .accountInfo(UsdExternalAccountCreateInfo.builder()\n            .accountNumber("12345678901")\n            .accountType(UsdExternalAccountCreateInfo.AccountType.USD_ACCOUNT)\n            .individualBeneficiary("John Doe")\n            .routingNumber("123456789")\n            .build())\n        .currency("USD")\n        .build()\n    val externalAccount: ExternalAccount = client.platform().externalAccounts().create(params)\n}',
       },
+      go: {
+        method: 'client.Platform.ExternalAccounts.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n\t"github.com/stainless-sdks/grid-go/shared"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\texternalAccount, err := client.Platform.ExternalAccounts.New(context.TODO(), grid.PlatformExternalAccountNewParams{\n\t\tAccountInfo: grid.PlatformExternalAccountNewParamsAccountInfoUnion{\n\t\t\tOfUsdAccount: &shared.UsdExternalAccountCreateInfoParam{\n\t\t\t\tAccountType:   shared.UsdExternalAccountCreateInfoAccountTypeUsdAccount,\n\t\t\t\tAccountNumber: "12345678901",\n\t\t\t\tRoutingNumber: "123456789",\n\t\t\t\tBeneficiary: shared.UsdExternalAccountCreateInfoBeneficiaryUnionParam{\n\t\t\t\t\tOfIndividual: &grid.UsdBeneficiaryParam{\n\t\t\t\t\t\tBeneficiaryType: grid.UsdBeneficiaryBeneficiaryTypeIndividual,\n\t\t\t\t\t\tFullName:        "John Doe",\n\t\t\t\t\t\tBirthDate:       grid.String("1990-01-15"),\n\t\t\t\t\t\tNationality:     grid.String("US"),\n\t\t\t\t\t\tAddress: grid.AddressParam{\n\t\t\t\t\t\t\tLine1:      "123 Main Street",\n\t\t\t\t\t\t\tCity:       grid.String("San Francisco"),\n\t\t\t\t\t\t\tState:      grid.String("CA"),\n\t\t\t\t\t\t\tPostalCode: "94105",\n\t\t\t\t\t\t\tCountry:    "US",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t},\n\t\t},\n\t\tCurrency: "USD",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", externalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'platform.external_accounts.create',
         example:
@@ -935,6 +1035,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val externalAccount: ExternalAccount = client.platform().externalAccounts().retrieve("externalAccountId")\n}',
       },
+      go: {
+        method: 'client.Platform.ExternalAccounts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\texternalAccount, err := client.Platform.ExternalAccounts.Get(context.TODO(), "externalAccountId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", externalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'platform.external_accounts.retrieve',
         example:
@@ -972,6 +1077,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform().externalAccounts().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.platform.externalaccounts.ExternalAccountDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.platform().externalAccounts().delete("externalAccountId")\n}',
+      },
+      go: {
+        method: 'client.Platform.ExternalAccounts.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\terr := client.Platform.ExternalAccounts.Delete(context.TODO(), "externalAccountId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'platform.external_accounts.delete',
@@ -1019,6 +1129,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\nimport com.lightspark.grid.models.transferin.Transaction\nimport com.lightspark.grid.models.transferin.TransferInCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransferInCreateParams = TransferInCreateParams.builder()\n        .destination(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .source(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val transaction: Transaction = client.transferIn().create(params)\n}',
       },
+      go: {
+        method: 'client.TransferIn.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\ttransaction, err := client.TransferIn.New(context.TODO(), grid.TransferInNewParams{\n\t\tDestination: grid.InternalAccountReferenceParam{\n\t\t\tAccountID: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t},\n\t\tSource: grid.ExternalAccountReferenceParam{\n\t\t\tAccountID: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t},\n\t\tAmount: grid.Int(12550),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", transaction)\n}\n',
+      },
       ruby: {
         method: 'transfer_in.create',
         example:
@@ -1064,6 +1179,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\nimport com.lightspark.grid.models.transferin.Transaction\nimport com.lightspark.grid.models.transferout.TransferOutCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransferOutCreateParams = TransferOutCreateParams.builder()\n        .destination(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .source(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .build()\n    val transaction: Transaction = client.transferOut().create(params)\n}',
       },
+      go: {
+        method: 'client.TransferOut.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\ttransaction, err := client.TransferOut.New(context.TODO(), grid.TransferOutNewParams{\n\t\tDestination: grid.ExternalAccountReferenceParam{\n\t\t\tAccountID: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t},\n\t\tSource: grid.InternalAccountReferenceParam{\n\t\t\tAccountID: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t},\n\t\tAmount: grid.Int(12550),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", transaction)\n}\n',
+      },
       ruby: {
         method: 'transfer_out.create',
         example:
@@ -1104,6 +1224,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver().lookupUma',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.receiver.ReceiverLookupUmaParams\nimport com.lightspark.grid.models.receiver.ReceiverLookupUmaResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: ReceiverLookupUmaResponse = client.receiver().lookupUma("receiverUmaAddress")\n}',
+      },
+      go: {
+        method: 'client.Receiver.LookupUma',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Receiver.LookupUma(\n\t\tcontext.TODO(),\n\t\t"receiverUmaAddress",\n\t\tgrid.ReceiverLookupUmaParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
       },
       ruby: {
         method: 'receiver.lookup_uma',
@@ -1146,6 +1271,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.receiver.ReceiverLookupExternalAccountParams\nimport com.lightspark.grid.models.receiver.ReceiverLookupExternalAccountResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: ReceiverLookupExternalAccountResponse = client.receiver().lookupExternalAccount("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n}',
       },
+      go: {
+        method: 'client.Receiver.LookupExternalAccount',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Receiver.LookupExternalAccount(\n\t\tcontext.TODO(),\n\t\t"ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\tgrid.ReceiverLookupExternalAccountParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response)\n}\n',
+      },
       ruby: {
         method: 'receiver.lookup_external_account',
         example:
@@ -1186,6 +1316,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val quote: Quote = client.quotes().retrieve("quoteId")\n}',
+      },
+      go: {
+        method: 'client.Quotes.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tquote, err := client.Quotes.Get(context.TODO(), "quoteId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", quote.ID)\n}\n',
       },
       ruby: {
         method: 'quotes.retrieve',
@@ -1239,6 +1374,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: QuoteCreateParams = QuoteCreateParams.builder()\n        .destination(QuoteDestinationOneOf.AccountDestination.builder()\n            .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .lockedCurrencyAmount(10000L)\n        .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n        .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n            .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val quote: Quote = client.quotes().create(params)\n}',
       },
+      go: {
+        method: 'client.Quotes.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tquote, err := client.Quotes.New(context.TODO(), grid.QuoteNewParams{\n\t\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t\t},\n\t\t},\n\t\tLockedCurrencyAmount: 10000,\n\t\tLockedCurrencySide:   grid.QuoteNewParamsLockedCurrencySideSending,\n\t\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t\t},\n\t\t},\n\t\tDescription: grid.String("Transfer between accounts, either internal or external."),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", quote.ID)\n}\n',
+      },
       ruby: {
         method: 'quotes.create',
         example:
@@ -1279,6 +1419,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes().execute',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteExecuteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val quote: Quote = client.quotes().execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n}',
+      },
+      go: {
+        method: 'client.Quotes.Execute',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tquote, err := client.Quotes.Execute(\n\t\tcontext.TODO(),\n\t\t"Quote:019542f5-b3e7-1d02-0000-000000000001",\n\t\tgrid.QuoteExecuteParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", quote.ID)\n}\n',
       },
       ruby: {
         method: 'quotes.execute',
@@ -1335,6 +1480,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.TransactionListPage\nimport com.lightspark.grid.models.transactions.TransactionListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: TransactionListPage = client.transactions().list()\n}',
       },
+      go: {
+        method: 'client.Transactions.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Transactions.List(context.TODO(), grid.TransactionListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'transactions.list',
         example:
@@ -1374,6 +1524,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.TransactionRetrieveParams\nimport com.lightspark.grid.models.transferin.Transaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val transaction: Transaction = client.transactions().retrieve("transactionId")\n}',
+      },
+      go: {
+        method: 'client.Transactions.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\ttransaction, err := client.Transactions.Get(context.TODO(), "transactionId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", transaction)\n}\n',
       },
       ruby: {
         method: 'transactions.retrieve',
@@ -1416,6 +1571,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.IncomingTransaction\nimport com.lightspark.grid.models.transactions.TransactionApproveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val incomingTransaction: IncomingTransaction = client.transactions().approve("transactionId")\n}',
       },
+      go: {
+        method: 'client.Transactions.Approve',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tincomingTransaction, err := client.Transactions.Approve(\n\t\tcontext.TODO(),\n\t\t"transactionId",\n\t\tgrid.TransactionApproveParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", incomingTransaction.ID)\n}\n',
+      },
       ruby: {
         method: 'transactions.approve',
         example:
@@ -1457,6 +1617,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.IncomingTransaction\nimport com.lightspark.grid.models.transactions.TransactionRejectParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val incomingTransaction: IncomingTransaction = client.transactions().reject("transactionId")\n}',
       },
+      go: {
+        method: 'client.Transactions.Reject',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tincomingTransaction, err := client.Transactions.Reject(\n\t\tcontext.TODO(),\n\t\t"transactionId",\n\t\tgrid.TransactionRejectParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", incomingTransaction.ID)\n}\n',
+      },
       ruby: {
         method: 'transactions.reject',
         example:
@@ -1497,6 +1662,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationCreateParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: InvitationCreateParams = InvitationCreateParams.builder()\n        .inviterUma("\\$inviter@uma.domain")\n        .build()\n    val umaInvitation: UmaInvitation = client.invitations().create(params)\n}',
       },
+      go: {
+        method: 'client.Invitations.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tumaInvitation, err := client.Invitations.New(context.TODO(), grid.InvitationNewParams{\n\t\tInviterUma: "$inviter@uma.domain",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", umaInvitation.Code)\n}\n',
+      },
       ruby: {
         method: 'invitations.create',
         example:
@@ -1536,6 +1706,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationRetrieveParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val umaInvitation: UmaInvitation = client.invitations().retrieve("invitationCode")\n}',
+      },
+      go: {
+        method: 'client.Invitations.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tumaInvitation, err := client.Invitations.Get(context.TODO(), "invitationCode")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", umaInvitation.Code)\n}\n',
       },
       ruby: {
         method: 'invitations.retrieve',
@@ -1578,6 +1753,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationClaimParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: InvitationClaimParams = InvitationClaimParams.builder()\n        .invitationCode("invitationCode")\n        .inviteeUma("\\$invitee@uma.domain")\n        .build()\n    val umaInvitation: UmaInvitation = client.invitations().claim(params)\n}',
       },
+      go: {
+        method: 'client.Invitations.Claim',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tumaInvitation, err := client.Invitations.Claim(\n\t\tcontext.TODO(),\n\t\t"invitationCode",\n\t\tgrid.InvitationClaimParams{\n\t\t\tInviteeUma: "$invitee@uma.domain",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", umaInvitation.Code)\n}\n',
+      },
       ruby: {
         method: 'invitations.claim',
         example:
@@ -1619,6 +1799,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.invitations.InvitationCancelParams\nimport com.lightspark.grid.models.invitations.UmaInvitation\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val umaInvitation: UmaInvitation = client.invitations().cancel("invitationCode")\n}',
       },
+      go: {
+        method: 'client.Invitations.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tumaInvitation, err := client.Invitations.Cancel(context.TODO(), "invitationCode")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", umaInvitation.Code)\n}\n',
+      },
       ruby: {
         method: 'invitations.cancel',
         example:
@@ -1659,6 +1844,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox().sendFunds',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.SandboxSendFundsParams\nimport com.lightspark.grid.models.transactions.OutgoingTransaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SandboxSendFundsParams = SandboxSendFundsParams.builder()\n        .currencyCode("USD")\n        .quoteId("Quote:019542f5-b3e7-1d02-0000-000000000006")\n        .build()\n    val outgoingTransaction: OutgoingTransaction = client.sandbox().sendFunds(params)\n}',
+      },
+      go: {
+        method: 'client.Sandbox.SendFunds',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\toutgoingTransaction, err := client.Sandbox.SendFunds(context.TODO(), grid.SandboxSendFundsParams{\n\t\tCurrencyCode: "USD",\n\t\tQuoteID:      "Quote:019542f5-b3e7-1d02-0000-000000000006",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", outgoingTransaction.ID)\n}\n',
       },
       ruby: {
         method: 'sandbox.send_funds',
@@ -1707,6 +1897,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.uma.UmaReceivePaymentParams\nimport com.lightspark.grid.models.transactions.IncomingTransaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: UmaReceivePaymentParams = UmaReceivePaymentParams.builder()\n        .receivingCurrencyAmount(1000L)\n        .receivingCurrencyCode("USD")\n        .senderUmaAddress("\\$success.usd@sandbox.grid.uma.money")\n        .build()\n    val incomingTransaction: IncomingTransaction = client.sandbox().uma().receivePayment(params)\n}',
       },
+      go: {
+        method: 'client.Sandbox.Uma.ReceivePayment',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tincomingTransaction, err := client.Sandbox.Uma.ReceivePayment(context.TODO(), grid.SandboxUmaReceivePaymentParams{\n\t\tReceivingCurrencyAmount: 1000,\n\t\tReceivingCurrencyCode:   "USD",\n\t\tSenderUmaAddress:        "$success.usd@sandbox.grid.uma.money",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", incomingTransaction.ID)\n}\n',
+      },
       ruby: {
         method: 'sandbox.uma.receive_payment',
         example:
@@ -1748,6 +1943,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.internalaccounts.InternalAccount\nimport com.lightspark.grid.models.sandbox.internalaccounts.InternalAccountFundParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: InternalAccountFundParams = InternalAccountFundParams.builder()\n        .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .amount(100000L)\n        .build()\n    val internalAccount: InternalAccount = client.sandbox().internalAccounts().fund(params)\n}',
       },
+      go: {
+        method: 'client.Sandbox.InternalAccounts.Fund',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tinternalAccount, err := client.Sandbox.InternalAccounts.Fund(\n\t\tcontext.TODO(),\n\t\t"InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\tgrid.SandboxInternalAccountFundParams{\n\t\t\tAmount: 100000,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", internalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'sandbox.internal_accounts.fund',
         example:
@@ -1785,6 +1985,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox().webhooks().sendTest',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.webhooks.WebhookSendTestParams\nimport com.lightspark.grid.models.sandbox.webhooks.WebhookSendTestResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val response: WebhookSendTestResponse = client.sandbox().webhooks().sendTest()\n}',
+      },
+      go: {
+        method: 'client.Sandbox.Webhooks.SendTest',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Sandbox.Webhooks.SendTest(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ResponseStatus)\n}\n',
       },
       ruby: {
         method: 'sandbox.webhooks.send_test',
@@ -1834,6 +2039,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.umaproviders.UmaProviderListPage\nimport com.lightspark.grid.models.umaproviders.UmaProviderListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: UmaProviderListPage = client.umaProviders().list()\n}',
       },
+      go: {
+        method: 'client.UmaProviders.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.UmaProviders.List(context.TODO(), grid.UmaProviderListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'uma_providers.list',
         example:
@@ -1873,6 +2083,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens().create',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.ApiToken\nimport com.lightspark.grid.models.tokens.Permission\nimport com.lightspark.grid.models.tokens.TokenCreateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TokenCreateParams = TokenCreateParams.builder()\n        .name("Sandbox read-only")\n        .addPermission(Permission.VIEW)\n        .build()\n    val apiToken: ApiToken = client.tokens().create(params)\n}',
+      },
+      go: {
+        method: 'client.Tokens.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tapiToken, err := client.Tokens.New(context.TODO(), grid.TokenNewParams{\n\t\tName:        "Sandbox read-only",\n\t\tPermissions: []grid.Permission{grid.PermissionView},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiToken.ID)\n}\n',
       },
       ruby: {
         method: 'tokens.create',
@@ -1923,6 +2138,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.TokenListPage\nimport com.lightspark.grid.models.tokens.TokenListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: TokenListPage = client.tokens().list()\n}',
       },
+      go: {
+        method: 'client.Tokens.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Tokens.List(context.TODO(), grid.TokenListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'tokens.list',
         example:
@@ -1963,6 +2183,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.ApiToken\nimport com.lightspark.grid.models.tokens.TokenRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val apiToken: ApiToken = client.tokens().retrieve("tokenId")\n}',
       },
+      go: {
+        method: 'client.Tokens.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tapiToken, err := client.Tokens.Get(context.TODO(), "tokenId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", apiToken.ID)\n}\n',
+      },
       ruby: {
         method: 'tokens.retrieve',
         example:
@@ -2000,6 +2225,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.tokens.TokenDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.tokens().delete("tokenId")\n}',
+      },
+      go: {
+        method: 'client.Tokens.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\terr := client.Tokens.Delete(context.TODO(), "tokenId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'tokens.delete',
@@ -2042,6 +2272,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.exchangerates.ExchangeRateListParams\nimport com.lightspark.grid.models.exchangerates.ExchangeRateListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val exchangeRates: ExchangeRateListResponse = client.exchangeRates().list()\n}',
       },
+      go: {
+        method: 'client.ExchangeRates.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\texchangeRates, err := client.ExchangeRates.List(context.TODO(), grid.ExchangeRateListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", exchangeRates.Data)\n}\n',
+      },
       ruby: {
         method: 'exchange_rates.list',
         example:
@@ -2075,6 +2310,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       kotlin: {
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.webhooks.WebhookUnwrapParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.webhooks().unwrap()\n}',
+      },
+      go: {
+        method: 'client.Webhooks.Unwrap',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\terr := client.Webhooks.Unwrap(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'webhooks.unwrap',
@@ -2118,6 +2358,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'crypto().estimateWithdrawalFee',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.crypto.CryptoEstimateWithdrawalFeeParams\nimport com.lightspark.grid.models.crypto.CryptoEstimateWithdrawalFeeResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CryptoEstimateWithdrawalFeeParams = CryptoEstimateWithdrawalFeeParams.builder()\n        .amount(1000000L)\n        .cryptoNetwork("SOLANA")\n        .currency("USDC")\n        .destinationAddress("7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU")\n        .internalAccountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n        .build()\n    val response: CryptoEstimateWithdrawalFeeResponse = client.crypto().estimateWithdrawalFee(params)\n}',
+      },
+      go: {
+        method: 'client.Crypto.EstimateWithdrawalFee',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Crypto.EstimateWithdrawalFee(context.TODO(), grid.CryptoEstimateWithdrawalFeeParams{\n\t\tAmount:             1000000,\n\t\tCryptoNetwork:      "SOLANA",\n\t\tCurrency:           "USDC",\n\t\tDestinationAddress: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n\t\tInternalAccountID:  "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ApplicationFee)\n}\n',
       },
       ruby: {
         method: 'crypto.estimate_withdrawal_fee',
@@ -2165,6 +2410,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerCreateParams\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerCreateResponse\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerPersonalInfo\nimport com.lightspark.grid.models.customers.externalaccounts.Address\nimport java.time.LocalDate\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: BeneficialOwnerCreateParams = BeneficialOwnerCreateParams.builder()\n        .customerId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .ownershipPercentage(51L)\n        .personalInfo(BeneficialOwnerPersonalInfo.builder()\n            .address(Address.builder()\n                .country("US")\n                .line1("123 Main Street")\n                .postalCode("94105")\n                .build())\n            .birthDate(LocalDate.parse("1978-06-15"))\n            .firstName("Jane")\n            .identifier("123-45-6789")\n            .idType(BeneficialOwnerPersonalInfo.IdType.SSN)\n            .lastName("Smith")\n            .nationality("US")\n            .build())\n        .addRole(BeneficialOwnerCreateParams.Role.UBO)\n        .addRole(BeneficialOwnerCreateParams.Role.DIRECTOR)\n        .build()\n    val beneficialOwner: BeneficialOwnerCreateResponse = client.beneficialOwners().create(params)\n}',
       },
+      go: {
+        method: 'client.BeneficialOwners.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\t"time"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tbeneficialOwner, err := client.BeneficialOwners.New(context.TODO(), grid.BeneficialOwnerNewParams{\n\t\tCustomerID:          "Customer:019542f5-b3e7-1d02-0000-000000000001",\n\t\tOwnershipPercentage: 51,\n\t\tPersonalInfo: grid.BeneficialOwnerPersonalInfoParam{\n\t\t\tAddress: grid.AddressParam{\n\t\t\t\tCountry:    "US",\n\t\t\t\tLine1:      "123 Main Street",\n\t\t\t\tPostalCode: "94105",\n\t\t\t},\n\t\t\tBirthDate:   time.Now(),\n\t\t\tFirstName:   "Jane",\n\t\t\tIdentifier:  "123-45-6789",\n\t\t\tIDType:      grid.BeneficialOwnerPersonalInfoIDTypeSsn,\n\t\t\tLastName:    "Smith",\n\t\t\tNationality: "US",\n\t\t},\n\t\tRoles: []string{"UBO", "DIRECTOR"},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", beneficialOwner.ID)\n}\n',
+      },
       ruby: {
         method: 'beneficial_owners.create',
         example:
@@ -2205,6 +2455,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerListPage\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: BeneficialOwnerListParams = BeneficialOwnerListParams.builder()\n        .customerId("customerId")\n        .build()\n    val page: BeneficialOwnerListPage = client.beneficialOwners().list(params)\n}',
       },
+      go: {
+        method: 'client.BeneficialOwners.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.BeneficialOwners.List(context.TODO(), grid.BeneficialOwnerListParams{\n\t\tCustomerID: "customerId",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'beneficial_owners.list',
         example:
@@ -2244,6 +2499,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficialOwners().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerRetrieveParams\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val beneficialOwner: BeneficialOwnerRetrieveResponse = client.beneficialOwners().retrieve("beneficialOwnerId")\n}',
+      },
+      go: {
+        method: 'client.BeneficialOwners.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tbeneficialOwner, err := client.BeneficialOwners.Get(context.TODO(), "beneficialOwnerId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", beneficialOwner.ID)\n}\n',
       },
       ruby: {
         method: 'beneficial_owners.retrieve',
@@ -2289,6 +2549,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficialOwners().update',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerUpdateParams\nimport com.lightspark.grid.models.beneficialowners.BeneficialOwnerUpdateResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val beneficialOwner: BeneficialOwnerUpdateResponse = client.beneficialOwners().update("beneficialOwnerId")\n}',
+      },
+      go: {
+        method: 'client.BeneficialOwners.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tbeneficialOwner, err := client.BeneficialOwners.Update(\n\t\tcontext.TODO(),\n\t\t"beneficialOwnerId",\n\t\tgrid.BeneficialOwnerUpdateParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", beneficialOwner.ID)\n}\n',
       },
       ruby: {
         method: 'beneficial_owners.update',
@@ -2338,6 +2603,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentUploadParams\nimport com.lightspark.grid.models.documents.DocumentUploadResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentUploadParams = DocumentUploadParams.builder()\n        .country("US")\n        .documentHolder("BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001")\n        .documentType(DocumentUploadParams.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .build()\n    val response: DocumentUploadResponse = client.documents().upload(params)\n}',
       },
+      go: {
+        method: 'client.Documents.Upload',
+        example:
+          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Documents.Upload(context.TODO(), grid.DocumentUploadParams{\n\t\tCountry:        "US",\n\t\tDocumentHolder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n\t\tDocumentType:   grid.DocumentUploadParamsDocumentTypePassport,\n\t\tFile:           io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
       ruby: {
         method: 'documents.upload',
         example:
@@ -2378,6 +2648,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentListPage\nimport com.lightspark.grid.models.documents.DocumentListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: DocumentListPage = client.documents().list()\n}',
       },
+      go: {
+        method: 'client.Documents.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Documents.List(context.TODO(), grid.DocumentListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'documents.list',
         example:
@@ -2417,6 +2692,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentRetrieveParams\nimport com.lightspark.grid.models.documents.DocumentRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val document: DocumentRetrieveResponse = client.documents().retrieve("documentId")\n}',
+      },
+      go: {
+        method: 'client.Documents.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tdocument, err := client.Documents.Get(context.TODO(), "documentId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", document.ID)\n}\n',
       },
       ruby: {
         method: 'documents.retrieve',
@@ -2466,6 +2746,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentReplaceParams\nimport com.lightspark.grid.models.documents.DocumentReplaceResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentReplaceParams = DocumentReplaceParams.builder()\n        .documentId("documentId")\n        .country("US")\n        .documentType(DocumentReplaceParams.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .build()\n    val response: DocumentReplaceResponse = client.documents().replace(params)\n}',
       },
+      go: {
+        method: 'client.Documents.Replace',
+        example:
+          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Documents.Replace(\n\t\tcontext.TODO(),\n\t\t"documentId",\n\t\tgrid.DocumentReplaceParams{\n\t\t\tCountry:      "US",\n\t\t\tDocumentType: grid.DocumentReplaceParamsDocumentTypePassport,\n\t\t\tFile:         io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
       ruby: {
         method: 'documents.replace',
         example:
@@ -2504,6 +2789,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.documents().delete("documentId")\n}',
+      },
+      go: {
+        method: 'client.Documents.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\terr := client.Documents.Delete(context.TODO(), "documentId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'documents.delete',
@@ -2546,6 +2836,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.verifications.VerificationSubmitParams\nimport com.lightspark.grid.models.verifications.VerificationSubmitResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: VerificationSubmitParams = VerificationSubmitParams.builder()\n        .customerId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .build()\n    val response: VerificationSubmitResponse = client.verifications().submit(params)\n}',
       },
+      go: {
+        method: 'client.Verifications.Submit',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Verifications.Submit(context.TODO(), grid.VerificationSubmitParams{\n\t\tCustomerID: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
       ruby: {
         method: 'verifications.submit',
         example:
@@ -2585,6 +2880,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.verifications.VerificationListPage\nimport com.lightspark.grid.models.verifications.VerificationListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: VerificationListPage = client.verifications().list()\n}',
+      },
+      go: {
+        method: 'client.Verifications.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Verifications.List(context.TODO(), grid.VerificationListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       ruby: {
         method: 'verifications.list',
@@ -2626,6 +2926,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.verifications.VerificationRetrieveParams\nimport com.lightspark.grid.models.verifications.VerificationRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val verification: VerificationRetrieveResponse = client.verifications().retrieve("verificationId")\n}',
       },
+      go: {
+        method: 'client.Verifications.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tverification, err := client.Verifications.Get(context.TODO(), "verificationId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", verification.ID)\n}\n',
+      },
       ruby: {
         method: 'verifications.retrieve',
         example:
@@ -2665,6 +2970,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.discoveries.DiscoveryListParams\nimport com.lightspark.grid.models.discoveries.DiscoveryListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val discoveries: DiscoveryListResponse = client.discoveries().list()\n}',
+      },
+      go: {
+        method: 'client.Discoveries.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tdiscoveries, err := client.Discoveries.List(context.TODO(), grid.DiscoveryListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", discoveries.Data)\n}\n',
       },
       ruby: {
         method: 'discoveries.list',
@@ -2711,6 +3021,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthMethodResponse\nimport com.lightspark.grid.models.auth.credentials.EmailOtpCredentialCreateRequest\nimport com.lightspark.grid.models.auth.credentials.EmailOtpCredentialCreateRequestFields\nimport com.lightspark.grid.models.auth.credentials.OAuthCredentialCreateRequest\nimport com.lightspark.grid.models.auth.credentials.PasskeyCredentialCreateRequest\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: EmailOtpCredentialCreateRequest = EmailOtpCredentialCreateRequest.builder()\n        .accountId("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n        .type(EmailOtpCredentialCreateRequestFields.Type.EMAIL_OTP)\n        .build()\n    val authMethodResponse: AuthMethodResponse = client.auth().credentials().create(params)\n}',
       },
+      go: {
+        method: 'client.Auth.Credentials.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthMethodResponse, err := client.Auth.Credentials.New(context.TODO(), grid.AuthCredentialNewParams{\n\t\tAuthCredentialCreateRequest: grid.AuthCredentialCreateRequestOneOfUnionParam{\n\t\t\tOfEmailOtp: &grid.EmailOtpCredentialCreateRequestParam{\n\t\t\t\tAuthCredentialCreateRequestParam: grid.AuthCredentialCreateRequestParam{\n\t\t\t\t\tAccountID: "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n\t\t\t\t},\n\t\t\t\tEmailOtpCredentialCreateRequestFieldsParam: grid.EmailOtpCredentialCreateRequestFieldsParam{\n\t\t\t\t\tType: grid.EmailOtpCredentialCreateRequestFieldsTypeEmailOtp,\n\t\t\t\t},\n\t\t\t},\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authMethodResponse.ID)\n}\n',
+      },
       ruby: {
         method: 'auth.credentials.create',
         example:
@@ -2756,6 +3071,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSession\nimport com.lightspark.grid.models.auth.credentials.CredentialVerifyParams\nimport com.lightspark.grid.models.auth.credentials.EmailOtpCredentialVerifyRequestFields\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialVerifyParams = CredentialVerifyParams.builder()\n        .id("id")\n        .authCredentialVerifyRequest(EmailOtpCredentialVerifyRequestFields.builder()\n            .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n            .otp("123456")\n            .type(EmailOtpCredentialVerifyRequestFields.Type.EMAIL_OTP)\n            .build())\n        .build()\n    val authSession: AuthSession = client.auth().credentials().verify(params)\n}',
       },
+      go: {
+        method: 'client.Auth.Credentials.Verify',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthSession, err := client.Auth.Credentials.Verify(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgrid.AuthCredentialVerifyParams{\n\t\t\tAuthCredentialVerifyRequest: grid.AuthCredentialVerifyRequestOneOfUnionParam{\n\t\t\t\tOfEmailOtpCredentialVerifyRequest: &grid.EmailOtpCredentialVerifyRequestFieldsParam{\n\t\t\t\t\tClientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n\t\t\t\t\tOtp:             "123456",\n\t\t\t\t\tType:            grid.EmailOtpCredentialVerifyRequestFieldsTypeEmailOtp,\n\t\t\t\t},\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authSession)\n}\n',
+      },
       ruby: {
         method: 'auth.credentials.verify',
         example:
@@ -2796,6 +3116,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth().credentials().challenge',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthCredentialResponseOneOf\nimport com.lightspark.grid.models.auth.credentials.CredentialChallengeParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val authCredentialResponseOneOf: AuthCredentialResponseOneOf = client.auth().credentials().challenge("id")\n}',
+      },
+      go: {
+        method: 'client.Auth.Credentials.Challenge',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthCredentialResponseOneOf, err := client.Auth.Credentials.Challenge(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgrid.AuthCredentialChallengeParams{\n\t\t\tClientPublicKey: grid.String("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authCredentialResponseOneOf)\n}\n',
       },
       ruby: {
         method: 'auth.credentials.challenge',
@@ -2838,6 +3163,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthCredentialListResponse\nimport com.lightspark.grid.models.auth.credentials.CredentialListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CredentialListParams = CredentialListParams.builder()\n        .accountId("accountId")\n        .build()\n    val authCredentialListResponse: AuthCredentialListResponse = client.auth().credentials().list(params)\n}',
       },
+      go: {
+        method: 'client.Auth.Credentials.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthCredentialListResponse, err := client.Auth.Credentials.List(context.TODO(), grid.AuthCredentialListParams{\n\t\tAccountID: "accountId",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authCredentialListResponse.Data)\n}\n',
+      },
       ruby: {
         method: 'auth.credentials.list',
         example:
@@ -2877,6 +3207,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth().credentials().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSignedRequestChallenge\nimport com.lightspark.grid.models.auth.credentials.CredentialDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val authSignedRequestChallenge: AuthSignedRequestChallenge = client.auth().credentials().delete("id")\n}',
+      },
+      go: {
+        method: 'client.Auth.Credentials.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthSignedRequestChallenge, err := client.Auth.Credentials.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgrid.AuthCredentialDeleteParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authSignedRequestChallenge)\n}\n',
       },
       ruby: {
         method: 'auth.credentials.delete',
@@ -2918,6 +3253,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.sessions.SessionListParams\nimport com.lightspark.grid.models.auth.sessions.SessionListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SessionListParams = SessionListParams.builder()\n        .accountId("accountId")\n        .build()\n    val sessionListResponse: SessionListResponse = client.auth().sessions().list(params)\n}',
       },
+      go: {
+        method: 'client.Auth.Sessions.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tsessionListResponse, err := client.Auth.Sessions.List(context.TODO(), grid.AuthSessionListParams{\n\t\tAccountID: "accountId",\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", sessionListResponse.Data)\n}\n',
+      },
       ruby: {
         method: 'auth.sessions.list',
         example:
@@ -2957,6 +3297,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth().sessions().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSignedRequestChallenge\nimport com.lightspark.grid.models.auth.sessions.SessionDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val authSignedRequestChallenge: AuthSignedRequestChallenge = client.auth().sessions().delete("id")\n}',
+      },
+      go: {
+        method: 'client.Auth.Sessions.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthSignedRequestChallenge, err := client.Auth.Sessions.Delete(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgrid.AuthSessionDeleteParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authSignedRequestChallenge)\n}\n',
       },
       ruby: {
         method: 'auth.sessions.delete',
@@ -3004,6 +3349,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.auth.credentials.AuthSession\nimport com.lightspark.grid.models.auth.sessions.SessionRefreshParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SessionRefreshParams = SessionRefreshParams.builder()\n        .id("Session:019542f5-b3e7-1d02-0000-000000000003")\n        .clientPublicKey("04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2")\n        .build()\n    val authSession: AuthSession = client.auth().sessions().refresh(params)\n}',
       },
+      go: {
+        method: 'client.Auth.Sessions.Refresh',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tauthSession, err := client.Auth.Sessions.Refresh(\n\t\tcontext.TODO(),\n\t\t"Session:019542f5-b3e7-1d02-0000-000000000003",\n\t\tgrid.AuthSessionRefreshParams{\n\t\t\tClientPublicKey: "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", authSession)\n}\n',
+      },
       ruby: {
         method: 'auth.sessions.refresh',
         example:
@@ -3048,6 +3398,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().create',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentCreateRequest\nimport com.lightspark.grid.models.agents.AgentCreateResponse\nimport com.lightspark.grid.models.agents.AgentPolicy\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: AgentCreateRequest = AgentCreateRequest.builder()\n        .customerId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .name("Payroll Automation Agent")\n        .policy(AgentPolicy.builder()\n            .defaultExecutionMode(AgentPolicy.DefaultExecutionMode.AUTO)\n            .addPermission(AgentPolicy.Permission.VIEW_TRANSACTIONS)\n            .spendingLimits(AgentPolicy.SpendingLimits.builder()\n                .currency("USD")\n                .perTransactionLimit(50000L)\n                .build())\n            .build())\n        .build()\n    val agentCreateResponse: AgentCreateResponse = client.agents().create(params)\n}',
+      },
+      go: {
+        method: 'client.Agents.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentCreateResponse, err := client.Agents.New(context.TODO(), grid.AgentNewParams{\n\t\tAgentCreateRequest: grid.AgentCreateRequestParam{\n\t\t\tCustomerID: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n\t\t\tName:       "Payroll Automation Agent",\n\t\t\tPolicy: grid.AgentPolicyParam{\n\t\t\t\tDefaultExecutionMode: grid.AgentPolicyDefaultExecutionModeAuto,\n\t\t\t\tPermissions:          []string{"VIEW_TRANSACTIONS"},\n\t\t\t\tSpendingLimits: grid.AgentPolicySpendingLimitsParam{\n\t\t\t\t\tCurrency:            "USD",\n\t\t\t\t\tPerTransactionLimit: 50000,\n\t\t\t\t},\n\t\t\t},\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentCreateResponse.Agent)\n}\n',
       },
       ruby: {
         method: 'agents.create',
@@ -3099,6 +3454,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentListPage\nimport com.lightspark.grid.models.agents.AgentListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: AgentListPage = client.agents().list()\n}',
       },
+      go: {
+        method: 'client.Agents.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Agents.List(context.TODO(), grid.AgentListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'agents.list',
         example:
@@ -3148,6 +3508,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentListApprovalsPage\nimport com.lightspark.grid.models.agents.AgentListApprovalsParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: AgentListApprovalsPage = client.agents().listApprovals()\n}',
       },
+      go: {
+        method: 'client.Agents.ListApprovals',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Agents.ListApprovals(context.TODO(), grid.AgentListApprovalsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'agents.list_approvals',
         example:
@@ -3187,6 +3552,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.AgentRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agent: Agent = client.agents().retrieve("agentId")\n}',
+      },
+      go: {
+        method: 'client.Agents.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagent, err := client.Agents.Get(context.TODO(), "agentId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.ID)\n}\n',
       },
       ruby: {
         method: 'agents.retrieve',
@@ -3228,6 +3598,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.AgentUpdateParams\nimport com.lightspark.grid.models.agents.AgentUpdateRequest\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: AgentUpdateParams = AgentUpdateParams.builder()\n        .agentId("agentId")\n        .agentUpdateRequest(AgentUpdateRequest.builder().build())\n        .build()\n    val agent: Agent = client.agents().update(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagent, err := client.Agents.Update(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tgrid.AgentUpdateParams{\n\t\t\tAgentUpdateRequest: grid.AgentUpdateRequestParam{},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.update',
         example:
@@ -3265,6 +3640,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.agents().delete("agentId")\n}',
+      },
+      go: {
+        method: 'client.Agents.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\terr := client.Agents.Delete(context.TODO(), "agentId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'agents.delete',
@@ -3314,6 +3694,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.AgentUpdatePolicyParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agent: Agent = client.agents().updatePolicy("agentId")\n}',
       },
+      go: {
+        method: 'client.Agents.UpdatePolicy',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagent, err := client.Agents.UpdatePolicy(\n\t\tcontext.TODO(),\n\t\t"agentId",\n\t\tgrid.AgentUpdatePolicyParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.update_policy',
         example:
@@ -3353,6 +3738,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.Agent\nimport com.lightspark.grid.models.agents.me.MeRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agent: Agent = client.agents().me().retrieve()\n}',
+      },
+      go: {
+        method: 'client.Agents.Me.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tagent, err := client.Agents.Me.Get(context.TODO())\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agent.ID)\n}\n',
       },
       ruby: {
         method: 'agents.me.retrieve',
@@ -3400,6 +3790,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.MeCreateTransferInParams\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: MeCreateTransferInParams = MeCreateTransferInParams.builder()\n        .destination(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .source(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val agentAction: AgentAction = client.agents().me().createTransferIn(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Me.NewTransferIn',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tagentAction, err := client.Agents.Me.NewTransferIn(context.TODO(), grid.AgentMeNewTransferInParams{\n\t\tDestination: grid.InternalAccountReferenceParam{\n\t\t\tAccountID: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t},\n\t\tSource: grid.ExternalAccountReferenceParam{\n\t\t\tAccountID: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t},\n\t\tAmount: grid.Int(12550),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.create_transfer_in',
         example:
@@ -3446,6 +3841,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.MeCreateTransferOutParams\nimport com.lightspark.grid.models.transferin.ExternalAccountReference\nimport com.lightspark.grid.models.transferin.InternalAccountReference\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: MeCreateTransferOutParams = MeCreateTransferOutParams.builder()\n        .destination(ExternalAccountReference.builder()\n            .accountId("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .source(InternalAccountReference.builder()\n            .accountId("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .build()\n    val agentAction: AgentAction = client.agents().me().createTransferOut(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Me.NewTransferOut',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tagentAction, err := client.Agents.Me.NewTransferOut(context.TODO(), grid.AgentMeNewTransferOutParams{\n\t\tDestination: grid.ExternalAccountReferenceParam{\n\t\t\tAccountID: "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t},\n\t\tSource: grid.InternalAccountReferenceParam{\n\t\t\tAccountID: "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t},\n\t\tAmount: grid.Int(12550),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.create_transfer_out',
         example:
@@ -3491,6 +3891,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().listInternalAccounts',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.MeListInternalAccountsPage\nimport com.lightspark.grid.models.agents.me.MeListInternalAccountsParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: MeListInternalAccountsPage = client.agents().me().listInternalAccounts()\n}',
+      },
+      go: {
+        method: 'client.Agents.Me.ListInternalAccounts',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tpage, err := client.Agents.Me.ListInternalAccounts(context.TODO(), grid.AgentMeListInternalAccountsParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       ruby: {
         method: 'agents.me.list_internal_accounts',
@@ -3545,6 +3950,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.transactions.TransactionListPage\nimport com.lightspark.grid.models.agents.me.transactions.TransactionListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: TransactionListPage = client.agents().me().transactions().list()\n}',
       },
+      go: {
+        method: 'client.Agents.Me.Transactions.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tpage, err := client.Agents.Me.Transactions.List(context.TODO(), grid.AgentMeTransactionListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'agents.me.transactions.list',
         example:
@@ -3585,6 +3995,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().transactions().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.transactions.TransactionRetrieveParams\nimport com.lightspark.grid.models.transferin.Transaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val transaction: Transaction = client.agents().me().transactions().retrieve("transactionId")\n}',
+      },
+      go: {
+        method: 'client.Agents.Me.Transactions.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\ttransaction, err := client.Agents.Me.Transactions.Get(context.TODO(), "transactionId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", transaction)\n}\n',
       },
       ruby: {
         method: 'agents.me.transactions.retrieve',
@@ -3638,6 +4053,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.quotes.QuoteCreateParams\nimport com.lightspark.grid.models.quotes.Quote\nimport com.lightspark.grid.models.quotes.QuoteDestinationOneOf\nimport com.lightspark.grid.models.quotes.QuoteSourceOneOf\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: QuoteCreateParams = QuoteCreateParams.builder()\n        .destination(QuoteDestinationOneOf.AccountDestination.builder()\n            .accountId("ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123")\n            .build())\n        .lockedCurrencyAmount(1000L)\n        .lockedCurrencySide(QuoteCreateParams.LockedCurrencySide.SENDING)\n        .source(QuoteSourceOneOf.AccountQuoteSource.builder()\n            .accountId("InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965")\n            .build())\n        .build()\n    val quote: Quote = client.agents().me().quotes().create(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Me.Quotes.New',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tquote, err := client.Agents.Me.Quotes.New(context.TODO(), grid.AgentMeQuoteNewParams{\n\t\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t\t},\n\t\t},\n\t\tLockedCurrencyAmount: 1000,\n\t\tLockedCurrencySide:   grid.AgentMeQuoteNewParamsLockedCurrencySideSending,\n\t\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t\t},\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", quote.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.quotes.create',
         example:
@@ -3678,6 +4098,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().quotes().retrieve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.quotes.QuoteRetrieveParams\nimport com.lightspark.grid.models.quotes.Quote\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val quote: Quote = client.agents().me().quotes().retrieve("quoteId")\n}',
+      },
+      go: {
+        method: 'client.Agents.Me.Quotes.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tquote, err := client.Agents.Me.Quotes.Get(context.TODO(), "quoteId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", quote.ID)\n}\n',
       },
       ruby: {
         method: 'agents.me.quotes.retrieve',
@@ -3720,6 +4145,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.quotes.QuoteExecuteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentAction: AgentAction = client.agents().me().quotes().execute("Quote:019542f5-b3e7-1d02-0000-000000000001")\n}',
       },
+      go: {
+        method: 'client.Agents.Me.Quotes.Execute',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tagentAction, err := client.Agents.Me.Quotes.Execute(\n\t\tcontext.TODO(),\n\t\t"Quote:019542f5-b3e7-1d02-0000-000000000001",\n\t\tgrid.AgentMeQuoteExecuteParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.quotes.execute',
         example:
@@ -3760,6 +4190,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().externalAccounts().list',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountListPage\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ExternalAccountListPage = client.agents().me().externalAccounts().list()\n}',
+      },
+      go: {
+        method: 'client.Agents.Me.ExternalAccounts.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tpage, err := client.Agents.Me.ExternalAccounts.List(context.TODO(), grid.AgentMeExternalAccountListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
       },
       ruby: {
         method: 'agents.me.external_accounts.list',
@@ -3808,6 +4243,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.UsdExternalAccountCreateInfo\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccountCreate\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ExternalAccountCreate = ExternalAccountCreate.builder()\n        .accountInfo(UsdExternalAccountCreateInfo.builder()\n            .accountNumber("12345678901")\n            .accountType(UsdExternalAccountCreateInfo.AccountType.USD_ACCOUNT)\n            .individualBeneficiary("John Doe")\n            .routingNumber("123456789")\n            .build())\n        .currency("USD")\n        .build()\n    val externalAccount: ExternalAccount = client.agents().me().externalAccounts().add(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Me.ExternalAccounts.Add',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n\t"github.com/stainless-sdks/grid-go/shared"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\texternalAccount, err := client.Agents.Me.ExternalAccounts.Add(context.TODO(), grid.AgentMeExternalAccountAddParams{\n\t\tExternalAccountCreate: grid.ExternalAccountCreateParam{\n\t\t\tAccountInfo: grid.ExternalAccountCreateAccountInfoUnionParam{\n\t\t\t\tOfUsdAccount: &shared.UsdExternalAccountCreateInfoParam{\n\t\t\t\t\tAccountNumber: "12345678901",\n\t\t\t\t\tAccountType:   shared.UsdExternalAccountCreateInfoAccountTypeUsdAccount,\n\t\t\t\t\tBeneficiary: shared.UsdExternalAccountCreateInfoBeneficiaryUnionParam{\n\t\t\t\t\t\tOfIndividual: &grid.UsdBeneficiaryParam{\n\t\t\t\t\t\t\tBeneficiaryType: grid.UsdBeneficiaryBeneficiaryTypeIndividual,\n\t\t\t\t\t\t\tFullName:        "John Doe",\n\t\t\t\t\t\t},\n\t\t\t\t\t},\n\t\t\t\t\tRoutingNumber: "123456789",\n\t\t\t\t},\n\t\t\t},\n\t\t\tCurrency: "USD",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", externalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.external_accounts.add',
         example:
@@ -3849,6 +4289,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountRetrieveParams\nimport com.lightspark.grid.models.customers.externalaccounts.ExternalAccount\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val externalAccount: ExternalAccount = client.agents().me().externalAccounts().retrieve("externalAccountId")\n}',
       },
+      go: {
+        method: 'client.Agents.Me.ExternalAccounts.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\texternalAccount, err := client.Agents.Me.ExternalAccounts.Get(context.TODO(), "externalAccountId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", externalAccount.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.external_accounts.retrieve',
         example:
@@ -3887,6 +4332,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().me().externalAccounts().delete',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.externalaccounts.ExternalAccountDeleteParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    client.agents().me().externalAccounts().delete("externalAccountId")\n}',
+      },
+      go: {
+        method: 'client.Agents.Me.ExternalAccounts.Delete',
+        example:
+          'package main\n\nimport (\n\t"context"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\terr := client.Agents.Me.ExternalAccounts.Delete(context.TODO(), "externalAccountId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n}\n',
       },
       ruby: {
         method: 'agents.me.external_accounts.delete',
@@ -3933,6 +4383,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.me.actions.ActionListPage\nimport com.lightspark.grid.models.agents.me.actions.ActionListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: ActionListPage = client.agents().me().actions().list()\n}',
       },
+      go: {
+        method: 'client.Agents.Me.Actions.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tpage, err := client.Agents.Me.Actions.List(context.TODO(), grid.AgentMeActionListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
       ruby: {
         method: 'agents.me.actions.list',
         example:
@@ -3974,6 +4429,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.me.actions.ActionRetrieveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentAction: AgentAction = client.agents().me().actions().retrieve("actionId")\n}',
       },
+      go: {
+        method: 'client.Agents.Me.Actions.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithAgentAccessToken("My Agent Access Token"),\n\t)\n\tagentAction, err := client.Agents.Me.Actions.Get(context.TODO(), "actionId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.me.actions.retrieve',
         example:
@@ -4014,6 +4474,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeviceCode\nimport com.lightspark.grid.models.agents.devicecodes.DeviceCodeRegenerateParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentDeviceCode: AgentDeviceCode = client.agents().deviceCodes().regenerate("agentId")\n}',
       },
+      go: {
+        method: 'client.Agents.DeviceCodes.Regenerate',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentDeviceCode, err := client.Agents.DeviceCodes.Regenerate(context.TODO(), "agentId")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDeviceCode.AgentID)\n}\n',
+      },
       ruby: {
         method: 'agents.device_codes.regenerate',
         example:
@@ -4053,6 +4518,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().deviceCodes().getStatus',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeviceCodeStatusResponse\nimport com.lightspark.grid.models.agents.devicecodes.DeviceCodeGetStatusParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentDeviceCodeStatusResponse: AgentDeviceCodeStatusResponse = client.agents().deviceCodes().getStatus("code")\n}',
+      },
+      go: {
+        method: 'client.Agents.DeviceCodes.GetStatus',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentDeviceCodeStatusResponse, err := client.Agents.DeviceCodes.GetStatus(context.TODO(), "code")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDeviceCodeStatusResponse.Code)\n}\n',
       },
       ruby: {
         method: 'agents.device_codes.get_status',
@@ -4095,6 +4565,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentDeviceCodeRedeemResponse\nimport com.lightspark.grid.models.agents.devicecodes.DeviceCodeRedeemParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val agentDeviceCodeRedeemResponse: AgentDeviceCodeRedeemResponse = client.agents().deviceCodes().redeem("code")\n}',
       },
+      go: {
+        method: 'client.Agents.DeviceCodes.Redeem',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentDeviceCodeRedeemResponse, err := client.Agents.DeviceCodes.Redeem(context.TODO(), "code")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentDeviceCodeRedeemResponse.AccessToken)\n}\n',
+      },
       ruby: {
         method: 'agents.device_codes.redeem',
         example:
@@ -4135,6 +4610,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().transactions().approve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.transactions.TransactionApproveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransactionApproveParams = TransactionApproveParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().transactions().approve(params)\n}',
+      },
+      go: {
+        method: 'client.Agents.Transactions.Approve',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentAction, err := client.Agents.Transactions.Approve(\n\t\tcontext.TODO(),\n\t\t"actionId",\n\t\tgrid.AgentTransactionApproveParams{\n\t\t\tAgentID: "agentId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
       },
       ruby: {
         method: 'agents.transactions.approve',
@@ -4177,6 +4657,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.transactions.TransactionRejectParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: TransactionRejectParams = TransactionRejectParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().transactions().reject(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Transactions.Reject',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentAction, err := client.Agents.Transactions.Reject(\n\t\tcontext.TODO(),\n\t\t"actionId",\n\t\tgrid.AgentTransactionRejectParams{\n\t\t\tAgentID: "agentId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.transactions.reject',
         example:
@@ -4217,6 +4702,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents().actions().approve',
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.actions.ActionApproveParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ActionApproveParams = ActionApproveParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().actions().approve(params)\n}',
+      },
+      go: {
+        method: 'client.Agents.Actions.Approve',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentAction, err := client.Agents.Actions.Approve(\n\t\tcontext.TODO(),\n\t\t"actionId",\n\t\tgrid.AgentActionApproveParams{\n\t\t\tAgentID: "agentId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
       },
       ruby: {
         method: 'agents.actions.approve',
@@ -4259,6 +4749,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.agents.AgentAction\nimport com.lightspark.grid.models.agents.actions.ActionRejectParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: ActionRejectParams = ActionRejectParams.builder()\n        .agentId("agentId")\n        .actionId("actionId")\n        .build()\n    val agentAction: AgentAction = client.agents().actions().reject(params)\n}',
       },
+      go: {
+        method: 'client.Agents.Actions.Reject',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tagentAction, err := client.Agents.Actions.Reject(\n\t\tcontext.TODO(),\n\t\t"actionId",\n\t\tgrid.AgentActionRejectParams{\n\t\t\tAgentID: "agentId",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", agentAction.ID)\n}\n',
+      },
       ruby: {
         method: 'agents.actions.reject',
         example:
@@ -4273,6 +4768,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
 ];
 
 const EMBEDDED_READMES: { language: string; content: string }[] = [
+  {
+    language: 'go',
+    content:
+      '# Lightspark Grid Go API Library\n\n<a href="https://pkg.go.dev/github.com/stainless-sdks/grid-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/grid-go.svg" alt="Go Reference"></a>\n\nThe Lightspark Grid Go library provides convenient access to the [Lightspark Grid REST API](grid.lightspark.com)\nfrom applications written in Go.\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## MCP Server\n\nUse the Lightspark Grid MCP Server to enable AI assistants to interact with this API, allowing them to explore endpoints, make test requests, and use documentation to help integrate this SDK into your application.\n\n[![Add to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en-US/install-mcp?name=%40lightsparkdev%2Fgrid-mcp&config=eyJuYW1lIjoiQGxpZ2h0c3BhcmtkZXYvZ3JpZC1tY3AiLCJ0cmFuc3BvcnQiOiJodHRwIiwidXJsIjoiaHR0cHM6Ly9ncmlkLW1jcC5zdGxtY3AuY29tIiwiaGVhZGVycyI6eyJ4LWdyaWQtY2xpZW50LWlkIjoiTXkgVXNlcm5hbWUiLCJ4LWdyaWQtY2xpZW50LXNlY3JldCI6Ik15IFBhc3N3b3JkIiwieC1ncmlkLWFnZW50LWFjY2Vzcy10b2tlbiI6Ik15IEFnZW50IEFjY2VzcyBUb2tlbiIsIlgtR3JpZC1TaWduYXR1cmUiOiJNeSBXZWJob29rIFNpZ25hdHVyZSJ9fQ)\n[![Install in VS Code](https://img.shields.io/badge/_-Add_to_VS_Code-blue?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCA0MCA0MCI+PHBhdGggZmlsbD0iI0VFRSIgZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMzAuMjM1IDM5Ljg4NGEyLjQ5MSAyLjQ5MSAwIDAgMS0xLjc4MS0uNzNMMTIuNyAyNC43OGwtMy40NiAyLjYyNC0zLjQwNiAyLjU4MmExLjY2NSAxLjY2NSAwIDAgMS0xLjA4Mi4zMzggMS42NjQgMS42NjQgMCAwIDEtMS4wNDYtLjQzMWwtMi4yLTJhMS42NjYgMS42NjYgMCAwIDEgMC0yLjQ2M0w3LjQ1OCAyMCA0LjY3IDE3LjQ1MyAxLjUwNyAxNC41N2ExLjY2NSAxLjY2NSAwIDAgMSAwLTIuNDYzbDIuMi0yYTEuNjY1IDEuNjY1IDAgMCAxIDIuMTMtLjA5N2w2Ljg2MyA1LjIwOUwyOC40NTIuODQ0YTIuNDg4IDIuNDg4IDAgMCAxIDEuODQxLS43MjljLjM1MS4wMDkuNjk5LjA5MSAxLjAxOS4yNDVsOC4yMzYgMy45NjFhMi41IDIuNSAwIDAgMSAxLjQxNSAyLjI1M3YuMDk5LS4wNDVWMzMuMzd2LS4wNDUuMDk1YTIuNTAxIDIuNTAxIDAgMCAxLTEuNDE2IDIuMjU3bC04LjIzNSAzLjk2MWEyLjQ5MiAyLjQ5MiAwIDAgMS0xLjA3Ny4yNDZabS43MTYtMjguOTQ3LTExLjk0OCA5LjA2MiAxMS45NTIgOS4wNjUtLjAwNC0xOC4xMjdaIi8+PC9zdmc+)](https://vscode.stainless.com/mcp/%7B%22name%22%3A%22%40lightsparkdev%2Fgrid-mcp%22%2C%22type%22%3A%22http%22%2C%22url%22%3A%22https%3A%2F%2Fgrid-mcp.stlmcp.com%22%2C%22headers%22%3A%7B%22x-grid-client-id%22%3A%22My%20Username%22%2C%22x-grid-client-secret%22%3A%22My%20Password%22%2C%22x-grid-agent-access-token%22%3A%22My%20Agent%20Access%20Token%22%2C%22X-Grid-Signature%22%3A%22My%20Webhook%20Signature%22%7D%7D)\n\n> Note: You may need to set environment variables in your MCP client.\n\n## Installation\n\n\n\n```go\nimport (\n\t"github.com/stainless-sdks/grid-go" // imported as SDK_PackageName\n)\n```\n\n\n\nOr to pin the version:\n\n\n\n```sh\ngo get -u \'github.com/stainless-sdks/grid-go@v0.0.1\'\n```\n\n\n\n## Requirements\n\nThis library requires Go 1.22+.\n\n## Usage\n\nThe full API of this library can be found in [api.md](api.md).\n\n```go\npackage main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"), // defaults to os.LookupEnv("GRID_CLIENT_ID")\n\t\toption.WithPassword("My Password"), // defaults to os.LookupEnv("GRID_CLIENT_SECRET")\n\t)\n\tquote, err := client.Quotes.New(context.TODO(), grid.QuoteNewParams{\n\t\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t\t},\n\t\t},\n\t\tLockedCurrencyAmount: 10000,\n\t\tLockedCurrencySide:   grid.QuoteNewParamsLockedCurrencySideSending,\n\t\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t\t},\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", quote.ID)\n}\n\n```\n\n### Request fields\n\nAll request parameters are wrapped in a generic `Field` type,\nwhich we use to distinguish zero values from null or omitted fields.\n\nThis prevents accidentally sending a zero value if you forget a required parameter,\nand enables explicitly sending `null`, `false`, `\'\'`, or `0` on optional parameters.\nAny field not specified is not sent.\n\nTo construct fields with values, use the helpers `String()`, `Int()`, `Float()`, or most commonly, the generic `F[T]()`.\nTo send a null, use `Null[T]()`, and to send a nonconforming value, use `Raw[T](any)`. For example:\n\n```go\nparams := FooParams{\n\tName: SDK_PackageName.F("hello"),\n\n\t// Explicitly send `"description": null`\n\tDescription: SDK_PackageName.Null[string](),\n\n\tPoint: SDK_PackageName.F(SDK_PackageName.Point{\n\t\tX: SDK_PackageName.Int(0),\n\t\tY: SDK_PackageName.Int(1),\n\n\t\t// In cases where the API specifies a given type,\n\t\t// but you want to send something else, use `Raw`:\n\t\tZ: SDK_PackageName.Raw[int64](0.01), // sends a float\n\t}),\n}\n```\n\n### Response objects\n\nAll fields in response structs are value types (not pointers or wrappers).\n\nIf a given field is `null`, not present, or invalid, the corresponding field\nwill simply be its zero value.\n\nAll response structs also include a special `JSON` field, containing more detailed\ninformation about each property, which you can use like so:\n\n```go\nif res.Name == "" {\n\t// true if `"name"` is either not present or explicitly null\n\tres.JSON.Name.IsNull()\n\n\t// true if the `"name"` key was not present in the response JSON at all\n\tres.JSON.Name.IsMissing()\n\n\t// When the API returns data that cannot be coerced to the expected type:\n\tif res.JSON.Name.IsInvalid() {\n\t\traw := res.JSON.Name.Raw()\n\n\t\tlegacyName := struct{\n\t\t\tFirst string `json:"first"`\n\t\t\tLast  string `json:"last"`\n\t\t}{}\n\t\tjson.Unmarshal([]byte(raw), &legacyName)\n\t\tname = legacyName.First + " " + legacyName.Last\n\t}\n}\n```\n\nThese `.JSON` structs also include an `Extras` map containing\nany properties in the json response that were not specified\nin the struct. This can be useful for API features not yet\npresent in the SDK.\n\n```go\nbody := res.JSON.ExtraFields["my_unexpected_field"].Raw()\n```\n\n### RequestOptions\n\nThis library uses the functional options pattern. Functions defined in the\n`SDK_PackageOptionName` package return a `RequestOption`, which is a closure that mutates a\n`RequestConfig`. These options can be supplied to the client or at individual\nrequests. For example:\n\n```go\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\t// Adds a header to every request made by the client\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "custom_header_info"),\n)\n\nclient.Quotes.New(context.TODO(), ...,\n\t// Override the header\n\tSDK_PackageOptionName.WithHeader("X-Some-Header", "some_other_custom_header_info"),\n\t// Add an undocumented field to the request body, using sjson syntax\n\tSDK_PackageOptionName.WithJSONSet("some.json.path", map[string]string{"my": "object"}),\n)\n```\n\nSee the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/grid-go/SDK_PackageOptionName).\n\n### Pagination\n\nThis library provides some conveniences for working with paginated list endpoints.\n\nYou can use `.ListAutoPaging()` methods to iterate through items across all pages:\n\n```go\niter := client.Customers.ListAutoPaging(context.TODO(), grid.CustomerListParams{})\n// Automatically fetches more pages as needed.\nfor iter.Next() {\n\tcustomerOneOf := iter.Current()\n\tfmt.Printf("%+v\\n", customerOneOf)\n}\nif err := iter.Err(); err != nil {\n\tpanic(err.Error())\n}\n```\n\nOr you can use simple `.List()` methods to fetch a single page and receive a standard response object\nwith additional helper methods like `.GetNextPage()`, e.g.:\n\n```go\npage, err := client.Customers.List(context.TODO(), grid.CustomerListParams{})\nfor page != nil {\n\tfor _, customer := range page.Data {\n\t\tfmt.Printf("%+v\\n", customer)\n\t}\n\tpage, err = page.GetNextPage()\n}\nif err != nil {\n\tpanic(err.Error())\n}\n```\n\n### Errors\n\nWhen the API returns a non-success status code, we return an error with type\n`*SDK_PackageName.Error`. This contains the `StatusCode`, `*http.Request`, and\n`*http.Response` values of the request, as well as the JSON of the error body\n(much like other response objects in the SDK).\n\nTo handle errors, we recommend that you use the `errors.As` pattern:\n\n```go\n_, err := client.Quotes.New(context.TODO(), grid.QuoteNewParams{\n\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t},\n\t},\n\tLockedCurrencyAmount: 10000,\n\tLockedCurrencySide:   grid.QuoteNewParamsLockedCurrencySideSending,\n\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t},\n\t},\n})\nif err != nil {\n\tvar apierr *grid.Error\n\tif errors.As(err, &apierr) {\n\t\tprintln(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request\n\t\tprintln(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response\n\t}\n\tpanic(err.Error()) // GET "/quotes": 400 Bad Request { ... }\n}\n```\n\nWhen other errors occur, they are returned unwrapped; for example,\nif HTTP transport fails, you might receive `*url.Error` wrapping `*net.OpError`.\n\n### Timeouts\n\nRequests do not time out by default; use context to configure a timeout for a request lifecycle.\n\nNote that if a request is [retried](#retries), the context timeout does not start over.\nTo set a per-retry timeout, use `SDK_PackageOptionName.WithRequestTimeout()`.\n\n```go\n// This sets the timeout for the request, including all the retries.\nctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)\ndefer cancel()\nclient.Quotes.New(\n\tctx,\n\tgrid.QuoteNewParams{\n\t\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t\t},\n\t\t},\n\t\tLockedCurrencyAmount: 10000,\n\t\tLockedCurrencySide:   grid.QuoteNewParamsLockedCurrencySideSending,\n\t\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t\t},\n\t\t},\n\t},\n\t// This sets the per-retry timeout\n\toption.WithRequestTimeout(20*time.Second),\n)\n```\n\n### File uploads\n\nRequest parameters that correspond to file uploads in multipart requests are typed as\n`param.Field[io.Reader]`. The contents of the `io.Reader` will by default be sent as a multipart form\npart with the file name of "anonymous_file" and content-type of "application/octet-stream".\n\nThe file name and content-type can be customized by implementing `Name() string` or `ContentType()\nstring` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a\nfile returned by `os.Open` will be sent with the file name on disk.\n\nWe also provide a helper `SDK_PackageName.FileParam(reader io.Reader, filename string, contentType string)`\nwhich can be used to wrap any `io.Reader` with the appropriate file name and content type.\n\n```go\n// A file from the file system\nfile, err := os.Open("/path/to/file")\ngrid.CustomerBulkUploadCsvParams{\n\tFile: file,\n}\n\n// A file from a string\ngrid.CustomerBulkUploadCsvParams{\n\tFile: strings.NewReader("my file contents"),\n}\n\n// With a custom filename and contentType\ngrid.CustomerBulkUploadCsvParams{\n\tFile: grid.File(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),\n}\n```\n\n### Retries\n\nCertain errors will be automatically retried 2 times by default, with a short exponential backoff.\nWe retry by default all connection errors, 408 Request Timeout, 409 Conflict, 429 Rate Limit,\nand >=500 Internal errors.\n\nYou can use the `WithMaxRetries` option to configure or disable this:\n\n```go\n// Configure the default for all requests:\nclient := grid.NewClient(\n\toption.WithMaxRetries(0), // default is 2\n)\n\n// Override per-request:\nclient.Quotes.New(\n\tcontext.TODO(),\n\tgrid.QuoteNewParams{\n\t\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t\t},\n\t\t},\n\t\tLockedCurrencyAmount: 10000,\n\t\tLockedCurrencySide:   grid.QuoteNewParamsLockedCurrencySideSending,\n\t\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t\t},\n\t\t},\n\t},\n\toption.WithMaxRetries(5),\n)\n```\n\n\n### Accessing raw response data (e.g. response headers)\n\nYou can access the raw HTTP response data by using the `option.WithResponseInto()` request option. This is useful when\nyou need to examine response headers, status codes, or other details.\n\n```go\n// Create a variable to store the HTTP response\nvar response *http.Response\nquote, err := client.Quotes.New(\n\tcontext.TODO(),\n\tgrid.QuoteNewParams{\n\t\tDestination: grid.QuoteDestinationOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteDestinationOneOfAccountParam{\n\t\t\t\tAccountID: "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n\t\t\t},\n\t\t},\n\t\tLockedCurrencyAmount: 10000,\n\t\tLockedCurrencySide:   grid.QuoteNewParamsLockedCurrencySideSending,\n\t\tSource: grid.QuoteSourceOneOfUnionParam{\n\t\t\tOfAccount: &grid.QuoteSourceOneOfAccountParam{\n\t\t\t\tAccountID: "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n\t\t\t},\n\t\t},\n\t},\n\toption.WithResponseInto(&response),\n)\nif err != nil {\n\t// handle error\n}\nfmt.Printf("%+v\\n", quote)\n\nfmt.Printf("Status Code: %d\\n", response.StatusCode)\nfmt.Printf("Headers: %+#v\\n", response.Header)\n```\n\n### Making custom/undocumented requests\n\nThis library is typed for convenient access to the documented API. If you need to access undocumented\nendpoints, params, or response properties, the library can still be used.\n\n#### Undocumented endpoints\n\nTo make requests to undocumented endpoints, you can use `client.Get`, `client.Post`, and other HTTP verbs.\n`RequestOptions` on the client, such as retries, will be respected when making these requests.\n\n```go\nvar (\n    // params can be an io.Reader, a []byte, an encoding/json serializable object,\n    // or a "…Params" struct defined in this library.\n    params map[string]interface{}\n\n    // result can be an []byte, *http.Response, a encoding/json deserializable object,\n    // or a model defined in this library.\n    result *http.Response\n)\nerr := client.Post(context.Background(), "/unspecified", params, &result)\nif err != nil {\n    …\n}\n```\n\n#### Undocumented request params\n\nTo make requests using undocumented parameters, you may use either the `SDK_PackageOptionName.WithQuerySet()`\nor the `SDK_PackageOptionName.WithJSONSet()` methods.\n\n```go\nparams := FooNewParams{\n    ID:   SDK_PackageName.F("id_xxxx"),\n    Data: SDK_PackageName.F(FooNewParamsData{\n        FirstName: SDK_PackageName.F("John"),\n    }),\n}\nclient.Foo.New(context.Background(), params, SDK_PackageOptionName.WithJSONSet("data.last_name", "Doe"))\n```\n\n#### Undocumented response properties\n\nTo access undocumented response properties, you may either access the raw JSON of the response as a string\nwith `result.JSON.RawJSON()`, or get the raw JSON of a particular field on the result with\n`result.JSON.Foo.Raw()`.\n\nAny fields that are not present on the response struct will be saved and can be accessed by `result.JSON.ExtraFields()` which returns the extra fields as a `map[string]Field`.\n\n### Middleware\n\nWe provide `SDK_PackageOptionName.WithMiddleware` which applies the given\nmiddleware to requests.\n\n```go\nfunc Logger(req *http.Request, next SDK_PackageOptionName.MiddlewareNext) (res *http.Response, err error) {\n\t// Before the request\n\tstart := time.Now()\n\tLogReq(req)\n\n\t// Forward the request to the next handler\n\tres, err = next(req)\n\n\t// Handle stuff after the request\n\tend := time.Now()\n\tLogRes(res, err, start - end)\n\n    return res, err\n}\n\nclient := SDK_PackageName.SDK_ClientInitializerName(\n\tSDK_PackageOptionName.WithMiddleware(Logger),\n)\n```\n\nWhen multiple middlewares are provided as variadic arguments, the middlewares\nare applied left to right. If `SDK_PackageOptionName.WithMiddleware` is given\nmultiple times, for example first in the client then the method, the\nmiddleware in the client will run first and the middleware given in the method\nwill run next.\n\nYou may also replace the default `http.Client` with\n`SDK_PackageOptionName.WithHTTPClient(client)`. Only one http client is\naccepted (this overwrites any previous client) and receives requests after any\nmiddleware has been applied.\n\n## Semantic versioning\n\nThis package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) conventions, though certain backwards-incompatible changes may be released as minor versions:\n\n1. Changes to library internals which are technically public but not intended or documented for external use. _(Please open a GitHub issue to let us know if you are relying on such internals.)_\n2. Changes that we do not expect to impact the vast majority of users in practice.\n\nWe take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.\n\nWe are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/grid-go/issues) with questions, bugs, or suggestions.\n\n## Contributing\n\nSee [the contributing documentation](./CONTRIBUTING.md).\n',
+  },
   {
     language: 'kotlin',
     content:
