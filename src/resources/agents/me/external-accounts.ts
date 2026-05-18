@@ -169,7 +169,7 @@ export interface ExternalAccountAddParams {
     | Shared.HtgExternalAccountCreateInfo
     | Shared.JmdExternalAccountCreateInfo
     | Shared.PkrExternalAccountCreateInfo
-    | ExternalAccountAddParams.SlvExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
     | ExternalAccountsAPI.SparkWalletInfo
     | ExternalAccountsAPI.LightningWalletInfo
     | ExternalAccountsAPI.SolanaWalletInfo
@@ -206,72 +206,6 @@ export interface ExternalAccountAddParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
-}
-
-export namespace ExternalAccountAddParams {
-  export interface SlvExternalAccountCreateInfo {
-    accountType: 'SLV_ACCOUNT';
-
-    beneficiary: SlvExternalAccountCreateInfo.SlvBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * The account number of the bank (BANK_TRANSFER only)
-     */
-    accountNumber?: string;
-
-    /**
-     * The bank account type (BANK_TRANSFER only)
-     */
-    bankAccountType?: 'CHECKING' | 'SAVINGS';
-
-    /**
-     * The name of the bank (BANK_TRANSFER only)
-     */
-    bankName?: string;
-
-    /**
-     * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
-     */
-    phoneNumber?: string;
-  }
-
-  export namespace SlvExternalAccountCreateInfo {
-    export interface SlvBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-    }
-  }
 }
 
 export declare namespace ExternalAccounts {
