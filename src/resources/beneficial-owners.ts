@@ -148,6 +148,11 @@ export interface BeneficialOwnerPersonalInfo {
   email?: string;
 
   /**
+   * Name of the government agency or organization that issued the identification
+   */
+  issuingAuthority?: string;
+
+  /**
    * Middle name of the individual
    */
   middleName?: string;
@@ -389,6 +394,11 @@ export namespace BeneficialOwnerUpdateParams {
      * Type of tax identification
      */
     idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
+
+    /**
+     * Name of the government agency or organization that issued the identification
+     */
+    issuingAuthority?: string;
 
     /**
      * Last name of the individual
