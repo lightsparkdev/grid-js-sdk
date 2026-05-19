@@ -60,6 +60,7 @@ describe('resource beneficialOwners', () => {
         nationality: 'US',
         countryOfIssuance: 'US',
         email: 'jane.smith@acmecorp.com',
+        issuingAuthority: 'U.S. Department of State',
         middleName: 'Marie',
         phoneNumber: '+14155550192',
       },
