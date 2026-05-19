@@ -1,7 +1,6 @@
 import fs from 'fs';
 import type { ResponseLike } from '@lightsparkdev/grid/internal/to-file';
 import { toFile } from '@lightsparkdev/grid/core/uploads';
-import { File } from 'node:buffer';
 
 class MyClass {
   name: string = 'foo';
