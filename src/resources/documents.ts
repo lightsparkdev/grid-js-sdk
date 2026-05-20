@@ -189,6 +189,11 @@ export interface DocumentRetrieveResponse {
   documentNumber?: string;
 
   /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
+
+  /**
    * Which side of the document this upload represents. Relevant for two-sided
    * documents like driver's licenses or national IDs.
    */
@@ -270,6 +275,11 @@ export interface DocumentListResponse {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document this upload represents. Relevant for two-sided
@@ -355,6 +365,11 @@ export interface DocumentReplaceResponse {
   documentNumber?: string;
 
   /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
+
+  /**
    * Which side of the document this upload represents. Relevant for two-sided
    * documents like driver's licenses or national IDs.
    */
@@ -438,6 +453,11 @@ export interface DocumentUploadResponse {
   documentNumber?: string;
 
   /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
+
+  /**
    * Which side of the document this upload represents. Relevant for two-sided
    * documents like driver's licenses or national IDs.
    */
@@ -517,6 +537,11 @@ export interface DocumentReplaceParams {
   documentNumber?: string;
 
   /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
+
+  /**
    * Which side of the document (for two-sided documents like driver's licenses)
    */
   side?: 'FRONT' | 'BACK';
@@ -582,6 +607,11 @@ export interface DocumentUploadParams {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document (for two-sided documents like driver's licenses)
