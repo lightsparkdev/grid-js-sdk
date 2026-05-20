@@ -83,6 +83,7 @@ describe('resource documents', () => {
       documentType: 'PASSPORT',
       file: await toFile(Buffer.from('Example data'), 'README.md'),
       documentNumber: 'A12345678',
+      issuingAuthority: 'U.S. Department of State',
       side: 'FRONT',
     });
   });
@@ -112,6 +113,7 @@ describe('resource documents', () => {
       documentType: 'PASSPORT',
       file: await toFile(Buffer.from('Example data'), 'README.md'),
       documentNumber: 'A12345678',
+      issuingAuthority: 'U.S. Department of State',
       side: 'FRONT',
     });
   });
