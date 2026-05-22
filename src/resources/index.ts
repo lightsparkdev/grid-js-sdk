@@ -38,6 +38,17 @@ export {
   type BeneficialOwnerListResponsesDefaultPagination,
 } from './beneficial-owners';
 export {
+  Cards,
+  type CardRetrieveResponse,
+  type CardUpdateResponse,
+  type CardListResponse,
+  type CardIssueResponse,
+  type CardUpdateParams,
+  type CardListParams,
+  type CardIssueParams,
+  type CardListResponsesDefaultPagination,
+} from './cards';
+export {
   Config,
   type CustomerInfoFieldName,
   type PlatformConfig,
@@ -178,5 +189,7 @@ export {
   type CustomerUpdateWebhookEvent,
   type InternalAccountStatusWebhookEvent,
   type VerificationUpdateWebhookEvent,
+  type CardStateChangeWebhookEvent,
+  type CardFundingSourceChangeWebhookEvent,
   type UnwrapWebhookEvent,
 } from './webhooks';

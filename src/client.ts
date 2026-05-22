@@ -32,6 +32,17 @@ import {
   BeneficialOwners,
 } from './resources/beneficial-owners';
 import {
+  CardIssueParams,
+  CardIssueResponse,
+  CardListParams,
+  CardListResponse,
+  CardListResponsesDefaultPagination,
+  CardRetrieveResponse,
+  CardUpdateParams,
+  CardUpdateResponse,
+  Cards,
+} from './resources/cards';
+import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
@@ -135,6 +146,8 @@ import {
 import {
   AgentActionWebhookEvent,
   BulkUploadWebhookEvent,
+  CardFundingSourceChangeWebhookEvent,
+  CardStateChangeWebhookEvent,
   CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
   InternalAccountStatusWebhookEvent,
@@ -1094,6 +1107,10 @@ export class LightsparkGrid {
    * Endpoints for creating and managing agents (experimental), called by the partner's backend using platform credentials. Covers the full agent lifecycle: creation, policy configuration, pausing, deletion, the device code installation flow, and approving or rejecting transactions initiated by agents.
    */
   agents: API.Agents = new API.Agents(this);
+  /**
+   * Card management endpoints. Issue debit cards against an internal account, freeze / unfreeze, close, manage card funding sources, and list card transactions.
+   */
+  cards: API.Cards = new API.Cards(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -1117,6 +1134,7 @@ LightsparkGrid.Verifications = Verifications;
 LightsparkGrid.Discoveries = Discoveries;
 LightsparkGrid.Auth = Auth;
 LightsparkGrid.Agents = Agents;
+LightsparkGrid.Cards = Cards;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1258,6 +1276,8 @@ export declare namespace LightsparkGrid {
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
+    type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
+    type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 
@@ -1332,6 +1352,18 @@ export declare namespace LightsparkGrid {
     type AgentListParams as AgentListParams,
     type AgentListApprovalsParams as AgentListApprovalsParams,
     type AgentUpdatePolicyParams as AgentUpdatePolicyParams,
+  };
+
+  export {
+    Cards as Cards,
+    type CardRetrieveResponse as CardRetrieveResponse,
+    type CardUpdateResponse as CardUpdateResponse,
+    type CardListResponse as CardListResponse,
+    type CardIssueResponse as CardIssueResponse,
+    type CardListResponsesDefaultPagination as CardListResponsesDefaultPagination,
+    type CardUpdateParams as CardUpdateParams,
+    type CardListParams as CardListParams,
+    type CardIssueParams as CardIssueParams,
   };
 
   export type AedBeneficiary = API.AedBeneficiary;

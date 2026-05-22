@@ -2615,6 +2615,194 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'authorization',
+    endpoint: '/sandbox/cards/{id}/simulate/authorization',
+    httpMethod: 'post',
+    summary: 'Simulate a card authorization',
+    description:
+      "Simulate an inbound card authorization in the sandbox environment. Drives the same internal `authorize` + `reconcile` paths the card issuer would call in production, so platforms can exercise Grid's decisioning + funding-source pull behavior end-to-end without an external network round-trip.\n\nThe decisioning outcome is controlled by the last three characters of `merchant.descriptor`:\n\n| Suffix | Outcome | | ------ | ------- | | `002`  | Decline — `INSUFFICIENT_FUNDS` (the pull on the funding source fails) | | `003`  | Decline — `CARD_PAUSED` (intended to verify a frozen card refuses auths) | | `005`  | Delayed pull (~30s) — exercises the `PENDING → CONFIRMED` path | | `006`  | Pull succeeds but the confirmation event reports `FAILED` — exercises the high-urgency `EXCEPTION` alert | | any other | Approved |\n\nProduction returns `404` on this path.\n",
+    stainlessPath: '(resource) sandbox.cards.simulate > (method) authorization',
+    qualified: 'client.sandbox.cards.simulate.authorization',
+    params: [
+      'id: string;',
+      'amount: number;',
+      'currency: { code?: string; decimals?: number; name?: string; symbol?: string; };',
+      'merchant: { descriptor: string; country?: string; mcc?: string; };',
+    ],
+    response:
+      "{ id: string; accountId: string; authorizedAmount: { amount: number; currency: currency; }; authorizedAt: string; cardId: string; createdAt: string; merchant: { descriptor: string; country?: string; mcc?: string; }; pullSummary: { count: number; totalAmount: number; pendingCount?: number; }; refundSummary: { count: number; totalAmount: number; }; settlementSummary: { count: number; totalAmount: number; }; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: { amount: number; currency: currency; }; settledAmount?: { amount: number; currency: currency; }; }",
+    markdown:
+      "## authorization\n\n`client.sandbox.cards.simulate.authorization(id: string, amount: number, currency: { code?: string; decimals?: number; name?: string; symbol?: string; }, merchant: { descriptor: string; country?: string; mcc?: string; }): { id: string; accountId: string; authorizedAmount: currency_amount; authorizedAt: string; cardId: string; createdAt: string; merchant: object; pullSummary: object; refundSummary: object; settlementSummary: object; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: currency_amount; settledAmount?: currency_amount; }`\n\n**post** `/sandbox/cards/{id}/simulate/authorization`\n\nSimulate an inbound card authorization in the sandbox environment. Drives the same internal `authorize` + `reconcile` paths the card issuer would call in production, so platforms can exercise Grid's decisioning + funding-source pull behavior end-to-end without an external network round-trip.\n\nThe decisioning outcome is controlled by the last three characters of `merchant.descriptor`:\n\n| Suffix | Outcome | | ------ | ------- | | `002`  | Decline — `INSUFFICIENT_FUNDS` (the pull on the funding source fails) | | `003`  | Decline — `CARD_PAUSED` (intended to verify a frozen card refuses auths) | | `005`  | Delayed pull (~30s) — exercises the `PENDING → CONFIRMED` path | | `006`  | Pull succeeds but the confirmation event reports `FAILED` — exercises the high-urgency `EXCEPTION` alert | | any other | Approved |\n\nProduction returns `404` on this path.\n\n\n### Parameters\n\n- `id: string`\n\n- `amount: number`\n  Authorization amount in the smallest unit of `currency` (e.g. cents for USD).\n\n- `currency: { code?: string; decimals?: number; name?: string; symbol?: string; }`\n  - `code?: string`\n    Three-letter currency code (ISO 4217) for fiat currencies. Some cryptocurrencies may use their own ticker symbols (e.g. \"BTC\" for Bitcoin, \"USDC\" for USDC, etc.)\n  - `decimals?: number`\n    Number of decimal places for the currency\n  - `name?: string`\n    Full name of the currency\n  - `symbol?: string`\n    Symbol of the currency\n\n- `merchant: { descriptor: string; country?: string; mcc?: string; }`\n  - `descriptor: string`\n    Merchant descriptor string captured from the card network at authorization time.\n  - `country?: string`\n    Two-letter ISO 3166-1 alpha-2 country code of the merchant.\n  - `mcc?: string`\n    Merchant Category Code (ISO 18245) — four-digit numeric string.\n\n### Returns\n\n- `{ id: string; accountId: string; authorizedAmount: { amount: number; currency: currency; }; authorizedAt: string; cardId: string; createdAt: string; merchant: { descriptor: string; country?: string; mcc?: string; }; pullSummary: { count: number; totalAmount: number; pendingCount?: number; }; refundSummary: { count: number; totalAmount: number; }; settlementSummary: { count: number; totalAmount: number; }; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: { amount: number; currency: currency; }; settledAmount?: { amount: number; currency: currency; }; }`\n  Parent transaction row for a card authorization and all of the pulls / settlements / refunds that reconcile against it. Child events are rolled up into the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates. Delivered as the payload of the generic transaction webhook stream (extends the Transaction model with a card destination type) on every transition.\n\n  - `id: string`\n  - `accountId: string`\n  - `authorizedAmount: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n  - `authorizedAt: string`\n  - `cardId: string`\n  - `createdAt: string`\n  - `merchant: { descriptor: string; country?: string; mcc?: string; }`\n  - `pullSummary: { count: number; totalAmount: number; pendingCount?: number; }`\n  - `refundSummary: { count: number; totalAmount: number; }`\n  - `settlementSummary: { count: number; totalAmount: number; }`\n  - `status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'`\n  - `updatedAt: string`\n  - `issuerTransactionToken?: string`\n  - `lastEventAt?: string`\n  - `refundedAmount?: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n  - `settledAmount?: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.sandbox.cards.simulate.authorization('Card:019542f5-b3e7-1d02-0000-000000000010', {\n  amount: 1250,\n  currency: {},\n  merchant: { descriptor: 'BLUE BOTTLE COFFEE SF' },\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.sandbox.cards.simulate.authorization',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.sandbox.cards.simulate.authorization(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  {\n    amount: 1250,\n    currency: { code: 'USD' },\n    merchant: {\n      descriptor: 'BLUE BOTTLE COFFEE SF',\n      mcc: '5814',\n      country: 'US',\n    },\n  },\n);\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'sandbox.cards.simulate.authorization',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.sandbox.cards.simulate.authorization(\n    id="Card:019542f5-b3e7-1d02-0000-000000000010",\n    amount=1250,\n    currency={\n        "code": "USD"\n    },\n    merchant={\n        "descriptor": "BLUE BOTTLE COFFEE SF",\n        "mcc": "5814",\n        "country": "US",\n    },\n)\nprint(response.id)',
+      },
+      kotlin: {
+        method: 'sandbox().cards().simulate().authorization',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.quotes.Currency\nimport com.lightspark.grid.models.sandbox.cards.simulate.SimulateAuthorizationParams\nimport com.lightspark.grid.models.sandbox.cards.simulate.SimulateAuthorizationResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SimulateAuthorizationParams = SimulateAuthorizationParams.builder()\n        .id("Card:019542f5-b3e7-1d02-0000-000000000010")\n        .amount(1250L)\n        .currency(Currency.builder().build())\n        .merchant(SimulateAuthorizationParams.Merchant.builder()\n            .descriptor("BLUE BOTTLE COFFEE SF")\n            .build())\n        .build()\n    val response: SimulateAuthorizationResponse = client.sandbox().cards().simulate().authorization(params)\n}',
+      },
+      go: {
+        method: 'client.Sandbox.Cards.Simulate.Authorization',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Sandbox.Cards.Simulate.Authorization(\n\t\tcontext.TODO(),\n\t\t"Card:019542f5-b3e7-1d02-0000-000000000010",\n\t\tgrid.SandboxCardSimulateAuthorizationParams{\n\t\t\tAmount: 1250,\n\t\t\tCurrency: grid.CurrencyParam{\n\t\t\t\tCode: grid.String("USD"),\n\t\t\t},\n\t\t\tMerchant: grid.SandboxCardSimulateAuthorizationParamsMerchant{\n\t\t\t\tDescriptor: "BLUE BOTTLE COFFEE SF",\n\t\t\t\tMcc:        grid.String("5814"),\n\t\t\t\tCountry:    grid.String("US"),\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      ruby: {
+        method: 'sandbox.cards.simulate.authorization',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.cards.simulate.authorization(\n  "Card:019542f5-b3e7-1d02-0000-000000000010",\n  amount: 1250,\n  currency: {},\n  merchant: {descriptor: "BLUE BOTTLE COFFEE SF"}\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'simulate authorization',
+        example:
+          "grid sandbox:cards:simulate authorization \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id Card:019542f5-b3e7-1d02-0000-000000000010 \\\n  --amount 1250 \\\n  --currency '{}' \\\n  --merchant '{descriptor: BLUE BOTTLE COFFEE SF}'",
+      },
+      php: {
+        method: 'sandbox->cards->simulate->authorization',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->sandbox->cards->simulate->authorization(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  amount: 1250,\n  currency: [\n    'code' => 'USD',\n    'decimals' => 2,\n    'name' => 'United States Dollar',\n    'symbol' => '$',\n  ],\n  merchant: [\n    'descriptor' => 'BLUE BOTTLE COFFEE SF', 'country' => 'US', 'mcc' => '5814'\n  ],\n);\n\nvar_dump($response);",
+      },
+      csharp: {
+        method: 'Sandbox.Cards.Simulate.Authorization',
+        example:
+          'SimulateAuthorizationParams parameters = new()\n{\n    ID = "Card:019542f5-b3e7-1d02-0000-000000000010",\n    Amount = 1250,\n    Currency = new()\n    {\n        Code = "USD",\n        Decimals = 2,\n        Name = "United States Dollar",\n        Symbol = "$",\n    },\n    Merchant = new()\n    {\n        Descriptor = "BLUE BOTTLE COFFEE SF",\n        Country = "US",\n        Mcc = "5814",\n    },\n};\n\nvar response = await client.Sandbox.Cards.Simulate.Authorization(parameters);\n\nConsole.WriteLine(response);',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/sandbox/cards/$ID/simulate/authorization \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 1250,\n          "currency": {\n            "code": "USD"\n          },\n          "merchant": {\n            "descriptor": "BLUE BOTTLE COFFEE SF",\n            "country": "US",\n            "mcc": "5814"\n          }\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'clearing',
+    endpoint: '/sandbox/cards/{id}/simulate/clearing',
+    httpMethod: 'post',
+    summary: 'Simulate a card clearing',
+    description:
+      "Simulate a clearing (settlement) event against an existing `CardTransaction` in the sandbox environment.\n\n- A clearing `amount` greater than the authorized amount exercises the over-auth post-hoc-pull path (e.g. restaurant tip on top of a 20% over-auth).\n- A clearing `amount` of `0` exercises the `AUTHORIZATION_EXPIRY` path — the auth expires with no clearing posted.\n- Suffix-driven outcomes on the parent transaction's id govern whether the post-hoc pull succeeds (use the suffix table from `simulate/authorization` to construct deterministic test cases).\n\nProduction returns `404` on this path.\n",
+    stainlessPath: '(resource) sandbox.cards.simulate > (method) clearing',
+    qualified: 'client.sandbox.cards.simulate.clearing',
+    params: ['id: string;', 'amount: number;', 'cardTransactionId: string;'],
+    response:
+      "{ id: string; accountId: string; authorizedAmount: { amount: number; currency: currency; }; authorizedAt: string; cardId: string; createdAt: string; merchant: { descriptor: string; country?: string; mcc?: string; }; pullSummary: { count: number; totalAmount: number; pendingCount?: number; }; refundSummary: { count: number; totalAmount: number; }; settlementSummary: { count: number; totalAmount: number; }; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: { amount: number; currency: currency; }; settledAmount?: { amount: number; currency: currency; }; }",
+    markdown:
+      "## clearing\n\n`client.sandbox.cards.simulate.clearing(id: string, amount: number, cardTransactionId: string): { id: string; accountId: string; authorizedAmount: currency_amount; authorizedAt: string; cardId: string; createdAt: string; merchant: object; pullSummary: object; refundSummary: object; settlementSummary: object; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: currency_amount; settledAmount?: currency_amount; }`\n\n**post** `/sandbox/cards/{id}/simulate/clearing`\n\nSimulate a clearing (settlement) event against an existing `CardTransaction` in the sandbox environment.\n\n- A clearing `amount` greater than the authorized amount exercises the over-auth post-hoc-pull path (e.g. restaurant tip on top of a 20% over-auth).\n- A clearing `amount` of `0` exercises the `AUTHORIZATION_EXPIRY` path — the auth expires with no clearing posted.\n- Suffix-driven outcomes on the parent transaction's id govern whether the post-hoc pull succeeds (use the suffix table from `simulate/authorization` to construct deterministic test cases).\n\nProduction returns `404` on this path.\n\n\n### Parameters\n\n- `id: string`\n\n- `amount: number`\n  Clearing amount in the smallest unit of the transaction's currency. Set to `0` to simulate an authorization expiry with no clearing.\n\n- `cardTransactionId: string`\n  The id of the `CardTransaction` to clear against. Must be in `AUTHORIZED` or `PARTIALLY_SETTLED` state.\n\n### Returns\n\n- `{ id: string; accountId: string; authorizedAmount: { amount: number; currency: currency; }; authorizedAt: string; cardId: string; createdAt: string; merchant: { descriptor: string; country?: string; mcc?: string; }; pullSummary: { count: number; totalAmount: number; pendingCount?: number; }; refundSummary: { count: number; totalAmount: number; }; settlementSummary: { count: number; totalAmount: number; }; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: { amount: number; currency: currency; }; settledAmount?: { amount: number; currency: currency; }; }`\n  Parent transaction row for a card authorization and all of the pulls / settlements / refunds that reconcile against it. Child events are rolled up into the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates. Delivered as the payload of the generic transaction webhook stream (extends the Transaction model with a card destination type) on every transition.\n\n  - `id: string`\n  - `accountId: string`\n  - `authorizedAmount: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n  - `authorizedAt: string`\n  - `cardId: string`\n  - `createdAt: string`\n  - `merchant: { descriptor: string; country?: string; mcc?: string; }`\n  - `pullSummary: { count: number; totalAmount: number; pendingCount?: number; }`\n  - `refundSummary: { count: number; totalAmount: number; }`\n  - `settlementSummary: { count: number; totalAmount: number; }`\n  - `status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'`\n  - `updatedAt: string`\n  - `issuerTransactionToken?: string`\n  - `lastEventAt?: string`\n  - `refundedAmount?: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n  - `settledAmount?: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.sandbox.cards.simulate.clearing('Card:019542f5-b3e7-1d02-0000-000000000010', { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.sandbox.cards.simulate.clearing',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.sandbox.cards.simulate.clearing(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' },\n);\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'sandbox.cards.simulate.clearing',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.sandbox.cards.simulate.clearing(\n    id="Card:019542f5-b3e7-1d02-0000-000000000010",\n    amount=1500,\n    card_transaction_id="CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n)\nprint(response.id)',
+      },
+      kotlin: {
+        method: 'sandbox().cards().simulate().clearing',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.cards.simulate.SimulateClearingParams\nimport com.lightspark.grid.models.sandbox.cards.simulate.SimulateClearingResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SimulateClearingParams = SimulateClearingParams.builder()\n        .id("Card:019542f5-b3e7-1d02-0000-000000000010")\n        .amount(1500L)\n        .cardTransactionId("CardTransaction:019542f5-b3e7-1d02-0000-000000000100")\n        .build()\n    val response: SimulateClearingResponse = client.sandbox().cards().simulate().clearing(params)\n}',
+      },
+      go: {
+        method: 'client.Sandbox.Cards.Simulate.Clearing',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Sandbox.Cards.Simulate.Clearing(\n\t\tcontext.TODO(),\n\t\t"Card:019542f5-b3e7-1d02-0000-000000000010",\n\t\tgrid.SandboxCardSimulateClearingParams{\n\t\t\tAmount:            1500,\n\t\t\tCardTransactionID: "CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      ruby: {
+        method: 'sandbox.cards.simulate.clearing',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.cards.simulate.clearing(\n  "Card:019542f5-b3e7-1d02-0000-000000000010",\n  amount: 1500,\n  card_transaction_id: "CardTransaction:019542f5-b3e7-1d02-0000-000000000100"\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'simulate clearing',
+        example:
+          "grid sandbox:cards:simulate clearing \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id Card:019542f5-b3e7-1d02-0000-000000000010 \\\n  --amount 1500 \\\n  --card-transaction-id CardTransaction:019542f5-b3e7-1d02-0000-000000000100",
+      },
+      php: {
+        method: 'sandbox->cards->simulate->clearing',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->sandbox->cards->simulate->clearing(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  amount: 1500,\n  cardTransactionID: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',\n);\n\nvar_dump($response);",
+      },
+      csharp: {
+        method: 'Sandbox.Cards.Simulate.Clearing',
+        example:
+          'SimulateClearingParams parameters = new()\n{\n    ID = "Card:019542f5-b3e7-1d02-0000-000000000010",\n    Amount = 1500,\n    CardTransactionID = "CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n};\n\nvar response = await client.Sandbox.Cards.Simulate.Clearing(parameters);\n\nConsole.WriteLine(response);',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/sandbox/cards/$ID/simulate/clearing \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 1500,\n          "cardTransactionId": "CardTransaction:019542f5-b3e7-1d02-0000-000000000100"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'return',
+    endpoint: '/sandbox/cards/{id}/simulate/return',
+    httpMethod: 'post',
+    summary: 'Simulate a card return',
+    description:
+      'Simulate a merchant-initiated `RETURN` against an existing settled card transaction in the sandbox environment. Creates a `CardRefund` on the parent and either flips the parent to `REFUNDED` (full refund) or keeps it `SETTLED` with a non-zero `refundedAmount` (partial refund).\n\nProduction returns `404` on this path.\n',
+    stainlessPath: '(resource) sandbox.cards.simulate > (method) return',
+    qualified: 'client.sandbox.cards.simulate.return',
+    params: ['id: string;', 'amount: number;', 'cardTransactionId: string;'],
+    response:
+      "{ id: string; accountId: string; authorizedAmount: { amount: number; currency: currency; }; authorizedAt: string; cardId: string; createdAt: string; merchant: { descriptor: string; country?: string; mcc?: string; }; pullSummary: { count: number; totalAmount: number; pendingCount?: number; }; refundSummary: { count: number; totalAmount: number; }; settlementSummary: { count: number; totalAmount: number; }; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: { amount: number; currency: currency; }; settledAmount?: { amount: number; currency: currency; }; }",
+    markdown:
+      "## return\n\n`client.sandbox.cards.simulate.return(id: string, amount: number, cardTransactionId: string): { id: string; accountId: string; authorizedAmount: currency_amount; authorizedAt: string; cardId: string; createdAt: string; merchant: object; pullSummary: object; refundSummary: object; settlementSummary: object; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: currency_amount; settledAmount?: currency_amount; }`\n\n**post** `/sandbox/cards/{id}/simulate/return`\n\nSimulate a merchant-initiated `RETURN` against an existing settled card transaction in the sandbox environment. Creates a `CardRefund` on the parent and either flips the parent to `REFUNDED` (full refund) or keeps it `SETTLED` with a non-zero `refundedAmount` (partial refund).\n\nProduction returns `404` on this path.\n\n\n### Parameters\n\n- `id: string`\n\n- `amount: number`\n  Return amount in the smallest unit of the transaction's currency. Must be less than or equal to the net settled amount (settled minus previously-refunded).\n\n- `cardTransactionId: string`\n  The id of the `CardTransaction` to refund against. Must have at least one settled clearing.\n\n### Returns\n\n- `{ id: string; accountId: string; authorizedAmount: { amount: number; currency: currency; }; authorizedAt: string; cardId: string; createdAt: string; merchant: { descriptor: string; country?: string; mcc?: string; }; pullSummary: { count: number; totalAmount: number; pendingCount?: number; }; refundSummary: { count: number; totalAmount: number; }; settlementSummary: { count: number; totalAmount: number; }; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; updatedAt: string; issuerTransactionToken?: string; lastEventAt?: string; refundedAmount?: { amount: number; currency: currency; }; settledAmount?: { amount: number; currency: currency; }; }`\n  Parent transaction row for a card authorization and all of the pulls / settlements / refunds that reconcile against it. Child events are rolled up into the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates. Delivered as the payload of the generic transaction webhook stream (extends the Transaction model with a card destination type) on every transition.\n\n  - `id: string`\n  - `accountId: string`\n  - `authorizedAmount: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n  - `authorizedAt: string`\n  - `cardId: string`\n  - `createdAt: string`\n  - `merchant: { descriptor: string; country?: string; mcc?: string; }`\n  - `pullSummary: { count: number; totalAmount: number; pendingCount?: number; }`\n  - `refundSummary: { count: number; totalAmount: number; }`\n  - `settlementSummary: { count: number; totalAmount: number; }`\n  - `status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'`\n  - `updatedAt: string`\n  - `issuerTransactionToken?: string`\n  - `lastEventAt?: string`\n  - `refundedAmount?: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n  - `settledAmount?: { amount: number; currency: { code?: string; decimals?: number; name?: string; symbol?: string; }; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.sandbox.cards.simulate.return('Card:019542f5-b3e7-1d02-0000-000000000010', { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' });\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.sandbox.cards.simulate.return',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.sandbox.cards.simulate.return(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' },\n);\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'sandbox.cards.simulate.return_',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.sandbox.cards.simulate.return_(\n    id="Card:019542f5-b3e7-1d02-0000-000000000010",\n    amount=1500,\n    card_transaction_id="CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n)\nprint(response.id)',
+      },
+      kotlin: {
+        method: 'sandbox().cards().simulate().return_',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.sandbox.cards.simulate.SimulateReturnParams\nimport com.lightspark.grid.models.sandbox.cards.simulate.SimulateReturnResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: SimulateReturnParams = SimulateReturnParams.builder()\n        .id("Card:019542f5-b3e7-1d02-0000-000000000010")\n        .amount(1500L)\n        .cardTransactionId("CardTransaction:019542f5-b3e7-1d02-0000-000000000100")\n        .build()\n    val response: SimulateReturnResponse = client.sandbox().cards().simulate().return_(params)\n}',
+      },
+      go: {
+        method: 'client.Sandbox.Cards.Simulate.Return',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Sandbox.Cards.Simulate.Return(\n\t\tcontext.TODO(),\n\t\t"Card:019542f5-b3e7-1d02-0000-000000000010",\n\t\tgrid.SandboxCardSimulateReturnParams{\n\t\t\tAmount:            1500,\n\t\t\tCardTransactionID: "CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      ruby: {
+        method: 'sandbox.cards.simulate.return_',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.sandbox.cards.simulate.return_(\n  "Card:019542f5-b3e7-1d02-0000-000000000010",\n  amount: 1500,\n  card_transaction_id: "CardTransaction:019542f5-b3e7-1d02-0000-000000000100"\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'simulate return',
+        example:
+          "grid sandbox:cards:simulate return \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id Card:019542f5-b3e7-1d02-0000-000000000010 \\\n  --amount 1500 \\\n  --card-transaction-id CardTransaction:019542f5-b3e7-1d02-0000-000000000100",
+      },
+      php: {
+        method: 'sandbox->cards->simulate->return',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->sandbox->cards->simulate->return(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  amount: 1500,\n  cardTransactionID: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',\n);\n\nvar_dump($response);",
+      },
+      csharp: {
+        method: 'Sandbox.Cards.Simulate.Return',
+        example:
+          'SimulateReturnParams parameters = new()\n{\n    ID = "Card:019542f5-b3e7-1d02-0000-000000000010",\n    Amount = 1500,\n    CardTransactionID = "CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n};\n\nvar response = await client.Sandbox.Cards.Simulate.Return(parameters);\n\nConsole.WriteLine(response);',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/sandbox/cards/$ID/simulate/return \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 1500,\n          "cardTransactionId": "CardTransaction:019542f5-b3e7-1d02-0000-000000000100"\n        }\'',
+      },
+    },
+  },
+  {
     name: 'list',
     endpoint: '/uma-providers',
     httpMethod: 'get',
@@ -6229,6 +6417,267 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+    },
+  },
+  {
+    name: 'issue',
+    endpoint: '/cards',
+    httpMethod: 'post',
+    summary: 'Issue a card',
+    description:
+      'Issue a new card for a cardholder. Every card must be bound to at least one funding source at create time. The cardholder must have KYC status `APPROVED` before a card can be issued; otherwise the request is rejected with `CARDHOLDER_KYC_NOT_APPROVED`.\n\nNew cards start in `state: "PENDING_ISSUE"` while the card issuer provisions the card. The `card.state_change` webhook fires on the transition to `ACTIVE` (or to `CLOSED` with `stateReason: "ISSUER_REJECTED"` if provisioning fails).\n',
+    stainlessPath: '(resource) cards > (method) issue',
+    qualified: 'client.cards.issue',
+    params: [
+      'cardholderId: string;',
+      "form: 'VIRTUAL';",
+      'fundingSources: string[];',
+      'platformCardId?: string;',
+    ],
+    response:
+      "{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }",
+    markdown:
+      "## issue\n\n`client.cards.issue(cardholderId: string, form: 'VIRTUAL', fundingSources: string[], platformCardId?: string): { id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n**post** `/cards`\n\nIssue a new card for a cardholder. Every card must be bound to at least one funding source at create time. The cardholder must have KYC status `APPROVED` before a card can be issued; otherwise the request is rejected with `CARDHOLDER_KYC_NOT_APPROVED`.\n\nNew cards start in `state: \"PENDING_ISSUE\"` while the card issuer provisions the card. The `card.state_change` webhook fires on the transition to `ACTIVE` (or to `CLOSED` with `stateReason: \"ISSUER_REJECTED\"` if provisioning fails).\n\n\n### Parameters\n\n- `cardholderId: string`\n  The id of the `Customer` to issue the card to. The customer must have KYC status `APPROVED`; otherwise the request is rejected with `CARDHOLDER_KYC_NOT_APPROVED`.\n\n- `form: 'VIRTUAL'`\n  Physical form factor of the card. Only `VIRTUAL` is supported in v1;\n`PHYSICAL` will be added in a later release.\n\n- `fundingSources: string[]`\n  Internal account ids to bind as funding sources, in priority order. The first entry is tried first by Authorization Decisioning. Every card must be bound to at least one source, and every source must belong to the cardholder and be denominated in a card-eligible currency (USDB in v1); otherwise the request is rejected with `FUNDING_SOURCE_INELIGIBLE`.\n\n- `platformCardId?: string`\n  Optional platform-specific card identifier. System-generated when omitted, mirroring `platformCustomerId` semantics.\n\n### Returns\n\n- `{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n  - `id: string`\n  - `cardholderId: string`\n  - `createdAt: string`\n  - `form: 'VIRTUAL'`\n  - `fundingSources: string[]`\n  - `state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'`\n  - `updatedAt: string`\n  - `brand?: 'VISA' | 'MASTERCARD'`\n  - `currency?: string`\n  - `expMonth?: number`\n  - `expYear?: number`\n  - `issuerRef?: string`\n  - `last4?: string`\n  - `panEmbedUrl?: string`\n  - `platformCardId?: string`\n  - `stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.cards.issue({\n  cardholderId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n});\n\nconsole.log(response);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.cards.issue',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.cards.issue({\n  cardholderId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  platformCardId: 'card-emp-aary-001',\n});\n\nconsole.log(response.id);",
+      },
+      python: {
+        method: 'cards.issue',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.cards.issue(\n    cardholder_id="Customer:019542f5-b3e7-1d02-0000-000000000001",\n    form="VIRTUAL",\n    funding_sources=["InternalAccount:019542f5-b3e7-1d02-0000-000000000002"],\n    platform_card_id="card-emp-aary-001",\n)\nprint(response.id)',
+      },
+      kotlin: {
+        method: 'cards().issue',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.cards.CardIssueParams\nimport com.lightspark.grid.models.cards.CardIssueResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: CardIssueParams = CardIssueParams.builder()\n        .cardholderId("Customer:019542f5-b3e7-1d02-0000-000000000001")\n        .form(CardIssueParams.Form.VIRTUAL)\n        .addFundingSource("InternalAccount:019542f5-b3e7-1d02-0000-000000000002")\n        .build()\n    val response: CardIssueResponse = client.cards().issue(params)\n}',
+      },
+      go: {
+        method: 'client.Cards.Issue',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Cards.Issue(context.TODO(), grid.CardIssueParams{\n\t\tCardholderID:   "Customer:019542f5-b3e7-1d02-0000-000000000001",\n\t\tForm:           grid.CardIssueParamsFormVirtual,\n\t\tFundingSources: []string{"InternalAccount:019542f5-b3e7-1d02-0000-000000000002"},\n\t\tPlatformCardID: grid.String("card-emp-aary-001"),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+      },
+      ruby: {
+        method: 'cards.issue',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.cards.issue(\n  cardholder_id: "Customer:019542f5-b3e7-1d02-0000-000000000001",\n  form: :VIRTUAL,\n  funding_sources: ["InternalAccount:019542f5-b3e7-1d02-0000-000000000002"]\n)\n\nputs(response)',
+      },
+      cli: {
+        method: 'cards issue',
+        example:
+          "grid cards issue \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --cardholder-id Customer:019542f5-b3e7-1d02-0000-000000000001 \\\n  --form VIRTUAL \\\n  --funding-source InternalAccount:019542f5-b3e7-1d02-0000-000000000002",
+      },
+      php: {
+        method: 'cards->issue',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->cards->issue(\n  cardholderID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  platformCardID: 'card-emp-aary-001',\n);\n\nvar_dump($response);",
+      },
+      csharp: {
+        method: 'Cards.Issue',
+        example:
+          'CardIssueParams parameters = new()\n{\n    CardholderID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    Form = Form.Virtual,\n    FundingSources =\n    [\n        "InternalAccount:019542f5-b3e7-1d02-0000-000000000002"\n    ],\n};\n\nvar response = await client.Cards.Issue(parameters);\n\nConsole.WriteLine(response);',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/cards \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "cardholderId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "form": "VIRTUAL",\n          "fundingSources": [\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000002"\n          ],\n          "platformCardId": "card-emp-aary-001"\n        }\'',
+      },
+    },
+  },
+  {
+    name: 'list',
+    endpoint: '/cards',
+    httpMethod: 'get',
+    summary: 'List cards',
+    description:
+      'Retrieve a paginated list of cards. Cards can be filtered by cardholder, bound funding-source internal account, state, and platform-specific card identifier. If no filters are provided, returns all cards visible to the caller.\n',
+    stainlessPath: '(resource) cards > (method) list',
+    qualified: 'client.cards.list',
+    params: [
+      'accountId?: string;',
+      'cardholderId?: string;',
+      'cursor?: string;',
+      'limit?: number;',
+      'platformCardId?: string;',
+      "sortOrder?: 'asc' | 'desc';",
+      "state?: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';",
+    ],
+    response:
+      "{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }",
+    markdown:
+      "## list\n\n`client.cards.list(accountId?: string, cardholderId?: string, cursor?: string, limit?: number, platformCardId?: string, sortOrder?: 'asc' | 'desc', state?: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'): { id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n**get** `/cards`\n\nRetrieve a paginated list of cards. Cards can be filtered by cardholder, bound funding-source internal account, state, and platform-specific card identifier. If no filters are provided, returns all cards visible to the caller.\n\n\n### Parameters\n\n- `accountId?: string`\n  Filter by internal account id. Returns cards whose `fundingSources` array contains the given internal account id.\n\n- `cardholderId?: string`\n  Filter by cardholder (customer) id.\n\n- `cursor?: string`\n  Cursor for pagination (returned from previous request)\n\n- `limit?: number`\n  Maximum number of results to return (default 20, max 100)\n\n- `platformCardId?: string`\n  Filter by platform-specific card identifier.\n\n- `sortOrder?: 'asc' | 'desc'`\n  Order to sort results in\n\n- `state?: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'`\n  Filter by card state.\n\n### Returns\n\n- `{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n  - `id: string`\n  - `cardholderId: string`\n  - `createdAt: string`\n  - `form: 'VIRTUAL'`\n  - `fundingSources: string[]`\n  - `state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'`\n  - `updatedAt: string`\n  - `brand?: 'VISA' | 'MASTERCARD'`\n  - `currency?: string`\n  - `expMonth?: number`\n  - `expYear?: number`\n  - `issuerRef?: string`\n  - `last4?: string`\n  - `panEmbedUrl?: string`\n  - `platformCardId?: string`\n  - `stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\n// Automatically fetches more pages as needed.\nfor await (const cardListResponse of client.cards.list()) {\n  console.log(cardListResponse);\n}\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.cards.list',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const cardListResponse of client.cards.list()) {\n  console.log(cardListResponse.id);\n}",
+      },
+      python: {
+        method: 'cards.list',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.cards.list()\npage = page.data[0]\nprint(page.id)',
+      },
+      kotlin: {
+        method: 'cards().list',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.cards.CardListPage\nimport com.lightspark.grid.models.cards.CardListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: CardListPage = client.cards().list()\n}',
+      },
+      go: {
+        method: 'client.Cards.List',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.Cards.List(context.TODO(), grid.CardListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
+      },
+      ruby: {
+        method: 'cards.list',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.cards.list\n\nputs(page)',
+      },
+      cli: {
+        method: 'cards list',
+        example: "grid cards list \\\n  --username 'My Username' \\\n  --password 'My Password'",
+      },
+      php: {
+        method: 'cards->list',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->cards->list(\n  accountID: 'accountId',\n  cardholderID: 'cardholderId',\n  cursor: 'cursor',\n  limit: 1,\n  platformCardID: 'platformCardId',\n  sortOrder: 'asc',\n  state: 'PENDING_KYC',\n);\n\nvar_dump($page);",
+      },
+      csharp: {
+        method: 'Cards.List',
+        example:
+          'CardListParams parameters = new();\n\nvar page = await client.Cards.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/cards \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+    },
+  },
+  {
+    name: 'retrieve',
+    endpoint: '/cards/{id}',
+    httpMethod: 'get',
+    summary: 'Get a card',
+    description: 'Retrieve a card by its system-generated id.',
+    stainlessPath: '(resource) cards > (method) retrieve',
+    qualified: 'client.cards.retrieve',
+    params: ['id: string;'],
+    response:
+      "{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }",
+    markdown:
+      "## retrieve\n\n`client.cards.retrieve(id: string): { id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n**get** `/cards/{id}`\n\nRetrieve a card by its system-generated id.\n\n### Parameters\n\n- `id: string`\n\n### Returns\n\n- `{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n  - `id: string`\n  - `cardholderId: string`\n  - `createdAt: string`\n  - `form: 'VIRTUAL'`\n  - `fundingSources: string[]`\n  - `state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'`\n  - `updatedAt: string`\n  - `brand?: 'VISA' | 'MASTERCARD'`\n  - `currency?: string`\n  - `expMonth?: number`\n  - `expYear?: number`\n  - `issuerRef?: string`\n  - `last4?: string`\n  - `panEmbedUrl?: string`\n  - `platformCardId?: string`\n  - `stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst card = await client.cards.retrieve('id');\n\nconsole.log(card);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.cards.retrieve',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst card = await client.cards.retrieve('id');\n\nconsole.log(card.id);",
+      },
+      python: {
+        method: 'cards.retrieve',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncard = client.cards.retrieve(\n    "id",\n)\nprint(card.id)',
+      },
+      kotlin: {
+        method: 'cards().retrieve',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.cards.CardRetrieveParams\nimport com.lightspark.grid.models.cards.CardRetrieveResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val card: CardRetrieveResponse = client.cards().retrieve("id")\n}',
+      },
+      go: {
+        method: 'client.Cards.Get',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tcard, err := client.Cards.Get(context.TODO(), "id")\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", card.ID)\n}\n',
+      },
+      ruby: {
+        method: 'cards.retrieve',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncard = lightspark_grid.cards.retrieve("id")\n\nputs(card)',
+      },
+      cli: {
+        method: 'cards retrieve',
+        example:
+          "grid cards retrieve \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id",
+      },
+      php: {
+        method: 'cards->retrieve',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->retrieve('id');\n\nvar_dump($card);",
+      },
+      csharp: {
+        method: 'Cards.Retrieve',
+        example:
+          'CardRetrieveParams parameters = new() { ID = "id" };\n\nvar card = await client.Cards.Retrieve(parameters);\n\nConsole.WriteLine(card);',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/cards/$ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+    },
+  },
+  {
+    name: 'update',
+    endpoint: '/cards/{id}',
+    httpMethod: 'patch',
+    summary: 'Update a card',
+    description:
+      "Update a card's `state` and / or its bound `fundingSources`. At least one of the two fields must be supplied.\n\n- `state` transitions are limited to `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible. Any other transition returns `409 INVALID_STATE_TRANSITION`.\n- `fundingSources`, when supplied, fully replaces the card's bound funding sources. Array order determines the priority Authorization Decisioning tries them in. Each id must belong to the cardholder and be denominated in the card's currency; the list must contain at least one source. `fundingSources` cannot be supplied alongside `state: CLOSED`.\n\nBecause both updates are sensitive state changes, this endpoint uses Grid's 202 → signed-retry pattern (same shape as `DELETE /auth/credentials/{id}` and `POST /internal-accounts/{id}/export`):\n\n1. Call `PATCH /cards/{id}` with the target fields and no signing headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of a verified authentication credential on the card's owning internal account and retry with the signature as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `200` with the updated `Card`.\n\nEffects:\n- `state: FROZEN`: Authorization Decisioning declines new auths with `CARD_PAUSED`. Existing pulls and in-flight reconciliation continue — freezing does not pause the lifecycle of authorizations that already passed.\n- `state: ACTIVE`: normal authorization behavior resumes.\n- `state: CLOSED`: terminal close. The card transitions to `state: \"CLOSED\"` with `stateReason: \"CLOSED_BY_PLATFORM\"` and stays in the system for audit and reconciliation. All pending auths reconcile to a terminal state via the existing reconcile primitive. Inbound clearings received after close follow the standard force-post / late-presentment path — Lightspark absorbs the loss if a post-hoc pull on the now-unbound source fails. Funding-source bindings are detached. Refunds already in flight still complete because Lightspark holds the card-reserve keys.\n- `fundingSources` change: emits `card.funding_source_change` reflecting the new ordered binding.\n\nThe `card.state_change` webhook fires on every successful `state` transition; the `card.funding_source_change` webhook fires whenever `fundingSources` is updated.\n",
+    stainlessPath: '(resource) cards > (method) update',
+    qualified: 'client.cards.update',
+    params: [
+      'id: string;',
+      'fundingSources?: string[];',
+      "state?: 'ACTIVE' | 'FROZEN' | 'CLOSED';",
+      'Grid-Wallet-Signature?: string;',
+      'Request-Id?: string;',
+    ],
+    response:
+      "{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }",
+    markdown:
+      "## update\n\n`client.cards.update(id: string, fundingSources?: string[], state?: 'ACTIVE' | 'FROZEN' | 'CLOSED', Grid-Wallet-Signature?: string, Request-Id?: string): { id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n**patch** `/cards/{id}`\n\nUpdate a card's `state` and / or its bound `fundingSources`. At least one of the two fields must be supplied.\n\n- `state` transitions are limited to `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible. Any other transition returns `409 INVALID_STATE_TRANSITION`.\n- `fundingSources`, when supplied, fully replaces the card's bound funding sources. Array order determines the priority Authorization Decisioning tries them in. Each id must belong to the cardholder and be denominated in the card's currency; the list must contain at least one source. `fundingSources` cannot be supplied alongside `state: CLOSED`.\n\nBecause both updates are sensitive state changes, this endpoint uses Grid's 202 → signed-retry pattern (same shape as `DELETE /auth/credentials/{id}` and `POST /internal-accounts/{id}/export`):\n\n1. Call `PATCH /cards/{id}` with the target fields and no signing headers. The response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.\n\n2. Sign the `payloadToSign` with the session private key of a verified authentication credential on the card's owning internal account and retry with the signature as the `Grid-Wallet-Signature` header and the `requestId` echoed back as the `Request-Id` header. The signed retry returns `200` with the updated `Card`.\n\nEffects:\n- `state: FROZEN`: Authorization Decisioning declines new auths with `CARD_PAUSED`. Existing pulls and in-flight reconciliation continue — freezing does not pause the lifecycle of authorizations that already passed.\n- `state: ACTIVE`: normal authorization behavior resumes.\n- `state: CLOSED`: terminal close. The card transitions to `state: \"CLOSED\"` with `stateReason: \"CLOSED_BY_PLATFORM\"` and stays in the system for audit and reconciliation. All pending auths reconcile to a terminal state via the existing reconcile primitive. Inbound clearings received after close follow the standard force-post / late-presentment path — Lightspark absorbs the loss if a post-hoc pull on the now-unbound source fails. Funding-source bindings are detached. Refunds already in flight still complete because Lightspark holds the card-reserve keys.\n- `fundingSources` change: emits `card.funding_source_change` reflecting the new ordered binding.\n\nThe `card.state_change` webhook fires on every successful `state` transition; the `card.funding_source_change` webhook fires whenever `fundingSources` is updated.\n\n\n### Parameters\n\n- `id: string`\n\n- `fundingSources?: string[]`\n  New ordered list of internal account ids to bind as funding sources. Fully replaces the previous binding. Each id must belong to the cardholder and be denominated in the card's currency. The list must contain at least one source — to stop a card from spending without removing all sources, transition it to `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.\n\n- `state?: 'ACTIVE' | 'FROZEN' | 'CLOSED'`\n  Target state for the card. Permitted transitions are `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible; once closed, the card stays in the system for audit and reconciliation but cannot transact again.\n\n- `Grid-Wallet-Signature?: string`\n\n- `Request-Id?: string`\n\n### Returns\n\n- `{ id: string; cardholderId: string; createdAt: string; form: 'VIRTUAL'; fundingSources: string[]; state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'; updatedAt: string; brand?: 'VISA' | 'MASTERCARD'; currency?: string; expMonth?: number; expYear?: number; issuerRef?: string; last4?: string; panEmbedUrl?: string; platformCardId?: string; stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'; }`\n\n  - `id: string`\n  - `cardholderId: string`\n  - `createdAt: string`\n  - `form: 'VIRTUAL'`\n  - `fundingSources: string[]`\n  - `state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED'`\n  - `updatedAt: string`\n  - `brand?: 'VISA' | 'MASTERCARD'`\n  - `currency?: string`\n  - `expMonth?: number`\n  - `expYear?: number`\n  - `issuerRef?: string`\n  - `last4?: string`\n  - `panEmbedUrl?: string`\n  - `platformCardId?: string`\n  - `stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID'`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst card = await client.cards.update('id');\n\nconsole.log(card);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.cards.update',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst card = await client.cards.update('id', { state: 'FROZEN' });\n\nconsole.log(card.id);",
+      },
+      python: {
+        method: 'cards.update',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncard = client.cards.update(\n    id="id",\n    state="FROZEN",\n)\nprint(card.id)',
+      },
+      kotlin: {
+        method: 'cards().update',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.cards.CardUpdateParams\nimport com.lightspark.grid.models.cards.CardUpdateResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val card: CardUpdateResponse = client.cards().update("id")\n}',
+      },
+      go: {
+        method: 'client.Cards.Update',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tcard, err := client.Cards.Update(\n\t\tcontext.TODO(),\n\t\t"id",\n\t\tgrid.CardUpdateParams{\n\t\t\tState: grid.CardUpdateParamsStateFrozen,\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", card.ID)\n}\n',
+      },
+      ruby: {
+        method: 'cards.update',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ncard = lightspark_grid.cards.update("id")\n\nputs(card)',
+      },
+      cli: {
+        method: 'cards update',
+        example:
+          "grid cards update \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --id id",
+      },
+      php: {
+        method: 'cards->update',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->update(\n  'id',\n  fundingSources: [\n    'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n    'InternalAccount:019542f5-b3e7-1d02-0000-000000000003',\n  ],\n  state: 'FROZEN',\n  gridWalletSignature: 'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',\n  requestID: '7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($card);",
+      },
+      csharp: {
+        method: 'Cards.Update',
+        example:
+          'CardUpdateParams parameters = new() { ID = "id" };\n\nvar card = await client.Cards.Update(parameters);\n\nConsole.WriteLine(card);',
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/cards/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "fundingSources": [\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000003"\n          ],\n          "state": "FROZEN"\n        }\'',
       },
     },
   },

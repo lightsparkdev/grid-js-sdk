@@ -257,6 +257,24 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/sandbox/webhooks/test',
   },
   {
+    clientCallName: 'client.sandbox.cards.simulate.authorization',
+    fullyQualifiedName: 'sandbox.cards.simulate.authorization',
+    httpMethod: 'post',
+    httpPath: '/sandbox/cards/{id}/simulate/authorization',
+  },
+  {
+    clientCallName: 'client.sandbox.cards.simulate.clearing',
+    fullyQualifiedName: 'sandbox.cards.simulate.clearing',
+    httpMethod: 'post',
+    httpPath: '/sandbox/cards/{id}/simulate/clearing',
+  },
+  {
+    clientCallName: 'client.sandbox.cards.simulate.return',
+    fullyQualifiedName: 'sandbox.cards.simulate.return',
+    httpMethod: 'post',
+    httpPath: '/sandbox/cards/{id}/simulate/return',
+  },
+  {
     clientCallName: 'client.umaProviders.list',
     fullyQualifiedName: 'umaProviders.list',
     httpMethod: 'get',
@@ -598,6 +616,30 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'agents.actions.reject',
     httpMethod: 'post',
     httpPath: '/agents/{agentId}/actions/{actionId}/reject',
+  },
+  {
+    clientCallName: 'client.cards.retrieve',
+    fullyQualifiedName: 'cards.retrieve',
+    httpMethod: 'get',
+    httpPath: '/cards/{id}',
+  },
+  {
+    clientCallName: 'client.cards.update',
+    fullyQualifiedName: 'cards.update',
+    httpMethod: 'patch',
+    httpPath: '/cards/{id}',
+  },
+  {
+    clientCallName: 'client.cards.list',
+    fullyQualifiedName: 'cards.list',
+    httpMethod: 'get',
+    httpPath: '/cards',
+  },
+  {
+    clientCallName: 'client.cards.issue',
+    fullyQualifiedName: 'cards.issue',
+    httpMethod: 'post',
+    httpPath: '/cards',
   },
 ];
 
