@@ -64,6 +64,8 @@ export interface AgentActionWebhookEvent {
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -110,6 +112,8 @@ export interface IncomingPaymentWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -167,6 +171,8 @@ export interface OutgoingPaymentWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -211,7 +217,9 @@ export interface TestWebhookWebhookEvent {
     | 'INVITATION.CLAIMED'
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL';
+    | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE';
 }
 
 export interface BulkUploadWebhookEvent {
@@ -257,6 +265,8 @@ export interface BulkUploadWebhookEvent {
     | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
     | 'INVITATION.CLAIMED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -353,6 +363,8 @@ export interface InvitationClaimedWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -399,6 +411,8 @@ export interface CustomerUpdateWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -445,6 +459,8 @@ export interface InternalAccountStatusWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -491,6 +507,8 @@ export interface VerificationUpdateWebhookEvent {
     | 'BULK_UPLOAD.COMPLETED'
     | 'BULK_UPLOAD.FAILED'
     | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
     | 'TEST';
 }
 
@@ -535,6 +553,320 @@ export namespace VerificationUpdateWebhookEvent {
   }
 }
 
+export interface CardStateChangeWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data: CardStateChangeWebhookEvent.Data;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type:
+    | 'CARD.STATE_CHANGE'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.FUNDING_SOURCE_CHANGE'
+    | 'TEST';
+}
+
+export namespace CardStateChangeWebhookEvent {
+  export interface Data {
+    /**
+     * System-generated unique card identifier
+     */
+    id: string;
+
+    /**
+     * The id of the `Customer` who holds this card.
+     */
+    cardholderId: string;
+
+    /**
+     * Creation timestamp
+     */
+    createdAt: string;
+
+    /**
+     * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
+     * will be added in a later release.
+     */
+    form: 'VIRTUAL';
+
+    /**
+     * Internal account ids bound to this card as funding sources, in priority order —
+     * the first entry is tried first by Authorization Decisioning. Every card has at
+     * least one funding source.
+     */
+    fundingSources: Array<string>;
+
+    /**
+     * Lifecycle state of a card.
+     *
+     * | State           | Description                                                                                                                                                   |
+     * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+     * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
+     * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
+     * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
+     * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
+     * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
+     */
+    state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+
+    /**
+     * Last update timestamp
+     */
+    updatedAt: string;
+
+    /**
+     * Card network brand. Read-only — determined by Grid when the card is provisioned
+     * with the issuer.
+     */
+    brand?: 'VISA' | 'MASTERCARD';
+
+    /**
+     * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
+     * from the funding sources at issue time — all funding sources bound to a card
+     * must be denominated in the same card-eligible currency.
+     */
+    currency?: string;
+
+    /**
+     * Card expiration month (1–12).
+     */
+    expMonth?: number;
+
+    /**
+     * Card expiration year (four digits).
+     */
+    expYear?: number;
+
+    /**
+     * Opaque identifier for the card on the underlying issuer. Useful for
+     * cross-referencing in issuer dashboards; not used for any Grid request routing.
+     */
+    issuerRef?: string;
+
+    /**
+     * Last four digits of the card PAN.
+     */
+    last4?: string;
+
+    /**
+     * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
+     * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
+     * URL in an iframe in your client to reveal card details.
+     */
+    panEmbedUrl?: string;
+
+    /**
+     * Platform-specific card identifier. Optional on create — system-generated if
+     * omitted, mirroring `platformCustomerId` semantics.
+     */
+    platformCardId?: string;
+
+    /**
+     * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
+     * and on cards that fail provisioning before reaching `ACTIVE`.
+     *
+     * | Reason               | Description                                                                    |
+     * | -------------------- | ------------------------------------------------------------------------------ |
+     * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
+     * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
+     * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+     */
+    stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
+  }
+}
+
+export interface CardFundingSourceChangeWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data: CardFundingSourceChangeWebhookEvent.Data;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type:
+    | 'CARD.FUNDING_SOURCE_CHANGE'
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED'
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'CUSTOMER.KYC_APPROVED'
+    | 'CUSTOMER.KYC_REJECTED'
+    | 'CUSTOMER.KYC_PENDING'
+    | 'CUSTOMER.KYB_APPROVED'
+    | 'CUSTOMER.KYB_REJECTED'
+    | 'CUSTOMER.KYB_PENDING'
+    | 'VERIFICATION.APPROVED'
+    | 'VERIFICATION.REJECTED'
+    | 'VERIFICATION.RESOLVE_ERRORS'
+    | 'VERIFICATION.IN_PROGRESS'
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+    | 'VERIFICATION.READY_FOR_VERIFICATION'
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
+    | 'INVITATION.CLAIMED'
+    | 'BULK_UPLOAD.COMPLETED'
+    | 'BULK_UPLOAD.FAILED'
+    | 'AGENT_ACTION.PENDING_APPROVAL'
+    | 'CARD.STATE_CHANGE'
+    | 'TEST';
+}
+
+export namespace CardFundingSourceChangeWebhookEvent {
+  export interface Data {
+    /**
+     * System-generated unique card identifier
+     */
+    id: string;
+
+    /**
+     * The id of the `Customer` who holds this card.
+     */
+    cardholderId: string;
+
+    /**
+     * Creation timestamp
+     */
+    createdAt: string;
+
+    /**
+     * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
+     * will be added in a later release.
+     */
+    form: 'VIRTUAL';
+
+    /**
+     * Internal account ids bound to this card as funding sources, in priority order —
+     * the first entry is tried first by Authorization Decisioning. Every card has at
+     * least one funding source.
+     */
+    fundingSources: Array<string>;
+
+    /**
+     * Lifecycle state of a card.
+     *
+     * | State           | Description                                                                                                                                                   |
+     * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+     * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
+     * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
+     * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
+     * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
+     * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
+     */
+    state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+
+    /**
+     * Last update timestamp
+     */
+    updatedAt: string;
+
+    /**
+     * Card network brand. Read-only — determined by Grid when the card is provisioned
+     * with the issuer.
+     */
+    brand?: 'VISA' | 'MASTERCARD';
+
+    /**
+     * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
+     * from the funding sources at issue time — all funding sources bound to a card
+     * must be denominated in the same card-eligible currency.
+     */
+    currency?: string;
+
+    /**
+     * Card expiration month (1–12).
+     */
+    expMonth?: number;
+
+    /**
+     * Card expiration year (four digits).
+     */
+    expYear?: number;
+
+    /**
+     * Opaque identifier for the card on the underlying issuer. Useful for
+     * cross-referencing in issuer dashboards; not used for any Grid request routing.
+     */
+    issuerRef?: string;
+
+    /**
+     * Last four digits of the card PAN.
+     */
+    last4?: string;
+
+    /**
+     * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
+     * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
+     * URL in an iframe in your client to reveal card details.
+     */
+    panEmbedUrl?: string;
+
+    /**
+     * Platform-specific card identifier. Optional on create — system-generated if
+     * omitted, mirroring `platformCustomerId` semantics.
+     */
+    platformCardId?: string;
+
+    /**
+     * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
+     * and on cards that fail provisioning before reaching `ACTIVE`.
+     *
+     * | Reason               | Description                                                                    |
+     * | -------------------- | ------------------------------------------------------------------------------ |
+     * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
+     * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
+     * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+     */
+    stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
+  }
+}
+
 export type UnwrapWebhookEvent =
   | AgentActionWebhookEvent
   | IncomingPaymentWebhookEvent
@@ -544,7 +876,9 @@ export type UnwrapWebhookEvent =
   | InvitationClaimedWebhookEvent
   | CustomerUpdateWebhookEvent
   | InternalAccountStatusWebhookEvent
-  | VerificationUpdateWebhookEvent;
+  | VerificationUpdateWebhookEvent
+  | CardStateChangeWebhookEvent
+  | CardFundingSourceChangeWebhookEvent;
 
 export declare namespace Webhooks {
   export {
@@ -557,6 +891,8 @@ export declare namespace Webhooks {
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
+    type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
+    type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }

@@ -367,6 +367,22 @@ Methods:
 
 - <code title="post /sandbox/webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
 
+## Cards
+
+### Simulate
+
+Types:
+
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
+
+Methods:
+
+- <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
+
 # UmaProviders
 
 Types:
@@ -414,6 +430,8 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">CustomerUpdateWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">VerificationUpdateWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CardStateChangeWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CardFundingSourceChangeWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 
 Methods:
@@ -631,3 +649,19 @@ Methods:
 
 - <code title="post /agents/{agentId}/actions/{actionId}/approve">client.agents.actions.<a href="./src/resources/agents/actions.ts">approve</a>(actionID, { ...params }) -> AgentAction</code>
 - <code title="post /agents/{agentId}/actions/{actionId}/reject">client.agents.actions.<a href="./src/resources/agents/actions.ts">reject</a>(actionID, { ...params }) -> AgentAction</code>
+
+# Cards
+
+Types:
+
+- <code><a href="./src/resources/cards.ts">CardRetrieveResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardUpdateResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardListResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssueResponse</a></code>
+
+Methods:
+
+- <code title="get /cards/{id}">client.cards.<a href="./src/resources/cards.ts">retrieve</a>(id) -> CardRetrieveResponse</code>
+- <code title="patch /cards/{id}">client.cards.<a href="./src/resources/cards.ts">update</a>(id, { ...params }) -> CardUpdateResponse</code>
+- <code title="get /cards">client.cards.<a href="./src/resources/cards.ts">list</a>({ ...params }) -> CardListResponsesDefaultPagination</code>
+- <code title="post /cards">client.cards.<a href="./src/resources/cards.ts">issue</a>({ ...params }) -> CardIssueResponse</code>

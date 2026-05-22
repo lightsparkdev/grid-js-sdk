@@ -8,6 +8,8 @@ import * as UmaAPI from './uma';
 import { Uma, UmaReceivePaymentParams } from './uma';
 import * as WebhooksAPI from './webhooks';
 import { WebhookSendTestResponse, Webhooks } from './webhooks';
+import * as CardsAPI from './cards/cards';
+import { Cards } from './cards/cards';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -20,6 +22,7 @@ export class Sandbox extends APIResource {
     this._client,
   );
   webhooks: WebhooksAPI.Webhooks = new WebhooksAPI.Webhooks(this._client);
+  cards: CardsAPI.Cards = new CardsAPI.Cards(this._client);
 
   /**
    * Simulate sending funds to the bank account as instructed in the quote. This
@@ -63,6 +66,7 @@ export interface SandboxSendFundsParams {
 Sandbox.Uma = Uma;
 Sandbox.InternalAccounts = InternalAccounts;
 Sandbox.Webhooks = Webhooks;
+Sandbox.Cards = Cards;
 
 export declare namespace Sandbox {
   export { type SandboxSendFundsParams as SandboxSendFundsParams };
@@ -76,4 +80,6 @@ export declare namespace Sandbox {
   };
 
   export { Webhooks as Webhooks, type WebhookSendTestResponse as WebhookSendTestResponse };
+
+  export { Cards as Cards };
 }
