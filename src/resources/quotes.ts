@@ -519,7 +519,12 @@ export interface Quote {
   exchangeRate: number;
 
   /**
-   * When this quote expires (typically 1-5 minutes after creation)
+   * Absolute UTC timestamp when the rate locked in this quote becomes invalid and
+   * the quote can no longer be executed. The window depends on the rail and
+   * corridor: instant rails (Lightning, Spark, USDC on Solana/Base/Polygon, RTP,
+   * SEPA Instant) typically expire in 1–5 minutes; corridors with longer settlement
+   * guarantees may have longer windows. Always rely on this timestamp rather than
+   * assuming a fixed window.
    */
   expiresAt: string;
 
