@@ -524,9 +524,19 @@ export namespace BusinessCustomerFields {
  */
 export interface BusinessInfo {
   /**
+   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+   */
+  incorporatedOn: string;
+
+  /**
    * Legal name of the business
    */
   legalName: string;
+
+  /**
+   * Tax identification number
+   */
+  taxId: string;
 
   /**
    * The high-level industry category of the business
@@ -607,11 +617,6 @@ export interface BusinessInfo {
   expectedRecipientJurisdictions?: Array<string>;
 
   /**
-   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
-   */
-  incorporatedOn?: string;
-
-  /**
    * The intended purpose for using the Grid account
    */
   purposeOfAccount?:
@@ -638,11 +643,6 @@ export interface BusinessInfo {
    * The primary source of funds for the business
    */
   sourceOfFunds?: string;
-
-  /**
-   * Tax identification number
-   */
-  taxId?: string;
 }
 
 export interface Customer {
