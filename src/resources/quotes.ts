@@ -646,7 +646,7 @@ export namespace QuoteDestinationOneOf {
 
     /**
      * Currency code for the destination. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
+     * [Supported Currencies](https://docs.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
      * for the full list of supported fiat and crypto currencies.
      */
     currency?: string;
@@ -690,7 +690,7 @@ export namespace QuoteSourceOneOf {
   export interface RealtimeFundingQuoteSource {
     /**
      * Currency code for the funding source. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
+     * [Supported Currencies](https://docs.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
      * for the full list of supported fiat and crypto currencies.
      */
     currency: string;
