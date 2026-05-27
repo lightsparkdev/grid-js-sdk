@@ -59,6 +59,7 @@ export namespace ExchangeRateListResponse {
       | 'SEPA'
       | 'SEPA_INSTANT'
       | 'SPEI'
+      | 'SWIFT'
       | 'UPI'
       | 'WIRE';
 

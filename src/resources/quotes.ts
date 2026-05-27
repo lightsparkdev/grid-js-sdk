@@ -628,6 +628,7 @@ export namespace QuoteDestinationOneOf {
       | 'SEPA'
       | 'SEPA_INSTANT'
       | 'SPEI'
+      | 'SWIFT'
       | 'UPI'
       | 'WIRE';
   }
