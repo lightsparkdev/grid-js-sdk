@@ -3549,62 +3549,54 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     stainlessPath: '(resource) documents > (method) upload',
     qualified: 'client.documents.upload',
     params: [
-      'country: string;',
-      'documentHolder: string;',
-      'documentType: string;',
-      'file: string;',
-      'documentNumber?: string;',
-      'issuingAuthority?: string;',
-      "side?: 'FRONT' | 'BACK';",
+      "{ country: string; documentHolder: string; documentNumber: string; documentType: 'PASSPORT' | 'DRIVERS_LICENSE' | 'NATIONAL_ID'; file: string; issuingAuthority: string; side?: 'FRONT' | 'BACK'; } | { country: string; documentHolder: string; documentType: string; file: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; };",
     ],
     response:
       "{ id: string; country: string; createdAt: string; documentHolder: string; documentType: string; fileName: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; updatedAt?: string; }",
-    markdown:
-      "## upload\n\n`client.documents.upload(country: string, documentHolder: string, documentType: string, file: string, documentNumber?: string, issuingAuthority?: string, side?: 'FRONT' | 'BACK'): { id: string; country: string; createdAt: string; documentHolder: string; documentType: string; fileName: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; updatedAt?: string; }`\n\n**post** `/documents`\n\nUpload a verification document for a customer or beneficial owner. The request must use multipart/form-data with the file in the `file` field and metadata in the remaining fields.\n\nSupported file types: PDF, JPEG, PNG. Maximum file size: 10 MB.\n\n\n### Parameters\n\n- `country: string`\n  Country that issued the document (ISO 3166-1 alpha-2)\n\n- `documentHolder: string`\n  ID of the entity that owns this document. Can be a Customer ID or a BeneficialOwner ID.\n\n- `documentType: string`\n  Type of identity or business verification document. Document types are grouped by verification category:\n**Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID\n**Business — Legal presence** — CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT\n**Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT, STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT\n**Business — Ownership structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT\n**Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL, BANK_STATEMENT, TAX_RETURN\n\n- `file: string`\n  The document file (PDF, JPEG, or PNG, max 10 MB)\n\n- `documentNumber?: string`\n  Document identification number (e.g., passport number)\n\n- `issuingAuthority?: string`\n  Name of the government agency or organization that issued the document\n\n- `side?: 'FRONT' | 'BACK'`\n  Which side of the document (for two-sided documents like driver's licenses)\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; documentHolder: string; documentType: string; fileName: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; updatedAt?: string; }`\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `documentHolder: string`\n  - `documentType: string`\n  - `fileName: string`\n  - `documentNumber?: string`\n  - `issuingAuthority?: string`\n  - `side?: 'FRONT' | 'BACK'`\n  - `updatedAt?: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.documents.upload({\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.documents.upload',
         example:
-          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.upload({\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.id);",
+          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.upload({\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentNumber: 'A12345678',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n  issuingAuthority: 'U.S. Department of State',\n});\n\nconsole.log(response.id);",
       },
       python: {
         method: 'documents.upload',
         example:
-          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.documents.upload(\n    country="US",\n    document_holder="BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n    document_type="PASSPORT",\n    file=b"Example data",\n)\nprint(response.id)',
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.documents.upload(\n    country="US",\n    document_holder="BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n    document_number="A12345678",\n    document_type="PASSPORT",\n    file=b"Example data",\n    issuing_authority="U.S. Department of State",\n)\nprint(response.id)',
       },
       kotlin: {
         method: 'documents().upload',
         example:
-          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentUploadParams\nimport com.lightspark.grid.models.documents.DocumentUploadResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentUploadParams = DocumentUploadParams.builder()\n        .country("US")\n        .documentHolder("BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001")\n        .documentType(DocumentUploadParams.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .build()\n    val response: DocumentUploadResponse = client.documents().upload(params)\n}',
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentUploadParams\nimport com.lightspark.grid.models.documents.DocumentUploadResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentUploadParams.Body.IdentityDocumentUploadRequest = DocumentUploadParams.Body.IdentityDocumentUploadRequest.builder()\n        .country("US")\n        .documentHolder("BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001")\n        .documentNumber("A12345678")\n        .documentType(DocumentUploadParams.Body.IdentityDocumentUploadRequest.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .issuingAuthority("U.S. Department of State")\n        .build()\n    val response: DocumentUploadResponse = client.documents().upload(params)\n}',
       },
       go: {
         method: 'client.Documents.Upload',
         example:
-          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Documents.Upload(context.TODO(), grid.DocumentUploadParams{\n\t\tCountry:        "US",\n\t\tDocumentHolder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n\t\tDocumentType:   grid.DocumentUploadParamsDocumentTypePassport,\n\t\tFile:           io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Documents.Upload(context.TODO(), grid.DocumentUploadParams{\n\t\tOfIdentityDocumentUploadRequest: &grid.DocumentUploadParamsBodyIdentityDocumentUploadRequest{\n\t\t\tCountry:          "US",\n\t\t\tDocumentHolder:   "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n\t\t\tDocumentNumber:   "A12345678",\n\t\t\tDocumentType:     "PASSPORT",\n\t\t\tFile:             io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t\t\tIssuingAuthority: "U.S. Department of State",\n\t\t},\n\t})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
       },
       ruby: {
         method: 'documents.upload',
         example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  country: "US",\n  document_holder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.upload(\n  body: {\n    country: "US",\n    documentHolder: "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n    documentNumber: "A12345678",\n    documentType: :PASSPORT,\n    file: StringIO.new("Example data"),\n    issuingAuthority: "U.S. Department of State"\n  }\n)\n\nputs(response)',
       },
       cli: {
         method: 'documents upload',
         example:
-          "grid documents upload \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --country US \\\n  --document-holder BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n  --document-type PASSPORT \\\n  --file 'Example data'",
+          "grid documents upload \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --country US \\\n  --document-holder BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n  --document-number A12345678 \\\n  --document-type PASSPORT \\\n  --file 'Example data' \\\n  --issuing-authority 'U.S. Department of State'",
       },
       php: {
         method: 'documents->upload',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->documents->upload(\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentType: 'PASSPORT',\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  documentNumber: 'A12345678',\n  issuingAuthority: 'U.S. Department of State',\n  side: 'FRONT',\n);\n\nvar_dump($response);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->documents->upload(\n  country: 'US',\n  documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n  documentNumber: '20240312-INV-9821',\n  documentType: 'UTILITY_BILL',\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  issuingAuthority: 'City of San Francisco',\n  side: 'FRONT',\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Documents.Upload',
         example:
-          'DocumentUploadParams parameters = new()\n{\n    Country = "US",\n    DocumentHolder = "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n    DocumentType = DocumentType.Passport,\n    File = Encoding.UTF8.GetBytes("Example data"),\n};\n\nvar response = await client.Documents.Upload(parameters);\n\nConsole.WriteLine(response);',
+          'DocumentUploadParams parameters = new()\n{\n    Body = new IdentityDocumentUploadRequest()\n    {\n        Country = "US",\n        DocumentHolder = "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n        DocumentNumber = "A12345678",\n        DocumentType = DocumentType.Passport,\n        File = Encoding.UTF8.GetBytes("Example data"),\n        IssuingAuthority = "U.S. Department of State",\n        Side = Side.Front,\n    },\n};\n\nvar response = await client.Documents.Upload(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
-          "curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentHolder=BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F documentNumber=A12345678 \\\n    -F issuingAuthority='U.S. Department of State' \\\n    -F side=FRONT",
+          "curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentHolder=BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001 \\\n    -F documentNumber=A12345678 \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F issuingAuthority='U.S. Department of State' \\\n    -F side=FRONT",
       },
     },
   },
@@ -3738,61 +3730,54 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     qualified: 'client.documents.replace',
     params: [
       'documentId: string;',
-      'country: string;',
-      'documentType: string;',
-      'file: string;',
-      'documentNumber?: string;',
-      'issuingAuthority?: string;',
-      "side?: 'FRONT' | 'BACK';",
+      "body: { country: string; documentNumber: string; documentType: 'PASSPORT' | 'DRIVERS_LICENSE' | 'NATIONAL_ID'; file: string; issuingAuthority: string; side?: 'FRONT' | 'BACK'; } | { country: string; documentType: string; file: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; };",
     ],
     response:
       "{ id: string; country: string; createdAt: string; documentHolder: string; documentType: string; fileName: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; updatedAt?: string; }",
-    markdown:
-      "## replace\n\n`client.documents.replace(documentId: string, country: string, documentType: string, file: string, documentNumber?: string, issuingAuthority?: string, side?: 'FRONT' | 'BACK'): { id: string; country: string; createdAt: string; documentHolder: string; documentType: string; fileName: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; updatedAt?: string; }`\n\n**put** `/documents/{documentId}`\n\nReplace an existing document with a new file and/or updated metadata. This is useful when a document was rejected and needs to be re-uploaded. The request must use multipart/form-data.\n\n\n### Parameters\n\n- `documentId: string`\n\n- `country: string`\n  Country that issued the document (ISO 3166-1 alpha-2)\n\n- `documentType: string`\n  Type of identity or business verification document. Document types are grouped by verification category:\n**Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID\n**Business — Legal presence** — CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT\n**Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT, STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT\n**Business — Ownership structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT\n**Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL, BANK_STATEMENT, TAX_RETURN\n\n- `file: string`\n  The document file (PDF, JPEG, or PNG, max 10 MB)\n\n- `documentNumber?: string`\n  Document identification number (e.g., passport number)\n\n- `issuingAuthority?: string`\n  Name of the government agency or organization that issued the document\n\n- `side?: 'FRONT' | 'BACK'`\n  Which side of the document (for two-sided documents like driver's licenses)\n\n### Returns\n\n- `{ id: string; country: string; createdAt: string; documentHolder: string; documentType: string; fileName: string; documentNumber?: string; issuingAuthority?: string; side?: 'FRONT' | 'BACK'; updatedAt?: string; }`\n\n  - `id: string`\n  - `country: string`\n  - `createdAt: string`\n  - `documentHolder: string`\n  - `documentType: string`\n  - `fileName: string`\n  - `documentNumber?: string`\n  - `issuingAuthority?: string`\n  - `side?: 'FRONT' | 'BACK'`\n  - `updatedAt?: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst response = await client.documents.replace('documentId', {\n  country: 'US',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response);\n```",
     perLanguage: {
       typescript: {
         method: 'client.documents.replace',
         example:
-          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.replace('documentId', {\n  country: 'US',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n});\n\nconsole.log(response.id);",
+          "import fs from 'fs';\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst response = await client.documents.replace('documentId', {\n  country: 'US',\n  documentNumber: 'A12345678',\n  documentType: 'PASSPORT',\n  file: fs.createReadStream('path/to/file'),\n  issuingAuthority: 'U.S. Department of State',\n});\n\nconsole.log(response.id);",
       },
       python: {
         method: 'documents.replace',
         example:
-          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.documents.replace(\n    document_id="documentId",\n    country="US",\n    document_type="PASSPORT",\n    file=b"Example data",\n)\nprint(response.id)',
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nresponse = client.documents.replace(\n    document_id="documentId",\n    country="US",\n    document_number="A12345678",\n    document_type="PASSPORT",\n    file=b"Example data",\n    issuing_authority="U.S. Department of State",\n)\nprint(response.id)',
       },
       kotlin: {
         method: 'documents().replace',
         example:
-          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentReplaceParams\nimport com.lightspark.grid.models.documents.DocumentReplaceResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentReplaceParams = DocumentReplaceParams.builder()\n        .documentId("documentId")\n        .country("US")\n        .documentType(DocumentReplaceParams.DocumentType.PASSPORT)\n        .file("Example data".byteInputStream())\n        .build()\n    val response: DocumentReplaceResponse = client.documents().replace(params)\n}',
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.documents.DocumentReplaceParams\nimport com.lightspark.grid.models.documents.DocumentReplaceResponse\nimport java.io.ByteArrayInputStream\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val params: DocumentReplaceParams = DocumentReplaceParams.builder()\n        .documentId("documentId")\n        .body(DocumentReplaceParams.Body.IdentityDocumentReplaceRequest.builder()\n            .country("US")\n            .documentNumber("A12345678")\n            .documentType(DocumentReplaceParams.Body.IdentityDocumentReplaceRequest.DocumentType.PASSPORT)\n            .file("Example data".byteInputStream())\n            .issuingAuthority("U.S. Department of State")\n            .build())\n        .build()\n    val response: DocumentReplaceResponse = client.documents().replace(params)\n}',
       },
       go: {
         method: 'client.Documents.Replace',
         example:
-          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Documents.Replace(\n\t\tcontext.TODO(),\n\t\t"documentId",\n\t\tgrid.DocumentReplaceParams{\n\t\t\tCountry:      "US",\n\t\t\tDocumentType: grid.DocumentReplaceParamsDocumentTypePassport,\n\t\t\tFile:         io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
+          'package main\n\nimport (\n\t"bytes"\n\t"context"\n\t"fmt"\n\t"io"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tresponse, err := client.Documents.Replace(\n\t\tcontext.TODO(),\n\t\t"documentId",\n\t\tgrid.DocumentReplaceParams{\n\t\t\tOfIdentityDocumentReplaceRequest: &grid.DocumentReplaceParamsBodyIdentityDocumentReplaceRequest{\n\t\t\t\tCountry:          "US",\n\t\t\t\tDocumentNumber:   "A12345678",\n\t\t\t\tDocumentType:     "PASSPORT",\n\t\t\t\tFile:             io.Reader(bytes.NewBuffer([]byte("Example data"))),\n\t\t\t\tIssuingAuthority: "U.S. Department of State",\n\t\t\t},\n\t\t},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", response.ID)\n}\n',
       },
       ruby: {
         method: 'documents.replace',
         example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  country: "US",\n  document_type: :PASSPORT,\n  file: StringIO.new("Example data")\n)\n\nputs(response)',
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nresponse = lightspark_grid.documents.replace(\n  "documentId",\n  body: {\n    country: "US",\n    documentNumber: "A12345678",\n    documentType: :PASSPORT,\n    file: StringIO.new("Example data"),\n    issuingAuthority: "U.S. Department of State"\n  }\n)\n\nputs(response)',
       },
       cli: {
         method: 'documents replace',
         example:
-          "grid documents replace \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --document-id documentId \\\n  --country US \\\n  --document-type PASSPORT \\\n  --file 'Example data'",
+          "grid documents replace \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --document-id documentId \\\n  --country US \\\n  --document-number A12345678 \\\n  --document-type PASSPORT \\\n  --file 'Example data' \\\n  --issuing-authority 'U.S. Department of State'",
       },
       php: {
         method: 'documents->replace',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->documents->replace(\n  'documentId',\n  country: 'US',\n  documentType: 'PASSPORT',\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  documentNumber: 'A12345678',\n  issuingAuthority: 'U.S. Department of State',\n  side: 'FRONT',\n);\n\nvar_dump($response);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->documents->replace(\n  'documentId',\n  country: 'US',\n  documentNumber: '20240312-INV-9821',\n  documentType: 'UTILITY_BILL',\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n  issuingAuthority: 'City of San Francisco',\n  side: 'FRONT',\n);\n\nvar_dump($response);",
       },
       csharp: {
         method: 'Documents.Replace',
         example:
-          'DocumentReplaceParams parameters = new()\n{\n    DocumentID = "documentId",\n    Country = "US",\n    DocumentType = DocumentType.Passport,\n    File = Encoding.UTF8.GetBytes("Example data"),\n};\n\nvar response = await client.Documents.Replace(parameters);\n\nConsole.WriteLine(response);',
+          'DocumentReplaceParams parameters = new()\n{\n    DocumentID = "documentId",\n    Body = new IdentityDocumentReplaceRequest()\n    {\n        Country = "US",\n        DocumentNumber = "A12345678",\n        DocumentType = DocumentType.Passport,\n        File = Encoding.UTF8.GetBytes("Example data"),\n        IssuingAuthority = "U.S. Department of State",\n        Side = Side.Front,\n    },\n};\n\nvar response = await client.Documents.Replace(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
-          "curl https://api.lightspark.com/grid/2025-10-13/documents/$DOCUMENT_ID \\\n    -X PUT \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F documentNumber=A12345678 \\\n    -F issuingAuthority='U.S. Department of State' \\\n    -F side=FRONT",
+          "curl https://api.lightspark.com/grid/2025-10-13/documents/$DOCUMENT_ID \\\n    -X PUT \\\n    -H 'Content-Type: multipart/form-data' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -F country=US \\\n    -F documentNumber=A12345678 \\\n    -F documentType=PASSPORT \\\n    -F 'file=@/path/to/file' \\\n    -F issuingAuthority='U.S. Department of State' \\\n    -F side=FRONT",
       },
     },
   },

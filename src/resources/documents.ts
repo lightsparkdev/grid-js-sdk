@@ -15,13 +15,6 @@ import { path } from '../internal/utils/path';
 export class Documents extends APIResource {
   /**
    * Retrieve details and metadata of a specific document by ID.
-   *
-   * @example
-   * ```ts
-   * const document = await client.documents.retrieve(
-   *   'documentId',
-   * );
-   * ```
    */
   retrieve(documentID: string, options?: RequestOptions): APIPromise<DocumentRetrieveResponse> {
     return this._client.get(path`/documents/${documentID}`, options);
@@ -29,14 +22,6 @@ export class Documents extends APIResource {
 
   /**
    * Retrieve a list of documents with optional filtering by document holder.
-   *
-   * @example
-   * ```ts
-   * // Automatically fetches more pages as needed.
-   * for await (const documentListResponse of client.documents.list()) {
-   *   // ...
-   * }
-   * ```
    */
   list(
     query: DocumentListParams | null | undefined = {},
@@ -51,11 +36,6 @@ export class Documents extends APIResource {
   /**
    * Delete an uploaded document. This cannot be undone. Documents that have already
    * been submitted for verification may not be deletable.
-   *
-   * @example
-   * ```ts
-   * await client.documents.delete('documentId');
-   * ```
    */
   delete(documentID: string, options?: RequestOptions): APIPromise<void> {
     return this._client.delete(path`/documents/${documentID}`, {
@@ -75,8 +55,10 @@ export class Documents extends APIResource {
    *   'documentId',
    *   {
    *     country: 'US',
+   *     documentNumber: 'A12345678',
    *     documentType: 'PASSPORT',
    *     file: fs.createReadStream('path/to/file'),
+   *     issuingAuthority: 'U.S. Department of State',
    *   },
    * );
    * ```
@@ -105,8 +87,10 @@ export class Documents extends APIResource {
    *   country: 'US',
    *   documentHolder:
    *     'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
+   *   documentNumber: 'A12345678',
    *   documentType: 'PASSPORT',
    *   file: fs.createReadStream('path/to/file'),
+   *   issuingAuthority: 'U.S. Department of State',
    * });
    * ```
    */
@@ -481,142 +465,218 @@ export interface DocumentListParams extends DefaultPaginationParams {
   limit?: number;
 }
 
-export interface DocumentReplaceParams {
-  /**
-   * Country that issued the document (ISO 3166-1 alpha-2)
-   */
-  country: string;
+export type DocumentReplaceParams =
+  | DocumentReplaceParams.IdentityDocumentReplaceRequest
+  | DocumentReplaceParams.NonIdentityDocumentReplaceRequest;
 
-  /**
-   * Type of identity or business verification document. Document types are grouped
-   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
-   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
-   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
-   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
-   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
-   * BANK_STATEMENT, TAX_RETURN
-   */
-  documentType:
-    | 'PASSPORT'
-    | 'DRIVERS_LICENSE'
-    | 'NATIONAL_ID'
-    | 'PROOF_OF_ADDRESS'
-    | 'BANK_STATEMENT'
-    | 'TAX_RETURN'
-    | 'CERTIFICATE_OF_INCORPORATION'
-    | 'ARTICLES_OF_INCORPORATION'
-    | 'ARTICLES_OF_ASSOCIATION'
-    | 'STATE_REGISTRY_EXCERPT'
-    | 'GOOD_STANDING_CERTIFICATE'
-    | 'INFORMATION_STATEMENT'
-    | 'INCUMBENCY_CERTIFICATE'
-    | 'BUSINESS_LICENSE'
-    | 'SHAREHOLDER_REGISTER'
-    | 'POWER_OF_ATTORNEY'
-    | 'UTILITY_BILL'
-    | 'ELECTRICITY_BILL'
-    | 'RENT_OR_LEASE_AGREEMENT'
-    | 'DIRECTOR_REGISTRY'
-    | 'TRUST_AGREEMENT'
-    | 'STATE_COMPANY_REGISTRY'
-    | 'PARTNERSHIP_CONTROL_AGREEMENT'
-    | 'PARTNERSHIP_AGREEMENT'
-    | 'SELFIE'
-    | 'OTHER';
+export declare namespace DocumentReplaceParams {
+  export interface IdentityDocumentReplaceRequest {
+    /**
+     * Country that issued the document (ISO 3166-1 alpha-2)
+     */
+    country: string;
 
-  /**
-   * The document file (PDF, JPEG, or PNG, max 10 MB)
-   */
-  file: Uploadable;
+    /**
+     * Document identification number (e.g., passport number)
+     */
+    documentNumber: string;
 
-  /**
-   * Document identification number (e.g., passport number)
-   */
-  documentNumber?: string;
+    /**
+     * Identity document types issued by a government to verify an individual's
+     * identity.
+     */
+    documentType: 'PASSPORT' | 'DRIVERS_LICENSE' | 'NATIONAL_ID';
 
-  /**
-   * Name of the government agency or organization that issued the document
-   */
-  issuingAuthority?: string;
+    /**
+     * The document file (PDF, JPEG, or PNG, max 10 MB)
+     */
+    file: Uploadable;
 
-  /**
-   * Which side of the document (for two-sided documents like driver's licenses)
-   */
-  side?: 'FRONT' | 'BACK';
+    /**
+     * Name of the government agency or organization that issued the document
+     */
+    issuingAuthority: string;
+
+    /**
+     * Which side of the document (for two-sided documents like driver's licenses)
+     */
+    side?: 'FRONT' | 'BACK';
+  }
+
+  export interface NonIdentityDocumentReplaceRequest {
+    /**
+     * Country that issued the document (ISO 3166-1 alpha-2)
+     */
+    country: string;
+
+    /**
+     * Non-identity verification documents. **Business — Legal presence** —
+     * CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION,
+     * ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT **Business — Control structure**
+     * — DIRECTOR_REGISTRY, TRUST_AGREEMENT, STATE_COMPANY_REGISTRY,
+     * PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership structure** —
+     * SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT **Proof of
+     * address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+     * BANK_STATEMENT, TAX_RETURN
+     */
+    documentType:
+      | 'PROOF_OF_ADDRESS'
+      | 'BANK_STATEMENT'
+      | 'TAX_RETURN'
+      | 'CERTIFICATE_OF_INCORPORATION'
+      | 'ARTICLES_OF_INCORPORATION'
+      | 'ARTICLES_OF_ASSOCIATION'
+      | 'STATE_REGISTRY_EXCERPT'
+      | 'GOOD_STANDING_CERTIFICATE'
+      | 'INFORMATION_STATEMENT'
+      | 'INCUMBENCY_CERTIFICATE'
+      | 'BUSINESS_LICENSE'
+      | 'SHAREHOLDER_REGISTER'
+      | 'POWER_OF_ATTORNEY'
+      | 'UTILITY_BILL'
+      | 'ELECTRICITY_BILL'
+      | 'RENT_OR_LEASE_AGREEMENT'
+      | 'DIRECTOR_REGISTRY'
+      | 'TRUST_AGREEMENT'
+      | 'STATE_COMPANY_REGISTRY'
+      | 'PARTNERSHIP_CONTROL_AGREEMENT'
+      | 'PARTNERSHIP_AGREEMENT'
+      | 'SELFIE'
+      | 'OTHER';
+
+    /**
+     * The document file (PDF, JPEG, or PNG, max 10 MB)
+     */
+    file: Uploadable;
+
+    /**
+     * Optional document identification number
+     */
+    documentNumber?: string;
+
+    /**
+     * Optional name of the agency or organization that issued the document
+     */
+    issuingAuthority?: string;
+
+    /**
+     * Which side of the document (for two-sided documents like driver's licenses)
+     */
+    side?: 'FRONT' | 'BACK';
+  }
 }
 
-export interface DocumentUploadParams {
-  /**
-   * Country that issued the document (ISO 3166-1 alpha-2)
-   */
-  country: string;
+export type DocumentUploadParams =
+  | DocumentUploadParams.IdentityDocumentUploadRequest
+  | DocumentUploadParams.NonIdentityDocumentUploadRequest;
 
-  /**
-   * ID of the entity that owns this document. Can be a Customer ID or a
-   * BeneficialOwner ID.
-   */
-  documentHolder: string;
+export declare namespace DocumentUploadParams {
+  export interface IdentityDocumentUploadRequest {
+    /**
+     * Country that issued the document (ISO 3166-1 alpha-2)
+     */
+    country: string;
 
-  /**
-   * Type of identity or business verification document. Document types are grouped
-   * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
-   * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
-   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
-   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
-   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
-   * BANK_STATEMENT, TAX_RETURN
-   */
-  documentType:
-    | 'PASSPORT'
-    | 'DRIVERS_LICENSE'
-    | 'NATIONAL_ID'
-    | 'PROOF_OF_ADDRESS'
-    | 'BANK_STATEMENT'
-    | 'TAX_RETURN'
-    | 'CERTIFICATE_OF_INCORPORATION'
-    | 'ARTICLES_OF_INCORPORATION'
-    | 'ARTICLES_OF_ASSOCIATION'
-    | 'STATE_REGISTRY_EXCERPT'
-    | 'GOOD_STANDING_CERTIFICATE'
-    | 'INFORMATION_STATEMENT'
-    | 'INCUMBENCY_CERTIFICATE'
-    | 'BUSINESS_LICENSE'
-    | 'SHAREHOLDER_REGISTER'
-    | 'POWER_OF_ATTORNEY'
-    | 'UTILITY_BILL'
-    | 'ELECTRICITY_BILL'
-    | 'RENT_OR_LEASE_AGREEMENT'
-    | 'DIRECTOR_REGISTRY'
-    | 'TRUST_AGREEMENT'
-    | 'STATE_COMPANY_REGISTRY'
-    | 'PARTNERSHIP_CONTROL_AGREEMENT'
-    | 'PARTNERSHIP_AGREEMENT'
-    | 'SELFIE'
-    | 'OTHER';
+    /**
+     * ID of the entity that owns this document. Can be a Customer ID or a
+     * BeneficialOwner ID.
+     */
+    documentHolder: string;
 
-  /**
-   * The document file (PDF, JPEG, or PNG, max 10 MB)
-   */
-  file: Uploadable;
+    /**
+     * Document identification number (e.g., passport number)
+     */
+    documentNumber: string;
 
-  /**
-   * Document identification number (e.g., passport number)
-   */
-  documentNumber?: string;
+    /**
+     * Identity document types issued by a government to verify an individual's
+     * identity.
+     */
+    documentType: 'PASSPORT' | 'DRIVERS_LICENSE' | 'NATIONAL_ID';
 
-  /**
-   * Name of the government agency or organization that issued the document
-   */
-  issuingAuthority?: string;
+    /**
+     * The document file (PDF, JPEG, or PNG, max 10 MB)
+     */
+    file: Uploadable;
 
-  /**
-   * Which side of the document (for two-sided documents like driver's licenses)
-   */
-  side?: 'FRONT' | 'BACK';
+    /**
+     * Name of the government agency or organization that issued the document
+     */
+    issuingAuthority: string;
+
+    /**
+     * Which side of the document (for two-sided documents like driver's licenses)
+     */
+    side?: 'FRONT' | 'BACK';
+  }
+
+  export interface NonIdentityDocumentUploadRequest {
+    /**
+     * Country that issued the document (ISO 3166-1 alpha-2)
+     */
+    country: string;
+
+    /**
+     * ID of the entity that owns this document. Can be a Customer ID or a
+     * BeneficialOwner ID.
+     */
+    documentHolder: string;
+
+    /**
+     * Non-identity verification documents. **Business — Legal presence** —
+     * CERTIFICATE_OF_INCORPORATION, ARTICLES_OF_INCORPORATION,
+     * ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT **Business — Control structure**
+     * — DIRECTOR_REGISTRY, TRUST_AGREEMENT, STATE_COMPANY_REGISTRY,
+     * PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership structure** —
+     * SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT **Proof of
+     * address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+     * BANK_STATEMENT, TAX_RETURN
+     */
+    documentType:
+      | 'PROOF_OF_ADDRESS'
+      | 'BANK_STATEMENT'
+      | 'TAX_RETURN'
+      | 'CERTIFICATE_OF_INCORPORATION'
+      | 'ARTICLES_OF_INCORPORATION'
+      | 'ARTICLES_OF_ASSOCIATION'
+      | 'STATE_REGISTRY_EXCERPT'
+      | 'GOOD_STANDING_CERTIFICATE'
+      | 'INFORMATION_STATEMENT'
+      | 'INCUMBENCY_CERTIFICATE'
+      | 'BUSINESS_LICENSE'
+      | 'SHAREHOLDER_REGISTER'
+      | 'POWER_OF_ATTORNEY'
+      | 'UTILITY_BILL'
+      | 'ELECTRICITY_BILL'
+      | 'RENT_OR_LEASE_AGREEMENT'
+      | 'DIRECTOR_REGISTRY'
+      | 'TRUST_AGREEMENT'
+      | 'STATE_COMPANY_REGISTRY'
+      | 'PARTNERSHIP_CONTROL_AGREEMENT'
+      | 'PARTNERSHIP_AGREEMENT'
+      | 'SELFIE'
+      | 'OTHER';
+
+    /**
+     * The document file (PDF, JPEG, or PNG, max 10 MB)
+     */
+    file: Uploadable;
+
+    /**
+     * Optional document identification number
+     */
+    documentNumber?: string;
+
+    /**
+     * Optional name of the agency or organization that issued the document
+     */
+    issuingAuthority?: string;
+
+    /**
+     * Which side of the document (for two-sided documents like driver's licenses)
+     */
+    side?: 'FRONT' | 'BACK';
+  }
 }
 
 export declare namespace Documents {
