@@ -46,6 +46,7 @@ import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
+  EmbeddedWalletConfig,
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
@@ -1148,6 +1149,7 @@ export declare namespace LightsparkGrid {
   export {
     Config as Config,
     type CustomerInfoFieldName as CustomerInfoFieldName,
+    type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
@@ -1413,6 +1415,7 @@ export declare namespace LightsparkGrid {
   export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
   export type SlvBeneficiary = API.SlvBeneficiary;
   export type SlvExternalAccountCreateInfo = API.SlvExternalAccountCreateInfo;
+  export type SwiftExternalAccountCreateInfo = API.SwiftExternalAccountCreateInfo;
   export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
   export type TzsBeneficiary = API.TzsBeneficiary;
   export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;

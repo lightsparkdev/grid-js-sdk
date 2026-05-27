@@ -49,6 +49,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">SgdExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">SlvBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">SlvExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">SwiftExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">ThbExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">TzsBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">TzsExternalAccountCreateInfo</a></code>
@@ -71,6 +72,7 @@ Types:
 Types:
 
 - <code><a href="./src/resources/config.ts">CustomerInfoFieldName</a></code>
+- <code><a href="./src/resources/config.ts">EmbeddedWalletConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformCurrencyConfig</a></code>
 
@@ -373,6 +375,10 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardMerchant</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardPullSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardRefundSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
