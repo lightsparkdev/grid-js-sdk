@@ -51,6 +51,7 @@ export {
 export {
   Config,
   type CustomerInfoFieldName,
+  type EmbeddedWalletConfig,
   type PlatformConfig,
   type PlatformCurrencyConfig,
   type ConfigUpdateParams,
