@@ -62,9 +62,7 @@ import {
   DocumentListParams,
   DocumentListResponse,
   DocumentReplaceParams,
-  DocumentReplaceRequest,
   DocumentUploadParams,
-  DocumentUploadRequest,
   Documents,
   DocumentsDefaultPagination,
 } from './resources/documents';
@@ -1353,8 +1351,6 @@ export declare namespace LightsparkGrid {
     Documents as Documents,
     type Document as Document,
     type DocumentListResponse as DocumentListResponse,
-    type DocumentReplaceRequest as DocumentReplaceRequest,
-    type DocumentUploadRequest as DocumentUploadRequest,
     type DocumentsDefaultPagination as DocumentsDefaultPagination,
     type DocumentListParams as DocumentListParams,
     type DocumentReplaceParams as DocumentReplaceParams,
