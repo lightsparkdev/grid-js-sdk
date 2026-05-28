@@ -229,13 +229,13 @@ List methods in the LightsparkGrid API are paginated.
 You can use the `for await … of` syntax to iterate through items across all pages:
 
 ```ts
-async function fetchAllCustomerOneoves(params) {
-  const allCustomerOneoves = [];
+async function fetchAllCustomerListResponses(params) {
+  const allCustomerListResponses = [];
   // Automatically fetches more pages as needed.
-  for await (const customerOneOf of client.customers.list()) {
-    allCustomerOneoves.push(customerOneOf);
+  for await (const customerListResponse of client.customers.list()) {
+    allCustomerListResponses.push(customerListResponse);
   }
-  return allCustomerOneoves;
+  return allCustomerListResponses;
 }
 ```
 
@@ -243,8 +243,8 @@ Alternatively, you can request a single page at a time:
 
 ```ts
 let page = await client.customers.list();
-for (const customerOneOf of page.data) {
-  console.log(customerOneOf);
+for (const customerListResponse of page.data) {
+  console.log(customerListResponse);
 }
 
 // Convenience methods are provided for manually paginating:

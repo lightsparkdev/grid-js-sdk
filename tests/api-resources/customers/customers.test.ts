@@ -30,11 +30,6 @@ describe('resource customers', () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
         customerType: 'INDIVIDUAL',
-        currencies: ['USD', 'USDC'],
-        email: 'john.doe@example.com',
-        platformCustomerId: 'ind-9f84e0c2',
-        region: 'US',
-        umaAddress: '$john.doe@uma.domain.com',
         address: {
           country: 'US',
           line1: '123 Main Street',
@@ -44,9 +39,14 @@ describe('resource customers', () => {
           state: 'CA',
         },
         birthDate: '1990-01-15',
+        currencies: ['USD', 'USDC'],
+        email: 'john.doe@example.com',
         fullName: 'Jane Smith',
         kycStatus: 'APPROVED',
         nationality: 'US',
+        platformCustomerId: 'ind-9f84e0c2',
+        region: 'US',
+        umaAddress: '$john.doe@uma.domain.com',
       },
     });
   });
@@ -82,9 +82,6 @@ describe('resource customers', () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
         customerType: 'INDIVIDUAL',
-        currencies: ['USD', 'EUR', 'USDC'],
-        email: 'john.doe@example.com',
-        umaAddress: '$john.doe@uma.domain.com',
         address: {
           country: 'US',
           line1: '456 Market St',
@@ -94,9 +91,12 @@ describe('resource customers', () => {
           state: 'CA',
         },
         birthDate: '1985-06-15',
+        currencies: ['USD', 'EUR', 'USDC'],
+        email: 'john.doe@example.com',
         fullName: 'John Smith',
         kycStatus: 'APPROVED',
         nationality: 'US',
+        umaAddress: '$john.doe@uma.domain.com',
       },
       'Grid-Wallet-Signature':
         'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
