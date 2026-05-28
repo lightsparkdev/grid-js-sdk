@@ -34,39 +34,11 @@ export interface AgentActionWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'AGENT_ACTION.PENDING_APPROVAL';
 }
 
 export interface IncomingPaymentWebhookEvent {
@@ -82,39 +54,11 @@ export interface IncomingPaymentWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'INCOMING_PAYMENT.PENDING' | 'INCOMING_PAYMENT.COMPLETED' | 'INCOMING_PAYMENT.FAILED';
 }
 
 export namespace IncomingPaymentWebhookEvent {
@@ -141,6 +85,10 @@ export interface OutgoingPaymentWebhookEvent {
    */
   timestamp: string;
 
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
   type:
     | 'OUTGOING_PAYMENT.PENDING'
     | 'OUTGOING_PAYMENT.PROCESSING'
@@ -149,31 +97,7 @@ export interface OutgoingPaymentWebhookEvent {
     | 'OUTGOING_PAYMENT.EXPIRED'
     | 'OUTGOING_PAYMENT.REFUND_PENDING'
     | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+    | 'OUTGOING_PAYMENT.REFUND_FAILED';
 }
 
 export interface TestWebhookWebhookEvent {
@@ -187,39 +111,11 @@ export interface TestWebhookWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'TEST'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'TEST';
 }
 
 export interface BulkUploadWebhookEvent {
@@ -235,39 +131,11 @@ export interface BulkUploadWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'BULK_UPLOAD.COMPLETED' | 'BULK_UPLOAD.FAILED';
 }
 
 export namespace BulkUploadWebhookEvent {
@@ -333,39 +201,11 @@ export interface InvitationClaimedWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'INVITATION.CLAIMED'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'INVITATION.CLAIMED';
 }
 
 export interface CustomerUpdateWebhookEvent {
@@ -381,39 +221,17 @@ export interface CustomerUpdateWebhookEvent {
    */
   timestamp: string;
 
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
   type:
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
     | 'CUSTOMER.KYC_PENDING'
     | 'CUSTOMER.KYB_APPROVED'
     | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+    | 'CUSTOMER.KYB_PENDING';
 }
 
 export interface InternalAccountStatusWebhookEvent {
@@ -429,39 +247,11 @@ export interface InternalAccountStatusWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'INTERNAL_ACCOUNT.BALANCE_UPDATED' | 'INTERNAL_ACCOUNT.STATUS_UPDATED';
 }
 
 export interface VerificationUpdateWebhookEvent {
@@ -477,39 +267,16 @@ export interface VerificationUpdateWebhookEvent {
    */
   timestamp: string;
 
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
   type:
     | 'VERIFICATION.APPROVED'
     | 'VERIFICATION.REJECTED'
     | 'VERIFICATION.RESOLVE_ERRORS'
     | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+    | 'VERIFICATION.PENDING_MANUAL_REVIEW';
 }
 
 export namespace VerificationUpdateWebhookEvent {
@@ -566,57 +333,19 @@ export interface CardStateChangeWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'CARD.STATE_CHANGE'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'CARD.STATE_CHANGE';
 }
 
 export namespace CardStateChangeWebhookEvent {
   export interface Data {
     /**
-     * System-generated unique card identifier
-     */
-    id: string;
-
-    /**
      * The id of the `Customer` who holds this card.
      */
     cardholderId: string;
-
-    /**
-     * Creation timestamp
-     */
-    createdAt: string;
 
     /**
      * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
@@ -645,22 +374,10 @@ export namespace CardStateChangeWebhookEvent {
     state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 
     /**
-     * Last update timestamp
-     */
-    updatedAt: string;
-
-    /**
      * Card network brand. Read-only — determined by Grid when the card is provisioned
      * with the issuer.
      */
     brand?: 'VISA' | 'MASTERCARD';
-
-    /**
-     * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-     * from the funding sources at issue time — all funding sources bound to a card
-     * must be denominated in the same card-eligible currency.
-     */
-    currency?: string;
 
     /**
      * Card expiration month (1–12).
@@ -671,12 +388,6 @@ export namespace CardStateChangeWebhookEvent {
      * Card expiration year (four digits).
      */
     expYear?: number;
-
-    /**
-     * Opaque identifier for the card on the underlying issuer. Useful for
-     * cross-referencing in issuer dashboards; not used for any Grid request routing.
-     */
-    issuerRef?: string;
 
     /**
      * Last four digits of the card PAN.
@@ -697,14 +408,8 @@ export namespace CardStateChangeWebhookEvent {
     platformCardId?: string;
 
     /**
-     * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
-     * and on cards that fail provisioning before reaching `ACTIVE`.
-     *
-     * | Reason               | Description                                                                    |
-     * | -------------------- | ------------------------------------------------------------------------------ |
-     * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
-     * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
-     * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+     * Reason associated with the current `state`. Populated when the card is `CLOSED`
+     * or when provisioning was rejected; otherwise null.
      */
     stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
   }
@@ -723,57 +428,19 @@ export interface CardFundingSourceChangeWebhookEvent {
    */
   timestamp: string;
 
-  type:
-    | 'CARD.FUNDING_SOURCE_CHANGE'
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED'
-    | 'INCOMING_PAYMENT.PENDING'
-    | 'INCOMING_PAYMENT.COMPLETED'
-    | 'INCOMING_PAYMENT.FAILED'
-    | 'CUSTOMER.KYC_APPROVED'
-    | 'CUSTOMER.KYC_REJECTED'
-    | 'CUSTOMER.KYC_PENDING'
-    | 'CUSTOMER.KYB_APPROVED'
-    | 'CUSTOMER.KYB_REJECTED'
-    | 'CUSTOMER.KYB_PENDING'
-    | 'VERIFICATION.APPROVED'
-    | 'VERIFICATION.REJECTED'
-    | 'VERIFICATION.RESOLVE_ERRORS'
-    | 'VERIFICATION.IN_PROGRESS'
-    | 'VERIFICATION.PENDING_MANUAL_REVIEW'
-    | 'VERIFICATION.READY_FOR_VERIFICATION'
-    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
-    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
-    | 'INVITATION.CLAIMED'
-    | 'BULK_UPLOAD.COMPLETED'
-    | 'BULK_UPLOAD.FAILED'
-    | 'AGENT_ACTION.PENDING_APPROVAL'
-    | 'CARD.STATE_CHANGE'
-    | 'TEST';
+  /**
+   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
+   * OUTGOING_PAYMENT.COMPLETED)
+   */
+  type: 'CARD.FUNDING_SOURCE_CHANGE';
 }
 
 export namespace CardFundingSourceChangeWebhookEvent {
   export interface Data {
     /**
-     * System-generated unique card identifier
-     */
-    id: string;
-
-    /**
      * The id of the `Customer` who holds this card.
      */
     cardholderId: string;
-
-    /**
-     * Creation timestamp
-     */
-    createdAt: string;
 
     /**
      * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
@@ -802,22 +469,10 @@ export namespace CardFundingSourceChangeWebhookEvent {
     state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 
     /**
-     * Last update timestamp
-     */
-    updatedAt: string;
-
-    /**
      * Card network brand. Read-only — determined by Grid when the card is provisioned
      * with the issuer.
      */
     brand?: 'VISA' | 'MASTERCARD';
-
-    /**
-     * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-     * from the funding sources at issue time — all funding sources bound to a card
-     * must be denominated in the same card-eligible currency.
-     */
-    currency?: string;
 
     /**
      * Card expiration month (1–12).
@@ -828,12 +483,6 @@ export namespace CardFundingSourceChangeWebhookEvent {
      * Card expiration year (four digits).
      */
     expYear?: number;
-
-    /**
-     * Opaque identifier for the card on the underlying issuer. Useful for
-     * cross-referencing in issuer dashboards; not used for any Grid request routing.
-     */
-    issuerRef?: string;
 
     /**
      * Last four digits of the card PAN.
@@ -854,14 +503,8 @@ export namespace CardFundingSourceChangeWebhookEvent {
     platformCardId?: string;
 
     /**
-     * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
-     * and on cards that fail provisioning before reaching `ACTIVE`.
-     *
-     * | Reason               | Description                                                                    |
-     * | -------------------- | ------------------------------------------------------------------------------ |
-     * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
-     * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
-     * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+     * Reason associated with the current `state`. Populated when the card is `CLOSED`
+     * or when provisioning was rejected; otherwise null.
      */
     stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
   }

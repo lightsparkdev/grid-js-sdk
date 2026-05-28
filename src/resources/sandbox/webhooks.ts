@@ -17,7 +17,7 @@ export class Webhooks extends APIResource {
    * ```
    */
   sendTest(options?: RequestOptions): APIPromise<WebhookSendTestResponse> {
-    return this._client.post('/sandbox/webhooks/test', options);
+    return this._client.post('/sandbox/webhooks/test', { ...options, __security: { basicAuth: true } });
   }
 }
 

@@ -5,6 +5,8 @@ import LightsparkGrid from '@lightsparkdev/grid';
 const client = new LightsparkGrid({
   username: 'My Username',
   password: 'My Password',
+  agentAccessToken: 'My Agent Access Token',
+  webhookSignature: 'My Webhook Signature',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
@@ -27,12 +29,12 @@ describe('resource customers', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
+        customerType: 'INDIVIDUAL',
         currencies: ['USD', 'USDC'],
         email: 'john.doe@example.com',
         platformCustomerId: 'ind-9f84e0c2',
         region: 'US',
         umaAddress: '$john.doe@uma.domain.com',
-        customerType: 'INDIVIDUAL',
         address: {
           country: 'US',
           line1: '123 Main Street',
@@ -79,10 +81,10 @@ describe('resource customers', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
+        customerType: 'INDIVIDUAL',
         currencies: ['USD', 'EUR', 'USDC'],
         email: 'john.doe@example.com',
         umaAddress: '$john.doe@uma.domain.com',
-        customerType: 'INDIVIDUAL',
         address: {
           country: 'US',
           line1: '456 Market St',

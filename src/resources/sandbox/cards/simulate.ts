@@ -51,7 +51,11 @@ export class Simulate extends APIResource {
     body: SimulateAuthorizationParams,
     options?: RequestOptions,
   ): APIPromise<SimulateAuthorizationResponse> {
-    return this._client.post(path`/sandbox/cards/${id}/simulate/authorization`, { body, ...options });
+    return this._client.post(path`/sandbox/cards/${id}/simulate/authorization`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -86,7 +90,11 @@ export class Simulate extends APIResource {
     body: SimulateClearingParams,
     options?: RequestOptions,
   ): APIPromise<SimulateClearingResponse> {
-    return this._client.post(path`/sandbox/cards/${id}/simulate/clearing`, { body, ...options });
+    return this._client.post(path`/sandbox/cards/${id}/simulate/clearing`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -114,8 +122,75 @@ export class Simulate extends APIResource {
     body: SimulateReturnParams,
     options?: RequestOptions,
   ): APIPromise<SimulateReturnResponse> {
-    return this._client.post(path`/sandbox/cards/${id}/simulate/return`, { body, ...options });
+    return this._client.post(path`/sandbox/cards/${id}/simulate/return`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
+}
+
+export interface CardMerchant {
+  /**
+   * Merchant descriptor string captured from the card network at authorization time.
+   */
+  descriptor: string;
+
+  /**
+   * Two-letter ISO 3166-1 alpha-2 country code of the merchant.
+   */
+  country?: string;
+
+  /**
+   * Merchant Category Code (ISO 18245) — four-digit numeric string.
+   */
+  mcc?: string;
+}
+
+export interface CardPullSummary {
+  /**
+   * Total number of pulls (debits) executed against the funding source for this
+   * transaction. `> 1` indicates one or more post-hoc pulls — e.g. restaurant tip /
+   * over-auth clearings.
+   */
+  count: number;
+
+  /**
+   * Sum of all pull amounts in the smallest unit of the funding source's currency.
+   */
+  totalAmount: number;
+
+  /**
+   * Number of pulls still in the `PENDING` state. Drops to zero when every pull has
+   * reached a terminal state. Non-zero values that persist beyond the expected
+   * settlement window are an early signal for the `EXCEPTION` path.
+   */
+  pendingCount?: number;
+}
+
+export interface CardRefundSummary {
+  /**
+   * Number of refund (return) events received for this transaction.
+   */
+  count: number;
+
+  /**
+   * Sum of all refund amounts in the smallest unit of the funding source's currency.
+   */
+  totalAmount: number;
+}
+
+export interface CardSettlementSummary {
+  /**
+   * Number of settlement (clearing) events received for this transaction.
+   */
+  count: number;
+
+  /**
+   * Sum of all settled amounts in the smallest unit of the funding source's
+   * currency.
+   */
+  totalAmount: number;
 }
 
 /**
@@ -154,13 +229,13 @@ export interface SimulateAuthorizationResponse {
    */
   createdAt: string;
 
-  merchant: SimulateAuthorizationResponse.Merchant;
+  merchant: CardMerchant;
 
-  pullSummary: SimulateAuthorizationResponse.PullSummary;
+  pullSummary: CardPullSummary;
 
-  refundSummary: SimulateAuthorizationResponse.RefundSummary;
+  refundSummary: CardRefundSummary;
 
-  settlementSummary: SimulateAuthorizationResponse.SettlementSummary;
+  settlementSummary: CardSettlementSummary;
 
   /**
    * Lifecycle status of a card transaction.
@@ -195,71 +270,6 @@ export interface SimulateAuthorizationResponse {
   refundedAmount?: InvitationsAPI.CurrencyAmount;
 
   settledAmount?: InvitationsAPI.CurrencyAmount;
-}
-
-export namespace SimulateAuthorizationResponse {
-  export interface Merchant {
-    /**
-     * Merchant descriptor string captured from the card network at authorization time.
-     */
-    descriptor: string;
-
-    /**
-     * Two-letter ISO 3166-1 alpha-2 country code of the merchant.
-     */
-    country?: string;
-
-    /**
-     * Merchant Category Code (ISO 18245) — four-digit numeric string.
-     */
-    mcc?: string;
-  }
-
-  export interface PullSummary {
-    /**
-     * Total number of pulls (debits) executed against the funding source for this
-     * transaction. `> 1` indicates one or more post-hoc pulls — e.g. restaurant tip /
-     * over-auth clearings.
-     */
-    count: number;
-
-    /**
-     * Sum of all pull amounts in the smallest unit of the funding source's currency.
-     */
-    totalAmount: number;
-
-    /**
-     * Number of pulls still in the `PENDING` state. Drops to zero when every pull has
-     * reached a terminal state. Non-zero values that persist beyond the expected
-     * settlement window are an early signal for the `EXCEPTION` path.
-     */
-    pendingCount?: number;
-  }
-
-  export interface RefundSummary {
-    /**
-     * Number of refund (return) events received for this transaction.
-     */
-    count: number;
-
-    /**
-     * Sum of all refund amounts in the smallest unit of the funding source's currency.
-     */
-    totalAmount: number;
-  }
-
-  export interface SettlementSummary {
-    /**
-     * Number of settlement (clearing) events received for this transaction.
-     */
-    count: number;
-
-    /**
-     * Sum of all settled amounts in the smallest unit of the funding source's
-     * currency.
-     */
-    totalAmount: number;
-  }
 }
 
 /**
@@ -298,13 +308,13 @@ export interface SimulateClearingResponse {
    */
   createdAt: string;
 
-  merchant: SimulateClearingResponse.Merchant;
+  merchant: CardMerchant;
 
-  pullSummary: SimulateClearingResponse.PullSummary;
+  pullSummary: CardPullSummary;
 
-  refundSummary: SimulateClearingResponse.RefundSummary;
+  refundSummary: CardRefundSummary;
 
-  settlementSummary: SimulateClearingResponse.SettlementSummary;
+  settlementSummary: CardSettlementSummary;
 
   /**
    * Lifecycle status of a card transaction.
@@ -339,71 +349,6 @@ export interface SimulateClearingResponse {
   refundedAmount?: InvitationsAPI.CurrencyAmount;
 
   settledAmount?: InvitationsAPI.CurrencyAmount;
-}
-
-export namespace SimulateClearingResponse {
-  export interface Merchant {
-    /**
-     * Merchant descriptor string captured from the card network at authorization time.
-     */
-    descriptor: string;
-
-    /**
-     * Two-letter ISO 3166-1 alpha-2 country code of the merchant.
-     */
-    country?: string;
-
-    /**
-     * Merchant Category Code (ISO 18245) — four-digit numeric string.
-     */
-    mcc?: string;
-  }
-
-  export interface PullSummary {
-    /**
-     * Total number of pulls (debits) executed against the funding source for this
-     * transaction. `> 1` indicates one or more post-hoc pulls — e.g. restaurant tip /
-     * over-auth clearings.
-     */
-    count: number;
-
-    /**
-     * Sum of all pull amounts in the smallest unit of the funding source's currency.
-     */
-    totalAmount: number;
-
-    /**
-     * Number of pulls still in the `PENDING` state. Drops to zero when every pull has
-     * reached a terminal state. Non-zero values that persist beyond the expected
-     * settlement window are an early signal for the `EXCEPTION` path.
-     */
-    pendingCount?: number;
-  }
-
-  export interface RefundSummary {
-    /**
-     * Number of refund (return) events received for this transaction.
-     */
-    count: number;
-
-    /**
-     * Sum of all refund amounts in the smallest unit of the funding source's currency.
-     */
-    totalAmount: number;
-  }
-
-  export interface SettlementSummary {
-    /**
-     * Number of settlement (clearing) events received for this transaction.
-     */
-    count: number;
-
-    /**
-     * Sum of all settled amounts in the smallest unit of the funding source's
-     * currency.
-     */
-    totalAmount: number;
-  }
 }
 
 /**
@@ -442,13 +387,13 @@ export interface SimulateReturnResponse {
    */
   createdAt: string;
 
-  merchant: SimulateReturnResponse.Merchant;
+  merchant: CardMerchant;
 
-  pullSummary: SimulateReturnResponse.PullSummary;
+  pullSummary: CardPullSummary;
 
-  refundSummary: SimulateReturnResponse.RefundSummary;
+  refundSummary: CardRefundSummary;
 
-  settlementSummary: SimulateReturnResponse.SettlementSummary;
+  settlementSummary: CardSettlementSummary;
 
   /**
    * Lifecycle status of a card transaction.
@@ -485,71 +430,6 @@ export interface SimulateReturnResponse {
   settledAmount?: InvitationsAPI.CurrencyAmount;
 }
 
-export namespace SimulateReturnResponse {
-  export interface Merchant {
-    /**
-     * Merchant descriptor string captured from the card network at authorization time.
-     */
-    descriptor: string;
-
-    /**
-     * Two-letter ISO 3166-1 alpha-2 country code of the merchant.
-     */
-    country?: string;
-
-    /**
-     * Merchant Category Code (ISO 18245) — four-digit numeric string.
-     */
-    mcc?: string;
-  }
-
-  export interface PullSummary {
-    /**
-     * Total number of pulls (debits) executed against the funding source for this
-     * transaction. `> 1` indicates one or more post-hoc pulls — e.g. restaurant tip /
-     * over-auth clearings.
-     */
-    count: number;
-
-    /**
-     * Sum of all pull amounts in the smallest unit of the funding source's currency.
-     */
-    totalAmount: number;
-
-    /**
-     * Number of pulls still in the `PENDING` state. Drops to zero when every pull has
-     * reached a terminal state. Non-zero values that persist beyond the expected
-     * settlement window are an early signal for the `EXCEPTION` path.
-     */
-    pendingCount?: number;
-  }
-
-  export interface RefundSummary {
-    /**
-     * Number of refund (return) events received for this transaction.
-     */
-    count: number;
-
-    /**
-     * Sum of all refund amounts in the smallest unit of the funding source's currency.
-     */
-    totalAmount: number;
-  }
-
-  export interface SettlementSummary {
-    /**
-     * Number of settlement (clearing) events received for this transaction.
-     */
-    count: number;
-
-    /**
-     * Sum of all settled amounts in the smallest unit of the funding source's
-     * currency.
-     */
-    totalAmount: number;
-  }
-}
-
 export interface SimulateAuthorizationParams {
   /**
    * Authorization amount in the smallest unit of `currency` (e.g. cents for USD).
@@ -558,26 +438,7 @@ export interface SimulateAuthorizationParams {
 
   currency: QuotesAPI.Currency;
 
-  merchant: SimulateAuthorizationParams.Merchant;
-}
-
-export namespace SimulateAuthorizationParams {
-  export interface Merchant {
-    /**
-     * Merchant descriptor string captured from the card network at authorization time.
-     */
-    descriptor: string;
-
-    /**
-     * Two-letter ISO 3166-1 alpha-2 country code of the merchant.
-     */
-    country?: string;
-
-    /**
-     * Merchant Category Code (ISO 18245) — four-digit numeric string.
-     */
-    mcc?: string;
-  }
+  merchant: CardMerchant;
 }
 
 export interface SimulateClearingParams {
@@ -610,6 +471,10 @@ export interface SimulateReturnParams {
 
 export declare namespace Simulate {
   export {
+    type CardMerchant as CardMerchant,
+    type CardPullSummary as CardPullSummary,
+    type CardRefundSummary as CardRefundSummary,
+    type CardSettlementSummary as CardSettlementSummary,
     type SimulateAuthorizationResponse as SimulateAuthorizationResponse,
     type SimulateClearingResponse as SimulateClearingResponse,
     type SimulateReturnResponse as SimulateReturnResponse,

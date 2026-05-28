@@ -58,6 +58,7 @@ export class Credentials extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -79,7 +80,7 @@ export class Credentials extends APIResource {
    * ```
    */
   list(query: CredentialListParams, options?: RequestOptions): APIPromise<AuthCredentialListResponse> {
-    return this._client.get('/auth/credentials', { query, ...options });
+    return this._client.get('/auth/credentials', { query, ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -121,6 +122,7 @@ export class Credentials extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -163,7 +165,11 @@ export class Credentials extends APIResource {
     body: CredentialChallengeParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AuthCredentialResponseOneOf> {
-    return this._client.post(path`/auth/credentials/${id}/challenge`, { body, ...options });
+    return this._client.post(path`/auth/credentials/${id}/challenge`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -193,14 +199,7 @@ export class Credentials extends APIResource {
    * ```ts
    * const authSession = await client.auth.credentials.verify(
    *   'id',
-   *   {
-   *     AuthCredentialVerifyRequest: {
-   *       clientPublicKey:
-   *         '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
-   *       otp: '123456',
-   *       type: 'EMAIL_OTP',
-   *     },
-   *   },
+   *   { AuthCredentialVerifyRequest: {} },
    * );
    * ```
    */
@@ -213,6 +212,7 @@ export class Credentials extends APIResource {
         { ...(requestID != null ? { 'Request-Id': requestID } : undefined) },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 }
@@ -222,6 +222,8 @@ export interface AuthCredentialCreateRequest {
    * Identifier of the internal account that this credential will authenticate.
    */
   accountId: string;
+
+  type: unknown;
 }
 
 export type AuthCredentialCreateRequestOneOf =
@@ -249,12 +251,11 @@ export interface AuthCredentialListResponse {
  */
 export type AuthCredentialResponseOneOf = AuthMethodResponse | PasskeyAuthChallenge;
 
-export type AuthCredentialVerifyRequest = unknown;
+export interface AuthCredentialVerifyRequest {
+  type: unknown;
+}
 
-export type AuthCredentialVerifyRequestOneOf =
-  | EmailOtpCredentialVerifyRequestFields
-  | OAuthCredentialVerifyRequestFields
-  | PasskeyCredentialVerifyRequestFields;
+export type AuthCredentialVerifyRequestOneOf = unknown;
 
 export interface AuthMethod {
   /**
@@ -441,26 +442,7 @@ export interface EmailOtpCredentialCreateRequestFields {
   type: 'EMAIL_OTP';
 }
 
-export interface EmailOtpCredentialVerifyRequestFields {
-  /**
-   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-   * total). The matching private key must remain on the client. Grid encrypts the
-   * session signing key returned in the response to this public key. The key is
-   * ephemeral and one-time-use per verification request.
-   */
-  clientPublicKey: string;
-
-  /**
-   * The one-time password received by the user via email.
-   */
-  otp: string;
-
-  /**
-   * Discriminator value identifying this as an email OTP verification.
-   */
-  type: 'EMAIL_OTP';
-}
+export type EmailOtpCredentialVerifyRequest = unknown;
 
 export interface EmailOtpCredentialVerifyRequestFields {
   /**
@@ -505,33 +487,7 @@ export interface OAuthCredentialCreateRequestFields {
   type: 'OAUTH';
 }
 
-export interface OAuthCredentialVerifyRequestFields {
-  /**
-   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
-   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-   * total). The matching private key must remain on the client. Grid encrypts the
-   * session signing key returned in the response to this public key. The key is
-   * ephemeral and one-time-use per verification request.
-   */
-  clientPublicKey: string;
-
-  /**
-   * OIDC ID token issued by the identity provider. For reauthentication after a
-   * prior session expired, supply a fresh token — the token's `iat` claim must be
-   * less than 60 seconds before the request timestamp. The token identity (`iss`,
-   * `aud`, and `sub`) must match the registered OAuth credential. In production, the
-   * provider signature is verified against the issuer's JWKS. In sandbox, the token
-   * must still be JWT-shaped with supported `iss`, non-empty `aud` and `sub`,
-   * numeric `iat` and `exp`, and a `nonce` equal to `sha256(clientPublicKey)`, but
-   * the signature segment may be a dummy value.
-   */
-  oidcToken: string;
-
-  /**
-   * Discriminator value identifying this as an OAuth verification.
-   */
-  type: 'OAUTH';
-}
+export type OAuthCredentialVerifyRequest = unknown;
 
 export interface OAuthCredentialVerifyRequestFields {
   /**
@@ -711,14 +667,7 @@ export interface PasskeyCredentialCreateRequestFields {
   type: 'PASSKEY';
 }
 
-export interface PasskeyCredentialVerifyRequestFields {
-  assertion: PasskeyAssertion;
-
-  /**
-   * Discriminator value identifying this as a passkey verification.
-   */
-  type: 'PASSKEY';
-}
+export type PasskeyCredentialVerifyRequest = unknown;
 
 export interface PasskeyCredentialVerifyRequestFields {
   assertion: PasskeyAssertion;
