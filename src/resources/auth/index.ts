@@ -12,7 +12,6 @@ export {
   type AuthMethod,
   type AuthMethodResponse,
   type AuthMethodType,
-  type AuthSession,
   type AuthSignedRequestChallenge,
   type EmailOtpCredentialCreateRequest,
   type EmailOtpCredentialCreateRequestFields,
@@ -38,6 +37,8 @@ export {
 } from './credentials';
 export {
   Sessions,
+  type AuthSession,
+  type AuthSessionRefreshRequest,
   type SessionListResponse,
   type SessionListParams,
   type SessionDeleteParams,

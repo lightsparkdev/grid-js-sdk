@@ -53,6 +53,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/{customerId}',
   },
   {
+    clientCallName: 'client.customers.createKYCLink',
+    fullyQualifiedName: 'customers.createKYCLink',
+    httpMethod: 'post',
+    httpPath: '/customers/{customerId}/kyc-link',
+  },
+  {
     clientCallName: 'client.customers.export',
     fullyQualifiedName: 'customers.export',
     httpMethod: 'post',
