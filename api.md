@@ -7,8 +7,11 @@ Types:
 - <code><a href="./src/resources/shared.ts">AgentTransferDetails</a></code>
 - <code><a href="./src/resources/shared.ts">BdtBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BdtExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">BeneficialOwner</a></code>
 - <code><a href="./src/resources/shared.ts">BrlExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BulkCustomerImportErrorEntry</a></code>
+- <code><a href="./src/resources/shared.ts">BusinessCustomer</a></code>
+- <code><a href="./src/resources/shared.ts">BusinessInfoUpdate</a></code>
 - <code><a href="./src/resources/shared.ts">BwpBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BwpExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">CadBeneficiary</a></code>
@@ -30,6 +33,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">HtgBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">HtgExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">IdrExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">IndividualCustomer</a></code>
 - <code><a href="./src/resources/shared.ts">InrExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">JmdBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">JmdExternalAccountCreateInfo</a></code>
@@ -49,6 +53,8 @@ Types:
 - <code><a href="./src/resources/shared.ts">SgdExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">SlvBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">SlvExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">SwiftBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">SwiftExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">ThbExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">TzsBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">TzsExternalAccountCreateInfo</a></code>
@@ -71,6 +77,7 @@ Types:
 Types:
 
 - <code><a href="./src/resources/config.ts">CustomerInfoFieldName</a></code>
+- <code><a href="./src/resources/config.ts">EmbeddedWalletConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformCurrencyConfig</a></code>
 
@@ -83,26 +90,22 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerFields</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessInfo</a></code>
-- <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerCreate</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerType</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerUpdate</a></code>
-- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
-- <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
-- <code><a href="./src/resources/customers/customers.ts">InternalAccountExportResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerCreateResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerRetrieveResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerUpdateResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerDeleteResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerExportResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerGenerateKYCLinkResponse</a></code>
 
 Methods:
 
-- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerOneOf</code>
-- <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerOneOf</code>
-- <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerOneOf</code>
-- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
-- <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
-- <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
+- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
+- <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerRetrieveResponse</code>
+- <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
+- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerListResponsesDefaultPagination</code>
+- <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerDeleteResponse</code>
+- <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> CustomerExportResponse</code>
 - <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> CustomerGenerateKYCLinkResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 - <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
@@ -373,6 +376,10 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardMerchant</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardPullSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardRefundSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
@@ -453,17 +460,13 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerPersonalInfo</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerCreateResponse</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerRetrieveResponse</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerUpdateResponse</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerListResponse</a></code>
 
 Methods:
 
-- <code title="post /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">create</a>({ ...params }) -> BeneficialOwnerCreateResponse</code>
-- <code title="get /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">retrieve</a>(beneficialOwnerID) -> BeneficialOwnerRetrieveResponse</code>
-- <code title="patch /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">update</a>(beneficialOwnerID, { ...params }) -> BeneficialOwnerUpdateResponse</code>
-- <code title="get /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">list</a>({ ...params }) -> BeneficialOwnerListResponsesDefaultPagination</code>
+- <code title="post /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">create</a>({ ...params }) -> BeneficialOwner</code>
+- <code title="get /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">retrieve</a>(beneficialOwnerID) -> BeneficialOwner</code>
+- <code title="patch /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">update</a>(beneficialOwnerID, { ...params }) -> BeneficialOwner</code>
+- <code title="get /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">list</a>({ ...params }) -> BeneficialOwnersDefaultPagination</code>
 
 # Documents
 

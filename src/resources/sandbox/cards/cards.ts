@@ -3,6 +3,10 @@
 import { APIResource } from '../../../core/resource';
 import * as SimulateAPI from './simulate';
 import {
+  CardMerchant,
+  CardPullSummary,
+  CardRefundSummary,
+  CardSettlementSummary,
   Simulate,
   SimulateAuthorizationParams,
   SimulateAuthorizationResponse,
@@ -21,6 +25,10 @@ Cards.Simulate = Simulate;
 export declare namespace Cards {
   export {
     Simulate as Simulate,
+    type CardMerchant as CardMerchant,
+    type CardPullSummary as CardPullSummary,
+    type CardRefundSummary as CardRefundSummary,
+    type CardSettlementSummary as CardSettlementSummary,
     type SimulateAuthorizationResponse as SimulateAuthorizationResponse,
     type SimulateClearingResponse as SimulateClearingResponse,
     type SimulateReturnResponse as SimulateReturnResponse,

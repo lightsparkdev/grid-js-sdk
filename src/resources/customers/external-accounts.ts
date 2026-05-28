@@ -404,7 +404,7 @@ export interface ExternalAccountCreate {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | ExternalAccountCreate.SwiftAccount;
+    | Shared.SwiftExternalAccountCreateInfo;
 
   /**
    * The ISO 4217 currency code
@@ -434,79 +434,6 @@ export interface ExternalAccountCreate {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
-}
-
-export namespace ExternalAccountCreate {
-  export interface SwiftAccount {
-    accountType: 'SWIFT_ACCOUNT';
-
-    /**
-     * The name of the bank
-     */
-    bankName: string;
-
-    beneficiary: SwiftAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * The ISO 3166-1 alpha-2 country code of the bank account
-     */
-    country: string;
-
-    /**
-     * The SWIFT/BIC code of the bank
-     */
-    swiftCode: string;
-
-    /**
-     * The bank account number. Required for most corridors. Use iban instead for
-     * IBAN-only corridors (e.g. BR, GB).
-     */
-    accountNumber?: string;
-
-    /**
-     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
-     * Use accountNumber for all other corridors.
-     */
-    iban?: string;
-  }
-
-  export namespace SwiftAccount {
-    export interface IndividualBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-    }
-  }
 }
 
 /**
@@ -562,7 +489,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     bankName: string;
 
-    beneficiary: SwiftAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+    beneficiary: Shared.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
      * The ISO 3166-1 alpha-2 country code of the bank account
@@ -587,44 +514,6 @@ export namespace ExternalAccountInfoOneOf {
      * Use accountNumber for all other corridors.
      */
     iban?: string;
-  }
-
-  export namespace SwiftAccount {
-    export interface IndividualBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-    }
   }
 }
 
@@ -1146,7 +1035,7 @@ export interface ExternalAccountCreateParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | ExternalAccountCreateParams.SwiftAccount;
+    | Shared.SwiftExternalAccountCreateInfo;
 
   /**
    * The ISO 4217 currency code
@@ -1176,79 +1065,6 @@ export interface ExternalAccountCreateParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
-}
-
-export namespace ExternalAccountCreateParams {
-  export interface SwiftAccount {
-    accountType: 'SWIFT_ACCOUNT';
-
-    /**
-     * The name of the bank
-     */
-    bankName: string;
-
-    beneficiary: SwiftAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * The ISO 3166-1 alpha-2 country code of the bank account
-     */
-    country: string;
-
-    /**
-     * The SWIFT/BIC code of the bank
-     */
-    swiftCode: string;
-
-    /**
-     * The bank account number. Required for most corridors. Use iban instead for
-     * IBAN-only corridors (e.g. BR, GB).
-     */
-    accountNumber?: string;
-
-    /**
-     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
-     * Use accountNumber for all other corridors.
-     */
-    iban?: string;
-  }
-
-  export namespace SwiftAccount {
-    export interface IndividualBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-    }
-  }
 }
 
 export interface ExternalAccountListParams extends DefaultPaginationParams {

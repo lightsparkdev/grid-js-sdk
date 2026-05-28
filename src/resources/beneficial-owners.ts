@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as Shared from './shared';
+import { BeneficialOwnersDefaultPagination } from './shared';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
@@ -39,10 +41,7 @@ export class BeneficialOwners extends APIResource {
    *   });
    * ```
    */
-  create(
-    body: BeneficialOwnerCreateParams,
-    options?: RequestOptions,
-  ): APIPromise<BeneficialOwnerCreateResponse> {
+  create(body: BeneficialOwnerCreateParams, options?: RequestOptions): APIPromise<Shared.BeneficialOwner> {
     return this._client.post('/beneficial-owners', { body, ...options, __security: { basicAuth: true } });
   }
 
@@ -57,7 +56,7 @@ export class BeneficialOwners extends APIResource {
    *   );
    * ```
    */
-  retrieve(beneficialOwnerID: string, options?: RequestOptions): APIPromise<BeneficialOwnerRetrieveResponse> {
+  retrieve(beneficialOwnerID: string, options?: RequestOptions): APIPromise<Shared.BeneficialOwner> {
     return this._client.get(path`/beneficial-owners/${beneficialOwnerID}`, {
       ...options,
       __security: { basicAuth: true },
@@ -77,7 +76,7 @@ export class BeneficialOwners extends APIResource {
     beneficialOwnerID: string,
     body: BeneficialOwnerUpdateParams,
     options?: RequestOptions,
-  ): APIPromise<BeneficialOwnerUpdateResponse> {
+  ): APIPromise<Shared.BeneficialOwner> {
     return this._client.patch(path`/beneficial-owners/${beneficialOwnerID}`, {
       body,
       ...options,
@@ -91,7 +90,7 @@ export class BeneficialOwners extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const beneficialOwnerListResponse of client.beneficialOwners.list(
+   * for await (const beneficialOwner of client.beneficialOwners.list(
    *   { customerId: 'customerId' },
    * )) {
    *   // ...
@@ -101,16 +100,14 @@ export class BeneficialOwners extends APIResource {
   list(
     query: BeneficialOwnerListParams,
     options?: RequestOptions,
-  ): PagePromise<BeneficialOwnerListResponsesDefaultPagination, BeneficialOwnerListResponse> {
-    return this._client.getAPIList('/beneficial-owners', DefaultPagination<BeneficialOwnerListResponse>, {
+  ): PagePromise<BeneficialOwnersDefaultPagination, Shared.BeneficialOwner> {
+    return this._client.getAPIList('/beneficial-owners', DefaultPagination<Shared.BeneficialOwner>, {
       query,
       ...options,
       __security: { basicAuth: true },
     });
   }
 }
-
-export type BeneficialOwnerListResponsesDefaultPagination = DefaultPagination<BeneficialOwnerListResponse>;
 
 export interface BeneficialOwnerPersonalInfo {
   address: ExternalAccountsAPI.Address;
@@ -164,162 +161,6 @@ export interface BeneficialOwnerPersonalInfo {
    * Phone number in E.164 format
    */
   phoneNumber?: string;
-}
-
-export interface BeneficialOwnerCreateResponse {
-  /**
-   * Unique identifier for this beneficial owner
-   */
-  id: string;
-
-  /**
-   * When this beneficial owner was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the business customer this beneficial owner is associated with
-   */
-  customerId: string;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage: number;
-
-  personalInfo: BeneficialOwnerPersonalInfo;
-
-  /**
-   * Roles of this person within the business
-   */
-  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * When this beneficial owner was last updated
-   */
-  updatedAt?: string;
-}
-
-export interface BeneficialOwnerRetrieveResponse {
-  /**
-   * Unique identifier for this beneficial owner
-   */
-  id: string;
-
-  /**
-   * When this beneficial owner was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the business customer this beneficial owner is associated with
-   */
-  customerId: string;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage: number;
-
-  personalInfo: BeneficialOwnerPersonalInfo;
-
-  /**
-   * Roles of this person within the business
-   */
-  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * When this beneficial owner was last updated
-   */
-  updatedAt?: string;
-}
-
-export interface BeneficialOwnerUpdateResponse {
-  /**
-   * Unique identifier for this beneficial owner
-   */
-  id: string;
-
-  /**
-   * When this beneficial owner was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the business customer this beneficial owner is associated with
-   */
-  customerId: string;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage: number;
-
-  personalInfo: BeneficialOwnerPersonalInfo;
-
-  /**
-   * Roles of this person within the business
-   */
-  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * When this beneficial owner was last updated
-   */
-  updatedAt?: string;
-}
-
-export interface BeneficialOwnerListResponse {
-  /**
-   * Unique identifier for this beneficial owner
-   */
-  id: string;
-
-  /**
-   * When this beneficial owner was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the business customer this beneficial owner is associated with
-   */
-  customerId: string;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage: number;
-
-  personalInfo: BeneficialOwnerPersonalInfo;
-
-  /**
-   * Roles of this person within the business
-   */
-  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * When this beneficial owner was last updated
-   */
-  updatedAt?: string;
 }
 
 export interface BeneficialOwnerCreateParams {
@@ -435,13 +276,10 @@ export interface BeneficialOwnerListParams extends DefaultPaginationParams {
 export declare namespace BeneficialOwners {
   export {
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
-    type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
-    type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
-    type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
-    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
-    type BeneficialOwnerListResponsesDefaultPagination as BeneficialOwnerListResponsesDefaultPagination,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
     type BeneficialOwnerListParams as BeneficialOwnerListParams,
   };
 }
+
+export { type BeneficialOwnersDefaultPagination };

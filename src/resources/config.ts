@@ -82,6 +82,54 @@ export type CustomerInfoFieldName =
   | 'BUSINESS_TYPE'
   | 'COMPANY_LEGAL_NAME';
 
+/**
+ * Per-platform embedded-wallet configuration. Controls branding and OTP behavior
+ * for the email sent when a customer authenticates with an EMAIL_OTP credential.
+ * Fields omitted from a request are left unchanged.
+ */
+export interface EmbeddedWalletConfig {
+  /**
+   * If true, OTP includes letters in addition to digits. Defaults to numeric-only
+   * when not set.
+   */
+  alphanumeric?: boolean;
+
+  /**
+   * App name displayed in the default OTP email template.
+   */
+  appName?: string;
+
+  /**
+   * OTP validity window in seconds. Defaults to 300 when not set.
+   */
+  expirationSeconds?: number;
+
+  /**
+   * URL to a PNG logo for the OTP email. Resized to 340x124px.
+   */
+  logoUrl?: string;
+
+  /**
+   * Number of digits / characters in the OTP code. Defaults to 6 when not set.
+   */
+  otpLength?: number;
+
+  /**
+   * Custom reply-to email address for OTP emails.
+   */
+  replyToEmailAddress?: string;
+
+  /**
+   * Custom sender email address for OTP emails.
+   */
+  sendFromEmailAddress?: string;
+
+  /**
+   * Custom sender display name. Defaults to "Notifications" when not set.
+   */
+  sendFromEmailSenderName?: string;
+}
+
 export interface PlatformConfig {
   /**
    * System-generated unique identifier
@@ -97,7 +145,7 @@ export interface PlatformConfig {
    * Embedded-wallet branding and OTP settings for this platform. Present only when
    * the platform has configured embedded-wallet support; omitted otherwise.
    */
-  embeddedWalletConfig?: PlatformConfig.EmbeddedWalletConfig;
+  embeddedWalletConfig?: EmbeddedWalletConfig;
 
   /**
    * Whether the platform is a regulated financial institution. This is used to
@@ -131,55 +179,6 @@ export interface PlatformConfig {
    * URL where webhook notifications will be sent
    */
   webhookEndpoint?: string;
-}
-
-export namespace PlatformConfig {
-  /**
-   * Embedded-wallet branding and OTP settings for this platform. Present only when
-   * the platform has configured embedded-wallet support; omitted otherwise.
-   */
-  export interface EmbeddedWalletConfig {
-    /**
-     * If true, OTP includes letters in addition to digits. Defaults to numeric-only
-     * when not set.
-     */
-    alphanumeric?: boolean;
-
-    /**
-     * App name displayed in the default OTP email template.
-     */
-    appName?: string;
-
-    /**
-     * OTP validity window in seconds. Defaults to 300 when not set.
-     */
-    expirationSeconds?: number;
-
-    /**
-     * URL to a PNG logo for the OTP email. Resized to 340x124px.
-     */
-    logoUrl?: string;
-
-    /**
-     * Number of digits / characters in the OTP code. Defaults to 6 when not set.
-     */
-    otpLength?: number;
-
-    /**
-     * Custom reply-to email address for OTP emails.
-     */
-    replyToEmailAddress?: string;
-
-    /**
-     * Custom sender email address for OTP emails.
-     */
-    sendFromEmailAddress?: string;
-
-    /**
-     * Custom sender display name. Defaults to "Notifications" when not set.
-     */
-    sendFromEmailSenderName?: string;
-  }
 }
 
 export interface PlatformCurrencyConfig {
@@ -233,7 +232,7 @@ export interface ConfigUpdateParams {
    * omitted from the nested object are left unchanged. Omit this field at the top
    * level to leave the embedded-wallet configuration unchanged entirely.
    */
-  embeddedWalletConfig?: ConfigUpdateParams.EmbeddedWalletConfig;
+  embeddedWalletConfig?: EmbeddedWalletConfig;
 
   supportedCurrencies?: Array<PlatformCurrencyConfig>;
 
@@ -242,59 +241,10 @@ export interface ConfigUpdateParams {
   webhookEndpoint?: string;
 }
 
-export namespace ConfigUpdateParams {
-  /**
-   * Update or create the embedded-wallet configuration for this platform. Fields
-   * omitted from the nested object are left unchanged. Omit this field at the top
-   * level to leave the embedded-wallet configuration unchanged entirely.
-   */
-  export interface EmbeddedWalletConfig {
-    /**
-     * If true, OTP includes letters in addition to digits. Defaults to numeric-only
-     * when not set.
-     */
-    alphanumeric?: boolean;
-
-    /**
-     * App name displayed in the default OTP email template.
-     */
-    appName?: string;
-
-    /**
-     * OTP validity window in seconds. Defaults to 300 when not set.
-     */
-    expirationSeconds?: number;
-
-    /**
-     * URL to a PNG logo for the OTP email. Resized to 340x124px.
-     */
-    logoUrl?: string;
-
-    /**
-     * Number of digits / characters in the OTP code. Defaults to 6 when not set.
-     */
-    otpLength?: number;
-
-    /**
-     * Custom reply-to email address for OTP emails.
-     */
-    replyToEmailAddress?: string;
-
-    /**
-     * Custom sender email address for OTP emails.
-     */
-    sendFromEmailAddress?: string;
-
-    /**
-     * Custom sender display name. Defaults to "Notifications" when not set.
-     */
-    sendFromEmailSenderName?: string;
-  }
-}
-
 export declare namespace Config {
   export {
     type CustomerInfoFieldName as CustomerInfoFieldName,
+    type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
