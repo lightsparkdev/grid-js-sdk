@@ -385,13 +385,13 @@ Types:
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateRefundResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
 - <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
-- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">refund</a>(id, { ...params }) -> SimulateRefundResponse</code>
 
 # UmaProviders
 
@@ -479,18 +479,25 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/documents.ts">DocumentRetrieveResponse</a></code>
+- <code><a href="./src/resources/documents.ts">Document</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentReplaceResponse</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentUploadResponse</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentReplaceRequest</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentType</a></code>
+- <code><a href="./src/resources/documents.ts">DocumentUploadRequest</a></code>
+- <code><a href="./src/resources/documents.ts">IdentityDocumentReplaceRequest</a></code>
+- <code><a href="./src/resources/documents.ts">IdentityDocumentType</a></code>
+- <code><a href="./src/resources/documents.ts">IdentityDocumentUploadRequest</a></code>
+- <code><a href="./src/resources/documents.ts">NonIdentityDocumentReplaceRequest</a></code>
+- <code><a href="./src/resources/documents.ts">NonIdentityDocumentType</a></code>
+- <code><a href="./src/resources/documents.ts">NonIdentityDocumentUploadRequest</a></code>
 
 Methods:
 
-- <code title="get /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(documentID) -> DocumentRetrieveResponse</code>
-- <code title="get /documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentListResponsesDefaultPagination</code>
+- <code title="get /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(documentID) -> Document</code>
+- <code title="get /documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentsDefaultPagination</code>
 - <code title="delete /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">delete</a>(documentID) -> void</code>
-- <code title="put /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">replace</a>(documentID, { ...params }) -> DocumentReplaceResponse</code>
-- <code title="post /documents">client.documents.<a href="./src/resources/documents.ts">upload</a>({ ...params }) -> DocumentUploadResponse</code>
+- <code title="put /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">replace</a>(documentID, { ...params }) -> Document</code>
+- <code title="post /documents">client.documents.<a href="./src/resources/documents.ts">upload</a>({ ...params }) -> Document</code>
 
 # Verifications
 

@@ -9,8 +9,8 @@ export {
   type CardSettlementSummary,
   type SimulateAuthorizationResponse,
   type SimulateClearingResponse,
-  type SimulateReturnResponse,
+  type SimulateRefundResponse,
   type SimulateAuthorizationParams,
   type SimulateClearingParams,
-  type SimulateReturnParams,
+  type SimulateRefundParams,
 } from './simulate';

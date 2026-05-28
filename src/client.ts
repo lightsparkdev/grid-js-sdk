@@ -57,15 +57,22 @@ import {
 } from './resources/crypto';
 import { Discoveries, DiscoveryListParams, DiscoveryListResponse } from './resources/discoveries';
 import {
+  Document,
   DocumentListParams,
   DocumentListResponse,
-  DocumentListResponsesDefaultPagination,
   DocumentReplaceParams,
-  DocumentReplaceResponse,
-  DocumentRetrieveResponse,
+  DocumentReplaceRequest,
+  DocumentType,
   DocumentUploadParams,
-  DocumentUploadResponse,
+  DocumentUploadRequest,
   Documents,
+  DocumentsDefaultPagination,
+  IdentityDocumentReplaceRequest,
+  IdentityDocumentType,
+  IdentityDocumentUploadRequest,
+  NonIdentityDocumentReplaceRequest,
+  NonIdentityDocumentType,
+  NonIdentityDocumentUploadRequest,
 } from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
@@ -1314,11 +1321,18 @@ export declare namespace LightsparkGrid {
 
   export {
     Documents as Documents,
-    type DocumentRetrieveResponse as DocumentRetrieveResponse,
+    type Document as Document,
     type DocumentListResponse as DocumentListResponse,
-    type DocumentReplaceResponse as DocumentReplaceResponse,
-    type DocumentUploadResponse as DocumentUploadResponse,
-    type DocumentListResponsesDefaultPagination as DocumentListResponsesDefaultPagination,
+    type DocumentReplaceRequest as DocumentReplaceRequest,
+    type DocumentType as DocumentType,
+    type DocumentUploadRequest as DocumentUploadRequest,
+    type IdentityDocumentReplaceRequest as IdentityDocumentReplaceRequest,
+    type IdentityDocumentType as IdentityDocumentType,
+    type IdentityDocumentUploadRequest as IdentityDocumentUploadRequest,
+    type NonIdentityDocumentReplaceRequest as NonIdentityDocumentReplaceRequest,
+    type NonIdentityDocumentType as NonIdentityDocumentType,
+    type NonIdentityDocumentUploadRequest as NonIdentityDocumentUploadRequest,
+    type DocumentsDefaultPagination as DocumentsDefaultPagination,
     type DocumentListParams as DocumentListParams,
     type DocumentReplaceParams as DocumentReplaceParams,
     type DocumentUploadParams as DocumentUploadParams,
