@@ -97,8 +97,6 @@ export {
   Documents,
   type Document,
   type DocumentListResponse,
-  type DocumentReplaceRequest,
-  type DocumentUploadRequest,
   type DocumentListParams,
   type DocumentReplaceParams,
   type DocumentUploadParams,

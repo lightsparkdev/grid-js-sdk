@@ -511,8 +511,6 @@ Types:
 
 - <code><a href="./src/resources/documents.ts">Document</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentReplaceRequest</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentUploadRequest</a></code>
 
 Methods:
 
