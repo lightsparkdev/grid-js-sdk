@@ -784,9 +784,11 @@ export namespace CustomerOneOf {
     beneficialOwners?: Array<BusinessCustomer.BeneficialOwner>;
 
     /**
-     * Additional information required for business entities
+     * Business information returned on a customer. `taxId` and `incorporatedOn` are
+     * required on creation but may be absent on legacy customers that pre-date the
+     * requirement, so both are optional in responses.
      */
-    businessInfo?: CustomersAPI.BusinessInfo;
+    businessInfo?: BusinessCustomer.BusinessInfo;
   }
 
   export namespace BusinessCustomer {
@@ -827,6 +829,134 @@ export namespace CustomerOneOf {
        * When this beneficial owner was last updated
        */
       updatedAt?: string;
+    }
+
+    /**
+     * Business information returned on a customer. `taxId` and `incorporatedOn` are
+     * required on creation but may be absent on legacy customers that pre-date the
+     * requirement, so both are optional in responses.
+     */
+    export interface BusinessInfo {
+      /**
+       * Legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The high-level industry category of the business
+       */
+      businessType?:
+        | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
+        | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
+        | 'UTILITIES'
+        | 'CONSTRUCTION'
+        | 'MANUFACTURING'
+        | 'WHOLESALE_TRADE'
+        | 'RETAIL_TRADE'
+        | 'TRANSPORTATION_AND_WAREHOUSING'
+        | 'INFORMATION'
+        | 'FINANCE_AND_INSURANCE'
+        | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
+        | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
+        | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
+        | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
+        | 'EDUCATIONAL_SERVICES'
+        | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
+        | 'ARTS_ENTERTAINMENT_AND_RECREATION'
+        | 'ACCOMMODATION_AND_FOOD_SERVICES'
+        | 'OTHER_SERVICES'
+        | 'PUBLIC_ADMINISTRATION';
+
+      /**
+       * List of countries where the business operates (ISO 3166-1 alpha-2)
+       */
+      countriesOfOperation?: Array<string>;
+
+      /**
+       * Country of incorporation or registration (ISO 3166-1 alpha-2)
+       */
+      country?: string;
+
+      /**
+       * Trade name or DBA name of the business, if different from the legal name
+       */
+      doingBusinessAs?: string;
+
+      /**
+       * Legal entity type of the business
+       */
+      entityType?:
+        | 'SOLE_PROPRIETORSHIP'
+        | 'PARTNERSHIP'
+        | 'LLC'
+        | 'CORPORATION'
+        | 'S_CORPORATION'
+        | 'NON_PROFIT'
+        | 'OTHER';
+
+      /**
+       * Expected number of transactions per month
+       */
+      expectedMonthlyTransactionCount?:
+        | 'COUNT_UNDER_10'
+        | 'COUNT_10_TO_100'
+        | 'COUNT_100_TO_500'
+        | 'COUNT_500_TO_1000'
+        | 'COUNT_OVER_1000';
+
+      /**
+       * Expected total transaction volume per month in USD equivalent
+       */
+      expectedMonthlyTransactionVolume?:
+        | 'VOLUME_UNDER_10K'
+        | 'VOLUME_10K_TO_100K'
+        | 'VOLUME_100K_TO_1M'
+        | 'VOLUME_1M_TO_10M'
+        | 'VOLUME_OVER_10M';
+
+      /**
+       * List of countries where the business expects to send payments (ISO 3166-1
+       * alpha-2)
+       */
+      expectedRecipientJurisdictions?: Array<string>;
+
+      /**
+       * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+       */
+      incorporatedOn?: string;
+
+      /**
+       * The intended purpose for using the Grid account
+       */
+      purposeOfAccount?:
+        | 'CONTRACTOR_PAYOUTS'
+        | 'CREATOR_PAYOUTS'
+        | 'EMPLOYEE_PAYOUTS'
+        | 'MARKETPLACE_SELLER_PAYOUTS'
+        | 'SUPPLIER_PAYMENTS'
+        | 'CROSS_BORDER_B2B'
+        | 'AR_AUTOMATION'
+        | 'AP_AUTOMATION'
+        | 'EMBEDDED_PAYMENTS'
+        | 'PLATFORM_FEE_COLLECTION'
+        | 'P2P_TRANSFERS'
+        | 'CHARITABLE_DONATIONS'
+        | 'OTHER';
+
+      /**
+       * Business registration number
+       */
+      registrationNumber?: string;
+
+      /**
+       * The primary source of funds for the business
+       */
+      sourceOfFunds?: string;
+
+      /**
+       * Tax identification number
+       */
+      taxId?: string;
     }
   }
 }
