@@ -23,13 +23,13 @@ export class Sessions extends APIResource {
    *
    * @example
    * ```ts
-   * const sessions = await client.auth.sessions.list({
-   *   accountId: 'accountId',
-   * });
+   * const sessionListResponse = await client.auth.sessions.list(
+   *   { accountId: 'accountId' },
+   * );
    * ```
    */
   list(query: SessionListParams, options?: RequestOptions): APIPromise<SessionListResponse> {
-    return this._client.get('/auth/sessions', { query, ...options });
+    return this._client.get('/auth/sessions', { query, ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -45,16 +45,24 @@ export class Sessions extends APIResource {
    *    that full stamp as the `Grid-Wallet-Signature` header and the `requestId`
    *    echoed back as the `Request-Id` header. The signed retry returns `204`.
    *
+   * Sessions also expire on their own. `404` is returned whenever the `id` does not
+   * match an active session — whether the session was never issued, was already
+   * revoked by a prior call, or has expired past its `expiresAt`. The response code
+   * reflects the resource state, not an error in the client's flow: re-revoking an
+   * already-revoked or expired session is safe and idempotent at the user intent
+   * level.
+   *
    * @example
    * ```ts
-   * const response = await client.auth.sessions.revoke('id');
+   * const authSignedRequestChallenge =
+   *   await client.auth.sessions.delete('id');
    * ```
    */
-  revoke(
+  delete(
     id: string,
-    params: SessionRevokeParams | null | undefined = {},
+    params: SessionDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<SessionRevokeResponse> {
+  ): APIPromise<CredentialsAPI.AuthSignedRequestChallenge> {
     const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID } = params ?? {};
     return this._client.delete(path`/auth/sessions/${id}`, {
       ...options,
@@ -65,6 +73,58 @@ export class Sessions extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
+    });
+  }
+
+  /**
+   * Refresh an active Embedded Wallet auth session and create a new session signing
+   * key. Session refresh is a two-step signed-retry flow:
+   *
+   * 1. Call `POST /auth/sessions/{id}/refresh` with the request body
+   *    `{ "clientPublicKey": "04..." }` and no signature headers. Grid builds a
+   *    Turnkey create-read-write-session payload, binds the supplied
+   *    `clientPublicKey` into that payload, persists it as a pending request, and
+   *    returns `202` with `payloadToSign`, `requestId`, and `expiresAt`.
+   *
+   * 2. Sign `payloadToSign` with the current session signing key, then retry the
+   *    same request with the full API-key stamp as `Grid-Wallet-Signature`, the
+   *    `requestId` echoed back as `Request-Id`, and the same `clientPublicKey` in
+   *    the request body. On success, Grid returns a new `AuthSession` with an
+   *    `encryptedSessionSigningKey` sealed to that client public key.
+   *
+   * The original session must still be active on both steps so it can authorize the
+   * refresh. If the session has already expired, use the credential reauthentication
+   * flow instead.
+   *
+   * @example
+   * ```ts
+   * const authSession = await client.auth.sessions.refresh(
+   *   'Session:019542f5-b3e7-1d02-0000-000000000003',
+   *   {
+   *     clientPublicKey:
+   *       '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   *   },
+   * );
+   * ```
+   */
+  refresh(
+    id: string,
+    params: SessionRefreshParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialsAPI.AuthSession> {
+    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
+    return this._client.post(path`/auth/sessions/${id}/refresh`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        {
+          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
+          ...(requestID != null ? { 'Request-Id': requestID } : undefined),
+        },
+        options?.headers,
+      ]),
+      __security: { basicAuth: true },
     });
   }
 }
@@ -73,87 +133,7 @@ export interface SessionListResponse {
   /**
    * List of active authentication sessions for the internal account.
    */
-  data: Array<SessionListResponse.Data>;
-}
-
-export namespace SessionListResponse {
-  /**
-   * An authentication session on an Embedded Wallet internal account. Returned from
-   * `GET /auth/sessions` (list) and `POST /auth/credentials/{id}/verify` (on
-   * credential verification). Only the verify response includes
-   * `encryptedSessionSigningKey` — it is delivered exactly once at the moment the
-   * session is issued and is never returned by the list endpoint.
-   */
-  export interface Data extends CredentialsAPI.AuthMethod {
-    /**
-     * System-generated unique identifier for the session. Pass this value to
-     * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
-     * the `id` inherited from `AuthMethod` so this response identifies the session
-     * rather than the authenticating credential.
-     */
-    id: string;
-
-    /**
-     * Timestamp after which the session is no longer valid and the
-     * `encryptedSessionSigningKey` must not be used to sign further requests.
-     */
-    expiresAt: string;
-
-    /**
-     * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
-     * the verify request. Encoded as a base58check string: the decoded payload is a
-     * 33-byte compressed P-256 encapsulated public key followed by AES-256-GCM
-     * ciphertext. The client decrypts this key with its private key and uses it to
-     * sign subsequent Embedded Wallet requests until `expiresAt`.
-     *
-     * Only returned from `POST /auth/credentials/{id}/verify` (where the session is
-     * first issued). Omitted from responses that simply surface existing sessions
-     * (e.g. `GET /auth/sessions`) — Grid does not retain the plaintext key after the
-     * client has decrypted it.
-     */
-    encryptedSessionSigningKey?: string;
-  }
-}
-
-/**
- * 202 response returned from Embedded Wallet Auth endpoints that require a signed
- * retry — `POST /auth/credentials` (adding an additional credential),
- * `DELETE /auth/credentials/{id}` (revoking a credential), and
- * `DELETE /auth/sessions/{id}` (revoking a session). Carries the signing fields
- * from `SignedRequestChallenge` plus the `type` of the authentication credential
- * involved (being added, being revoked, or that issued the session being revoked).
- * The client already knows the target resource id from the request path / body it
- * just sent, so nothing beyond `type` is echoed in the response.
- */
-export interface SessionRevokeResponse {
-  /**
-   * Timestamp after which this challenge is no longer valid. The signed retry must
-   * be submitted before this time.
-   */
-  expiresAt: string;
-
-  /**
-   * Canonical payload for the retry authorization stamp. Build an API-key stamp over
-   * this exact value with the session API keypair, then send the full
-   * base64url-encoded stamp in `Grid-Wallet-Signature` on the retry that completes
-   * the original request.
-   */
-  payloadToSign: string;
-
-  /**
-   * Unique identifier for this request. Must be echoed in the `Request-Id` header on
-   * the signed retry so the server can correlate the retry with the issued
-   * challenge.
-   */
-  requestId: string;
-
-  /**
-   * Credential type relevant to this challenge: the credential type being added
-   * (`POST /auth/credentials`), the credential type being revoked
-   * (`DELETE /auth/credentials/{id}`), or the type of credential that issued the
-   * session being revoked (`DELETE /auth/sessions/{id}`).
-   */
-  type: 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+  data: Array<CredentialsAPI.AuthSession>;
 }
 
 export interface SessionListParams {
@@ -163,7 +143,7 @@ export interface SessionListParams {
   accountId: string;
 }
 
-export interface SessionRevokeParams {
+export interface SessionDeleteParams {
   /**
    * Full API-key stamp built over the prior `payloadToSign` with the session API
    * keypair of a verified session on the same internal account. Required on the
@@ -172,9 +152,34 @@ export interface SessionRevokeParams {
   'Grid-Wallet-Signature'?: string;
 
   /**
-   * The `requestId` returned in a prior `202` response, echoed back on the signed
-   * retry so the server can correlate it with the issued challenge. Required on the
-   * signed retry; must be paired with `Grid-Wallet-Signature`.
+   * The `requestId` returned in a prior `202` response, echoed back exactly on the
+   * signed retry so the server can correlate it with the issued challenge. Required
+   * on the signed retry; must be paired with `Grid-Wallet-Signature`.
+   */
+  'Request-Id'?: string;
+}
+
+export interface SessionRefreshParams {
+  /**
+   * Body param: Client-generated P-256 public key, hex-encoded in uncompressed SEC1
+   * format (`04` prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+   * characters total). The matching private key must remain on the client. Grid
+   * binds this key into the session-creation payload on the initial call and seals
+   * the returned `encryptedSessionSigningKey` to it on the signed retry.
+   */
+  clientPublicKey: string;
+
+  /**
+   * Header param: Full API-key stamp built over the prior `payloadToSign` with the
+   * current session API keypair. Required on the signed retry; ignored on the
+   * initial call.
+   */
+  'Grid-Wallet-Signature'?: string;
+
+  /**
+   * Header param: The `requestId` returned in the prior `202` response, echoed back
+   * on the signed retry so the server can correlate it with the issued challenge.
+   * Required on the signed retry; must be paired with `Grid-Wallet-Signature`.
    */
   'Request-Id'?: string;
 }
@@ -182,8 +187,8 @@ export interface SessionRevokeParams {
 export declare namespace Sessions {
   export {
     type SessionListResponse as SessionListResponse,
-    type SessionRevokeResponse as SessionRevokeResponse,
     type SessionListParams as SessionListParams,
-    type SessionRevokeParams as SessionRevokeParams,
+    type SessionDeleteParams as SessionDeleteParams,
+    type SessionRefreshParams as SessionRefreshParams,
   };
 }

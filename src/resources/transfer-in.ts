@@ -41,6 +41,7 @@ export class TransferIn extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 }
@@ -48,6 +49,8 @@ export class TransferIn extends APIResource {
 export type TransactionsDefaultPagination = DefaultPagination<Transaction>;
 
 export interface BaseTransactionDestination {
+  destinationType: unknown;
+
   /**
    * Currency code for the destination
    */

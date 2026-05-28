@@ -14,7 +14,6 @@ import {
   EurAccountInfo,
   ExternalAccountCreateParams,
   ExternalAccountListParams,
-  ExternalAccountListResponse,
   ExternalAccounts,
   GbpAccountInfo,
   GhsAccountInfo,
@@ -73,7 +72,11 @@ export class Platform extends APIResource {
     query: PlatformListInternalAccountsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PlatformListInternalAccountsResponse> {
-    return this._client.get('/platform/internal-accounts', { query, ...options });
+    return this._client.get('/platform/internal-accounts', {
+      query,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 }
 
@@ -143,7 +146,6 @@ export declare namespace Platform {
     type XofAccountInfo as XofAccountInfo,
     type ZarAccountInfo as ZarAccountInfo,
     type ZmwAccountInfo as ZmwAccountInfo,
-    type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };

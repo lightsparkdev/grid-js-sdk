@@ -23,6 +23,8 @@ TEST_PATHS=(
 	tests/api-resources/sandbox/uma.test.ts
 	tests/api-resources/sandbox/internal-accounts.test.ts
 	tests/api-resources/sandbox/webhooks.test.ts
+	tests/api-resources/sandbox/cards/cards.test.ts
+	tests/api-resources/sandbox/cards/simulate.test.ts
 	tests/api-resources/uma-providers.test.ts
 	tests/api-resources/tokens.test.ts
 	tests/api-resources/exchange-rates.test.ts
@@ -34,7 +36,16 @@ TEST_PATHS=(
 	tests/api-resources/auth/auth.test.ts
 	tests/api-resources/auth/credentials.test.ts
 	tests/api-resources/auth/sessions.test.ts
-	tests/api-resources/internal-accounts.test.ts
+	tests/api-resources/agents/agents.test.ts
+	tests/api-resources/agents/me/me.test.ts
+	tests/api-resources/agents/me/transactions.test.ts
+	tests/api-resources/agents/me/quotes.test.ts
+	tests/api-resources/agents/me/external-accounts.test.ts
+	tests/api-resources/agents/me/actions.test.ts
+	tests/api-resources/agents/device-codes.test.ts
+	tests/api-resources/agents/transactions.test.ts
+	tests/api-resources/agents/actions.test.ts
+	tests/api-resources/cards.test.ts
 	tests/index.test.ts
 )
 

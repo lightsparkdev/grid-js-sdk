@@ -1,7 +1,7 @@
 {
   "dxt_version": "0.2",
   "name": "@lightsparkdev/grid-mcp",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "The official MCP Server for the Lightspark Grid API",
   "author": {
     "name": "Lightspark Grid",
@@ -23,6 +23,7 @@
       "env": {
         "GRID_CLIENT_ID": "${user_config.GRID_CLIENT_ID}",
         "GRID_CLIENT_SECRET": "${user_config.GRID_CLIENT_SECRET}",
+        "GRID_AGENT_ACCESS_TOKEN": "${user_config.GRID_AGENT_ACCESS_TOKEN}",
         "GRID_WEBHOOK_PUBKEY": "${user_config.GRID_WEBHOOK_PUBKEY}"
       }
     }
@@ -31,13 +32,19 @@
     "GRID_CLIENT_ID": {
       "title": "username",
       "description": "API token authentication using format `<api token id>:<api client secret>`",
-      "required": true,
+      "required": false,
       "type": "string"
     },
     "GRID_CLIENT_SECRET": {
       "title": "password",
       "description": "API token authentication using format `<api token id>:<api client secret>`",
-      "required": true,
+      "required": false,
+      "type": "string"
+    },
+    "GRID_AGENT_ACCESS_TOKEN": {
+      "title": "agent_access_token",
+      "description": "Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations.",
+      "required": false,
       "type": "string"
     },
     "GRID_WEBHOOK_PUBKEY": {

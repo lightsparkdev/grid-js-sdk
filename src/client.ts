@@ -21,20 +21,27 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   BeneficialOwnerCreateParams,
-  BeneficialOwnerCreateResponse,
   BeneficialOwnerListParams,
-  BeneficialOwnerListResponse,
-  BeneficialOwnerListResponsesDefaultPagination,
   BeneficialOwnerPersonalInfo,
-  BeneficialOwnerRetrieveResponse,
   BeneficialOwnerUpdateParams,
-  BeneficialOwnerUpdateResponse,
   BeneficialOwners,
 } from './resources/beneficial-owners';
+import {
+  CardIssueParams,
+  CardIssueResponse,
+  CardListParams,
+  CardListResponse,
+  CardListResponsesDefaultPagination,
+  CardRetrieveResponse,
+  CardUpdateParams,
+  CardUpdateResponse,
+  Cards,
+} from './resources/cards';
 import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
+  EmbeddedWalletConfig,
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
@@ -56,11 +63,6 @@ import {
   Documents,
 } from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
-import {
-  InternalAccountExportParams,
-  InternalAccountExportResponse,
-  InternalAccounts,
-} from './resources/internal-accounts';
 import {
   CurrencyAmount,
   InvitationClaimParams,
@@ -138,7 +140,10 @@ import {
   Verifications,
 } from './resources/verifications';
 import {
+  AgentActionWebhookEvent,
   BulkUploadWebhookEvent,
+  CardFundingSourceChangeWebhookEvent,
+  CardStateChangeWebhookEvent,
   CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
   InternalAccountStatusWebhookEvent,
@@ -149,24 +154,50 @@ import {
   VerificationUpdateWebhookEvent,
   Webhooks,
 } from './resources/webhooks';
+import {
+  Agent,
+  AgentAccountRestrictions,
+  AgentAccountRule,
+  AgentAction,
+  AgentActionListResponse,
+  AgentActionRejectRequest,
+  AgentActionsDefaultPagination,
+  AgentApprovalThresholds,
+  AgentCreateParams,
+  AgentCreateRequest,
+  AgentCreateResponse,
+  AgentDeviceCode,
+  AgentDeviceCodeRedeemResponse,
+  AgentDeviceCodeStatusResponse,
+  AgentListApprovalsParams,
+  AgentListParams,
+  AgentListResponse,
+  AgentPolicy,
+  AgentUpdateParams,
+  AgentUpdatePolicyParams,
+  AgentUpdateRequest,
+  AgentUsage,
+  Agents,
+  AgentsDefaultPagination,
+} from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
-  BusinessCustomerFields,
-  BusinessInfo,
-  Customer,
-  CustomerCreate,
   CustomerCreateParams,
-  CustomerGetKYCLinkParams,
-  CustomerGetKYCLinkResponse,
+  CustomerCreateResponse,
+  CustomerDeleteResponse,
+  CustomerExportParams,
+  CustomerExportResponse,
+  CustomerGenerateKYCLinkParams,
+  CustomerGenerateKYCLinkResponse,
   CustomerListInternalAccountsParams,
   CustomerListParams,
-  CustomerOneOf,
-  CustomerOneovesDefaultPagination,
-  CustomerType,
-  CustomerUpdate,
+  CustomerListResponse,
+  CustomerListResponsesDefaultPagination,
+  CustomerRetrieveResponse,
+  CustomerUpdateInternalAccountParams,
   CustomerUpdateParams,
+  CustomerUpdateResponse,
   Customers,
-  IndividualCustomerFields,
 } from './resources/customers/customers';
 import {
   Platform,
@@ -192,12 +223,17 @@ export interface ClientOptions {
   /**
    * API token authentication using format `<api token id>:<api client secret>`
    */
-  username?: string | undefined;
+  username?: string | null | undefined;
 
   /**
    * API token authentication using format `<api token id>:<api client secret>`
    */
-  password?: string | undefined;
+  password?: string | null | undefined;
+
+  /**
+   * Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations.
+   */
+  agentAccessToken?: string | null | undefined;
 
   /**
    * Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.
@@ -286,8 +322,9 @@ export interface ClientOptions {
  * API Client for interfacing with the Lightspark Grid API.
  */
 export class LightsparkGrid {
-  username: string;
-  password: string;
+  username: string | null;
+  password: string | null;
+  agentAccessToken: string | null;
   webhookSignature: string | null;
 
   baseURL: string;
@@ -305,8 +342,9 @@ export class LightsparkGrid {
   /**
    * API Client for interfacing with the Lightspark Grid API.
    *
-   * @param {string | undefined} [opts.username=process.env['GRID_CLIENT_ID'] ?? undefined]
-   * @param {string | undefined} [opts.password=process.env['GRID_CLIENT_SECRET'] ?? undefined]
+   * @param {string | null | undefined} [opts.username=process.env['GRID_CLIENT_ID'] ?? null]
+   * @param {string | null | undefined} [opts.password=process.env['GRID_CLIENT_SECRET'] ?? null]
+   * @param {string | null | undefined} [opts.agentAccessToken=process.env['GRID_AGENT_ACCESS_TOKEN'] ?? null]
    * @param {string | null | undefined} [opts.webhookSignature=process.env['GRID_WEBHOOK_PUBKEY'] ?? null]
    * @param {string} [opts.baseURL=process.env['LIGHTSPARK_GRID_BASE_URL'] ?? https://api.lightspark.com/grid/2025-10-13] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -318,25 +356,16 @@ export class LightsparkGrid {
    */
   constructor({
     baseURL = readEnv('LIGHTSPARK_GRID_BASE_URL'),
-    username = readEnv('GRID_CLIENT_ID'),
-    password = readEnv('GRID_CLIENT_SECRET'),
+    username = readEnv('GRID_CLIENT_ID') ?? null,
+    password = readEnv('GRID_CLIENT_SECRET') ?? null,
+    agentAccessToken = readEnv('GRID_AGENT_ACCESS_TOKEN') ?? null,
     webhookSignature = readEnv('GRID_WEBHOOK_PUBKEY') ?? null,
     ...opts
   }: ClientOptions = {}) {
-    if (username === undefined) {
-      throw new Errors.LightsparkGridError(
-        "The GRID_CLIENT_ID environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an username option, like new LightsparkGrid({ username: 'My Username' }).",
-      );
-    }
-    if (password === undefined) {
-      throw new Errors.LightsparkGridError(
-        "The GRID_CLIENT_SECRET environment variable is missing or empty; either provide it, or instantiate the LightsparkGrid client with an password option, like new LightsparkGrid({ password: 'My Password' }).",
-      );
-    }
-
     const options: ClientOptions = {
       username,
       password,
+      agentAccessToken,
       webhookSignature,
       ...opts,
       baseURL: baseURL || `https://api.lightspark.com/grid/2025-10-13`,
@@ -373,6 +402,7 @@ export class LightsparkGrid {
 
     this.username = username;
     this.password = password;
+    this.agentAccessToken = agentAccessToken;
     this.webhookSignature = webhookSignature;
   }
 
@@ -391,6 +421,7 @@ export class LightsparkGrid {
       fetchOptions: this.fetchOptions,
       username: this.username,
       password: this.password,
+      agentAccessToken: this.agentAccessToken,
       webhookSignature: this.webhookSignature,
       ...options,
     });
@@ -409,11 +440,41 @@ export class LightsparkGrid {
   }
 
   protected validateHeaders({ values, nulls }: NullableHeaders) {
-    return;
+    if (this.username && this.password && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    if (this.agentAccessToken && values.get('authorization')) {
+      return;
+    }
+    if (nulls.has('authorization')) {
+      return;
+    }
+
+    if (this.webhookSignature && values.get('x-grid-signature')) {
+      return;
+    }
+    if (nulls.has('x-grid-signature')) {
+      return;
+    }
+
+    throw new Error(
+      'Could not resolve authentication method. Expected one of username, password, agentAccessToken or webhookSignature to be set. Or for one of the "Authorization", "Authorization" or "X-Grid-Signature" headers to be explicitly omitted',
+    );
   }
 
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
-    return buildHeaders([await this.basicAuth(opts), await this.webhookSignatureAuth(opts)]);
+  protected async authHeaders(
+    opts: FinalRequestOptions,
+    schemes: { basicAuth?: boolean; agentAuth?: boolean; webhookSignatureAuth?: boolean },
+  ): Promise<NullableHeaders | undefined> {
+    return buildHeaders([
+      schemes.basicAuth ? await this.basicAuth(opts) : null,
+      schemes.agentAuth ? await this.agentAuth(opts) : null,
+      schemes.webhookSignatureAuth ? await this.webhookSignatureAuth(opts) : null,
+    ]);
   }
 
   protected async basicAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
@@ -428,6 +489,13 @@ export class LightsparkGrid {
     const credentials = `${this.username}:${this.password}`;
     const Authorization = `Basic ${toBase64(credentials)}`;
     return buildHeaders([{ Authorization }]);
+  }
+
+  protected async agentAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+    if (this.agentAccessToken == null) {
+      return undefined;
+    }
+    return buildHeaders([{ Authorization: `Bearer ${this.agentAccessToken}` }]);
   }
 
   protected async webhookSignatureAuth(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
@@ -884,7 +952,10 @@ export class LightsparkGrid {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(options),
+      await this.authHeaders(
+        options,
+        options.__security ?? { basicAuth: true, agentAuth: true, webhookSignatureAuth: true },
+      ),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,
@@ -1034,9 +1105,13 @@ export class LightsparkGrid {
   discoveries: API.Discoveries = new API.Discoveries(this);
   auth: API.Auth = new API.Auth(this);
   /**
-   * Internal account management endpoints for creating and managing internal accounts
+   * Endpoints for creating and managing agents (experimental), called by the partner's backend using platform credentials. Covers the full agent lifecycle: creation, policy configuration, pausing, deletion, the device code installation flow, and approving or rejecting transactions initiated by agents.
    */
-  internalAccounts: API.InternalAccounts = new API.InternalAccounts(this);
+  agents: API.Agents = new API.Agents(this);
+  /**
+   * Card management endpoints. Issue debit cards against an internal account, freeze / unfreeze, close, manage card funding sources, and list card transactions.
+   */
+  cards: API.Cards = new API.Cards(this);
 }
 
 LightsparkGrid.Config = Config;
@@ -1059,7 +1134,8 @@ LightsparkGrid.Documents = Documents;
 LightsparkGrid.Verifications = Verifications;
 LightsparkGrid.Discoveries = Discoveries;
 LightsparkGrid.Auth = Auth;
-LightsparkGrid.InternalAccounts = InternalAccounts;
+LightsparkGrid.Agents = Agents;
+LightsparkGrid.Cards = Cards;
 
 export declare namespace LightsparkGrid {
   export type RequestOptions = Opts.RequestOptions;
@@ -1073,6 +1149,7 @@ export declare namespace LightsparkGrid {
   export {
     Config as Config,
     type CustomerInfoFieldName as CustomerInfoFieldName,
+    type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
@@ -1080,21 +1157,21 @@ export declare namespace LightsparkGrid {
 
   export {
     Customers as Customers,
-    type BusinessCustomerFields as BusinessCustomerFields,
-    type BusinessInfo as BusinessInfo,
-    type Customer as Customer,
-    type CustomerCreate as CustomerCreate,
-    type CustomerOneOf as CustomerOneOf,
-    type CustomerType as CustomerType,
-    type CustomerUpdate as CustomerUpdate,
-    type IndividualCustomerFields as IndividualCustomerFields,
-    type CustomerGetKYCLinkResponse as CustomerGetKYCLinkResponse,
-    type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
+    type CustomerCreateResponse as CustomerCreateResponse,
+    type CustomerRetrieveResponse as CustomerRetrieveResponse,
+    type CustomerUpdateResponse as CustomerUpdateResponse,
+    type CustomerListResponse as CustomerListResponse,
+    type CustomerDeleteResponse as CustomerDeleteResponse,
+    type CustomerExportResponse as CustomerExportResponse,
+    type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
+    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
-    type CustomerGetKYCLinkParams as CustomerGetKYCLinkParams,
+    type CustomerExportParams as CustomerExportParams,
+    type CustomerGenerateKYCLinkParams as CustomerGenerateKYCLinkParams,
     type CustomerListInternalAccountsParams as CustomerListInternalAccountsParams,
+    type CustomerUpdateInternalAccountParams as CustomerUpdateInternalAccountParams,
   };
 
   export {
@@ -1188,6 +1265,7 @@ export declare namespace LightsparkGrid {
 
   export {
     Webhooks as Webhooks,
+    type AgentActionWebhookEvent as AgentActionWebhookEvent,
     type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
     type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
     type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
@@ -1196,6 +1274,8 @@ export declare namespace LightsparkGrid {
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
+    type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
+    type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 
@@ -1208,11 +1288,6 @@ export declare namespace LightsparkGrid {
   export {
     BeneficialOwners as BeneficialOwners,
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
-    type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
-    type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
-    type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
-    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
-    type BeneficialOwnerListResponsesDefaultPagination as BeneficialOwnerListResponsesDefaultPagination,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
     type BeneficialOwnerListParams as BeneficialOwnerListParams,
@@ -1249,17 +1324,54 @@ export declare namespace LightsparkGrid {
   export { Auth as Auth };
 
   export {
-    InternalAccounts as InternalAccounts,
-    type InternalAccountExportResponse as InternalAccountExportResponse,
-    type InternalAccountExportParams as InternalAccountExportParams,
+    Agents as Agents,
+    type Agent as Agent,
+    type AgentAccountRestrictions as AgentAccountRestrictions,
+    type AgentAccountRule as AgentAccountRule,
+    type AgentAction as AgentAction,
+    type AgentActionListResponse as AgentActionListResponse,
+    type AgentActionRejectRequest as AgentActionRejectRequest,
+    type AgentApprovalThresholds as AgentApprovalThresholds,
+    type AgentCreateRequest as AgentCreateRequest,
+    type AgentCreateResponse as AgentCreateResponse,
+    type AgentDeviceCode as AgentDeviceCode,
+    type AgentDeviceCodeRedeemResponse as AgentDeviceCodeRedeemResponse,
+    type AgentDeviceCodeStatusResponse as AgentDeviceCodeStatusResponse,
+    type AgentListResponse as AgentListResponse,
+    type AgentPolicy as AgentPolicy,
+    type AgentUpdateRequest as AgentUpdateRequest,
+    type AgentUsage as AgentUsage,
+    type AgentsDefaultPagination as AgentsDefaultPagination,
+    type AgentActionsDefaultPagination as AgentActionsDefaultPagination,
+    type AgentCreateParams as AgentCreateParams,
+    type AgentUpdateParams as AgentUpdateParams,
+    type AgentListParams as AgentListParams,
+    type AgentListApprovalsParams as AgentListApprovalsParams,
+    type AgentUpdatePolicyParams as AgentUpdatePolicyParams,
+  };
+
+  export {
+    Cards as Cards,
+    type CardRetrieveResponse as CardRetrieveResponse,
+    type CardUpdateResponse as CardUpdateResponse,
+    type CardListResponse as CardListResponse,
+    type CardIssueResponse as CardIssueResponse,
+    type CardListResponsesDefaultPagination as CardListResponsesDefaultPagination,
+    type CardUpdateParams as CardUpdateParams,
+    type CardListParams as CardListParams,
+    type CardIssueParams as CardIssueParams,
   };
 
   export type AedBeneficiary = API.AedBeneficiary;
   export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
+  export type AgentTransferDetails = API.AgentTransferDetails;
   export type BdtBeneficiary = API.BdtBeneficiary;
   export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
+  export type BeneficialOwner = API.BeneficialOwner;
   export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
+  export type BusinessCustomer = API.BusinessCustomer;
+  export type BusinessInfoUpdate = API.BusinessInfoUpdate;
   export type BwpBeneficiary = API.BwpBeneficiary;
   export type BwpExternalAccountCreateInfo = API.BwpExternalAccountCreateInfo;
   export type CadBeneficiary = API.CadBeneficiary;
@@ -1281,6 +1393,7 @@ export declare namespace LightsparkGrid {
   export type HtgBeneficiary = API.HtgBeneficiary;
   export type HtgExternalAccountCreateInfo = API.HtgExternalAccountCreateInfo;
   export type IdrExternalAccountCreateInfo = API.IdrExternalAccountCreateInfo;
+  export type IndividualCustomer = API.IndividualCustomer;
   export type InrExternalAccountCreateInfo = API.InrExternalAccountCreateInfo;
   export type JmdBeneficiary = API.JmdBeneficiary;
   export type JmdExternalAccountCreateInfo = API.JmdExternalAccountCreateInfo;
@@ -1298,6 +1411,10 @@ export declare namespace LightsparkGrid {
   export type RwfBeneficiary = API.RwfBeneficiary;
   export type RwfExternalAccountCreateInfo = API.RwfExternalAccountCreateInfo;
   export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
+  export type SlvBeneficiary = API.SlvBeneficiary;
+  export type SlvExternalAccountCreateInfo = API.SlvExternalAccountCreateInfo;
+  export type SwiftBeneficiary = API.SwiftBeneficiary;
+  export type SwiftExternalAccountCreateInfo = API.SwiftExternalAccountCreateInfo;
   export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
   export type TzsBeneficiary = API.TzsBeneficiary;
   export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;

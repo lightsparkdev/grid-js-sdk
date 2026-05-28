@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as ExternalAccountsAPI from './platform/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -65,6 +64,7 @@ export class Quotes extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -79,7 +79,7 @@ export class Quotes extends APIResource {
    * ```
    */
   retrieve(quoteID: string, options?: RequestOptions): APIPromise<Quote> {
-    return this._client.get(path`/quotes/${quoteID}`, options);
+    return this._client.get(path`/quotes/${quoteID}`, { ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -91,8 +91,8 @@ export class Quotes extends APIResource {
    * external account).
    *
    * When the quote's `source` is an internal account of type `EMBEDDED_WALLET`, the
-   * request must include a `Grid-Wallet-Signature` header. The signature is produced
-   * by signing the `payloadToSign` value from the quote's
+   * request must include a `Grid-Wallet-Signature` header. The header value is the
+   * full Turnkey API-key stamp built over the `payloadToSign` value from the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry with the session private key
    * of a verified authentication credential on the source Embedded Wallet.
    *
@@ -120,13 +120,18 @@ export class Quotes extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 }
 
-export type BaseDestination = unknown;
+export interface BaseDestination {
+  destinationType: unknown;
+}
 
-export type BaseQuoteSource = unknown;
+export interface BaseQuoteSource {
+  sourceType: unknown;
+}
 
 export interface Currency {
   /**
@@ -152,7 +157,11 @@ export interface Currency {
 }
 
 /**
- * Details about the rate and fees for an outgoing transaction or quote.
+ * Details about the rate and fees for an outgoing transaction or quote. Note:
+ * `counterpartyFixedFee` is denominated in the receiving currency, so its
+ * equivalent value in the sending currency fluctuates with the FX rate. As a
+ * result, the total fee on a subsequent quote for the same transfer may differ
+ * even if the underlying fee structure is unchanged.
  */
 export interface OutgoingRateDetails {
   /**
@@ -194,51 +203,16 @@ export interface OutgoingRateDetails {
 }
 
 export interface PaymentInstructions {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: bankAccountType, accountNumber
+   * - MOBILE_MONEY: phoneNumber
+   */
   accountOrWalletInfo:
-    | PaymentInstructions.PaymentUsdAccountInfo
-    | PaymentInstructions.PaymentBrlAccountInfo
-    | PaymentInstructions.PaymentMxnAccountInfo
-    | PaymentInstructions.PaymentDkkAccountInfo
-    | PaymentInstructions.PaymentEurAccountInfo
-    | ExternalAccountsAPI.InrAccountInfo
-    | PaymentInstructions.PaymentNgnAccountInfo
-    | PaymentInstructions.PaymentCadAccountInfo
-    | PaymentInstructions.PaymentGbpAccountInfo
-    | PaymentInstructions.PaymentHkdAccountInfo
-    | PaymentInstructions.PaymentIdrAccountInfo
-    | PaymentInstructions.PaymentMyrAccountInfo
-    | PaymentInstructions.PaymentPhpAccountInfo
-    | PaymentInstructions.PaymentSgdAccountInfo
-    | PaymentInstructions.PaymentThbAccountInfo
-    | PaymentInstructions.PaymentVndAccountInfo
-    | PaymentInstructions.PaymentAedAccountInfo
-    | PaymentInstructions.PaymentKesAccountInfo
-    | PaymentInstructions.PaymentMwkAccountInfo
-    | PaymentInstructions.PaymentRwfAccountInfo
-    | PaymentInstructions.PaymentTzsAccountInfo
-    | PaymentInstructions.PaymentUgxAccountInfo
-    | PaymentInstructions.PaymentXofAccountInfo
-    | PaymentInstructions.PaymentZarAccountInfo
-    | PaymentInstructions.PaymentZmwAccountInfo
-    | PaymentInstructions.PaymentBwpAccountInfo
-    | PaymentInstructions.PaymentXafAccountInfo
-    | PaymentInstructions.PaymentBdtAccountInfo
-    | PaymentInstructions.PaymentArsAccountInfo
-    | PaymentInstructions.PaymentCopAccountInfo
-    | PaymentInstructions.PaymentEgpAccountInfo
-    | PaymentInstructions.PaymentGhsAccountInfo
-    | PaymentInstructions.PaymentGtqAccountInfo
-    | PaymentInstructions.PaymentHtgAccountInfo
-    | PaymentInstructions.PaymentJmdAccountInfo
-    | PaymentInstructions.PaymentPkrAccountInfo
-    | PaymentInstructions.PaymentSparkWalletInfo
-    | PaymentInstructions.PaymentLightningInvoiceInfo
-    | PaymentInstructions.PaymentSolanaWalletInfo
-    | PaymentInstructions.PaymentTronWalletInfo
-    | PaymentInstructions.PaymentPolygonWalletInfo
-    | PaymentInstructions.PaymentBaseWalletInfo
-    | PaymentInstructions.PaymentEthereumWalletInfo
-    | PaymentInstructions.PaymentEmbeddedWalletInfo;
+    | PaymentInstructions.ArsAccount
+    | PaymentInstructions.SlvAccount
+    | PaymentInstructions.EmbeddedWallet;
 
   /**
    * Additional human-readable instructions for making the payment
@@ -252,69 +226,7 @@ export interface PaymentInstructions {
 }
 
 export namespace PaymentInstructions {
-  export interface PaymentUsdAccountInfo extends ExternalAccountsAPI.UsdAccountInfo {}
-
-  export interface PaymentBrlAccountInfo {
-    /**
-     * A PIX QR code payload that can be used to fund the transaction. This can be
-     * rendered as a QR code image or pasted into a PIX-compatible banking app.
-     */
-    qrCode: string;
-
-    accountType?: 'BRL_ACCOUNT';
-  }
-
-  export interface PaymentMxnAccountInfo extends ExternalAccountsAPI.MxnAccountInfo {}
-
-  export interface PaymentDkkAccountInfo extends ExternalAccountsAPI.DkkAccountInfo {}
-
-  export interface PaymentEurAccountInfo extends ExternalAccountsAPI.EurAccountInfo {}
-
-  export interface PaymentNgnAccountInfo extends ExternalAccountsAPI.NgnAccountInfo {}
-
-  export interface PaymentCadAccountInfo extends ExternalAccountsAPI.CadAccountInfo {}
-
-  export interface PaymentGbpAccountInfo extends ExternalAccountsAPI.GbpAccountInfo {}
-
-  export interface PaymentHkdAccountInfo extends ExternalAccountsAPI.HkdAccountInfo {}
-
-  export interface PaymentIdrAccountInfo extends ExternalAccountsAPI.IdrAccountInfo {}
-
-  export interface PaymentMyrAccountInfo extends ExternalAccountsAPI.MyrAccountInfo {}
-
-  export interface PaymentPhpAccountInfo extends ExternalAccountsAPI.PhpAccountInfo {}
-
-  export interface PaymentSgdAccountInfo extends ExternalAccountsAPI.SgdAccountInfo {}
-
-  export interface PaymentThbAccountInfo extends ExternalAccountsAPI.ThbAccountInfo {}
-
-  export interface PaymentVndAccountInfo extends ExternalAccountsAPI.VndAccountInfo {}
-
-  export interface PaymentAedAccountInfo extends ExternalAccountsAPI.AedAccountInfo {}
-
-  export interface PaymentKesAccountInfo extends ExternalAccountsAPI.KesAccountInfo {}
-
-  export interface PaymentMwkAccountInfo extends ExternalAccountsAPI.MwkAccountInfo {}
-
-  export interface PaymentRwfAccountInfo extends ExternalAccountsAPI.RwfAccountInfo {}
-
-  export interface PaymentTzsAccountInfo extends ExternalAccountsAPI.TzsAccountInfo {}
-
-  export interface PaymentUgxAccountInfo extends ExternalAccountsAPI.UgxAccountInfo {}
-
-  export interface PaymentXofAccountInfo extends ExternalAccountsAPI.XofAccountInfo {}
-
-  export interface PaymentZarAccountInfo extends ExternalAccountsAPI.ZarAccountInfo {}
-
-  export interface PaymentZmwAccountInfo extends ExternalAccountsAPI.ZmwAccountInfo {}
-
-  export interface PaymentBwpAccountInfo extends ExternalAccountsAPI.BwpAccountInfo {}
-
-  export interface PaymentXafAccountInfo extends ExternalAccountsAPI.XafAccountInfo {}
-
-  export interface PaymentBdtAccountInfo extends ExternalAccountsAPI.BdtAccountInfo {}
-
-  export interface PaymentArsAccountInfo {
+  export interface ArsAccount {
     /**
      * The static CVU (Clave Virtual Uniforme) bank account number to pay to.
      */
@@ -323,136 +235,55 @@ export namespace PaymentInstructions {
     accountType: 'ARS_ACCOUNT';
   }
 
-  export interface PaymentCopAccountInfo {
-    /**
-     * A payment URL where the customer can complete their COP deposit.
-     */
-    paymentUrl: string;
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: bankAccountType, accountNumber
+   * - MOBILE_MONEY: phoneNumber
+   */
+  export interface SlvAccount {
+    accountType: 'SLV_ACCOUNT';
 
-    accountType?: 'COP_ACCOUNT';
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The account number of the bank (BANK_TRANSFER only)
+     */
+    accountNumber?: string;
+
+    /**
+     * The bank account type (BANK_TRANSFER only)
+     */
+    bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+    /**
+     * The name of the bank (BANK_TRANSFER only)
+     */
+    bankName?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
+     */
+    phoneNumber?: string;
   }
 
-  export interface PaymentEgpAccountInfo extends ExternalAccountsAPI.EgpAccountInfo {}
-
-  export interface PaymentGhsAccountInfo extends ExternalAccountsAPI.GhsAccountInfo {}
-
-  export interface PaymentGtqAccountInfo extends ExternalAccountsAPI.GtqAccountInfo {}
-
-  export interface PaymentHtgAccountInfo extends ExternalAccountsAPI.HtgAccountInfo {}
-
-  export interface PaymentJmdAccountInfo extends ExternalAccountsAPI.JmdAccountInfo {}
-
-  export interface PaymentPkrAccountInfo extends ExternalAccountsAPI.PkrAccountInfo {}
-
-  export interface PaymentSparkWalletInfo {
-    accountType: 'SPARK_WALLET';
-
-    /**
-     * Spark wallet address
-     */
-    address: string;
-
-    /**
-     * Type of asset
-     */
-    assetType: 'BTC' | 'USDB';
-
-    /**
-     * Invoice for the payment
-     */
-    invoice?: string;
-  }
-
-  export interface PaymentLightningInvoiceInfo {
-    /**
-     * Invoice for the payment
-     */
-    invoice: string;
-
-    accountType?: 'LIGHTNING';
-  }
-
-  export interface PaymentSolanaWalletInfo {
-    accountType: 'SOLANA_WALLET';
-
-    /**
-     * Solana wallet address
-     */
-    address: string;
-
-    /**
-     * Type of asset
-     */
-    assetType?: 'USDC' | 'USDT';
-  }
-
-  export interface PaymentTronWalletInfo {
-    accountType: 'TRON_WALLET';
-
-    /**
-     * Tron wallet address
-     */
-    address: string;
-
-    /**
-     * Type of asset
-     */
-    assetType?: 'USDT';
-  }
-
-  export interface PaymentPolygonWalletInfo {
-    accountType: 'POLYGON_WALLET';
-
-    /**
-     * Polygon eth wallet address
-     */
-    address: string;
-
-    /**
-     * Type of asset
-     */
-    assetType?: 'USDC';
-  }
-
-  export interface PaymentBaseWalletInfo {
-    accountType: 'BASE_WALLET';
-
-    /**
-     * Base eth wallet address
-     */
-    address: string;
-
-    /**
-     * Type of asset
-     */
-    assetType?: 'USDC';
-  }
-
-  export interface PaymentEthereumWalletInfo {
-    accountType: 'ETHEREUM_WALLET';
-
-    /**
-     * Ethereum L1 wallet address
-     */
-    address: string;
-
-    /**
-     * Type of asset
-     */
-    assetType?: 'USDC';
-  }
-
-  export interface PaymentEmbeddedWalletInfo {
+  export interface EmbeddedWallet {
     /**
      * Discriminator value identifying this as Embedded Wallet payment instructions.
      */
     accountType: 'EMBEDDED_WALLET';
 
     /**
-     * JSON-encoded transaction signing payload that must be signed, as-is
+     * JSON-encoded transaction signing payload that must be stamped, as-is
      * (byte-for-byte, without re-serialization), with the session private key of a
      * verified authentication credential on the source Embedded Wallet. The resulting
-     * signature is base64-encoded and passed as the `Grid-Wallet-Signature` header on
+     * Turnkey API-key stamp is passed as the `Grid-Wallet-Signature` header on
      * `POST /quotes/{quoteId}/execute` to authorize the outbound transfer from the
      * wallet.
      */
@@ -471,9 +302,6 @@ export interface Quote {
    */
   createdAt: string;
 
-  /**
-   * Destination account details
-   */
   destination: QuoteDestinationOneOf;
 
   /**
@@ -482,13 +310,21 @@ export interface Quote {
   exchangeRate: number;
 
   /**
-   * When this quote expires (typically 1-5 minutes after creation)
+   * Absolute UTC timestamp when the rate locked in this quote becomes invalid and
+   * the quote can no longer be executed. The window depends on the rail and
+   * corridor: instant rails (Lightning, Spark, USDC on Solana/Base/Polygon, RTP,
+   * SEPA Instant) typically expire in 1–5 minutes; corridors with longer settlement
+   * guarantees may have longer windows. Always rely on this timestamp rather than
+   * assuming a fixed window.
    */
   expiresAt: string;
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
-   * (eg. cents).
+   * (eg. cents). Note: this value may fluctuate between quotes — some underlying fee
+   * components are defined in the receiving currency, so their equivalent in the
+   * sending currency moves with the FX rate. The fees shown here are locked only for
+   * the lifetime of this quote.
    */
   feesIncluded: number;
 
@@ -502,9 +338,6 @@ export interface Quote {
    */
   sendingCurrency: Currency;
 
-  /**
-   * Source account details
-   */
   source: QuoteSourceOneOf;
 
   /**
@@ -547,132 +380,13 @@ export interface Quote {
   rateDetails?: OutgoingRateDetails;
 }
 
-/**
- * Destination account details
- */
-export type QuoteDestinationOneOf =
-  | QuoteDestinationOneOf.AccountDestination
-  | QuoteDestinationOneOf.UmaAddressDestination;
+export type QuoteDestinationOneOf = unknown;
 
-export namespace QuoteDestinationOneOf {
-  /**
-   * Destination account details
-   */
-  export interface AccountDestination {
-    /**
-     * Destination account identifier
-     */
-    accountId: string;
-
-    destinationType: 'ACCOUNT';
-
-    /**
-     * The payment rail used for the transfer. Payment rails represent the underlying
-     * payment network or system used to move funds between accounts.
-     */
-    paymentRail?:
-      | 'ACH'
-      | 'BANK_TRANSFER'
-      | 'FAST'
-      | 'FASTER_PAYMENTS'
-      | 'FEDNOW'
-      | 'MOBILE_MONEY'
-      | 'PAYNOW'
-      | 'PIX'
-      | 'RTP'
-      | 'SEPA'
-      | 'SEPA_INSTANT'
-      | 'SPEI'
-      | 'UPI'
-      | 'WIRE';
-  }
-
-  /**
-   * UMA address destination details
-   */
-  export interface UmaAddressDestination {
-    destinationType: 'UMA_ADDRESS';
-
-    /**
-     * UMA address of the recipient
-     */
-    umaAddress: string;
-
-    /**
-     * Currency code for the destination. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency?: string;
-  }
-}
-
-/**
- * Source account details
- */
-export type QuoteSourceOneOf =
-  | QuoteSourceOneOf.AccountQuoteSource
-  | QuoteSourceOneOf.RealtimeFundingQuoteSource;
-
-export namespace QuoteSourceOneOf {
-  /**
-   * Source account details
-   */
-  export interface AccountQuoteSource {
-    /**
-     * Source account identifier
-     */
-    accountId: string;
-
-    sourceType: 'ACCOUNT';
-
-    /**
-     * Required when funding from an FBO account to identify the customer on whose
-     * behalf the transaction is being initiated. Otherwise, will default to the
-     * customerId of the account owner.
-     */
-    customerId?: string;
-  }
-
-  /**
-   * Fund the quote using a real-time funding source (RTP, SEPA Instant, Spark,
-   * Stables, etc.). This will require manual just-in-time funding using
-   * `paymentInstructions` in the response. Because quotes expire quickly, this
-   * option is only valid for instant payment methods. Do not try to fund a quote
-   * with a non-instant payment method (ACH, etc.).
-   */
-  export interface RealtimeFundingQuoteSource {
-    /**
-     * Currency code for the funding source. See
-     * [Supported Currencies](https://grid.lightspark.com/platform-overview/core-concepts/currencies-and-rails)
-     * for the full list of supported fiat and crypto currencies.
-     */
-    currency: string;
-
-    sourceType: 'REALTIME_FUNDING';
-
-    /**
-     * The crypto network to use for the funding source. Required when `currency` is a
-     * stablecoin (e.g. USDC, USDT). Specifies which network the customer will deposit
-     * on, so the correct deposit address can be generated. Example values:
-     * `SOLANA_MAINNET`, `SOLANA_DEVNET`, `ETHEREUM_MAINNET`, `ETHEREUM_TESTNET`,
-     * `BASE_MAINNET`, `BASE_TESTNET`, `SPARK_MAINNET`, `SPARK_TESTNET`,
-     * `LIGHTNING_MAINNET`, `LIGHTNING_REGTEST`.
-     */
-    cryptoNetwork?: string;
-
-    /**
-     * Source customer ID. If this transaction is being initiated on behalf of a
-     * customer, this is required. If customerId is not provided, the quote will be
-     * created on behalf of the platform itself.
-     */
-    customerId?: string;
-  }
-}
+export type QuoteSourceOneOf = unknown;
 
 export interface QuoteCreateParams {
   /**
-   * Body param: Destination account details
+   * Body param
    */
   destination: QuoteDestinationOneOf;
 
@@ -692,7 +406,7 @@ export interface QuoteCreateParams {
   lockedCurrencySide: 'SENDING' | 'RECEIVING';
 
   /**
-   * Body param: Source account details
+   * Body param
    */
   source: QuoteSourceOneOf;
 
@@ -714,7 +428,7 @@ export interface QuoteCreateParams {
    * `payloadToSign` returned in the quote response, which is not available in a
    * combined create-and-execute call. Create the quote first with
    * `immediatelyExecute: false` and then call `POST /quotes/{quoteId}/execute` with
-   * the signature header.
+   * the `Grid-Wallet-Signature` stamp header.
    */
   immediatelyExecute?: boolean;
 
@@ -765,11 +479,11 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Signature over the `payloadToSign` returned in the quote's
+   * Full Turnkey API-key stamp over the `payloadToSign` returned in the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
    * private key of a verified authentication credential on the source Embedded
-   * Wallet and base64-encoded. Required when the quote's source is an internal
-   * account of type `EMBEDDED_WALLET`; ignored for other source types.
+   * Wallet. Required when the quote's source is an internal account of type
+   * `EMBEDDED_WALLET`; ignored for other source types.
    */
   'Grid-Wallet-Signature'?: string;
 

@@ -33,7 +33,11 @@ export class InternalAccounts extends APIResource {
     body: InternalAccountFundParams,
     options?: RequestOptions,
   ): APIPromise<InternalAccount> {
-    return this._client.post(path`/sandbox/internal-accounts/${accountID}/fund`, { body, ...options });
+    return this._client.post(path`/sandbox/internal-accounts/${accountID}/fund`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 }
 
@@ -58,6 +62,22 @@ export interface InternalAccount {
   fundingPaymentInstructions: Array<QuotesAPI.PaymentInstructions>;
 
   /**
+   * Status of a Grid internal account. The status determines whether the account can
+   * send or receive payments.
+   *
+   * - `PENDING`: The account is under review and is being provisioned. The account
+   *   cannot send or receive payments until provisioning completes.
+   * - `ACTIVE`: The account is ready to send and receive payments.
+   * - `CLOSED`: The account cannot send or receive payments. A customer can initiate
+   *   the closing of an internal account, after which the account transitions to
+   *   this status.
+   * - `FROZEN`: The account cannot send or receive payments. Grid may freeze an
+   *   account in response to compliance or fraud signals; payments are blocked while
+   *   the account remains frozen.
+   */
+  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+
+  /**
    * Classification of an internal account.
    *
    * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
@@ -80,6 +100,12 @@ export interface InternalAccount {
    * empty, the internal account belongs to the platform.
    */
   customerId?: string;
+
+  /**
+   * Whether wallet privacy is enabled for the Embedded Wallet. Only present for
+   * `EMBEDDED_WALLET` internal accounts.
+   */
+  privateEnabled?: boolean;
 }
 
 export interface InternalAccountFundParams {

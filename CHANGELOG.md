@@ -1,5 +1,99 @@
 # Changelog
 
+## 1.8.0 (2026-05-28)
+
+Full Changelog: [v1.7.1...v1.8.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v1.7.1...v1.8.0)
+
+### Features
+
+* [kyb] require tax_id and incorporated_on for business customers ([0261b0b](https://github.com/lightsparkdev/grid-js-sdk/commit/0261b0bbde5f4cdfcbb290f509d0256514bbef52))
+* Add SLV_ACCOUNT external-account type for El Salvador ([42d8f83](https://github.com/lightsparkdev/grid-js-sdk/commit/42d8f83a11aa0b7563e7a3640b36cf0619360893))
+* Add swift as new payment rail option ([8a71441](https://github.com/lightsparkdev/grid-js-sdk/commit/8a7144166eb09c090a013876eedc7cb871836fa9))
+* **api:** add agents resource, device codes, me namespace, agentId to transactions ([4e14ef7](https://github.com/lightsparkdev/grid-js-sdk/commit/4e14ef7e1df416ac9180ae56d64008e6af86d59d))
+* **api:** add cards resource, sandbox card simulate, card webhooks ([6b671db](https://github.com/lightsparkdev/grid-js-sdk/commit/6b671db01e511eb1dd4d8a45c10f2d122bfabf4c))
+* **api:** add credentialId and type fields to passkey auth challenge response ([6a31162](https://github.com/lightsparkdev/grid-js-sdk/commit/6a31162b60f8b1b9dce4096c4d48153b6e67f27d))
+* **api:** add credentialId field to passkey response in auth.credentials.list ([e95b556](https://github.com/lightsparkdev/grid-js-sdk/commit/e95b556c67f554172372966ca0025517b00ac2b3))
+* **api:** add document and bank fields to Colombian Peso external accounts ([bbbca1e](https://github.com/lightsparkdev/grid-js-sdk/commit/bbbca1e2f82cc08cae7684ee9abe6cb2319fe1e4))
+* **api:** add document type enum values to documents resource ([be789de](https://github.com/lightsparkdev/grid-js-sdk/commit/be789de7b9b7b0349d9405ce3fb4241a4e0704dc))
+* **api:** add embeddedWalletConfig parameter and field to config ([d8233c3](https://github.com/lightsparkdev/grid-js-sdk/commit/d8233c37bf022d496034b8a46e5462f18eae94dc))
+* **api:** add Grid-Wallet-Signature and Request-Id headers to customers.update ([5c55afe](https://github.com/lightsparkdev/grid-js-sdk/commit/5c55afe84dce41244ce47c1851847b05230097b1))
+* **api:** add issueChallenge/verifyChallenge to auth sessions ([2579159](https://github.com/lightsparkdev/grid-js-sdk/commit/25791596e062f6b298264705a2d9fba2ff57ba77))
+* **api:** add issuingAuthority field to beneficial owners personalInfo ([bfb48fc](https://github.com/lightsparkdev/grid-js-sdk/commit/bfb48fc31901e3ad02620de3c58b4634d065a1db))
+* **api:** add issuingAuthority parameter and field to documents ([d0b2e92](https://github.com/lightsparkdev/grid-js-sdk/commit/d0b2e9251ca2e97d693c327b73a103f8d9cdd143))
+* **api:** add pagination to platform.externalAccounts.list ([9bf7e0e](https://github.com/lightsparkdev/grid-js-sdk/commit/9bf7e0eaf009aa3ac5e3eb2872190020a332a46e))
+* **api:** add status field to internal account responses ([9bd1baa](https://github.com/lightsparkdev/grid-js-sdk/commit/9bd1baa6d9f026fc0f38c5d89f0cc13845c46bdc))
+* **api:** add SWIFT account type to external accounts ([8ccd1b7](https://github.com/lightsparkdev/grid-js-sdk/commit/8ccd1b76d879a1611b486cc2f00ab0644ac38dcc))
+* **api:** add updateEmail method to customers ([7be958f](https://github.com/lightsparkdev/grid-js-sdk/commit/7be958f1c6aecd2d0be49fb75c40279a57afcd31))
+* **api:** add updateWalletPrivacy method to customers ([8ea8d04](https://github.com/lightsparkdev/grid-js-sdk/commit/8ea8d043672ddd53ac645740dc839de61524ed1a))
+* **api:** manual updates ([53b4968](https://github.com/lightsparkdev/grid-js-sdk/commit/53b4968e2db73eee24191d9015f2f0b0fa0e3839))
+* **api:** manual updates ([0927acc](https://github.com/lightsparkdev/grid-js-sdk/commit/0927accac0e1c5e21268df83f544c9c343934ddb))
+* **api:** manual updates ([9256000](https://github.com/lightsparkdev/grid-js-sdk/commit/92560005cb24dc0c35e52d801c50941dbad85977))
+* **api:** manual updates ([5a8cc62](https://github.com/lightsparkdev/grid-js-sdk/commit/5a8cc626f06dea4708ab542e81fec9c1038b4a8c))
+* **api:** manual updates ([1c85ff8](https://github.com/lightsparkdev/grid-js-sdk/commit/1c85ff83e6625e78a47a4c916d8ae1e078a36fe4))
+* **api:** manual updates ([b9bc604](https://github.com/lightsparkdev/grid-js-sdk/commit/b9bc6044e18e4c23d5a5e5090556421881723fe7))
+* **api:** manual updates ([75b8b7b](https://github.com/lightsparkdev/grid-js-sdk/commit/75b8b7b501e166cb40cbd679fcb00e874542f04e))
+* **api:** manual updates ([f2a9dd9](https://github.com/lightsparkdev/grid-js-sdk/commit/f2a9dd93a9ad1c84d55beb6a9039f1be58ec5d9d))
+* **api:** manual updates ([0d59c22](https://github.com/lightsparkdev/grid-js-sdk/commit/0d59c223b8ac4d3b36dc668550ffb4e283d75a85))
+* **api:** manual updates ([054bc41](https://github.com/lightsparkdev/grid-js-sdk/commit/054bc41732dab4d791b2ae981e790f3022593ca0))
+* **api:** manual updates ([f9bf31f](https://github.com/lightsparkdev/grid-js-sdk/commit/f9bf31f92488b80c4a39dc2e7e55adf0ed57e8db))
+* **api:** manual updates ([96f1271](https://github.com/lightsparkdev/grid-js-sdk/commit/96f12716736bfbda35e2348513ac35e1fab3c5b4))
+* **api:** manual updates ([75b2ad9](https://github.com/lightsparkdev/grid-js-sdk/commit/75b2ad9ec64aa6496c6f2e158a371c67339d0ddf))
+* **api:** manual updates ([b9a0cad](https://github.com/lightsparkdev/grid-js-sdk/commit/b9a0cad025b82396a7a8286f09d36e0cee3c6bf9))
+* **api:** manual updates ([3793af3](https://github.com/lightsparkdev/grid-js-sdk/commit/3793af3229ccc1dc3750849c46563a379048a14a))
+* Replace grid.lightspark.com with docs.lightspark.com ([dca9391](https://github.com/lightsparkdev/grid-js-sdk/commit/dca9391b3262ea667dea2b85525f84e5ecc63039))
+* **types:** add BusinessInfo interface definition to customers ([8e18059](https://github.com/lightsparkdev/grid-js-sdk/commit/8e18059c8b7d20009a784b2e2cb222c11068c99f))
+* Update cryptoNetwork values ([6908f84](https://github.com/lightsparkdev/grid-js-sdk/commit/6908f84f91dafb07202d0f29a9bac290aed89924))
+
+
+### Bug Fixes
+
+* **api:** remove cryptoNetwork field from external accounts ([64072cd](https://github.com/lightsparkdev/grid-js-sdk/commit/64072cdf999803c37e1c1061e2b8bcd888fb5a93))
+* **types:** add mobile money to COP accounts, make AED address required ([1adbf8c](https://github.com/lightsparkdev/grid-js-sdk/commit/1adbf8c35aaf0a6fb11b000882f358fb09245da9))
+* **types:** make clientPublicKey required in EmailOtpCredentialVerifyRequest ([a15ca2e](https://github.com/lightsparkdev/grid-js-sdk/commit/a15ca2e64a42a7e8271e61a9fdab81a196b444ae))
+* **types:** make countryOfResidence optional, phoneNumber required in beneficiary types ([2fb820d](https://github.com/lightsparkdev/grid-js-sdk/commit/2fb820dba2d0b849fd47149d878a035e3f995153))
+* **types:** make documentNumber/issuingAuthority optional, remove identity variants in documents ([36917b3](https://github.com/lightsparkdev/grid-js-sdk/commit/36917b39823d5098c3aef5ccfe44f017e7b061b5))
+* **types:** make fields optional in BDT/GHS/PKR account types ([75b1675](https://github.com/lightsparkdev/grid-js-sdk/commit/75b1675f61d88b0657e36f8b4e3fe569dd0b1eda))
+* **types:** remove issuingAuthority from beneficial owners ([4dd5d1f](https://github.com/lightsparkdev/grid-js-sdk/commit/4dd5d1f6f596a2e593a72dbc8e74efff9cefd2ef))
+* **types:** update BDT/GHS/GTQ/HTG/JMD/PKR account and beneficiary types ([f21102a](https://github.com/lightsparkdev/grid-js-sdk/commit/f21102a8d02c768d927a02b67b82657cf9d27674))
+
+
+### Chores
+
+* **api:** remove update method from auth.credentials ([c50af96](https://github.com/lightsparkdev/grid-js-sdk/commit/c50af962fae54d9de5fbd1dedefbff81975bf3d6))
+* avoid formatting file that gets changed during releases ([76ae105](https://github.com/lightsparkdev/grid-js-sdk/commit/76ae105e8416d30d5c19b8515552e52620bd04f2))
+* configure new SDK language ([9ed5e41](https://github.com/lightsparkdev/grid-js-sdk/commit/9ed5e4172a69d2d8ff942b3f653a797665a77aae))
+* configure new SDK language ([5646c8c](https://github.com/lightsparkdev/grid-js-sdk/commit/5646c8c96df0fdcf02214a05484d491535c90a96))
+* configure new SDK language ([3ae1b50](https://github.com/lightsparkdev/grid-js-sdk/commit/3ae1b502122683a3255c3358498623bd3ea6e052))
+* configure new SDK language ([f7809e7](https://github.com/lightsparkdev/grid-js-sdk/commit/f7809e7c28ae5e4c0cf50701bd56ebbed65d6279))
+* configure new SDK language ([7d2d75d](https://github.com/lightsparkdev/grid-js-sdk/commit/7d2d75dd533ab942f88570991ab842373314a573))
+* **format:** run eslint and prettier separately ([7f042f3](https://github.com/lightsparkdev/grid-js-sdk/commit/7f042f33f721a05e26f66da079892dc6b33994f3))
+* **internal:** codegen related update ([db96399](https://github.com/lightsparkdev/grid-js-sdk/commit/db96399fa38625a48035b33625b3eda7192d6a98))
+* **internal:** codegen related update ([e3444b4](https://github.com/lightsparkdev/grid-js-sdk/commit/e3444b43c1a0f8b04bc6a39b864ebac19012bc8a))
+* **internal:** regenerate SDK with no functional changes ([9394744](https://github.com/lightsparkdev/grid-js-sdk/commit/9394744e44bdc46b27ecba3eb16189b421276849))
+* **internal:** regenerate SDK with no functional changes ([d2499b2](https://github.com/lightsparkdev/grid-js-sdk/commit/d2499b22753caa666eb5b797160b5da2604f9051))
+* redact api-key headers in debug logs ([5e0267e](https://github.com/lightsparkdev/grid-js-sdk/commit/5e0267e95919a5b6f6c765f21440b2dc9f4947fc))
+* **tests:** update Request-Id header format in auth test fixtures ([986353c](https://github.com/lightsparkdev/grid-js-sdk/commit/986353c2e69ae3e03c2cc86464a6910b51b9a6cb))
+
+
+### Documentation
+
+* **api:** clarify nickname validation in auth credentials ([1eedd88](https://github.com/lightsparkdev/grid-js-sdk/commit/1eedd88be81fa1bbf8defcba7479d29afc6d430c))
+* **api:** clarify OAUTH credential challenge behavior in auth.credentials ([21c1a37](https://github.com/lightsparkdev/grid-js-sdk/commit/21c1a37b08adf1791280d1352f3a2bbf1d6708fa))
+* **api:** clarify passkey credential limits in auth.credentials ([7f7969a](https://github.com/lightsparkdev/grid-js-sdk/commit/7f7969ad8fa1c75c834ba524b4f64ab5390067e3))
+* **api:** clarify Request-Id header format across auth and customers ([05ad798](https://github.com/lightsparkdev/grid-js-sdk/commit/05ad7983a8f6deff594224b2a1bd875ea99cd2d7))
+* **api:** remove OTHER from documentType enum documentation in documents ([6bd7355](https://github.com/lightsparkdev/grid-js-sdk/commit/6bd7355fc324659f22a1001e91c83feb1e67521c))
+* **api:** update auth credentials method descriptions ([0a252eb](https://github.com/lightsparkdev/grid-js-sdk/commit/0a252eb9a8bdef3280b3836407aabf214d0ed2eb))
+* **api:** update auth.sessions.delete and Quote.expiresAt descriptions ([34bd3bc](https://github.com/lightsparkdev/grid-js-sdk/commit/34bd3bcbafa20e7f94e21edf47625f7cea61abd1))
+* **api:** update endpoint references in agents.me transfer and quote methods ([8b42438](https://github.com/lightsparkdev/grid-js-sdk/commit/8b4243825baa545d8402b0b9b9a9d4d2e273d488))
+* **api:** update Grid-Wallet-Signature documentation to clarify Turnkey stamp format ([c7cdf9f](https://github.com/lightsparkdev/grid-js-sdk/commit/c7cdf9f5b02bf3d346856ec99fe52459a47c9a01))
+* **api:** update OAuth token requirements in auth credentials ([f74643f](https://github.com/lightsparkdev/grid-js-sdk/commit/f74643f521eaa49a026231cdbdd8dfb750670024))
+* clarify forwards compat behavior ([e379a52](https://github.com/lightsparkdev/grid-js-sdk/commit/e379a52c805d530c1c1950594548a00ebb04438a))
+* **documents:** split document upload by identity vs non-identity ([755b9d8](https://github.com/lightsparkdev/grid-js-sdk/commit/755b9d8d2fb0b4c667c860ba2b73866ad75da00a))
+* sync country coverage with Grid Switch Corridor List ([8ee7c32](https://github.com/lightsparkdev/grid-js-sdk/commit/8ee7c320b09a1e1f33c983bfa2eb987029e6d5c5))
+* update http mcp docs ([cb382bb](https://github.com/lightsparkdev/grid-js-sdk/commit/cb382bbd94722bba4c5c46059ad4563d5771e8d8))
+* update logging docs ([e871d63](https://github.com/lightsparkdev/grid-js-sdk/commit/e871d634610ccf9046d02c5c553a2445595cc7da))
+* update with proxy auth info ([b3e8864](https://github.com/lightsparkdev/grid-js-sdk/commit/b3e8864a570272cad87b73fd4bd4cb6dbed25b84))
+
 ## 1.7.1 (2026-04-28)
 
 Full Changelog: [v1.7.0...v1.7.1](https://github.com/lightsparkdev/grid-js-sdk/compare/v1.7.0...v1.7.1)

@@ -1,22 +1,55 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 export * from './shared';
+export {
+  Agents,
+  type Agent,
+  type AgentAccountRestrictions,
+  type AgentAccountRule,
+  type AgentAction,
+  type AgentActionListResponse,
+  type AgentActionRejectRequest,
+  type AgentApprovalThresholds,
+  type AgentCreateRequest,
+  type AgentCreateResponse,
+  type AgentDeviceCode,
+  type AgentDeviceCodeRedeemResponse,
+  type AgentDeviceCodeStatusResponse,
+  type AgentListResponse,
+  type AgentPolicy,
+  type AgentUpdateRequest,
+  type AgentUsage,
+  type AgentCreateParams,
+  type AgentUpdateParams,
+  type AgentListParams,
+  type AgentListApprovalsParams,
+  type AgentUpdatePolicyParams,
+  type AgentActionsDefaultPagination,
+  type AgentsDefaultPagination,
+} from './agents/agents';
 export { Auth } from './auth/auth';
 export {
   BeneficialOwners,
   type BeneficialOwnerPersonalInfo,
-  type BeneficialOwnerCreateResponse,
-  type BeneficialOwnerRetrieveResponse,
-  type BeneficialOwnerUpdateResponse,
-  type BeneficialOwnerListResponse,
   type BeneficialOwnerCreateParams,
   type BeneficialOwnerUpdateParams,
   type BeneficialOwnerListParams,
-  type BeneficialOwnerListResponsesDefaultPagination,
 } from './beneficial-owners';
+export {
+  Cards,
+  type CardRetrieveResponse,
+  type CardUpdateResponse,
+  type CardListResponse,
+  type CardIssueResponse,
+  type CardUpdateParams,
+  type CardListParams,
+  type CardIssueParams,
+  type CardListResponsesDefaultPagination,
+} from './cards';
 export {
   Config,
   type CustomerInfoFieldName,
+  type EmbeddedWalletConfig,
   type PlatformConfig,
   type PlatformCurrencyConfig,
   type ConfigUpdateParams,
@@ -28,21 +61,21 @@ export {
 } from './crypto';
 export {
   Customers,
-  type BusinessCustomerFields,
-  type BusinessInfo,
-  type Customer,
-  type CustomerCreate,
-  type CustomerOneOf,
-  type CustomerType,
-  type CustomerUpdate,
-  type IndividualCustomerFields,
-  type CustomerGetKYCLinkResponse,
+  type CustomerCreateResponse,
+  type CustomerRetrieveResponse,
+  type CustomerUpdateResponse,
+  type CustomerListResponse,
+  type CustomerDeleteResponse,
+  type CustomerExportResponse,
+  type CustomerGenerateKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
-  type CustomerGetKYCLinkParams,
+  type CustomerExportParams,
+  type CustomerGenerateKYCLinkParams,
   type CustomerListInternalAccountsParams,
-  type CustomerOneovesDefaultPagination,
+  type CustomerUpdateInternalAccountParams,
+  type CustomerListResponsesDefaultPagination,
 } from './customers/customers';
 export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';
 export {
@@ -57,11 +90,6 @@ export {
   type DocumentListResponsesDefaultPagination,
 } from './documents';
 export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
-export {
-  InternalAccounts,
-  type InternalAccountExportResponse,
-  type InternalAccountExportParams,
-} from './internal-accounts';
 export {
   Invitations,
   type CurrencyAmount,
@@ -147,6 +175,7 @@ export {
 } from './verifications';
 export {
   Webhooks,
+  type AgentActionWebhookEvent,
   type IncomingPaymentWebhookEvent,
   type OutgoingPaymentWebhookEvent,
   type TestWebhookWebhookEvent,
@@ -155,5 +184,7 @@ export {
   type CustomerUpdateWebhookEvent,
   type InternalAccountStatusWebhookEvent,
   type VerificationUpdateWebhookEvent,
+  type CardStateChangeWebhookEvent,
+  type CardFundingSourceChangeWebhookEvent,
   type UnwrapWebhookEvent,
 } from './webhooks';

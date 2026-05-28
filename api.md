@@ -4,10 +4,14 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">AedBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">AedExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">AgentTransferDetails</a></code>
 - <code><a href="./src/resources/shared.ts">BdtBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BdtExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">BeneficialOwner</a></code>
 - <code><a href="./src/resources/shared.ts">BrlExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BulkCustomerImportErrorEntry</a></code>
+- <code><a href="./src/resources/shared.ts">BusinessCustomer</a></code>
+- <code><a href="./src/resources/shared.ts">BusinessInfoUpdate</a></code>
 - <code><a href="./src/resources/shared.ts">BwpBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BwpExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">CadBeneficiary</a></code>
@@ -29,6 +33,7 @@ Types:
 - <code><a href="./src/resources/shared.ts">HtgBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">HtgExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">IdrExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">IndividualCustomer</a></code>
 - <code><a href="./src/resources/shared.ts">InrExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">JmdBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">JmdExternalAccountCreateInfo</a></code>
@@ -46,6 +51,10 @@ Types:
 - <code><a href="./src/resources/shared.ts">RwfBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">RwfExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">SgdExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">SlvBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">SlvExternalAccountCreateInfo</a></code>
+- <code><a href="./src/resources/shared.ts">SwiftBeneficiary</a></code>
+- <code><a href="./src/resources/shared.ts">SwiftExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">ThbExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">TzsBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">TzsExternalAccountCreateInfo</a></code>
@@ -68,6 +77,7 @@ Types:
 Types:
 
 - <code><a href="./src/resources/config.ts">CustomerInfoFieldName</a></code>
+- <code><a href="./src/resources/config.ts">EmbeddedWalletConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformCurrencyConfig</a></code>
 
@@ -80,25 +90,25 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerFields</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessInfo</a></code>
-- <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerCreate</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerType</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerUpdate</a></code>
-- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerGetKYCLinkResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerCreateResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerRetrieveResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerUpdateResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerDeleteResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerExportResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerGenerateKYCLinkResponse</a></code>
 
 Methods:
 
-- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerOneOf</code>
-- <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerOneOf</code>
-- <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerOneOf</code>
-- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
-- <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
-- <code title="get /customers/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">getKYCLink</a>({ ...params }) -> CustomerGetKYCLinkResponse</code>
+- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
+- <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerRetrieveResponse</code>
+- <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
+- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerListResponsesDefaultPagination</code>
+- <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerDeleteResponse</code>
+- <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> CustomerExportResponse</code>
+- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> CustomerGenerateKYCLinkResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
+- <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
 
 ## ExternalAccounts
 
@@ -233,13 +243,12 @@ Types:
 - <code><a href="./src/resources/platform/external-accounts.ts">XofAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">ZarAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">ZmwAccountInfo</a></code>
-- <code><a href="./src/resources/platform/external-accounts.ts">ExternalAccountListResponse</a></code>
 
 Methods:
 
 - <code title="post /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">create</a>({ ...params }) -> ExternalAccount</code>
 - <code title="get /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
-- <code title="get /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountListResponse</code>
+- <code title="get /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
 - <code title="delete /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
 
 # TransferIn
@@ -361,6 +370,26 @@ Methods:
 
 - <code title="post /sandbox/webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
 
+## Cards
+
+### Simulate
+
+Types:
+
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardMerchant</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardPullSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardRefundSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
+
+Methods:
+
+- <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
+
 # UmaProviders
 
 Types:
@@ -399,6 +428,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/webhooks.ts">AgentActionWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">TestWebhookWebhookEvent</a></code>
@@ -407,6 +437,8 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">CustomerUpdateWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">VerificationUpdateWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CardStateChangeWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CardFundingSourceChangeWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 
 Methods:
@@ -428,17 +460,13 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerPersonalInfo</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerCreateResponse</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerRetrieveResponse</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerUpdateResponse</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerListResponse</a></code>
 
 Methods:
 
-- <code title="post /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">create</a>({ ...params }) -> BeneficialOwnerCreateResponse</code>
-- <code title="get /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">retrieve</a>(beneficialOwnerID) -> BeneficialOwnerRetrieveResponse</code>
-- <code title="patch /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">update</a>(beneficialOwnerID, { ...params }) -> BeneficialOwnerUpdateResponse</code>
-- <code title="get /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">list</a>({ ...params }) -> BeneficialOwnerListResponsesDefaultPagination</code>
+- <code title="post /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">create</a>({ ...params }) -> BeneficialOwner</code>
+- <code title="get /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">retrieve</a>(beneficialOwnerID) -> BeneficialOwner</code>
+- <code title="patch /beneficial-owners/{beneficialOwnerId}">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">update</a>(beneficialOwnerID, { ...params }) -> BeneficialOwner</code>
+- <code title="get /beneficial-owners">client.beneficialOwners.<a href="./src/resources/beneficial-owners.ts">list</a>({ ...params }) -> BeneficialOwnersDefaultPagination</code>
 
 # Documents
 
@@ -487,38 +515,153 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialCreateRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialCreateRequestOneOf</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialListResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialResponseOneOf</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialVerifyRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialVerifyRequestOneOf</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethod</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">CredentialListResponse</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">CredentialResendChallengeResponse</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">CredentialRevokeResponse</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">CredentialVerifyResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthMethodResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthMethodType</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthSession</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthSignedRequestChallenge</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialVerifyRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialCreateRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialVerifyRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">PasskeyAssertion</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">PasskeyAttestation</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">PasskeyAuthChallenge</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequest</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">SignedRequestChallenge</a></code>
 
 Methods:
 
-- <code title="post /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">create</a>({ ...params }) -> AuthMethod</code>
-- <code title="get /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">list</a>({ ...params }) -> CredentialListResponse</code>
-- <code title="post /auth/credentials/{id}/challenge">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">resendChallenge</a>(id, { ...params }) -> CredentialResendChallengeResponse</code>
-- <code title="delete /auth/credentials/{id}">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">revoke</a>(id, { ...params }) -> CredentialRevokeResponse</code>
-- <code title="post /auth/credentials/{id}/verify">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">verify</a>(id, { ...params }) -> CredentialVerifyResponse</code>
+- <code title="post /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">create</a>({ ...params }) -> AuthMethodResponse</code>
+- <code title="get /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">list</a>({ ...params }) -> AuthCredentialListResponse</code>
+- <code title="delete /auth/credentials/{id}">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">delete</a>(id, { ...params }) -> AuthSignedRequestChallenge</code>
+- <code title="post /auth/credentials/{id}/challenge">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">challenge</a>(id, { ...params }) -> AuthCredentialResponseOneOf</code>
+- <code title="post /auth/credentials/{id}/verify">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">verify</a>(id, { ...params }) -> AuthSession</code>
 
 ## Sessions
 
 Types:
 
 - <code><a href="./src/resources/auth/sessions.ts">SessionListResponse</a></code>
-- <code><a href="./src/resources/auth/sessions.ts">SessionRevokeResponse</a></code>
 
 Methods:
 
 - <code title="get /auth/sessions">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">list</a>({ ...params }) -> SessionListResponse</code>
-- <code title="delete /auth/sessions/{id}">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">revoke</a>(id, { ...params }) -> SessionRevokeResponse</code>
+- <code title="delete /auth/sessions/{id}">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">delete</a>(id, { ...params }) -> AuthSignedRequestChallenge</code>
+- <code title="post /auth/sessions/{id}/refresh">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">refresh</a>(id, { ...params }) -> AuthSession</code>
 
-# InternalAccounts
+# Agents
 
 Types:
 
-- <code><a href="./src/resources/internal-accounts.ts">InternalAccountExportResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentAccountRestrictions</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentAccountRule</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentAction</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentActionListResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentActionRejectRequest</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentApprovalThresholds</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentCreateRequest</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentCreateResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentDeviceCode</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentDeviceCodeRedeemResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentDeviceCodeStatusResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentPolicy</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentUpdateRequest</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentUsage</a></code>
 
 Methods:
 
-- <code title="post /internal-accounts/{id}/export">client.internalAccounts.<a href="./src/resources/internal-accounts.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
+- <code title="post /agents">client.agents.<a href="./src/resources/agents/agents.ts">create</a>({ ...params }) -> AgentCreateResponse</code>
+- <code title="get /agents/{agentId}">client.agents.<a href="./src/resources/agents/agents.ts">retrieve</a>(agentID) -> Agent</code>
+- <code title="patch /agents/{agentId}">client.agents.<a href="./src/resources/agents/agents.ts">update</a>(agentID, { ...params }) -> Agent</code>
+- <code title="get /agents">client.agents.<a href="./src/resources/agents/agents.ts">list</a>({ ...params }) -> AgentsDefaultPagination</code>
+- <code title="delete /agents/{agentId}">client.agents.<a href="./src/resources/agents/agents.ts">delete</a>(agentID) -> void</code>
+- <code title="get /agents/approvals">client.agents.<a href="./src/resources/agents/agents.ts">listApprovals</a>({ ...params }) -> AgentActionsDefaultPagination</code>
+- <code title="patch /agents/{agentId}/policy">client.agents.<a href="./src/resources/agents/agents.ts">updatePolicy</a>(agentID, { ...params }) -> Agent</code>
+
+## Me
+
+Methods:
+
+- <code title="get /agents/me">client.agents.me.<a href="./src/resources/agents/me/me.ts">retrieve</a>() -> Agent</code>
+- <code title="post /agents/me/transfer-in">client.agents.me.<a href="./src/resources/agents/me/me.ts">createTransferIn</a>({ ...params }) -> AgentAction</code>
+- <code title="post /agents/me/transfer-out">client.agents.me.<a href="./src/resources/agents/me/me.ts">createTransferOut</a>({ ...params }) -> AgentAction</code>
+- <code title="get /agents/me/internal-accounts">client.agents.me.<a href="./src/resources/agents/me/me.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
+
+### Transactions
+
+Methods:
+
+- <code title="get /agents/me/transactions/{transactionId}">client.agents.me.transactions.<a href="./src/resources/agents/me/transactions.ts">retrieve</a>(transactionID) -> Transaction</code>
+- <code title="get /agents/me/transactions">client.agents.me.transactions.<a href="./src/resources/agents/me/transactions.ts">list</a>({ ...params }) -> TransactionsDefaultPagination</code>
+
+### Quotes
+
+Methods:
+
+- <code title="post /agents/me/quotes">client.agents.me.quotes.<a href="./src/resources/agents/me/quotes.ts">create</a>({ ...params }) -> Quote</code>
+- <code title="get /agents/me/quotes/{quoteId}">client.agents.me.quotes.<a href="./src/resources/agents/me/quotes.ts">retrieve</a>(quoteID) -> Quote</code>
+- <code title="post /agents/me/quotes/{quoteId}/execute">client.agents.me.quotes.<a href="./src/resources/agents/me/quotes.ts">execute</a>(quoteID, { ...params }) -> AgentAction</code>
+
+### ExternalAccounts
+
+Methods:
+
+- <code title="get /agents/me/external-accounts/{externalAccountId}">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
+- <code title="get /agents/me/external-accounts">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
+- <code title="delete /agents/me/external-accounts/{externalAccountId}">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
+- <code title="post /agents/me/external-accounts">client.agents.me.externalAccounts.<a href="./src/resources/agents/me/external-accounts.ts">add</a>({ ...params }) -> ExternalAccount</code>
+
+### Actions
+
+Methods:
+
+- <code title="get /agents/me/actions/{actionId}">client.agents.me.actions.<a href="./src/resources/agents/me/actions.ts">retrieve</a>(actionID) -> AgentAction</code>
+- <code title="get /agents/me/actions">client.agents.me.actions.<a href="./src/resources/agents/me/actions.ts">list</a>({ ...params }) -> AgentActionsDefaultPagination</code>
+
+## DeviceCodes
+
+Methods:
+
+- <code title="get /agents/device-codes/{code}/status">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">getStatus</a>(code) -> AgentDeviceCodeStatusResponse</code>
+- <code title="post /agents/device-codes/{code}/redeem">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">redeem</a>(code) -> AgentDeviceCodeRedeemResponse</code>
+- <code title="post /agents/{agentId}/device-codes">client.agents.deviceCodes.<a href="./src/resources/agents/device-codes.ts">regenerate</a>(agentID) -> AgentDeviceCode</code>
+
+## Transactions
+
+Methods:
+
+- <code title="post /agents/{agentId}/actions/{actionId}/approve">client.agents.transactions.<a href="./src/resources/agents/transactions.ts">approve</a>(actionID, { ...params }) -> AgentAction</code>
+- <code title="post /agents/{agentId}/actions/{actionId}/reject">client.agents.transactions.<a href="./src/resources/agents/transactions.ts">reject</a>(actionID, { ...params }) -> AgentAction</code>
+
+## Actions
+
+Methods:
+
+- <code title="post /agents/{agentId}/actions/{actionId}/approve">client.agents.actions.<a href="./src/resources/agents/actions.ts">approve</a>(actionID, { ...params }) -> AgentAction</code>
+- <code title="post /agents/{agentId}/actions/{actionId}/reject">client.agents.actions.<a href="./src/resources/agents/actions.ts">reject</a>(actionID, { ...params }) -> AgentAction</code>
+
+# Cards
+
+Types:
+
+- <code><a href="./src/resources/cards.ts">CardRetrieveResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardUpdateResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardListResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardIssueResponse</a></code>
+
+Methods:
+
+- <code title="get /cards/{id}">client.cards.<a href="./src/resources/cards.ts">retrieve</a>(id) -> CardRetrieveResponse</code>
+- <code title="patch /cards/{id}">client.cards.<a href="./src/resources/cards.ts">update</a>(id, { ...params }) -> CardUpdateResponse</code>
+- <code title="get /cards">client.cards.<a href="./src/resources/cards.ts">list</a>({ ...params }) -> CardListResponsesDefaultPagination</code>
+- <code title="post /cards">client.cards.<a href="./src/resources/cards.ts">issue</a>({ ...params }) -> CardIssueResponse</code>

@@ -17,7 +17,7 @@ export class Crypto extends APIResource {
    * ```ts
    * const response = await client.crypto.estimateWithdrawalFee({
    *   amount: 1000000,
-   *   cryptoNetwork: 'SOLANA_MAINNET',
+   *   cryptoNetwork: 'SOLANA',
    *   currency: 'USDC',
    *   destinationAddress:
    *     '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
@@ -30,7 +30,11 @@ export class Crypto extends APIResource {
     body: CryptoEstimateWithdrawalFeeParams,
     options?: RequestOptions,
   ): APIPromise<CryptoEstimateWithdrawalFeeResponse> {
-    return this._client.post('/crypto/estimate-withdrawal-fee', { body, ...options });
+    return this._client.post('/crypto/estimate-withdrawal-fee', {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 }
 
@@ -77,9 +81,8 @@ export interface CryptoEstimateWithdrawalFeeParams {
   amount: number;
 
   /**
-   * The blockchain network for the withdrawal. Example values: SOLANA_MAINNET,
-   * SOLANA_DEVNET, ETHEREUM_MAINNET, ETHEREUM_TESTNET, BASE_MAINNET, BASE_TESTNET,
-   * SPARK_MAINNET, SPARK_TESTNET, LIGHTNING_MAINNET, LIGHTNING_REGTEST.
+   * The blockchain network for the withdrawal. Example values: SOLANA, ETHEREUM,
+   * BASE, POLYGON, SPARK, LIGHTNING, BITCOIN.
    */
   cryptoNetwork: string;
 

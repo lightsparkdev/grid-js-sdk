@@ -5,6 +5,8 @@ import LightsparkGrid from '@lightsparkdev/grid';
 const client = new LightsparkGrid({
   username: 'My Username',
   password: 'My Password',
+  agentAccessToken: 'My Agent Access Token',
+  webhookSignature: 'My Webhook Signature',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
@@ -27,11 +29,6 @@ describe('resource customers', () => {
   test.skip('create: required and optional params', async () => {
     const response = await client.customers.create({
       CreateCustomerRequest: {
-        currencies: ['USD', 'USDC'],
-        email: 'john.doe@example.com',
-        platformCustomerId: 'ind-9f84e0c2',
-        region: 'US',
-        umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
           country: 'US',
@@ -42,9 +39,14 @@ describe('resource customers', () => {
           state: 'CA',
         },
         birthDate: '1990-01-15',
+        currencies: ['USD', 'USDC'],
+        email: 'john.doe@example.com',
         fullName: 'Jane Smith',
         kycStatus: 'APPROVED',
         nationality: 'US',
+        platformCustomerId: 'ind-9f84e0c2',
+        region: 'US',
+        umaAddress: '$john.doe@uma.domain.com',
       },
     });
   });
@@ -79,9 +81,6 @@ describe('resource customers', () => {
   test.skip('update: required and optional params', async () => {
     const response = await client.customers.update('customerId', {
       UpdateCustomerRequest: {
-        currencies: ['USD', 'EUR', 'USDC'],
-        email: 'john.doe@example.com',
-        umaAddress: '$john.doe@uma.domain.com',
         customerType: 'INDIVIDUAL',
         address: {
           country: 'US',
@@ -92,10 +91,16 @@ describe('resource customers', () => {
           state: 'CA',
         },
         birthDate: '1985-06-15',
+        currencies: ['USD', 'EUR', 'USDC'],
+        email: 'john.doe@example.com',
         fullName: 'John Smith',
         kycStatus: 'APPROVED',
         nationality: 'US',
+        umaAddress: '$john.doe@uma.domain.com',
       },
+      'Grid-Wallet-Signature':
+        'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
+      'Request-Id': 'Request:019542f5-b3e7-1d02-0000-000000000010',
     });
   });
 
@@ -148,8 +153,11 @@ describe('resource customers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('getKYCLink: only required params', async () => {
-    const responsePromise = client.customers.getKYCLink({ platformCustomerId: 'platformCustomerId' });
+  test.skip('export: only required params', async () => {
+    const responsePromise = client.customers.export('id', {
+      clientPublicKey:
+        '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+    });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -160,11 +168,38 @@ describe('resource customers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('getKYCLink: required and optional params', async () => {
-    const response = await client.customers.getKYCLink({
-      platformCustomerId: 'platformCustomerId',
-      redirectUri: 'redirectUri',
+  test.skip('export: required and optional params', async () => {
+    const response = await client.customers.export('id', {
+      clientPublicKey:
+        '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+      'Grid-Wallet-Signature':
+        'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
+      'Request-Id': 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('generateKYCLink', async () => {
+    const responsePromise = client.customers.generateKYCLink('customerId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('generateKYCLink: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.customers.generateKYCLink(
+        'customerId',
+        { redirectUri: 'https://app.example.com/onboarding/completed', 'Idempotency-Key': '<uuid>' },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -194,5 +229,20 @@ describe('resource customers', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateInternalAccount', async () => {
+    const responsePromise = client.customers.updateInternalAccount(
+      'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
+      {},
+    );
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 });

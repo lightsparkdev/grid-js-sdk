@@ -3,7 +3,9 @@
 import { APIResource } from '../../core/resource';
 import * as Shared from '../shared';
 import * as ExternalAccountsAPI from '../customers/external-accounts';
+import { ExternalAccountsDefaultPagination } from '../customers/external-accounts';
 import { APIPromise } from '../../core/api-promise';
+import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
@@ -45,7 +47,11 @@ export class ExternalAccounts extends APIResource {
     body: ExternalAccountCreateParams,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.post('/platform/external-accounts', { body, ...options });
+    return this._client.post('/platform/external-accounts', {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -63,7 +69,10 @@ export class ExternalAccounts extends APIResource {
     externalAccountID: string,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.get(path`/platform/external-accounts/${externalAccountID}`, options);
+    return this._client.get(path`/platform/external-accounts/${externalAccountID}`, {
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -75,15 +84,21 @@ export class ExternalAccounts extends APIResource {
    *
    * @example
    * ```ts
-   * const externalAccounts =
-   *   await client.platform.externalAccounts.list();
+   * // Automatically fetches more pages as needed.
+   * for await (const externalAccount of client.platform.externalAccounts.list()) {
+   *   // ...
+   * }
    * ```
    */
   list(
     query: ExternalAccountListParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ExternalAccountListResponse> {
-    return this._client.get('/platform/external-accounts', { query, ...options });
+  ): PagePromise<ExternalAccountsDefaultPagination, ExternalAccountsAPI.ExternalAccount> {
+    return this._client.getAPIList(
+      '/platform/external-accounts',
+      DefaultPagination<ExternalAccountsAPI.ExternalAccount>,
+      { query, ...options, __security: { basicAuth: true } },
+    );
   }
 
   /**
@@ -100,6 +115,7 @@ export class ExternalAccounts extends APIResource {
     return this._client.delete(path`/platform/external-accounts/${externalAccountID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      __security: { basicAuth: true },
     });
   }
 }
@@ -120,30 +136,31 @@ export interface AedAccountInfo {
   swiftCode?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface BdtAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'BDT_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
-  /**
-   * The branch code
-   */
-  branchCode: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
+   * The account number of the bank
+   */
+  accountNumber?: string;
+
+  /**
+   * The branch code
+   */
+  branchCode?: string;
+
+  /**
    * The phone number in international format
    */
-  phoneNumber: string;
+  phoneNumber?: string;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -209,25 +226,36 @@ export interface CadAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface CopAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'COP_ACCOUNT';
 
-  /**
-   * The bank account type
-   */
-  bankAccountType: 'CHECKING' | 'SAVINGS';
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The name of the bank
+   * The account number of the bank (BANK_TRANSFER only)
    */
-  bankName: string;
+  accountNumber?: string;
 
-  paymentRails: Array<'BANK_TRANSFER'>;
+  /**
+   * The bank account type (BANK_TRANSFER only)
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank (BANK_TRANSFER only)
+   */
+  bankName?: string;
+
+  /**
+   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
+   */
+  phoneNumber?: string;
 }
 
 export interface DkkAccountInfo {
@@ -304,25 +332,26 @@ export interface GbpAccountInfo {
   sortCode: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface GhsAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'GHS_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
+   * The account number of the bank
+   */
+  accountNumber?: string;
+
+  /**
    * The phone number in international format
    */
-  phoneNumber: string;
+  phoneNumber?: string;
 }
 
 export interface GtqAccountInfo {
@@ -337,11 +366,6 @@ export interface GtqAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 }
@@ -427,11 +451,6 @@ export interface JmdAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   /**
    * The branch code
@@ -537,30 +556,36 @@ export interface PhpAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: bankName, phoneNumber
+ */
 export interface PkrAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'PKR_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The phone number in international format
+   * The account number of the bank
    */
-  phoneNumber: string;
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)
    */
   iban?: string;
+
+  /**
+   * The phone number in international format
+   */
+  phoneNumber?: string;
 }
 
 export interface RwfAccountInfo {
@@ -764,37 +789,41 @@ export interface ZmwAccountInfo {
   provider: string;
 }
 
-export interface ExternalAccountListResponse {
-  /**
-   * List of external accounts matching the filter criteria
-   */
-  data: Array<ExternalAccountsAPI.ExternalAccount>;
-}
-
 export interface ExternalAccountCreateParams {
   /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber
+   * - MOBILE_MONEY: phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
     | Shared.BrlExternalAccountCreateInfo
     | Shared.BwpExternalAccountCreateInfo
     | Shared.CadExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
     | Shared.DkkExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
     | Shared.EurExternalAccountCreateInfo
     | Shared.GbpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
     | Shared.HkdExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
     | Shared.IdrExternalAccountCreateInfo
     | Shared.InrExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
     | Shared.KesExternalAccountCreateInfo
     | Shared.MwkExternalAccountCreateInfo
     | Shared.MxnExternalAccountCreateInfo
     | Shared.MyrExternalAccountCreateInfo
     | Shared.NgnExternalAccountCreateInfo
     | Shared.PhpExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
     | Shared.RwfExternalAccountCreateInfo
     | Shared.SgdExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
     | Shared.ThbExternalAccountCreateInfo
     | Shared.TzsExternalAccountCreateInfo
     | Shared.UgxExternalAccountCreateInfo
@@ -804,21 +833,7 @@ export interface ExternalAccountCreateParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | Shared.BdtExternalAccountCreateInfo
-    | Shared.CopExternalAccountCreateInfo
-    | Shared.EgpExternalAccountCreateInfo
-    | Shared.GhsExternalAccountCreateInfo
-    | Shared.GtqExternalAccountCreateInfo
-    | Shared.HtgExternalAccountCreateInfo
-    | Shared.JmdExternalAccountCreateInfo
-    | Shared.PkrExternalAccountCreateInfo
-    | ExternalAccountsAPI.SparkWalletInfo
-    | ExternalAccountsAPI.LightningWalletInfo
-    | ExternalAccountsAPI.SolanaWalletInfo
-    | ExternalAccountsAPI.TronWalletInfo
-    | ExternalAccountsAPI.PolygonWalletInfo
-    | ExternalAccountsAPI.BaseWalletInfo
-    | Shared.EthereumWalletExternalAccountInfo;
+    | Shared.SwiftExternalAccountCreateInfo;
 
   /**
    * The ISO 4217 currency code
@@ -832,11 +847,16 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
-export interface ExternalAccountListParams {
+export interface ExternalAccountListParams extends DefaultPaginationParams {
   /**
    * Filter by currency code
    */
   currency?: string;
+
+  /**
+   * Maximum number of results to return (default 20, max 100)
+   */
+  limit?: number;
 }
 
 export declare namespace ExternalAccounts {
@@ -876,8 +896,9 @@ export declare namespace ExternalAccounts {
     type XofAccountInfo as XofAccountInfo,
     type ZarAccountInfo as ZarAccountInfo,
     type ZmwAccountInfo as ZmwAccountInfo,
-    type ExternalAccountListResponse as ExternalAccountListResponse,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
   };
 }
+
+export { type ExternalAccountsDefaultPagination };

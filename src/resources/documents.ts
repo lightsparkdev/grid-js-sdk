@@ -24,7 +24,7 @@ export class Documents extends APIResource {
    * ```
    */
   retrieve(documentID: string, options?: RequestOptions): APIPromise<DocumentRetrieveResponse> {
-    return this._client.get(path`/documents/${documentID}`, options);
+    return this._client.get(path`/documents/${documentID}`, { ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -45,6 +45,7 @@ export class Documents extends APIResource {
     return this._client.getAPIList('/documents', DefaultPagination<DocumentListResponse>, {
       query,
       ...options,
+      __security: { basicAuth: true },
     });
   }
 
@@ -61,6 +62,7 @@ export class Documents extends APIResource {
     return this._client.delete(path`/documents/${documentID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -88,7 +90,7 @@ export class Documents extends APIResource {
   ): APIPromise<DocumentReplaceResponse> {
     return this._client.put(
       path`/documents/${documentID}`,
-      multipartFormRequestOptions({ body, ...options }, this._client),
+      multipartFormRequestOptions({ body, ...options, __security: { basicAuth: true } }, this._client),
     );
   }
 
@@ -111,7 +113,10 @@ export class Documents extends APIResource {
    * ```
    */
   upload(body: DocumentUploadParams, options?: RequestOptions): APIPromise<DocumentUploadResponse> {
-    return this._client.post('/documents', multipartFormRequestOptions({ body, ...options }, this._client));
+    return this._client.post(
+      '/documents',
+      multipartFormRequestOptions({ body, ...options, __security: { basicAuth: true } }, this._client),
+    );
   }
 }
 
@@ -144,15 +149,11 @@ export interface DocumentRetrieveResponse {
    * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
    * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
    * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
-   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
-   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
-   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
-   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
-   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
-   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
-   * **Proof of address** — PROOF_OF_ADDRESS
+   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
+   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
+   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
+   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+   * BANK_STATEMENT, TAX_RETURN
    */
   documentType:
     | 'PASSPORT'
@@ -172,6 +173,13 @@ export interface DocumentRetrieveResponse {
     | 'SHAREHOLDER_REGISTER'
     | 'POWER_OF_ATTORNEY'
     | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
     | 'SELFIE'
     | 'OTHER';
 
@@ -184,6 +192,11 @@ export interface DocumentRetrieveResponse {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document this upload represents. Relevant for two-sided
@@ -224,15 +237,11 @@ export interface DocumentListResponse {
    * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
    * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
    * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
-   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
-   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
-   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
-   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
-   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
-   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
-   * **Proof of address** — PROOF_OF_ADDRESS
+   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
+   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
+   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
+   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+   * BANK_STATEMENT, TAX_RETURN
    */
   documentType:
     | 'PASSPORT'
@@ -252,6 +261,13 @@ export interface DocumentListResponse {
     | 'SHAREHOLDER_REGISTER'
     | 'POWER_OF_ATTORNEY'
     | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
     | 'SELFIE'
     | 'OTHER';
 
@@ -264,6 +280,11 @@ export interface DocumentListResponse {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document this upload represents. Relevant for two-sided
@@ -304,15 +325,11 @@ export interface DocumentReplaceResponse {
    * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
    * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
    * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
-   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
-   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
-   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
-   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
-   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
-   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
-   * **Proof of address** — PROOF_OF_ADDRESS
+   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
+   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
+   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
+   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+   * BANK_STATEMENT, TAX_RETURN
    */
   documentType:
     | 'PASSPORT'
@@ -332,6 +349,13 @@ export interface DocumentReplaceResponse {
     | 'SHAREHOLDER_REGISTER'
     | 'POWER_OF_ATTORNEY'
     | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
     | 'SELFIE'
     | 'OTHER';
 
@@ -344,6 +368,11 @@ export interface DocumentReplaceResponse {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document this upload represents. Relevant for two-sided
@@ -384,15 +413,11 @@ export interface DocumentUploadResponse {
    * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
    * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
    * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
-   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
-   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
-   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
-   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
-   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
-   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
-   * **Proof of address** — PROOF_OF_ADDRESS
+   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
+   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
+   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
+   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+   * BANK_STATEMENT, TAX_RETURN
    */
   documentType:
     | 'PASSPORT'
@@ -412,6 +437,13 @@ export interface DocumentUploadResponse {
     | 'SHAREHOLDER_REGISTER'
     | 'POWER_OF_ATTORNEY'
     | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
     | 'SELFIE'
     | 'OTHER';
 
@@ -424,6 +456,11 @@ export interface DocumentUploadResponse {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document this upload represents. Relevant for two-sided
@@ -460,15 +497,11 @@ export interface DocumentReplaceParams {
    * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
    * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
    * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
-   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
-   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
-   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
-   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
-   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
-   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
-   * **Proof of address** — PROOF_OF_ADDRESS
+   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
+   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
+   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
+   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+   * BANK_STATEMENT, TAX_RETURN
    */
   documentType:
     | 'PASSPORT'
@@ -488,6 +521,13 @@ export interface DocumentReplaceParams {
     | 'SHAREHOLDER_REGISTER'
     | 'POWER_OF_ATTORNEY'
     | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
     | 'SELFIE'
     | 'OTHER';
 
@@ -500,6 +540,11 @@ export interface DocumentReplaceParams {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document (for two-sided documents like driver's licenses)
@@ -524,15 +569,11 @@ export interface DocumentUploadParams {
    * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
    * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
    * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
-   * **Business — Company details** — INFORMATION_STATEMENT, STATE_REGISTRY_EXCERPT,
-   * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION,
-   * CERTIFICATE_OF_INCORPORATION, INCUMBENCY_CERTIFICATE, GOOD_STANDING_CERTIFICATE
-   * **Business — Control structure** — ARTICLES_OF_INCORPORATION,
-   * ARTICLES_OF_ASSOCIATION, INCUMBENCY_CERTIFICATE, INFORMATION_STATEMENT,
-   * STATE_REGISTRY_EXCERPT **Business — Ownership structure** —
-   * SHAREHOLDER_REGISTER, INFORMATION_STATEMENT, INCUMBENCY_CERTIFICATE,
-   * STATE_REGISTRY_EXCERPT, ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION
-   * **Proof of address** — PROOF_OF_ADDRESS
+   * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
+   * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
+   * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
+   * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
+   * BANK_STATEMENT, TAX_RETURN
    */
   documentType:
     | 'PASSPORT'
@@ -552,6 +593,13 @@ export interface DocumentUploadParams {
     | 'SHAREHOLDER_REGISTER'
     | 'POWER_OF_ATTORNEY'
     | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
     | 'SELFIE'
     | 'OTHER';
 
@@ -564,6 +612,11 @@ export interface DocumentUploadParams {
    * Document identification number (e.g., passport number)
    */
   documentNumber?: string;
+
+  /**
+   * Name of the government agency or organization that issued the document
+   */
+  issuingAuthority?: string;
 
   /**
    * Which side of the document (for two-sided documents like driver's licenses)
