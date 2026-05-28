@@ -214,6 +214,12 @@ export interface IncomingTransaction {
     | 'QUOTE_EXECUTION_FAILED';
 
   /**
+   * The total fees available from the receive quote in the smallest unit of the
+   * receiving currency (eg. cents).
+   */
+  fees?: number;
+
+  /**
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: IncomingRateDetails;
@@ -378,6 +384,12 @@ export interface OutgoingTransaction {
   receivedAmount?: InvitationsAPI.CurrencyAmount;
 
   /**
+   * Reconciliation details for this transaction, including crypto transaction hash
+   * when available.
+   */
+  reconciliationInstructions?: ReconciliationInstructions;
+
+  /**
    * The refund if transaction was refunded.
    */
   refund?: OutgoingTransaction.Refund;
@@ -464,10 +476,16 @@ export type OutgoingTransactionStatus = 'PENDING' | 'EXPIRED' | 'PROCESSING' | '
 
 export interface ReconciliationInstructions {
   /**
-   * Unique reference code that must be included with the payment to match it with
-   * the correct incoming transaction
+   * Unique reference code to include with the payment to match it with the correct
+   * incoming transaction, when available.
    */
-  reference: string;
+  reference?: string;
+
+  /**
+   * Transaction hash for the crypto transfer that delivered funds to the transaction
+   * destination, when available.
+   */
+  transactionHash?: string;
 }
 
 /**
