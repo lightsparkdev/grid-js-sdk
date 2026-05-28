@@ -67,12 +67,6 @@ import {
   DocumentUploadRequest,
   Documents,
   DocumentsDefaultPagination,
-  IdentityDocumentReplaceRequest,
-  IdentityDocumentType,
-  IdentityDocumentUploadRequest,
-  NonIdentityDocumentReplaceRequest,
-  NonIdentityDocumentType,
-  NonIdentityDocumentUploadRequest,
 } from './resources/documents';
 import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
 import {
@@ -1326,12 +1320,6 @@ export declare namespace LightsparkGrid {
     type DocumentReplaceRequest as DocumentReplaceRequest,
     type DocumentType as DocumentType,
     type DocumentUploadRequest as DocumentUploadRequest,
-    type IdentityDocumentReplaceRequest as IdentityDocumentReplaceRequest,
-    type IdentityDocumentType as IdentityDocumentType,
-    type IdentityDocumentUploadRequest as IdentityDocumentUploadRequest,
-    type NonIdentityDocumentReplaceRequest as NonIdentityDocumentReplaceRequest,
-    type NonIdentityDocumentType as NonIdentityDocumentType,
-    type NonIdentityDocumentUploadRequest as NonIdentityDocumentUploadRequest,
     type DocumentsDefaultPagination as DocumentsDefaultPagination,
     type DocumentListParams as DocumentListParams,
     type DocumentReplaceParams as DocumentReplaceParams,

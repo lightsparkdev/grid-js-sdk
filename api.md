@@ -484,12 +484,6 @@ Types:
 - <code><a href="./src/resources/documents.ts">DocumentReplaceRequest</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentType</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentUploadRequest</a></code>
-- <code><a href="./src/resources/documents.ts">IdentityDocumentReplaceRequest</a></code>
-- <code><a href="./src/resources/documents.ts">IdentityDocumentType</a></code>
-- <code><a href="./src/resources/documents.ts">IdentityDocumentUploadRequest</a></code>
-- <code><a href="./src/resources/documents.ts">NonIdentityDocumentReplaceRequest</a></code>
-- <code><a href="./src/resources/documents.ts">NonIdentityDocumentType</a></code>
-- <code><a href="./src/resources/documents.ts">NonIdentityDocumentUploadRequest</a></code>
 
 Methods:
 
