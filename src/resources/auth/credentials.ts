@@ -174,13 +174,15 @@ export class Credentials extends APIResource {
    * the user along with a client-generated public key. For `OAUTH` credentials,
    * supply a fresh OIDC token (`iat` must be less than 60 seconds before the
    * request) along with the client-generated public key; this is also the
-   * reauthentication path after a prior session expired. For `PASSKEY` credentials,
-   * the client completes a WebAuthn assertion (`navigator.credentials.get()`)
-   * against the Grid-issued `challenge` returned from
-   * `POST /auth/credentials/{id}/challenge`, and submits the resulting `assertion`
-   * with the `Request-Id` header. The `clientPublicKey` for `PASSKEY` credentials is
-   * supplied on the challenge call, where it is bound into the pending
-   * session-creation request.
+   * reauthentication path after a prior session expired. The token identity (`iss`,
+   * `aud`, and `sub`) must match the OAuth credential being verified. In sandbox,
+   * the token's `nonce` must equal `sha256(clientPublicKey)`. For `PASSKEY`
+   * credentials, the client completes a WebAuthn assertion
+   * (`navigator.credentials.get()`) against the Grid-issued `challenge` returned
+   * from `POST /auth/credentials/{id}/challenge`, and submits the resulting
+   * `assertion` with the `Request-Id` header. The `clientPublicKey` for `PASSKEY`
+   * credentials is supplied on the challenge call, where it is bound into the
+   * pending session-creation request.
    *
    * On success, the response contains an `encryptedSessionSigningKey` that is
    * encrypted to the supplied `clientPublicKey`, along with an `expiresAt` timestamp
@@ -487,10 +489,13 @@ export interface OAuthCredentialCreateRequest
 
 export interface OAuthCredentialCreateRequestFields {
   /**
-   * OIDC ID token issued by the identity provider (e.g. Google, Apple). Grid fetches
-   * the issuer's signing key from the `iss` claim's `.well-known` OpenID
-   * configuration and verifies the token signature. The token's `iat` claim must be
-   * less than 60 seconds before the request timestamp.
+   * OIDC ID token issued by the identity provider (e.g. Google, Apple). The token's
+   * `iss`, `aud`, and `sub` claims define the OAuth identity registered to this
+   * credential. In production, the provider signature is verified against the
+   * issuer's JWKS. In sandbox, the token must still be JWT-shaped with supported
+   * `iss`, non-empty `aud` and `sub`, numeric `iat` and `exp`, and `iat` less than
+   * 60 seconds before the request timestamp, but the signature segment may be a
+   * dummy value.
    */
   oidcToken: string;
 
@@ -513,9 +518,12 @@ export interface OAuthCredentialVerifyRequestFields {
   /**
    * OIDC ID token issued by the identity provider. For reauthentication after a
    * prior session expired, supply a fresh token — the token's `iat` claim must be
-   * less than 60 seconds before the request timestamp. Grid fetches the issuer's
-   * signing key from the `iss` claim's `.well-known` OpenID configuration and
-   * verifies the token signature.
+   * less than 60 seconds before the request timestamp. The token identity (`iss`,
+   * `aud`, and `sub`) must match the registered OAuth credential. In production, the
+   * provider signature is verified against the issuer's JWKS. In sandbox, the token
+   * must still be JWT-shaped with supported `iss`, non-empty `aud` and `sub`,
+   * numeric `iat` and `exp`, and a `nonce` equal to `sha256(clientPublicKey)`, but
+   * the signature segment may be a dummy value.
    */
   oidcToken: string;
 
@@ -538,9 +546,12 @@ export interface OAuthCredentialVerifyRequestFields {
   /**
    * OIDC ID token issued by the identity provider. For reauthentication after a
    * prior session expired, supply a fresh token — the token's `iat` claim must be
-   * less than 60 seconds before the request timestamp. Grid fetches the issuer's
-   * signing key from the `iss` claim's `.well-known` OpenID configuration and
-   * verifies the token signature.
+   * less than 60 seconds before the request timestamp. The token identity (`iss`,
+   * `aud`, and `sub`) must match the registered OAuth credential. In production, the
+   * provider signature is verified against the issuer's JWKS. In sandbox, the token
+   * must still be JWT-shaped with supported `iss`, non-empty `aud` and `sub`,
+   * numeric `iat` and `exp`, and a `nonce` equal to `sha256(clientPublicKey)`, but
+   * the signature segment may be a dummy value.
    */
   oidcToken: string;
 
