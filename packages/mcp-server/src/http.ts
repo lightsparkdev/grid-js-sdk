@@ -3,6 +3,7 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { ClientOptions } from '@lightsparkdev/grid';
+import { timingSafeEqual } from 'crypto';
 import express from 'express';
 import pino from 'pino';
 import pinoHttp from 'pino-http';
@@ -10,6 +11,61 @@ import { getStainlessApiKey, parseClientAuthHeaders } from './auth';
 import { getLogger } from './logger';
 import { McpOptions } from './options';
 import { initMcpServer, newMcpServer } from './server';
+
+const ORIGIN_SECRET_HEADER = 'x-origin-secret';
+
+// Origin-secret gate. When ORIGIN_SECRET is set, requests to /mcp must carry
+// a matching X-Origin-Secret header. CloudFront injects this header via the
+// distribution's origin.custom_header config; direct hits to the bare Lambda
+// Function URL miss the header and are rejected.
+//
+// Comparison is timing-safe (crypto.timingSafeEqual after length check) to
+// prevent secret-length leakage via response-time analysis.
+//
+// Header-case note: Node.js (and Express on top of it) normalizes incoming
+// header NAMES to lowercase on req.headers — this is why we lookup with the
+// lowercase 'x-origin-secret' constant. CloudFront's custom_header.name is
+// case-insensitive too. No additional normalization is needed.
+//
+// Logging: on rejection, we log via the pino logger but DO NOT include the
+// expected or provided secret value (or its length) in the log payload —
+// length alone leaks information that helps attackers calibrate payloads.
+//
+// When expectedSecret is undefined or empty (e.g., stdio transport, local
+// development, or unconfigured Lambda env), the middleware no-ops. The
+// caller is responsible for refusing to start in production without a secret
+// configured. The /health route does NOT go through this middleware because
+// it is mounted on app.use('/mcp', ...) — LWA's readiness check at /health
+// must remain accessible from inside the container.
+//
+// Secret redaction in request logs: the existing redactHeaders() regex in
+// this file matches /secret/i, so 'X-Origin-Secret' values are automatically
+// redacted in pino's request-line logs. No additional code is needed for
+// that path.
+export const originSecretMiddleware = (expectedSecret: string | undefined): express.RequestHandler => {
+  return (req, res, next) => {
+    if (!expectedSecret) {
+      return next();
+    }
+    const provided = req.headers[ORIGIN_SECRET_HEADER];
+    if (typeof provided !== 'string') {
+      getLogger().warn(
+        { path: req.path, reason: 'missing-or-non-string' },
+        'origin-secret middleware rejected request',
+      );
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+    const a = Buffer.from(provided);
+    const b = Buffer.from(expectedSecret);
+    if (a.length !== b.length || !timingSafeEqual(a, b)) {
+      getLogger().warn({ path: req.path, reason: 'mismatch' }, 'origin-secret middleware rejected request');
+      res.status(403).json({ error: 'Forbidden' });
+      return;
+    }
+    next();
+  };
+};
 
 const newServer = async ({
   clientOptions,
@@ -126,7 +182,17 @@ const del = async (req: express.Request, res: express.Response) => {
 };
 
 const redactHeaders = (headers: Record<string, any>) => {
-  const hiddenHeaders = /auth|cookie|key|token|x-stainless-mcp-client-envs/i;
+  // SECURITY MAINTENANCE CONTRACT: this regex matches header NAMES that
+  // may carry sensitive values; it is intentionally permissive (substring
+  // matches) so common conventions like *-secret, *-signature, *-api-key
+  // are caught automatically. When adding ANY new request header that
+  // could carry secrets (auth tokens, customer creds, signing material),
+  // verify substring match here AND extend the smoke test in
+  // docs/superpowers/plans/2026-05-07-lambda-migration.md Task 2.5 Step 3
+  // and Task 7 Step 5 with a probe value. Allowlist-by-substring will not
+  // catch novel naming conventions (e.g. X-Customer-Hmac); add explicit
+  // alternatives when you introduce them.
+  const hiddenHeaders = /auth|cookie|key|token|secret|signature|grid|stainless/i;
   const filtered = { ...headers };
   Object.keys(filtered).forEach((key) => {
     if (hiddenHeaders.test(key)) {
@@ -197,21 +263,43 @@ export const streamableHTTPApp = ({
   app.get('/health', async (req: express.Request, res: express.Response) => {
     res.status(200).send('OK');
   });
-  app.get('/', get);
-  app.post('/', post({ clientOptions, mcpOptions }));
-  app.delete('/', del);
+  // Per-route secret gating on the three MCP methods at root. Per-route
+  // (rather than app.use(secret)) makes the /health bypass explicit and
+  // immune to future route-registration reordering — a global mount that
+  // relies on Express's "/health registered first" ordering would silently
+  // gate /health if someone moved the registration.
+  const secret = originSecretMiddleware(process.env['ORIGIN_SECRET']);
+  app.get('/', secret, get);
+  app.post('/', secret, post({ clientOptions, mcpOptions }));
+  app.delete('/', secret, del);
 
   return app;
 };
 
 export const launchStreamableHTTPServer = async ({
+  clientOptions,
   mcpOptions,
   port,
 }: {
+  clientOptions?: ClientOptions;
   mcpOptions: McpOptions;
   port: number | string | undefined;
 }) => {
-  const app = streamableHTTPApp({ mcpOptions });
+  // Fail-closed guard: if running on AWS Lambda with HTTP transport, ORIGIN_SECRET
+  // MUST be set. Without it, the middleware no-ops and /mcp becomes wide open to
+  // direct Function URL hits — bypassing CloudFront's WAF and origin gate. Fail
+  // at boot so a missing env var surfaces as an InitError rather than silent
+  // exposure. AWS_LAMBDA_FUNCTION_NAME is set by the Lambda runtime on every
+  // invocation and is never present in local dev, so this check correctly
+  // scopes to production deploys without breaking local HTTP-transport testing.
+  if (process.env['AWS_LAMBDA_FUNCTION_NAME'] && !process.env['ORIGIN_SECRET']) {
+    throw new Error(
+      'ORIGIN_SECRET must be set when running HTTP transport on AWS Lambda. ' +
+        'Without it, the origin-secret middleware no-ops and /mcp is unguarded. ' +
+        'Set ORIGIN_SECRET in the Lambda environment configuration.',
+    );
+  }
+  const app = streamableHTTPApp({ ...(clientOptions && { clientOptions }), mcpOptions });
   const server = app.listen(port);
   const address = server.address();
 
@@ -224,4 +312,6 @@ export const launchStreamableHTTPServer = async ({
   } else {
     logger.info(`MCP Server running on streamable HTTP on port ${port}`);
   }
+
+  return server;
 };

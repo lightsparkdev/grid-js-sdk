@@ -27,6 +27,11 @@ async function main() {
       break;
     case 'http':
       await launchStreamableHTTPServer({
+        clientOptions: {
+          ...(process.env['GRID_CLIENT_ID'] && { username: process.env['GRID_CLIENT_ID'] }),
+          ...(process.env['GRID_CLIENT_SECRET'] && { password: process.env['GRID_CLIENT_SECRET'] }),
+          ...(process.env['GRID_WEBHOOK_PUBKEY'] && { webhookSignature: process.env['GRID_WEBHOOK_PUBKEY'] }),
+        },
         mcpOptions: options,
         port: options.socket ?? options.port,
       });
