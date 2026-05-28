@@ -33,10 +33,6 @@ export interface AgentActionWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'AGENT_ACTION.PENDING_APPROVAL';
 }
 
@@ -53,10 +49,6 @@ export interface IncomingPaymentWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'INCOMING_PAYMENT.PENDING' | 'INCOMING_PAYMENT.COMPLETED' | 'INCOMING_PAYMENT.FAILED';
 }
 
@@ -84,10 +76,6 @@ export interface OutgoingPaymentWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type:
     | 'OUTGOING_PAYMENT.PENDING'
     | 'OUTGOING_PAYMENT.PROCESSING'
@@ -110,10 +98,6 @@ export interface TestWebhookWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'TEST';
 }
 
@@ -130,10 +114,6 @@ export interface BulkUploadWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'BULK_UPLOAD.COMPLETED' | 'BULK_UPLOAD.FAILED';
 }
 
@@ -200,10 +180,6 @@ export interface InvitationClaimedWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'INVITATION.CLAIMED';
 }
 
@@ -220,10 +196,6 @@ export interface CustomerUpdateWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type:
     | 'CUSTOMER.KYC_APPROVED'
     | 'CUSTOMER.KYC_REJECTED'
@@ -246,10 +218,6 @@ export interface InternalAccountStatusWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'INTERNAL_ACCOUNT.BALANCE_UPDATED' | 'INTERNAL_ACCOUNT.STATUS_UPDATED';
 }
 
@@ -266,10 +234,6 @@ export interface VerificationUpdateWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type:
     | 'VERIFICATION.APPROVED'
     | 'VERIFICATION.REJECTED'
@@ -332,10 +296,6 @@ export interface CardStateChangeWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'CARD.STATE_CHANGE';
 }
 
@@ -427,10 +387,6 @@ export interface CardFundingSourceChangeWebhookEvent {
    */
   timestamp: string;
 
-  /**
-   * Status-specific event type in OBJECT.EVENT dot-notation (e.g.,
-   * OUTGOING_PAYMENT.COMPLETED)
-   */
   type: 'CARD.FUNDING_SOURCE_CHANGE';
 }
 

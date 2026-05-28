@@ -438,8 +438,6 @@ export interface EmailOtpCredentialCreateRequest extends AuthCredentialCreateReq
   type: 'EMAIL_OTP';
 }
 
-export type EmailOtpCredentialVerifyRequest = unknown;
-
 export interface OAuthCredentialCreateRequest extends AuthCredentialCreateRequest {
   /**
    * OIDC ID token issued by the identity provider (e.g. Google, Apple). The token's
@@ -457,8 +455,6 @@ export interface OAuthCredentialCreateRequest extends AuthCredentialCreateReques
    */
   type: 'OAUTH';
 }
-
-export type OAuthCredentialVerifyRequest = unknown;
 
 export interface PasskeyAssertion {
   /**
@@ -606,8 +602,6 @@ export interface PasskeyCredentialCreateRequest extends AuthCredentialCreateRequ
   type: 'PASSKEY';
 }
 
-export type PasskeyCredentialVerifyRequest = unknown;
-
 /**
  * Common base for two-step signed-retry challenge responses on Embedded Wallet
  * endpoints (credential registration or revocation, session refresh or revocation,
@@ -725,14 +719,11 @@ export declare namespace Credentials {
     type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
-    type EmailOtpCredentialVerifyRequest as EmailOtpCredentialVerifyRequest,
     type OAuthCredentialCreateRequest as OAuthCredentialCreateRequest,
-    type OAuthCredentialVerifyRequest as OAuthCredentialVerifyRequest,
     type PasskeyAssertion as PasskeyAssertion,
     type PasskeyAttestation as PasskeyAttestation,
     type PasskeyAuthChallenge as PasskeyAuthChallenge,
     type PasskeyCredentialCreateRequest as PasskeyCredentialCreateRequest,
-    type PasskeyCredentialVerifyRequest as PasskeyCredentialVerifyRequest,
     type SignedRequestChallenge as SignedRequestChallenge,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,

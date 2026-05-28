@@ -382,13 +382,13 @@ Types:
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateRefundResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
 - <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
-- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">refund</a>(id, { ...params }) -> SimulateRefundResponse</code>
 
 # UmaProviders
 
@@ -527,14 +527,11 @@ Types:
 - <code><a href="./src/resources/auth/credentials.ts">AuthSession</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthSignedRequestChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialCreateRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAssertion</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAttestation</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAuthChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">SignedRequestChallenge</a></code>
 
 Methods:
