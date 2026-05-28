@@ -4,11 +4,9 @@ export { Actions, type ActionApproveParams, type ActionRejectParams } from './ac
 export {
   Agents,
   type Agent,
-  type AgentAccountRestrictions,
   type AgentAction,
   type AgentActionListResponse,
   type AgentActionRejectRequest,
-  type AgentApprovalThresholds,
   type AgentCreateRequest,
   type AgentCreateResponse,
   type AgentDeviceCode,

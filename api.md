@@ -49,7 +49,6 @@ Types:
 - <code><a href="./src/resources/shared.ts">SgdExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">SlvBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">SlvExternalAccountCreateInfo</a></code>
-- <code><a href="./src/resources/shared.ts">SwiftExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">ThbExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">TzsBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">TzsExternalAccountCreateInfo</a></code>
@@ -72,7 +71,6 @@ Types:
 Types:
 
 - <code><a href="./src/resources/config.ts">CustomerInfoFieldName</a></code>
-- <code><a href="./src/resources/config.ts">EmbeddedWalletConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformCurrencyConfig</a></code>
 
@@ -95,10 +93,7 @@ Types:
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">InternalAccountUpdateRequest</a></code>
-- <code><a href="./src/resources/customers/customers.ts">KYCLinkCreate</a></code>
-- <code><a href="./src/resources/customers/customers.ts">KYCLinkResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">KYCProvider</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerGenerateKYCLinkResponse</a></code>
 
 Methods:
 
@@ -107,9 +102,8 @@ Methods:
 - <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerOneOf</code>
 - <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
 - <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
-- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">createKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
 - <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
-- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
+- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> CustomerGenerateKYCLinkResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 - <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
 
@@ -379,19 +373,15 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardMerchant</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardPullSummary</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardRefundSummary</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateRefundResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
 
 Methods:
 
 - <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
 - <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
-- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">refund</a>(id, { ...params }) -> SimulateRefundResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
 
 # UmaProviders
 
@@ -531,18 +521,22 @@ Types:
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethod</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethodResponse</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethodType</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">AuthSession</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthSignedRequestChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequestFields</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialVerifyRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialCreateRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialCreateRequestFields</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialVerifyRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAssertion</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAttestation</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAuthChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequestFields</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">SignedRequestChallenge</a></code>
 
@@ -558,8 +552,6 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/auth/sessions.ts">AuthSession</a></code>
-- <code><a href="./src/resources/auth/sessions.ts">AuthSessionRefreshRequest</a></code>
 - <code><a href="./src/resources/auth/sessions.ts">SessionListResponse</a></code>
 
 Methods:
@@ -573,11 +565,9 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentAccountRestrictions</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentAction</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentActionListResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentActionRejectRequest</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentApprovalThresholds</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateRequest</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentDeviceCode</a></code>

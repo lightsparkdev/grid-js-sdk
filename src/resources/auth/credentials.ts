@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as SessionsAPI from './sessions';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -203,11 +202,7 @@ export class Credentials extends APIResource {
    * );
    * ```
    */
-  verify(
-    id: string,
-    params: CredentialVerifyParams,
-    options?: RequestOptions,
-  ): APIPromise<SessionsAPI.AuthSession> {
+  verify(id: string, params: CredentialVerifyParams, options?: RequestOptions): APIPromise<AuthSession> {
     const { AuthCredentialVerifyRequest, 'Request-Id': requestID } = params;
     return this._client.post(path`/auth/credentials/${id}/verify`, {
       body: AuthCredentialVerifyRequest,
@@ -375,6 +370,45 @@ export interface AuthMethodResponse {
 export type AuthMethodType = 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
 
 /**
+ * An authentication session on an Embedded Wallet internal account. Returned from
+ * `GET /auth/sessions` (list) and `POST /auth/credentials/{id}/verify` (on
+ * credential verification) or `POST /auth/sessions/{id}/refresh` (on mid-session
+ * refresh). Only session-issuing responses include `encryptedSessionSigningKey` —
+ * it is delivered exactly once at the moment the session is issued and is never
+ * returned by the list endpoint.
+ */
+export interface AuthSession extends AuthMethod {
+  /**
+   * System-generated unique identifier for the session. Pass this value to
+   * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
+   * the `id` inherited from `AuthMethod` so this response identifies the session
+   * rather than the authenticating credential.
+   */
+  id: string;
+
+  /**
+   * Timestamp after which the session is no longer valid and the
+   * `encryptedSessionSigningKey` must not be used to sign further requests.
+   */
+  expiresAt: string;
+
+  /**
+   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
+   * the verification or refresh request. Encoded as a base58check string: the
+   * decoded payload is a 33-byte compressed P-256 encapsulated public key followed
+   * by AES-256-GCM ciphertext. The client decrypts this key with its private key and
+   * uses it to sign subsequent Embedded Wallet requests until `expiresAt`.
+   *
+   * Only returned from session-issuing responses like
+   * `POST /auth/credentials/{id}/verify` and `POST /auth/sessions/{id}/refresh`.
+   * Omitted from responses that simply surface existing sessions (e.g.
+   * `GET /auth/sessions`) — Grid does not retain the plaintext key after the client
+   * has decrypted it.
+   */
+  encryptedSessionSigningKey?: string;
+}
+
+/**
  * 202 response returned from Embedded Wallet Auth endpoints that require a signed
  * retry — `POST /auth/credentials` (adding an additional credential),
  * `DELETE /auth/credentials/{id}` (revoking a credential), and
@@ -426,6 +460,27 @@ export interface EmailOtpCredentialVerifyRequestFields {
   type: 'EMAIL_OTP';
 }
 
+export interface EmailOtpCredentialVerifyRequestFields {
+  /**
+   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+   * total). The matching private key must remain on the client. Grid encrypts the
+   * session signing key returned in the response to this public key. The key is
+   * ephemeral and one-time-use per verification request.
+   */
+  clientPublicKey: string;
+
+  /**
+   * The one-time password received by the user via email.
+   */
+  otp: string;
+
+  /**
+   * Discriminator value identifying this as an email OTP verification.
+   */
+  type: 'EMAIL_OTP';
+}
+
 export interface OAuthCredentialCreateRequest
   extends AuthCredentialCreateRequest,
     OAuthCredentialCreateRequestFields {}
@@ -441,6 +496,31 @@ export interface OAuthCredentialCreateRequestFields {
 
   /**
    * Discriminator value identifying this as an OAuth credential.
+   */
+  type: 'OAUTH';
+}
+
+export interface OAuthCredentialVerifyRequestFields {
+  /**
+   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+   * total). The matching private key must remain on the client. Grid encrypts the
+   * session signing key returned in the response to this public key. The key is
+   * ephemeral and one-time-use per verification request.
+   */
+  clientPublicKey: string;
+
+  /**
+   * OIDC ID token issued by the identity provider. For reauthentication after a
+   * prior session expired, supply a fresh token — the token's `iat` claim must be
+   * less than 60 seconds before the request timestamp. Grid fetches the issuer's
+   * signing key from the `iss` claim's `.well-known` OpenID configuration and
+   * verifies the token signature.
+   */
+  oidcToken: string;
+
+  /**
+   * Discriminator value identifying this as an OAuth verification.
    */
   type: 'OAUTH';
 }
@@ -629,6 +709,15 @@ export interface PasskeyCredentialVerifyRequestFields {
   type: 'PASSKEY';
 }
 
+export interface PasskeyCredentialVerifyRequestFields {
+  assertion: PasskeyAssertion;
+
+  /**
+   * Discriminator value identifying this as a passkey verification.
+   */
+  type: 'PASSKEY';
+}
+
 /**
  * Common base for two-step signed-retry challenge responses on Embedded Wallet
  * endpoints (credential registration or revocation, session refresh or revocation,
@@ -743,18 +832,22 @@ export declare namespace Credentials {
     type AuthMethod as AuthMethod,
     type AuthMethodResponse as AuthMethodResponse,
     type AuthMethodType as AuthMethodType,
+    type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
     type EmailOtpCredentialCreateRequestFields as EmailOtpCredentialCreateRequestFields,
+    type EmailOtpCredentialVerifyRequest as EmailOtpCredentialVerifyRequest,
     type EmailOtpCredentialVerifyRequestFields as EmailOtpCredentialVerifyRequestFields,
     type OAuthCredentialCreateRequest as OAuthCredentialCreateRequest,
     type OAuthCredentialCreateRequestFields as OAuthCredentialCreateRequestFields,
+    type OAuthCredentialVerifyRequest as OAuthCredentialVerifyRequest,
     type OAuthCredentialVerifyRequestFields as OAuthCredentialVerifyRequestFields,
     type PasskeyAssertion as PasskeyAssertion,
     type PasskeyAttestation as PasskeyAttestation,
     type PasskeyAuthChallenge as PasskeyAuthChallenge,
     type PasskeyCredentialCreateRequest as PasskeyCredentialCreateRequest,
     type PasskeyCredentialCreateRequestFields as PasskeyCredentialCreateRequestFields,
+    type PasskeyCredentialVerifyRequest as PasskeyCredentialVerifyRequest,
     type PasskeyCredentialVerifyRequestFields as PasskeyCredentialVerifyRequestFields,
     type SignedRequestChallenge as SignedRequestChallenge,
     type CredentialCreateParams as CredentialCreateParams,

@@ -3,14 +3,10 @@
 export { Cards } from './cards';
 export {
   Simulate,
-  type CardMerchant,
-  type CardPullSummary,
-  type CardRefundSummary,
-  type CardSettlementSummary,
   type SimulateAuthorizationResponse,
   type SimulateClearingResponse,
-  type SimulateRefundResponse,
+  type SimulateReturnResponse,
   type SimulateAuthorizationParams,
   type SimulateClearingParams,
-  type SimulateRefundParams,
+  type SimulateReturnParams,
 } from './simulate';
