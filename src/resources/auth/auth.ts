@@ -12,7 +12,6 @@ import {
   AuthMethod,
   AuthMethodResponse,
   AuthMethodType,
-  AuthSession,
   AuthSignedRequestChallenge,
   CredentialChallengeParams,
   CredentialCreateParams,
@@ -39,6 +38,8 @@ import {
 } from './credentials';
 import * as SessionsAPI from './sessions';
 import {
+  AuthSession,
+  AuthSessionRefreshRequest,
   SessionDeleteParams,
   SessionListParams,
   SessionListResponse,
@@ -66,7 +67,6 @@ export declare namespace Auth {
     type AuthMethod as AuthMethod,
     type AuthMethodResponse as AuthMethodResponse,
     type AuthMethodType as AuthMethodType,
-    type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
     type EmailOtpCredentialCreateRequestFields as EmailOtpCredentialCreateRequestFields,
@@ -93,6 +93,8 @@ export declare namespace Auth {
 
   export {
     Sessions as Sessions,
+    type AuthSession as AuthSession,
+    type AuthSessionRefreshRequest as AuthSessionRefreshRequest,
     type SessionListResponse as SessionListResponse,
     type SessionListParams as SessionListParams,
     type SessionDeleteParams as SessionDeleteParams,

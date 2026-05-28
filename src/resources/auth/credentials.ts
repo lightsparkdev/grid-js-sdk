@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as SessionsAPI from './sessions';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -202,7 +203,11 @@ export class Credentials extends APIResource {
    * );
    * ```
    */
-  verify(id: string, params: CredentialVerifyParams, options?: RequestOptions): APIPromise<AuthSession> {
+  verify(
+    id: string,
+    params: CredentialVerifyParams,
+    options?: RequestOptions,
+  ): APIPromise<SessionsAPI.AuthSession> {
     const { AuthCredentialVerifyRequest, 'Request-Id': requestID } = params;
     return this._client.post(path`/auth/credentials/${id}/verify`, {
       body: AuthCredentialVerifyRequest,
@@ -368,45 +373,6 @@ export interface AuthMethodResponse {
  * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
  */
 export type AuthMethodType = 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
-
-/**
- * An authentication session on an Embedded Wallet internal account. Returned from
- * `GET /auth/sessions` (list) and `POST /auth/credentials/{id}/verify` (on
- * credential verification) or `POST /auth/sessions/{id}/refresh` (on mid-session
- * refresh). Only session-issuing responses include `encryptedSessionSigningKey` —
- * it is delivered exactly once at the moment the session is issued and is never
- * returned by the list endpoint.
- */
-export interface AuthSession extends AuthMethod {
-  /**
-   * System-generated unique identifier for the session. Pass this value to
-   * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
-   * the `id` inherited from `AuthMethod` so this response identifies the session
-   * rather than the authenticating credential.
-   */
-  id: string;
-
-  /**
-   * Timestamp after which the session is no longer valid and the
-   * `encryptedSessionSigningKey` must not be used to sign further requests.
-   */
-  expiresAt: string;
-
-  /**
-   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
-   * the verification or refresh request. Encoded as a base58check string: the
-   * decoded payload is a 33-byte compressed P-256 encapsulated public key followed
-   * by AES-256-GCM ciphertext. The client decrypts this key with its private key and
-   * uses it to sign subsequent Embedded Wallet requests until `expiresAt`.
-   *
-   * Only returned from session-issuing responses like
-   * `POST /auth/credentials/{id}/verify` and `POST /auth/sessions/{id}/refresh`.
-   * Omitted from responses that simply surface existing sessions (e.g.
-   * `GET /auth/sessions`) — Grid does not retain the plaintext key after the client
-   * has decrypted it.
-   */
-  encryptedSessionSigningKey?: string;
-}
 
 /**
  * 202 response returned from Embedded Wallet Auth endpoints that require a signed
@@ -832,7 +798,6 @@ export declare namespace Credentials {
     type AuthMethod as AuthMethod,
     type AuthMethodResponse as AuthMethodResponse,
     type AuthMethodType as AuthMethodType,
-    type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
     type EmailOtpCredentialCreateRequestFields as EmailOtpCredentialCreateRequestFields,

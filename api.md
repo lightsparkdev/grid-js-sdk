@@ -95,7 +95,10 @@ Types:
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerFields</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerGenerateKYCLinkResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">InternalAccountUpdateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">KYCLinkCreate</a></code>
+- <code><a href="./src/resources/customers/customers.ts">KYCLinkResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">KYCProvider</a></code>
 
 Methods:
 
@@ -104,8 +107,9 @@ Methods:
 - <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerOneOf</code>
 - <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
 - <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
+- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">createKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
 - <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
-- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> CustomerGenerateKYCLinkResponse</code>
+- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 - <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
 
@@ -527,7 +531,6 @@ Types:
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethod</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethodResponse</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthMethodType</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">AuthSession</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthSignedRequestChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequestFields</a></code>
@@ -558,6 +561,8 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/auth/sessions.ts">AuthSession</a></code>
+- <code><a href="./src/resources/auth/sessions.ts">AuthSessionRefreshRequest</a></code>
 - <code><a href="./src/resources/auth/sessions.ts">SessionListResponse</a></code>
 
 Methods:
@@ -571,9 +576,11 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/agents/agents.ts">Agent</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentAccountRestrictions</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentAction</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentActionListResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentActionRejectRequest</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentApprovalThresholds</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateRequest</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentDeviceCode</a></code>

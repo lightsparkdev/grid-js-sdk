@@ -111,6 +111,7 @@ const fuse = new Fuse(
     'client.config.retrieve',
     'client.config.update',
     'client.customers.create',
+    'client.customers.createKYCLink',
     'client.customers.delete',
     'client.customers.export',
     'client.customers.generateKYCLink',
