@@ -5,6 +5,8 @@ import LightsparkGrid from '@lightsparkdev/grid';
 const client = new LightsparkGrid({
   username: 'My Username',
   password: 'My Password',
+  agentAccessToken: 'My Agent Access Token',
+  webhookSignature: 'My Webhook Signature',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
@@ -64,10 +66,17 @@ describe('resource externalAccounts', () => {
   test.skip('add: only required params', async () => {
     const responsePromise = client.agents.me.externalAccounts.add({
       accountInfo: {
-        accountNumber: '12345678901',
-        accountType: 'USD_ACCOUNT',
-        beneficiary: { beneficiaryType: 'INDIVIDUAL', fullName: 'John Doe' },
-        routingNumber: '123456789',
+        accountType: 'AED_ACCOUNT',
+        beneficiary: {
+          address: {
+            country: 'US',
+            line1: '123 Main Street',
+            postalCode: '94105',
+          },
+          beneficiaryType: 'INDIVIDUAL',
+          fullName: 'fullName',
+        },
+        iban: 'AE070331234567890123456',
       },
       currency: 'USD',
     });
@@ -84,11 +93,8 @@ describe('resource externalAccounts', () => {
   test.skip('add: required and optional params', async () => {
     const response = await client.agents.me.externalAccounts.add({
       accountInfo: {
-        accountNumber: '12345678901',
-        accountType: 'USD_ACCOUNT',
+        accountType: 'AED_ACCOUNT',
         beneficiary: {
-          beneficiaryType: 'INDIVIDUAL',
-          fullName: 'John Doe',
           address: {
             country: 'US',
             line1: '123 Main Street',
@@ -97,13 +103,16 @@ describe('resource externalAccounts', () => {
             line2: 'Apt 4B',
             state: 'CA',
           },
-          birthDate: '1990-01-15',
+          beneficiaryType: 'INDIVIDUAL',
+          fullName: 'fullName',
+          birthDate: 'birthDate',
           countryOfResidence: 'countryOfResidence',
           email: 'email',
-          nationality: 'US',
+          nationality: 'nationality',
           phoneNumber: 'phoneNumber',
         },
-        routingNumber: '123456789',
+        iban: 'AE070331234567890123456',
+        swiftCode: 'EBILAEAD',
       },
       currency: 'USD',
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',

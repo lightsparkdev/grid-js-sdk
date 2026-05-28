@@ -115,6 +115,12 @@ export interface BdtBeneficiary {
   phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface BdtExternalAccountCreateInfo {
   accountType: 'BDT_ACCOUNT';
 
@@ -162,6 +168,9 @@ export interface BrlExternalAccountCreateInfo {
   taxId: string;
 }
 
+/**
+ * Error information for a failed bulk import entry
+ */
 export interface BulkCustomerImportErrorEntry {
   /**
    * Platform customer ID or row number for the failed entry
@@ -346,6 +355,12 @@ export interface CopBeneficiary {
   phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface CopExternalAccountCreateInfo {
   accountType: 'COP_ACCOUNT';
 
@@ -450,14 +465,7 @@ export interface EgpExternalAccountCreateInfo {
   swiftCode?: string;
 }
 
-export interface EthereumWalletExternalAccountInfo {
-  accountType: 'ETHEREUM_WALLET';
-
-  /**
-   * Ethereum L1 wallet address
-   */
-  address: string;
-}
+export type EthereumWalletExternalAccountInfo = unknown;
 
 export interface EurBeneficiary {
   address: ExternalAccountsAPI.Address;
@@ -563,6 +571,12 @@ export interface GhsBeneficiary {
   phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface GhsExternalAccountCreateInfo {
   accountType: 'GHS_ACCOUNT';
 
@@ -1033,6 +1047,12 @@ export interface PkrBeneficiary {
   phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: bankName, phoneNumber
+ */
 export interface PkrExternalAccountCreateInfo {
   accountType: 'PKR_ACCOUNT';
 
@@ -1168,6 +1188,12 @@ export interface SlvBeneficiary {
   phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: bankAccountType, accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface SlvExternalAccountCreateInfo {
   accountType: 'SLV_ACCOUNT';
 
@@ -1192,6 +1218,75 @@ export interface SlvExternalAccountCreateInfo {
    * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
    */
   phoneNumber?: string;
+}
+
+export interface SwiftBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * The birth date of the beneficiary
+   */
+  birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
+
+  /**
+   * The email of the beneficiary
+   */
+  email?: string;
+
+  /**
+   * The nationality of the beneficiary
+   */
+  nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
+}
+
+export interface SwiftExternalAccountCreateInfo {
+  accountType: 'SWIFT_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
+  beneficiary: SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+  /**
+   * The ISO 3166-1 alpha-2 country code of the bank account
+   */
+  country: string;
+
+  /**
+   * The SWIFT/BIC code of the bank
+   */
+  swiftCode: string;
+
+  /**
+   * The bank account number. Required for most corridors. Use iban instead for
+   * IBAN-only corridors (e.g. BR, GB).
+   */
+  accountNumber?: string;
+
+  /**
+   * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+   * Use accountNumber for all other corridors.
+   */
+  iban?: string;
 }
 
 export interface ThbExternalAccountCreateInfo {

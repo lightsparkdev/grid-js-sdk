@@ -43,7 +43,7 @@ export class BeneficialOwners extends APIResource {
     body: BeneficialOwnerCreateParams,
     options?: RequestOptions,
   ): APIPromise<BeneficialOwnerCreateResponse> {
-    return this._client.post('/beneficial-owners', { body, ...options });
+    return this._client.post('/beneficial-owners', { body, ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -58,7 +58,10 @@ export class BeneficialOwners extends APIResource {
    * ```
    */
   retrieve(beneficialOwnerID: string, options?: RequestOptions): APIPromise<BeneficialOwnerRetrieveResponse> {
-    return this._client.get(path`/beneficial-owners/${beneficialOwnerID}`, options);
+    return this._client.get(path`/beneficial-owners/${beneficialOwnerID}`, {
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -75,7 +78,11 @@ export class BeneficialOwners extends APIResource {
     body: BeneficialOwnerUpdateParams,
     options?: RequestOptions,
   ): APIPromise<BeneficialOwnerUpdateResponse> {
-    return this._client.patch(path`/beneficial-owners/${beneficialOwnerID}`, { body, ...options });
+    return this._client.patch(path`/beneficial-owners/${beneficialOwnerID}`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -98,6 +105,7 @@ export class BeneficialOwners extends APIResource {
     return this._client.getAPIList('/beneficial-owners', DefaultPagination<BeneficialOwnerListResponse>, {
       query,
       ...options,
+      __security: { basicAuth: true },
     });
   }
 }

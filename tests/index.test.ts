@@ -25,6 +25,8 @@ describe('instantiate client', () => {
       defaultHeaders: { 'X-My-Default-Header': '2' },
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
     });
 
     test('they are used in the request', async () => {
@@ -93,6 +95,8 @@ describe('instantiate client', () => {
         logLevel: 'debug',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
 
       await forceAPIResponseForClient(client);
@@ -100,7 +104,12 @@ describe('instantiate client', () => {
     });
 
     test('default logLevel is warn', async () => {
-      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({
+        username: 'My Username',
+        password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
+      });
       expect(client.logLevel).toBe('warn');
     });
 
@@ -118,6 +127,8 @@ describe('instantiate client', () => {
         logLevel: 'info',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
 
       await forceAPIResponseForClient(client);
@@ -138,6 +149,8 @@ describe('instantiate client', () => {
         logger: logger,
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.logLevel).toBe('debug');
 
@@ -159,6 +172,8 @@ describe('instantiate client', () => {
         logger: logger,
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.logLevel).toBe('warn');
       expect(warnMock).toHaveBeenCalledWith(
@@ -181,6 +196,8 @@ describe('instantiate client', () => {
         logLevel: 'off',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
 
       await forceAPIResponseForClient(client);
@@ -202,6 +219,8 @@ describe('instantiate client', () => {
         logLevel: 'debug',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.logLevel).toBe('debug');
       expect(warnMock).not.toHaveBeenCalled();
@@ -215,6 +234,8 @@ describe('instantiate client', () => {
         defaultQuery: { apiVersion: 'foo' },
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo');
     });
@@ -225,6 +246,8 @@ describe('instantiate client', () => {
         defaultQuery: { apiVersion: 'foo', hello: 'world' },
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/foo?apiVersion=foo&hello=world');
     });
@@ -235,6 +258,8 @@ describe('instantiate client', () => {
         defaultQuery: { hello: 'world' },
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.buildURL('/foo', { hello: undefined })).toEqual('http://localhost:5000/foo');
     });
@@ -245,6 +270,8 @@ describe('instantiate client', () => {
       baseURL: 'http://localhost:5000/',
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: (url) => {
         return Promise.resolve(
           new Response(JSON.stringify({ url, custom: true }), {
@@ -264,6 +291,8 @@ describe('instantiate client', () => {
       baseURL: 'http://localhost:5000/',
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: defaultFetch,
     });
   });
@@ -273,6 +302,8 @@ describe('instantiate client', () => {
       baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: (...args) => {
         return new Promise((resolve, reject) =>
           setTimeout(
@@ -306,6 +337,8 @@ describe('instantiate client', () => {
       baseURL: 'http://localhost:5000/',
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
     });
 
@@ -319,6 +352,8 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/custom/path/',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
@@ -328,6 +363,8 @@ describe('instantiate client', () => {
         baseURL: 'http://localhost:5000/custom/path',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.buildURL('/foo', null)).toEqual('http://localhost:5000/custom/path/foo');
     });
@@ -341,30 +378,52 @@ describe('instantiate client', () => {
         baseURL: 'https://example.com',
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
       expect(client.baseURL).toEqual('https://example.com');
     });
 
     test('env variable', () => {
       process.env['LIGHTSPARK_GRID_BASE_URL'] = 'https://example.com/from_env';
-      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({
+        username: 'My Username',
+        password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
+      });
       expect(client.baseURL).toEqual('https://example.com/from_env');
     });
 
     test('empty env variable', () => {
       process.env['LIGHTSPARK_GRID_BASE_URL'] = ''; // empty
-      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({
+        username: 'My Username',
+        password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
+      });
       expect(client.baseURL).toEqual('https://api.lightspark.com/grid/2025-10-13');
     });
 
     test('blank env variable', () => {
       process.env['LIGHTSPARK_GRID_BASE_URL'] = '  '; // blank
-      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({
+        username: 'My Username',
+        password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
+      });
       expect(client.baseURL).toEqual('https://api.lightspark.com/grid/2025-10-13');
     });
 
     test('in request options', () => {
-      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({
+        username: 'My Username',
+        password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
+      });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/option/foo',
       );
@@ -374,6 +433,8 @@ describe('instantiate client', () => {
       const client = new LightsparkGrid({
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
         baseURL: 'http://localhost:5000/client',
       });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
@@ -383,7 +444,12 @@ describe('instantiate client', () => {
 
     test('in request options overridden by env variable', () => {
       process.env['LIGHTSPARK_GRID_BASE_URL'] = 'http://localhost:5000/env';
-      const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+      const client = new LightsparkGrid({
+        username: 'My Username',
+        password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
+      });
       expect(client.buildURL('/foo', null, 'http://localhost:5000/option')).toEqual(
         'http://localhost:5000/env/foo',
       );
@@ -395,11 +461,18 @@ describe('instantiate client', () => {
       maxRetries: 4,
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
     });
     expect(client.maxRetries).toEqual(4);
 
     // default
-    const client2 = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+    const client2 = new LightsparkGrid({
+      username: 'My Username',
+      password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
+    });
     expect(client2.maxRetries).toEqual(2);
   });
 
@@ -410,6 +483,8 @@ describe('instantiate client', () => {
         maxRetries: 3,
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
 
       const newClient = client.withOptions({
@@ -437,6 +512,8 @@ describe('instantiate client', () => {
         defaultQuery: { 'test-param': 'test-value' },
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
 
       const newClient = client.withOptions({
@@ -456,6 +533,8 @@ describe('instantiate client', () => {
         timeout: 1000,
         username: 'My Username',
         password: 'My Password',
+        agentAccessToken: 'My Agent Access Token',
+        webhookSignature: 'My Webhook Signature',
       });
 
       // Modify the client properties directly after creation
@@ -486,23 +565,41 @@ describe('instantiate client', () => {
     // set options via env var
     process.env['GRID_CLIENT_ID'] = 'My Username';
     process.env['GRID_CLIENT_SECRET'] = 'My Password';
+    process.env['GRID_AGENT_ACCESS_TOKEN'] = 'My Agent Access Token';
+    process.env['GRID_WEBHOOK_PUBKEY'] = 'My Webhook Signature';
     const client = new LightsparkGrid();
     expect(client.username).toBe('My Username');
     expect(client.password).toBe('My Password');
+    expect(client.agentAccessToken).toBe('My Agent Access Token');
+    expect(client.webhookSignature).toBe('My Webhook Signature');
   });
 
   test('with overridden environment variable arguments', () => {
     // set options via env var
     process.env['GRID_CLIENT_ID'] = 'another My Username';
     process.env['GRID_CLIENT_SECRET'] = 'another My Password';
-    const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+    process.env['GRID_AGENT_ACCESS_TOKEN'] = 'another My Agent Access Token';
+    process.env['GRID_WEBHOOK_PUBKEY'] = 'another My Webhook Signature';
+    const client = new LightsparkGrid({
+      username: 'My Username',
+      password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
+    });
     expect(client.username).toBe('My Username');
     expect(client.password).toBe('My Password');
+    expect(client.agentAccessToken).toBe('My Agent Access Token');
+    expect(client.webhookSignature).toBe('My Webhook Signature');
   });
 });
 
 describe('request building', () => {
-  const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+  const client = new LightsparkGrid({
+    username: 'My Username',
+    password: 'My Password',
+    agentAccessToken: 'My Agent Access Token',
+    webhookSignature: 'My Webhook Signature',
+  });
 
   describe('custom headers', () => {
     test('handles undefined', async () => {
@@ -521,7 +618,12 @@ describe('request building', () => {
 });
 
 describe('default encoder', () => {
-  const client = new LightsparkGrid({ username: 'My Username', password: 'My Password' });
+  const client = new LightsparkGrid({
+    username: 'My Username',
+    password: 'My Password',
+    agentAccessToken: 'My Agent Access Token',
+    webhookSignature: 'My Webhook Signature',
+  });
 
   class Serializable {
     toJSON() {
@@ -609,6 +711,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       timeout: 10,
       fetch: testFetch,
     });
@@ -644,6 +748,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
       maxRetries: 4,
     });
@@ -673,6 +779,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
       maxRetries: 4,
     });
@@ -707,6 +815,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
       maxRetries: 4,
       defaultHeaders: { 'X-Stainless-Retry-Count': null },
@@ -741,6 +851,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
       maxRetries: 4,
     });
@@ -776,6 +888,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
     });
 
@@ -810,6 +924,8 @@ describe('retries', () => {
     const client = new LightsparkGrid({
       username: 'My Username',
       password: 'My Password',
+      agentAccessToken: 'My Agent Access Token',
+      webhookSignature: 'My Webhook Signature',
       fetch: testFetch,
     });
 

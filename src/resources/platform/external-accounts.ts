@@ -47,7 +47,11 @@ export class ExternalAccounts extends APIResource {
     body: ExternalAccountCreateParams,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.post('/platform/external-accounts', { body, ...options });
+    return this._client.post('/platform/external-accounts', {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -65,7 +69,10 @@ export class ExternalAccounts extends APIResource {
     externalAccountID: string,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.get(path`/platform/external-accounts/${externalAccountID}`, options);
+    return this._client.get(path`/platform/external-accounts/${externalAccountID}`, {
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -90,7 +97,7 @@ export class ExternalAccounts extends APIResource {
     return this._client.getAPIList(
       '/platform/external-accounts',
       DefaultPagination<ExternalAccountsAPI.ExternalAccount>,
-      { query, ...options },
+      { query, ...options, __security: { basicAuth: true } },
     );
   }
 
@@ -108,6 +115,7 @@ export class ExternalAccounts extends APIResource {
     return this._client.delete(path`/platform/external-accounts/${externalAccountID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      __security: { basicAuth: true },
     });
   }
 }
@@ -128,6 +136,12 @@ export interface AedAccountInfo {
   swiftCode?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface BdtAccountInfo {
   accountType: 'BDT_ACCOUNT';
 
@@ -212,6 +226,12 @@ export interface CadAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface CopAccountInfo {
   accountType: 'COP_ACCOUNT';
 
@@ -312,6 +332,12 @@ export interface GbpAccountInfo {
   sortCode: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface GhsAccountInfo {
   accountType: 'GHS_ACCOUNT';
 
@@ -530,6 +556,12 @@ export interface PhpAccountInfo {
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: bankName, phoneNumber
+ */
 export interface PkrAccountInfo {
   accountType: 'PKR_ACCOUNT';
 
@@ -759,8 +791,10 @@ export interface ZmwAccountInfo {
 
 export interface ExternalAccountCreateParams {
   /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber
+   * - MOBILE_MONEY: phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -799,14 +833,7 @@ export interface ExternalAccountCreateParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | ExternalAccountCreateParams.SwiftExternalAccountCreateInfo
-    | ExternalAccountsAPI.BaseWalletInfo
-    | Shared.EthereumWalletExternalAccountInfo
-    | ExternalAccountsAPI.LightningWalletInfo
-    | ExternalAccountsAPI.PolygonWalletInfo
-    | ExternalAccountsAPI.SolanaWalletInfo
-    | ExternalAccountsAPI.SparkWalletInfo
-    | ExternalAccountsAPI.TronWalletInfo;
+    | Shared.SwiftExternalAccountCreateInfo;
 
   /**
    * The ISO 4217 currency code
@@ -818,79 +845,6 @@ export interface ExternalAccountCreateParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
-}
-
-export namespace ExternalAccountCreateParams {
-  export interface SwiftExternalAccountCreateInfo {
-    accountType: 'SWIFT_ACCOUNT';
-
-    /**
-     * The name of the bank
-     */
-    bankName: string;
-
-    beneficiary: SwiftExternalAccountCreateInfo.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-    /**
-     * The ISO 3166-1 alpha-2 country code of the bank account
-     */
-    country: string;
-
-    /**
-     * The SWIFT/BIC code of the bank
-     */
-    swiftCode: string;
-
-    /**
-     * The bank account number. Required for most corridors. Use iban instead for
-     * IBAN-only corridors (e.g. BR, GB).
-     */
-    accountNumber?: string;
-
-    /**
-     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
-     * Use accountNumber for all other corridors.
-     */
-    iban?: string;
-  }
-
-  export namespace SwiftExternalAccountCreateInfo {
-    export interface SwiftBeneficiary {
-      beneficiaryType: 'INDIVIDUAL';
-
-      /**
-       * The full name of the beneficiary
-       */
-      fullName: string;
-
-      address?: ExternalAccountsAPI.Address;
-
-      /**
-       * The birth date of the beneficiary
-       */
-      birthDate?: string;
-
-      /**
-       * The country of residence of the beneficiary
-       */
-      countryOfResidence?: string;
-
-      /**
-       * The email of the beneficiary
-       */
-      email?: string;
-
-      /**
-       * The nationality of the beneficiary
-       */
-      nationality?: string;
-
-      /**
-       * The phone number of the beneficiary
-       */
-      phoneNumber?: string;
-    }
-  }
 }
 
 export interface ExternalAccountListParams extends DefaultPaginationParams {

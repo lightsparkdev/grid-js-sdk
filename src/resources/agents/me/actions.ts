@@ -25,7 +25,10 @@ export class Actions extends APIResource {
    * ```
    */
   retrieve(actionID: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentAction> {
-    return this._client.get(path`/agents/me/actions/${actionID}`, options);
+    return this._client.get(path`/agents/me/actions/${actionID}`, {
+      ...options,
+      __security: { agentAuth: true },
+    });
   }
 
   /**
@@ -48,6 +51,7 @@ export class Actions extends APIResource {
     return this._client.getAPIList('/agents/me/actions', DefaultPagination<AgentsAPI.AgentAction>, {
       query,
       ...options,
+      __security: { agentAuth: true },
     });
   }
 }

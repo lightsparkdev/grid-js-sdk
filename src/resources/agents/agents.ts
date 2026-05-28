@@ -55,7 +55,7 @@ export class Agents extends APIResource {
    * ```
    */
   create(body: AgentCreateParams, options?: RequestOptions): APIPromise<AgentCreateResponse> {
-    return this._client.post('/agents', { body, ...options });
+    return this._client.post('/agents', { body, ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -67,7 +67,7 @@ export class Agents extends APIResource {
    * ```
    */
   retrieve(agentID: string, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.get(path`/agents/${agentID}`, options);
+    return this._client.get(path`/agents/${agentID}`, { ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -79,7 +79,11 @@ export class Agents extends APIResource {
    * ```
    */
   update(agentID: string, body: AgentUpdateParams, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.patch(path`/agents/${agentID}`, { body, ...options });
+    return this._client.patch(path`/agents/${agentID}`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -97,7 +101,11 @@ export class Agents extends APIResource {
     query: AgentListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<AgentsDefaultPagination, Agent> {
-    return this._client.getAPIList('/agents', DefaultPagination<Agent>, { query, ...options });
+    return this._client.getAPIList('/agents', DefaultPagination<Agent>, {
+      query,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -113,6 +121,7 @@ export class Agents extends APIResource {
     return this._client.delete(path`/agents/${agentID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -138,6 +147,7 @@ export class Agents extends APIResource {
     return this._client.getAPIList('/agents/approvals', DefaultPagination<AgentAction>, {
       query,
       ...options,
+      __security: { basicAuth: true },
     });
   }
 
@@ -152,7 +162,11 @@ export class Agents extends APIResource {
    * ```
    */
   updatePolicy(agentID: string, body: AgentUpdatePolicyParams, options?: RequestOptions): APIPromise<Agent> {
-    return this._client.patch(path`/agents/${agentID}/policy`, { body, ...options });
+    return this._client.patch(path`/agents/${agentID}/policy`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 }
 
@@ -296,7 +310,8 @@ export interface AgentAction {
   transaction?: TransferInAPI.Transaction;
 
   /**
-   * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
+   * Details of the transfer being requested. Populated for `TRANSFER_OUT` and
+   * `TRANSFER_IN` actions; absent for `EXECUTE_QUOTE` actions.
    */
   transferDetails?: Shared.AgentTransferDetails;
 }
@@ -537,7 +552,7 @@ export namespace AgentPolicy {
      * If set, restricts the agent to operate only on the specified internal account
      * IDs. Null means the agent can access all accounts.
      */
-    allowedAccountIds?: Array<string> | null;
+    allowedAccountIds?: Array<string>;
   }
 
   export namespace AccountRestrictions {
@@ -794,7 +809,7 @@ export namespace AgentUpdatePolicyParams {
      * If set, restricts the agent to operate only on the specified internal account
      * IDs. Null means the agent can access all accounts.
      */
-    allowedAccountIds?: Array<string> | null;
+    allowedAccountIds?: Array<string>;
   }
 
   export namespace AccountRestrictions {
