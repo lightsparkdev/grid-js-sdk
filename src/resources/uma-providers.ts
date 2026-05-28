@@ -18,6 +18,7 @@ export class UmaProviders extends APIResource {
     return this._client.getAPIList('/uma-providers', DefaultPagination<UmaProviderListResponse>, {
       query,
       ...options,
+      __security: { basicAuth: true },
     });
   }
 }

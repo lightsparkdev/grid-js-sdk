@@ -23,18 +23,10 @@ export class Quotes extends APIResource {
    * @example
    * ```ts
    * const quote = await client.agents.me.quotes.create({
-   *   destination: {
-   *     accountId:
-   *       'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-   *     destinationType: 'ACCOUNT',
-   *   },
+   *   destination: {},
    *   lockedCurrencyAmount: 1000,
    *   lockedCurrencySide: 'SENDING',
-   *   source: {
-   *     accountId:
-   *       'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
-   *     sourceType: 'ACCOUNT',
-   *   },
+   *   source: {},
    * });
    * ```
    */
@@ -47,6 +39,7 @@ export class Quotes extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
+      __security: { agentAuth: true },
     });
   }
 
@@ -62,7 +55,10 @@ export class Quotes extends APIResource {
    * ```
    */
   retrieve(quoteID: string, options?: RequestOptions): APIPromise<QuotesAPI.Quote> {
-    return this._client.get(path`/agents/me/quotes/${quoteID}`, options);
+    return this._client.get(path`/agents/me/quotes/${quoteID}`, {
+      ...options,
+      __security: { agentAuth: true },
+    });
   }
 
   /**
@@ -95,13 +91,14 @@ export class Quotes extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { agentAuth: true },
     });
   }
 }
 
 export interface QuoteCreateParams {
   /**
-   * Body param: Destination account details
+   * Body param
    */
   destination: QuotesAPI.QuoteDestinationOneOf;
 
@@ -121,7 +118,7 @@ export interface QuoteCreateParams {
   lockedCurrencySide: 'SENDING' | 'RECEIVING';
 
   /**
-   * Body param: Source account details
+   * Body param
    */
   source: QuotesAPI.QuoteSourceOneOf;
 

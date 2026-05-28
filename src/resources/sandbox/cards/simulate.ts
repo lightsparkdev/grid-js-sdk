@@ -51,7 +51,11 @@ export class Simulate extends APIResource {
     body: SimulateAuthorizationParams,
     options?: RequestOptions,
   ): APIPromise<SimulateAuthorizationResponse> {
-    return this._client.post(path`/sandbox/cards/${id}/simulate/authorization`, { body, ...options });
+    return this._client.post(path`/sandbox/cards/${id}/simulate/authorization`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -86,7 +90,11 @@ export class Simulate extends APIResource {
     body: SimulateClearingParams,
     options?: RequestOptions,
   ): APIPromise<SimulateClearingResponse> {
-    return this._client.post(path`/sandbox/cards/${id}/simulate/clearing`, { body, ...options });
+    return this._client.post(path`/sandbox/cards/${id}/simulate/clearing`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -114,7 +122,11 @@ export class Simulate extends APIResource {
     body: SimulateReturnParams,
     options?: RequestOptions,
   ): APIPromise<SimulateReturnResponse> {
-    return this._client.post(path`/sandbox/cards/${id}/simulate/return`, { body, ...options });
+    return this._client.post(path`/sandbox/cards/${id}/simulate/return`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 }
 

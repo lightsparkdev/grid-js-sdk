@@ -99,7 +99,11 @@ export class Customers extends APIResource {
    */
   create(params: CustomerCreateParams, options?: RequestOptions): APIPromise<CustomerOneOf> {
     const { CreateCustomerRequest } = params;
-    return this._client.post('/customers', { body: CreateCustomerRequest, ...options });
+    return this._client.post('/customers', {
+      body: CreateCustomerRequest,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -113,7 +117,7 @@ export class Customers extends APIResource {
    * ```
    */
   retrieve(customerID: string, options?: RequestOptions): APIPromise<CustomerOneOf> {
-    return this._client.get(path`/customers/${customerID}`, options);
+    return this._client.get(path`/customers/${customerID}`, { ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -171,6 +175,7 @@ export class Customers extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -191,7 +196,11 @@ export class Customers extends APIResource {
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<CustomerOneovesDefaultPagination, CustomerOneOf> {
-    return this._client.getAPIList('/customers', DefaultPagination<CustomerOneOf>, { query, ...options });
+    return this._client.getAPIList('/customers', DefaultPagination<CustomerOneOf>, {
+      query,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -205,7 +214,10 @@ export class Customers extends APIResource {
    * ```
    */
   delete(customerID: string, options?: RequestOptions): APIPromise<CustomerOneOf> {
-    return this._client.delete(path`/customers/${customerID}`, options);
+    return this._client.delete(path`/customers/${customerID}`, {
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -261,6 +273,7 @@ export class Customers extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -297,6 +310,7 @@ export class Customers extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -323,7 +337,7 @@ export class Customers extends APIResource {
     return this._client.getAPIList(
       '/customers/internal-accounts',
       DefaultPagination<InternalAccountsAPI.InternalAccount>,
-      { query, ...options },
+      { query, ...options, __security: { basicAuth: true } },
     );
   }
 
@@ -369,6 +383,7 @@ export class Customers extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 }
@@ -646,6 +661,8 @@ export interface BusinessInfo {
 }
 
 export interface Customer {
+  customerType: unknown;
+
   /**
    * Platform-specific customer identifier
    */
@@ -695,6 +712,8 @@ export interface Customer {
 }
 
 export interface CustomerCreate {
+  customerType: unknown;
+
   /**
    * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
    * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
@@ -935,6 +954,8 @@ export type CustomerType = 'INDIVIDUAL' | 'BUSINESS';
  * through the endpoint's signed-retry flow.
  */
 export interface CustomerUpdate {
+  customerType: unknown;
+
   /**
    * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
    * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
@@ -1076,7 +1097,135 @@ export namespace CustomerCreateParams {
     /**
      * Additional information required for business entities
      */
-    businessInfo?: CustomersAPI.BusinessInfo;
+    businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
+  }
+
+  export namespace BusinessCustomerCreateRequest {
+    /**
+     * Additional information required for business entities
+     */
+    export interface BusinessInfo extends CustomersAPI.BusinessInfo {
+      /**
+       * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+       */
+      incorporatedOn: string;
+
+      /**
+       * Legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * Tax identification number
+       */
+      taxId: string;
+
+      /**
+       * The high-level industry category of the business
+       */
+      businessType?:
+        | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
+        | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
+        | 'UTILITIES'
+        | 'CONSTRUCTION'
+        | 'MANUFACTURING'
+        | 'WHOLESALE_TRADE'
+        | 'RETAIL_TRADE'
+        | 'TRANSPORTATION_AND_WAREHOUSING'
+        | 'INFORMATION'
+        | 'FINANCE_AND_INSURANCE'
+        | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
+        | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
+        | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
+        | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
+        | 'EDUCATIONAL_SERVICES'
+        | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
+        | 'ARTS_ENTERTAINMENT_AND_RECREATION'
+        | 'ACCOMMODATION_AND_FOOD_SERVICES'
+        | 'OTHER_SERVICES'
+        | 'PUBLIC_ADMINISTRATION';
+
+      /**
+       * List of countries where the business operates (ISO 3166-1 alpha-2)
+       */
+      countriesOfOperation?: Array<string>;
+
+      /**
+       * Country of incorporation or registration (ISO 3166-1 alpha-2)
+       */
+      country?: string;
+
+      /**
+       * Trade name or DBA name of the business, if different from the legal name
+       */
+      doingBusinessAs?: string;
+
+      /**
+       * Legal entity type of the business
+       */
+      entityType?:
+        | 'SOLE_PROPRIETORSHIP'
+        | 'PARTNERSHIP'
+        | 'LLC'
+        | 'CORPORATION'
+        | 'S_CORPORATION'
+        | 'NON_PROFIT'
+        | 'OTHER';
+
+      /**
+       * Expected number of transactions per month
+       */
+      expectedMonthlyTransactionCount?:
+        | 'COUNT_UNDER_10'
+        | 'COUNT_10_TO_100'
+        | 'COUNT_100_TO_500'
+        | 'COUNT_500_TO_1000'
+        | 'COUNT_OVER_1000';
+
+      /**
+       * Expected total transaction volume per month in USD equivalent
+       */
+      expectedMonthlyTransactionVolume?:
+        | 'VOLUME_UNDER_10K'
+        | 'VOLUME_10K_TO_100K'
+        | 'VOLUME_100K_TO_1M'
+        | 'VOLUME_1M_TO_10M'
+        | 'VOLUME_OVER_10M';
+
+      /**
+       * List of countries where the business expects to send payments (ISO 3166-1
+       * alpha-2)
+       */
+      expectedRecipientJurisdictions?: Array<string>;
+
+      /**
+       * The intended purpose for using the Grid account
+       */
+      purposeOfAccount?:
+        | 'CONTRACTOR_PAYOUTS'
+        | 'CREATOR_PAYOUTS'
+        | 'EMPLOYEE_PAYOUTS'
+        | 'MARKETPLACE_SELLER_PAYOUTS'
+        | 'SUPPLIER_PAYMENTS'
+        | 'CROSS_BORDER_B2B'
+        | 'AR_AUTOMATION'
+        | 'AP_AUTOMATION'
+        | 'EMBEDDED_PAYMENTS'
+        | 'PLATFORM_FEE_COLLECTION'
+        | 'P2P_TRANSFERS'
+        | 'CHARITABLE_DONATIONS'
+        | 'OTHER';
+
+      /**
+       * Business registration number
+       */
+      registrationNumber?: string;
+
+      /**
+       * The primary source of funds for the business
+       */
+      sourceOfFunds?: string;
+    }
   }
 }
 
@@ -1149,7 +1298,7 @@ export interface CustomerListParams extends DefaultPaginationParams {
   currency?: string;
 
   /**
-   * Filter by customer type
+   * Whether the customer is an individual or a business entity
    */
   customerType?: CustomerType;
 

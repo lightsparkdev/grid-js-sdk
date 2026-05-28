@@ -20,7 +20,7 @@ export class Cards extends APIResource {
    * ```
    */
   retrieve(id: string, options?: RequestOptions): APIPromise<CardRetrieveResponse> {
-    return this._client.get(path`/cards/${id}`, options);
+    return this._client.get(path`/cards/${id}`, { ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -89,6 +89,7 @@ export class Cards extends APIResource {
         },
         options?.headers,
       ]),
+      __security: { basicAuth: true },
     });
   }
 
@@ -109,7 +110,11 @@ export class Cards extends APIResource {
     query: CardListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<CardListResponsesDefaultPagination, CardListResponse> {
-    return this._client.getAPIList('/cards', DefaultPagination<CardListResponse>, { query, ...options });
+    return this._client.getAPIList('/cards', DefaultPagination<CardListResponse>, {
+      query,
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -136,7 +141,7 @@ export class Cards extends APIResource {
    * ```
    */
   issue(body: CardIssueParams, options?: RequestOptions): APIPromise<CardIssueResponse> {
-    return this._client.post('/cards', { body, ...options });
+    return this._client.post('/cards', { body, ...options, __security: { basicAuth: true } });
   }
 }
 
@@ -237,14 +242,8 @@ export interface CardRetrieveResponse {
   platformCardId?: string;
 
   /**
-   * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
-   * and on cards that fail provisioning before reaching `ACTIVE`.
-   *
-   * | Reason               | Description                                                                    |
-   * | -------------------- | ------------------------------------------------------------------------------ |
-   * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
-   * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
-   * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+   * Reason associated with the current `state`. Populated when the card is `CLOSED`
+   * or when provisioning was rejected; otherwise null.
    */
   stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
@@ -344,14 +343,8 @@ export interface CardUpdateResponse {
   platformCardId?: string;
 
   /**
-   * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
-   * and on cards that fail provisioning before reaching `ACTIVE`.
-   *
-   * | Reason               | Description                                                                    |
-   * | -------------------- | ------------------------------------------------------------------------------ |
-   * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
-   * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
-   * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+   * Reason associated with the current `state`. Populated when the card is `CLOSED`
+   * or when provisioning was rejected; otherwise null.
    */
   stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
@@ -451,14 +444,8 @@ export interface CardListResponse {
   platformCardId?: string;
 
   /**
-   * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
-   * and on cards that fail provisioning before reaching `ACTIVE`.
-   *
-   * | Reason               | Description                                                                    |
-   * | -------------------- | ------------------------------------------------------------------------------ |
-   * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
-   * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
-   * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+   * Reason associated with the current `state`. Populated when the card is `CLOSED`
+   * or when provisioning was rejected; otherwise null.
    */
   stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
@@ -558,14 +545,8 @@ export interface CardIssueResponse {
   platformCardId?: string;
 
   /**
-   * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
-   * and on cards that fail provisioning before reaching `ACTIVE`.
-   *
-   * | Reason               | Description                                                                    |
-   * | -------------------- | ------------------------------------------------------------------------------ |
-   * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
-   * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
-   * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
+   * Reason associated with the current `state`. Populated when the card is `CLOSED`
+   * or when provisioning was rejected; otherwise null.
    */
   stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
