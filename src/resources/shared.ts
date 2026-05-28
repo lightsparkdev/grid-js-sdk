@@ -1,5 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+import * as DocumentsAPI from './documents';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 
 export interface AedBeneficiary {
@@ -1461,34 +1462,7 @@ export interface VerificationError {
    * | MISSING_PROOF_OF_ADDRESS_DOCUMENT    | UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL, BANK_STATEMENT, TAX_RETURN                      |
    * | MISSING_IDENTITY_DOCUMENT            | PASSPORT, DRIVERS_LICENSE, NATIONAL_ID                                                                   |
    */
-  acceptedDocumentTypes?: Array<
-    | 'PASSPORT'
-    | 'DRIVERS_LICENSE'
-    | 'NATIONAL_ID'
-    | 'PROOF_OF_ADDRESS'
-    | 'BANK_STATEMENT'
-    | 'TAX_RETURN'
-    | 'CERTIFICATE_OF_INCORPORATION'
-    | 'ARTICLES_OF_INCORPORATION'
-    | 'ARTICLES_OF_ASSOCIATION'
-    | 'STATE_REGISTRY_EXCERPT'
-    | 'GOOD_STANDING_CERTIFICATE'
-    | 'INFORMATION_STATEMENT'
-    | 'INCUMBENCY_CERTIFICATE'
-    | 'BUSINESS_LICENSE'
-    | 'SHAREHOLDER_REGISTER'
-    | 'POWER_OF_ATTORNEY'
-    | 'UTILITY_BILL'
-    | 'ELECTRICITY_BILL'
-    | 'RENT_OR_LEASE_AGREEMENT'
-    | 'DIRECTOR_REGISTRY'
-    | 'TRUST_AGREEMENT'
-    | 'STATE_COMPANY_REGISTRY'
-    | 'PARTNERSHIP_CONTROL_AGREEMENT'
-    | 'PARTNERSHIP_AGREEMENT'
-    | 'SELFIE'
-    | 'OTHER'
-  >;
+  acceptedDocumentTypes?: Array<DocumentsAPI.DocumentType>;
 
   /**
    * Dot-notation path to the field with the issue. Present when type is

@@ -92,14 +92,21 @@ export {
 export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';
 export {
   Documents,
-  type DocumentRetrieveResponse,
+  type Document,
   type DocumentListResponse,
-  type DocumentReplaceResponse,
-  type DocumentUploadResponse,
+  type DocumentReplaceRequest,
+  type DocumentType,
+  type DocumentUploadRequest,
+  type IdentityDocumentReplaceRequest,
+  type IdentityDocumentType,
+  type IdentityDocumentUploadRequest,
+  type NonIdentityDocumentReplaceRequest,
+  type NonIdentityDocumentType,
+  type NonIdentityDocumentUploadRequest,
   type DocumentListParams,
   type DocumentReplaceParams,
   type DocumentUploadParams,
-  type DocumentListResponsesDefaultPagination,
+  type DocumentsDefaultPagination,
 } from './documents';
 export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
 export {
