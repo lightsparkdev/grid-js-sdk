@@ -527,20 +527,14 @@ Types:
 - <code><a href="./src/resources/auth/credentials.ts">AuthSession</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthSignedRequestChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialCreateRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialVerifyRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">EmailOtpCredentialVerifyRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialCreateRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialCreateRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialVerifyRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">OAuthCredentialVerifyRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAssertion</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAttestation</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyAuthChallenge</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequest</a></code>
-- <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequestFields</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">SignedRequestChallenge</a></code>
 
 Methods:
