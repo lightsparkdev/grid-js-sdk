@@ -21,7 +21,7 @@ export class Discoveries extends APIResource {
     query: DiscoveryListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<DiscoveryListResponse> {
-    return this._client.get('/discoveries', { query, ...options });
+    return this._client.get('/discoveries', { query, ...options, __security: { basicAuth: true } });
   }
 }
 

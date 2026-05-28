@@ -471,11 +471,14 @@ export class LightsparkGrid {
     );
   }
 
-  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
+  protected async authHeaders(
+    opts: FinalRequestOptions,
+    schemes: { basicAuth?: boolean; agentAuth?: boolean; webhookSignatureAuth?: boolean },
+  ): Promise<NullableHeaders | undefined> {
     return buildHeaders([
-      await this.basicAuth(opts),
-      await this.agentAuth(opts),
-      await this.webhookSignatureAuth(opts),
+      schemes.basicAuth ? await this.basicAuth(opts) : null,
+      schemes.agentAuth ? await this.agentAuth(opts) : null,
+      schemes.webhookSignatureAuth ? await this.webhookSignatureAuth(opts) : null,
     ]);
   }
 
@@ -954,7 +957,10 @@ export class LightsparkGrid {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(options),
+      await this.authHeaders(
+        options,
+        options.__security ?? { basicAuth: true, agentAuth: true, webhookSignatureAuth: true },
+      ),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,

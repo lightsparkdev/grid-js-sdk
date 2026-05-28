@@ -31,7 +31,10 @@ export class ExternalAccounts extends APIResource {
     externalAccountID: string,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.get(path`/agents/me/external-accounts/${externalAccountID}`, options);
+    return this._client.get(path`/agents/me/external-accounts/${externalAccountID}`, {
+      ...options,
+      __security: { agentAuth: true },
+    });
   }
 
   /**
@@ -54,7 +57,7 @@ export class ExternalAccounts extends APIResource {
     return this._client.getAPIList(
       '/agents/me/external-accounts',
       DefaultPagination<ExternalAccountsAPI.ExternalAccount>,
-      { query, ...options },
+      { query, ...options, __security: { agentAuth: true } },
     );
   }
 
@@ -73,6 +76,7 @@ export class ExternalAccounts extends APIResource {
     return this._client.delete(path`/agents/me/external-accounts/${externalAccountID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
+      __security: { agentAuth: true },
     });
   }
 
@@ -112,7 +116,11 @@ export class ExternalAccounts extends APIResource {
     body: ExternalAccountAddParams,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.post('/agents/me/external-accounts', { body, ...options });
+    return this._client.post('/agents/me/external-accounts', {
+      body,
+      ...options,
+      __security: { agentAuth: true },
+    });
   }
 }
 
@@ -130,8 +138,10 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
 
 export interface ExternalAccountAddParams {
   /**
-   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
-   * `lightningAddress` must be provided.
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber
+   * - MOBILE_MONEY: phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -170,14 +180,7 @@ export interface ExternalAccountAddParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | ExternalAccountAddParams.SwiftExternalAccountCreateInfo
-    | ExternalAccountsAPI.BaseWalletInfo
-    | Shared.EthereumWalletExternalAccountInfo
-    | ExternalAccountsAPI.LightningWalletInfo
-    | ExternalAccountsAPI.PolygonWalletInfo
-    | ExternalAccountsAPI.SolanaWalletInfo
-    | ExternalAccountsAPI.SparkWalletInfo
-    | ExternalAccountsAPI.TronWalletInfo;
+    | ExternalAccountAddParams.SwiftAccount;
 
   /**
    * The ISO 4217 currency code
@@ -210,7 +213,7 @@ export interface ExternalAccountAddParams {
 }
 
 export namespace ExternalAccountAddParams {
-  export interface SwiftExternalAccountCreateInfo {
+  export interface SwiftAccount {
     accountType: 'SWIFT_ACCOUNT';
 
     /**
@@ -218,7 +221,7 @@ export namespace ExternalAccountAddParams {
      */
     bankName: string;
 
-    beneficiary: SwiftExternalAccountCreateInfo.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+    beneficiary: SwiftAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
      * The ISO 3166-1 alpha-2 country code of the bank account
@@ -243,8 +246,8 @@ export namespace ExternalAccountAddParams {
     iban?: string;
   }
 
-  export namespace SwiftExternalAccountCreateInfo {
-    export interface SwiftBeneficiary {
+  export namespace SwiftAccount {
+    export interface IndividualBeneficiary {
       beneficiaryType: 'INDIVIDUAL';
 
       /**

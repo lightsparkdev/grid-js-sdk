@@ -31,7 +31,10 @@ export class Bulk extends APIResource {
    * ```
    */
   getJobStatus(jobID: string, options?: RequestOptions): APIPromise<BulkGetJobStatusResponse> {
-    return this._client.get(path`/customers/bulk/jobs/${jobID}`, options);
+    return this._client.get(path`/customers/bulk/jobs/${jobID}`, {
+      ...options,
+      __security: { basicAuth: true },
+    });
   }
 
   /**
@@ -105,7 +108,7 @@ export class Bulk extends APIResource {
   uploadCsv(body: BulkUploadCsvParams, options?: RequestOptions): APIPromise<BulkUploadCsvResponse> {
     return this._client.post(
       '/customers/bulk/csv',
-      multipartFormRequestOptions({ body, ...options }, this._client),
+      multipartFormRequestOptions({ body, ...options, __security: { basicAuth: true } }, this._client),
     );
   }
 }

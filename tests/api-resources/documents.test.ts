@@ -5,6 +5,8 @@ import LightsparkGrid, { toFile } from '@lightsparkdev/grid';
 const client = new LightsparkGrid({
   username: 'My Username',
   password: 'My Password',
+  agentAccessToken: 'My Agent Access Token',
+  webhookSignature: 'My Webhook Signature',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 

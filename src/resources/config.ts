@@ -19,7 +19,7 @@ export class Config extends APIResource {
    * ```
    */
   retrieve(options?: RequestOptions): APIPromise<PlatformConfig> {
-    return this._client.get('/config', options);
+    return this._client.get('/config', { ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -54,7 +54,7 @@ export class Config extends APIResource {
    * ```
    */
   update(body: ConfigUpdateParams, options?: RequestOptions): APIPromise<PlatformConfig> {
-    return this._client.patch('/config', { body, ...options });
+    return this._client.patch('/config', { body, ...options, __security: { basicAuth: true } });
   }
 }
 
