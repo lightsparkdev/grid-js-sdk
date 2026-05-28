@@ -16,8 +16,8 @@ export class Credentials extends APIResource {
    * Embedded Wallet internal accounts are initialized with an `EMAIL_OTP` credential
    * tied to the customer email on the account. Use this endpoint to add another
    * credential (`OAUTH` or `PASSKEY`), or to add `EMAIL_OTP` back after it has been
-   * removed. Only one `EMAIL_OTP` credential and one `PASSKEY` credential are
-   * supported per internal account.
+   * removed. Only one `EMAIL_OTP` credential is supported per internal account;
+   * multiple distinct `PASSKEY` credentials may be registered.
    *
    * Adding a credential requires a signature from an existing verified credential on
    * the same account. Call this endpoint with the new credential's details to
