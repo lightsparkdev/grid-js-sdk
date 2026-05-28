@@ -255,12 +255,6 @@ export type CadExternalAccountInfo = unknown;
  */
 export type CopExternalAccountInfo = unknown;
 
-/**
- * Additional information about the counterparty, if available and relevant to the
- * transaction and platform.
- */
-export type CounterpartyInformation = { [key: string]: unknown };
-
 export interface DkkBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
@@ -325,7 +319,7 @@ export interface ExternalAccount {
   /**
    * Status of the external account
    */
-  status: ExternalAccountStatus;
+  status: 'PENDING' | 'ACTIVE' | 'UNDER_REVIEW' | 'INACTIVE';
 
   /**
    * The result of verifying the beneficiary name against the account holder name
@@ -373,7 +367,44 @@ export interface ExternalAccountCreate {
    * - BANK_TRANSFER: accountNumber
    * - MOBILE_MONEY: phoneNumber
    */
-  accountInfo: ExternalAccountCreateInfoOneOf;
+  accountInfo:
+    | Shared.AedExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
+    | Shared.BrlExternalAccountCreateInfo
+    | Shared.BwpExternalAccountCreateInfo
+    | Shared.CadExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
+    | Shared.DkkExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
+    | Shared.EurExternalAccountCreateInfo
+    | Shared.GbpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
+    | Shared.HkdExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
+    | Shared.IdrExternalAccountCreateInfo
+    | Shared.InrExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
+    | Shared.KesExternalAccountCreateInfo
+    | Shared.MwkExternalAccountCreateInfo
+    | Shared.MxnExternalAccountCreateInfo
+    | Shared.MyrExternalAccountCreateInfo
+    | Shared.NgnExternalAccountCreateInfo
+    | Shared.PhpExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
+    | Shared.RwfExternalAccountCreateInfo
+    | Shared.SgdExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
+    | Shared.ThbExternalAccountCreateInfo
+    | Shared.TzsExternalAccountCreateInfo
+    | Shared.UgxExternalAccountCreateInfo
+    | Shared.UsdExternalAccountCreateInfo
+    | Shared.VndExternalAccountCreateInfo
+    | Shared.XafExternalAccountCreateInfo
+    | Shared.XofExternalAccountCreateInfo
+    | Shared.ZarExternalAccountCreateInfo
+    | Shared.ZmwExternalAccountCreateInfo
+    | Shared.SwiftExternalAccountCreateInfo;
 
   /**
    * The ISO 4217 currency code
@@ -404,51 +435,6 @@ export interface ExternalAccountCreate {
    */
   platformAccountId?: string;
 }
-
-/**
- * Required fields depend on the selected paymentRails:
- *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
- */
-export type ExternalAccountCreateInfoOneOf =
-  | Shared.AedExternalAccountCreateInfo
-  | Shared.BdtExternalAccountCreateInfo
-  | Shared.BrlExternalAccountCreateInfo
-  | Shared.BwpExternalAccountCreateInfo
-  | Shared.CadExternalAccountCreateInfo
-  | Shared.CopExternalAccountCreateInfo
-  | Shared.DkkExternalAccountCreateInfo
-  | Shared.EgpExternalAccountCreateInfo
-  | Shared.EurExternalAccountCreateInfo
-  | Shared.GbpExternalAccountCreateInfo
-  | Shared.GhsExternalAccountCreateInfo
-  | Shared.GtqExternalAccountCreateInfo
-  | Shared.HkdExternalAccountCreateInfo
-  | Shared.HtgExternalAccountCreateInfo
-  | Shared.IdrExternalAccountCreateInfo
-  | Shared.InrExternalAccountCreateInfo
-  | Shared.JmdExternalAccountCreateInfo
-  | Shared.KesExternalAccountCreateInfo
-  | Shared.MwkExternalAccountCreateInfo
-  | Shared.MxnExternalAccountCreateInfo
-  | Shared.MyrExternalAccountCreateInfo
-  | Shared.NgnExternalAccountCreateInfo
-  | Shared.PhpExternalAccountCreateInfo
-  | Shared.PkrExternalAccountCreateInfo
-  | Shared.RwfExternalAccountCreateInfo
-  | Shared.SgdExternalAccountCreateInfo
-  | Shared.SlvExternalAccountCreateInfo
-  | Shared.ThbExternalAccountCreateInfo
-  | Shared.TzsExternalAccountCreateInfo
-  | Shared.UgxExternalAccountCreateInfo
-  | Shared.UsdExternalAccountCreateInfo
-  | Shared.VndExternalAccountCreateInfo
-  | Shared.XafExternalAccountCreateInfo
-  | Shared.XofExternalAccountCreateInfo
-  | Shared.ZarExternalAccountCreateInfo
-  | Shared.ZmwExternalAccountCreateInfo
-  | Shared.SwiftExternalAccountCreateInfo;
 
 /**
  * Required fields depend on the selected paymentRails:
@@ -552,60 +538,6 @@ export interface ExternalAccountListResponse {
    */
   totalCount?: number;
 }
-
-/**
- * Status of an external account
- */
-export type ExternalAccountStatus = 'PENDING' | 'ACTIVE' | 'UNDER_REVIEW' | 'INACTIVE';
-
-/**
- * Type of external account or wallet
- */
-export type ExternalAccountType =
-  | 'AED_ACCOUNT'
-  | 'BDT_ACCOUNT'
-  | 'BRL_ACCOUNT'
-  | 'BWP_ACCOUNT'
-  | 'CAD_ACCOUNT'
-  | 'COP_ACCOUNT'
-  | 'DKK_ACCOUNT'
-  | 'EGP_ACCOUNT'
-  | 'EUR_ACCOUNT'
-  | 'GBP_ACCOUNT'
-  | 'GHS_ACCOUNT'
-  | 'GTQ_ACCOUNT'
-  | 'HKD_ACCOUNT'
-  | 'HTG_ACCOUNT'
-  | 'IDR_ACCOUNT'
-  | 'INR_ACCOUNT'
-  | 'JMD_ACCOUNT'
-  | 'KES_ACCOUNT'
-  | 'MWK_ACCOUNT'
-  | 'MXN_ACCOUNT'
-  | 'MYR_ACCOUNT'
-  | 'NGN_ACCOUNT'
-  | 'PHP_ACCOUNT'
-  | 'PKR_ACCOUNT'
-  | 'RWF_ACCOUNT'
-  | 'SGD_ACCOUNT'
-  | 'SLV_ACCOUNT'
-  | 'THB_ACCOUNT'
-  | 'TZS_ACCOUNT'
-  | 'UGX_ACCOUNT'
-  | 'USD_ACCOUNT'
-  | 'VND_ACCOUNT'
-  | 'XAF_ACCOUNT'
-  | 'XOF_ACCOUNT'
-  | 'ZAR_ACCOUNT'
-  | 'ZMW_ACCOUNT'
-  | 'SWIFT_ACCOUNT'
-  | 'BASE_WALLET'
-  | 'ETHEREUM_WALLET'
-  | 'LIGHTNING'
-  | 'POLYGON_WALLET'
-  | 'SOLANA_WALLET'
-  | 'SPARK_WALLET'
-  | 'TRON_WALLET';
 
 export interface GbpBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
@@ -1088,7 +1020,44 @@ export interface ExternalAccountCreateParams {
    * - BANK_TRANSFER: accountNumber
    * - MOBILE_MONEY: phoneNumber
    */
-  accountInfo: ExternalAccountCreateInfoOneOf;
+  accountInfo:
+    | Shared.AedExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
+    | Shared.BrlExternalAccountCreateInfo
+    | Shared.BwpExternalAccountCreateInfo
+    | Shared.CadExternalAccountCreateInfo
+    | Shared.CopExternalAccountCreateInfo
+    | Shared.DkkExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
+    | Shared.EurExternalAccountCreateInfo
+    | Shared.GbpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
+    | Shared.HkdExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
+    | Shared.IdrExternalAccountCreateInfo
+    | Shared.InrExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
+    | Shared.KesExternalAccountCreateInfo
+    | Shared.MwkExternalAccountCreateInfo
+    | Shared.MxnExternalAccountCreateInfo
+    | Shared.MyrExternalAccountCreateInfo
+    | Shared.NgnExternalAccountCreateInfo
+    | Shared.PhpExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
+    | Shared.RwfExternalAccountCreateInfo
+    | Shared.SgdExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
+    | Shared.ThbExternalAccountCreateInfo
+    | Shared.TzsExternalAccountCreateInfo
+    | Shared.UgxExternalAccountCreateInfo
+    | Shared.UsdExternalAccountCreateInfo
+    | Shared.VndExternalAccountCreateInfo
+    | Shared.XafExternalAccountCreateInfo
+    | Shared.XofExternalAccountCreateInfo
+    | Shared.ZarExternalAccountCreateInfo
+    | Shared.ZmwExternalAccountCreateInfo
+    | Shared.SwiftExternalAccountCreateInfo;
 
   /**
    * The ISO 4217 currency code
@@ -1150,18 +1119,14 @@ export declare namespace ExternalAccounts {
     type BwpExternalAccountInfo as BwpExternalAccountInfo,
     type CadExternalAccountInfo as CadExternalAccountInfo,
     type CopExternalAccountInfo as CopExternalAccountInfo,
-    type CounterpartyInformation as CounterpartyInformation,
     type DkkBeneficiary as DkkBeneficiary,
     type DkkExternalAccountInfo as DkkExternalAccountInfo,
     type EgpExternalAccountInfo as EgpExternalAccountInfo,
     type EurExternalAccountInfo as EurExternalAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
-    type ExternalAccountCreateInfoOneOf as ExternalAccountCreateInfoOneOf,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
     type ExternalAccountListResponse as ExternalAccountListResponse,
-    type ExternalAccountStatus as ExternalAccountStatus,
-    type ExternalAccountType as ExternalAccountType,
     type GbpBeneficiary as GbpBeneficiary,
     type GbpExternalAccountInfo as GbpExternalAccountInfo,
     type GhsExternalAccountInfo as GhsExternalAccountInfo,

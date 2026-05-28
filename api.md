@@ -11,7 +11,6 @@ Types:
 - <code><a href="./src/resources/shared.ts">BrlExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BulkCustomerImportErrorEntry</a></code>
 - <code><a href="./src/resources/shared.ts">BusinessCustomer</a></code>
-- <code><a href="./src/resources/shared.ts">BusinessInfoUpdate</a></code>
 - <code><a href="./src/resources/shared.ts">BwpBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BwpExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">CadBeneficiary</a></code>
@@ -93,28 +92,19 @@ Types:
 
 - <code><a href="./src/resources/customers/customers.ts">BusinessCustomerCreateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">BusinessCustomerUpdateRequest</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessInfo</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessInfoResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">BusinessType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerCreateRequestOneOf</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdateRequestOneOf</a></code>
-- <code><a href="./src/resources/customers/customers.ts">EntityType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerCreateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerUpdateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountListResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">InternalAccountStatus</a></code>
-- <code><a href="./src/resources/customers/customers.ts">InternalAccountType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountUpdateRequest</a></code>
-- <code><a href="./src/resources/customers/customers.ts">KYBStatus</a></code>
 - <code><a href="./src/resources/customers/customers.ts">KYCLinkCreateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">KYCLinkResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">KYCStatus</a></code>
 
 Methods:
 
@@ -143,18 +133,14 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">BwpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">CadExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">CopExternalAccountInfo</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">CounterpartyInformation</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">DkkBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">DkkExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">EgpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">EurExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreateInfoOneOf</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountListResponse</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountStatus</a></code>
-- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountType</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">GbpBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">GbpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">GhsExternalAccountInfo</a></code>
@@ -324,10 +310,8 @@ Types:
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteDestinationOneOf</a></code>
-- <code><a href="./src/resources/quotes.ts">QuoteLockSide</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteRequest</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteSourceOneOf</a></code>
-- <code><a href="./src/resources/quotes.ts">QuoteSourceType</a></code>
 
 Methods:
 
@@ -342,16 +326,11 @@ Types:
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingRateDetails</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
-- <code><a href="./src/resources/transactions.ts">IncomingTransactionFailureReason</a></code>
 - <code><a href="./src/resources/transactions.ts">OutgoingTransaction</a></code>
-- <code><a href="./src/resources/transactions.ts">OutgoingTransactionFailureReason</a></code>
 - <code><a href="./src/resources/transactions.ts">OutgoingTransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">ReconciliationInstructions</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionDestinationOneOf</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionDestinationType</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionListResponse</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
-- <code><a href="./src/resources/transactions.ts">TransactionSourceType</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
 
@@ -473,7 +452,6 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/exchange-rates.ts">ExchangeRate</a></code>
-- <code><a href="./src/resources/exchange-rates.ts">ExchangeRateFees</a></code>
 - <code><a href="./src/resources/exchange-rates.ts">ExchangeRateListResponse</a></code>
 
 Methods:
@@ -484,18 +462,16 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/webhooks.ts">AgentActionWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">BaseWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">BulkUploadWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">CardFundingSourceChangeWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">CardStateChangeWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">CustomerWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">VerificationWebhook</a></code>
-- <code><a href="./src/resources/webhooks.ts">WebhookType</a></code>
+- <code><a href="./src/resources/webhooks.ts">AgentActionWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CustomerUpdateWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">VerificationUpdateWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CardStateChangeWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">CardFundingSourceChangeWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 
 Methods:
@@ -520,8 +496,6 @@ Types:
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerCreateRequest</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerListResponse</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerPersonalInfo</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerPersonalInfoUpdate</a></code>
-- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerRole</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerUpdateRequest</a></code>
 
 Methods:
@@ -538,7 +512,6 @@ Types:
 - <code><a href="./src/resources/documents.ts">Document</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentReplaceRequest</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentType</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentUploadRequest</a></code>
 
 Methods:
@@ -554,10 +527,8 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/verifications.ts">Verification</a></code>
-- <code><a href="./src/resources/verifications.ts">VerificationErrorType</a></code>
 - <code><a href="./src/resources/verifications.ts">VerificationListResponse</a></code>
 - <code><a href="./src/resources/verifications.ts">VerificationRequest</a></code>
-- <code><a href="./src/resources/verifications.ts">VerificationStatus</a></code>
 
 Methods:
 
@@ -635,21 +606,15 @@ Types:
 - <code><a href="./src/resources/agents/agents.ts">AgentAction</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentActionListResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentActionRejectRequest</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentActionStatus</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentActionType</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentApprovalThresholds</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateRequest</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentCreateResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentDeviceCode</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentDeviceCodeRedeemResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentDeviceCodeStatusResponse</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentExecutionMode</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentPermission</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentPolicy</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentPolicyUpdateRequest</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpendingLimits</a></code>
-- <code><a href="./src/resources/agents/agents.ts">AgentSpendingLimitsUpdate</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUpdateRequest</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUsage</a></code>
 
@@ -730,14 +695,9 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/cards.ts">Card</a></code>
-- <code><a href="./src/resources/cards.ts">CardBrand</a></code>
 - <code><a href="./src/resources/cards.ts">CardCreateRequest</a></code>
-- <code><a href="./src/resources/cards.ts">CardForm</a></code>
 - <code><a href="./src/resources/cards.ts">CardListResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardState</a></code>
-- <code><a href="./src/resources/cards.ts">CardStateReason</a></code>
 - <code><a href="./src/resources/cards.ts">CardTransaction</a></code>
-- <code><a href="./src/resources/cards.ts">CardTransactionStatus</a></code>
 - <code><a href="./src/resources/cards.ts">CardUpdateRequest</a></code>
 
 Methods:

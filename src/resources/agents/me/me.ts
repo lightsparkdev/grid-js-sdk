@@ -3,7 +3,6 @@
 import { APIResource } from '../../../core/resource';
 import * as TransferInAPI from '../../transfer-in';
 import * as AgentsAPI from '../agents';
-import * as CustomersAPI from '../../customers/customers';
 import * as InternalAccountsAPI from '../../sandbox/internal-accounts';
 import { InternalAccountsDefaultPagination } from '../../sandbox/internal-accounts';
 import * as ActionsAPI from './actions';
@@ -214,17 +213,11 @@ export interface MeListInternalAccountsParams extends DefaultPaginationParams {
   limit?: number;
 
   /**
-   * Classification of an internal account.
-   *
-   * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
-   *   holding account used as the source for Payouts flows).
-   * - `INTERNAL_CRYPTO`: A Grid-managed crypto holding account denominated in a
-   *   stablecoin such as USDC.
-   * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
-   *   customer. Outbound transfers require a session signature produced by the
-   *   customer's device — see the Embedded Wallets guide.
+   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
+   * self-custodial wallet provisioned for the customer, or `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for platform-managed holding accounts.
    */
-  type?: CustomersAPI.InternalAccountType;
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 }
 
 Me.Transactions = Transactions;

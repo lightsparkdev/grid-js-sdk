@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as WebhooksAPI from '../webhooks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -23,7 +22,17 @@ export class Webhooks extends APIResource {
   }
 }
 
-export interface TestWebhookRequest extends WebhooksAPI.BaseWebhook {
+export interface TestWebhookRequest {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
   type: 'TEST';
 }
 

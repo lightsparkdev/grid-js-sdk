@@ -263,7 +263,7 @@ export interface AgentAccountRule {
    * APPROVAL_REQUIRED: All agent actions require explicit human approval before
    * execution.
    */
-  executionMode?: AgentExecutionMode;
+  executionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
 
   /**
    * Per-transaction limit override, in the smallest unit of the relevant currency.
@@ -314,7 +314,7 @@ export interface AgentAction {
    * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
    * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
    */
-  status: AgentActionStatus;
+  status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
 
   /**
    * The type of action the agent is requesting.
@@ -325,7 +325,7 @@ export interface AgentAction {
    * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
    * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
    */
-  type: AgentActionType;
+  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
 
   /**
    * When the action was last updated.
@@ -388,29 +388,6 @@ export interface AgentActionRejectRequest {
    */
   reason?: string;
 }
-
-/**
- * Status of an agent action.
- *
- * | Status             | Description                                                            |
- * | ------------------ | ---------------------------------------------------------------------- |
- * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
- * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
- * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
- * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
- */
-export type AgentActionStatus = 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
-
-/**
- * The type of action the agent is requesting.
- *
- * | Type            | Description                                              |
- * | --------------- | -------------------------------------------------------- |
- * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
- * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
- * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
- */
-export type AgentActionType = 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
 
 /**
  * Thresholds that force approval for high-value transactions, overriding the
@@ -524,14 +501,6 @@ export interface AgentDeviceCodeStatusResponse {
   redeemed: boolean;
 }
 
-/**
- * Execution mode controlling whether agent actions require human approval. AUTO:
- * The agent can execute actions autonomously without explicit approval.
- * APPROVAL_REQUIRED: All agent actions require explicit human approval before
- * execution.
- */
-export type AgentExecutionMode = 'AUTO' | 'APPROVAL_REQUIRED';
-
 export interface AgentListResponse {
   /**
    * List of agents matching the filter criteria.
@@ -555,20 +524,6 @@ export interface AgentListResponse {
 }
 
 /**
- * Permission granted to an agent that determines what actions it can perform.
- * VIEW_TRANSACTIONS: Can list and retrieve transactions and account balances.
- * CREATE_TRANSFERS: Can initiate same-currency transfers. CREATE_QUOTES: Can
- * create cross-currency quotes. EXECUTE_QUOTES: Can execute cross-currency quotes.
- * MANAGE_EXTERNAL_ACCOUNTS: Can create and manage external accounts.
- */
-export type AgentPermission =
-  | 'VIEW_TRANSACTIONS'
-  | 'CREATE_TRANSFERS'
-  | 'CREATE_QUOTES'
-  | 'EXECUTE_QUOTES'
-  | 'MANAGE_EXTERNAL_ACCOUNTS';
-
-/**
  * Policy governing what an agent can do, how it executes actions, and its spending
  * boundaries.
  */
@@ -579,12 +534,14 @@ export interface AgentPolicy {
    * APPROVAL_REQUIRED: All agent actions require explicit human approval before
    * execution.
    */
-  defaultExecutionMode: AgentExecutionMode;
+  defaultExecutionMode: 'AUTO' | 'APPROVAL_REQUIRED';
 
   /**
    * List of permissions granted to the agent.
    */
-  permissions: Array<AgentPermission>;
+  permissions: Array<
+    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
+  >;
 
   /**
    * Spending limits that cap the agent's transaction amounts and frequency. All
@@ -592,7 +549,7 @@ export interface AgentPolicy {
    * a transaction is denominated in a different currency, Grid converts using the
    * exchange rate at evaluation time.
    */
-  spendingLimits: AgentSpendingLimits;
+  spendingLimits: AgentPolicy.SpendingLimits;
 
   /**
    * Optional restrictions that limit the agent to specific accounts or override
@@ -607,6 +564,42 @@ export interface AgentPolicy {
    * time.
    */
   approvalThresholds?: AgentApprovalThresholds;
+}
+
+export namespace AgentPolicy {
+  /**
+   * Spending limits that cap the agent's transaction amounts and frequency. All
+   * amount fields are integers in the smallest unit of the specified currency. When
+   * a transaction is denominated in a different currency, Grid converts using the
+   * exchange rate at evaluation time.
+   */
+  export interface SpendingLimits {
+    /**
+     * ISO 4217 currency code that all amount limits are denominated in.
+     */
+    currency: string;
+
+    /**
+     * Maximum amount the agent can transfer in a single transaction.
+     */
+    perTransactionLimit: number;
+
+    /**
+     * Maximum total amount the agent can transfer per day. Null means no daily limit.
+     */
+    dailyLimit?: number | null;
+
+    /**
+     * Maximum number of transactions the agent can initiate per day.
+     */
+    dailyTransactionLimit?: number;
+
+    /**
+     * Maximum total amount the agent can transfer per month. Null means no monthly
+     * limit.
+     */
+    monthlyLimit?: number | null;
+  }
 }
 
 /**
@@ -634,84 +627,54 @@ export interface AgentPolicyUpdateRequest {
    * APPROVAL_REQUIRED: All agent actions require explicit human approval before
    * execution.
    */
-  defaultExecutionMode?: AgentExecutionMode;
+  defaultExecutionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
 
   /**
    * Updated list of permissions. Replaces the entire permissions list when provided.
    */
-  permissions?: Array<AgentPermission>;
+  permissions?: Array<
+    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
+  >;
 
   /**
    * Partial update to spending limits. Only provided fields will be updated; omitted
    * fields retain their current values.
    */
-  spendingLimits?: AgentSpendingLimitsUpdate;
+  spendingLimits?: AgentPolicyUpdateRequest.SpendingLimits;
 }
 
-/**
- * Spending limits that cap the agent's transaction amounts and frequency. All
- * amount fields are integers in the smallest unit of the specified currency. When
- * a transaction is denominated in a different currency, Grid converts using the
- * exchange rate at evaluation time.
- */
-export interface AgentSpendingLimits {
+export namespace AgentPolicyUpdateRequest {
   /**
-   * ISO 4217 currency code that all amount limits are denominated in.
+   * Partial update to spending limits. Only provided fields will be updated; omitted
+   * fields retain their current values.
    */
-  currency: string;
+  export interface SpendingLimits {
+    /**
+     * ISO 4217 currency code that all amount limits are denominated in. Updating this
+     * recasts all existing limits into the new currency denomination.
+     */
+    currency?: string;
 
-  /**
-   * Maximum amount the agent can transfer in a single transaction.
-   */
-  perTransactionLimit: number;
+    /**
+     * Maximum daily spend. Set to null to remove the daily limit.
+     */
+    dailyLimit?: number | null;
 
-  /**
-   * Maximum total amount the agent can transfer per day. Null means no daily limit.
-   */
-  dailyLimit?: number | null;
+    /**
+     * Maximum number of transactions per day.
+     */
+    dailyTransactionLimit?: number;
 
-  /**
-   * Maximum number of transactions the agent can initiate per day.
-   */
-  dailyTransactionLimit?: number;
+    /**
+     * Maximum monthly spend. Set to null to remove the monthly limit.
+     */
+    monthlyLimit?: number | null;
 
-  /**
-   * Maximum total amount the agent can transfer per month. Null means no monthly
-   * limit.
-   */
-  monthlyLimit?: number | null;
-}
-
-/**
- * Partial update to spending limits. Only provided fields will be updated; omitted
- * fields retain their current values.
- */
-export interface AgentSpendingLimitsUpdate {
-  /**
-   * ISO 4217 currency code that all amount limits are denominated in. Updating this
-   * recasts all existing limits into the new currency denomination.
-   */
-  currency?: string;
-
-  /**
-   * Maximum daily spend. Set to null to remove the daily limit.
-   */
-  dailyLimit?: number | null;
-
-  /**
-   * Maximum number of transactions per day.
-   */
-  dailyTransactionLimit?: number;
-
-  /**
-   * Maximum monthly spend. Set to null to remove the monthly limit.
-   */
-  monthlyLimit?: number | null;
-
-  /**
-   * Maximum amount per transaction.
-   */
-  perTransactionLimit?: number;
+    /**
+     * Maximum amount per transaction.
+     */
+    perTransactionLimit?: number;
+  }
 }
 
 /**
@@ -887,18 +850,54 @@ export interface AgentUpdatePolicyParams {
    * APPROVAL_REQUIRED: All agent actions require explicit human approval before
    * execution.
    */
-  defaultExecutionMode?: AgentExecutionMode;
+  defaultExecutionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
 
   /**
    * Updated list of permissions. Replaces the entire permissions list when provided.
    */
-  permissions?: Array<AgentPermission>;
+  permissions?: Array<
+    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
+  >;
 
   /**
    * Partial update to spending limits. Only provided fields will be updated; omitted
    * fields retain their current values.
    */
-  spendingLimits?: AgentSpendingLimitsUpdate;
+  spendingLimits?: AgentUpdatePolicyParams.SpendingLimits;
+}
+
+export namespace AgentUpdatePolicyParams {
+  /**
+   * Partial update to spending limits. Only provided fields will be updated; omitted
+   * fields retain their current values.
+   */
+  export interface SpendingLimits {
+    /**
+     * ISO 4217 currency code that all amount limits are denominated in. Updating this
+     * recasts all existing limits into the new currency denomination.
+     */
+    currency?: string;
+
+    /**
+     * Maximum daily spend. Set to null to remove the daily limit.
+     */
+    dailyLimit?: number | null;
+
+    /**
+     * Maximum number of transactions per day.
+     */
+    dailyTransactionLimit?: number;
+
+    /**
+     * Maximum monthly spend. Set to null to remove the monthly limit.
+     */
+    monthlyLimit?: number | null;
+
+    /**
+     * Maximum amount per transaction.
+     */
+    perTransactionLimit?: number;
+  }
 }
 
 Agents.Me = Me;
@@ -914,21 +913,15 @@ export declare namespace Agents {
     type AgentAction as AgentAction,
     type AgentActionListResponse as AgentActionListResponse,
     type AgentActionRejectRequest as AgentActionRejectRequest,
-    type AgentActionStatus as AgentActionStatus,
-    type AgentActionType as AgentActionType,
     type AgentApprovalThresholds as AgentApprovalThresholds,
     type AgentCreateRequest as AgentCreateRequest,
     type AgentCreateResponse as AgentCreateResponse,
     type AgentDeviceCode as AgentDeviceCode,
     type AgentDeviceCodeRedeemResponse as AgentDeviceCodeRedeemResponse,
     type AgentDeviceCodeStatusResponse as AgentDeviceCodeStatusResponse,
-    type AgentExecutionMode as AgentExecutionMode,
     type AgentListResponse as AgentListResponse,
-    type AgentPermission as AgentPermission,
     type AgentPolicy as AgentPolicy,
     type AgentPolicyUpdateRequest as AgentPolicyUpdateRequest,
-    type AgentSpendingLimits as AgentSpendingLimits,
-    type AgentSpendingLimitsUpdate as AgentSpendingLimitsUpdate,
     type AgentUpdateRequest as AgentUpdateRequest,
     type AgentUsage as AgentUsage,
     type AgentsDefaultPagination as AgentsDefaultPagination,

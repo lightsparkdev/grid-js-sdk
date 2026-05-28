@@ -116,7 +116,33 @@ export interface Document {
    * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
    * BANK_STATEMENT, TAX_RETURN
    */
-  documentType: DocumentType;
+  documentType:
+    | 'PASSPORT'
+    | 'DRIVERS_LICENSE'
+    | 'NATIONAL_ID'
+    | 'PROOF_OF_ADDRESS'
+    | 'BANK_STATEMENT'
+    | 'TAX_RETURN'
+    | 'CERTIFICATE_OF_INCORPORATION'
+    | 'ARTICLES_OF_INCORPORATION'
+    | 'ARTICLES_OF_ASSOCIATION'
+    | 'STATE_REGISTRY_EXCERPT'
+    | 'GOOD_STANDING_CERTIFICATE'
+    | 'INFORMATION_STATEMENT'
+    | 'INCUMBENCY_CERTIFICATE'
+    | 'BUSINESS_LICENSE'
+    | 'SHAREHOLDER_REGISTER'
+    | 'POWER_OF_ATTORNEY'
+    | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
+    | 'SELFIE'
+    | 'OTHER';
 
   /**
    * Original file name of the uploaded document
@@ -184,7 +210,33 @@ export interface DocumentReplaceRequest {
    * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
    * BANK_STATEMENT, TAX_RETURN
    */
-  documentType: DocumentType;
+  documentType:
+    | 'PASSPORT'
+    | 'DRIVERS_LICENSE'
+    | 'NATIONAL_ID'
+    | 'PROOF_OF_ADDRESS'
+    | 'BANK_STATEMENT'
+    | 'TAX_RETURN'
+    | 'CERTIFICATE_OF_INCORPORATION'
+    | 'ARTICLES_OF_INCORPORATION'
+    | 'ARTICLES_OF_ASSOCIATION'
+    | 'STATE_REGISTRY_EXCERPT'
+    | 'GOOD_STANDING_CERTIFICATE'
+    | 'INFORMATION_STATEMENT'
+    | 'INCUMBENCY_CERTIFICATE'
+    | 'BUSINESS_LICENSE'
+    | 'SHAREHOLDER_REGISTER'
+    | 'POWER_OF_ATTORNEY'
+    | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
+    | 'SELFIE'
+    | 'OTHER';
 
   /**
    * The document file (PDF, JPEG, or PNG, max 10 MB)
@@ -206,45 +258,6 @@ export interface DocumentReplaceRequest {
    */
   side?: 'FRONT' | 'BACK';
 }
-
-/**
- * Type of identity or business verification document. Document types are grouped
- * by verification category: **Identity** — PASSPORT, DRIVERS_LICENSE, NATIONAL_ID
- * **Business — Legal presence** — CERTIFICATE_OF_INCORPORATION,
- * ARTICLES_OF_INCORPORATION, ARTICLES_OF_ASSOCIATION, STATE_REGISTRY_EXCERPT
- * **Business — Control structure** — DIRECTOR_REGISTRY, TRUST_AGREEMENT,
- * STATE_COMPANY_REGISTRY, PARTNERSHIP_CONTROL_AGREEMENT **Business — Ownership
- * structure** — SHAREHOLDER_REGISTER, TRUST_AGREEMENT, PARTNERSHIP_AGREEMENT
- * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
- * BANK_STATEMENT, TAX_RETURN
- */
-export type DocumentType =
-  | 'PASSPORT'
-  | 'DRIVERS_LICENSE'
-  | 'NATIONAL_ID'
-  | 'PROOF_OF_ADDRESS'
-  | 'BANK_STATEMENT'
-  | 'TAX_RETURN'
-  | 'CERTIFICATE_OF_INCORPORATION'
-  | 'ARTICLES_OF_INCORPORATION'
-  | 'ARTICLES_OF_ASSOCIATION'
-  | 'STATE_REGISTRY_EXCERPT'
-  | 'GOOD_STANDING_CERTIFICATE'
-  | 'INFORMATION_STATEMENT'
-  | 'INCUMBENCY_CERTIFICATE'
-  | 'BUSINESS_LICENSE'
-  | 'SHAREHOLDER_REGISTER'
-  | 'POWER_OF_ATTORNEY'
-  | 'UTILITY_BILL'
-  | 'ELECTRICITY_BILL'
-  | 'RENT_OR_LEASE_AGREEMENT'
-  | 'DIRECTOR_REGISTRY'
-  | 'TRUST_AGREEMENT'
-  | 'STATE_COMPANY_REGISTRY'
-  | 'PARTNERSHIP_CONTROL_AGREEMENT'
-  | 'PARTNERSHIP_AGREEMENT'
-  | 'SELFIE'
-  | 'OTHER';
 
 export interface DocumentUploadRequest {
   /**
@@ -269,7 +282,33 @@ export interface DocumentUploadRequest {
    * **Proof of address** — UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL,
    * BANK_STATEMENT, TAX_RETURN
    */
-  documentType: DocumentType;
+  documentType:
+    | 'PASSPORT'
+    | 'DRIVERS_LICENSE'
+    | 'NATIONAL_ID'
+    | 'PROOF_OF_ADDRESS'
+    | 'BANK_STATEMENT'
+    | 'TAX_RETURN'
+    | 'CERTIFICATE_OF_INCORPORATION'
+    | 'ARTICLES_OF_INCORPORATION'
+    | 'ARTICLES_OF_ASSOCIATION'
+    | 'STATE_REGISTRY_EXCERPT'
+    | 'GOOD_STANDING_CERTIFICATE'
+    | 'INFORMATION_STATEMENT'
+    | 'INCUMBENCY_CERTIFICATE'
+    | 'BUSINESS_LICENSE'
+    | 'SHAREHOLDER_REGISTER'
+    | 'POWER_OF_ATTORNEY'
+    | 'UTILITY_BILL'
+    | 'ELECTRICITY_BILL'
+    | 'RENT_OR_LEASE_AGREEMENT'
+    | 'DIRECTOR_REGISTRY'
+    | 'TRUST_AGREEMENT'
+    | 'STATE_COMPANY_REGISTRY'
+    | 'PARTNERSHIP_CONTROL_AGREEMENT'
+    | 'PARTNERSHIP_AGREEMENT'
+    | 'SELFIE'
+    | 'OTHER';
 
   /**
    * The document file (PDF, JPEG, or PNG, max 10 MB)
@@ -317,7 +356,6 @@ export declare namespace Documents {
     type Document as Document,
     type DocumentListResponse as DocumentListResponse,
     type DocumentReplaceRequest as DocumentReplaceRequest,
-    type DocumentType as DocumentType,
     type DocumentUploadRequest as DocumentUploadRequest,
     type DocumentsDefaultPagination as DocumentsDefaultPagination,
     type DocumentListParams as DocumentListParams,

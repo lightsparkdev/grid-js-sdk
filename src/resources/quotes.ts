@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -367,7 +366,7 @@ export interface Quote {
    * Additional information about the counterparty, if available and required by the
    * platform in their configuration.
    */
-  counterpartyInformation?: ExternalAccountsAPI.CounterpartyInformation;
+  counterpartyInformation?: { [key: string]: unknown };
 
   /**
    * Payment instructions for executing the payment. This is not required when using
@@ -382,15 +381,6 @@ export interface Quote {
 }
 
 export type QuoteDestinationOneOf = unknown;
-
-/**
- * The side of the quote which should be locked and specified in the
- * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
- * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
- * cents). If I want the receiver to receive exactly $10 USD, I would set this to
- * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
- */
-export type QuoteLockSide = 'SENDING' | 'RECEIVING';
 
 export interface QuoteRequest {
   destination: QuoteDestinationOneOf;
@@ -408,7 +398,7 @@ export interface QuoteRequest {
    * cents). If I want the receiver to receive exactly $10 USD, I would set this to
    * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
    */
-  lockedCurrencySide: QuoteLockSide;
+  lockedCurrencySide: 'SENDING' | 'RECEIVING';
 
   source: QuoteSourceOneOf;
 
@@ -475,11 +465,6 @@ export interface QuoteRequest {
 
 export type QuoteSourceOneOf = unknown;
 
-/**
- * Type of quote funding source
- */
-export type QuoteSourceType = 'ACCOUNT' | 'REALTIME_FUNDING';
-
 export interface QuoteCreateParams {
   /**
    * Body param
@@ -499,7 +484,7 @@ export interface QuoteCreateParams {
    * cents). If I want the receiver to receive exactly $10 USD, I would set this to
    * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
    */
-  lockedCurrencySide: QuoteLockSide;
+  lockedCurrencySide: 'SENDING' | 'RECEIVING';
 
   /**
    * Body param
@@ -599,10 +584,8 @@ export declare namespace Quotes {
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
-    type QuoteLockSide as QuoteLockSide,
     type QuoteRequest as QuoteRequest,
     type QuoteSourceOneOf as QuoteSourceOneOf,
-    type QuoteSourceType as QuoteSourceType,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteExecuteParams as QuoteExecuteParams,
   };

@@ -126,7 +126,7 @@ export interface BeneficialOwnerCreateRequest {
   /**
    * Roles of this person within the business
    */
-  roles: Array<BeneficialOwnerRole>;
+  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
 }
 
 export interface BeneficialOwnerListResponse {
@@ -205,75 +205,6 @@ export interface BeneficialOwnerPersonalInfo {
   phoneNumber?: string;
 }
 
-/**
- * Partial update for beneficial owner personal information. Only provided fields
- * are updated.
- */
-export interface BeneficialOwnerPersonalInfoUpdate {
-  address?: ExternalAccountsAPI.Address;
-
-  /**
-   * Date of birth in ISO 8601 format (YYYY-MM-DD)
-   */
-  birthDate?: string;
-
-  /**
-   * Country that issued the identification (ISO 3166-1 alpha-2)
-   */
-  countryOfIssuance?: string;
-
-  /**
-   * Email address of the individual
-   */
-  email?: string;
-
-  /**
-   * First name of the individual
-   */
-  firstName?: string;
-
-  /**
-   * The identification number or value
-   */
-  identifier?: string;
-
-  /**
-   * Type of tax identification
-   */
-  idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
-
-  /**
-   * Last name of the individual
-   */
-  lastName?: string;
-
-  /**
-   * Middle name of the individual
-   */
-  middleName?: string;
-
-  /**
-   * Country of nationality (ISO 3166-1 alpha-2)
-   */
-  nationality?: string;
-
-  /**
-   * Phone number in E.164 format
-   */
-  phoneNumber?: string;
-}
-
-/**
- * Role of the beneficial owner within the business
- */
-export type BeneficialOwnerRole =
-  | 'UBO'
-  | 'DIRECTOR'
-  | 'COMPANY_OFFICER'
-  | 'CONTROL_PERSON'
-  | 'TRUSTEE'
-  | 'GENERAL_PARTNER';
-
 export interface BeneficialOwnerUpdateRequest {
   /**
    * Percentage of ownership in the business (0-100)
@@ -284,12 +215,72 @@ export interface BeneficialOwnerUpdateRequest {
    * Partial update for beneficial owner personal information. Only provided fields
    * are updated.
    */
-  personalInfo?: BeneficialOwnerPersonalInfoUpdate;
+  personalInfo?: BeneficialOwnerUpdateRequest.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
-  roles?: Array<BeneficialOwnerRole>;
+  roles?: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
+}
+
+export namespace BeneficialOwnerUpdateRequest {
+  /**
+   * Partial update for beneficial owner personal information. Only provided fields
+   * are updated.
+   */
+  export interface PersonalInfo {
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate?: string;
+
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
+
+    /**
+     * Email address of the individual
+     */
+    email?: string;
+
+    /**
+     * First name of the individual
+     */
+    firstName?: string;
+
+    /**
+     * The identification number or value
+     */
+    identifier?: string;
+
+    /**
+     * Type of tax identification
+     */
+    idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
+
+    /**
+     * Last name of the individual
+     */
+    lastName?: string;
+
+    /**
+     * Middle name of the individual
+     */
+    middleName?: string;
+
+    /**
+     * Country of nationality (ISO 3166-1 alpha-2)
+     */
+    nationality?: string;
+
+    /**
+     * Phone number in E.164 format
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface BeneficialOwnerCreateParams {
@@ -309,7 +300,7 @@ export interface BeneficialOwnerCreateParams {
   /**
    * Roles of this person within the business
    */
-  roles: Array<BeneficialOwnerRole>;
+  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
 }
 
 export interface BeneficialOwnerUpdateParams {
@@ -322,12 +313,72 @@ export interface BeneficialOwnerUpdateParams {
    * Partial update for beneficial owner personal information. Only provided fields
    * are updated.
    */
-  personalInfo?: BeneficialOwnerPersonalInfoUpdate;
+  personalInfo?: BeneficialOwnerUpdateParams.PersonalInfo;
 
   /**
    * Roles of this person within the business
    */
-  roles?: Array<BeneficialOwnerRole>;
+  roles?: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
+}
+
+export namespace BeneficialOwnerUpdateParams {
+  /**
+   * Partial update for beneficial owner personal information. Only provided fields
+   * are updated.
+   */
+  export interface PersonalInfo {
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate?: string;
+
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
+
+    /**
+     * Email address of the individual
+     */
+    email?: string;
+
+    /**
+     * First name of the individual
+     */
+    firstName?: string;
+
+    /**
+     * The identification number or value
+     */
+    identifier?: string;
+
+    /**
+     * Type of tax identification
+     */
+    idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
+
+    /**
+     * Last name of the individual
+     */
+    lastName?: string;
+
+    /**
+     * Middle name of the individual
+     */
+    middleName?: string;
+
+    /**
+     * Country of nationality (ISO 3166-1 alpha-2)
+     */
+    nationality?: string;
+
+    /**
+     * Phone number in E.164 format
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface BeneficialOwnerListParams extends DefaultPaginationParams {
@@ -347,8 +398,6 @@ export declare namespace BeneficialOwners {
     type BeneficialOwnerCreateRequest as BeneficialOwnerCreateRequest,
     type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
-    type BeneficialOwnerPersonalInfoUpdate as BeneficialOwnerPersonalInfoUpdate,
-    type BeneficialOwnerRole as BeneficialOwnerRole,
     type BeneficialOwnerUpdateRequest as BeneficialOwnerUpdateRequest,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
