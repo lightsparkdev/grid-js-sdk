@@ -65,10 +65,8 @@ describe('resource documents', () => {
     const responsePromise = client.documents.replace('documentId', {
       DocumentReplaceRequest: {
         country: 'US',
-        documentNumber: 'A12345678',
         documentType: 'PASSPORT',
         file: await toFile(Buffer.from('Example data'), 'README.md'),
-        issuingAuthority: 'U.S. Department of State',
       },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -85,9 +83,9 @@ describe('resource documents', () => {
     const response = await client.documents.replace('documentId', {
       DocumentReplaceRequest: {
         country: 'US',
-        documentNumber: 'A12345678',
         documentType: 'PASSPORT',
         file: await toFile(Buffer.from('Example data'), 'README.md'),
+        documentNumber: 'A12345678',
         issuingAuthority: 'U.S. Department of State',
         side: 'FRONT',
       },
@@ -100,10 +98,8 @@ describe('resource documents', () => {
       DocumentUploadRequest: {
         country: 'US',
         documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
-        documentNumber: 'A12345678',
         documentType: 'PASSPORT',
         file: await toFile(Buffer.from('Example data'), 'README.md'),
-        issuingAuthority: 'U.S. Department of State',
       },
     });
     const rawResponse = await responsePromise.asResponse();
@@ -121,9 +117,9 @@ describe('resource documents', () => {
       DocumentUploadRequest: {
         country: 'US',
         documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
-        documentNumber: 'A12345678',
         documentType: 'PASSPORT',
         file: await toFile(Buffer.from('Example data'), 'README.md'),
+        documentNumber: 'A12345678',
         issuingAuthority: 'U.S. Department of State',
         side: 'FRONT',
       },
