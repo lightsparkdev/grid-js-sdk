@@ -107,7 +107,7 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.sandbox.cards.simulate.return(
+   * const response = await client.sandbox.cards.simulate.refund(
    *   'Card:019542f5-b3e7-1d02-0000-000000000010',
    *   {
    *     amount: 1500,
@@ -117,11 +117,11 @@ export class Simulate extends APIResource {
    * );
    * ```
    */
-  return(
+  refund(
     id: string,
-    body: SimulateReturnParams,
+    body: SimulateRefundParams,
     options?: RequestOptions,
-  ): APIPromise<SimulateReturnResponse> {
+  ): APIPromise<SimulateRefundResponse> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/return`, {
       body,
       ...options,
@@ -358,7 +358,7 @@ export interface SimulateClearingResponse {
  * Delivered as the payload of the generic transaction webhook stream (extends the
  * Transaction model with a card destination type) on every transition.
  */
-export interface SimulateReturnResponse {
+export interface SimulateRefundResponse {
   /**
    * System-generated unique card transaction identifier
    */
@@ -455,7 +455,7 @@ export interface SimulateClearingParams {
   cardTransactionId: string;
 }
 
-export interface SimulateReturnParams {
+export interface SimulateRefundParams {
   /**
    * Return amount in the smallest unit of the transaction's currency. Must be less
    * than or equal to the net settled amount (settled minus previously-refunded).
@@ -477,9 +477,9 @@ export declare namespace Simulate {
     type CardSettlementSummary as CardSettlementSummary,
     type SimulateAuthorizationResponse as SimulateAuthorizationResponse,
     type SimulateClearingResponse as SimulateClearingResponse,
-    type SimulateReturnResponse as SimulateReturnResponse,
+    type SimulateRefundResponse as SimulateRefundResponse,
     type SimulateAuthorizationParams as SimulateAuthorizationParams,
     type SimulateClearingParams as SimulateClearingParams,
-    type SimulateReturnParams as SimulateReturnParams,
+    type SimulateRefundParams as SimulateRefundParams,
   };
 }
