@@ -73,6 +73,24 @@ export interface InternalAccountReference {
 
 export type Transaction = TransactionsAPI.IncomingTransaction | TransactionsAPI.OutgoingTransaction;
 
+export interface TransferInRequest {
+  /**
+   * Destination internal account details
+   */
+  destination: InternalAccountReference;
+
+  /**
+   * Source external account details
+   */
+  source: ExternalAccountReference;
+
+  /**
+   * Amount in the smallest unit of the currency (e.g., cents for USD/EUR, satoshis
+   * for BTC)
+   */
+  amount?: number;
+}
+
 export interface TransferInCreateParams {
   /**
    * Body param: Destination internal account details
@@ -103,6 +121,7 @@ export declare namespace TransferIn {
     type ExternalAccountReference as ExternalAccountReference,
     type InternalAccountReference as InternalAccountReference,
     type Transaction as Transaction,
+    type TransferInRequest as TransferInRequest,
     type TransferInCreateParams as TransferInCreateParams,
   };
 }

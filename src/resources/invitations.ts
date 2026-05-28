@@ -175,6 +175,41 @@ export interface UmaInvitation {
   inviteeUma?: string;
 }
 
+export interface UmaInvitationClaimRequest {
+  /**
+   * The UMA address of the customer claiming the invitation
+   */
+  inviteeUma: string;
+}
+
+export interface UmaInvitationCreateRequest {
+  /**
+   * The UMA address of the customer creating the invitation
+   */
+  inviterUma: string;
+
+  /**
+   * An amount to send (in the smallest unit of the customer's currency) to the
+   * invitee when the invitation is claimed. This is optional and if not provided,
+   * the invitee will not receive any amount. Note that the actual sending of the
+   * amount must be done by the inviter platform once the INVITATION_CLAIMED webhook
+   * is received. If the inviter platform either does not send the payment or the
+   * payment fails, the invitee will not receive this amount. This field is primarily
+   * used for display purposes on the claiming side of the invitation.
+   */
+  amountToSend?: number;
+
+  /**
+   * When the invitation expires (if at all)
+   */
+  expiresAt?: string;
+
+  /**
+   * First name of the invitee to show as part of the invite
+   */
+  firstName?: string;
+}
+
 export interface InvitationCreateParams {
   /**
    * The UMA address of the customer creating the invitation
@@ -214,6 +249,8 @@ export declare namespace Invitations {
   export {
     type CurrencyAmount as CurrencyAmount,
     type UmaInvitation as UmaInvitation,
+    type UmaInvitationClaimRequest as UmaInvitationClaimRequest,
+    type UmaInvitationCreateRequest as UmaInvitationCreateRequest,
     type InvitationCreateParams as InvitationCreateParams,
     type InvitationClaimParams as InvitationClaimParams,
   };

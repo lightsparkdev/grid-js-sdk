@@ -41,10 +41,10 @@ describe('resource customers', () => {
         birthDate: '1990-01-15',
         currencies: ['USD', 'USDC'],
         email: 'john.doe@example.com',
-        fullName: 'Jane Smith',
+        fullName: 'John Michael Doe',
         kycStatus: 'APPROVED',
         nationality: 'US',
-        platformCustomerId: 'ind-9f84e0c2',
+        platformCustomerId: '9f84e0c2a72c4fa',
         region: 'US',
         umaAddress: '$john.doe@uma.domain.com',
       },
@@ -84,16 +84,16 @@ describe('resource customers', () => {
         customerType: 'INDIVIDUAL',
         address: {
           country: 'US',
-          line1: '456 Market St',
-          postalCode: '94103',
+          line1: '123 Main Street',
+          postalCode: '94105',
           city: 'San Francisco',
           line2: 'Apt 4B',
           state: 'CA',
         },
-        birthDate: '1985-06-15',
+        birthDate: '1990-01-15',
         currencies: ['USD', 'EUR', 'USDC'],
         email: 'john.doe@example.com',
-        fullName: 'John Smith',
+        fullName: 'John Michael Doe',
         kycStatus: 'APPROVED',
         nationality: 'US',
         umaAddress: '$john.doe@uma.domain.com',
@@ -153,6 +153,33 @@ describe('resource customers', () => {
   });
 
   // Mock server tests are disabled
+  test.skip('createKYCLink', async () => {
+    const responsePromise = client.customers.createKYCLink('customerId');
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('createKYCLink: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.customers.createKYCLink(
+        'customerId',
+        {
+          KycLinkCreateRequest: { redirectUri: 'https://app.example.com/onboarding/completed' },
+          'Idempotency-Key': '<uuid>',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
   test.skip('export: only required params', async () => {
     const responsePromise = client.customers.export('id', {
       clientPublicKey:
@@ -176,30 +203,6 @@ describe('resource customers', () => {
         'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
       'Request-Id': 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
     });
-  });
-
-  // Mock server tests are disabled
-  test.skip('generateKYCLink', async () => {
-    const responsePromise = client.customers.generateKYCLink('customerId');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Mock server tests are disabled
-  test.skip('generateKYCLink: request options and params are passed correctly', async () => {
-    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
-    await expect(
-      client.customers.generateKYCLink(
-        'customerId',
-        { redirectUri: 'https://app.example.com/onboarding/completed', 'Idempotency-Key': '<uuid>' },
-        { path: '/_stainless_unknown_path' },
-      ),
-    ).rejects.toThrow(LightsparkGrid.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -232,10 +235,10 @@ describe('resource customers', () => {
   });
 
   // Mock server tests are disabled
-  test.skip('updateInternalAccount', async () => {
+  test.skip('updateInternalAccount: only required params', async () => {
     const responsePromise = client.customers.updateInternalAccount(
       'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
-      {},
+      { InternalAccountUpdateRequest: {} },
     );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -244,5 +247,18 @@ describe('resource customers', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('updateInternalAccount: required and optional params', async () => {
+    const response = await client.customers.updateInternalAccount(
+      'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
+      {
+        InternalAccountUpdateRequest: { privateEnabled: true },
+        'Grid-Wallet-Signature':
+          'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzaWduYXR1cmUiOiIzMDQ1MDIyMTAwLi4uIiwic2NoZW1lIjoiUDI1Nl9FQ0RTQV9TSEEyNTYifQ',
+        'Request-Id': 'Request:019542f5-b3e7-1d02-0000-000000000010',
+      },
+    );
   });
 });

@@ -21,7 +21,7 @@ export class Receiver extends APIResource {
     accountID: string,
     query: ReceiverLookupExternalAccountParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ReceiverLookupExternalAccountResponse> {
+  ): APIPromise<ExternalAccountLookupResponse> {
     return this._client.get(path`/receiver/external-account/${accountID}`, {
       query,
       ...options,
@@ -38,7 +38,7 @@ export class Receiver extends APIResource {
     receiverUmaAddress: string,
     query: ReceiverLookupUmaParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<ReceiverLookupUmaResponse> {
+  ): APIPromise<UmaLookupResponse> {
     return this._client.get(path`/receiver/uma/${receiverUmaAddress}`, {
       query,
       ...options,
@@ -58,6 +58,13 @@ export interface CounterpartyFieldDefinition {
    * counterparty customer.
    */
   name: ConfigAPI.CustomerInfoFieldName;
+}
+
+export interface ExternalAccountLookupResponse extends LookupResponse {
+  /**
+   * The external account ID that was looked up
+   */
+  accountId: string;
 }
 
 export interface LookupResponse {
@@ -100,14 +107,7 @@ export namespace LookupResponse {
   }
 }
 
-export interface ReceiverLookupExternalAccountResponse extends LookupResponse {
-  /**
-   * The external account ID that was looked up
-   */
-  accountId: string;
-}
-
-export interface ReceiverLookupUmaResponse extends LookupResponse {
+export interface UmaLookupResponse extends LookupResponse {
   /**
    * The UMA address that was looked up
    */
@@ -141,9 +141,9 @@ export interface ReceiverLookupUmaParams {
 export declare namespace Receiver {
   export {
     type CounterpartyFieldDefinition as CounterpartyFieldDefinition,
+    type ExternalAccountLookupResponse as ExternalAccountLookupResponse,
     type LookupResponse as LookupResponse,
-    type ReceiverLookupExternalAccountResponse as ReceiverLookupExternalAccountResponse,
-    type ReceiverLookupUmaResponse as ReceiverLookupUmaResponse,
+    type UmaLookupResponse as UmaLookupResponse,
     type ReceiverLookupExternalAccountParams as ReceiverLookupExternalAccountParams,
     type ReceiverLookupUmaParams as ReceiverLookupUmaParams,
   };

@@ -63,9 +63,16 @@ export interface ActionListParams extends DefaultPaginationParams {
   limit?: number;
 
   /**
-   * Filter by action status
+   * Status of an agent action.
+   *
+   * | Status             | Description                                                            |
+   * | ------------------ | ---------------------------------------------------------------------- |
+   * | `PENDING_APPROVAL` | Submitted by the agent, awaiting platform approval before execution    |
+   * | `APPROVED`         | Approved by the platform; execution is in progress or completed        |
+   * | `REJECTED`         | Rejected by the platform; the underlying transaction was not executed  |
+   * | `FAILED`           | Approved but execution failed (e.g. quote expired, insufficient funds) |
    */
-  status?: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED' | 'FAILED';
+  status?: AgentsAPI.AgentActionStatus;
 }
 
 export declare namespace Actions {

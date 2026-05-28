@@ -28,78 +28,74 @@ export class ExchangeRates extends APIResource {
   }
 }
 
+/**
+ * Exchange rate information for a currency corridor
+ */
+export interface ExchangeRate {
+  destinationCurrency: QuotesAPI.Currency;
+
+  /**
+   * The payment rail used for the destination (e.g., UPI, SEPA_INSTANT,
+   * MOBILE_MONEY, FASTER_PAYMENTS)
+   */
+  destinationPaymentRail: unknown;
+
+  /**
+   * Number of sending currency units per receiving currency unit.
+   */
+  exchangeRate: number;
+
+  /**
+   * Fees associated with an exchange rate
+   */
+  fees: ExchangeRateFees;
+
+  /**
+   * The maximum supported sending amount in the smallest unit of the source
+   * currency.
+   */
+  maxSendingAmount: number;
+
+  /**
+   * The minimum supported sending amount in the smallest unit of the source
+   * currency.
+   */
+  minSendingAmount: number;
+
+  /**
+   * The receiving amount in the smallest unit of the destination currency
+   */
+  receivingAmount: number;
+
+  /**
+   * The sending amount in the smallest unit of the source currency (e.g., cents for
+   * USD). Echoed back from the request if provided.
+   */
+  sendingAmount: number;
+
+  sourceCurrency: QuotesAPI.Currency;
+
+  /**
+   * Timestamp when this exchange rate was last refreshed
+   */
+  updatedAt: string;
+}
+
+/**
+ * Fees associated with an exchange rate
+ */
+export interface ExchangeRateFees {
+  /**
+   * Fixed fee in the smallest unit of the sending currency (e.g., cents for USD)
+   */
+  fixed?: number;
+}
+
 export interface ExchangeRateListResponse {
   /**
    * List of exchange rates matching the filter criteria
    */
-  data: Array<ExchangeRateListResponse.Data>;
-}
-
-export namespace ExchangeRateListResponse {
-  /**
-   * Exchange rate information for a currency corridor
-   */
-  export interface Data {
-    destinationCurrency: QuotesAPI.Currency;
-
-    /**
-     * The payment rail used for the destination (e.g., UPI, SEPA_INSTANT,
-     * MOBILE_MONEY, FASTER_PAYMENTS)
-     */
-    destinationPaymentRail: unknown;
-
-    /**
-     * Number of sending currency units per receiving currency unit.
-     */
-    exchangeRate: number;
-
-    /**
-     * Fees associated with an exchange rate
-     */
-    fees: Data.Fees;
-
-    /**
-     * The maximum supported sending amount in the smallest unit of the source
-     * currency.
-     */
-    maxSendingAmount: number;
-
-    /**
-     * The minimum supported sending amount in the smallest unit of the source
-     * currency.
-     */
-    minSendingAmount: number;
-
-    /**
-     * The receiving amount in the smallest unit of the destination currency
-     */
-    receivingAmount: number;
-
-    /**
-     * The sending amount in the smallest unit of the source currency (e.g., cents for
-     * USD). Echoed back from the request if provided.
-     */
-    sendingAmount: number;
-
-    sourceCurrency: QuotesAPI.Currency;
-
-    /**
-     * Timestamp when this exchange rate was last refreshed
-     */
-    updatedAt: string;
-  }
-
-  export namespace Data {
-    /**
-     * Fees associated with an exchange rate
-     */
-    export interface Fees {
-      /**
-       * Fixed fee in the smallest unit of the sending currency (e.g., cents for USD)
-       */
-      fixed?: number;
-    }
-  }
+  data: Array<ExchangeRate>;
 }
 
 export interface ExchangeRateListParams {
@@ -124,6 +120,8 @@ export interface ExchangeRateListParams {
 
 export declare namespace ExchangeRates {
   export {
+    type ExchangeRate as ExchangeRate,
+    type ExchangeRateFees as ExchangeRateFees,
     type ExchangeRateListResponse as ExchangeRateListResponse,
     type ExchangeRateListParams as ExchangeRateListParams,
   };

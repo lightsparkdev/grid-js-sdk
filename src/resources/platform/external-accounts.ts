@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as Shared from '../shared';
 import * as ExternalAccountsAPI from '../customers/external-accounts';
 import { ExternalAccountsDefaultPagination } from '../customers/external-accounts';
 import { APIPromise } from '../../core/api-promise';
@@ -588,6 +587,27 @@ export interface PkrAccountInfo {
   phoneNumber?: string;
 }
 
+export interface PlatformExternalAccountCreateRequest {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber
+   * - MOBILE_MONEY: phoneNumber
+   */
+  accountInfo: ExternalAccountsAPI.ExternalAccountCreateInfoOneOf;
+
+  /**
+   * The ISO 4217 currency code
+   */
+  currency: string;
+
+  /**
+   * Your platform's identifier for the account in your system. This can be used to
+   * reference the account by your own identifier.
+   */
+  platformAccountId?: string;
+}
+
 export interface RwfAccountInfo {
   accountType: 'RWF_ACCOUNT';
 
@@ -796,44 +816,7 @@ export interface ExternalAccountCreateParams {
    * - BANK_TRANSFER: accountNumber
    * - MOBILE_MONEY: phoneNumber
    */
-  accountInfo:
-    | Shared.AedExternalAccountCreateInfo
-    | Shared.BdtExternalAccountCreateInfo
-    | Shared.BrlExternalAccountCreateInfo
-    | Shared.BwpExternalAccountCreateInfo
-    | Shared.CadExternalAccountCreateInfo
-    | Shared.CopExternalAccountCreateInfo
-    | Shared.DkkExternalAccountCreateInfo
-    | Shared.EgpExternalAccountCreateInfo
-    | Shared.EurExternalAccountCreateInfo
-    | Shared.GbpExternalAccountCreateInfo
-    | Shared.GhsExternalAccountCreateInfo
-    | Shared.GtqExternalAccountCreateInfo
-    | Shared.HkdExternalAccountCreateInfo
-    | Shared.HtgExternalAccountCreateInfo
-    | Shared.IdrExternalAccountCreateInfo
-    | Shared.InrExternalAccountCreateInfo
-    | Shared.JmdExternalAccountCreateInfo
-    | Shared.KesExternalAccountCreateInfo
-    | Shared.MwkExternalAccountCreateInfo
-    | Shared.MxnExternalAccountCreateInfo
-    | Shared.MyrExternalAccountCreateInfo
-    | Shared.NgnExternalAccountCreateInfo
-    | Shared.PhpExternalAccountCreateInfo
-    | Shared.PkrExternalAccountCreateInfo
-    | Shared.RwfExternalAccountCreateInfo
-    | Shared.SgdExternalAccountCreateInfo
-    | Shared.SlvExternalAccountCreateInfo
-    | Shared.ThbExternalAccountCreateInfo
-    | Shared.TzsExternalAccountCreateInfo
-    | Shared.UgxExternalAccountCreateInfo
-    | Shared.UsdExternalAccountCreateInfo
-    | Shared.VndExternalAccountCreateInfo
-    | Shared.XafExternalAccountCreateInfo
-    | Shared.XofExternalAccountCreateInfo
-    | Shared.ZarExternalAccountCreateInfo
-    | Shared.ZmwExternalAccountCreateInfo
-    | Shared.SwiftExternalAccountCreateInfo;
+  accountInfo: ExternalAccountsAPI.ExternalAccountCreateInfoOneOf;
 
   /**
    * The ISO 4217 currency code
@@ -885,6 +868,7 @@ export declare namespace ExternalAccounts {
     type NgnAccountInfo as NgnAccountInfo,
     type PhpAccountInfo as PhpAccountInfo,
     type PkrAccountInfo as PkrAccountInfo,
+    type PlatformExternalAccountCreateRequest as PlatformExternalAccountCreateRequest,
     type RwfAccountInfo as RwfAccountInfo,
     type SgdAccountInfo as SgdAccountInfo,
     type ThbAccountInfo as ThbAccountInfo,

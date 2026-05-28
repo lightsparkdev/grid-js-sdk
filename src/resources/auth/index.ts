@@ -3,6 +3,7 @@
 export { Auth } from './auth';
 export {
   Credentials,
+  type AuthCredentialChallengeRequest,
   type AuthCredentialCreateRequest,
   type AuthCredentialCreateRequestOneOf,
   type AuthCredentialListResponse,
@@ -15,11 +16,14 @@ export {
   type AuthSession,
   type AuthSignedRequestChallenge,
   type EmailOtpCredentialCreateRequest,
+  type EmailOtpCredentialVerifyRequest,
   type OAuthCredentialCreateRequest,
+  type OAuthCredentialVerifyRequest,
   type PasskeyAssertion,
   type PasskeyAttestation,
   type PasskeyAuthChallenge,
   type PasskeyCredentialCreateRequest,
+  type PasskeyCredentialVerifyRequest,
   type SignedRequestChallenge,
   type CredentialCreateParams,
   type CredentialListParams,
@@ -29,6 +33,7 @@ export {
 } from './credentials';
 export {
   Sessions,
+  type AuthSessionRefreshRequest,
   type SessionListResponse,
   type SessionListParams,
   type SessionDeleteParams,

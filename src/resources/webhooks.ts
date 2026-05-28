@@ -1,12 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as CardsAPI from './cards';
 import * as InvitationsAPI from './invitations';
 import * as ReceiverAPI from './receiver';
 import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
+import * as VerificationsAPI from './verifications';
 import * as AgentsAPI from './agents/agents';
+import * as CustomersAPI from './customers/customers';
 import * as InternalAccountsAPI from './sandbox/internal-accounts';
+import * as SandboxWebhooksAPI from './sandbox/webhooks';
 
 export class Webhooks extends APIResource {
   unwrap(body: string): UnwrapWebhookEvent {
@@ -14,12 +18,7 @@ export class Webhooks extends APIResource {
   }
 }
 
-export interface AgentActionWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
+export interface AgentActionWebhook extends BaseWebhook {
   /**
    * An action submitted by an agent that may require platform approval before
    * execution. All agent-initiated operations (quote execution, transfers) are
@@ -28,66 +27,10 @@ export interface AgentActionWebhookEvent {
    */
   data: AgentsAPI.AgentAction;
 
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
   type: 'AGENT_ACTION.PENDING_APPROVAL';
 }
 
-export interface IncomingPaymentWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
-  data: IncomingPaymentWebhookEvent.Data;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
-  type: 'INCOMING_PAYMENT.PENDING' | 'INCOMING_PAYMENT.COMPLETED' | 'INCOMING_PAYMENT.FAILED';
-}
-
-export namespace IncomingPaymentWebhookEvent {
-  export interface Data extends TransactionsAPI.IncomingTransaction {
-    /**
-     * Information required by the sender's VASP about the recipient. Platform must
-     * provide these in the 200 OK response if approving. Note that this only includes
-     * fields which Grid does not already have from initial customer registration.
-     */
-    requestedReceiverCustomerInfoFields?: Array<ReceiverAPI.CounterpartyFieldDefinition>;
-  }
-}
-
-export interface OutgoingPaymentWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
-  data: TransactionsAPI.OutgoingTransaction;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
-  type:
-    | 'OUTGOING_PAYMENT.PENDING'
-    | 'OUTGOING_PAYMENT.PROCESSING'
-    | 'OUTGOING_PAYMENT.COMPLETED'
-    | 'OUTGOING_PAYMENT.FAILED'
-    | 'OUTGOING_PAYMENT.EXPIRED'
-    | 'OUTGOING_PAYMENT.REFUND_PENDING'
-    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
-    | 'OUTGOING_PAYMENT.REFUND_FAILED';
-}
-
-export interface TestWebhookWebhookEvent {
+export interface BaseWebhook {
   /**
    * Unique identifier for this webhook delivery (can be used for idempotency)
    */
@@ -98,26 +41,16 @@ export interface TestWebhookWebhookEvent {
    */
   timestamp: string;
 
-  type: 'TEST';
+  type: unknown;
 }
 
-export interface BulkUploadWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
-  data: BulkUploadWebhookEvent.Data;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
+export interface BulkUploadWebhook extends BaseWebhook {
+  data: BulkUploadWebhook.Data;
 
   type: 'BULK_UPLOAD.COMPLETED' | 'BULK_UPLOAD.FAILED';
 }
 
-export namespace BulkUploadWebhookEvent {
+export namespace BulkUploadWebhook {
   export interface Data {
     /**
      * Unique identifier for the bulk import job
@@ -167,34 +100,20 @@ export namespace BulkUploadWebhookEvent {
   }
 }
 
-export interface InvitationClaimedWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
+export interface CardFundingSourceChangeWebhook extends BaseWebhook {
+  data: CardsAPI.Card;
 
-  data: InvitationsAPI.UmaInvitation;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
-  type: 'INVITATION.CLAIMED';
+  type: 'CARD.FUNDING_SOURCE_CHANGE';
 }
 
-export interface CustomerUpdateWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
+export interface CardStateChangeWebhook extends BaseWebhook {
+  data: CardsAPI.Card;
 
-  data: Shared.IndividualCustomer | Shared.BusinessCustomer;
+  type: 'CARD.STATE_CHANGE';
+}
 
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
+export interface CustomerWebhook extends BaseWebhook {
+  data: CustomersAPI.CustomerOneOf;
 
   type:
     | 'CUSTOMER.KYC_APPROVED'
@@ -205,34 +124,51 @@ export interface CustomerUpdateWebhookEvent {
     | 'CUSTOMER.KYB_PENDING';
 }
 
-export interface InternalAccountStatusWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
+export interface IncomingPaymentWebhook extends BaseWebhook {
+  data: IncomingPaymentWebhook.Data;
 
+  type: 'INCOMING_PAYMENT.PENDING' | 'INCOMING_PAYMENT.COMPLETED' | 'INCOMING_PAYMENT.FAILED';
+}
+
+export namespace IncomingPaymentWebhook {
+  export interface Data extends TransactionsAPI.IncomingTransaction {
+    /**
+     * Information required by the sender's VASP about the recipient. Platform must
+     * provide these in the 200 OK response if approving. Note that this only includes
+     * fields which Grid does not already have from initial customer registration.
+     */
+    requestedReceiverCustomerInfoFields?: Array<ReceiverAPI.CounterpartyFieldDefinition>;
+  }
+}
+
+export interface InternalAccountStatusWebhook extends BaseWebhook {
   data: InternalAccountsAPI.InternalAccount;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
 
   type: 'INTERNAL_ACCOUNT.BALANCE_UPDATED' | 'INTERNAL_ACCOUNT.STATUS_UPDATED';
 }
 
-export interface VerificationUpdateWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
+export interface InvitationClaimedWebhook extends BaseWebhook {
+  data: InvitationsAPI.UmaInvitation;
 
-  data: VerificationUpdateWebhookEvent.Data;
+  type: 'INVITATION.CLAIMED';
+}
 
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
+export interface OutgoingPaymentWebhook extends BaseWebhook {
+  data: TransactionsAPI.OutgoingTransaction;
+
+  type:
+    | 'OUTGOING_PAYMENT.PENDING'
+    | 'OUTGOING_PAYMENT.PROCESSING'
+    | 'OUTGOING_PAYMENT.COMPLETED'
+    | 'OUTGOING_PAYMENT.FAILED'
+    | 'OUTGOING_PAYMENT.EXPIRED'
+    | 'OUTGOING_PAYMENT.REFUND_PENDING'
+    | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+    | 'OUTGOING_PAYMENT.REFUND_FAILED';
+}
+
+export interface VerificationWebhook extends BaseWebhook {
+  data: VerificationsAPI.Verification;
 
   type:
     | 'VERIFICATION.APPROVED'
@@ -242,255 +178,72 @@ export interface VerificationUpdateWebhookEvent {
     | 'VERIFICATION.PENDING_MANUAL_REVIEW';
 }
 
-export namespace VerificationUpdateWebhookEvent {
-  export interface Data {
-    /**
-     * Unique identifier for this verification
-     */
-    id: string;
-
-    /**
-     * When this verification was created
-     */
-    createdAt: string;
-
-    /**
-     * The ID of the customer being verified
-     */
-    customerId: string;
-
-    /**
-     * List of issues preventing verification from proceeding. Empty when
-     * verificationStatus is APPROVED or IN_PROGRESS.
-     */
-    errors: Array<Shared.VerificationError>;
-
-    /**
-     * Current status of the KYC/KYB verification
-     */
-    verificationStatus:
-      | 'RESOLVE_ERRORS'
-      | 'PENDING_MANUAL_REVIEW'
-      | 'IN_PROGRESS'
-      | 'APPROVED'
-      | 'REJECTED'
-      | 'READY_FOR_VERIFICATION';
-
-    /**
-     * When this verification was last updated
-     */
-    updatedAt?: string;
-  }
-}
-
-export interface CardStateChangeWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
-  data: CardStateChangeWebhookEvent.Data;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
-  type: 'CARD.STATE_CHANGE';
-}
-
-export namespace CardStateChangeWebhookEvent {
-  export interface Data {
-    /**
-     * The id of the `Customer` who holds this card.
-     */
-    cardholderId: string;
-
-    /**
-     * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
-     * will be added in a later release.
-     */
-    form: 'VIRTUAL';
-
-    /**
-     * Internal account ids bound to this card as funding sources, in priority order —
-     * the first entry is tried first by Authorization Decisioning. Every card has at
-     * least one funding source.
-     */
-    fundingSources: Array<string>;
-
-    /**
-     * Lifecycle state of a card.
-     *
-     * | State           | Description                                                                                                                                                   |
-     * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-     * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-     * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-     * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-     * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-     * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
-     */
-    state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
-
-    /**
-     * Card network brand. Read-only — determined by Grid when the card is provisioned
-     * with the issuer.
-     */
-    brand?: 'VISA' | 'MASTERCARD';
-
-    /**
-     * Card expiration month (1–12).
-     */
-    expMonth?: number;
-
-    /**
-     * Card expiration year (four digits).
-     */
-    expYear?: number;
-
-    /**
-     * Last four digits of the card PAN.
-     */
-    last4?: string;
-
-    /**
-     * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-     * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-     * URL in an iframe in your client to reveal card details.
-     */
-    panEmbedUrl?: string;
-
-    /**
-     * Platform-specific card identifier. Optional on create — system-generated if
-     * omitted, mirroring `platformCustomerId` semantics.
-     */
-    platformCardId?: string;
-
-    /**
-     * Reason associated with the current `state`. Populated when the card is `CLOSED`
-     * or when provisioning was rejected; otherwise null.
-     */
-    stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
-  }
-}
-
-export interface CardFundingSourceChangeWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
-  data: CardFundingSourceChangeWebhookEvent.Data;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
-  type: 'CARD.FUNDING_SOURCE_CHANGE';
-}
-
-export namespace CardFundingSourceChangeWebhookEvent {
-  export interface Data {
-    /**
-     * The id of the `Customer` who holds this card.
-     */
-    cardholderId: string;
-
-    /**
-     * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
-     * will be added in a later release.
-     */
-    form: 'VIRTUAL';
-
-    /**
-     * Internal account ids bound to this card as funding sources, in priority order —
-     * the first entry is tried first by Authorization Decisioning. Every card has at
-     * least one funding source.
-     */
-    fundingSources: Array<string>;
-
-    /**
-     * Lifecycle state of a card.
-     *
-     * | State           | Description                                                                                                                                                   |
-     * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-     * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-     * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-     * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-     * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-     * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
-     */
-    state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
-
-    /**
-     * Card network brand. Read-only — determined by Grid when the card is provisioned
-     * with the issuer.
-     */
-    brand?: 'VISA' | 'MASTERCARD';
-
-    /**
-     * Card expiration month (1–12).
-     */
-    expMonth?: number;
-
-    /**
-     * Card expiration year (four digits).
-     */
-    expYear?: number;
-
-    /**
-     * Last four digits of the card PAN.
-     */
-    last4?: string;
-
-    /**
-     * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-     * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-     * URL in an iframe in your client to reveal card details.
-     */
-    panEmbedUrl?: string;
-
-    /**
-     * Platform-specific card identifier. Optional on create — system-generated if
-     * omitted, mirroring `platformCustomerId` semantics.
-     */
-    platformCardId?: string;
-
-    /**
-     * Reason associated with the current `state`. Populated when the card is `CLOSED`
-     * or when provisioning was rejected; otherwise null.
-     */
-    stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
-  }
-}
+/**
+ * Type of webhook event in OBJECT.EVENT dot-notation. The part before the dot
+ * identifies the resource, the part after identifies the event. This lets
+ * consumers route purely on type without inspecting data.status.
+ */
+export type WebhookType =
+  | 'OUTGOING_PAYMENT.PENDING'
+  | 'OUTGOING_PAYMENT.PROCESSING'
+  | 'OUTGOING_PAYMENT.COMPLETED'
+  | 'OUTGOING_PAYMENT.FAILED'
+  | 'OUTGOING_PAYMENT.EXPIRED'
+  | 'OUTGOING_PAYMENT.REFUND_PENDING'
+  | 'OUTGOING_PAYMENT.REFUND_COMPLETED'
+  | 'OUTGOING_PAYMENT.REFUND_FAILED'
+  | 'INCOMING_PAYMENT.PENDING'
+  | 'INCOMING_PAYMENT.COMPLETED'
+  | 'INCOMING_PAYMENT.FAILED'
+  | 'CUSTOMER.KYC_APPROVED'
+  | 'CUSTOMER.KYC_REJECTED'
+  | 'CUSTOMER.KYC_PENDING'
+  | 'CUSTOMER.KYB_APPROVED'
+  | 'CUSTOMER.KYB_REJECTED'
+  | 'CUSTOMER.KYB_PENDING'
+  | 'VERIFICATION.APPROVED'
+  | 'VERIFICATION.REJECTED'
+  | 'VERIFICATION.RESOLVE_ERRORS'
+  | 'VERIFICATION.IN_PROGRESS'
+  | 'VERIFICATION.PENDING_MANUAL_REVIEW'
+  | 'VERIFICATION.READY_FOR_VERIFICATION'
+  | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+  | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
+  | 'INVITATION.CLAIMED'
+  | 'BULK_UPLOAD.COMPLETED'
+  | 'BULK_UPLOAD.FAILED'
+  | 'AGENT_ACTION.PENDING_APPROVAL'
+  | 'CARD.STATE_CHANGE'
+  | 'CARD.FUNDING_SOURCE_CHANGE'
+  | 'TEST';
 
 export type UnwrapWebhookEvent =
-  | AgentActionWebhookEvent
-  | IncomingPaymentWebhookEvent
-  | OutgoingPaymentWebhookEvent
-  | TestWebhookWebhookEvent
-  | BulkUploadWebhookEvent
-  | InvitationClaimedWebhookEvent
-  | CustomerUpdateWebhookEvent
-  | InternalAccountStatusWebhookEvent
-  | VerificationUpdateWebhookEvent
-  | CardStateChangeWebhookEvent
-  | CardFundingSourceChangeWebhookEvent;
+  | AgentActionWebhook
+  | IncomingPaymentWebhook
+  | OutgoingPaymentWebhook
+  | SandboxWebhooksAPI.TestWebhookRequest
+  | BulkUploadWebhook
+  | InvitationClaimedWebhook
+  | CustomerWebhook
+  | InternalAccountStatusWebhook
+  | VerificationWebhook
+  | CardStateChangeWebhook
+  | CardFundingSourceChangeWebhook;
 
 export declare namespace Webhooks {
   export {
-    type AgentActionWebhookEvent as AgentActionWebhookEvent,
-    type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
-    type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
-    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
-    type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
-    type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
-    type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
-    type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
-    type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
-    type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
-    type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
+    type AgentActionWebhook as AgentActionWebhook,
+    type BaseWebhook as BaseWebhook,
+    type BulkUploadWebhook as BulkUploadWebhook,
+    type CardFundingSourceChangeWebhook as CardFundingSourceChangeWebhook,
+    type CardStateChangeWebhook as CardStateChangeWebhook,
+    type CustomerWebhook as CustomerWebhook,
+    type IncomingPaymentWebhook as IncomingPaymentWebhook,
+    type InternalAccountStatusWebhook as InternalAccountStatusWebhook,
+    type InvitationClaimedWebhook as InvitationClaimedWebhook,
+    type OutgoingPaymentWebhook as OutgoingPaymentWebhook,
+    type VerificationWebhook as VerificationWebhook,
+    type WebhookType as WebhookType,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }

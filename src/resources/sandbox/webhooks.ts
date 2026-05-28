@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as WebhooksAPI from '../webhooks';
 import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
@@ -13,15 +14,20 @@ export class Webhooks extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.sandbox.webhooks.sendTest();
+   * const testWebhookResponse =
+   *   await client.sandbox.webhooks.sendTest();
    * ```
    */
-  sendTest(options?: RequestOptions): APIPromise<WebhookSendTestResponse> {
+  sendTest(options?: RequestOptions): APIPromise<TestWebhookResponse> {
     return this._client.post('/sandbox/webhooks/test', { ...options, __security: { basicAuth: true } });
   }
 }
 
-export interface WebhookSendTestResponse {
+export interface TestWebhookRequest extends WebhooksAPI.BaseWebhook {
+  type: 'TEST';
+}
+
+export interface TestWebhookResponse {
   /**
    * The HTTP status code returned by the webhook endpoint
    */
@@ -39,5 +45,5 @@ export interface WebhookSendTestResponse {
 }
 
 export declare namespace Webhooks {
-  export { type WebhookSendTestResponse as WebhookSendTestResponse };
+  export { type TestWebhookRequest as TestWebhookRequest, type TestWebhookResponse as TestWebhookResponse };
 }

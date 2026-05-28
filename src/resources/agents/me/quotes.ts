@@ -115,7 +115,7 @@ export interface QuoteCreateParams {
    * cents). If I want the receiver to receive exactly $10 USD, I would set this to
    * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
    */
-  lockedCurrencySide: 'SENDING' | 'RECEIVING';
+  lockedCurrencySide: QuotesAPI.QuoteLockSide;
 
   /**
    * Body param

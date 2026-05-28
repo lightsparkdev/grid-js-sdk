@@ -32,6 +32,33 @@ export class Uma extends APIResource {
   }
 }
 
+export interface ReceiveRequest {
+  /**
+   * The amount to be received in the smallest unit of the currency (eg. cents)
+   */
+  receivingCurrencyAmount: number;
+
+  /**
+   * The currency code for the receiving amount
+   */
+  receivingCurrencyCode: string;
+
+  /**
+   * UMA address of the sender from the sandbox
+   */
+  senderUmaAddress: string;
+
+  /**
+   * System ID of the receiver (optional if receiverUmaAddress is provided)
+   */
+  customerId?: string;
+
+  /**
+   * UMA address of the receiver (optional if customerId is provided)
+   */
+  receiverUmaAddress?: string;
+}
+
 export interface UmaReceivePaymentParams {
   /**
    * The amount to be received in the smallest unit of the currency (eg. cents)
@@ -60,5 +87,5 @@ export interface UmaReceivePaymentParams {
 }
 
 export declare namespace Uma {
-  export { type UmaReceivePaymentParams as UmaReceivePaymentParams };
+  export { type ReceiveRequest as ReceiveRequest, type UmaReceivePaymentParams as UmaReceivePaymentParams };
 }

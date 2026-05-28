@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as ExternalAccountsAPI from './customers/external-accounts';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -366,7 +367,7 @@ export interface Quote {
    * Additional information about the counterparty, if available and required by the
    * platform in their configuration.
    */
-  counterpartyInformation?: { [key: string]: unknown };
+  counterpartyInformation?: ExternalAccountsAPI.CounterpartyInformation;
 
   /**
    * Payment instructions for executing the payment. This is not required when using
@@ -382,7 +383,102 @@ export interface Quote {
 
 export type QuoteDestinationOneOf = unknown;
 
+/**
+ * The side of the quote which should be locked and specified in the
+ * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
+ * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
+ * cents). If I want the receiver to receive exactly $10 USD, I would set this to
+ * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
+ */
+export type QuoteLockSide = 'SENDING' | 'RECEIVING';
+
+export interface QuoteRequest {
+  destination: QuoteDestinationOneOf;
+
+  /**
+   * The amount to send/receive in the smallest unit of the locked currency (eg.
+   * cents). See `lockedCurrencySide` for more information.
+   */
+  lockedCurrencyAmount: number;
+
+  /**
+   * The side of the quote which should be locked and specified in the
+   * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
+   * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
+   * cents). If I want the receiver to receive exactly $10 USD, I would set this to
+   * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
+   */
+  lockedCurrencySide: QuoteLockSide;
+
+  source: QuoteSourceOneOf;
+
+  /**
+   * Optional description/memo for the transfer
+   */
+  description?: string;
+
+  /**
+   * Whether to immediately execute the quote after creation. If true, the quote will
+   * be executed and the transaction will be created at the current exchange rate. It
+   * should only be used if you don't want to lock and view rate details before
+   * executing the quote. If you are executing a pre-existing quote, use the
+   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default. This can
+   * only be used for quotes with a `source` which is either an internal account, or
+   * has direct pull functionality (e.g. ACH pull with an external account). Not
+   * supported when the `source` is an internal account of type `EMBEDDED_WALLET`:
+   * those transfers require a `Grid-Wallet-Signature` over the `payloadToSign`
+   * returned in the quote response, which is not available in a combined
+   * create-and-execute call. Create the quote first with `immediatelyExecute: false`
+   * and then call `POST /quotes/{quoteId}/execute` with the `Grid-Wallet-Signature`
+   * stamp header.
+   */
+  immediatelyExecute?: boolean;
+
+  /**
+   * Lookup ID from a previous receiver lookup request. If provided, this can make
+   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
+   * required for UMA destinations due to counterparty institution requirements. See
+   * `senderCustomerInfo` for more information.
+   */
+  lookupId?: string;
+
+  /**
+   * The purpose of the payment. This may be required when sending to certain
+   * geographies (e.g. India).
+   */
+  purposeOfPayment?:
+    | 'GIFT'
+    | 'SELF'
+    | 'GOODS_OR_SERVICES'
+    | 'EDUCATION'
+    | 'HEALTH_OR_MEDICAL'
+    | 'REAL_ESTATE_PURCHASE'
+    | 'TAX_PAYMENT'
+    | 'LOAN_PAYMENT'
+    | 'UTILITY_BILL'
+    | 'DONATION'
+    | 'TRAVEL'
+    | 'OTHER';
+
+  /**
+   * Key-value pairs of additional information about the sender which was requested
+   * by the destination. This is relevant when the destination requires more sender
+   * info than was provided during customer creation. Any fields specified in
+   * `requiredPayerDataFields` from the response of the
+   * `/receiver/uma/{receiverUmaAddress}` (lookupUma) or
+   * `/receiver/external-account/{accountId}` (lookupExternalAccount) endpoints MUST
+   * be provided here if they were requested. If the destination did not request any
+   * additional information, this field can be omitted.
+   */
+  senderCustomerInfo?: { [key: string]: unknown };
+}
+
 export type QuoteSourceOneOf = unknown;
+
+/**
+ * Type of quote funding source
+ */
+export type QuoteSourceType = 'ACCOUNT' | 'REALTIME_FUNDING';
 
 export interface QuoteCreateParams {
   /**
@@ -403,7 +499,7 @@ export interface QuoteCreateParams {
    * cents). If I want the receiver to receive exactly $10 USD, I would set this to
    * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
    */
-  lockedCurrencySide: 'SENDING' | 'RECEIVING';
+  lockedCurrencySide: QuoteLockSide;
 
   /**
    * Body param
@@ -503,7 +599,10 @@ export declare namespace Quotes {
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteLockSide as QuoteLockSide,
+    type QuoteRequest as QuoteRequest,
     type QuoteSourceOneOf as QuoteSourceOneOf,
+    type QuoteSourceType as QuoteSourceType,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteExecuteParams as QuoteExecuteParams,
   };

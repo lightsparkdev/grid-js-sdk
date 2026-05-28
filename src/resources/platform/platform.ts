@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CustomersAPI from '../customers/customers';
 import * as ExternalAccountsAPI from './external-accounts';
 import {
   AedAccountInfo,
@@ -30,6 +31,7 @@ import {
   NgnAccountInfo,
   PhpAccountInfo,
   PkrAccountInfo,
+  PlatformExternalAccountCreateRequest,
   RwfAccountInfo,
   SgdAccountInfo,
   ThbAccountInfo,
@@ -64,14 +66,14 @@ export class Platform extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
+   * const platformInternalAccountListResponse =
    *   await client.platform.listInternalAccounts();
    * ```
    */
   listInternalAccounts(
     query: PlatformListInternalAccountsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PlatformListInternalAccountsResponse> {
+  ): APIPromise<PlatformInternalAccountListResponse> {
     return this._client.get('/platform/internal-accounts', {
       query,
       ...options,
@@ -80,7 +82,7 @@ export class Platform extends APIResource {
   }
 }
 
-export interface PlatformListInternalAccountsResponse {
+export interface PlatformInternalAccountListResponse {
   /**
    * List of internal accounts matching the filter criteria
    */
@@ -94,18 +96,24 @@ export interface PlatformListInternalAccountsParams {
   currency?: string;
 
   /**
-   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
-   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
-   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   * Classification of an internal account.
+   *
+   * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
+   *   holding account used as the source for Payouts flows).
+   * - `INTERNAL_CRYPTO`: A Grid-managed crypto holding account denominated in a
+   *   stablecoin such as USDC.
+   * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
+   *   customer. Outbound transfers require a session signature produced by the
+   *   customer's device — see the Embedded Wallets guide.
    */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+  type?: CustomersAPI.InternalAccountType;
 }
 
 Platform.ExternalAccounts = ExternalAccounts;
 
 export declare namespace Platform {
   export {
-    type PlatformListInternalAccountsResponse as PlatformListInternalAccountsResponse,
+    type PlatformInternalAccountListResponse as PlatformInternalAccountListResponse,
     type PlatformListInternalAccountsParams as PlatformListInternalAccountsParams,
   };
 
@@ -135,6 +143,7 @@ export declare namespace Platform {
     type NgnAccountInfo as NgnAccountInfo,
     type PhpAccountInfo as PhpAccountInfo,
     type PkrAccountInfo as PkrAccountInfo,
+    type PlatformExternalAccountCreateRequest as PlatformExternalAccountCreateRequest,
     type RwfAccountInfo as RwfAccountInfo,
     type SgdAccountInfo as SgdAccountInfo,
     type ThbAccountInfo as ThbAccountInfo,

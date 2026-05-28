@@ -5,6 +5,8 @@ import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
 import { TransactionsDefaultPagination } from './transfer-in';
+import * as ExternalAccountsAPI from './customers/external-accounts';
+import * as SimulateAPI from './sandbox/cards/simulate';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -156,7 +158,7 @@ export interface IncomingTransaction {
    */
   customerId: string;
 
-  destination: unknown;
+  destination: TransactionDestinationOneOf;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -200,7 +202,7 @@ export interface IncomingTransaction {
    * Additional information about the counterparty, if available and relevant to the
    * transaction and platform.
    */
-  counterpartyInformation?: { [key: string]: unknown };
+  counterpartyInformation?: ExternalAccountsAPI.CounterpartyInformation;
 
   /**
    * When the transaction was created
@@ -215,15 +217,7 @@ export interface IncomingTransaction {
   /**
    * If the transaction failed, this field provides the reason for failure.
    */
-  failureReason?:
-    | 'LNURLP_FAILED'
-    | 'PAY_REQUEST_FAILED'
-    | 'PAYMENT_APPROVAL_WEBHOOK_ERROR'
-    | 'PAYMENT_APPROVAL_TIMED_OUT'
-    | 'OFFRAMP_FAILED'
-    | 'MISSING_MANDATORY_PAYEE_DATA'
-    | 'QUOTE_EXPIRED'
-    | 'QUOTE_EXECUTION_FAILED';
+  failureReason?: IncomingTransactionFailureReason;
 
   /**
    * The total fees available from the receive quote in the smallest unit of the
@@ -254,6 +248,21 @@ export interface IncomingTransaction {
   updatedAt?: string;
 }
 
+/**
+ * Reason for failure of an incoming transaction. This is used to provide more
+ * context on why a transaction failed. If the transaction is not in a failed
+ * state, this field is omitted.
+ */
+export type IncomingTransactionFailureReason =
+  | 'LNURLP_FAILED'
+  | 'PAY_REQUEST_FAILED'
+  | 'PAYMENT_APPROVAL_WEBHOOK_ERROR'
+  | 'PAYMENT_APPROVAL_TIMED_OUT'
+  | 'OFFRAMP_FAILED'
+  | 'MISSING_MANDATORY_PAYEE_DATA'
+  | 'QUOTE_EXPIRED'
+  | 'QUOTE_EXECUTION_FAILED';
+
 export interface OutgoingTransaction {
   /**
    * Unique identifier for the transaction
@@ -265,7 +274,7 @@ export interface OutgoingTransaction {
    */
   customerId: string;
 
-  destination: unknown;
+  destination: TransactionDestinationOneOf;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -308,7 +317,7 @@ export interface OutgoingTransaction {
    * Additional information about the counterparty, if available and relevant to the
    * transaction and platform.
    */
-  counterpartyInformation?: { [key: string]: unknown };
+  counterpartyInformation?: ExternalAccountsAPI.CounterpartyInformation;
 
   /**
    * When the transaction was created
@@ -328,12 +337,7 @@ export interface OutgoingTransaction {
   /**
    * If the transaction failed, this field provides the reason for failure.
    */
-  failureReason?:
-    | 'QUOTE_EXPIRED'
-    | 'QUOTE_EXECUTION_FAILED'
-    | 'LIGHTNING_PAYMENT_FAILED'
-    | 'FUNDING_AMOUNT_MISMATCH'
-    | 'COUNTERPARTY_POST_TX_FAILED';
+  failureReason?: OutgoingTransactionFailureReason;
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
@@ -370,7 +374,7 @@ export interface OutgoingTransaction {
   /**
    * The refund if transaction was refunded.
    */
-  refund?: OutgoingTransaction.Refund;
+  refund?: SimulateAPI.Refund;
 
   /**
    * When the payment was or will be settled
@@ -383,37 +387,17 @@ export interface OutgoingTransaction {
   updatedAt?: string;
 }
 
-export namespace OutgoingTransaction {
-  /**
-   * The refund if transaction was refunded.
-   */
-  export interface Refund {
-    /**
-     * When the refund was initiated
-     */
-    initiatedAt: string;
-
-    /**
-     * The unique reference ID of the refund
-     */
-    reference: string;
-
-    /**
-     * Current status of the refund
-     */
-    status: 'PENDING' | 'COMPLETED' | 'FAILED';
-
-    /**
-     * Reason for the refund
-     */
-    reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION' | 'TIMEOUT';
-
-    /**
-     * When the refund was settled
-     */
-    settledAt?: string;
-  }
-}
+/**
+ * Reason for failure of an outgoing transaction. This is used to provide more
+ * context on why a transaction failed. If the transaction is not in a failed
+ * state, this field is omitted.
+ */
+export type OutgoingTransactionFailureReason =
+  | 'QUOTE_EXPIRED'
+  | 'QUOTE_EXECUTION_FAILED'
+  | 'LIGHTNING_PAYMENT_FAILED'
+  | 'FUNDING_AMOUNT_MISMATCH'
+  | 'COUNTERPARTY_POST_TX_FAILED';
 
 /**
  * Status of an outgoing payment transaction.
@@ -442,7 +426,41 @@ export interface ReconciliationInstructions {
   transactionHash?: string;
 }
 
+export type TransactionDestinationOneOf = unknown;
+
+/**
+ * Type of transaction destination
+ */
+export type TransactionDestinationType = 'ACCOUNT' | 'UMA_ADDRESS';
+
+export interface TransactionListResponse {
+  /**
+   * List of transactions matching the criteria
+   */
+  data: Array<TransferInAPI.Transaction>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of transactions matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
+}
+
 export type TransactionSourceOneOf = unknown;
+
+/**
+ * Type of transaction source
+ */
+export type TransactionSourceType = 'ACCOUNT' | 'UMA_ADDRESS' | 'REALTIME_FUNDING';
 
 /**
  * Status of a payment transaction.
@@ -568,10 +586,16 @@ export declare namespace Transactions {
     type BaseTransactionSource as BaseTransactionSource,
     type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
+    type IncomingTransactionFailureReason as IncomingTransactionFailureReason,
     type OutgoingTransaction as OutgoingTransaction,
+    type OutgoingTransactionFailureReason as OutgoingTransactionFailureReason,
     type OutgoingTransactionStatus as OutgoingTransactionStatus,
     type ReconciliationInstructions as ReconciliationInstructions,
+    type TransactionDestinationOneOf as TransactionDestinationOneOf,
+    type TransactionDestinationType as TransactionDestinationType,
+    type TransactionListResponse as TransactionListResponse,
     type TransactionSourceOneOf as TransactionSourceOneOf,
+    type TransactionSourceType as TransactionSourceType,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
     type TransactionListParams as TransactionListParams,

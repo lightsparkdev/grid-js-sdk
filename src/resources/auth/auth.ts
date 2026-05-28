@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as CredentialsAPI from './credentials';
 import {
+  AuthCredentialChallengeRequest,
   AuthCredentialCreateRequest,
   AuthCredentialCreateRequestOneOf,
   AuthCredentialListResponse,
@@ -21,15 +22,19 @@ import {
   CredentialVerifyParams,
   Credentials,
   EmailOtpCredentialCreateRequest,
+  EmailOtpCredentialVerifyRequest,
   OAuthCredentialCreateRequest,
+  OAuthCredentialVerifyRequest,
   PasskeyAssertion,
   PasskeyAttestation,
   PasskeyAuthChallenge,
   PasskeyCredentialCreateRequest,
+  PasskeyCredentialVerifyRequest,
   SignedRequestChallenge,
 } from './credentials';
 import * as SessionsAPI from './sessions';
 import {
+  AuthSessionRefreshRequest,
   SessionDeleteParams,
   SessionListParams,
   SessionListResponse,
@@ -48,6 +53,7 @@ Auth.Sessions = Sessions;
 export declare namespace Auth {
   export {
     Credentials as Credentials,
+    type AuthCredentialChallengeRequest as AuthCredentialChallengeRequest,
     type AuthCredentialCreateRequest as AuthCredentialCreateRequest,
     type AuthCredentialCreateRequestOneOf as AuthCredentialCreateRequestOneOf,
     type AuthCredentialListResponse as AuthCredentialListResponse,
@@ -60,11 +66,14 @@ export declare namespace Auth {
     type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
+    type EmailOtpCredentialVerifyRequest as EmailOtpCredentialVerifyRequest,
     type OAuthCredentialCreateRequest as OAuthCredentialCreateRequest,
+    type OAuthCredentialVerifyRequest as OAuthCredentialVerifyRequest,
     type PasskeyAssertion as PasskeyAssertion,
     type PasskeyAttestation as PasskeyAttestation,
     type PasskeyAuthChallenge as PasskeyAuthChallenge,
     type PasskeyCredentialCreateRequest as PasskeyCredentialCreateRequest,
+    type PasskeyCredentialVerifyRequest as PasskeyCredentialVerifyRequest,
     type SignedRequestChallenge as SignedRequestChallenge,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,
@@ -75,6 +84,7 @@ export declare namespace Auth {
 
   export {
     Sessions as Sessions,
+    type AuthSessionRefreshRequest as AuthSessionRefreshRequest,
     type SessionListResponse as SessionListResponse,
     type SessionListParams as SessionListParams,
     type SessionDeleteParams as SessionDeleteParams,

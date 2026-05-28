@@ -43,6 +43,24 @@ export class TransferOut extends APIResource {
   }
 }
 
+export interface TransferOutRequest {
+  /**
+   * Destination external account details
+   */
+  destination: TransferInAPI.ExternalAccountReference;
+
+  /**
+   * Source internal account details
+   */
+  source: TransferInAPI.InternalAccountReference;
+
+  /**
+   * Amount in the smallest unit of the currency (e.g., cents for USD/EUR, satoshis
+   * for BTC)
+   */
+  amount?: number;
+}
+
 export interface TransferOutCreateParams {
   /**
    * Body param: Destination external account details
@@ -68,5 +86,8 @@ export interface TransferOutCreateParams {
 }
 
 export declare namespace TransferOut {
-  export { type TransferOutCreateParams as TransferOutCreateParams };
+  export {
+    type TransferOutRequest as TransferOutRequest,
+    type TransferOutCreateParams as TransferOutCreateParams,
+  };
 }
