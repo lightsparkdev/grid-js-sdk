@@ -181,6 +181,21 @@ export interface PlatformConfig {
   webhookEndpoint?: string;
 }
 
+export interface PlatformConfigUpdateRequest {
+  /**
+   * Update or create the embedded-wallet configuration for this platform. Fields
+   * omitted from the nested object are left unchanged. Omit this field at the top
+   * level to leave the embedded-wallet configuration unchanged entirely.
+   */
+  embeddedWalletConfig?: EmbeddedWalletConfig;
+
+  supportedCurrencies?: Array<PlatformCurrencyConfig>;
+
+  umaDomain?: string;
+
+  webhookEndpoint?: string;
+}
+
 export interface PlatformCurrencyConfig {
   /**
    * Three-letter currency code (ISO 4217)
@@ -246,6 +261,7 @@ export declare namespace Config {
     type CustomerInfoFieldName as CustomerInfoFieldName,
     type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
+    type PlatformConfigUpdateRequest as PlatformConfigUpdateRequest,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
   };

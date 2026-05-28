@@ -217,6 +217,27 @@ export class Credentials extends APIResource {
   }
 }
 
+/**
+ * Request body for `POST /auth/credentials/{id}/challenge`. Required when
+ * re-challenging a `PASSKEY` credential — must carry `clientPublicKey` so Grid can
+ * bake it into the Turnkey session-creation payload the returned challenge is
+ * computed from. Ignored for `EMAIL_OTP`, where the credential type alone is
+ * sufficient because the OTP is delivered out-of-band. OAuth credentials do not
+ * use this endpoint; authenticate or reauthenticate them with
+ * `POST /auth/credentials/{id}/verify`.
+ */
+export interface AuthCredentialChallengeRequest {
+  /**
+   * Required for `PASSKEY` credentials. Client-generated P-256 public key,
+   * hex-encoded in uncompressed SEC1 format (`04` prefix followed by the 32-byte X
+   * and 32-byte Y coordinates; 130 hex characters total). The matching private key
+   * must remain on the client. Grid bakes this key into the Turnkey session-creation
+   * payload that the returned `challenge` is computed from, so the resulting session
+   * signing key is sealed to the client. Ignored for `EMAIL_OTP`.
+   */
+  clientPublicKey?: string;
+}
+
 export interface AuthCredentialCreateRequest {
   /**
    * Identifier of the internal account that this credential will authenticate.
@@ -438,6 +459,8 @@ export interface EmailOtpCredentialCreateRequest extends AuthCredentialCreateReq
   type: 'EMAIL_OTP';
 }
 
+export type EmailOtpCredentialVerifyRequest = unknown;
+
 export interface OAuthCredentialCreateRequest extends AuthCredentialCreateRequest {
   /**
    * OIDC ID token issued by the identity provider (e.g. Google, Apple). The token's
@@ -455,6 +478,8 @@ export interface OAuthCredentialCreateRequest extends AuthCredentialCreateReques
    */
   type: 'OAUTH';
 }
+
+export type OAuthCredentialVerifyRequest = unknown;
 
 export interface PasskeyAssertion {
   /**
@@ -602,6 +627,8 @@ export interface PasskeyCredentialCreateRequest extends AuthCredentialCreateRequ
   type: 'PASSKEY';
 }
 
+export type PasskeyCredentialVerifyRequest = unknown;
+
 /**
  * Common base for two-step signed-retry challenge responses on Embedded Wallet
  * endpoints (credential registration or revocation, session refresh or revocation,
@@ -707,6 +734,7 @@ export interface CredentialVerifyParams {
 
 export declare namespace Credentials {
   export {
+    type AuthCredentialChallengeRequest as AuthCredentialChallengeRequest,
     type AuthCredentialCreateRequest as AuthCredentialCreateRequest,
     type AuthCredentialCreateRequestOneOf as AuthCredentialCreateRequestOneOf,
     type AuthCredentialListResponse as AuthCredentialListResponse,
@@ -719,11 +747,14 @@ export declare namespace Credentials {
     type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
+    type EmailOtpCredentialVerifyRequest as EmailOtpCredentialVerifyRequest,
     type OAuthCredentialCreateRequest as OAuthCredentialCreateRequest,
+    type OAuthCredentialVerifyRequest as OAuthCredentialVerifyRequest,
     type PasskeyAssertion as PasskeyAssertion,
     type PasskeyAttestation as PasskeyAttestation,
     type PasskeyAuthChallenge as PasskeyAuthChallenge,
     type PasskeyCredentialCreateRequest as PasskeyCredentialCreateRequest,
+    type PasskeyCredentialVerifyRequest as PasskeyCredentialVerifyRequest,
     type SignedRequestChallenge as SignedRequestChallenge,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,

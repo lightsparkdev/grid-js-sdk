@@ -15,21 +15,22 @@ export class Crypto extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.crypto.estimateWithdrawalFee({
-   *   amount: 1000000,
-   *   cryptoNetwork: 'SOLANA',
-   *   currency: 'USDC',
-   *   destinationAddress:
-   *     '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
-   *   internalAccountId:
-   *     'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-   * });
+   * const estimateCryptoWithdrawalFeeResponse =
+   *   await client.crypto.estimateWithdrawalFee({
+   *     amount: 1000000,
+   *     cryptoNetwork: 'SOLANA',
+   *     currency: 'USDC',
+   *     destinationAddress:
+   *       '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
+   *     internalAccountId:
+   *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+   *   });
    * ```
    */
   estimateWithdrawalFee(
     body: CryptoEstimateWithdrawalFeeParams,
     options?: RequestOptions,
-  ): APIPromise<CryptoEstimateWithdrawalFeeResponse> {
+  ): APIPromise<EstimateCryptoWithdrawalFeeResponse> {
     return this._client.post('/crypto/estimate-withdrawal-fee', {
       body,
       ...options,
@@ -38,7 +39,35 @@ export class Crypto extends APIResource {
   }
 }
 
-export interface CryptoEstimateWithdrawalFeeResponse {
+export interface EstimateCryptoWithdrawalFeeRequest {
+  /**
+   * The amount to withdraw in the smallest unit of the currency.
+   */
+  amount: number;
+
+  /**
+   * The blockchain network for the withdrawal. Example values: SOLANA, ETHEREUM,
+   * BASE, POLYGON, SPARK, LIGHTNING, BITCOIN.
+   */
+  cryptoNetwork: string;
+
+  /**
+   * The currency code of the asset to withdraw (e.g. USDC).
+   */
+  currency: string;
+
+  /**
+   * The blockchain address to withdraw funds to.
+   */
+  destinationAddress: string;
+
+  /**
+   * The ID of the crypto internal account to withdraw from.
+   */
+  internalAccountId: string;
+}
+
+export interface EstimateCryptoWithdrawalFeeResponse {
   /**
    * The application fee charged by the platform in the smallest unit of the
    * withdrawal currency. Zero if no application fee applies.
@@ -104,7 +133,8 @@ export interface CryptoEstimateWithdrawalFeeParams {
 
 export declare namespace Crypto {
   export {
-    type CryptoEstimateWithdrawalFeeResponse as CryptoEstimateWithdrawalFeeResponse,
+    type EstimateCryptoWithdrawalFeeRequest as EstimateCryptoWithdrawalFeeRequest,
+    type EstimateCryptoWithdrawalFeeResponse as EstimateCryptoWithdrawalFeeResponse,
     type CryptoEstimateWithdrawalFeeParams as CryptoEstimateWithdrawalFeeParams,
   };
 }

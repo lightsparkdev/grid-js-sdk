@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CustomersAPI from './customers';
 import * as Shared from '../shared';
 import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
@@ -17,15 +18,20 @@ import {
   BwpExternalAccountInfo,
   CadExternalAccountInfo,
   CopExternalAccountInfo,
+  CounterpartyInformation,
   DkkBeneficiary,
   DkkExternalAccountInfo,
   EgpExternalAccountInfo,
   EurExternalAccountInfo,
   ExternalAccount,
   ExternalAccountCreate,
+  ExternalAccountCreateInfoOneOf,
   ExternalAccountCreateParams,
   ExternalAccountInfoOneOf,
   ExternalAccountListParams,
+  ExternalAccountListResponse,
+  ExternalAccountStatus,
+  ExternalAccountType,
   ExternalAccounts,
   ExternalAccountsDefaultPagination,
   GbpBeneficiary,
@@ -91,12 +97,12 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const customer = await client.customers.create({
+   * const customerOneOf = await client.customers.create({
    *   CreateCustomerRequest: { customerType: 'INDIVIDUAL' },
    * });
    * ```
    */
-  create(params: CustomerCreateParams, options?: RequestOptions): APIPromise<CustomerCreateResponse> {
+  create(params: CustomerCreateParams, options?: RequestOptions): APIPromise<CustomerOneOf> {
     const { CreateCustomerRequest } = params;
     return this._client.post('/customers', {
       body: CreateCustomerRequest,
@@ -110,12 +116,12 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const customer = await client.customers.retrieve(
+   * const customerOneOf = await client.customers.retrieve(
    *   'customerId',
    * );
    * ```
    */
-  retrieve(customerID: string, options?: RequestOptions): APIPromise<CustomerRetrieveResponse> {
+  retrieve(customerID: string, options?: RequestOptions): APIPromise<CustomerOneOf> {
     return this._client.get(path`/customers/${customerID}`, { ...options, __security: { basicAuth: true } });
   }
 
@@ -148,7 +154,7 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const customer = await client.customers.update(
+   * const customerOneOf = await client.customers.update(
    *   'customerId',
    *   { UpdateCustomerRequest: { customerType: 'INDIVIDUAL' } },
    * );
@@ -158,7 +164,7 @@ export class Customers extends APIResource {
     customerID: string,
     params: CustomerUpdateParams,
     options?: RequestOptions,
-  ): APIPromise<CustomerUpdateResponse> {
+  ): APIPromise<CustomerOneOf> {
     const {
       UpdateCustomerRequest,
       'Grid-Wallet-Signature': gridWalletSignature,
@@ -186,7 +192,7 @@ export class Customers extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const customerListResponse of client.customers.list()) {
+   * for await (const customerOneOf of client.customers.list()) {
    *   // ...
    * }
    * ```
@@ -194,8 +200,8 @@ export class Customers extends APIResource {
   list(
     query: CustomerListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<CustomerListResponsesDefaultPagination, CustomerListResponse> {
-    return this._client.getAPIList('/customers', DefaultPagination<CustomerListResponse>, {
+  ): PagePromise<CustomerOneovesDefaultPagination, CustomerOneOf> {
+    return this._client.getAPIList('/customers', DefaultPagination<CustomerOneOf>, {
       query,
       ...options,
       __security: { basicAuth: true },
@@ -207,14 +213,50 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const customer = await client.customers.delete(
+   * const customerOneOf = await client.customers.delete(
    *   'customerId',
    * );
    * ```
    */
-  delete(customerID: string, options?: RequestOptions): APIPromise<CustomerDeleteResponse> {
+  delete(customerID: string, options?: RequestOptions): APIPromise<CustomerOneOf> {
     return this._client.delete(path`/customers/${customerID}`, {
       ...options,
+      __security: { basicAuth: true },
+    });
+  }
+
+  /**
+   * Generate a single-use hosted URL the customer can complete to verify their
+   * identity, and (where supported) a provider-specific `token` for embedding the
+   * verification flow directly via the provider's SDK.
+   *
+   * The customer must already exist — create them with `POST /customers` first.
+   * Calling this endpoint does not change the customer's `kycStatus`; the customer
+   * remains `PENDING` until they complete (or fail) the hosted flow.
+   *
+   * Each call returns a fresh link. Previously-issued links are not invalidated, but
+   * they remain single-use and will expire on their own. For request-level retry
+   * safety, include an `Idempotency-Key` header.
+   *
+   * @example
+   * ```ts
+   * const kycLinkResponse =
+   *   await client.customers.createKYCLink('customerId');
+   * ```
+   */
+  createKYCLink(
+    customerID: string,
+    params: CustomerCreateKYCLinkParams | null | undefined = undefined,
+    options?: RequestOptions,
+  ): APIPromise<KYCLinkResponse> {
+    const { KycLinkCreateRequest, 'Idempotency-Key': idempotencyKey } = params ?? {};
+    return this._client.post(path`/customers/${customerID}/kyc-link`, {
+      body: KycLinkCreateRequest,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
       __security: { basicAuth: true },
     });
   }
@@ -249,17 +291,18 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.customers.export('id', {
-   *   clientPublicKey:
-   *     '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
-   * });
+   * const internalAccountExportResponse =
+   *   await client.customers.export('id', {
+   *     clientPublicKey:
+   *       '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   *   });
    * ```
    */
   export(
     id: string,
     params: CustomerExportParams,
     options?: RequestOptions,
-  ): APIPromise<CustomerExportResponse> {
+  ): APIPromise<InternalAccountExportResponse> {
     const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
     return this._client.post(path`/internal-accounts/${id}/export`, {
       body,
@@ -269,43 +312,6 @@ export class Customers extends APIResource {
           ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
           ...(requestID != null ? { 'Request-Id': requestID } : undefined),
         },
-        options?.headers,
-      ]),
-      __security: { basicAuth: true },
-    });
-  }
-
-  /**
-   * Generate a single-use hosted URL the customer can complete to verify their
-   * identity, and (where supported) a provider-specific `token` for embedding the
-   * verification flow directly via the provider's SDK.
-   *
-   * The customer must already exist — create them with `POST /customers` first.
-   * Calling this endpoint does not change the customer's `kycStatus`; the customer
-   * remains `PENDING` until they complete (or fail) the hosted flow.
-   *
-   * Each call returns a fresh link. Previously-issued links are not invalidated, but
-   * they remain single-use and will expire on their own. For request-level retry
-   * safety, include an `Idempotency-Key` header.
-   *
-   * @example
-   * ```ts
-   * const response = await client.customers.generateKYCLink(
-   *   'customerId',
-   * );
-   * ```
-   */
-  generateKYCLink(
-    customerID: string,
-    params: CustomerGenerateKYCLinkParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<CustomerGenerateKYCLinkResponse> {
-    const { 'Idempotency-Key': idempotencyKey, ...body } = params ?? {};
-    return this._client.post(path`/customers/${customerID}/kyc-link`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
       __security: { basicAuth: true },
@@ -361,7 +367,7 @@ export class Customers extends APIResource {
    * const internalAccount =
    *   await client.customers.updateInternalAccount(
    *     'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
-   *     { privateEnabled: true },
+   *     { InternalAccountUpdateRequest: {} },
    *   );
    * ```
    */
@@ -370,9 +376,13 @@ export class Customers extends APIResource {
     params: CustomerUpdateInternalAccountParams,
     options?: RequestOptions,
   ): APIPromise<InternalAccountsAPI.InternalAccount> {
-    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
+    const {
+      InternalAccountUpdateRequest,
+      'Grid-Wallet-Signature': gridWalletSignature,
+      'Request-Id': requestID,
+    } = params;
     return this._client.patch(path`/internal-accounts/${id}`, {
-      body,
+      body: InternalAccountUpdateRequest,
       ...options,
       headers: buildHeaders([
         {
@@ -386,19 +396,576 @@ export class Customers extends APIResource {
   }
 }
 
-export type CustomerListResponsesDefaultPagination = DefaultPagination<CustomerListResponse>;
+export type CustomerOneovesDefaultPagination = DefaultPagination<CustomerOneOf>;
 
-export type CustomerCreateResponse = Shared.IndividualCustomer | Shared.BusinessCustomer;
+export interface BusinessCustomerCreateRequest {
+  customerType: 'BUSINESS';
 
-export type CustomerRetrieveResponse = Shared.IndividualCustomer | Shared.BusinessCustomer;
+  address?: ExternalAccountsAPI.Address;
 
-export type CustomerUpdateResponse = Shared.IndividualCustomer | Shared.BusinessCustomer;
+  /**
+   * Additional information for business entities
+   */
+  businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
 
-export type CustomerListResponse = Shared.IndividualCustomer | Shared.BusinessCustomer;
+  /**
+   * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
+   * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
+   * use more than one sending currency, since the correct currencies cannot always
+   * be inferred. If not provided, currencies will be inferred from the customer's
+   * region. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
 
-export type CustomerDeleteResponse = Shared.IndividualCustomer | Shared.BusinessCustomer;
+  /**
+   * Email address for the customer.
+   */
+  email?: string;
 
-export interface CustomerExportResponse {
+  /**
+   * The current KYB status of a business customer
+   */
+  kybStatus?: KYBStatus;
+
+  /**
+   * Platform-specific customer identifier. If not provided, one will be generated by
+   * the system.
+   */
+  platformCustomerId?: string;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
+   * This determines the regulatory jurisdiction and KYC requirements for the
+   * customer. Required if the customer will use currencies with different KYC
+   * requirements across regions. A customer with accounts in multiple regions should
+   * be registered as separate customers. This field is immutable after creation.
+   */
+  region?: string;
+
+  /**
+   * Optional UMA address identifier. If not provided during customer creation, one
+   * will be generated by the system. If provided during customer update, the UMA
+   * address will be updated to the provided value. This is an optional identifier to
+   * route payments to the customer. This is an optional identifier to route payments
+   * to the customer.
+   */
+  umaAddress?: string;
+}
+
+export namespace BusinessCustomerCreateRequest {
+  /**
+   * Additional information for business entities
+   */
+  export interface BusinessInfo extends Shared.BusinessInfoUpdate, CustomersAPI.BusinessInfo {}
+}
+
+/**
+ * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
+ * customer with tied Embedded Wallet internal accounts, Grid updates the customer
+ * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
+ * through the endpoint's signed-retry flow.
+ */
+export interface BusinessCustomerUpdateRequest {
+  customerType: 'BUSINESS';
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Additional information for business entities
+   */
+  businessInfo?: Shared.BusinessInfoUpdate;
+
+  /**
+   * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
+   * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
+   * list. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer. For customers with tied Embedded Wallet internal
+   * accounts, changing this value also updates every tied `EMAIL_OTP` credential
+   * across all tied Embedded Wallets.
+   */
+  email?: string;
+
+  /**
+   * The current KYB status of a business customer
+   */
+  kybStatus?: KYBStatus;
+
+  /**
+   * Optional UMA address identifier. If provided, the customer's UMA address will be
+   * updated. This is an optional identifier to route payments to the customer.
+   */
+  umaAddress?: string;
+}
+
+/**
+ * Additional information required for business entities
+ */
+export interface BusinessInfo {
+  /**
+   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+   */
+  incorporatedOn: string;
+
+  /**
+   * Legal name of the business
+   */
+  legalName: string;
+
+  /**
+   * Tax identification number
+   */
+  taxId: string;
+
+  /**
+   * The high-level industry category of the business
+   */
+  businessType?: BusinessType;
+
+  /**
+   * List of countries where the business operates (ISO 3166-1 alpha-2)
+   */
+  countriesOfOperation?: Array<string>;
+
+  /**
+   * Country of incorporation or registration (ISO 3166-1 alpha-2)
+   */
+  country?: string;
+
+  /**
+   * Trade name or DBA name of the business, if different from the legal name
+   */
+  doingBusinessAs?: string;
+
+  /**
+   * Legal entity type of the business
+   */
+  entityType?: EntityType;
+
+  /**
+   * Expected number of transactions per month
+   */
+  expectedMonthlyTransactionCount?:
+    | 'COUNT_UNDER_10'
+    | 'COUNT_10_TO_100'
+    | 'COUNT_100_TO_500'
+    | 'COUNT_500_TO_1000'
+    | 'COUNT_OVER_1000';
+
+  /**
+   * Expected total transaction volume per month in USD equivalent
+   */
+  expectedMonthlyTransactionVolume?:
+    | 'VOLUME_UNDER_10K'
+    | 'VOLUME_10K_TO_100K'
+    | 'VOLUME_100K_TO_1M'
+    | 'VOLUME_1M_TO_10M'
+    | 'VOLUME_OVER_10M';
+
+  /**
+   * List of countries where the business expects to send payments (ISO 3166-1
+   * alpha-2)
+   */
+  expectedRecipientJurisdictions?: Array<string>;
+
+  /**
+   * The intended purpose for using the Grid account
+   */
+  purposeOfAccount?:
+    | 'CONTRACTOR_PAYOUTS'
+    | 'CREATOR_PAYOUTS'
+    | 'EMPLOYEE_PAYOUTS'
+    | 'MARKETPLACE_SELLER_PAYOUTS'
+    | 'SUPPLIER_PAYMENTS'
+    | 'CROSS_BORDER_B2B'
+    | 'AR_AUTOMATION'
+    | 'AP_AUTOMATION'
+    | 'EMBEDDED_PAYMENTS'
+    | 'PLATFORM_FEE_COLLECTION'
+    | 'P2P_TRANSFERS'
+    | 'CHARITABLE_DONATIONS'
+    | 'OTHER';
+
+  /**
+   * Business registration number
+   */
+  registrationNumber?: string;
+
+  /**
+   * The primary source of funds for the business
+   */
+  sourceOfFunds?: string;
+}
+
+/**
+ * Business information returned on a customer. `taxId` and `incorporatedOn` are
+ * required on creation but may be absent on legacy customers that pre-date the
+ * requirement, so both are optional in responses.
+ */
+export interface BusinessInfoResponse {
+  /**
+   * Legal name of the business
+   */
+  legalName: string;
+
+  /**
+   * The high-level industry category of the business
+   */
+  businessType?: BusinessType;
+
+  /**
+   * List of countries where the business operates (ISO 3166-1 alpha-2)
+   */
+  countriesOfOperation?: Array<string>;
+
+  /**
+   * Country of incorporation or registration (ISO 3166-1 alpha-2)
+   */
+  country?: string;
+
+  /**
+   * Trade name or DBA name of the business, if different from the legal name
+   */
+  doingBusinessAs?: string;
+
+  /**
+   * Legal entity type of the business
+   */
+  entityType?: EntityType;
+
+  /**
+   * Expected number of transactions per month
+   */
+  expectedMonthlyTransactionCount?:
+    | 'COUNT_UNDER_10'
+    | 'COUNT_10_TO_100'
+    | 'COUNT_100_TO_500'
+    | 'COUNT_500_TO_1000'
+    | 'COUNT_OVER_1000';
+
+  /**
+   * Expected total transaction volume per month in USD equivalent
+   */
+  expectedMonthlyTransactionVolume?:
+    | 'VOLUME_UNDER_10K'
+    | 'VOLUME_10K_TO_100K'
+    | 'VOLUME_100K_TO_1M'
+    | 'VOLUME_1M_TO_10M'
+    | 'VOLUME_OVER_10M';
+
+  /**
+   * List of countries where the business expects to send payments (ISO 3166-1
+   * alpha-2)
+   */
+  expectedRecipientJurisdictions?: Array<string>;
+
+  /**
+   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
+   */
+  incorporatedOn?: string;
+
+  /**
+   * The intended purpose for using the Grid account
+   */
+  purposeOfAccount?:
+    | 'CONTRACTOR_PAYOUTS'
+    | 'CREATOR_PAYOUTS'
+    | 'EMPLOYEE_PAYOUTS'
+    | 'MARKETPLACE_SELLER_PAYOUTS'
+    | 'SUPPLIER_PAYMENTS'
+    | 'CROSS_BORDER_B2B'
+    | 'AR_AUTOMATION'
+    | 'AP_AUTOMATION'
+    | 'EMBEDDED_PAYMENTS'
+    | 'PLATFORM_FEE_COLLECTION'
+    | 'P2P_TRANSFERS'
+    | 'CHARITABLE_DONATIONS'
+    | 'OTHER';
+
+  /**
+   * Business registration number
+   */
+  registrationNumber?: string;
+
+  /**
+   * The primary source of funds for the business
+   */
+  sourceOfFunds?: string;
+
+  /**
+   * Tax identification number
+   */
+  taxId?: string;
+}
+
+/**
+ * The high-level industry category of the business
+ */
+export type BusinessType =
+  | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
+  | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
+  | 'UTILITIES'
+  | 'CONSTRUCTION'
+  | 'MANUFACTURING'
+  | 'WHOLESALE_TRADE'
+  | 'RETAIL_TRADE'
+  | 'TRANSPORTATION_AND_WAREHOUSING'
+  | 'INFORMATION'
+  | 'FINANCE_AND_INSURANCE'
+  | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
+  | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
+  | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
+  | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
+  | 'EDUCATIONAL_SERVICES'
+  | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
+  | 'ARTS_ENTERTAINMENT_AND_RECREATION'
+  | 'ACCOMMODATION_AND_FOOD_SERVICES'
+  | 'OTHER_SERVICES'
+  | 'PUBLIC_ADMINISTRATION';
+
+export interface Customer {
+  customerType: unknown;
+
+  /**
+   * Platform-specific customer identifier
+   */
+  platformCustomerId: string;
+
+  /**
+   * Full UMA address (always present in responses, even if system-generated). This
+   * is an optional identifier to route payments to the customer.
+   */
+  umaAddress: string;
+
+  /**
+   * System-generated unique identifier
+   */
+  id?: string;
+
+  /**
+   * Creation timestamp
+   */
+  createdAt?: string;
+
+  /**
+   * List of currency codes enabled for this customer.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer.
+   */
+  email?: string;
+
+  /**
+   * Whether the customer is marked as deleted
+   */
+  isDeleted?: boolean;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
+   * and regulatory jurisdiction.
+   */
+  region?: string;
+
+  /**
+   * Last update timestamp
+   */
+  updatedAt?: string;
+}
+
+export type CustomerCreateRequestOneOf = IndividualCustomerCreateRequest | BusinessCustomerCreateRequest;
+
+export interface CustomerListResponse {
+  /**
+   * List of customers matching the filter criteria
+   */
+  data: Array<CustomerOneOf>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of customers matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
+}
+
+export type CustomerOneOf = Shared.IndividualCustomer | Shared.BusinessCustomer;
+
+/**
+ * Whether the customer is an individual or a business entity
+ */
+export type CustomerType = 'INDIVIDUAL' | 'BUSINESS';
+
+/**
+ * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
+ * customer with tied Embedded Wallet internal accounts, Grid updates the customer
+ * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
+ * through the endpoint's signed-retry flow.
+ */
+export type CustomerUpdateRequestOneOf = IndividualCustomerUpdateRequest | BusinessCustomerUpdateRequest;
+
+/**
+ * Legal entity type of the business
+ */
+export type EntityType =
+  | 'SOLE_PROPRIETORSHIP'
+  | 'PARTNERSHIP'
+  | 'LLC'
+  | 'CORPORATION'
+  | 'S_CORPORATION'
+  | 'NON_PROFIT'
+  | 'OTHER';
+
+export interface IndividualCustomerCreateRequest {
+  customerType: 'INDIVIDUAL';
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Date of birth in ISO 8601 format (YYYY-MM-DD)
+   */
+  birthDate?: string;
+
+  /**
+   * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
+   * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
+   * use more than one sending currency, since the correct currencies cannot always
+   * be inferred. If not provided, currencies will be inferred from the customer's
+   * region. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer.
+   */
+  email?: string;
+
+  /**
+   * Individual's full name
+   */
+  fullName?: string;
+
+  /**
+   * The current KYC status of a customer
+   */
+  kycStatus?: KYCStatus;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2)
+   */
+  nationality?: string;
+
+  /**
+   * Platform-specific customer identifier. If not provided, one will be generated by
+   * the system.
+   */
+  platformCustomerId?: string;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
+   * This determines the regulatory jurisdiction and KYC requirements for the
+   * customer. Required if the customer will use currencies with different KYC
+   * requirements across regions. A customer with accounts in multiple regions should
+   * be registered as separate customers. This field is immutable after creation.
+   */
+  region?: string;
+
+  /**
+   * Optional UMA address identifier. If not provided during customer creation, one
+   * will be generated by the system. If provided during customer update, the UMA
+   * address will be updated to the provided value. This is an optional identifier to
+   * route payments to the customer. This is an optional identifier to route payments
+   * to the customer.
+   */
+  umaAddress?: string;
+}
+
+/**
+ * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
+ * customer with tied Embedded Wallet internal accounts, Grid updates the customer
+ * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
+ * through the endpoint's signed-retry flow.
+ */
+export interface IndividualCustomerUpdateRequest {
+  customerType: 'INDIVIDUAL';
+
+  address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Date of birth in ISO 8601 format (YYYY-MM-DD)
+   */
+  birthDate?: string;
+
+  /**
+   * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
+   * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
+   * list. Some currency combinations may require separate customers — if so, the
+   * request will be rejected with details.
+   */
+  currencies?: Array<string>;
+
+  /**
+   * Email address for the customer. For customers with tied Embedded Wallet internal
+   * accounts, changing this value also updates every tied `EMAIL_OTP` credential
+   * across all tied Embedded Wallets.
+   */
+  email?: string;
+
+  /**
+   * Individual's full name
+   */
+  fullName?: string;
+
+  /**
+   * The current KYC status of a customer
+   */
+  kycStatus?: KYCStatus;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2)
+   */
+  nationality?: string;
+
+  /**
+   * Optional UMA address identifier. If provided, the customer's UMA address will be
+   * updated. This is an optional identifier to route payments to the customer.
+   */
+  umaAddress?: string;
+}
+
+/**
+ * Request body for `POST /internal-accounts/{id}/export`. The `clientPublicKey` is
+ * required on both steps of the signed-retry flow. On step 1 Grid binds it into
+ * `payloadToSign` so the subsequent stamp in `Grid-Wallet-Signature` commits to
+ * the target pubkey; on step 2 the client echoes the same `clientPublicKey` back
+ * and Grid uses it to encrypt the wallet credentials returned in the `200`
+ * response.
+ */
+export interface InternalAccountExportRequest {
+  /**
+   * Fresh P-256 public key, uncompressed SEC1 hex — 130 hex chars where the first
+   * two are `04` (the uncompressed-point indicator). Generate a new keypair for each
+   * export and discard the private key after decrypting the response.
+   */
+  clientPublicKey: string;
+}
+
+export interface InternalAccountExportResponse {
   /**
    * The id of the internal account that was exported.
    */
@@ -422,10 +989,91 @@ export interface CustomerExportResponse {
   encryptedWalletCredentials: string;
 }
 
+export interface InternalAccountListResponse {
+  /**
+   * List of internal accounts matching the filter criteria
+   */
+  data: Array<InternalAccountsAPI.InternalAccount>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of customers matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
+}
+
+/**
+ * Status of a Grid internal account. The status determines whether the account can
+ * send or receive payments.
+ *
+ * - `PENDING`: The account is under review and is being provisioned. The account
+ *   cannot send or receive payments until provisioning completes.
+ * - `ACTIVE`: The account is ready to send and receive payments.
+ * - `CLOSED`: The account cannot send or receive payments. A customer can initiate
+ *   the closing of an internal account, after which the account transitions to
+ *   this status.
+ * - `FROZEN`: The account cannot send or receive payments. Grid may freeze an
+ *   account in response to compliance or fraud signals; payments are blocked while
+ *   the account remains frozen.
+ */
+export type InternalAccountStatus = 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+
+/**
+ * Classification of an internal account.
+ *
+ * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
+ *   holding account used as the source for Payouts flows).
+ * - `INTERNAL_CRYPTO`: A Grid-managed crypto holding account denominated in a
+ *   stablecoin such as USDC.
+ * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
+ *   customer. Outbound transfers require a session signature produced by the
+ *   customer's device — see the Embedded Wallets guide.
+ */
+export type InternalAccountType = 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+
+/**
+ * Partial request body for `PATCH /internal-accounts/{id}`. At least one update
+ * field must be provided. On step 1 of the signed-retry flow Grid binds the
+ * submitted update fields into `payloadToSign`; on step 2 the client echoes the
+ * same fields back and Grid applies the update to the internal account.
+ */
+export interface InternalAccountUpdateRequest {
+  /**
+   * Whether wallet privacy should be enabled for the Embedded Wallet.
+   */
+  privateEnabled?: boolean;
+}
+
+/**
+ * The current KYB status of a business customer
+ */
+export type KYBStatus = 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
+/**
+ * Request body for generating a hosted KYC link for an existing customer.
+ */
+export interface KYCLinkCreateRequest {
+  /**
+   * URI the customer is redirected to after completing the hosted KYC flow. Must
+   * start with `https://` (or `http://` for local development). Embedded in the
+   * returned `kycUrl`.
+   */
+  redirectUri?: string;
+}
+
 /**
  * A hosted KYC link that the customer can complete to verify their identity.
  */
-export interface CustomerGenerateKYCLinkResponse {
+export interface KYCLinkResponse {
   /**
    * Time at which the hosted link expires and can no longer be used.
    */
@@ -457,260 +1105,13 @@ export interface CustomerGenerateKYCLinkResponse {
   token?: string;
 }
 
+/**
+ * The current KYC status of a customer
+ */
+export type KYCStatus = 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+
 export interface CustomerCreateParams {
-  CreateCustomerRequest:
-    | CustomerCreateParams.IndividualCustomerCreateRequest
-    | CustomerCreateParams.BusinessCustomerCreateRequest;
-}
-
-export namespace CustomerCreateParams {
-  export interface IndividualCustomerCreateRequest {
-    customerType: 'INDIVIDUAL';
-
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
-     * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
-     * use more than one sending currency, since the correct currencies cannot always
-     * be inferred. If not provided, currencies will be inferred from the customer's
-     * region. Some currency combinations may require separate customers — if so, the
-     * request will be rejected with details.
-     */
-    currencies?: Array<string>;
-
-    /**
-     * Email address for the customer.
-     */
-    email?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * The current KYC status of a customer
-     */
-    kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-
-    /**
-     * Platform-specific customer identifier. If not provided, one will be generated by
-     * the system.
-     */
-    platformCustomerId?: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
-     * This determines the regulatory jurisdiction and KYC requirements for the
-     * customer. Required if the customer will use currencies with different KYC
-     * requirements across regions. A customer with accounts in multiple regions should
-     * be registered as separate customers. This field is immutable after creation.
-     */
-    region?: string;
-
-    /**
-     * Optional UMA address identifier. If not provided during customer creation, one
-     * will be generated by the system. If provided during customer update, the UMA
-     * address will be updated to the provided value. This is an optional identifier to
-     * route payments to the customer. This is an optional identifier to route payments
-     * to the customer.
-     */
-    umaAddress?: string;
-  }
-
-  export interface BusinessCustomerCreateRequest {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Additional information for business entities
-     */
-    businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
-
-    /**
-     * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
-     * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
-     * use more than one sending currency, since the correct currencies cannot always
-     * be inferred. If not provided, currencies will be inferred from the customer's
-     * region. Some currency combinations may require separate customers — if so, the
-     * request will be rejected with details.
-     */
-    currencies?: Array<string>;
-
-    /**
-     * Email address for the customer.
-     */
-    email?: string;
-
-    /**
-     * The current KYB status of a business customer
-     */
-    kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-    /**
-     * Platform-specific customer identifier. If not provided, one will be generated by
-     * the system.
-     */
-    platformCustomerId?: string;
-
-    /**
-     * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
-     * This determines the regulatory jurisdiction and KYC requirements for the
-     * customer. Required if the customer will use currencies with different KYC
-     * requirements across regions. A customer with accounts in multiple regions should
-     * be registered as separate customers. This field is immutable after creation.
-     */
-    region?: string;
-
-    /**
-     * Optional UMA address identifier. If not provided during customer creation, one
-     * will be generated by the system. If provided during customer update, the UMA
-     * address will be updated to the provided value. This is an optional identifier to
-     * route payments to the customer. This is an optional identifier to route payments
-     * to the customer.
-     */
-    umaAddress?: string;
-  }
-
-  export namespace BusinessCustomerCreateRequest {
-    /**
-     * Additional information for business entities
-     */
-    export interface BusinessInfo extends Shared.BusinessInfoUpdate {
-      /**
-       * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
-       */
-      incorporatedOn: string;
-
-      /**
-       * Legal name of the business
-       */
-      legalName: string;
-
-      /**
-       * Tax identification number
-       */
-      taxId: string;
-
-      /**
-       * The high-level industry category of the business
-       */
-      businessType?:
-        | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
-        | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
-        | 'UTILITIES'
-        | 'CONSTRUCTION'
-        | 'MANUFACTURING'
-        | 'WHOLESALE_TRADE'
-        | 'RETAIL_TRADE'
-        | 'TRANSPORTATION_AND_WAREHOUSING'
-        | 'INFORMATION'
-        | 'FINANCE_AND_INSURANCE'
-        | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
-        | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
-        | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
-        | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
-        | 'EDUCATIONAL_SERVICES'
-        | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
-        | 'ARTS_ENTERTAINMENT_AND_RECREATION'
-        | 'ACCOMMODATION_AND_FOOD_SERVICES'
-        | 'OTHER_SERVICES'
-        | 'PUBLIC_ADMINISTRATION';
-
-      /**
-       * List of countries where the business operates (ISO 3166-1 alpha-2)
-       */
-      countriesOfOperation?: Array<string>;
-
-      /**
-       * Country of incorporation or registration (ISO 3166-1 alpha-2)
-       */
-      country?: string;
-
-      /**
-       * Trade name or DBA name of the business, if different from the legal name
-       */
-      doingBusinessAs?: string;
-
-      /**
-       * Legal entity type of the business
-       */
-      entityType?:
-        | 'SOLE_PROPRIETORSHIP'
-        | 'PARTNERSHIP'
-        | 'LLC'
-        | 'CORPORATION'
-        | 'S_CORPORATION'
-        | 'NON_PROFIT'
-        | 'OTHER';
-
-      /**
-       * Expected number of transactions per month
-       */
-      expectedMonthlyTransactionCount?:
-        | 'COUNT_UNDER_10'
-        | 'COUNT_10_TO_100'
-        | 'COUNT_100_TO_500'
-        | 'COUNT_500_TO_1000'
-        | 'COUNT_OVER_1000';
-
-      /**
-       * Expected total transaction volume per month in USD equivalent
-       */
-      expectedMonthlyTransactionVolume?:
-        | 'VOLUME_UNDER_10K'
-        | 'VOLUME_10K_TO_100K'
-        | 'VOLUME_100K_TO_1M'
-        | 'VOLUME_1M_TO_10M'
-        | 'VOLUME_OVER_10M';
-
-      /**
-       * List of countries where the business expects to send payments (ISO 3166-1
-       * alpha-2)
-       */
-      expectedRecipientJurisdictions?: Array<string>;
-
-      /**
-       * The intended purpose for using the Grid account
-       */
-      purposeOfAccount?:
-        | 'CONTRACTOR_PAYOUTS'
-        | 'CREATOR_PAYOUTS'
-        | 'EMPLOYEE_PAYOUTS'
-        | 'MARKETPLACE_SELLER_PAYOUTS'
-        | 'SUPPLIER_PAYMENTS'
-        | 'CROSS_BORDER_B2B'
-        | 'AR_AUTOMATION'
-        | 'AP_AUTOMATION'
-        | 'EMBEDDED_PAYMENTS'
-        | 'PLATFORM_FEE_COLLECTION'
-        | 'P2P_TRANSFERS'
-        | 'CHARITABLE_DONATIONS'
-        | 'OTHER';
-
-      /**
-       * Business registration number
-       */
-      registrationNumber?: string;
-
-      /**
-       * The primary source of funds for the business
-       */
-      sourceOfFunds?: string;
-    }
-  }
+  CreateCustomerRequest: CustomerCreateRequestOneOf;
 }
 
 export interface CustomerUpdateParams {
@@ -720,9 +1121,7 @@ export interface CustomerUpdateParams {
    * the customer email and every tied `EMAIL_OTP` credential across all tied
    * Embedded Wallets through the endpoint's signed-retry flow.
    */
-  UpdateCustomerRequest:
-    | CustomerUpdateParams.IndividualCustomerUpdateRequest
-    | CustomerUpdateParams.BusinessCustomerUpdateRequest;
+  UpdateCustomerRequest: CustomerUpdateRequestOneOf;
 
   /**
    * Header param: Full API-key stamp built over the prior `payloadToSign` with the
@@ -740,104 +1139,6 @@ export interface CustomerUpdateParams {
    * with `Grid-Wallet-Signature`.
    */
   'Request-Id'?: string;
-}
-
-export namespace CustomerUpdateParams {
-  /**
-   * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
-   * customer with tied Embedded Wallet internal accounts, Grid updates the customer
-   * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
-   * through the endpoint's signed-retry flow.
-   */
-  export interface IndividualCustomerUpdateRequest {
-    customerType: 'INDIVIDUAL';
-
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Date of birth in ISO 8601 format (YYYY-MM-DD)
-     */
-    birthDate?: string;
-
-    /**
-     * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
-     * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
-     * list. Some currency combinations may require separate customers — if so, the
-     * request will be rejected with details.
-     */
-    currencies?: Array<string>;
-
-    /**
-     * Email address for the customer. For customers with tied Embedded Wallet internal
-     * accounts, changing this value also updates every tied `EMAIL_OTP` credential
-     * across all tied Embedded Wallets.
-     */
-    email?: string;
-
-    /**
-     * Individual's full name
-     */
-    fullName?: string;
-
-    /**
-     * The current KYC status of a customer
-     */
-    kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-    /**
-     * Country code (ISO 3166-1 alpha-2)
-     */
-    nationality?: string;
-
-    /**
-     * Optional UMA address identifier. If provided, the customer's UMA address will be
-     * updated. This is an optional identifier to route payments to the customer.
-     */
-    umaAddress?: string;
-  }
-
-  /**
-   * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
-   * customer with tied Embedded Wallet internal accounts, Grid updates the customer
-   * email and every tied `EMAIL_OTP` credential across all tied Embedded Wallets
-   * through the endpoint's signed-retry flow.
-   */
-  export interface BusinessCustomerUpdateRequest {
-    customerType: 'BUSINESS';
-
-    address?: ExternalAccountsAPI.Address;
-
-    /**
-     * Additional information for business entities
-     */
-    businessInfo?: Shared.BusinessInfoUpdate;
-
-    /**
-     * Updated list of currency codes the customer will use (ISO 4217 for fiat, e.g.
-     * "USD", "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Replaces the existing
-     * list. Some currency combinations may require separate customers — if so, the
-     * request will be rejected with details.
-     */
-    currencies?: Array<string>;
-
-    /**
-     * Email address for the customer. For customers with tied Embedded Wallet internal
-     * accounts, changing this value also updates every tied `EMAIL_OTP` credential
-     * across all tied Embedded Wallets.
-     */
-    email?: string;
-
-    /**
-     * The current KYB status of a business customer
-     */
-    kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-    /**
-     * Optional UMA address identifier. If provided, the customer's UMA address will be
-     * updated. This is an optional identifier to route payments to the customer.
-     */
-    umaAddress?: string;
-  }
 }
 
 export interface CustomerListParams extends DefaultPaginationParams {
@@ -858,9 +1159,9 @@ export interface CustomerListParams extends DefaultPaginationParams {
   currency?: string;
 
   /**
-   * Filter by customer type
+   * Whether the customer is an individual or a business entity
    */
-  customerType?: 'INDIVIDUAL' | 'BUSINESS';
+  customerType?: CustomerType;
 
   /**
    * Whether to include deleted customers in the results. Default is false.
@@ -898,6 +1199,20 @@ export interface CustomerListParams extends DefaultPaginationParams {
   updatedBefore?: string;
 }
 
+export interface CustomerCreateKYCLinkParams {
+  /**
+   * Body param: Request body for generating a hosted KYC link for an existing
+   * customer.
+   */
+  KycLinkCreateRequest?: KYCLinkCreateRequest;
+
+  /**
+   * Header param: A unique identifier for the request. If the same key is sent
+   * multiple times, the server will return the same response as the first request.
+   */
+  'Idempotency-Key'?: string;
+}
+
 export interface CustomerExportParams {
   /**
    * Body param: Fresh P-256 public key, uncompressed SEC1 hex — 130 hex chars where
@@ -923,21 +1238,6 @@ export interface CustomerExportParams {
   'Request-Id'?: string;
 }
 
-export interface CustomerGenerateKYCLinkParams {
-  /**
-   * Body param: URI the customer is redirected to after completing the hosted KYC
-   * flow. Must start with `https://` (or `http://` for local development). Embedded
-   * in the returned `kycUrl`.
-   */
-  redirectUri?: string;
-
-  /**
-   * Header param: A unique identifier for the request. If the same key is sent
-   * multiple times, the server will return the same response as the first request.
-   */
-  'Idempotency-Key'?: string;
-}
-
 export interface CustomerListInternalAccountsParams extends DefaultPaginationParams {
   /**
    * Filter by currency code
@@ -955,18 +1255,27 @@ export interface CustomerListInternalAccountsParams extends DefaultPaginationPar
   limit?: number;
 
   /**
-   * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
-   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
-   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   * Classification of an internal account.
+   *
+   * - `INTERNAL_FIAT`: A Grid-managed fiat holding account (for example, the USD
+   *   holding account used as the source for Payouts flows).
+   * - `INTERNAL_CRYPTO`: A Grid-managed crypto holding account denominated in a
+   *   stablecoin such as USDC.
+   * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
+   *   customer. Outbound transfers require a session signature produced by the
+   *   customer's device — see the Embedded Wallets guide.
    */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+  type?: InternalAccountType;
 }
 
 export interface CustomerUpdateInternalAccountParams {
   /**
-   * Body param: Whether wallet privacy should be enabled for the Embedded Wallet.
+   * Body param: Partial request body for `PATCH /internal-accounts/{id}`. At least
+   * one update field must be provided. On step 1 of the signed-retry flow Grid binds
+   * the submitted update fields into `payloadToSign`; on step 2 the client echoes
+   * the same fields back and Grid applies the update to the internal account.
    */
-  privateEnabled?: boolean;
+  InternalAccountUpdateRequest: InternalAccountUpdateRequest;
 
   /**
    * Header param: Full API-key stamp built over the prior `payloadToSign` with the
@@ -988,19 +1297,36 @@ Customers.Bulk = Bulk;
 
 export declare namespace Customers {
   export {
-    type CustomerCreateResponse as CustomerCreateResponse,
-    type CustomerRetrieveResponse as CustomerRetrieveResponse,
-    type CustomerUpdateResponse as CustomerUpdateResponse,
+    type BusinessCustomerCreateRequest as BusinessCustomerCreateRequest,
+    type BusinessCustomerUpdateRequest as BusinessCustomerUpdateRequest,
+    type BusinessInfo as BusinessInfo,
+    type BusinessInfoResponse as BusinessInfoResponse,
+    type BusinessType as BusinessType,
+    type Customer as Customer,
+    type CustomerCreateRequestOneOf as CustomerCreateRequestOneOf,
     type CustomerListResponse as CustomerListResponse,
-    type CustomerDeleteResponse as CustomerDeleteResponse,
-    type CustomerExportResponse as CustomerExportResponse,
-    type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
-    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
+    type CustomerOneOf as CustomerOneOf,
+    type CustomerType as CustomerType,
+    type CustomerUpdateRequestOneOf as CustomerUpdateRequestOneOf,
+    type EntityType as EntityType,
+    type IndividualCustomerCreateRequest as IndividualCustomerCreateRequest,
+    type IndividualCustomerUpdateRequest as IndividualCustomerUpdateRequest,
+    type InternalAccountExportRequest as InternalAccountExportRequest,
+    type InternalAccountExportResponse as InternalAccountExportResponse,
+    type InternalAccountListResponse as InternalAccountListResponse,
+    type InternalAccountStatus as InternalAccountStatus,
+    type InternalAccountType as InternalAccountType,
+    type InternalAccountUpdateRequest as InternalAccountUpdateRequest,
+    type KYBStatus as KYBStatus,
+    type KYCLinkCreateRequest as KYCLinkCreateRequest,
+    type KYCLinkResponse as KYCLinkResponse,
+    type KYCStatus as KYCStatus,
+    type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
+    type CustomerCreateKYCLinkParams as CustomerCreateKYCLinkParams,
     type CustomerExportParams as CustomerExportParams,
-    type CustomerGenerateKYCLinkParams as CustomerGenerateKYCLinkParams,
     type CustomerListInternalAccountsParams as CustomerListInternalAccountsParams,
     type CustomerUpdateInternalAccountParams as CustomerUpdateInternalAccountParams,
   };
@@ -1018,13 +1344,18 @@ export declare namespace Customers {
     type BwpExternalAccountInfo as BwpExternalAccountInfo,
     type CadExternalAccountInfo as CadExternalAccountInfo,
     type CopExternalAccountInfo as CopExternalAccountInfo,
+    type CounterpartyInformation as CounterpartyInformation,
     type DkkBeneficiary as DkkBeneficiary,
     type DkkExternalAccountInfo as DkkExternalAccountInfo,
     type EgpExternalAccountInfo as EgpExternalAccountInfo,
     type EurExternalAccountInfo as EurExternalAccountInfo,
     type ExternalAccount as ExternalAccount,
     type ExternalAccountCreate as ExternalAccountCreate,
+    type ExternalAccountCreateInfoOneOf as ExternalAccountCreateInfoOneOf,
     type ExternalAccountInfoOneOf as ExternalAccountInfoOneOf,
+    type ExternalAccountListResponse as ExternalAccountListResponse,
+    type ExternalAccountStatus as ExternalAccountStatus,
+    type ExternalAccountType as ExternalAccountType,
     type GbpBeneficiary as GbpBeneficiary,
     type GbpExternalAccountInfo as GbpExternalAccountInfo,
     type GhsExternalAccountInfo as GhsExternalAccountInfo,

@@ -21,7 +21,7 @@ export class Verifications extends APIResource {
    * );
    * ```
    */
-  retrieve(verificationID: string, options?: RequestOptions): APIPromise<VerificationRetrieveResponse> {
+  retrieve(verificationID: string, options?: RequestOptions): APIPromise<Verification> {
     return this._client.get(path`/verifications/${verificationID}`, {
       ...options,
       __security: { basicAuth: true },
@@ -35,7 +35,7 @@ export class Verifications extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const verificationListResponse of client.verifications.list()) {
+   * for await (const verification of client.verifications.list()) {
    *   // ...
    * }
    * ```
@@ -43,8 +43,8 @@ export class Verifications extends APIResource {
   list(
     query: VerificationListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<VerificationListResponsesDefaultPagination, VerificationListResponse> {
-    return this._client.getAPIList('/verifications', DefaultPagination<VerificationListResponse>, {
+  ): PagePromise<VerificationsDefaultPagination, Verification> {
+    return this._client.getAPIList('/verifications', DefaultPagination<Verification>, {
       query,
       ...options,
       __security: { basicAuth: true },
@@ -61,20 +61,20 @@ export class Verifications extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.verifications.submit({
+   * const verification = await client.verifications.submit({
    *   customerId:
    *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
    * });
    * ```
    */
-  submit(body: VerificationSubmitParams, options?: RequestOptions): APIPromise<VerificationSubmitResponse> {
+  submit(body: VerificationSubmitParams, options?: RequestOptions): APIPromise<Verification> {
     return this._client.post('/verifications', { body, ...options, __security: { basicAuth: true } });
   }
 }
 
-export type VerificationListResponsesDefaultPagination = DefaultPagination<VerificationListResponse>;
+export type VerificationsDefaultPagination = DefaultPagination<Verification>;
 
-export interface VerificationRetrieveResponse {
+export interface Verification {
   /**
    * Unique identifier for this verification
    */
@@ -99,97 +99,82 @@ export interface VerificationRetrieveResponse {
   /**
    * Current status of the KYC/KYB verification
    */
-  verificationStatus:
-    | 'RESOLVE_ERRORS'
-    | 'PENDING_MANUAL_REVIEW'
-    | 'IN_PROGRESS'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'READY_FOR_VERIFICATION';
+  verificationStatus: VerificationStatus;
 
   /**
    * When this verification was last updated
    */
   updatedAt?: string;
 }
+
+/**
+ * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
+ * indicate which document category is needed. Document quality types
+ * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
+ * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
+ * themselves (sanctions, fraud, criminal records).
+ */
+export type VerificationErrorType =
+  | 'MISSING_FIELD'
+  | 'INVALID_FIELD'
+  | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
+  | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
+  | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
+  | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
+  | 'MISSING_IDENTITY_DOCUMENT'
+  | 'INVALID_DOCUMENT'
+  | 'EXPIRED_DOCUMENT'
+  | 'POOR_QUALITY_DOCUMENT'
+  | 'SUSPECTED_FRAUD_DOCUMENT'
+  | 'WRONG_DOCUMENT_TYPE'
+  | 'INCOMPLETE_DOCUMENT'
+  | 'UNREADABLE_DOCUMENT'
+  | 'DOCUMENT_VERIFICATION_FAILED'
+  | 'APPLICANT_SANCTIONED'
+  | 'APPLICANT_FRAUD'
+  | 'APPLICANT_CRIMINAL_RECORD'
+  | 'APPLICANT_REJECTED'
+  | 'MISSING_BENEFICIAL_OWNER';
 
 export interface VerificationListResponse {
   /**
-   * Unique identifier for this verification
+   * List of verifications matching the filter criteria
    */
-  id: string;
+  data: Array<Verification>;
 
   /**
-   * When this verification was created
+   * Indicates if more results are available beyond this page
    */
-  createdAt: string;
+  hasMore: boolean;
 
   /**
-   * The ID of the customer being verified
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
    */
-  customerId: string;
+  nextCursor?: string;
 
   /**
-   * List of issues preventing verification from proceeding. Empty when
-   * verificationStatus is APPROVED or IN_PROGRESS.
+   * Total number of results matching the criteria
    */
-  errors: Array<Shared.VerificationError>;
-
-  /**
-   * Current status of the KYC/KYB verification
-   */
-  verificationStatus:
-    | 'RESOLVE_ERRORS'
-    | 'PENDING_MANUAL_REVIEW'
-    | 'IN_PROGRESS'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'READY_FOR_VERIFICATION';
-
-  /**
-   * When this verification was last updated
-   */
-  updatedAt?: string;
+  totalCount?: number;
 }
 
-export interface VerificationSubmitResponse {
+export interface VerificationRequest {
   /**
-   * Unique identifier for this verification
-   */
-  id: string;
-
-  /**
-   * When this verification was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the customer being verified
+   * The ID of the customer to verify
    */
   customerId: string;
-
-  /**
-   * List of issues preventing verification from proceeding. Empty when
-   * verificationStatus is APPROVED or IN_PROGRESS.
-   */
-  errors: Array<Shared.VerificationError>;
-
-  /**
-   * Current status of the KYC/KYB verification
-   */
-  verificationStatus:
-    | 'RESOLVE_ERRORS'
-    | 'PENDING_MANUAL_REVIEW'
-    | 'IN_PROGRESS'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'READY_FOR_VERIFICATION';
-
-  /**
-   * When this verification was last updated
-   */
-  updatedAt?: string;
 }
+
+/**
+ * Current status of the KYC/KYB verification
+ */
+export type VerificationStatus =
+  | 'RESOLVE_ERRORS'
+  | 'PENDING_MANUAL_REVIEW'
+  | 'IN_PROGRESS'
+  | 'APPROVED'
+  | 'REJECTED'
+  | 'READY_FOR_VERIFICATION';
 
 export interface VerificationListParams extends DefaultPaginationParams {
   /**
@@ -203,15 +188,9 @@ export interface VerificationListParams extends DefaultPaginationParams {
   limit?: number;
 
   /**
-   * Filter by verification status
+   * Current status of the KYC/KYB verification
    */
-  verificationStatus?:
-    | 'RESOLVE_ERRORS'
-    | 'PENDING_MANUAL_REVIEW'
-    | 'IN_PROGRESS'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'READY_FOR_VERIFICATION';
+  verificationStatus?: VerificationStatus;
 }
 
 export interface VerificationSubmitParams {
@@ -223,10 +202,12 @@ export interface VerificationSubmitParams {
 
 export declare namespace Verifications {
   export {
-    type VerificationRetrieveResponse as VerificationRetrieveResponse,
+    type Verification as Verification,
+    type VerificationErrorType as VerificationErrorType,
     type VerificationListResponse as VerificationListResponse,
-    type VerificationSubmitResponse as VerificationSubmitResponse,
-    type VerificationListResponsesDefaultPagination as VerificationListResponsesDefaultPagination,
+    type VerificationRequest as VerificationRequest,
+    type VerificationStatus as VerificationStatus,
+    type VerificationsDefaultPagination as VerificationsDefaultPagination,
     type VerificationListParams as VerificationListParams,
     type VerificationSubmitParams as VerificationSubmitParams,
   };

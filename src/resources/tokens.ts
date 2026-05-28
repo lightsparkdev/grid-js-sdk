@@ -121,6 +121,18 @@ export interface APIToken {
   clientSecret?: string;
 }
 
+export interface APITokenCreateRequest {
+  /**
+   * Name of the token to help identify it
+   */
+  name: string;
+
+  /**
+   * A list of permissions to grant to the token
+   */
+  permissions: Array<Permission>;
+}
+
 /**
  * Permission of an API token that determines what actions the token can perform:
  * VIEW: Can view all data, including platform config, customers and transactions
@@ -128,6 +140,28 @@ export interface APIToken {
  * customers
  */
 export type Permission = 'VIEW' | 'TRANSACT' | 'MANAGE';
+
+export interface TokenListResponse {
+  /**
+   * List of tokens matching the filter criteria
+   */
+  data: Array<APIToken>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of tokens matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
+}
 
 export interface TokenCreateParams {
   /**
@@ -176,7 +210,9 @@ export interface TokenListParams extends DefaultPaginationParams {
 export declare namespace Tokens {
   export {
     type APIToken as APIToken,
+    type APITokenCreateRequest as APITokenCreateRequest,
     type Permission as Permission,
+    type TokenListResponse as TokenListResponse,
     type APITokensDefaultPagination as APITokensDefaultPagination,
     type TokenCreateParams as TokenCreateParams,
     type TokenListParams as TokenListParams,

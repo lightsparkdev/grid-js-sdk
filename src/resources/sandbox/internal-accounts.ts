@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
+import * as CustomersAPI from '../customers/customers';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -43,6 +44,14 @@ export class InternalAccounts extends APIResource {
 
 export type InternalAccountsDefaultPagination = DefaultPagination<InternalAccount>;
 
+export interface FundRequest {
+  /**
+   * Amount to add in the smallest unit of the account's currency (e.g., cents for
+   * USD/EUR, satoshis for BTC)
+   */
+  amount: number;
+}
+
 export interface InternalAccount {
   /**
    * The ID of the internal account
@@ -75,7 +84,7 @@ export interface InternalAccount {
    *   account in response to compliance or fraud signals; payments are blocked while
    *   the account remains frozen.
    */
-  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+  status: CustomersAPI.InternalAccountStatus;
 
   /**
    * Classification of an internal account.
@@ -88,7 +97,7 @@ export interface InternalAccount {
    *   customer. Outbound transfers require a session signature produced by the
    *   customer's device — see the Embedded Wallets guide.
    */
-  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+  type: CustomersAPI.InternalAccountType;
 
   /**
    * Timestamp when the internal account was last updated
@@ -118,6 +127,7 @@ export interface InternalAccountFundParams {
 
 export declare namespace InternalAccounts {
   export {
+    type FundRequest as FundRequest,
     type InternalAccount as InternalAccount,
     type InternalAccountFundParams as InternalAccountFundParams,
   };

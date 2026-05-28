@@ -2,6 +2,9 @@
 
 import * as Shared from './shared';
 import * as BeneficialOwnersAPI from './beneficial-owners';
+import * as DocumentsAPI from './documents';
+import * as VerificationsAPI from './verifications';
+import * as CustomersAPI from './customers/customers';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { DefaultPagination } from '../core/pagination';
 
@@ -169,7 +172,7 @@ export interface BeneficialOwner {
   /**
    * The current KYC status of a customer
    */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus: CustomersAPI.KYCStatus;
 
   /**
    * Percentage of ownership in the business (0-100)
@@ -181,7 +184,7 @@ export interface BeneficialOwner {
   /**
    * Roles of this person within the business
    */
-  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
+  roles: Array<BeneficialOwnersAPI.BeneficialOwnerRole>;
 
   /**
    * When this beneficial owner was last updated
@@ -235,24 +238,8 @@ export interface BulkCustomerImportErrorEntry {
   message?: string;
 }
 
-export interface BusinessCustomer {
+export interface BusinessCustomer extends CustomersAPI.Customer {
   customerType: 'BUSINESS';
-
-  /**
-   * Platform-specific customer identifier
-   */
-  platformCustomerId: string;
-
-  /**
-   * Full UMA address (always present in responses, even if system-generated). This
-   * is an optional identifier to route payments to the customer.
-   */
-  umaAddress: string;
-
-  /**
-   * System-generated unique identifier
-   */
-  id?: string;
 
   address?: ExternalAccountsAPI.Address;
 
@@ -264,168 +251,16 @@ export interface BusinessCustomer {
   businessInfo?: BusinessCustomer.BusinessInfo;
 
   /**
-   * Creation timestamp
-   */
-  createdAt?: string;
-
-  /**
-   * List of currency codes enabled for this customer.
-   */
-  currencies?: Array<string>;
-
-  /**
-   * Email address for the customer.
-   */
-  email?: string;
-
-  /**
-   * Whether the customer is marked as deleted
-   */
-  isDeleted?: boolean;
-
-  /**
    * The current KYB status of a business customer
    */
-  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
-   * and regulatory jurisdiction.
-   */
-  region?: string;
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt?: string;
+  kybStatus?: CustomersAPI.KYBStatus;
 }
 
 export namespace BusinessCustomer {
   /**
    * Additional information for business entities
    */
-  export interface BusinessInfo extends Shared.BusinessInfoUpdate {
-    /**
-     * Legal name of the business
-     */
-    legalName: string;
-
-    /**
-     * The high-level industry category of the business
-     */
-    businessType?:
-      | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
-      | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
-      | 'UTILITIES'
-      | 'CONSTRUCTION'
-      | 'MANUFACTURING'
-      | 'WHOLESALE_TRADE'
-      | 'RETAIL_TRADE'
-      | 'TRANSPORTATION_AND_WAREHOUSING'
-      | 'INFORMATION'
-      | 'FINANCE_AND_INSURANCE'
-      | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
-      | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
-      | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
-      | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
-      | 'EDUCATIONAL_SERVICES'
-      | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
-      | 'ARTS_ENTERTAINMENT_AND_RECREATION'
-      | 'ACCOMMODATION_AND_FOOD_SERVICES'
-      | 'OTHER_SERVICES'
-      | 'PUBLIC_ADMINISTRATION';
-
-    /**
-     * List of countries where the business operates (ISO 3166-1 alpha-2)
-     */
-    countriesOfOperation?: Array<string>;
-
-    /**
-     * Country of incorporation or registration (ISO 3166-1 alpha-2)
-     */
-    country?: string;
-
-    /**
-     * Trade name or DBA name of the business, if different from the legal name
-     */
-    doingBusinessAs?: string;
-
-    /**
-     * Legal entity type of the business
-     */
-    entityType?:
-      | 'SOLE_PROPRIETORSHIP'
-      | 'PARTNERSHIP'
-      | 'LLC'
-      | 'CORPORATION'
-      | 'S_CORPORATION'
-      | 'NON_PROFIT'
-      | 'OTHER';
-
-    /**
-     * Expected number of transactions per month
-     */
-    expectedMonthlyTransactionCount?:
-      | 'COUNT_UNDER_10'
-      | 'COUNT_10_TO_100'
-      | 'COUNT_100_TO_500'
-      | 'COUNT_500_TO_1000'
-      | 'COUNT_OVER_1000';
-
-    /**
-     * Expected total transaction volume per month in USD equivalent
-     */
-    expectedMonthlyTransactionVolume?:
-      | 'VOLUME_UNDER_10K'
-      | 'VOLUME_10K_TO_100K'
-      | 'VOLUME_100K_TO_1M'
-      | 'VOLUME_1M_TO_10M'
-      | 'VOLUME_OVER_10M';
-
-    /**
-     * List of countries where the business expects to send payments (ISO 3166-1
-     * alpha-2)
-     */
-    expectedRecipientJurisdictions?: Array<string>;
-
-    /**
-     * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
-     */
-    incorporatedOn?: string;
-
-    /**
-     * The intended purpose for using the Grid account
-     */
-    purposeOfAccount?:
-      | 'CONTRACTOR_PAYOUTS'
-      | 'CREATOR_PAYOUTS'
-      | 'EMPLOYEE_PAYOUTS'
-      | 'MARKETPLACE_SELLER_PAYOUTS'
-      | 'SUPPLIER_PAYMENTS'
-      | 'CROSS_BORDER_B2B'
-      | 'AR_AUTOMATION'
-      | 'AP_AUTOMATION'
-      | 'EMBEDDED_PAYMENTS'
-      | 'PLATFORM_FEE_COLLECTION'
-      | 'P2P_TRANSFERS'
-      | 'CHARITABLE_DONATIONS'
-      | 'OTHER';
-
-    /**
-     * Business registration number
-     */
-    registrationNumber?: string;
-
-    /**
-     * The primary source of funds for the business
-     */
-    sourceOfFunds?: string;
-
-    /**
-     * Tax identification number
-     */
-    taxId?: string;
-  }
+  export interface BusinessInfo extends Shared.BusinessInfoUpdate, CustomersAPI.BusinessInfoResponse {}
 }
 
 /**
@@ -435,27 +270,7 @@ export interface BusinessInfoUpdate {
   /**
    * The high-level industry category of the business
    */
-  businessType?:
-    | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
-    | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
-    | 'UTILITIES'
-    | 'CONSTRUCTION'
-    | 'MANUFACTURING'
-    | 'WHOLESALE_TRADE'
-    | 'RETAIL_TRADE'
-    | 'TRANSPORTATION_AND_WAREHOUSING'
-    | 'INFORMATION'
-    | 'FINANCE_AND_INSURANCE'
-    | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
-    | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
-    | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
-    | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
-    | 'EDUCATIONAL_SERVICES'
-    | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
-    | 'ARTS_ENTERTAINMENT_AND_RECREATION'
-    | 'ACCOMMODATION_AND_FOOD_SERVICES'
-    | 'OTHER_SERVICES'
-    | 'PUBLIC_ADMINISTRATION';
+  businessType?: CustomersAPI.BusinessType;
 
   /**
    * List of countries where the business operates (ISO 3166-1 alpha-2)
@@ -475,14 +290,7 @@ export interface BusinessInfoUpdate {
   /**
    * Legal entity type of the business
    */
-  entityType?:
-    | 'SOLE_PROPRIETORSHIP'
-    | 'PARTNERSHIP'
-    | 'LLC'
-    | 'CORPORATION'
-    | 'S_CORPORATION'
-    | 'NON_PROFIT'
-    | 'OTHER';
+  entityType?: CustomersAPI.EntityType;
 
   /**
    * Expected number of transactions per month
@@ -1100,24 +908,8 @@ export interface IdrExternalAccountCreateInfo {
   swiftCode: string;
 }
 
-export interface IndividualCustomer {
+export interface IndividualCustomer extends CustomersAPI.Customer {
   customerType: 'INDIVIDUAL';
-
-  /**
-   * Platform-specific customer identifier
-   */
-  platformCustomerId: string;
-
-  /**
-   * Full UMA address (always present in responses, even if system-generated). This
-   * is an optional identifier to route payments to the customer.
-   */
-  umaAddress: string;
-
-  /**
-   * System-generated unique identifier
-   */
-  id?: string;
 
   address?: ExternalAccountsAPI.Address;
 
@@ -1127,50 +919,19 @@ export interface IndividualCustomer {
   birthDate?: string;
 
   /**
-   * Creation timestamp
-   */
-  createdAt?: string;
-
-  /**
-   * List of currency codes enabled for this customer.
-   */
-  currencies?: Array<string>;
-
-  /**
-   * Email address for the customer.
-   */
-  email?: string;
-
-  /**
    * Individual's full name
    */
   fullName?: string;
 
   /**
-   * Whether the customer is marked as deleted
-   */
-  isDeleted?: boolean;
-
-  /**
    * The current KYC status of a customer
    */
-  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus?: CustomersAPI.KYCStatus;
 
   /**
    * Country code (ISO 3166-1 alpha-2)
    */
   nationality?: string;
-
-  /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
-   * and regulatory jurisdiction.
-   */
-  region?: string;
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt?: string;
 }
 
 export interface InrExternalAccountCreateInfo {
@@ -1882,27 +1643,7 @@ export interface VerificationError {
    * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
    * themselves (sanctions, fraud, criminal records).
    */
-  type:
-    | 'MISSING_FIELD'
-    | 'INVALID_FIELD'
-    | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
-    | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
-    | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
-    | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
-    | 'MISSING_IDENTITY_DOCUMENT'
-    | 'INVALID_DOCUMENT'
-    | 'EXPIRED_DOCUMENT'
-    | 'POOR_QUALITY_DOCUMENT'
-    | 'SUSPECTED_FRAUD_DOCUMENT'
-    | 'WRONG_DOCUMENT_TYPE'
-    | 'INCOMPLETE_DOCUMENT'
-    | 'UNREADABLE_DOCUMENT'
-    | 'DOCUMENT_VERIFICATION_FAILED'
-    | 'APPLICANT_SANCTIONED'
-    | 'APPLICANT_FRAUD'
-    | 'APPLICANT_CRIMINAL_RECORD'
-    | 'APPLICANT_REJECTED'
-    | 'MISSING_BENEFICIAL_OWNER';
+  type: VerificationsAPI.VerificationErrorType;
 
   /**
    * Document types that would satisfy this requirement. The integrator can upload
@@ -1919,34 +1660,7 @@ export interface VerificationError {
    * | MISSING_PROOF_OF_ADDRESS_DOCUMENT    | UTILITY_BILL, RENT_OR_LEASE_AGREEMENT, ELECTRICITY_BILL, BANK_STATEMENT, TAX_RETURN                      |
    * | MISSING_IDENTITY_DOCUMENT            | PASSPORT, DRIVERS_LICENSE, NATIONAL_ID                                                                   |
    */
-  acceptedDocumentTypes?: Array<
-    | 'PASSPORT'
-    | 'DRIVERS_LICENSE'
-    | 'NATIONAL_ID'
-    | 'PROOF_OF_ADDRESS'
-    | 'BANK_STATEMENT'
-    | 'TAX_RETURN'
-    | 'CERTIFICATE_OF_INCORPORATION'
-    | 'ARTICLES_OF_INCORPORATION'
-    | 'ARTICLES_OF_ASSOCIATION'
-    | 'STATE_REGISTRY_EXCERPT'
-    | 'GOOD_STANDING_CERTIFICATE'
-    | 'INFORMATION_STATEMENT'
-    | 'INCUMBENCY_CERTIFICATE'
-    | 'BUSINESS_LICENSE'
-    | 'SHAREHOLDER_REGISTER'
-    | 'POWER_OF_ATTORNEY'
-    | 'UTILITY_BILL'
-    | 'ELECTRICITY_BILL'
-    | 'RENT_OR_LEASE_AGREEMENT'
-    | 'DIRECTOR_REGISTRY'
-    | 'TRUST_AGREEMENT'
-    | 'STATE_COMPANY_REGISTRY'
-    | 'PARTNERSHIP_CONTROL_AGREEMENT'
-    | 'PARTNERSHIP_AGREEMENT'
-    | 'SELFIE'
-    | 'OTHER'
-  >;
+  acceptedDocumentTypes?: Array<DocumentsAPI.DocumentType>;
 
   /**
    * Dot-notation path to the field with the issue. Present when type is
