@@ -6,7 +6,6 @@ import * as ReceiverAPI from './receiver';
 import * as Shared from './shared';
 import * as TransactionsAPI from './transactions';
 import * as AgentsAPI from './agents/agents';
-import * as CustomersAPI from './customers/customers';
 import * as InternalAccountsAPI from './sandbox/internal-accounts';
 
 export class Webhooks extends APIResource {
@@ -190,7 +189,7 @@ export interface CustomerUpdateWebhookEvent {
    */
   id: string;
 
-  data: CustomersAPI.CustomerOneOf;
+  data: Shared.IndividualCustomer | Shared.BusinessCustomer;
 
   /**
    * ISO 8601 timestamp of when the webhook was sent
