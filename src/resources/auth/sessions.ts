@@ -29,7 +29,7 @@ export class Sessions extends APIResource {
    * ```
    */
   list(query: SessionListParams, options?: RequestOptions): APIPromise<SessionListResponse> {
-    return this._client.get('/auth/sessions', { query, ...options, __security: { basicAuth: true } });
+    return this._client.get('/auth/sessions', { query, ...options });
   }
 
   /**
@@ -73,7 +73,6 @@ export class Sessions extends APIResource {
         },
         options?.headers,
       ]),
-      __security: { basicAuth: true },
     });
   }
 
@@ -124,7 +123,6 @@ export class Sessions extends APIResource {
         },
         options?.headers,
       ]),
-      __security: { basicAuth: true },
     });
   }
 }

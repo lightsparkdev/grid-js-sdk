@@ -75,8 +75,6 @@ export type RequestOptions = {
    */
   defaultBaseURL?: string | undefined;
 
-  __security?: { basicAuth?: boolean; agentAuth?: boolean; webhookSignatureAuth?: boolean };
-
   __binaryResponse?: boolean | undefined;
 };
 

@@ -21,10 +21,7 @@ export class DeviceCodes extends APIResource {
    * ```
    */
   getStatus(code: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentDeviceCodeStatusResponse> {
-    return this._client.get(path`/agents/device-codes/${code}/status`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get(path`/agents/device-codes/${code}/status`, options);
   }
 
   /**
@@ -41,7 +38,7 @@ export class DeviceCodes extends APIResource {
    * ```
    */
   redeem(code: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentDeviceCodeRedeemResponse> {
-    return this._client.post(path`/agents/device-codes/${code}/redeem`, { ...options, __security: {} });
+    return this._client.post(path`/agents/device-codes/${code}/redeem`, options);
   }
 
   /**
@@ -57,9 +54,6 @@ export class DeviceCodes extends APIResource {
    * ```
    */
   regenerate(agentID: string, options?: RequestOptions): APIPromise<AgentsAPI.AgentDeviceCode> {
-    return this._client.post(path`/agents/${agentID}/device-codes`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/agents/${agentID}/device-codes`, options);
   }
 }

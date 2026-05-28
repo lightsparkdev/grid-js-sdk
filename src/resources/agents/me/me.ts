@@ -40,7 +40,7 @@ export class Me extends APIResource {
    * ```
    */
   retrieve(options?: RequestOptions): APIPromise<AgentsAPI.Agent> {
-    return this._client.get('/agents/me', { ...options, __security: { agentAuth: true } });
+    return this._client.get('/agents/me', options);
   }
 
   /**
@@ -83,7 +83,6 @@ export class Me extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
-      __security: { agentAuth: true },
     });
   }
 
@@ -123,7 +122,6 @@ export class Me extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
-      __security: { agentAuth: true },
     });
   }
 
@@ -148,7 +146,7 @@ export class Me extends APIResource {
     return this._client.getAPIList(
       '/agents/me/internal-accounts',
       DefaultPagination<InternalAccountsAPI.InternalAccount>,
-      { query, ...options, __security: { agentAuth: true } },
+      { query, ...options },
     );
   }
 }

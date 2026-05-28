@@ -24,7 +24,7 @@ export class ExchangeRates extends APIResource {
     query: ExchangeRateListParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ExchangeRateListResponse> {
-    return this._client.get('/exchange-rates', { query, ...options, __security: { basicAuth: true } });
+    return this._client.get('/exchange-rates', { query, ...options });
   }
 }
 
@@ -43,10 +43,25 @@ export namespace ExchangeRateListResponse {
     destinationCurrency: QuotesAPI.Currency;
 
     /**
-     * The payment rail used for the destination (e.g., UPI, SEPA_INSTANT,
-     * MOBILE_MONEY, FASTER_PAYMENTS)
+     * The payment rail used for the transfer. Payment rails represent the underlying
+     * payment network or system used to move funds between accounts.
      */
-    destinationPaymentRail: unknown;
+    destinationPaymentRail:
+      | 'ACH'
+      | 'BANK_TRANSFER'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'MOBILE_MONEY'
+      | 'PAYNOW'
+      | 'PIX'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UPI'
+      | 'WIRE';
 
     /**
      * Number of sending currency units per receiving currency unit.

@@ -22,10 +22,7 @@ export class Verifications extends APIResource {
    * ```
    */
   retrieve(verificationID: string, options?: RequestOptions): APIPromise<VerificationRetrieveResponse> {
-    return this._client.get(path`/verifications/${verificationID}`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get(path`/verifications/${verificationID}`, options);
   }
 
   /**
@@ -47,7 +44,6 @@ export class Verifications extends APIResource {
     return this._client.getAPIList('/verifications', DefaultPagination<VerificationListResponse>, {
       query,
       ...options,
-      __security: { basicAuth: true },
     });
   }
 
@@ -68,7 +64,7 @@ export class Verifications extends APIResource {
    * ```
    */
   submit(body: VerificationSubmitParams, options?: RequestOptions): APIPromise<VerificationSubmitResponse> {
-    return this._client.post('/verifications', { body, ...options, __security: { basicAuth: true } });
+    return this._client.post('/verifications', { body, ...options });
   }
 }
 

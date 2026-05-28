@@ -33,10 +33,7 @@ export class Actions extends APIResource {
     options?: RequestOptions,
   ): APIPromise<AgentsAPI.AgentAction> {
     const { agentId } = params;
-    return this._client.post(path`/agents/${agentId}/actions/${actionID}/approve`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/agents/${agentId}/actions/${actionID}/approve`, options);
   }
 
   /**
@@ -59,11 +56,7 @@ export class Actions extends APIResource {
     options?: RequestOptions,
   ): APIPromise<AgentsAPI.AgentAction> {
     const { agentId, ...body } = params;
-    return this._client.post(path`/agents/${agentId}/actions/${actionID}/reject`, {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/agents/${agentId}/actions/${actionID}/reject`, { body, ...options });
   }
 }
 

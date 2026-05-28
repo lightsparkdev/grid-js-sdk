@@ -38,7 +38,6 @@ export class TransferOut extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
-      __security: { basicAuth: true },
     });
   }
 }

@@ -41,7 +41,7 @@ export class Sandbox extends APIResource {
     body: SandboxSendFundsParams,
     options?: RequestOptions,
   ): APIPromise<TransactionsAPI.OutgoingTransaction> {
-    return this._client.post('/sandbox/send', { body, ...options, __security: { basicAuth: true } });
+    return this._client.post('/sandbox/send', { body, ...options });
   }
 }
 

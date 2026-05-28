@@ -25,10 +25,7 @@ export class Transactions extends APIResource {
    * ```
    */
   retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
-    return this._client.get(path`/transactions/${transactionID}`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get(path`/transactions/${transactionID}`, options);
   }
 
   /**
@@ -51,7 +48,6 @@ export class Transactions extends APIResource {
     return this._client.getAPIList('/transactions', DefaultPagination<TransferInAPI.Transaction>, {
       query,
       ...options,
-      __security: { basicAuth: true },
     });
   }
 
@@ -71,11 +67,7 @@ export class Transactions extends APIResource {
     body: TransactionApproveParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<IncomingTransaction> {
-    return this._client.post(path`/transactions/${transactionID}/approve`, {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/transactions/${transactionID}/approve`, { body, ...options });
   }
 
   /**
@@ -94,17 +86,11 @@ export class Transactions extends APIResource {
     body: TransactionRejectParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<IncomingTransaction> {
-    return this._client.post(path`/transactions/${transactionID}/reject`, {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/transactions/${transactionID}/reject`, { body, ...options });
   }
 }
 
 export interface BaseTransactionSource {
-  sourceType: unknown;
-
   /**
    * Currency code for the source
    */
@@ -156,7 +142,12 @@ export interface IncomingTransaction {
    */
   customerId: string;
 
-  destination: unknown;
+  /**
+   * Destination account details
+   */
+  destination:
+    | IncomingTransaction.AccountTransactionDestination
+    | IncomingTransaction.UmaAddressTransactionDestination;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -185,10 +176,7 @@ export interface IncomingTransaction {
    */
   status: TransactionStatus;
 
-  /**
-   * Type of transaction (incoming payment or outgoing payment)
-   */
-  type: 'INCOMING';
+  type: 'INCOMING' | 'OUTGOING';
 
   /**
    * If this transaction was initiated by an agent, the system-generated ID of that
@@ -246,12 +234,41 @@ export interface IncomingTransaction {
    */
   settledAt?: string;
 
+  /**
+   * Source account details
+   */
   source?: TransactionSourceOneOf;
 
   /**
    * When the transaction was last updated
    */
   updatedAt?: string;
+}
+
+export namespace IncomingTransaction {
+  /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
+  }
 }
 
 export interface OutgoingTransaction {
@@ -265,7 +282,12 @@ export interface OutgoingTransaction {
    */
   customerId: string;
 
-  destination: unknown;
+  /**
+   * Destination account details
+   */
+  destination:
+    | OutgoingTransaction.AccountTransactionDestination
+    | OutgoingTransaction.UmaAddressTransactionDestination;
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -278,6 +300,9 @@ export interface OutgoingTransaction {
    */
   sentAmount: InvitationsAPI.CurrencyAmount;
 
+  /**
+   * Source account details
+   */
   source: TransactionSourceOneOf;
 
   /**
@@ -291,12 +316,9 @@ export interface OutgoingTransaction {
    * | `COMPLETED`  | Payout successfully reached the destination             |
    * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
    */
-  status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
+  status: OutgoingTransactionStatus;
 
-  /**
-   * Type of transaction (incoming payment or outgoing payment)
-   */
-  type: 'OUTGOING';
+  type: 'OUTGOING' | 'INCOMING';
 
   /**
    * If this transaction was initiated by an agent, the system-generated ID of that
@@ -385,6 +407,30 @@ export interface OutgoingTransaction {
 
 export namespace OutgoingTransaction {
   /**
+   * Destination account details
+   */
+  export interface AccountTransactionDestination {
+    /**
+     * Destination account identifier
+     */
+    accountId: string;
+
+    destinationType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address destination details
+   */
+  export interface UmaAddressTransactionDestination {
+    destinationType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the recipient
+     */
+    umaAddress: string;
+  }
+
+  /**
    * The refund if transaction was refunded.
    */
   export interface Refund {
@@ -442,7 +488,57 @@ export interface ReconciliationInstructions {
   transactionHash?: string;
 }
 
-export type TransactionSourceOneOf = unknown;
+/**
+ * Source account details
+ */
+export type TransactionSourceOneOf =
+  | TransactionSourceOneOf.AccountTransactionSource
+  | TransactionSourceOneOf.UmaAddressTransactionSource
+  | TransactionSourceOneOf.RealtimeFundingTransactionSource;
+
+export namespace TransactionSourceOneOf {
+  /**
+   * Source account details
+   */
+  export interface AccountTransactionSource {
+    /**
+     * Source account identifier
+     */
+    accountId: string;
+
+    sourceType: 'ACCOUNT';
+  }
+
+  /**
+   * UMA address source details
+   */
+  export interface UmaAddressTransactionSource {
+    sourceType: 'UMA_ADDRESS';
+
+    /**
+     * UMA address of the sender
+     */
+    umaAddress: string;
+  }
+
+  /**
+   * Transaction was funded using a real-time funding source (RTP, SEPA Instant,
+   * Spark, Stables, etc.).
+   */
+  export interface RealtimeFundingTransactionSource {
+    /**
+     * Currency code for the funding source
+     */
+    currency: string;
+
+    sourceType: 'REALTIME_FUNDING';
+
+    /**
+     * The customer on whose behalf the transaction was initiated.
+     */
+    customerId?: string;
+  }
+}
 
 /**
  * Status of a payment transaction.
@@ -526,23 +622,12 @@ export interface TransactionListParams extends DefaultPaginationParams {
   startDate?: string;
 
   /**
-   * Status of a payment transaction.
-   *
-   * | Status       | Description                                                                                        |
-   * | ------------ | -------------------------------------------------------------------------------------------------- |
-   * | `CREATED`    | Initial lookup has been created                                                                    |
-   * | `PENDING`    | Quote has been created                                                                             |
-   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
-   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
-   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
-   * | `FAILED`     | An error occurred during payment                                                                   |
-   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
-   * | `EXPIRED`    | Quote has expired                                                                                  |
+   * Filter by transaction status
    */
   status?: TransactionStatus;
 
   /**
-   * Type of transaction (incoming payment or outgoing payment)
+   * Filter by transaction type
    */
   type?: TransactionType;
 }

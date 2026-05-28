@@ -1,9 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as Shared from './shared';
-import * as BeneficialOwnersAPI from './beneficial-owners';
 import * as ExternalAccountsAPI from './customers/external-accounts';
-import { DefaultPagination } from '../core/pagination';
 
 export interface AedBeneficiary {
   address: ExternalAccountsAPI.Address;
@@ -118,12 +115,6 @@ export interface BdtBeneficiary {
   phoneNumber?: string;
 }
 
-/**
- * Required fields depend on the selected paymentRails:
- *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
- */
 export interface BdtExternalAccountCreateInfo {
   accountType: 'BDT_ACCOUNT';
 
@@ -150,45 +141,6 @@ export interface BdtExternalAccountCreateInfo {
   swiftCode?: string;
 }
 
-export interface BeneficialOwner {
-  /**
-   * Unique identifier for this beneficial owner
-   */
-  id: string;
-
-  /**
-   * When this beneficial owner was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the business customer this beneficial owner is associated with
-   */
-  customerId: string;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Percentage of ownership in the business (0-100)
-   */
-  ownershipPercentage: number;
-
-  personalInfo: BeneficialOwnersAPI.BeneficialOwnerPersonalInfo;
-
-  /**
-   * Roles of this person within the business
-   */
-  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
-
-  /**
-   * When this beneficial owner was last updated
-   */
-  updatedAt?: string;
-}
-
 export interface BrlExternalAccountCreateInfo {
   accountType: 'BRL_ACCOUNT';
 
@@ -210,9 +162,6 @@ export interface BrlExternalAccountCreateInfo {
   taxId: string;
 }
 
-/**
- * Error information for a failed bulk import entry
- */
 export interface BulkCustomerImportErrorEntry {
   /**
    * Platform customer ID or row number for the failed entry
@@ -233,325 +182,6 @@ export interface BulkCustomerImportErrorEntry {
    * Error message
    */
   message?: string;
-}
-
-export interface BusinessCustomer {
-  customerType: 'BUSINESS';
-
-  /**
-   * Platform-specific customer identifier
-   */
-  platformCustomerId: string;
-
-  /**
-   * Full UMA address (always present in responses, even if system-generated). This
-   * is an optional identifier to route payments to the customer.
-   */
-  umaAddress: string;
-
-  /**
-   * System-generated unique identifier
-   */
-  id?: string;
-
-  address?: ExternalAccountsAPI.Address;
-
-  beneficialOwners?: Array<BeneficialOwner>;
-
-  /**
-   * Additional information for business entities
-   */
-  businessInfo?: BusinessCustomer.BusinessInfo;
-
-  /**
-   * Creation timestamp
-   */
-  createdAt?: string;
-
-  /**
-   * List of currency codes enabled for this customer.
-   */
-  currencies?: Array<string>;
-
-  /**
-   * Email address for the customer.
-   */
-  email?: string;
-
-  /**
-   * Whether the customer is marked as deleted
-   */
-  isDeleted?: boolean;
-
-  /**
-   * The current KYB status of a business customer
-   */
-  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
-   * and regulatory jurisdiction.
-   */
-  region?: string;
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt?: string;
-}
-
-export namespace BusinessCustomer {
-  /**
-   * Additional information for business entities
-   */
-  export interface BusinessInfo extends Shared.BusinessInfoUpdate {
-    /**
-     * Legal name of the business
-     */
-    legalName: string;
-
-    /**
-     * The high-level industry category of the business
-     */
-    businessType?:
-      | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
-      | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
-      | 'UTILITIES'
-      | 'CONSTRUCTION'
-      | 'MANUFACTURING'
-      | 'WHOLESALE_TRADE'
-      | 'RETAIL_TRADE'
-      | 'TRANSPORTATION_AND_WAREHOUSING'
-      | 'INFORMATION'
-      | 'FINANCE_AND_INSURANCE'
-      | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
-      | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
-      | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
-      | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
-      | 'EDUCATIONAL_SERVICES'
-      | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
-      | 'ARTS_ENTERTAINMENT_AND_RECREATION'
-      | 'ACCOMMODATION_AND_FOOD_SERVICES'
-      | 'OTHER_SERVICES'
-      | 'PUBLIC_ADMINISTRATION';
-
-    /**
-     * List of countries where the business operates (ISO 3166-1 alpha-2)
-     */
-    countriesOfOperation?: Array<string>;
-
-    /**
-     * Country of incorporation or registration (ISO 3166-1 alpha-2)
-     */
-    country?: string;
-
-    /**
-     * Trade name or DBA name of the business, if different from the legal name
-     */
-    doingBusinessAs?: string;
-
-    /**
-     * Legal entity type of the business
-     */
-    entityType?:
-      | 'SOLE_PROPRIETORSHIP'
-      | 'PARTNERSHIP'
-      | 'LLC'
-      | 'CORPORATION'
-      | 'S_CORPORATION'
-      | 'NON_PROFIT'
-      | 'OTHER';
-
-    /**
-     * Expected number of transactions per month
-     */
-    expectedMonthlyTransactionCount?:
-      | 'COUNT_UNDER_10'
-      | 'COUNT_10_TO_100'
-      | 'COUNT_100_TO_500'
-      | 'COUNT_500_TO_1000'
-      | 'COUNT_OVER_1000';
-
-    /**
-     * Expected total transaction volume per month in USD equivalent
-     */
-    expectedMonthlyTransactionVolume?:
-      | 'VOLUME_UNDER_10K'
-      | 'VOLUME_10K_TO_100K'
-      | 'VOLUME_100K_TO_1M'
-      | 'VOLUME_1M_TO_10M'
-      | 'VOLUME_OVER_10M';
-
-    /**
-     * List of countries where the business expects to send payments (ISO 3166-1
-     * alpha-2)
-     */
-    expectedRecipientJurisdictions?: Array<string>;
-
-    /**
-     * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
-     */
-    incorporatedOn?: string;
-
-    /**
-     * The intended purpose for using the Grid account
-     */
-    purposeOfAccount?:
-      | 'CONTRACTOR_PAYOUTS'
-      | 'CREATOR_PAYOUTS'
-      | 'EMPLOYEE_PAYOUTS'
-      | 'MARKETPLACE_SELLER_PAYOUTS'
-      | 'SUPPLIER_PAYMENTS'
-      | 'CROSS_BORDER_B2B'
-      | 'AR_AUTOMATION'
-      | 'AP_AUTOMATION'
-      | 'EMBEDDED_PAYMENTS'
-      | 'PLATFORM_FEE_COLLECTION'
-      | 'P2P_TRANSFERS'
-      | 'CHARITABLE_DONATIONS'
-      | 'OTHER';
-
-    /**
-     * Business registration number
-     */
-    registrationNumber?: string;
-
-    /**
-     * The primary source of funds for the business
-     */
-    sourceOfFunds?: string;
-
-    /**
-     * Tax identification number
-     */
-    taxId?: string;
-  }
-}
-
-/**
- * Additional information for business entities
- */
-export interface BusinessInfoUpdate {
-  /**
-   * The high-level industry category of the business
-   */
-  businessType?:
-    | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
-    | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
-    | 'UTILITIES'
-    | 'CONSTRUCTION'
-    | 'MANUFACTURING'
-    | 'WHOLESALE_TRADE'
-    | 'RETAIL_TRADE'
-    | 'TRANSPORTATION_AND_WAREHOUSING'
-    | 'INFORMATION'
-    | 'FINANCE_AND_INSURANCE'
-    | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
-    | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
-    | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
-    | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
-    | 'EDUCATIONAL_SERVICES'
-    | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
-    | 'ARTS_ENTERTAINMENT_AND_RECREATION'
-    | 'ACCOMMODATION_AND_FOOD_SERVICES'
-    | 'OTHER_SERVICES'
-    | 'PUBLIC_ADMINISTRATION';
-
-  /**
-   * List of countries where the business operates (ISO 3166-1 alpha-2)
-   */
-  countriesOfOperation?: Array<string>;
-
-  /**
-   * Country of incorporation or registration (ISO 3166-1 alpha-2)
-   */
-  country?: string;
-
-  /**
-   * Trade name or DBA name of the business, if different from the legal name
-   */
-  doingBusinessAs?: string;
-
-  /**
-   * Legal entity type of the business
-   */
-  entityType?:
-    | 'SOLE_PROPRIETORSHIP'
-    | 'PARTNERSHIP'
-    | 'LLC'
-    | 'CORPORATION'
-    | 'S_CORPORATION'
-    | 'NON_PROFIT'
-    | 'OTHER';
-
-  /**
-   * Expected number of transactions per month
-   */
-  expectedMonthlyTransactionCount?:
-    | 'COUNT_UNDER_10'
-    | 'COUNT_10_TO_100'
-    | 'COUNT_100_TO_500'
-    | 'COUNT_500_TO_1000'
-    | 'COUNT_OVER_1000';
-
-  /**
-   * Expected total transaction volume per month in USD equivalent
-   */
-  expectedMonthlyTransactionVolume?:
-    | 'VOLUME_UNDER_10K'
-    | 'VOLUME_10K_TO_100K'
-    | 'VOLUME_100K_TO_1M'
-    | 'VOLUME_1M_TO_10M'
-    | 'VOLUME_OVER_10M';
-
-  /**
-   * List of countries where the business expects to send payments (ISO 3166-1
-   * alpha-2)
-   */
-  expectedRecipientJurisdictions?: Array<string>;
-
-  /**
-   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
-   */
-  incorporatedOn?: string;
-
-  /**
-   * Legal name of the business
-   */
-  legalName?: string;
-
-  /**
-   * The intended purpose for using the Grid account
-   */
-  purposeOfAccount?:
-    | 'CONTRACTOR_PAYOUTS'
-    | 'CREATOR_PAYOUTS'
-    | 'EMPLOYEE_PAYOUTS'
-    | 'MARKETPLACE_SELLER_PAYOUTS'
-    | 'SUPPLIER_PAYMENTS'
-    | 'CROSS_BORDER_B2B'
-    | 'AR_AUTOMATION'
-    | 'AP_AUTOMATION'
-    | 'EMBEDDED_PAYMENTS'
-    | 'PLATFORM_FEE_COLLECTION'
-    | 'P2P_TRANSFERS'
-    | 'CHARITABLE_DONATIONS'
-    | 'OTHER';
-
-  /**
-   * Business registration number
-   */
-  registrationNumber?: string;
-
-  /**
-   * The primary source of funds for the business
-   */
-  sourceOfFunds?: string;
-
-  /**
-   * Tax identification number
-   */
-  taxId?: string;
 }
 
 export interface BwpBeneficiary {
@@ -716,12 +346,6 @@ export interface CopBeneficiary {
   phoneNumber?: string;
 }
 
-/**
- * Required fields depend on the selected paymentRails:
- *
- * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
- * - MOBILE_MONEY: phoneNumber
- */
 export interface CopExternalAccountCreateInfo {
   accountType: 'COP_ACCOUNT';
 
@@ -826,7 +450,14 @@ export interface EgpExternalAccountCreateInfo {
   swiftCode?: string;
 }
 
-export type EthereumWalletExternalAccountInfo = unknown;
+export interface EthereumWalletExternalAccountInfo {
+  accountType: 'ETHEREUM_WALLET';
+
+  /**
+   * Ethereum L1 wallet address
+   */
+  address: string;
+}
 
 export interface EurBeneficiary {
   address: ExternalAccountsAPI.Address;
@@ -932,12 +563,6 @@ export interface GhsBeneficiary {
   phoneNumber?: string;
 }
 
-/**
- * Required fields depend on the selected paymentRails:
- *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
- */
 export interface GhsExternalAccountCreateInfo {
   accountType: 'GHS_ACCOUNT';
 
@@ -1098,79 +723,6 @@ export interface IdrExternalAccountCreateInfo {
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
-}
-
-export interface IndividualCustomer {
-  customerType: 'INDIVIDUAL';
-
-  /**
-   * Platform-specific customer identifier
-   */
-  platformCustomerId: string;
-
-  /**
-   * Full UMA address (always present in responses, even if system-generated). This
-   * is an optional identifier to route payments to the customer.
-   */
-  umaAddress: string;
-
-  /**
-   * System-generated unique identifier
-   */
-  id?: string;
-
-  address?: ExternalAccountsAPI.Address;
-
-  /**
-   * Date of birth in ISO 8601 format (YYYY-MM-DD)
-   */
-  birthDate?: string;
-
-  /**
-   * Creation timestamp
-   */
-  createdAt?: string;
-
-  /**
-   * List of currency codes enabled for this customer.
-   */
-  currencies?: Array<string>;
-
-  /**
-   * Email address for the customer.
-   */
-  email?: string;
-
-  /**
-   * Individual's full name
-   */
-  fullName?: string;
-
-  /**
-   * Whether the customer is marked as deleted
-   */
-  isDeleted?: boolean;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Country code (ISO 3166-1 alpha-2)
-   */
-  nationality?: string;
-
-  /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
-   * and regulatory jurisdiction.
-   */
-  region?: string;
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt?: string;
 }
 
 export interface InrExternalAccountCreateInfo {
@@ -1481,12 +1033,6 @@ export interface PkrBeneficiary {
   phoneNumber?: string;
 }
 
-/**
- * Required fields depend on the selected paymentRails:
- *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: bankName, phoneNumber
- */
 export interface PkrExternalAccountCreateInfo {
   accountType: 'PKR_ACCOUNT';
 
@@ -1622,12 +1168,6 @@ export interface SlvBeneficiary {
   phoneNumber?: string;
 }
 
-/**
- * Required fields depend on the selected paymentRails:
- *
- * - BANK_TRANSFER: bankAccountType, accountNumber
- * - MOBILE_MONEY: phoneNumber
- */
 export interface SlvExternalAccountCreateInfo {
   accountType: 'SLV_ACCOUNT';
 
@@ -1652,75 +1192,6 @@ export interface SlvExternalAccountCreateInfo {
    * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
    */
   phoneNumber?: string;
-}
-
-export interface SwiftBeneficiary {
-  beneficiaryType: 'INDIVIDUAL';
-
-  /**
-   * The full name of the beneficiary
-   */
-  fullName: string;
-
-  address?: ExternalAccountsAPI.Address;
-
-  /**
-   * The birth date of the beneficiary
-   */
-  birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
-
-  /**
-   * The email of the beneficiary
-   */
-  email?: string;
-
-  /**
-   * The nationality of the beneficiary
-   */
-  nationality?: string;
-
-  /**
-   * The phone number of the beneficiary
-   */
-  phoneNumber?: string;
-}
-
-export interface SwiftExternalAccountCreateInfo {
-  accountType: 'SWIFT_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
-  beneficiary: SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
-
-  /**
-   * The ISO 3166-1 alpha-2 country code of the bank account
-   */
-  country: string;
-
-  /**
-   * The SWIFT/BIC code of the bank
-   */
-  swiftCode: string;
-
-  /**
-   * The bank account number. Required for most corridors. Use iban instead for
-   * IBAN-only corridors (e.g. BR, GB).
-   */
-  accountNumber?: string;
-
-  /**
-   * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
-   * Use accountNumber for all other corridors.
-   */
-  iban?: string;
 }
 
 export interface ThbExternalAccountCreateInfo {
@@ -2193,5 +1664,3 @@ export interface ZmwExternalAccountCreateInfo {
    */
   provider: string;
 }
-
-export type BeneficialOwnersDefaultPagination = DefaultPagination<BeneficialOwner>;

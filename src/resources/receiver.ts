@@ -22,11 +22,7 @@ export class Receiver extends APIResource {
     query: ReceiverLookupExternalAccountParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ReceiverLookupExternalAccountResponse> {
-    return this._client.get(path`/receiver/external-account/${accountID}`, {
-      query,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get(path`/receiver/external-account/${accountID}`, { query, ...options });
   }
 
   /**
@@ -39,11 +35,7 @@ export class Receiver extends APIResource {
     query: ReceiverLookupUmaParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<ReceiverLookupUmaResponse> {
-    return this._client.get(path`/receiver/uma/${receiverUmaAddress}`, {
-      query,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get(path`/receiver/uma/${receiverUmaAddress}`, { query, ...options });
   }
 }
 

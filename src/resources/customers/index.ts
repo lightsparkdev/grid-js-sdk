@@ -8,12 +8,16 @@ export {
 } from './bulk';
 export {
   Customers,
-  type CustomerCreateResponse,
-  type CustomerRetrieveResponse,
-  type CustomerUpdateResponse,
-  type CustomerListResponse,
-  type CustomerDeleteResponse,
-  type CustomerExportResponse,
+  type BusinessCustomerFields,
+  type BusinessInfo,
+  type Customer,
+  type CustomerCreate,
+  type CustomerOneOf,
+  type CustomerType,
+  type CustomerUpdate,
+  type IndividualCustomerFields,
+  type InternalAccountExportRequest,
+  type InternalAccountExportResponse,
   type CustomerGenerateKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
@@ -22,7 +26,7 @@ export {
   type CustomerGenerateKYCLinkParams,
   type CustomerListInternalAccountsParams,
   type CustomerUpdateInternalAccountParams,
-  type CustomerListResponsesDefaultPagination,
+  type CustomerOneovesDefaultPagination,
 } from './customers';
 export {
   ExternalAccounts,

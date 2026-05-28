@@ -26,10 +26,7 @@ export class Transactions extends APIResource {
    * ```
    */
   retrieve(transactionID: string, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
-    return this._client.get(path`/agents/me/transactions/${transactionID}`, {
-      ...options,
-      __security: { agentAuth: true },
-    });
+    return this._client.get(path`/agents/me/transactions/${transactionID}`, options);
   }
 
   /**
@@ -52,7 +49,6 @@ export class Transactions extends APIResource {
     return this._client.getAPIList('/agents/me/transactions', DefaultPagination<TransferInAPI.Transaction>, {
       query,
       ...options,
-      __security: { agentAuth: true },
     });
   }
 }
@@ -99,23 +95,12 @@ export interface TransactionListParams extends DefaultPaginationParams {
   startDate?: string;
 
   /**
-   * Status of a payment transaction.
-   *
-   * | Status       | Description                                                                                        |
-   * | ------------ | -------------------------------------------------------------------------------------------------- |
-   * | `CREATED`    | Initial lookup has been created                                                                    |
-   * | `PENDING`    | Quote has been created                                                                             |
-   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
-   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
-   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
-   * | `FAILED`     | An error occurred during payment                                                                   |
-   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
-   * | `EXPIRED`    | Quote has expired                                                                                  |
+   * Filter by transaction status
    */
   status?: TransactionsAPI.TransactionStatus;
 
   /**
-   * Type of transaction (incoming payment or outgoing payment)
+   * Filter by transaction type
    */
   type?: TransactionsAPI.TransactionType;
 }

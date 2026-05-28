@@ -33,11 +33,7 @@ export class InternalAccounts extends APIResource {
     body: InternalAccountFundParams,
     options?: RequestOptions,
   ): APIPromise<InternalAccount> {
-    return this._client.post(path`/sandbox/internal-accounts/${accountID}/fund`, {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/sandbox/internal-accounts/${accountID}/fund`, { body, ...options });
   }
 }
 

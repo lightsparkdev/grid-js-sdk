@@ -24,7 +24,7 @@ export class Documents extends APIResource {
    * ```
    */
   retrieve(documentID: string, options?: RequestOptions): APIPromise<DocumentRetrieveResponse> {
-    return this._client.get(path`/documents/${documentID}`, { ...options, __security: { basicAuth: true } });
+    return this._client.get(path`/documents/${documentID}`, options);
   }
 
   /**
@@ -45,7 +45,6 @@ export class Documents extends APIResource {
     return this._client.getAPIList('/documents', DefaultPagination<DocumentListResponse>, {
       query,
       ...options,
-      __security: { basicAuth: true },
     });
   }
 
@@ -62,7 +61,6 @@ export class Documents extends APIResource {
     return this._client.delete(path`/documents/${documentID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-      __security: { basicAuth: true },
     });
   }
 
@@ -90,7 +88,7 @@ export class Documents extends APIResource {
   ): APIPromise<DocumentReplaceResponse> {
     return this._client.put(
       path`/documents/${documentID}`,
-      multipartFormRequestOptions({ body, ...options, __security: { basicAuth: true } }, this._client),
+      multipartFormRequestOptions({ body, ...options }, this._client),
     );
   }
 
@@ -113,10 +111,7 @@ export class Documents extends APIResource {
    * ```
    */
   upload(body: DocumentUploadParams, options?: RequestOptions): APIPromise<DocumentUploadResponse> {
-    return this._client.post(
-      '/documents',
-      multipartFormRequestOptions({ body, ...options, __security: { basicAuth: true } }, this._client),
-    );
+    return this._client.post('/documents', multipartFormRequestOptions({ body, ...options }, this._client));
   }
 }
 
