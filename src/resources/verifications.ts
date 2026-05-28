@@ -99,42 +99,19 @@ export interface Verification {
   /**
    * Current status of the KYC/KYB verification
    */
-  verificationStatus: VerificationStatus;
+  verificationStatus:
+    | 'RESOLVE_ERRORS'
+    | 'PENDING_MANUAL_REVIEW'
+    | 'IN_PROGRESS'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'READY_FOR_VERIFICATION';
 
   /**
    * When this verification was last updated
    */
   updatedAt?: string;
 }
-
-/**
- * Type of verification error. The category-specific MISSING*\*\_DOCUMENT types
- * indicate which document category is needed. Document quality types
- * (POOR_QUALITY_DOCUMENT, SUSPECTED_FRAUD_DOCUMENT, etc.) indicate specific issues
- * with uploaded documents. APPLICANT*\* types indicate issues with the applicant
- * themselves (sanctions, fraud, criminal records).
- */
-export type VerificationErrorType =
-  | 'MISSING_FIELD'
-  | 'INVALID_FIELD'
-  | 'MISSING_LEGAL_PRESENCE_DOCUMENT'
-  | 'MISSING_CONTROL_STRUCTURE_DOCUMENT'
-  | 'MISSING_OWNERSHIP_STRUCTURE_DOCUMENT'
-  | 'MISSING_PROOF_OF_ADDRESS_DOCUMENT'
-  | 'MISSING_IDENTITY_DOCUMENT'
-  | 'INVALID_DOCUMENT'
-  | 'EXPIRED_DOCUMENT'
-  | 'POOR_QUALITY_DOCUMENT'
-  | 'SUSPECTED_FRAUD_DOCUMENT'
-  | 'WRONG_DOCUMENT_TYPE'
-  | 'INCOMPLETE_DOCUMENT'
-  | 'UNREADABLE_DOCUMENT'
-  | 'DOCUMENT_VERIFICATION_FAILED'
-  | 'APPLICANT_SANCTIONED'
-  | 'APPLICANT_FRAUD'
-  | 'APPLICANT_CRIMINAL_RECORD'
-  | 'APPLICANT_REJECTED'
-  | 'MISSING_BENEFICIAL_OWNER';
 
 export interface VerificationListResponse {
   /**
@@ -165,17 +142,6 @@ export interface VerificationRequest {
   customerId: string;
 }
 
-/**
- * Current status of the KYC/KYB verification
- */
-export type VerificationStatus =
-  | 'RESOLVE_ERRORS'
-  | 'PENDING_MANUAL_REVIEW'
-  | 'IN_PROGRESS'
-  | 'APPROVED'
-  | 'REJECTED'
-  | 'READY_FOR_VERIFICATION';
-
 export interface VerificationListParams extends DefaultPaginationParams {
   /**
    * Filter by customer ID
@@ -188,9 +154,15 @@ export interface VerificationListParams extends DefaultPaginationParams {
   limit?: number;
 
   /**
-   * Current status of the KYC/KYB verification
+   * Filter by verification status
    */
-  verificationStatus?: VerificationStatus;
+  verificationStatus?:
+    | 'RESOLVE_ERRORS'
+    | 'PENDING_MANUAL_REVIEW'
+    | 'IN_PROGRESS'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'READY_FOR_VERIFICATION';
 }
 
 export interface VerificationSubmitParams {
@@ -203,10 +175,8 @@ export interface VerificationSubmitParams {
 export declare namespace Verifications {
   export {
     type Verification as Verification,
-    type VerificationErrorType as VerificationErrorType,
     type VerificationListResponse as VerificationListResponse,
     type VerificationRequest as VerificationRequest,
-    type VerificationStatus as VerificationStatus,
     type VerificationsDefaultPagination as VerificationsDefaultPagination,
     type VerificationListParams as VerificationListParams,
     type VerificationSubmitParams as VerificationSubmitParams,

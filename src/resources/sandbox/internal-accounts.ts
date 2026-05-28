@@ -3,7 +3,6 @@
 import { APIResource } from '../../core/resource';
 import * as InvitationsAPI from '../invitations';
 import * as QuotesAPI from '../quotes';
-import * as CustomersAPI from '../customers/customers';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination } from '../../core/pagination';
 import { RequestOptions } from '../../internal/request-options';
@@ -84,7 +83,7 @@ export interface InternalAccount {
    *   account in response to compliance or fraud signals; payments are blocked while
    *   the account remains frozen.
    */
-  status: CustomersAPI.InternalAccountStatus;
+  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
 
   /**
    * Classification of an internal account.
@@ -97,7 +96,7 @@ export interface InternalAccount {
    *   customer. Outbound transfers require a session signature produced by the
    *   customer's device — see the Embedded Wallets guide.
    */
-  type: CustomersAPI.InternalAccountType;
+  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
 
   /**
    * Timestamp when the internal account was last updated

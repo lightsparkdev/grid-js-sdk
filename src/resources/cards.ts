@@ -169,7 +169,7 @@ export interface Card {
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
    * will be added in a later release.
    */
-  form: CardForm;
+  form: 'VIRTUAL';
 
   /**
    * Internal account ids bound to this card as funding sources, in priority order —
@@ -189,7 +189,7 @@ export interface Card {
    * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
    * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
    */
-  state: CardState;
+  state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 
   /**
    * Last update timestamp
@@ -200,7 +200,7 @@ export interface Card {
    * Card network brand. Read-only — determined by Grid when the card is provisioned
    * with the issuer.
    */
-  brand?: CardBrand;
+  brand?: 'VISA' | 'MASTERCARD';
 
   /**
    * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
@@ -247,14 +247,8 @@ export interface Card {
    * Reason associated with the current `state`. Populated when the card is `CLOSED`
    * or when provisioning was rejected; otherwise null.
    */
-  stateReason?: CardStateReason | null;
+  stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
-
-/**
- * Card network brand. Read-only — determined by Grid when the card is provisioned
- * with the issuer.
- */
-export type CardBrand = 'VISA' | 'MASTERCARD';
 
 export interface CardCreateRequest {
   /**
@@ -268,7 +262,7 @@ export interface CardCreateRequest {
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
    * will be added in a later release.
    */
-  form: CardForm;
+  form: 'VIRTUAL';
 
   /**
    * Internal account ids to bind as funding sources, in priority order. The first
@@ -285,12 +279,6 @@ export interface CardCreateRequest {
    */
   platformCardId?: string;
 }
-
-/**
- * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
- * will be added in a later release.
- */
-export type CardForm = 'VIRTUAL';
 
 export interface CardListResponse {
   /**
@@ -313,31 +301,6 @@ export interface CardListResponse {
    */
   totalCount?: number;
 }
-
-/**
- * Lifecycle state of a card.
- *
- * | State           | Description                                                                                                                                                   |
- * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
- * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
- * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
- * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
- * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
- * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
- */
-export type CardState = 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
-
-/**
- * Reason a card reached a terminal or non-active state. Present on `CLOSED` cards,
- * and on cards that fail provisioning before reaching `ACTIVE`.
- *
- * | Reason               | Description                                                                    |
- * | -------------------- | ------------------------------------------------------------------------------ |
- * | `ISSUER_REJECTED`    | The card issuer rejected provisioning during `PENDING_ISSUE`.                  |
- * | `CLOSED_BY_PLATFORM` | The card was closed via `PATCH /cards/{id}` (`state: CLOSED`) by the platform. |
- * | `CLOSED_BY_GRID`     | The card was closed by Grid (e.g. compliance or risk action).                  |
- */
-export type CardStateReason = 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID';
 
 /**
  * Parent transaction row for a card authorization and all of the pulls /
@@ -394,7 +357,7 @@ export interface CardTransaction {
    * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
    * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
    */
-  status: CardTransactionStatus;
+  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
 
   /**
    * Last update timestamp.
@@ -417,19 +380,6 @@ export interface CardTransaction {
 
   settledAmount?: InvitationsAPI.CurrencyAmount;
 }
-
-/**
- * Lifecycle status of a card transaction.
- *
- * | Status              | Description                                                                                                                                                                                                                                     |
- * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
- * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
- * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
- * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source.                                                                                                                                                |
- * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
- * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
- */
-export type CardTransactionStatus = 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
 
 /**
  * Update request for `PATCH /cards/{id}`. At least one of `state` or
@@ -521,17 +471,9 @@ export interface CardListParams extends DefaultPaginationParams {
   sortOrder?: 'asc' | 'desc';
 
   /**
-   * Lifecycle state of a card.
-   *
-   * | State           | Description                                                                                                                                                   |
-   * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-   * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
+   * Filter by card state.
    */
-  state?: CardState;
+  state?: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 }
 
 export interface CardIssueParams {
@@ -546,7 +488,7 @@ export interface CardIssueParams {
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
    * will be added in a later release.
    */
-  form: CardForm;
+  form: 'VIRTUAL';
 
   /**
    * Internal account ids to bind as funding sources, in priority order. The first
@@ -567,14 +509,9 @@ export interface CardIssueParams {
 export declare namespace Cards {
   export {
     type Card as Card,
-    type CardBrand as CardBrand,
     type CardCreateRequest as CardCreateRequest,
-    type CardForm as CardForm,
     type CardListResponse as CardListResponse,
-    type CardState as CardState,
-    type CardStateReason as CardStateReason,
     type CardTransaction as CardTransaction,
-    type CardTransactionStatus as CardTransactionStatus,
     type CardUpdateRequest as CardUpdateRequest,
     type CardsDefaultPagination as CardsDefaultPagination,
     type CardUpdateParams as CardUpdateParams,

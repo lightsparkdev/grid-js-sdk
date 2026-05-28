@@ -48,7 +48,7 @@ export interface ExchangeRate {
   /**
    * Fees associated with an exchange rate
    */
-  fees: ExchangeRateFees;
+  fees: ExchangeRate.Fees;
 
   /**
    * The maximum supported sending amount in the smallest unit of the source
@@ -81,14 +81,16 @@ export interface ExchangeRate {
   updatedAt: string;
 }
 
-/**
- * Fees associated with an exchange rate
- */
-export interface ExchangeRateFees {
+export namespace ExchangeRate {
   /**
-   * Fixed fee in the smallest unit of the sending currency (e.g., cents for USD)
+   * Fees associated with an exchange rate
    */
-  fixed?: number;
+  export interface Fees {
+    /**
+     * Fixed fee in the smallest unit of the sending currency (e.g., cents for USD)
+     */
+    fixed?: number;
+  }
 }
 
 export interface ExchangeRateListResponse {
@@ -121,7 +123,6 @@ export interface ExchangeRateListParams {
 export declare namespace ExchangeRates {
   export {
     type ExchangeRate as ExchangeRate,
-    type ExchangeRateFees as ExchangeRateFees,
     type ExchangeRateListResponse as ExchangeRateListResponse,
     type ExchangeRateListParams as ExchangeRateListParams,
   };
