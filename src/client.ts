@@ -21,14 +21,9 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   BeneficialOwnerCreateParams,
-  BeneficialOwnerCreateResponse,
   BeneficialOwnerListParams,
-  BeneficialOwnerListResponse,
-  BeneficialOwnerListResponsesDefaultPagination,
   BeneficialOwnerPersonalInfo,
-  BeneficialOwnerRetrieveResponse,
   BeneficialOwnerUpdateParams,
-  BeneficialOwnerUpdateResponse,
   BeneficialOwners,
 } from './resources/beneficial-owners';
 import {
@@ -161,10 +156,13 @@ import {
 } from './resources/webhooks';
 import {
   Agent,
+  AgentAccountRestrictions,
+  AgentAccountRule,
   AgentAction,
   AgentActionListResponse,
   AgentActionRejectRequest,
   AgentActionsDefaultPagination,
+  AgentApprovalThresholds,
   AgentCreateParams,
   AgentCreateRequest,
   AgentCreateResponse,
@@ -184,26 +182,22 @@ import {
 } from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
-  BusinessCustomerFields,
-  BusinessInfo,
-  Customer,
-  CustomerCreate,
   CustomerCreateParams,
+  CustomerCreateResponse,
+  CustomerDeleteResponse,
   CustomerExportParams,
+  CustomerExportResponse,
   CustomerGenerateKYCLinkParams,
   CustomerGenerateKYCLinkResponse,
   CustomerListInternalAccountsParams,
   CustomerListParams,
-  CustomerOneOf,
-  CustomerOneovesDefaultPagination,
-  CustomerType,
-  CustomerUpdate,
+  CustomerListResponse,
+  CustomerListResponsesDefaultPagination,
+  CustomerRetrieveResponse,
   CustomerUpdateInternalAccountParams,
   CustomerUpdateParams,
+  CustomerUpdateResponse,
   Customers,
-  IndividualCustomerFields,
-  InternalAccountExportRequest,
-  InternalAccountExportResponse,
 } from './resources/customers/customers';
 import {
   Platform,
@@ -1163,18 +1157,14 @@ export declare namespace LightsparkGrid {
 
   export {
     Customers as Customers,
-    type BusinessCustomerFields as BusinessCustomerFields,
-    type BusinessInfo as BusinessInfo,
-    type Customer as Customer,
-    type CustomerCreate as CustomerCreate,
-    type CustomerOneOf as CustomerOneOf,
-    type CustomerType as CustomerType,
-    type CustomerUpdate as CustomerUpdate,
-    type IndividualCustomerFields as IndividualCustomerFields,
-    type InternalAccountExportRequest as InternalAccountExportRequest,
-    type InternalAccountExportResponse as InternalAccountExportResponse,
+    type CustomerCreateResponse as CustomerCreateResponse,
+    type CustomerRetrieveResponse as CustomerRetrieveResponse,
+    type CustomerUpdateResponse as CustomerUpdateResponse,
+    type CustomerListResponse as CustomerListResponse,
+    type CustomerDeleteResponse as CustomerDeleteResponse,
+    type CustomerExportResponse as CustomerExportResponse,
     type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
-    type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
+    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -1298,11 +1288,6 @@ export declare namespace LightsparkGrid {
   export {
     BeneficialOwners as BeneficialOwners,
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
-    type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
-    type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
-    type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
-    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
-    type BeneficialOwnerListResponsesDefaultPagination as BeneficialOwnerListResponsesDefaultPagination,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
     type BeneficialOwnerListParams as BeneficialOwnerListParams,
@@ -1341,9 +1326,12 @@ export declare namespace LightsparkGrid {
   export {
     Agents as Agents,
     type Agent as Agent,
+    type AgentAccountRestrictions as AgentAccountRestrictions,
+    type AgentAccountRule as AgentAccountRule,
     type AgentAction as AgentAction,
     type AgentActionListResponse as AgentActionListResponse,
     type AgentActionRejectRequest as AgentActionRejectRequest,
+    type AgentApprovalThresholds as AgentApprovalThresholds,
     type AgentCreateRequest as AgentCreateRequest,
     type AgentCreateResponse as AgentCreateResponse,
     type AgentDeviceCode as AgentDeviceCode,
@@ -1379,8 +1367,11 @@ export declare namespace LightsparkGrid {
   export type AgentTransferDetails = API.AgentTransferDetails;
   export type BdtBeneficiary = API.BdtBeneficiary;
   export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
+  export type BeneficialOwner = API.BeneficialOwner;
   export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
+  export type BusinessCustomer = API.BusinessCustomer;
+  export type BusinessInfoUpdate = API.BusinessInfoUpdate;
   export type BwpBeneficiary = API.BwpBeneficiary;
   export type BwpExternalAccountCreateInfo = API.BwpExternalAccountCreateInfo;
   export type CadBeneficiary = API.CadBeneficiary;
@@ -1402,6 +1393,7 @@ export declare namespace LightsparkGrid {
   export type HtgBeneficiary = API.HtgBeneficiary;
   export type HtgExternalAccountCreateInfo = API.HtgExternalAccountCreateInfo;
   export type IdrExternalAccountCreateInfo = API.IdrExternalAccountCreateInfo;
+  export type IndividualCustomer = API.IndividualCustomer;
   export type InrExternalAccountCreateInfo = API.InrExternalAccountCreateInfo;
   export type JmdBeneficiary = API.JmdBeneficiary;
   export type JmdExternalAccountCreateInfo = API.JmdExternalAccountCreateInfo;

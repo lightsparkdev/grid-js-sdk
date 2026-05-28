@@ -4,9 +4,12 @@ export * from './shared';
 export {
   Agents,
   type Agent,
+  type AgentAccountRestrictions,
+  type AgentAccountRule,
   type AgentAction,
   type AgentActionListResponse,
   type AgentActionRejectRequest,
+  type AgentApprovalThresholds,
   type AgentCreateRequest,
   type AgentCreateResponse,
   type AgentDeviceCode,
@@ -28,14 +31,9 @@ export { Auth } from './auth/auth';
 export {
   BeneficialOwners,
   type BeneficialOwnerPersonalInfo,
-  type BeneficialOwnerCreateResponse,
-  type BeneficialOwnerRetrieveResponse,
-  type BeneficialOwnerUpdateResponse,
-  type BeneficialOwnerListResponse,
   type BeneficialOwnerCreateParams,
   type BeneficialOwnerUpdateParams,
   type BeneficialOwnerListParams,
-  type BeneficialOwnerListResponsesDefaultPagination,
 } from './beneficial-owners';
 export {
   Cards,
@@ -63,16 +61,12 @@ export {
 } from './crypto';
 export {
   Customers,
-  type BusinessCustomerFields,
-  type BusinessInfo,
-  type Customer,
-  type CustomerCreate,
-  type CustomerOneOf,
-  type CustomerType,
-  type CustomerUpdate,
-  type IndividualCustomerFields,
-  type InternalAccountExportRequest,
-  type InternalAccountExportResponse,
+  type CustomerCreateResponse,
+  type CustomerRetrieveResponse,
+  type CustomerUpdateResponse,
+  type CustomerListResponse,
+  type CustomerDeleteResponse,
+  type CustomerExportResponse,
   type CustomerGenerateKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
@@ -81,7 +75,7 @@ export {
   type CustomerGenerateKYCLinkParams,
   type CustomerListInternalAccountsParams,
   type CustomerUpdateInternalAccountParams,
-  type CustomerOneovesDefaultPagination,
+  type CustomerListResponsesDefaultPagination,
 } from './customers/customers';
 export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';
 export {
