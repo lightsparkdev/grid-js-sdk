@@ -46,7 +46,6 @@ import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
-  EmbeddedWalletConfig,
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
@@ -161,12 +160,10 @@ import {
 } from './resources/webhooks';
 import {
   Agent,
-  AgentAccountRestrictions,
   AgentAction,
   AgentActionListResponse,
   AgentActionRejectRequest,
   AgentActionsDefaultPagination,
-  AgentApprovalThresholds,
   AgentCreateParams,
   AgentCreateRequest,
   AgentCreateResponse,
@@ -190,10 +187,10 @@ import {
   BusinessInfo,
   Customer,
   CustomerCreate,
-  CustomerCreateKYCLinkParams,
   CustomerCreateParams,
   CustomerExportParams,
   CustomerGenerateKYCLinkParams,
+  CustomerGenerateKYCLinkResponse,
   CustomerListInternalAccountsParams,
   CustomerListParams,
   CustomerOneOf,
@@ -206,10 +203,6 @@ import {
   IndividualCustomerFields,
   InternalAccountExportRequest,
   InternalAccountExportResponse,
-  InternalAccountUpdateRequest,
-  KYCLinkCreate,
-  KYCLinkResponse,
-  KYCProvider,
 } from './resources/customers/customers';
 import {
   Platform,
@@ -1155,7 +1148,6 @@ export declare namespace LightsparkGrid {
   export {
     Config as Config,
     type CustomerInfoFieldName as CustomerInfoFieldName,
-    type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
@@ -1173,15 +1165,11 @@ export declare namespace LightsparkGrid {
     type IndividualCustomerFields as IndividualCustomerFields,
     type InternalAccountExportRequest as InternalAccountExportRequest,
     type InternalAccountExportResponse as InternalAccountExportResponse,
-    type InternalAccountUpdateRequest as InternalAccountUpdateRequest,
-    type KYCLinkCreate as KYCLinkCreate,
-    type KYCLinkResponse as KYCLinkResponse,
-    type KYCProvider as KYCProvider,
+    type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
-    type CustomerCreateKYCLinkParams as CustomerCreateKYCLinkParams,
     type CustomerExportParams as CustomerExportParams,
     type CustomerGenerateKYCLinkParams as CustomerGenerateKYCLinkParams,
     type CustomerListInternalAccountsParams as CustomerListInternalAccountsParams,
@@ -1345,11 +1333,9 @@ export declare namespace LightsparkGrid {
   export {
     Agents as Agents,
     type Agent as Agent,
-    type AgentAccountRestrictions as AgentAccountRestrictions,
     type AgentAction as AgentAction,
     type AgentActionListResponse as AgentActionListResponse,
     type AgentActionRejectRequest as AgentActionRejectRequest,
-    type AgentApprovalThresholds as AgentApprovalThresholds,
     type AgentCreateRequest as AgentCreateRequest,
     type AgentCreateResponse as AgentCreateResponse,
     type AgentDeviceCode as AgentDeviceCode,
@@ -1427,7 +1413,6 @@ export declare namespace LightsparkGrid {
   export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
   export type SlvBeneficiary = API.SlvBeneficiary;
   export type SlvExternalAccountCreateInfo = API.SlvExternalAccountCreateInfo;
-  export type SwiftExternalAccountCreateInfo = API.SwiftExternalAccountCreateInfo;
   export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
   export type TzsBeneficiary = API.TzsBeneficiary;
   export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;

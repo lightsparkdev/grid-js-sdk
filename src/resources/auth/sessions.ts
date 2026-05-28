@@ -101,22 +101,20 @@ export class Sessions extends APIResource {
    * const authSession = await client.auth.sessions.refresh(
    *   'Session:019542f5-b3e7-1d02-0000-000000000003',
    *   {
-   *     AuthSessionRefreshRequest: {
-   *       clientPublicKey:
-   *         '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
-   *     },
+   *     clientPublicKey:
+   *       '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
    *   },
    * );
    * ```
    */
-  refresh(id: string, params: SessionRefreshParams, options?: RequestOptions): APIPromise<AuthSession> {
-    const {
-      AuthSessionRefreshRequest,
-      'Grid-Wallet-Signature': gridWalletSignature,
-      'Request-Id': requestID,
-    } = params;
+  refresh(
+    id: string,
+    params: SessionRefreshParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialsAPI.AuthSession> {
+    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
     return this._client.post(path`/auth/sessions/${id}/refresh`, {
-      body: AuthSessionRefreshRequest,
+      body,
       ...options,
       headers: buildHeaders([
         {
@@ -129,68 +127,11 @@ export class Sessions extends APIResource {
   }
 }
 
-/**
- * An authentication session on an Embedded Wallet internal account. Returned from
- * `GET /auth/sessions` (list) and `POST /auth/credentials/{id}/verify` (on
- * credential verification) or `POST /auth/sessions/{id}/refresh` (on mid-session
- * refresh). Only session-issuing responses include `encryptedSessionSigningKey` —
- * it is delivered exactly once at the moment the session is issued and is never
- * returned by the list endpoint.
- */
-export interface AuthSession extends CredentialsAPI.AuthMethod {
-  /**
-   * System-generated unique identifier for the session. Pass this value to
-   * `DELETE /auth/sessions/{id}` to revoke the session before `expiresAt`. Overrides
-   * the `id` inherited from `AuthMethod` so this response identifies the session
-   * rather than the authenticating credential.
-   */
-  id: string;
-
-  /**
-   * Timestamp after which the session is no longer valid and the
-   * `encryptedSessionSigningKey` must not be used to sign further requests.
-   */
-  expiresAt: string;
-
-  /**
-   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
-   * the verification or refresh request. Encoded as a base58check string: the
-   * decoded payload is a 33-byte compressed P-256 encapsulated public key followed
-   * by AES-256-GCM ciphertext. The client decrypts this key with its private key and
-   * uses it to sign subsequent Embedded Wallet requests until `expiresAt`.
-   *
-   * Only returned from session-issuing responses like
-   * `POST /auth/credentials/{id}/verify` and `POST /auth/sessions/{id}/refresh`.
-   * Omitted from responses that simply surface existing sessions (e.g.
-   * `GET /auth/sessions`) — Grid does not retain the plaintext key after the client
-   * has decrypted it.
-   */
-  encryptedSessionSigningKey?: string;
-}
-
-/**
- * Request body for refreshing an active authentication session. The
- * `clientPublicKey` is required on both steps of the signed-retry flow. On the
- * initial call, Grid binds this key into the Turnkey session-creation payload
- * returned as `payloadToSign`; on the signed retry, the client echoes the same key
- * back and Grid uses it to encrypt the newly issued session signing key.
- */
-export interface AuthSessionRefreshRequest {
-  /**
-   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (`04`
-   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-   * total). The matching private key must remain on the client. Grid binds this key
-   * into the session-creation payload on the initial call and seals the returned
-   * `encryptedSessionSigningKey` to it on the signed retry.
-   */
-  clientPublicKey: string;
-}
-
 export interface SessionListResponse {
   /**
    * List of active authentication sessions for the internal account.
    */
-  data: Array<AuthSession>;
+  data: Array<CredentialsAPI.AuthSession>;
 }
 
 export interface SessionListParams {
@@ -218,13 +159,13 @@ export interface SessionDeleteParams {
 
 export interface SessionRefreshParams {
   /**
-   * Body param: Request body for refreshing an active authentication session. The
-   * `clientPublicKey` is required on both steps of the signed-retry flow. On the
-   * initial call, Grid binds this key into the Turnkey session-creation payload
-   * returned as `payloadToSign`; on the signed retry, the client echoes the same key
-   * back and Grid uses it to encrypt the newly issued session signing key.
+   * Body param: Client-generated P-256 public key, hex-encoded in uncompressed SEC1
+   * format (`04` prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+   * characters total). The matching private key must remain on the client. Grid
+   * binds this key into the session-creation payload on the initial call and seals
+   * the returned `encryptedSessionSigningKey` to it on the signed retry.
    */
-  AuthSessionRefreshRequest: AuthSessionRefreshRequest;
+  clientPublicKey: string;
 
   /**
    * Header param: Full API-key stamp built over the prior `payloadToSign` with the
@@ -243,8 +184,6 @@ export interface SessionRefreshParams {
 
 export declare namespace Sessions {
   export {
-    type AuthSession as AuthSession,
-    type AuthSessionRefreshRequest as AuthSessionRefreshRequest,
     type SessionListResponse as SessionListResponse,
     type SessionListParams as SessionListParams,
     type SessionDeleteParams as SessionDeleteParams,
