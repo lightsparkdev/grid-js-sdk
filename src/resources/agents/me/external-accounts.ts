@@ -31,10 +31,7 @@ export class ExternalAccounts extends APIResource {
     externalAccountID: string,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.get(path`/agents/me/external-accounts/${externalAccountID}`, {
-      ...options,
-      __security: { agentAuth: true },
-    });
+    return this._client.get(path`/agents/me/external-accounts/${externalAccountID}`, options);
   }
 
   /**
@@ -57,7 +54,7 @@ export class ExternalAccounts extends APIResource {
     return this._client.getAPIList(
       '/agents/me/external-accounts',
       DefaultPagination<ExternalAccountsAPI.ExternalAccount>,
-      { query, ...options, __security: { agentAuth: true } },
+      { query, ...options },
     );
   }
 
@@ -76,7 +73,6 @@ export class ExternalAccounts extends APIResource {
     return this._client.delete(path`/agents/me/external-accounts/${externalAccountID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-      __security: { agentAuth: true },
     });
   }
 
@@ -116,11 +112,7 @@ export class ExternalAccounts extends APIResource {
     body: ExternalAccountAddParams,
     options?: RequestOptions,
   ): APIPromise<ExternalAccountsAPI.ExternalAccount> {
-    return this._client.post('/agents/me/external-accounts', {
-      body,
-      ...options,
-      __security: { agentAuth: true },
-    });
+    return this._client.post('/agents/me/external-accounts', { body, ...options });
   }
 }
 
@@ -138,10 +130,8 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
 
 export interface ExternalAccountAddParams {
   /**
-   * Required fields depend on the selected paymentRails:
-   *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * Lightning payment destination. Exactly one of `invoice`, `bolt12`, or
+   * `lightningAddress` must be provided.
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -180,7 +170,14 @@ export interface ExternalAccountAddParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | Shared.SwiftExternalAccountCreateInfo;
+    | ExternalAccountAddParams.SwiftExternalAccountCreateInfo
+    | ExternalAccountsAPI.BaseWalletInfo
+    | Shared.EthereumWalletExternalAccountInfo
+    | ExternalAccountsAPI.LightningWalletInfo
+    | ExternalAccountsAPI.PolygonWalletInfo
+    | ExternalAccountsAPI.SolanaWalletInfo
+    | ExternalAccountsAPI.SparkWalletInfo
+    | ExternalAccountsAPI.TronWalletInfo;
 
   /**
    * The ISO 4217 currency code
@@ -210,6 +207,79 @@ export interface ExternalAccountAddParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccountAddParams {
+  export interface SwiftExternalAccountCreateInfo {
+    accountType: 'SWIFT_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: SwiftExternalAccountCreateInfo.SwiftBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The ISO 3166-1 alpha-2 country code of the bank account
+     */
+    country: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode: string;
+
+    /**
+     * The bank account number. Required for most corridors. Use iban instead for
+     * IBAN-only corridors (e.g. BR, GB).
+     */
+    accountNumber?: string;
+
+    /**
+     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+     * Use accountNumber for all other corridors.
+     */
+    iban?: string;
+  }
+
+  export namespace SwiftExternalAccountCreateInfo {
+    export interface SwiftBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export declare namespace ExternalAccounts {

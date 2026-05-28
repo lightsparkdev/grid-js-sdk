@@ -23,10 +23,18 @@ export class Quotes extends APIResource {
    * @example
    * ```ts
    * const quote = await client.agents.me.quotes.create({
-   *   destination: {},
+   *   destination: {
+   *     accountId:
+   *       'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+   *     destinationType: 'ACCOUNT',
+   *   },
    *   lockedCurrencyAmount: 1000,
    *   lockedCurrencySide: 'SENDING',
-   *   source: {},
+   *   source: {
+   *     accountId:
+   *       'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *     sourceType: 'ACCOUNT',
+   *   },
    * });
    * ```
    */
@@ -39,7 +47,6 @@ export class Quotes extends APIResource {
         { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
         options?.headers,
       ]),
-      __security: { agentAuth: true },
     });
   }
 
@@ -55,10 +62,7 @@ export class Quotes extends APIResource {
    * ```
    */
   retrieve(quoteID: string, options?: RequestOptions): APIPromise<QuotesAPI.Quote> {
-    return this._client.get(path`/agents/me/quotes/${quoteID}`, {
-      ...options,
-      __security: { agentAuth: true },
-    });
+    return this._client.get(path`/agents/me/quotes/${quoteID}`, options);
   }
 
   /**
@@ -91,14 +95,13 @@ export class Quotes extends APIResource {
         },
         options?.headers,
       ]),
-      __security: { agentAuth: true },
     });
   }
 }
 
 export interface QuoteCreateParams {
   /**
-   * Body param
+   * Body param: Destination account details
    */
   destination: QuotesAPI.QuoteDestinationOneOf;
 
@@ -118,7 +121,7 @@ export interface QuoteCreateParams {
   lockedCurrencySide: 'SENDING' | 'RECEIVING';
 
   /**
-   * Body param
+   * Body param: Source account details
    */
   source: QuotesAPI.QuoteSourceOneOf;
 
@@ -140,7 +143,7 @@ export interface QuoteCreateParams {
    * `payloadToSign` returned in the quote response, which is not available in a
    * combined create-and-execute call. Create the quote first with
    * `immediatelyExecute: false` and then call `POST /quotes/{quoteId}/execute` with
-   * the signature header.
+   * the `Grid-Wallet-Signature` stamp header.
    */
   immediatelyExecute?: boolean;
 
@@ -191,11 +194,11 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Signature over the `payloadToSign` returned in the quote's
+   * Full Turnkey API-key stamp over the `payloadToSign` returned in the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
    * private key of a verified authentication credential on the source Embedded
-   * Wallet and base64-encoded. Required when the quote's source is an internal
-   * account of type `EMBEDDED_WALLET`; ignored for other source types.
+   * Wallet. Required when the quote's source is an internal account of type
+   * `EMBEDDED_WALLET`; ignored for other source types.
    */
   'Grid-Wallet-Signature'?: string;
 

@@ -58,7 +58,6 @@ export class Credentials extends APIResource {
         },
         options?.headers,
       ]),
-      __security: { basicAuth: true },
     });
   }
 
@@ -80,7 +79,7 @@ export class Credentials extends APIResource {
    * ```
    */
   list(query: CredentialListParams, options?: RequestOptions): APIPromise<AuthCredentialListResponse> {
-    return this._client.get('/auth/credentials', { query, ...options, __security: { basicAuth: true } });
+    return this._client.get('/auth/credentials', { query, ...options });
   }
 
   /**
@@ -122,7 +121,6 @@ export class Credentials extends APIResource {
         },
         options?.headers,
       ]),
-      __security: { basicAuth: true },
     });
   }
 
@@ -165,11 +163,7 @@ export class Credentials extends APIResource {
     body: CredentialChallengeParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<AuthCredentialResponseOneOf> {
-    return this._client.post(path`/auth/credentials/${id}/challenge`, {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/auth/credentials/${id}/challenge`, { body, ...options });
   }
 
   /**
@@ -197,7 +191,14 @@ export class Credentials extends APIResource {
    * ```ts
    * const authSession = await client.auth.credentials.verify(
    *   'id',
-   *   { AuthCredentialVerifyRequest: {} },
+   *   {
+   *     AuthCredentialVerifyRequest: {
+   *       clientPublicKey:
+   *         '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   *       otp: '123456',
+   *       type: 'EMAIL_OTP',
+   *     },
+   *   },
    * );
    * ```
    */
@@ -210,7 +211,6 @@ export class Credentials extends APIResource {
         { ...(requestID != null ? { 'Request-Id': requestID } : undefined) },
         options?.headers,
       ]),
-      __security: { basicAuth: true },
     });
   }
 }
@@ -220,8 +220,6 @@ export interface AuthCredentialCreateRequest {
    * Identifier of the internal account that this credential will authenticate.
    */
   accountId: string;
-
-  type: unknown;
 }
 
 export type AuthCredentialCreateRequestOneOf =
@@ -249,11 +247,12 @@ export interface AuthCredentialListResponse {
  */
 export type AuthCredentialResponseOneOf = AuthMethodResponse | PasskeyAuthChallenge;
 
-export interface AuthCredentialVerifyRequest {
-  type: unknown;
-}
+export type AuthCredentialVerifyRequest = unknown;
 
-export type AuthCredentialVerifyRequestOneOf = unknown;
+export type AuthCredentialVerifyRequestOneOf =
+  | EmailOtpCredentialVerifyRequestFields
+  | OAuthCredentialVerifyRequestFields
+  | PasskeyCredentialVerifyRequestFields;
 
 export interface AuthMethod {
   /**
@@ -429,16 +428,64 @@ export interface AuthSignedRequestChallenge extends SignedRequestChallenge {
   type: AuthMethodType;
 }
 
-export interface EmailOtpCredentialCreateRequest extends AuthCredentialCreateRequest {
+export interface EmailOtpCredentialCreateRequest
+  extends AuthCredentialCreateRequest,
+    EmailOtpCredentialCreateRequestFields {}
+
+export interface EmailOtpCredentialCreateRequestFields {
   /**
    * Discriminator value identifying this as an email OTP credential.
    */
   type: 'EMAIL_OTP';
 }
 
-export type EmailOtpCredentialVerifyRequest = unknown;
+export interface EmailOtpCredentialVerifyRequestFields {
+  /**
+   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+   * total). The matching private key must remain on the client. Grid encrypts the
+   * session signing key returned in the response to this public key. The key is
+   * ephemeral and one-time-use per verification request.
+   */
+  clientPublicKey: string;
 
-export interface OAuthCredentialCreateRequest extends AuthCredentialCreateRequest {
+  /**
+   * The one-time password received by the user via email.
+   */
+  otp: string;
+
+  /**
+   * Discriminator value identifying this as an email OTP verification.
+   */
+  type: 'EMAIL_OTP';
+}
+
+export interface EmailOtpCredentialVerifyRequestFields {
+  /**
+   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+   * total). The matching private key must remain on the client. Grid encrypts the
+   * session signing key returned in the response to this public key. The key is
+   * ephemeral and one-time-use per verification request.
+   */
+  clientPublicKey: string;
+
+  /**
+   * The one-time password received by the user via email.
+   */
+  otp: string;
+
+  /**
+   * Discriminator value identifying this as an email OTP verification.
+   */
+  type: 'EMAIL_OTP';
+}
+
+export interface OAuthCredentialCreateRequest
+  extends AuthCredentialCreateRequest,
+    OAuthCredentialCreateRequestFields {}
+
+export interface OAuthCredentialCreateRequestFields {
   /**
    * OIDC ID token issued by the identity provider (e.g. Google, Apple). Grid fetches
    * the issuer's signing key from the `iss` claim's `.well-known` OpenID
@@ -453,7 +500,55 @@ export interface OAuthCredentialCreateRequest extends AuthCredentialCreateReques
   type: 'OAUTH';
 }
 
-export type OAuthCredentialVerifyRequest = unknown;
+export interface OAuthCredentialVerifyRequestFields {
+  /**
+   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+   * total). The matching private key must remain on the client. Grid encrypts the
+   * session signing key returned in the response to this public key. The key is
+   * ephemeral and one-time-use per verification request.
+   */
+  clientPublicKey: string;
+
+  /**
+   * OIDC ID token issued by the identity provider. For reauthentication after a
+   * prior session expired, supply a fresh token — the token's `iat` claim must be
+   * less than 60 seconds before the request timestamp. Grid fetches the issuer's
+   * signing key from the `iss` claim's `.well-known` OpenID configuration and
+   * verifies the token signature.
+   */
+  oidcToken: string;
+
+  /**
+   * Discriminator value identifying this as an OAuth verification.
+   */
+  type: 'OAUTH';
+}
+
+export interface OAuthCredentialVerifyRequestFields {
+  /**
+   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (0x04
+   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
+   * total). The matching private key must remain on the client. Grid encrypts the
+   * session signing key returned in the response to this public key. The key is
+   * ephemeral and one-time-use per verification request.
+   */
+  clientPublicKey: string;
+
+  /**
+   * OIDC ID token issued by the identity provider. For reauthentication after a
+   * prior session expired, supply a fresh token — the token's `iat` claim must be
+   * less than 60 seconds before the request timestamp. Grid fetches the issuer's
+   * signing key from the `iss` claim's `.well-known` OpenID configuration and
+   * verifies the token signature.
+   */
+  oidcToken: string;
+
+  /**
+   * Discriminator value identifying this as an OAuth verification.
+   */
+  type: 'OAUTH';
+}
 
 export interface PasskeyAssertion {
   /**
@@ -575,7 +670,11 @@ export interface PasskeyAuthChallenge extends AuthMethod {
   requestId: string;
 }
 
-export interface PasskeyCredentialCreateRequest extends AuthCredentialCreateRequest {
+export interface PasskeyCredentialCreateRequest
+  extends AuthCredentialCreateRequest,
+    PasskeyCredentialCreateRequestFields {}
+
+export interface PasskeyCredentialCreateRequestFields {
   attestation: PasskeyAttestation;
 
   /**
@@ -601,7 +700,23 @@ export interface PasskeyCredentialCreateRequest extends AuthCredentialCreateRequ
   type: 'PASSKEY';
 }
 
-export type PasskeyCredentialVerifyRequest = unknown;
+export interface PasskeyCredentialVerifyRequestFields {
+  assertion: PasskeyAssertion;
+
+  /**
+   * Discriminator value identifying this as a passkey verification.
+   */
+  type: 'PASSKEY';
+}
+
+export interface PasskeyCredentialVerifyRequestFields {
+  assertion: PasskeyAssertion;
+
+  /**
+   * Discriminator value identifying this as a passkey verification.
+   */
+  type: 'PASSKEY';
+}
 
 /**
  * Common base for two-step signed-retry challenge responses on Embedded Wallet
@@ -720,14 +835,20 @@ export declare namespace Credentials {
     type AuthSession as AuthSession,
     type AuthSignedRequestChallenge as AuthSignedRequestChallenge,
     type EmailOtpCredentialCreateRequest as EmailOtpCredentialCreateRequest,
+    type EmailOtpCredentialCreateRequestFields as EmailOtpCredentialCreateRequestFields,
     type EmailOtpCredentialVerifyRequest as EmailOtpCredentialVerifyRequest,
+    type EmailOtpCredentialVerifyRequestFields as EmailOtpCredentialVerifyRequestFields,
     type OAuthCredentialCreateRequest as OAuthCredentialCreateRequest,
+    type OAuthCredentialCreateRequestFields as OAuthCredentialCreateRequestFields,
     type OAuthCredentialVerifyRequest as OAuthCredentialVerifyRequest,
+    type OAuthCredentialVerifyRequestFields as OAuthCredentialVerifyRequestFields,
     type PasskeyAssertion as PasskeyAssertion,
     type PasskeyAttestation as PasskeyAttestation,
     type PasskeyAuthChallenge as PasskeyAuthChallenge,
     type PasskeyCredentialCreateRequest as PasskeyCredentialCreateRequest,
+    type PasskeyCredentialCreateRequestFields as PasskeyCredentialCreateRequestFields,
     type PasskeyCredentialVerifyRequest as PasskeyCredentialVerifyRequest,
+    type PasskeyCredentialVerifyRequestFields as PasskeyCredentialVerifyRequestFields,
     type SignedRequestChallenge as SignedRequestChallenge,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,

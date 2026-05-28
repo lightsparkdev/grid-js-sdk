@@ -21,7 +21,7 @@ export class Invitations extends APIResource {
    * ```
    */
   create(body: InvitationCreateParams, options?: RequestOptions): APIPromise<UmaInvitation> {
-    return this._client.post('/invitations', { body, ...options, __security: { basicAuth: true } });
+    return this._client.post('/invitations', { body, ...options });
   }
 
   /**
@@ -35,10 +35,7 @@ export class Invitations extends APIResource {
    * ```
    */
   retrieve(invitationCode: string, options?: RequestOptions): APIPromise<UmaInvitation> {
-    return this._client.get(path`/invitations/${invitationCode}`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get(path`/invitations/${invitationCode}`, options);
   }
 
   /**
@@ -62,10 +59,7 @@ export class Invitations extends APIResource {
    * ```
    */
   cancel(invitationCode: string, options?: RequestOptions): APIPromise<UmaInvitation> {
-    return this._client.post(path`/invitations/${invitationCode}/cancel`, {
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/invitations/${invitationCode}/cancel`, options);
   }
 
   /**
@@ -94,11 +88,7 @@ export class Invitations extends APIResource {
     body: InvitationClaimParams,
     options?: RequestOptions,
   ): APIPromise<UmaInvitation> {
-    return this._client.post(path`/invitations/${invitationCode}/claim`, {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post(path`/invitations/${invitationCode}/claim`, { body, ...options });
   }
 }
 

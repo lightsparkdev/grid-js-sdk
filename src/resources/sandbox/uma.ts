@@ -28,7 +28,7 @@ export class Uma extends APIResource {
     body: UmaReceivePaymentParams,
     options?: RequestOptions,
   ): APIPromise<TransactionsAPI.IncomingTransaction> {
-    return this._client.post('/sandbox/uma/receive', { body, ...options, __security: { basicAuth: true } });
+    return this._client.post('/sandbox/uma/receive', { body, ...options });
   }
 }
 

@@ -30,11 +30,7 @@ export class Crypto extends APIResource {
     body: CryptoEstimateWithdrawalFeeParams,
     options?: RequestOptions,
   ): APIPromise<CryptoEstimateWithdrawalFeeResponse> {
-    return this._client.post('/crypto/estimate-withdrawal-fee', {
-      body,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.post('/crypto/estimate-withdrawal-fee', { body, ...options });
   }
 }
 

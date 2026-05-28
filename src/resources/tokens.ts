@@ -23,7 +23,7 @@ export class Tokens extends APIResource {
    * ```
    */
   create(body: TokenCreateParams, options?: RequestOptions): APIPromise<APIToken> {
-    return this._client.post('/tokens', { body, ...options, __security: { basicAuth: true } });
+    return this._client.post('/tokens', { body, ...options });
   }
 
   /**
@@ -35,7 +35,7 @@ export class Tokens extends APIResource {
    * ```
    */
   retrieve(tokenID: string, options?: RequestOptions): APIPromise<APIToken> {
-    return this._client.get(path`/tokens/${tokenID}`, { ...options, __security: { basicAuth: true } });
+    return this._client.get(path`/tokens/${tokenID}`, options);
   }
 
   /**
@@ -55,11 +55,7 @@ export class Tokens extends APIResource {
     query: TokenListParams | null | undefined = {},
     options?: RequestOptions,
   ): PagePromise<APITokensDefaultPagination, APIToken> {
-    return this._client.getAPIList('/tokens', DefaultPagination<APIToken>, {
-      query,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.getAPIList('/tokens', DefaultPagination<APIToken>, { query, ...options });
   }
 
   /**
@@ -74,7 +70,6 @@ export class Tokens extends APIResource {
     return this._client.delete(path`/tokens/${tokenID}`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-      __security: { basicAuth: true },
     });
   }
 }

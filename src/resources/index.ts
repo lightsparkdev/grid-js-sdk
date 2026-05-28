@@ -28,9 +28,14 @@ export { Auth } from './auth/auth';
 export {
   BeneficialOwners,
   type BeneficialOwnerPersonalInfo,
+  type BeneficialOwnerCreateResponse,
+  type BeneficialOwnerRetrieveResponse,
+  type BeneficialOwnerUpdateResponse,
+  type BeneficialOwnerListResponse,
   type BeneficialOwnerCreateParams,
   type BeneficialOwnerUpdateParams,
   type BeneficialOwnerListParams,
+  type BeneficialOwnerListResponsesDefaultPagination,
 } from './beneficial-owners';
 export {
   Cards,
@@ -46,7 +51,6 @@ export {
 export {
   Config,
   type CustomerInfoFieldName,
-  type EmbeddedWalletConfig,
   type PlatformConfig,
   type PlatformCurrencyConfig,
   type ConfigUpdateParams,
@@ -58,12 +62,16 @@ export {
 } from './crypto';
 export {
   Customers,
-  type CustomerCreateResponse,
-  type CustomerRetrieveResponse,
-  type CustomerUpdateResponse,
-  type CustomerListResponse,
-  type CustomerDeleteResponse,
-  type CustomerExportResponse,
+  type BusinessCustomerFields,
+  type BusinessInfo,
+  type Customer,
+  type CustomerCreate,
+  type CustomerOneOf,
+  type CustomerType,
+  type CustomerUpdate,
+  type IndividualCustomerFields,
+  type InternalAccountExportRequest,
+  type InternalAccountExportResponse,
   type CustomerGenerateKYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
@@ -72,7 +80,7 @@ export {
   type CustomerGenerateKYCLinkParams,
   type CustomerListInternalAccountsParams,
   type CustomerUpdateInternalAccountParams,
-  type CustomerListResponsesDefaultPagination,
+  type CustomerOneovesDefaultPagination,
 } from './customers/customers';
 export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';
 export {

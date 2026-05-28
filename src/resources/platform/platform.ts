@@ -72,11 +72,7 @@ export class Platform extends APIResource {
     query: PlatformListInternalAccountsParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<PlatformListInternalAccountsResponse> {
-    return this._client.get('/platform/internal-accounts', {
-      query,
-      ...options,
-      __security: { basicAuth: true },
-    });
+    return this._client.get('/platform/internal-accounts', { query, ...options });
   }
 }
 

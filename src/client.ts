@@ -21,9 +21,14 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   BeneficialOwnerCreateParams,
+  BeneficialOwnerCreateResponse,
   BeneficialOwnerListParams,
+  BeneficialOwnerListResponse,
+  BeneficialOwnerListResponsesDefaultPagination,
   BeneficialOwnerPersonalInfo,
+  BeneficialOwnerRetrieveResponse,
   BeneficialOwnerUpdateParams,
+  BeneficialOwnerUpdateResponse,
   BeneficialOwners,
 } from './resources/beneficial-owners';
 import {
@@ -41,7 +46,6 @@ import {
   Config,
   ConfigUpdateParams,
   CustomerInfoFieldName,
-  EmbeddedWalletConfig,
   PlatformConfig,
   PlatformCurrencyConfig,
 } from './resources/config';
@@ -179,22 +183,26 @@ import {
 } from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
+  BusinessCustomerFields,
+  BusinessInfo,
+  Customer,
+  CustomerCreate,
   CustomerCreateParams,
-  CustomerCreateResponse,
-  CustomerDeleteResponse,
   CustomerExportParams,
-  CustomerExportResponse,
   CustomerGenerateKYCLinkParams,
   CustomerGenerateKYCLinkResponse,
   CustomerListInternalAccountsParams,
   CustomerListParams,
-  CustomerListResponse,
-  CustomerListResponsesDefaultPagination,
-  CustomerRetrieveResponse,
+  CustomerOneOf,
+  CustomerOneovesDefaultPagination,
+  CustomerType,
+  CustomerUpdate,
   CustomerUpdateInternalAccountParams,
   CustomerUpdateParams,
-  CustomerUpdateResponse,
   Customers,
+  IndividualCustomerFields,
+  InternalAccountExportRequest,
+  InternalAccountExportResponse,
 } from './resources/customers/customers';
 import {
   Platform,
@@ -463,14 +471,11 @@ export class LightsparkGrid {
     );
   }
 
-  protected async authHeaders(
-    opts: FinalRequestOptions,
-    schemes: { basicAuth?: boolean; agentAuth?: boolean; webhookSignatureAuth?: boolean },
-  ): Promise<NullableHeaders | undefined> {
+  protected async authHeaders(opts: FinalRequestOptions): Promise<NullableHeaders | undefined> {
     return buildHeaders([
-      schemes.basicAuth ? await this.basicAuth(opts) : null,
-      schemes.agentAuth ? await this.agentAuth(opts) : null,
-      schemes.webhookSignatureAuth ? await this.webhookSignatureAuth(opts) : null,
+      await this.basicAuth(opts),
+      await this.agentAuth(opts),
+      await this.webhookSignatureAuth(opts),
     ]);
   }
 
@@ -949,10 +954,7 @@ export class LightsparkGrid {
         ...(options.timeout ? { 'X-Stainless-Timeout': String(Math.trunc(options.timeout / 1000)) } : {}),
         ...getPlatformHeaders(),
       },
-      await this.authHeaders(
-        options,
-        options.__security ?? { basicAuth: true, agentAuth: true, webhookSignatureAuth: true },
-      ),
+      await this.authHeaders(options),
       this._options.defaultHeaders,
       bodyHeaders,
       options.headers,
@@ -1146,7 +1148,6 @@ export declare namespace LightsparkGrid {
   export {
     Config as Config,
     type CustomerInfoFieldName as CustomerInfoFieldName,
-    type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
@@ -1154,14 +1155,18 @@ export declare namespace LightsparkGrid {
 
   export {
     Customers as Customers,
-    type CustomerCreateResponse as CustomerCreateResponse,
-    type CustomerRetrieveResponse as CustomerRetrieveResponse,
-    type CustomerUpdateResponse as CustomerUpdateResponse,
-    type CustomerListResponse as CustomerListResponse,
-    type CustomerDeleteResponse as CustomerDeleteResponse,
-    type CustomerExportResponse as CustomerExportResponse,
+    type BusinessCustomerFields as BusinessCustomerFields,
+    type BusinessInfo as BusinessInfo,
+    type Customer as Customer,
+    type CustomerCreate as CustomerCreate,
+    type CustomerOneOf as CustomerOneOf,
+    type CustomerType as CustomerType,
+    type CustomerUpdate as CustomerUpdate,
+    type IndividualCustomerFields as IndividualCustomerFields,
+    type InternalAccountExportRequest as InternalAccountExportRequest,
+    type InternalAccountExportResponse as InternalAccountExportResponse,
     type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
-    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
+    type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
@@ -1285,6 +1290,11 @@ export declare namespace LightsparkGrid {
   export {
     BeneficialOwners as BeneficialOwners,
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
+    type BeneficialOwnerCreateResponse as BeneficialOwnerCreateResponse,
+    type BeneficialOwnerRetrieveResponse as BeneficialOwnerRetrieveResponse,
+    type BeneficialOwnerUpdateResponse as BeneficialOwnerUpdateResponse,
+    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
+    type BeneficialOwnerListResponsesDefaultPagination as BeneficialOwnerListResponsesDefaultPagination,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
     type BeneficialOwnerListParams as BeneficialOwnerListParams,
@@ -1361,11 +1371,8 @@ export declare namespace LightsparkGrid {
   export type AgentTransferDetails = API.AgentTransferDetails;
   export type BdtBeneficiary = API.BdtBeneficiary;
   export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
-  export type BeneficialOwner = API.BeneficialOwner;
   export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
-  export type BusinessCustomer = API.BusinessCustomer;
-  export type BusinessInfoUpdate = API.BusinessInfoUpdate;
   export type BwpBeneficiary = API.BwpBeneficiary;
   export type BwpExternalAccountCreateInfo = API.BwpExternalAccountCreateInfo;
   export type CadBeneficiary = API.CadBeneficiary;
@@ -1387,7 +1394,6 @@ export declare namespace LightsparkGrid {
   export type HtgBeneficiary = API.HtgBeneficiary;
   export type HtgExternalAccountCreateInfo = API.HtgExternalAccountCreateInfo;
   export type IdrExternalAccountCreateInfo = API.IdrExternalAccountCreateInfo;
-  export type IndividualCustomer = API.IndividualCustomer;
   export type InrExternalAccountCreateInfo = API.InrExternalAccountCreateInfo;
   export type JmdBeneficiary = API.JmdBeneficiary;
   export type JmdExternalAccountCreateInfo = API.JmdExternalAccountCreateInfo;
@@ -1407,8 +1413,6 @@ export declare namespace LightsparkGrid {
   export type SgdExternalAccountCreateInfo = API.SgdExternalAccountCreateInfo;
   export type SlvBeneficiary = API.SlvBeneficiary;
   export type SlvExternalAccountCreateInfo = API.SlvExternalAccountCreateInfo;
-  export type SwiftBeneficiary = API.SwiftBeneficiary;
-  export type SwiftExternalAccountCreateInfo = API.SwiftExternalAccountCreateInfo;
   export type ThbExternalAccountCreateInfo = API.ThbExternalAccountCreateInfo;
   export type TzsBeneficiary = API.TzsBeneficiary;
   export type TzsExternalAccountCreateInfo = API.TzsExternalAccountCreateInfo;
