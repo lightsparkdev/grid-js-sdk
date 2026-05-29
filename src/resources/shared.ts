@@ -520,14 +520,12 @@ export interface CopBeneficiary {
   countryOfResidence?: string;
 
   /**
-   * Identity document number — required by most Colombian banks
+   * The identity document number
    */
   documentNumber?: string;
 
   /**
-   * Identity document type — required by most Colombian banks. CC: Cédula de
-   * Ciudadanía, CE: Cédula de Extranjería, TI: Tarjeta de Identidad, NIT: Número de
-   * Identificación Tributaria, PP: Passport
+   * Identity document type (Colombia)
    */
   documentType?: 'CC' | 'CE' | 'TI' | 'NIT' | 'PP';
 
@@ -550,7 +548,7 @@ export interface CopBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
+ * - BANK_TRANSFER: accountNumber, bankAccountType
  * - MOBILE_MONEY: phoneNumber
  */
 export interface CopExternalAccountCreateInfo {
@@ -559,22 +557,17 @@ export interface CopExternalAccountCreateInfo {
   beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
-   * The account number of the bank (BANK_TRANSFER only)
+   * The account number of the bank
    */
   accountNumber?: string;
 
   /**
-   * The bank account type (BANK_TRANSFER only)
+   * The bank account type
    */
   bankAccountType?: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the bank (BANK_TRANSFER only)
-   */
-  bankName?: string;
-
-  /**
-   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
+   * The phone number in international format
    */
   phoneNumber?: string;
 }
@@ -596,29 +589,24 @@ export interface DkkExternalAccountCreateInfo {
 }
 
 export interface EgpBeneficiary {
-  address: ExternalAccountsAPI.Address;
-
   beneficiaryType: 'INDIVIDUAL';
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
 
-  /**
-   * The phone number of the beneficiary
-   */
-  phoneNumber: string;
+  address?: ExternalAccountsAPI.Address;
 
   /**
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -629,20 +617,21 @@ export interface EgpBeneficiary {
    * The nationality of the beneficiary
    */
   nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: iban
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface EgpExternalAccountCreateInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'EGP_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: EgpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -652,9 +641,9 @@ export interface EgpExternalAccountCreateInfo {
   iban?: string;
 
   /**
-   * The SWIFT/BIC code of the bank
+   * The phone number in international format
    */
-  swiftCode?: string;
+  phoneNumber?: string;
 }
 
 export type EthereumWalletExternalAccountInfo = unknown;
