@@ -212,6 +212,7 @@ export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.ArsAccount
     | PaymentInstructions.SlvAccount
+    | PaymentInstructions.SwiftAccount
     | PaymentInstructions.EmbeddedWallet;
 
   /**
@@ -271,6 +272,45 @@ export namespace PaymentInstructions {
      * The phone number in international format (MOBILE_MONEY only — e.g. Tigo Money)
      */
     phoneNumber?: string;
+  }
+
+  export interface SwiftAccount {
+    accountType: 'SWIFT_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    /**
+     * The ISO 3166-1 alpha-2 country code of the bank account
+     */
+    country: string;
+
+    paymentRails: Array<'SWIFT'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode: string;
+
+    /**
+     * The bank account number. Required for most corridors. Use iban instead for
+     * IBAN-only corridors (e.g. BR, GB).
+     */
+    accountNumber?: string;
+
+    /**
+     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+     * Use accountNumber for all other corridors.
+     */
+    iban?: string;
   }
 
   export interface EmbeddedWallet {

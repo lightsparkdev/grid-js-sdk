@@ -229,7 +229,7 @@ export interface CadAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
+ * - BANK_TRANSFER: accountNumber, bankAccountType
  * - MOBILE_MONEY: phoneNumber
  */
 export interface CopAccountInfo {
@@ -238,22 +238,17 @@ export interface CopAccountInfo {
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The account number of the bank (BANK_TRANSFER only)
+   * The account number of the bank
    */
   accountNumber?: string;
 
   /**
-   * The bank account type (BANK_TRANSFER only)
+   * The bank account type
    */
   bankAccountType?: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the bank (BANK_TRANSFER only)
-   */
-  bankName?: string;
-
-  /**
-   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
+   * The phone number in international format
    */
   phoneNumber?: string;
 }
@@ -274,20 +269,16 @@ export interface DkkAccountInfo {
   swiftCode?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: iban
+ * - MOBILE_MONEY: phoneNumber
+ */
 export interface EgpAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'EGP_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
-  paymentRails: Array<'BANK_TRANSFER'>;
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
    * Egyptian IBAN (29 characters, starting with EG)
@@ -295,9 +286,9 @@ export interface EgpAccountInfo {
   iban?: string;
 
   /**
-   * The SWIFT/BIC code of the bank
+   * The phone number in international format
    */
-  swiftCode?: string;
+  phoneNumber?: string;
 }
 
 export interface EurAccountInfo {

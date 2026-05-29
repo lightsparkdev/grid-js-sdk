@@ -250,7 +250,7 @@ export type CadExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
+ * - BANK_TRANSFER: accountNumber, bankAccountType
  * - MOBILE_MONEY: phoneNumber
  */
 export type CopExternalAccountInfo = unknown;
@@ -293,6 +293,12 @@ export interface DkkBeneficiary {
 
 export type DkkExternalAccountInfo = unknown;
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: iban
+ * - MOBILE_MONEY: phoneNumber
+ */
 export type EgpExternalAccountInfo = unknown;
 
 export type EurExternalAccountInfo = unknown;
