@@ -108,7 +108,7 @@ export class Simulate extends APIResource {
    * @example
    * ```ts
    * const cardTransaction =
-   *   await client.sandbox.cards.simulate.refund(
+   *   await client.sandbox.cards.simulate.return(
    *     'Card:019542f5-b3e7-1d02-0000-000000000010',
    *     {
    *       amount: 1500,
@@ -118,9 +118,9 @@ export class Simulate extends APIResource {
    *   );
    * ```
    */
-  refund(
+  return(
     id: string,
-    body: SimulateRefundParams,
+    body: SimulateReturnParams,
     options?: RequestOptions,
   ): APIPromise<CardsAPI.CardTransaction> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/return`, {
@@ -306,7 +306,7 @@ export interface SimulateClearingParams {
   cardTransactionId: string;
 }
 
-export interface SimulateRefundParams {
+export interface SimulateReturnParams {
   /**
    * Return amount in the smallest unit of the transaction's currency. Must be less
    * than or equal to the net settled amount (settled minus previously-refunded).
@@ -332,6 +332,6 @@ export declare namespace Simulate {
     type RefundRequest as RefundRequest,
     type SimulateAuthorizationParams as SimulateAuthorizationParams,
     type SimulateClearingParams as SimulateClearingParams,
-    type SimulateRefundParams as SimulateRefundParams,
+    type SimulateReturnParams as SimulateReturnParams,
   };
 }

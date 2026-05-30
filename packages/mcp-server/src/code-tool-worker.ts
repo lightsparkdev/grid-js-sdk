@@ -151,7 +151,7 @@ const fuse = new Fuse(
     'client.sandbox.webhooks.sendTest',
     'client.sandbox.cards.simulate.authorization',
     'client.sandbox.cards.simulate.clearing',
-    'client.sandbox.cards.simulate.refund',
+    'client.sandbox.cards.simulate.return',
     'client.umaProviders.list',
     'client.tokens.create',
     'client.tokens.delete',

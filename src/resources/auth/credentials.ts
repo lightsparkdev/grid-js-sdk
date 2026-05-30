@@ -481,6 +481,12 @@ export interface OAuthCredentialCreateRequest extends AuthCredentialCreateReques
 
 export type OAuthCredentialVerifyRequest = unknown;
 
+/**
+ * WebAuthn assertion returned by `navigator.credentials.get()`. In sandbox, Grid
+ * validates the assertion against the registered passkey credential so the
+ * client-side flow can match production. In production, Turnkey validates the
+ * WebAuthn assertion.
+ */
 export interface PasskeyAssertion {
   /**
    * Base64url-encoded authenticator data returned by the authenticator during the

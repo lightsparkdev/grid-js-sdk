@@ -14,7 +14,7 @@ import {
   Simulate,
   SimulateAuthorizationParams,
   SimulateClearingParams,
-  SimulateRefundParams,
+  SimulateReturnParams,
 } from './simulate';
 
 export class Cards extends APIResource {
@@ -36,6 +36,6 @@ export declare namespace Cards {
     type RefundRequest as RefundRequest,
     type SimulateAuthorizationParams as SimulateAuthorizationParams,
     type SimulateClearingParams as SimulateClearingParams,
-    type SimulateRefundParams as SimulateRefundParams,
+    type SimulateReturnParams as SimulateReturnParams,
   };
 }
