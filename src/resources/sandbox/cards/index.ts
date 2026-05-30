@@ -13,5 +13,5 @@ export {
   type RefundRequest,
   type SimulateAuthorizationParams,
   type SimulateClearingParams,
-  type SimulateRefundParams,
+  type SimulateReturnParams,
 } from './simulate';

@@ -418,7 +418,7 @@ Methods:
 
 - <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> CardTransaction</code>
 - <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> CardTransaction</code>
-- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">refund</a>(id, { ...params }) -> CardTransaction</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> CardTransaction</code>
 
 # UmaProviders
 
