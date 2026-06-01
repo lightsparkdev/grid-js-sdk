@@ -20,6 +20,7 @@ export class TransferOut extends APIResource {
    *   destination: {
    *     accountId:
    *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *     paymentRail: 'ACH',
    *   },
    *   source: {
    *     accountId:
@@ -47,7 +48,7 @@ export interface TransferOutRequest {
   /**
    * Destination external account details
    */
-  destination: TransferInAPI.ExternalAccountReference;
+  destination: TransferOutRequest.Destination;
 
   /**
    * Source internal account details
@@ -61,11 +62,45 @@ export interface TransferOutRequest {
   amount?: number;
 }
 
+export namespace TransferOutRequest {
+  /**
+   * Destination external account details
+   */
+  export interface Destination {
+    /**
+     * Reference to an external account ID
+     */
+    accountId: string;
+
+    /**
+     * The payment rail to use for the transfer. Must be one of the rails supported by
+     * the destination account. If not specified, the system will select a default
+     * rail.
+     */
+    paymentRail?:
+      | 'ACH'
+      | 'BANK_TRANSFER'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'MOBILE_MONEY'
+      | 'PAYNOW'
+      | 'PIX'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UPI'
+      | 'WIRE';
+  }
+}
+
 export interface TransferOutCreateParams {
   /**
    * Body param: Destination external account details
    */
-  destination: TransferInAPI.ExternalAccountReference;
+  destination: TransferOutCreateParams.Destination;
 
   /**
    * Body param: Source internal account details
@@ -83,6 +118,40 @@ export interface TransferOutCreateParams {
    * multiple times, the server will return the same response as the first request.
    */
   'Idempotency-Key'?: string;
+}
+
+export namespace TransferOutCreateParams {
+  /**
+   * Destination external account details
+   */
+  export interface Destination {
+    /**
+     * Reference to an external account ID
+     */
+    accountId: string;
+
+    /**
+     * The payment rail to use for the transfer. Must be one of the rails supported by
+     * the destination account. If not specified, the system will select a default
+     * rail.
+     */
+    paymentRail?:
+      | 'ACH'
+      | 'BANK_TRANSFER'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'MOBILE_MONEY'
+      | 'PAYNOW'
+      | 'PIX'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UPI'
+      | 'WIRE';
+  }
 }
 
 export declare namespace TransferOut {
