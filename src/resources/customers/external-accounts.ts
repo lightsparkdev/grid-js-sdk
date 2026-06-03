@@ -157,8 +157,8 @@ export type BaseWalletInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type BdtExternalAccountInfo = unknown;
 
@@ -250,8 +250,8 @@ export type CadExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankAccountType
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankAccountType, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type CopExternalAccountInfo = unknown;
 
@@ -296,8 +296,8 @@ export type DkkExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: iban
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: bankName, iban
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type EgpExternalAccountInfo = unknown;
 
@@ -370,8 +370,8 @@ export interface ExternalAccountCreate {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -586,8 +586,8 @@ export type GbpExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type GhsExternalAccountInfo = unknown;
 
@@ -840,7 +840,7 @@ export type PhpExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
+ * - BANK_TRANSFER: accountNumber, bankName
  * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type PkrExternalAccountInfo = unknown;
@@ -1023,8 +1023,8 @@ export interface ExternalAccountCreateParams {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
