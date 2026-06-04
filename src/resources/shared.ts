@@ -121,16 +121,11 @@ export interface BdtBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankName
- * - MOBILE_MONEY: bankName, phoneNumber
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
  */
 export interface BdtExternalAccountCreateInfo {
   accountType: 'BDT_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: BdtBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -553,16 +548,11 @@ export interface CopBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankAccountType, bankName
- * - MOBILE_MONEY: bankName, phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankAccountType
+ * - MOBILE_MONEY: phoneNumber
  */
 export interface CopExternalAccountCreateInfo {
   accountType: 'COP_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -637,16 +627,11 @@ export interface EgpBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: bankName, iban
- * - MOBILE_MONEY: bankName, phoneNumber
+ * - BANK_TRANSFER: iban
+ * - MOBILE_MONEY: phoneNumber
  */
 export interface EgpExternalAccountCreateInfo {
   accountType: 'EGP_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: EgpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -770,16 +755,11 @@ export interface GhsBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankName
- * - MOBILE_MONEY: bankName, phoneNumber
+ * - BANK_TRANSFER: accountNumber
+ * - MOBILE_MONEY: phoneNumber
  */
 export interface GhsExternalAccountCreateInfo {
   accountType: 'GHS_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: GhsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1277,16 +1257,11 @@ export interface PkrBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankName
+ * - BANK_TRANSFER: accountNumber
  * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface PkrExternalAccountCreateInfo {
   accountType: 'PKR_ACCOUNT';
-
-  /**
-   * The name of the bank
-   */
-  bankName: string;
 
   beneficiary: PkrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1294,6 +1269,11 @@ export interface PkrExternalAccountCreateInfo {
    * The account number of the bank
    */
   accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)

@@ -140,8 +140,8 @@ export interface ExternalAccountAddParams {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber, bankName
-   * - MOBILE_MONEY: bankName, phoneNumber
+   * - BANK_TRANSFER: accountNumber
+   * - MOBILE_MONEY: phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
