@@ -612,6 +612,7 @@ export interface PlatformExternalAccountCreateRequest {
     | Shared.BrlExternalAccountCreateInfo
     | Shared.BwpExternalAccountCreateInfo
     | Shared.CadExternalAccountCreateInfo
+    | PlatformExternalAccountCreateRequest.CnyAccount
     | Shared.CopExternalAccountCreateInfo
     | Shared.DkkExternalAccountCreateInfo
     | Shared.EgpExternalAccountCreateInfo
@@ -655,6 +656,62 @@ export interface PlatformExternalAccountCreateRequest {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
+}
+
+export namespace PlatformExternalAccountCreateRequest {
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace CnyAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export interface RwfAccountInfo {
@@ -871,6 +928,7 @@ export interface ExternalAccountCreateParams {
     | Shared.BrlExternalAccountCreateInfo
     | Shared.BwpExternalAccountCreateInfo
     | Shared.CadExternalAccountCreateInfo
+    | ExternalAccountCreateParams.CnyAccount
     | Shared.CopExternalAccountCreateInfo
     | Shared.DkkExternalAccountCreateInfo
     | Shared.EgpExternalAccountCreateInfo
@@ -914,6 +972,62 @@ export interface ExternalAccountCreateParams {
    * reference the account by your own identifier.
    */
   platformAccountId?: string;
+}
+
+export namespace ExternalAccountCreateParams {
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace CnyAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export interface ExternalAccountListParams extends DefaultPaginationParams {
