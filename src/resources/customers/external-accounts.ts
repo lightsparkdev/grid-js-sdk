@@ -157,8 +157,8 @@ export type BaseWalletInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type BdtExternalAccountInfo = unknown;
 
@@ -250,8 +250,8 @@ export type CadExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankAccountType
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankAccountType, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type CopExternalAccountInfo = unknown;
 
@@ -296,8 +296,8 @@ export type DkkExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: iban
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: bankName, iban
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type EgpExternalAccountInfo = unknown;
 
@@ -370,8 +370,8 @@ export interface ExternalAccountCreate {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -450,7 +450,8 @@ export interface ExternalAccountCreate {
  */
 export type ExternalAccountInfoOneOf =
   | ExternalAccountInfoOneOf.SlvAccount
-  | ExternalAccountInfoOneOf.SwiftAccount;
+  | ExternalAccountInfoOneOf.SwiftAccount
+  | ExternalAccountInfoOneOf.CnyAccount;
 
 export namespace ExternalAccountInfoOneOf {
   /**
@@ -521,6 +522,62 @@ export namespace ExternalAccountInfoOneOf {
      */
     iban?: string;
   }
+
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+  }
+
+  export namespace CnyAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export interface ExternalAccountListResponse {
@@ -586,8 +643,8 @@ export type GbpExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type GhsExternalAccountInfo = unknown;
 
@@ -840,7 +897,7 @@ export type PhpExternalAccountInfo = unknown;
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
+ * - BANK_TRANSFER: accountNumber, bankName
  * - MOBILE_MONEY: bankName, phoneNumber
  */
 export type PkrExternalAccountInfo = unknown;
@@ -1023,8 +1080,8 @@ export interface ExternalAccountCreateParams {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo

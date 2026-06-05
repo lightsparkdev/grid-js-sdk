@@ -139,11 +139,16 @@ export interface AedAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface BdtAccountInfo {
   accountType: 'BDT_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -229,11 +234,16 @@ export interface CadAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber, bankAccountType
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankAccountType, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface CopAccountInfo {
   accountType: 'COP_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -272,11 +282,16 @@ export interface DkkAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: iban
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: bankName, iban
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface EgpAccountInfo {
   accountType: 'EGP_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -326,11 +341,16 @@ export interface GbpAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface GhsAccountInfo {
   accountType: 'GHS_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -550,11 +570,16 @@ export interface PhpAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
+ * - BANK_TRANSFER: accountNumber, bankName
  * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface PkrAccountInfo {
   accountType: 'PKR_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -562,11 +587,6 @@ export interface PkrAccountInfo {
    * The account number of the bank
    */
   accountNumber?: string;
-
-  /**
-   * The name of the bank
-   */
-  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)
@@ -583,8 +603,8 @@ export interface PlatformExternalAccountCreateRequest {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -842,8 +862,8 @@ export interface ExternalAccountCreateParams {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo

@@ -238,6 +238,12 @@ export interface IncomingTransaction {
   rateDetails?: IncomingRateDetails;
 
   /**
+   * The time at which the platform confirmed delivery of the receipt to their
+   * customer.
+   */
+  receiptDeliveryConfirmedAt?: string;
+
+  /**
    * Included for all transactions except those with "CREATED" status
    */
   reconciliationInstructions?: ReconciliationInstructions;
@@ -356,6 +362,12 @@ export interface OutgoingTransaction {
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+  /**
+   * The time at which the platform confirmed delivery of the receipt to their
+   * customer.
+   */
+  receiptDeliveryConfirmedAt?: string;
 
   /**
    * Amount to be received by recipient in the recipient's currency

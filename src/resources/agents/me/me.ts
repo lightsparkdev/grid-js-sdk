@@ -181,7 +181,7 @@ export interface MeCreateTransferOutParams {
   /**
    * Body param: Destination external account details
    */
-  destination: TransferInAPI.ExternalAccountReference;
+  destination: MeCreateTransferOutParams.Destination;
 
   /**
    * Body param: Source internal account details
@@ -199,6 +199,40 @@ export interface MeCreateTransferOutParams {
    * multiple times, the server will return the same response as the first request.
    */
   'Idempotency-Key'?: string;
+}
+
+export namespace MeCreateTransferOutParams {
+  /**
+   * Destination external account details
+   */
+  export interface Destination {
+    /**
+     * Reference to an external account ID
+     */
+    accountId: string;
+
+    /**
+     * The payment rail to use for the transfer. Must be one of the rails supported by
+     * the destination account. If not specified, the system will select a default
+     * rail.
+     */
+    paymentRail?:
+      | 'ACH'
+      | 'BANK_TRANSFER'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'MOBILE_MONEY'
+      | 'PAYNOW'
+      | 'PIX'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UPI'
+      | 'WIRE';
+  }
 }
 
 export interface MeListInternalAccountsParams extends DefaultPaginationParams {
