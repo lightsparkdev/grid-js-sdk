@@ -80,7 +80,9 @@ export type CustomerInfoFieldName =
   | 'ULTIMATE_INSTITUTION_COUNTRY'
   | 'IDENTIFIER'
   | 'BUSINESS_TYPE'
-  | 'COMPANY_LEGAL_NAME';
+  | 'COMPANY_LEGAL_NAME'
+  | 'ID_TYPE'
+  | 'ID_NUMBER';
 
 /**
  * Per-platform embedded-wallet configuration. Controls branding and OTP behavior

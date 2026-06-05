@@ -213,6 +213,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.ArsAccount
     | PaymentInstructions.SlvAccount
     | PaymentInstructions.SwiftAccount
+    | PaymentInstructions.CnyAccount
     | PaymentInstructions.EmbeddedWallet;
 
   /**
@@ -311,6 +312,28 @@ export namespace PaymentInstructions {
      * Use accountNumber for all other corridors.
      */
     iban?: string;
+  }
+
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    paymentRails: Array<'MOBILE_MONEY'>;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber: string;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
   }
 
   export interface EmbeddedWallet {
