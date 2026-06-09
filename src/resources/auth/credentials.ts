@@ -139,17 +139,19 @@ export class Credentials extends APIResource {
    * reauthenticate an OAuth credential, call `POST /auth/credentials/{id}/verify`
    * with a fresh OIDC token and a `clientPublicKey`.
    *
-   * For `PASSKEY` credentials, this issues a fresh Grid-generated WebAuthn challenge
-   * for reauthentication. The request body must carry the client's ephemeral
-   * `clientPublicKey` so Grid can bake it into the Turnkey session-creation payload
-   * the returned challenge is computed from — this seals the resulting session
-   * signing key to the client. The response is a `PasskeyAuthChallenge` — the
-   * passkey auth method fields plus the WebAuthn `credentialId`, new `challenge`,
-   * `requestId`, and `expiresAt`. The client passes `credentialId` as
-   * `allowCredentials[].id` and `challenge` as the WebAuthn challenge in
-   * `navigator.credentials.get()`, then submits the resulting assertion to
-   * `POST /auth/credentials/{id}/verify` with `Request-Id: <requestId>` to receive a
-   * session.
+   * For `PASSKEY` credentials, this issues a fresh Grid reauthentication challenge.
+   * The request body must carry the client's ephemeral `clientPublicKey` so Grid can
+   * bake it into the Turnkey session-creation payload the returned challenge is
+   * computed from — this seals the resulting session signing key to the client. The
+   * response is a `PasskeyAuthChallenge` — the passkey auth method fields plus the
+   * WebAuthn `credentialId`, new `challenge`, `requestId`, and `expiresAt`. The
+   * `challenge` value is the lowercase hex-encoded SHA-256 digest of the canonical
+   * Turnkey session-creation body, not a base64url string. The client
+   * base64url-decodes `credentialId` for `allowCredentials[].id` and UTF-8 encodes
+   * `challenge` (for example, `new TextEncoder().encode(challenge)`) as the WebAuthn
+   * challenge in `navigator.credentials.get()`, then submits the resulting assertion
+   * to `POST /auth/credentials/{id}/verify` with `Request-Id: <requestId>` to
+   * receive a session.
    *
    * @example
    * ```ts
@@ -590,17 +592,20 @@ export interface PasskeyAttestation {
  * Extended `AuthMethod` shape returned for `PASSKEY` credentials from
  * `POST /auth/credentials/{id}/challenge`. Includes the WebAuthn `credentialId`
  * needed to target the passkey, plus the Grid-issued `challenge`, corresponding
- * `requestId`, and challenge `expiresAt`. The client signs the challenge with the
- * passkey to produce the assertion submitted to
- * `POST /auth/credentials/{id}/verify`.
+ * `requestId`, and challenge `expiresAt`. The `challenge` value is the lowercase
+ * hex-encoded SHA-256 digest of the canonical Turnkey session-creation request
+ * body, not a base64url string. The client UTF-8 encodes this string as the
+ * WebAuthn challenge and signs it with the passkey to produce the assertion
+ * submitted to `POST /auth/credentials/{id}/verify`.
  */
 export interface PasskeyAuthChallenge extends AuthMethod {
   /**
-   * Base64url-encoded challenge issued by Grid for the pending passkey
-   * authentication. The client passes it into `navigator.credentials.get()` as the
-   * WebAuthn challenge; the resulting assertion is submitted to
-   * `POST /auth/credentials/{id}/verify`. Single-use; a new challenge is issued on
-   * the next call to `POST /auth/credentials/{id}/challenge`.
+   * Lowercase hex-encoded SHA-256 digest of the canonical Turnkey session-creation
+   * request body for the pending passkey authentication. Do not base64url-decode
+   * this field; pass UTF-8 bytes of the string (for example,
+   * `new TextEncoder().encode(challenge)`) as the WebAuthn challenge to
+   * `navigator.credentials.get()`. Single-use; a new challenge is issued on the next
+   * call to `POST /auth/credentials/{id}/challenge`.
    */
   challenge: string;
 
