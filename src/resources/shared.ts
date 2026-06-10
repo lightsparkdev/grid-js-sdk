@@ -664,24 +664,24 @@ export interface EgpExternalAccountCreateInfo {
 export type EthereumWalletExternalAccountInfo = unknown;
 
 export interface EurBeneficiary {
-  address: ExternalAccountsAPI.Address;
-
   beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
 
+  address?: ExternalAccountsAPI.Address;
+
   /**
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
