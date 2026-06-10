@@ -180,20 +180,20 @@ export class Credentials extends APIResource {
    *
    * For `EMAIL_OTP` credentials, submit the `encryptedOtpBundle` produced by
    * HPKE-encrypting `{otp_code, public_key}` under the `otpEncryptionTargetBundle`
-   * returned from the credential's registration or re-issued via
-   * `POST /auth/credentials/{id}/challenge`. The server is a pass-through and never
-   * sees the plaintext OTP code. On success the response is `202` with a
-   * `payloadToSign` carrying the `verificationToken` bound to the client's TEK
-   * public key — sign that token with the matching TEK private key, then retry the
-   * same request with the full stamp in `Grid-Wallet-Signature` and the `requestId`
-   * echoed in `Request-Id`. The signed retry returns `200` with the issued
-   * `AuthSession`. The TEK public key becomes the session API key on successful
-   * completion. In sandbox mode, the EMAIL_OTP flow runs real HPKE end-to-end
-   * against a sandbox enclave keypair — clients build a real `encryptedOtpBundle`
-   * against the sandbox `otpEncryptionTargetBundle` and sign a real
-   * `verificationToken` with their TEK keypair. The only sandbox shortcut is the
-   * magic OTP code (`"000000"`) the user "receives" instead of a real email
-   * delivery.
+   * returned from registration when present, or from
+   * `POST /auth/credentials/{id}/challenge` when registration omitted it or the OTP
+   * must be reissued. The server is a pass-through and never sees the plaintext OTP
+   * code. On success the response is `202` with a `payloadToSign` carrying the
+   * `verificationToken` bound to the client's TEK public key — sign that token with
+   * the matching TEK private key, then retry the same request with the full stamp in
+   * `Grid-Wallet-Signature` and the `requestId` echoed in `Request-Id`. The signed
+   * retry returns `200` with the issued `AuthSession`. The TEK public key becomes
+   * the session API key on successful completion. In sandbox mode, the EMAIL_OTP
+   * flow runs real HPKE end-to-end against a sandbox enclave keypair — clients build
+   * a real `encryptedOtpBundle` against the sandbox `otpEncryptionTargetBundle` and
+   * sign a real `verificationToken` with their TEK keypair. The only sandbox
+   * shortcut is the magic OTP code (`"000000"`) the user "receives" instead of a
+   * real email delivery.
    *
    * For `OAUTH` credentials, supply a fresh OIDC token (`iat` must be less than 60
    * seconds before the request) along with the client-generated public key; this is
@@ -361,19 +361,25 @@ export interface AuthMethod {
  * `PasskeyAuthChallenge` — without the strictness, an `AuthMethod` with extra
  * fields would ambiguously match both branches.
  *
- * For `EMAIL_OTP` credentials, the response also carries
- * `otpEncryptionTargetBundle` so the client can HPKE-encrypt the OTP code in the
- * subsequent `POST /auth/credentials/{id}/verify` call without the plaintext code
- * ever transiting the server.
+ * For `EMAIL_OTP` credentials, responses that initiate or reissue an OTP challenge
+ * carry `otpEncryptionTargetBundle` so the client can HPKE-encrypt the OTP code in
+ * the subsequent `POST /auth/credentials/{id}/verify` call without the plaintext
+ * code ever transiting the server. First-time EMAIL_OTP wallet bootstrap
+ * registration can omit it; call `POST /auth/credentials/{id}/challenge` if it is
+ * absent.
  */
 export interface AuthMethodResponse extends AuthMethod {
   /**
-   * HPKE encryption target bundle for the freshly initiated OTP challenge. Returned
-   * only for `EMAIL_OTP` credentials. The client generates an ephemeral P-256
-   * keypair (the Target Encryption Key, or TEK) and uses this bundle as the
-   * recipient when HPKE-encrypting `{otp_code, public_key}`; the encrypted payload
-   * is submitted as `encryptedOtpBundle` on `POST /auth/credentials/{id}/verify`.
-   * The bundle is one-time-use per OTP issuance — re-issue via
+   * HPKE encryption target bundle for a freshly initiated OTP challenge. Returned
+   * only on `EMAIL_OTP` responses that initiate or reissue an OTP challenge, such as
+   * `POST /auth/credentials/{id}/challenge` and the add-EMAIL_OTP signed-retry
+   * response. It is omitted from first-time EMAIL_OTP wallet bootstrap registration;
+   * call `POST /auth/credentials/{id}/challenge` for the new credential if it is
+   * absent. The client generates an ephemeral P-256 keypair (the Target Encryption
+   * Key, or TEK) and uses this bundle as the recipient when HPKE-encrypting
+   * `{otp_code, public_key}`; the encrypted payload is submitted as
+   * `encryptedOtpBundle` on `POST /auth/credentials/{id}/verify`. The bundle is
+   * one-time-use per OTP issuance — re-issue via
    * `POST /auth/credentials/{id}/challenge` to obtain a fresh bundle. The matching
    * TEK private key must remain on the client and is used to sign the
    * `verificationToken` returned on the subsequent signed-retry. Treat the bundle as
@@ -475,12 +481,13 @@ export interface EmailOtpCredentialCreateRequest extends AuthCredentialCreateReq
 /**
  * Verify an email-OTP credential via the secure two-leg flow. The client
  * HPKE-encrypts the OTP code (together with its public key) under the
- * `otpEncryptionTargetBundle` returned from the credential's registration or
- * `POST /auth/credentials/{id}/challenge`, submits the result here, and receives
- * `202` with a `payloadToSign` carrying a `verificationToken` bound to the
- * client's public key. The client signs that token with the matching private key
- * and retries this request with `Grid-Wallet-Signature` + `Request-Id` headers to
- * obtain the session. Plaintext OTP codes are never sent over the wire.
+ * `otpEncryptionTargetBundle` returned from registration when present, or from
+ * `POST /auth/credentials/{id}/challenge` when registration omitted it or the OTP
+ * must be reissued, submits the result here, and receives `202` with a
+ * `payloadToSign` carrying a `verificationToken` bound to the client's public key.
+ * The client signs that token with the matching private key and retries this
+ * request with `Grid-Wallet-Signature` + `Request-Id` headers to obtain the
+ * session. Plaintext OTP codes are never sent over the wire.
  */
 export type EmailOtpCredentialVerifyRequest = unknown;
 
