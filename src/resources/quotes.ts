@@ -314,26 +314,37 @@ export namespace PaymentInstructions {
     iban?: string;
   }
 
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: phoneNumber, bankName
+   */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank
+     * The name of the bank or mobile-wallet provider
      */
     bankName: string;
 
-    paymentRails: Array<'MOBILE_MONEY'>;
-
-    /**
-     * The phone number in international format
-     */
-    phoneNumber: string;
+    paymentRails: Array<'MOBILE_MONEY' | 'BANK_TRANSFER'>;
 
     /**
      * Unique reference code that must be included with the payment to properly credit
      * it
      */
     reference: string;
+
+    /**
+     * The destination bank account number (BANK_TRANSFER rail)
+     */
+    accountNumber?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY rail)
+     */
+    phoneNumber?: string;
   }
 
   export interface EmbeddedWallet {

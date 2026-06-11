@@ -659,20 +659,31 @@ export interface PlatformExternalAccountCreateRequest {
 }
 
 export namespace PlatformExternalAccountCreateRequest {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: phoneNumber, bankName
+   */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank
+     * The name of the bank or mobile-wallet provider
      */
     bankName: string;
 
     beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
-     * The phone number in international format
+     * The destination bank account number (BANK_TRANSFER rail)
      */
-    phoneNumber: string;
+    accountNumber?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY rail)
+     */
+    phoneNumber?: string;
   }
 
   export namespace CnyAccount {
@@ -975,20 +986,31 @@ export interface ExternalAccountCreateParams {
 }
 
 export namespace ExternalAccountCreateParams {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: phoneNumber, bankName
+   */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank
+     * The name of the bank or mobile-wallet provider
      */
     bankName: string;
 
     beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
-     * The phone number in international format
+     * The destination bank account number (BANK_TRANSFER rail)
      */
-    phoneNumber: string;
+    accountNumber?: string;
+
+    /**
+     * The phone number in international format (MOBILE_MONEY rail)
+     */
+    phoneNumber?: string;
   }
 
   export namespace CnyAccount {
