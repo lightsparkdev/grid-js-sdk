@@ -90,6 +90,13 @@ export namespace ExchangeRate {
      * Fixed fee in the smallest unit of the sending currency (e.g., cents for USD)
      */
     fixed?: number;
+
+    /**
+     * Total fees in the smallest unit of the sending currency (e.g., cents for USD).
+     * This value may change depending on the sending amount used; if no sending amount
+     * is specified, it falls back to the default.
+     */
+    total?: number;
   }
 }
 
