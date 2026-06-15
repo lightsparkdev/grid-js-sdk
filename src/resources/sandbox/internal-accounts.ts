@@ -57,6 +57,9 @@ export interface InternalAccount {
    */
   id: string;
 
+  /**
+   * The balance available to spend, excluding pending and held funds
+   */
   balance: InvitationsAPI.CurrencyAmount;
 
   /**
@@ -84,6 +87,11 @@ export interface InternalAccount {
    *   the account remains frozen.
    */
   status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+
+  /**
+   * The total balance, including pending and held funds
+   */
+  totalBalance: InvitationsAPI.CurrencyAmount;
 
   /**
    * Classification of an internal account.
