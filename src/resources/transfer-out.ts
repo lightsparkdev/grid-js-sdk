@@ -79,18 +79,26 @@ export namespace TransferOutRequest {
      */
     paymentRail?:
       | 'ACH'
+      | 'ACH_COLOMBIA'
       | 'BANK_TRANSFER'
+      | 'BRE_B'
+      | 'CIPS'
       | 'FAST'
       | 'FASTER_PAYMENTS'
       | 'FEDNOW'
+      | 'INSTAPAY'
       | 'MOBILE_MONEY'
+      | 'NEFT'
       | 'PAYNOW'
+      | 'PESONET'
       | 'PIX'
+      | 'RTGS'
       | 'RTP'
       | 'SEPA'
       | 'SEPA_INSTANT'
       | 'SPEI'
       | 'SWIFT'
+      | 'UNIONPAY'
       | 'UPI'
       | 'WIRE';
   }
@@ -137,18 +145,26 @@ export namespace TransferOutCreateParams {
      */
     paymentRail?:
       | 'ACH'
+      | 'ACH_COLOMBIA'
       | 'BANK_TRANSFER'
+      | 'BRE_B'
+      | 'CIPS'
       | 'FAST'
       | 'FASTER_PAYMENTS'
       | 'FEDNOW'
+      | 'INSTAPAY'
       | 'MOBILE_MONEY'
+      | 'NEFT'
       | 'PAYNOW'
+      | 'PESONET'
       | 'PIX'
+      | 'RTGS'
       | 'RTP'
       | 'SEPA'
       | 'SEPA_INSTANT'
       | 'SPEI'
       | 'SWIFT'
+      | 'UNIONPAY'
       | 'UPI'
       | 'WIRE';
   }
