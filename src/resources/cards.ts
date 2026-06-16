@@ -125,7 +125,7 @@ export class Cards extends APIResource {
    * before a card can be issued; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    *
-   * New cards start in `state: "PENDING_ISSUE"` while the card issuer provisions the
+   * New cards start in `state: "PROCESSING"` while the card issuer provisions the
    * card. The `card.state_change` webhook fires on the transition to `ACTIVE` (or to
    * `CLOSED` with `stateReason: "ISSUER_REJECTED"` if provisioning fails).
    *
@@ -181,15 +181,15 @@ export interface Card {
   /**
    * Lifecycle state of a card.
    *
-   * | State           | Description                                                                                                                                                   |
-   * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-   * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
+   * | State         | Description                                                                                                                                                   |
+   * | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `PENDING_KYC` | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
+   * | `PROCESSING`  | The card has been requested and is being provisioned with the issuer.                                                                                         |
+   * | `ACTIVE`      | The card is live and can authorize transactions.                                                                                                              |
+   * | `FROZEN`      | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
+   * | `CLOSED`      | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
    */
-  state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+  state: 'PENDING_KYC' | 'PROCESSING' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 
   /**
    * Last update timestamp
@@ -473,7 +473,7 @@ export interface CardListParams extends DefaultPaginationParams {
   /**
    * Filter by card state.
    */
-  state?: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+  state?: 'PENDING_KYC' | 'PROCESSING' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 }
 
 export interface CardIssueParams {
