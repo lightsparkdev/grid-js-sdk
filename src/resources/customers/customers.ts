@@ -767,6 +767,12 @@ export interface Customer {
   id?: string;
 
   /**
+   * Email and phone verification state. **Only present when the customer's payment
+   * provider requires it** (e.g. EU customers); omitted otherwise.
+   */
+  contactVerification?: Customer.ContactVerification;
+
+  /**
    * Creation timestamp
    */
   createdAt?: string;
@@ -796,6 +802,26 @@ export interface Customer {
    * Last update timestamp
    */
   updatedAt?: string;
+}
+
+export namespace Customer {
+  /**
+   * Email and phone verification state. **Only present when the customer's payment
+   * provider requires it** (e.g. EU customers); omitted otherwise.
+   */
+  export interface ContactVerification {
+    /**
+     * Verification status of the customer's email address. Present only when the
+     * provider requires email verification.
+     */
+    email?: 'PENDING' | 'VERIFIED';
+
+    /**
+     * Verification status of the customer's phone number. Present only when the
+     * provider requires phone verification.
+     */
+    phone?: 'PENDING' | 'VERIFIED';
+  }
 }
 
 export type CustomerCreateRequestOneOf = IndividualCustomerCreateRequest | BusinessCustomerCreateRequest;
