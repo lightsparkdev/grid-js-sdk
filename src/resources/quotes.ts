@@ -522,6 +522,8 @@ export interface QuoteRequest {
     | 'UTILITY_BILL'
     | 'DONATION'
     | 'TRAVEL'
+    | 'FAMILY_SUPPORT'
+    | 'SALARY_PAYMENT'
     | 'OTHER';
 
   /**
@@ -611,6 +613,8 @@ export interface QuoteCreateParams {
     | 'UTILITY_BILL'
     | 'DONATION'
     | 'TRAVEL'
+    | 'FAMILY_SUPPORT'
+    | 'SALARY_PAYMENT'
     | 'OTHER';
 
   /**
