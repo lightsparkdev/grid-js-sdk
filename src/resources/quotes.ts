@@ -318,17 +318,17 @@ export namespace PaymentInstructions {
    * Required fields depend on the selected paymentRails:
    *
    * - BANK_TRANSFER: accountNumber, bankName
-   * - MOBILE_MONEY: phoneNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank or mobile-wallet provider
+     * The name of the bank
      */
     bankName: string;
 
-    paymentRails: Array<'MOBILE_MONEY' | 'BANK_TRANSFER'>;
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
     /**
      * Unique reference code that must be included with the payment to properly credit
@@ -337,12 +337,12 @@ export namespace PaymentInstructions {
     reference: string;
 
     /**
-     * The destination bank account number (BANK_TRANSFER rail)
+     * The account number of the bank
      */
     accountNumber?: string;
 
     /**
-     * The phone number in international format (MOBILE_MONEY rail)
+     * The phone number in international format
      */
     phoneNumber?: string;
   }
