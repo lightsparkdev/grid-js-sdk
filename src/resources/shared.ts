@@ -1366,17 +1366,18 @@ export interface SgdExternalAccountCreateInfo {
 
   accountType: 'SGD_ACCOUNT';
 
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
   beneficiary: ExternalAccountsAPI.SgdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+
+  /**
+   * Name of the beneficiary's bank. When omitted, resolved from swiftCode via the
+   * payout partner bank directory at account creation.
+   */
+  bankName?: string;
 }
 
 export interface SlvBeneficiary {

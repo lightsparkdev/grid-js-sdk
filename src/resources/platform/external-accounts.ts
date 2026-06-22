@@ -663,25 +663,25 @@ export namespace PlatformExternalAccountCreateRequest {
    * Required fields depend on the selected paymentRails:
    *
    * - BANK_TRANSFER: accountNumber, bankName
-   * - MOBILE_MONEY: phoneNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank or mobile-wallet provider
+     * The name of the bank
      */
     bankName: string;
 
     beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
-     * The destination bank account number (BANK_TRANSFER rail)
+     * The account number of the bank
      */
     accountNumber?: string;
 
     /**
-     * The phone number in international format (MOBILE_MONEY rail)
+     * The phone number in international format
      */
     phoneNumber?: string;
   }
@@ -749,17 +749,18 @@ export interface SgdAccountInfo {
 
   accountType: 'SGD_ACCOUNT';
 
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
   paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+
+  /**
+   * Name of the beneficiary's bank. When omitted, resolved from swiftCode via the
+   * payout partner bank directory at account creation.
+   */
+  bankName?: string;
 }
 
 export interface ThbAccountInfo {
@@ -990,25 +991,25 @@ export namespace ExternalAccountCreateParams {
    * Required fields depend on the selected paymentRails:
    *
    * - BANK_TRANSFER: accountNumber, bankName
-   * - MOBILE_MONEY: phoneNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank or mobile-wallet provider
+     * The name of the bank
      */
     bankName: string;
 
     beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
-     * The destination bank account number (BANK_TRANSFER rail)
+     * The account number of the bank
      */
     accountNumber?: string;
 
     /**
-     * The phone number in international format (MOBILE_MONEY rail)
+     * The phone number in international format
      */
     phoneNumber?: string;
   }

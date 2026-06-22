@@ -218,25 +218,25 @@ export namespace ExternalAccountAddParams {
    * Required fields depend on the selected paymentRails:
    *
    * - BANK_TRANSFER: accountNumber, bankName
-   * - MOBILE_MONEY: phoneNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank or mobile-wallet provider
+     * The name of the bank
      */
     bankName: string;
 
     beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
     /**
-     * The destination bank account number (BANK_TRANSFER rail)
+     * The account number of the bank
      */
     accountNumber?: string;
 
     /**
-     * The phone number in international format (MOBILE_MONEY rail)
+     * The phone number in international format
      */
     phoneNumber?: string;
   }
