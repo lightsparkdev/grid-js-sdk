@@ -92,7 +92,7 @@ export class Quotes extends APIResource {
    *
    * When the quote's `source` is an internal account of type `EMBEDDED_WALLET`, the
    * request must include a `Grid-Wallet-Signature` header. The header value is the
-   * full Turnkey API-key stamp built over the `payloadToSign` value from the quote's
+   * full Grid wallet signature built over the `payloadToSign` value from the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry with the session private key
    * of a verified authentication credential on the source Embedded Wallet.
    *
@@ -357,7 +357,7 @@ export namespace PaymentInstructions {
      * JSON-encoded transaction signing payload that must be stamped, as-is
      * (byte-for-byte, without re-serialization), with the session private key of a
      * verified authentication credential on the source Embedded Wallet. The resulting
-     * Turnkey API-key stamp is passed as the `Grid-Wallet-Signature` header on
+     * Grid wallet signature is passed as the `Grid-Wallet-Signature` header on
      * `POST /quotes/{quoteId}/execute` to authorize the outbound transfer from the
      * wallet.
      */
@@ -638,7 +638,7 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Full Turnkey API-key stamp over the `payloadToSign` returned in the quote's
+   * Full Grid wallet signature over the `payloadToSign` returned in the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
    * private key of a verified authentication credential on the source Embedded
    * Wallet. Required when the quote's source is an internal account of type
