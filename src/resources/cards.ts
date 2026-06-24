@@ -346,6 +346,11 @@ export interface CardTransaction {
    */
   createdAt: string;
 
+  /**
+   * Card transactions debit the customer's account.
+   */
+  direction: 'CREDIT' | 'DEBIT';
+
   merchant: SimulateAPI.CardMerchant;
 
   pullSummary: SimulateAPI.CardPullSummary;

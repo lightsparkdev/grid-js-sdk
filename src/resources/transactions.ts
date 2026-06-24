@@ -160,6 +160,11 @@ export interface IncomingTransaction {
   destination: unknown;
 
   /**
+   * Whether this transaction credits or debits the customer's account.
+   */
+  direction: 'CREDIT' | 'DEBIT';
+
+  /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
    * incoming)
    */
@@ -273,6 +278,11 @@ export interface OutgoingTransaction {
   customerId: string;
 
   destination: unknown;
+
+  /**
+   * Whether this transaction credits or debits the customer's account.
+   */
+  direction: 'CREDIT' | 'DEBIT';
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
