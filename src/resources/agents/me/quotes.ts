@@ -193,7 +193,7 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Full Turnkey API-key stamp over the `payloadToSign` returned in the quote's
+   * Full Grid wallet signature over the `payloadToSign` returned in the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
    * private key of a verified authentication credential on the source Embedded
    * Wallet. Required when the quote's source is an internal account of type

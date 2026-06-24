@@ -141,17 +141,17 @@ export class Credentials extends APIResource {
    *
    * For `PASSKEY` credentials, this issues a fresh Grid reauthentication challenge.
    * The request body must carry the client's ephemeral `clientPublicKey` so Grid can
-   * bake it into the Turnkey session-creation payload the returned challenge is
-   * computed from — this seals the resulting session signing key to the client. The
-   * response is a `PasskeyAuthChallenge` — the passkey auth method fields plus the
-   * WebAuthn `credentialId`, new `challenge`, `requestId`, and `expiresAt`. The
-   * `challenge` value is the lowercase hex-encoded SHA-256 digest of the canonical
-   * Turnkey session-creation body, not a base64url string. The client
-   * base64url-decodes `credentialId` for `allowCredentials[].id` and UTF-8 encodes
-   * `challenge` (for example, `new TextEncoder().encode(challenge)`) as the WebAuthn
-   * challenge in `navigator.credentials.get()`, then submits the resulting assertion
-   * to `POST /auth/credentials/{id}/verify` with `Request-Id: <requestId>` to
-   * receive a session.
+   * bake it into the session-creation payload the returned challenge is computed
+   * from — this seals the resulting session signing key to the client. The response
+   * is a `PasskeyAuthChallenge` — the passkey auth method fields plus the WebAuthn
+   * `credentialId`, new `challenge`, `requestId`, and `expiresAt`. The `challenge`
+   * value is the lowercase hex-encoded SHA-256 digest of the canonical
+   * session-creation body, not a base64url string. The client base64url-decodes
+   * `credentialId` for `allowCredentials[].id` and UTF-8 encodes `challenge` (for
+   * example, `new TextEncoder().encode(challenge)`) as the WebAuthn challenge in
+   * `navigator.credentials.get()`, then submits the resulting assertion to
+   * `POST /auth/credentials/{id}/verify` with `Request-Id: <requestId>` to receive a
+   * session.
    *
    * @example
    * ```ts
@@ -246,10 +246,10 @@ export class Credentials extends APIResource {
 /**
  * Request body for `POST /auth/credentials/{id}/challenge`. Required when
  * re-challenging a `PASSKEY` credential — must carry `clientPublicKey` so Grid can
- * bake it into the Turnkey session-creation payload the returned challenge is
- * computed from. Ignored for `EMAIL_OTP`, where the credential type alone is
- * sufficient because the OTP is delivered out-of-band. OAuth credentials do not
- * use this endpoint; authenticate or reauthenticate them with
+ * bake it into the session-creation payload the returned challenge is computed
+ * from. Ignored for `EMAIL_OTP`, where the credential type alone is sufficient
+ * because the OTP is delivered out-of-band. OAuth credentials do not use this
+ * endpoint; authenticate or reauthenticate them with
  * `POST /auth/credentials/{id}/verify`.
  */
 export interface AuthCredentialChallengeRequest {
@@ -257,9 +257,9 @@ export interface AuthCredentialChallengeRequest {
    * Required for `PASSKEY` credentials. Client-generated P-256 public key,
    * hex-encoded in uncompressed SEC1 format (`04` prefix followed by the 32-byte X
    * and 32-byte Y coordinates; 130 hex characters total). The matching private key
-   * must remain on the client. Grid bakes this key into the Turnkey session-creation
-   * payload that the returned `challenge` is computed from, so the resulting session
-   * signing key is sealed to the client. Ignored for `EMAIL_OTP`.
+   * must remain on the client. Grid bakes this key into the session-creation payload
+   * that the returned `challenge` is computed from, so the resulting session signing
+   * key is sealed to the client. Ignored for `EMAIL_OTP`.
    */
   clientPublicKey?: string;
 }
@@ -514,7 +514,7 @@ export type OAuthCredentialVerifyRequest = unknown;
 /**
  * WebAuthn assertion returned by `navigator.credentials.get()`. In sandbox, Grid
  * validates the assertion against the registered passkey credential so the
- * client-side flow can match production. In production, Turnkey validates the
+ * client-side flow can match production. In production, Grid validates the
  * WebAuthn assertion.
  */
 export interface PasskeyAssertion {
@@ -600,16 +600,16 @@ export interface PasskeyAttestation {
  * `POST /auth/credentials/{id}/challenge`. Includes the WebAuthn `credentialId`
  * needed to target the passkey, plus the Grid-issued `challenge`, corresponding
  * `requestId`, and challenge `expiresAt`. The `challenge` value is the lowercase
- * hex-encoded SHA-256 digest of the canonical Turnkey session-creation request
- * body, not a base64url string. The client UTF-8 encodes this string as the
- * WebAuthn challenge and signs it with the passkey to produce the assertion
- * submitted to `POST /auth/credentials/{id}/verify`.
+ * hex-encoded SHA-256 digest of the canonical session-creation request body, not a
+ * base64url string. The client UTF-8 encodes this string as the WebAuthn challenge
+ * and signs it with the passkey to produce the assertion submitted to
+ * `POST /auth/credentials/{id}/verify`.
  */
 export interface PasskeyAuthChallenge extends AuthMethod {
   /**
-   * Lowercase hex-encoded SHA-256 digest of the canonical Turnkey session-creation
-   * request body for the pending passkey authentication. Do not base64url-decode
-   * this field; pass UTF-8 bytes of the string (for example,
+   * Lowercase hex-encoded SHA-256 digest of the canonical session-creation request
+   * body for the pending passkey authentication. Do not base64url-decode this field;
+   * pass UTF-8 bytes of the string (for example,
    * `new TextEncoder().encode(challenge)`) as the WebAuthn challenge to
    * `navigator.credentials.get()`. Single-use; a new challenge is issued on the next
    * call to `POST /auth/credentials/{id}/challenge`.
@@ -750,9 +750,9 @@ export interface CredentialChallengeParams {
    * Required for `PASSKEY` credentials. Client-generated P-256 public key,
    * hex-encoded in uncompressed SEC1 format (`04` prefix followed by the 32-byte X
    * and 32-byte Y coordinates; 130 hex characters total). The matching private key
-   * must remain on the client. Grid bakes this key into the Turnkey session-creation
-   * payload that the returned `challenge` is computed from, so the resulting session
-   * signing key is sealed to the client. Ignored for `EMAIL_OTP`.
+   * must remain on the client. Grid bakes this key into the session-creation payload
+   * that the returned `challenge` is computed from, so the resulting session signing
+   * key is sealed to the client. Ignored for `EMAIL_OTP`.
    */
   clientPublicKey?: string;
 }
