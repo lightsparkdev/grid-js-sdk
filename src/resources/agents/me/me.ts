@@ -195,6 +195,15 @@ export interface MeCreateTransferOutParams {
   amount?: number;
 
   /**
+   * Body param: Free-form information about the payment that travels with it to the
+   * recipient. The field this populates depends on the payment rail: for ACH it
+   * populates the Addenda record, for FedNow and RTP it populates the
+   * remittanceInformation field, and for wires it populates the OBI (Originator to
+   * Beneficiary Information) / beneficiary information.
+   */
+  remittanceInformation?: string;
+
+  /**
    * Header param: A unique identifier for the request. If the same key is sent
    * multiple times, the server will return the same response as the first request.
    */
