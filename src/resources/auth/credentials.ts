@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CredentialsAPI from './credentials';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
 import { RequestOptions } from '../../internal/request-options';
@@ -15,9 +16,10 @@ export class Credentials extends APIResource {
    *
    * Embedded Wallet internal accounts are initialized with an `EMAIL_OTP` credential
    * tied to the customer email on the account. Use this endpoint to add another
-   * credential (`OAUTH` or `PASSKEY`), or to add `EMAIL_OTP` back after it has been
-   * removed. Only one `EMAIL_OTP` credential is supported per internal account;
-   * multiple distinct `PASSKEY` credentials may be registered.
+   * credential (`SMS_OTP`, `OAUTH`, or `PASSKEY`), or to add `EMAIL_OTP` / `SMS_OTP`
+   * back after it has been removed. Only one `EMAIL_OTP` and one `SMS_OTP`
+   * credential are supported per internal account; multiple distinct `PASSKEY`
+   * credentials may be registered.
    *
    * Adding a credential requires a signature from an existing verified credential on
    * the same account. Call this endpoint with the new credential's details to
@@ -26,9 +28,9 @@ export class Credentials extends APIResource {
    * `encryptedSessionSigningKey`) to build an API-key stamp over `payloadToSign`,
    * then retry the same request with that full stamp as the `Grid-Wallet-Signature`
    * header and the `requestId` echoed back as the `Request-Id` header. The signed
-   * retry returns `201` with the created `AuthMethod`. For `EMAIL_OTP`, the OTP
-   * email is triggered on the signed retry, and the credential must then be
-   * activated via `POST /auth/credentials/{id}/verify`.
+   * retry returns `201` with the created `AuthMethod`. For OTP credentials, the
+   * one-time password is triggered on the signed retry, and the credential must then
+   * be activated via `POST /auth/credentials/{id}/verify`.
    *
    * @example
    * ```ts
@@ -129,10 +131,10 @@ export class Credentials extends APIResource {
   /**
    * Re-issue the challenge for an existing authentication credential.
    *
-   * For `EMAIL_OTP` credentials, this triggers a new one-time password email to the
-   * address on file and returns a fresh `otpEncryptionTargetBundle` for the client
-   * to HPKE-encrypt the OTP attempt against. After the user receives the new OTP,
-   * build the `encryptedOtpBundle` under the new target bundle and call
+   * For `EMAIL_OTP` and `SMS_OTP` credentials, this triggers a new one-time password
+   * to the contact on file and returns a fresh `otpEncryptionTargetBundle` for the
+   * client to HPKE-encrypt the OTP attempt against. After the user receives the new
+   * OTP, build the `encryptedOtpBundle` under the new target bundle and call
    * `POST /auth/credentials/{id}/verify` to begin the secure OTP login flow.
    *
    * `OAUTH` credentials do not have a challenge step. To authenticate or
@@ -178,9 +180,9 @@ export class Credentials extends APIResource {
    * Complete the verification step for a previously created authentication
    * credential and issue a session.
    *
-   * For `EMAIL_OTP` credentials, submit the `encryptedOtpBundle` produced by
-   * HPKE-encrypting `{otp_code, public_key}` under the `otpEncryptionTargetBundle`
-   * returned from registration when present, or from
+   * For `EMAIL_OTP` and `SMS_OTP` credentials, submit the `encryptedOtpBundle`
+   * produced by HPKE-encrypting `{otp_code, public_key}` under the
+   * `otpEncryptionTargetBundle` returned from registration when present, or from
    * `POST /auth/credentials/{id}/challenge` when registration omitted it or the OTP
    * must be reissued. The server is a pass-through and never sees the plaintext OTP
    * code. On success the response is `202` with a `payloadToSign` carrying the
@@ -188,12 +190,12 @@ export class Credentials extends APIResource {
    * the matching TEK private key, then retry the same request with the full stamp in
    * `Grid-Wallet-Signature` and the `requestId` echoed in `Request-Id`. The signed
    * retry returns `200` with the issued `AuthSession`. The TEK public key becomes
-   * the session API key on successful completion. In sandbox mode, the EMAIL_OTP
-   * flow runs real HPKE end-to-end against a sandbox enclave keypair — clients build
-   * a real `encryptedOtpBundle` against the sandbox `otpEncryptionTargetBundle` and
-   * sign a real `verificationToken` with their TEK keypair. The only sandbox
-   * shortcut is the magic OTP code (`"000000"`) the user "receives" instead of a
-   * real email delivery.
+   * the session API key on successful completion. In sandbox mode, the OTP flow runs
+   * real HPKE end-to-end against a sandbox enclave keypair — clients build a real
+   * `encryptedOtpBundle` against the sandbox `otpEncryptionTargetBundle` and sign a
+   * real `verificationToken` with their TEK keypair. The only sandbox shortcut is
+   * the magic OTP code (`"000000"`) the user "receives" instead of a real email or
+   * SMS delivery.
    *
    * For `OAUTH` credentials, supply a fresh OIDC token (`iat` must be less than 60
    * seconds before the request) along with the client-generated public key; this is
@@ -207,18 +209,25 @@ export class Credentials extends APIResource {
    * credentials is supplied on the challenge call, where it is bound into the
    * pending session-creation request.
    *
-   * On success for `OAUTH` and `PASSKEY`, and on the signed retry for `EMAIL_OTP`,
-   * the response contains an `AuthSession`. For `OAUTH` and `PASSKEY` the session
-   * signing key is delivered as `encryptedSessionSigningKey` (HPKE-sealed to the
-   * supplied `clientPublicKey`); for `EMAIL_OTP` the client already holds the
-   * session signing key (the TEK private key it generated) and that field is omitted
-   * from the response. The `expiresAt` timestamp marks when the session expires.
+   * On success for `OAUTH` and `PASSKEY`, and on the signed retry for OTP
+   * credentials, the response contains an `AuthSession`. For `OAUTH` and `PASSKEY`
+   * the session signing key is delivered as `encryptedSessionSigningKey`
+   * (HPKE-sealed to the supplied `clientPublicKey`); for OTP credentials the client
+   * already holds the session signing key (the TEK private key it generated) and
+   * that field is omitted from the response. The `expiresAt` timestamp marks when
+   * the session expires.
    *
    * @example
    * ```ts
    * const authSession = await client.auth.credentials.verify(
    *   'id',
-   *   { AuthCredentialVerifyRequest: {} },
+   *   {
+   *     AuthCredentialVerifyRequest: {
+   *       type: 'SMS_OTP',
+   *       encryptedOtpBundle:
+   *         '{"encappedPublic":"044f631a2d890bc6668d997ee184e190650d06adf970987568ec641214a00403b73effe1ef406c60a5cde8508a4484567ddb8056fbd493bee614cd727aef02a838","ciphertext":"1fa1023390a56539aa48cbb380aa28f544ed5cc04861566bb806e25ba026f14660eaf4140a05b388dd012eaa899759a6a92576cdca8c1b7d12e147bd96cc26ed9f74886794155d8ac5cf0fdc"}',
+   *     },
+   *   },
    * );
    * ```
    */
@@ -247,9 +256,9 @@ export class Credentials extends APIResource {
  * Request body for `POST /auth/credentials/{id}/challenge`. Required when
  * re-challenging a `PASSKEY` credential — must carry `clientPublicKey` so Grid can
  * bake it into the session-creation payload the returned challenge is computed
- * from. Ignored for `EMAIL_OTP`, where the credential type alone is sufficient
- * because the OTP is delivered out-of-band. OAuth credentials do not use this
- * endpoint; authenticate or reauthenticate them with
+ * from. Ignored for `EMAIL_OTP` and `SMS_OTP`, where the credential type alone is
+ * sufficient because the OTP is delivered out-of-band. OAuth credentials do not
+ * use this endpoint; authenticate or reauthenticate them with
  * `POST /auth/credentials/{id}/verify`.
  */
 export interface AuthCredentialChallengeRequest {
@@ -259,7 +268,7 @@ export interface AuthCredentialChallengeRequest {
    * and 32-byte Y coordinates; 130 hex characters total). The matching private key
    * must remain on the client. Grid bakes this key into the session-creation payload
    * that the returned `challenge` is computed from, so the resulting session signing
-   * key is sealed to the client. Ignored for `EMAIL_OTP`.
+   * key is sealed to the client. Ignored for `EMAIL_OTP` and `SMS_OTP`.
    */
   clientPublicKey?: string;
 }
@@ -275,8 +284,18 @@ export interface AuthCredentialCreateRequest {
 
 export type AuthCredentialCreateRequestOneOf =
   | EmailOtpCredentialCreateRequest
+  | AuthCredentialCreateRequestOneOf.SMSOtpCredentialCreateRequest
   | OAuthCredentialCreateRequest
   | PasskeyCredentialCreateRequest;
+
+export namespace AuthCredentialCreateRequestOneOf {
+  export interface SMSOtpCredentialCreateRequest extends CredentialsAPI.AuthCredentialCreateRequest {
+    /**
+     * Discriminator value identifying this as an SMS OTP credential.
+     */
+    type: 'SMS_OTP';
+  }
+}
 
 export interface AuthCredentialListResponse {
   /**
@@ -287,14 +306,14 @@ export interface AuthCredentialListResponse {
 
 /**
  * Discriminated response shape returned from
- * `POST /auth/credentials/{id}/challenge`. For `EMAIL_OTP` credentials the body is
- * a plain `AuthMethod` (wrapped as `AuthMethodResponse` to disambiguate the
- * oneOf). For `PASSKEY` credentials the body is a `PasskeyAuthChallenge` — the
- * passkey auth method fields plus the WebAuthn `credentialId`, Grid-issued
- * `challenge`, `requestId`, and `expiresAt` that drive the subsequent assertion.
- * OAuth credentials do not use the challenge endpoint. Registration responses from
- * `POST /auth/credentials` use the simpler `AuthMethodResponse` shape directly for
- * all three credential types.
+ * `POST /auth/credentials/{id}/challenge`. For `EMAIL_OTP` and `SMS_OTP`
+ * credentials the body is a plain `AuthMethod` (wrapped as `AuthMethodResponse` to
+ * disambiguate the oneOf). For `PASSKEY` credentials the body is a
+ * `PasskeyAuthChallenge` — the passkey auth method fields plus the WebAuthn
+ * `credentialId`, Grid-issued `challenge`, `requestId`, and `expiresAt` that drive
+ * the subsequent assertion. OAuth credentials do not use the challenge endpoint.
+ * Registration responses from `POST /auth/credentials` use the simpler
+ * `AuthMethodResponse` shape directly for all credential types.
  */
 export type AuthCredentialResponseOneOf = AuthMethodResponse | PasskeyAuthChallenge;
 
@@ -302,7 +321,28 @@ export interface AuthCredentialVerifyRequest {
   type: unknown;
 }
 
-export type AuthCredentialVerifyRequestOneOf = unknown;
+/**
+ * Verify an SMS-OTP credential via the same secure two-leg flow as email OTP. The
+ * client HPKE-encrypts the OTP code (together with its public key) under the
+ * `otpEncryptionTargetBundle` returned from registration or
+ * `POST /auth/credentials/{id}/challenge`, submits the result here, and receives
+ * `202` with a `payloadToSign` carrying a `verificationToken` bound to the
+ * client's public key. The client signs that token with the matching private key
+ * and retries this request with `Grid-Wallet-Signature` + `Request-Id` headers to
+ * obtain the session. Plaintext OTP codes are never sent over the wire.
+ */
+export interface AuthCredentialVerifyRequestOneOf extends AuthCredentialVerifyRequest {
+  /**
+   * HPKE-sealed OTP attempt. Same format and retry semantics as
+   * `EmailOtpCredentialVerifyRequest.encryptedOtpBundle`.
+   */
+  encryptedOtpBundle: string;
+
+  /**
+   * Discriminator value identifying this as an SMS OTP verification.
+   */
+  type: 'SMS_OTP';
+}
 
 export interface AuthMethod {
   /**
@@ -322,9 +362,9 @@ export interface AuthMethod {
 
   /**
    * Human-readable identifier for this credential. For EMAIL_OTP credentials this is
-   * the email address; for OAUTH credentials it is typically the email claim from
-   * the OIDC token; for PASSKEY credentials it is the validated nickname provided at
-   * registration time.
+   * the email address; for SMS_OTP credentials this is the E.164 phone number; for
+   * OAUTH credentials it is typically the email claim from the OIDC token; for
+   * PASSKEY credentials it is the validated nickname provided at registration time.
    */
   nickname: string;
 
@@ -334,6 +374,7 @@ export interface AuthMethod {
    * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
    *   Google or Apple.
    * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
+   * - `SMS_OTP`: A one-time password delivered to the user's phone number.
    * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
    */
   type: AuthMethodType;
@@ -354,30 +395,29 @@ export interface AuthMethod {
 
 /**
  * Strict wrapper around `AuthMethod`. Used directly as the registration response
- * on `POST /auth/credentials` (all three credential types) and inside
- * `AuthCredentialResponseOneOf` for the `EMAIL_OTP` branch of
- * `POST /auth/credentials/{id}/challenge`. The only difference from `AuthMethod`
- * is `unevaluatedProperties: false`, which disambiguates the oneOf against
- * `PasskeyAuthChallenge` — without the strictness, an `AuthMethod` with extra
- * fields would ambiguously match both branches.
+ * on `POST /auth/credentials` and inside `AuthCredentialResponseOneOf` for the
+ * `EMAIL_OTP` / `SMS_OTP` branches of `POST /auth/credentials/{id}/challenge`. The
+ * only difference from `AuthMethod` is `unevaluatedProperties: false`, which
+ * disambiguates the oneOf against `PasskeyAuthChallenge` — without the strictness,
+ * an `AuthMethod` with extra fields would ambiguously match both branches.
  *
- * For `EMAIL_OTP` credentials, responses that initiate or reissue an OTP challenge
- * carry `otpEncryptionTargetBundle` so the client can HPKE-encrypt the OTP code in
- * the subsequent `POST /auth/credentials/{id}/verify` call without the plaintext
- * code ever transiting the server. First-time EMAIL_OTP wallet bootstrap
- * registration can omit it; call `POST /auth/credentials/{id}/challenge` if it is
- * absent.
+ * For `EMAIL_OTP` and `SMS_OTP` credentials, responses that initiate or reissue an
+ * OTP challenge carry `otpEncryptionTargetBundle` so the client can HPKE-encrypt
+ * the OTP code in the subsequent `POST /auth/credentials/{id}/verify` call without
+ * the plaintext code ever transiting the server. First-time EMAIL_OTP wallet
+ * bootstrap registration can omit it; call `POST /auth/credentials/{id}/challenge`
+ * if it is absent.
  */
 export interface AuthMethodResponse extends AuthMethod {
   /**
    * HPKE encryption target bundle for a freshly initiated OTP challenge. Returned
-   * only on `EMAIL_OTP` responses that initiate or reissue an OTP challenge, such as
-   * `POST /auth/credentials/{id}/challenge` and the add-EMAIL_OTP signed-retry
-   * response. It is omitted from first-time EMAIL_OTP wallet bootstrap registration;
-   * call `POST /auth/credentials/{id}/challenge` for the new credential if it is
-   * absent. The client generates an ephemeral P-256 keypair (the Target Encryption
-   * Key, or TEK) and uses this bundle as the recipient when HPKE-encrypting
-   * `{otp_code, public_key}`; the encrypted payload is submitted as
+   * only on `EMAIL_OTP` and `SMS_OTP` responses that initiate or reissue an OTP
+   * challenge, such as `POST /auth/credentials/{id}/challenge` and signed-retry add
+   * responses. It is omitted from first-time EMAIL_OTP wallet bootstrap
+   * registration; call `POST /auth/credentials/{id}/challenge` for the new
+   * credential if it is absent. The client generates an ephemeral P-256 keypair (the
+   * Target Encryption Key, or TEK) and uses this bundle as the recipient when
+   * HPKE-encrypting `{otp_code, public_key}`; the encrypted payload is submitted as
    * `encryptedOtpBundle` on `POST /auth/credentials/{id}/verify`. The bundle is
    * one-time-use per OTP issuance — re-issue via
    * `POST /auth/credentials/{id}/challenge` to obtain a fresh bundle. The matching
@@ -395,9 +435,10 @@ export interface AuthMethodResponse extends AuthMethod {
  * - `OAUTH`: OpenID Connect (OIDC) token issued by an identity provider such as
  *   Google or Apple.
  * - `EMAIL_OTP`: A one-time password delivered to the user's email address.
+ * - `SMS_OTP`: A one-time password delivered to the user's phone number.
  * - `PASSKEY`: A WebAuthn passkey bound to the user's device.
  */
-export type AuthMethodType = 'OAUTH' | 'EMAIL_OTP' | 'PASSKEY';
+export type AuthMethodType = 'OAUTH' | 'EMAIL_OTP' | 'SMS_OTP' | 'PASSKEY';
 
 /**
  * An authentication session on an Embedded Wallet internal account. Returned from
@@ -430,11 +471,11 @@ export interface AuthSession extends AuthMethod {
    * uses it to sign subsequent Embedded Wallet requests until `expiresAt`.
    *
    * Returned only by session-issuing responses for `OAUTH` and `PASSKEY`
-   * credentials. `EMAIL_OTP` sessions omit this field — the client generates a TEK
-   * keypair before verification and retains the private key throughout, so the
-   * server has nothing to deliver. Always omitted from list responses
-   * (`GET /auth/sessions`) since Grid does not retain the plaintext key after the
-   * client has decrypted it.
+   * credentials. `EMAIL_OTP` and `SMS_OTP` sessions omit this field — the client
+   * generates a TEK keypair before verification and retains the private key
+   * throughout, so the server has nothing to deliver. Always omitted from list
+   * responses (`GET /auth/sessions`) since Grid does not retain the plaintext key
+   * after the client has decrypted it.
    */
   encryptedSessionSigningKey?: string;
 }
@@ -443,30 +484,31 @@ export interface AuthSession extends AuthMethod {
  * 202 response returned from Embedded Wallet Auth endpoints that require a signed
  * retry — `POST /auth/credentials` (adding an additional credential),
  * `DELETE /auth/credentials/{id}` (revoking a credential),
- * `DELETE /auth/sessions/{id}` (revoking a session), and the `EMAIL_OTP` branch of
- * `POST /auth/credentials/{id}/verify` (the secure OTP login flow, where the
- * client submits an `encryptedOtpBundle` and receives a `verificationToken` to
- * sign for the second-leg session issuance). Carries the signing fields from
- * `SignedRequestChallenge` plus the `type` of the authentication credential
- * involved (being added, revoked, that issued the session being revoked, or being
- * authenticated). The client already knows the target resource id from the request
- * path / body it just sent, so nothing beyond `type` is echoed in the response.
+ * `DELETE /auth/sessions/{id}` (revoking a session), and the `EMAIL_OTP` /
+ * `SMS_OTP` branch of `POST /auth/credentials/{id}/verify` (the secure OTP login
+ * flow, where the client submits an `encryptedOtpBundle` and receives a
+ * `verificationToken` to sign for the second-leg session issuance). Carries the
+ * signing fields from `SignedRequestChallenge` plus the `type` of the
+ * authentication credential involved (being added, revoked, that issued the
+ * session being revoked, or being authenticated). The client already knows the
+ * target resource id from the request path / body it just sent, so nothing beyond
+ * `type` is echoed in the response.
  *
  * The keypair used to compute the stamp depends on the operation. For credential /
  * session management retries, sign with the session API keypair of an existing
- * verified credential on the same internal account. For the `EMAIL_OTP` verify
- * retry, sign with the ephemeral Target Encryption Key (TEK) the client generated
- * for this login — its public key is the one carried inside the
- * `encryptedOtpBundle` and bound into the `verificationToken`, and it becomes the
- * client's session API key on successful completion.
+ * verified credential on the same internal account. For OTP verify retries, sign
+ * with the ephemeral Target Encryption Key (TEK) the client generated for this
+ * login — its public key is the one carried inside the `encryptedOtpBundle` and
+ * bound into the `verificationToken`, and it becomes the client's session API key
+ * on successful completion.
  */
 export interface AuthSignedRequestChallenge extends SignedRequestChallenge {
   /**
    * Credential type relevant to this challenge: the credential type being added
    * (`POST /auth/credentials`), revoked (`DELETE /auth/credentials/{id}`), or
-   * authenticated (`EMAIL_OTP` branch of `POST /auth/credentials/{id}/verify`). For
-   * session revocation, this is the type of credential that issued the session
-   * (`DELETE /auth/sessions/{id}`).
+   * authenticated (`EMAIL_OTP` / `SMS_OTP` branch of
+   * `POST /auth/credentials/{id}/verify`). For session revocation, this is the type
+   * of credential that issued the session (`DELETE /auth/sessions/{id}`).
    */
   type: AuthMethodType;
 }
@@ -752,22 +794,30 @@ export interface CredentialChallengeParams {
    * and 32-byte Y coordinates; 130 hex characters total). The matching private key
    * must remain on the client. Grid bakes this key into the session-creation payload
    * that the returned `challenge` is computed from, so the resulting session signing
-   * key is sealed to the client. Ignored for `EMAIL_OTP`.
+   * key is sealed to the client. Ignored for `EMAIL_OTP` and `SMS_OTP`.
    */
   clientPublicKey?: string;
 }
 
 export interface CredentialVerifyParams {
   /**
-   * Body param
+   * Body param: Verify an SMS-OTP credential via the same secure two-leg flow as
+   * email OTP. The client HPKE-encrypts the OTP code (together with its public key)
+   * under the `otpEncryptionTargetBundle` returned from registration or
+   * `POST /auth/credentials/{id}/challenge`, submits the result here, and receives
+   * `202` with a `payloadToSign` carrying a `verificationToken` bound to the
+   * client's public key. The client signs that token with the matching private key
+   * and retries this request with `Grid-Wallet-Signature` + `Request-Id` headers to
+   * obtain the session. Plaintext OTP codes are never sent over the wire.
    */
   AuthCredentialVerifyRequest: AuthCredentialVerifyRequestOneOf;
 
   /**
    * Header param: Full API-key stamp built over the prior `payloadToSign` with the
    * TEK (Target Encryption Key) keypair the client generated for this login.
-   * Required on the signed retry that completes an `EMAIL_OTP` verification. Not
-   * used by `OAUTH` or `PASSKEY` verification, which complete in a single call.
+   * Required on the signed retry that completes an `EMAIL_OTP` or `SMS_OTP`
+   * verification. Not used by `OAUTH` or `PASSKEY` verification, which complete in a
+   * single call.
    */
   'Grid-Wallet-Signature'?: string;
 
@@ -775,8 +825,8 @@ export interface CredentialVerifyParams {
    * Header param: The `requestId` returned in a prior `202` response from this
    * endpoint, echoed back exactly here so the server can correlate the signed retry
    * with the issued challenge. Required on the signed retry that completes an
-   * `EMAIL_OTP` verification; must be paired with `Grid-Wallet-Signature`. For
-   * `PASSKEY` verification, the `requestId` issued from
+   * `EMAIL_OTP` or `SMS_OTP` verification; must be paired with
+   * `Grid-Wallet-Signature`. For `PASSKEY` verification, the `requestId` issued from
    * `POST /auth/credentials/{id}/challenge` is echoed here instead so the server can
    * correlate the assertion with the pending challenge.
    */
