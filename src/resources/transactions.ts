@@ -37,6 +37,11 @@ export class Transactions extends APIResource {
    * transactions can be filtered by customer ID, platform customer ID, UMA address,
    * date range, status, and transaction type.
    *
+   * Card transactions are included and identified by `type: CARD`. In Sandbox this
+   * is how you discover a `CardTransaction` id after simulating an authorization —
+   * list the transactions, take the card transaction's `id`, and pass it as the
+   * `cardTransactionId` to the clearing and return simulate endpoints.
+   *
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.

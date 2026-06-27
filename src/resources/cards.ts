@@ -337,14 +337,14 @@ export interface CardTransaction {
   authorizedAt: string;
 
   /**
-   * The id of the `Card` this transaction was made on.
-   */
-  cardId: string;
-
-  /**
    * Creation timestamp (same as `authorizedAt` for card transactions).
    */
   createdAt: string;
+
+  /**
+   * System ID of the customer (cardholder) this transaction belongs to.
+   */
+  customerId: string;
 
   /**
    * Card transactions debit the customer's account.
@@ -353,11 +353,10 @@ export interface CardTransaction {
 
   merchant: SimulateAPI.CardMerchant;
 
-  pullSummary: SimulateAPI.CardPullSummary;
-
-  refundSummary: SimulateAPI.CardRefundSummary;
-
-  settlementSummary: SimulateAPI.CardSettlementSummary;
+  /**
+   * Platform-specific ID of the customer (cardholder) this transaction belongs to.
+   */
+  platformCustomerId: string;
 
   /**
    * Lifecycle status of a card transaction.
@@ -373,9 +372,20 @@ export interface CardTransaction {
   status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
 
   /**
+   * Discriminator identifying this transaction as a card transaction in the
+   * `Transaction` list.
+   */
+  type: 'CARD';
+
+  /**
    * Last update timestamp.
    */
   updatedAt: string;
+
+  /**
+   * The id of the `Card` this transaction was made on.
+   */
+  cardId?: string;
 
   /**
    * Opaque identifier for the transaction on the underlying issuer. Used to
@@ -389,9 +399,15 @@ export interface CardTransaction {
    */
   lastEventAt?: string;
 
+  pullSummary?: SimulateAPI.CardPullSummary;
+
   refundedAmount?: InvitationsAPI.CurrencyAmount;
 
+  refundSummary?: SimulateAPI.CardRefundSummary;
+
   settledAmount?: InvitationsAPI.CurrencyAmount;
+
+  settlementSummary?: SimulateAPI.CardSettlementSummary;
 }
 
 /**
