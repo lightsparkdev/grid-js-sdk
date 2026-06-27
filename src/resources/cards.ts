@@ -228,8 +228,9 @@ export interface Card {
   expYear?: number;
 
   /**
-   * Opaque identifier for the card on the underlying issuer. Useful for
-   * cross-referencing in issuer dashboards; not used for any Grid request routing.
+   * Opaque identifier for the card on the issuer of record (e.g. the Lead Bank
+   * account/card identifier). Useful for cross-referencing in issuer dashboards; not
+   * used for any Grid request routing.
    */
   issuerRef?: string;
 
@@ -239,9 +240,9 @@ export interface Card {
   last4?: string;
 
   /**
-   * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-   * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-   * URL in an iframe in your client to reveal card details.
+   * URL of the card processor's iframe that securely displays the PAN, CVV, and
+   * expiry to the cardholder. The full PAN and CVV never cross Grid's servers —
+   * render this URL in an iframe in your client to reveal card details.
    */
   panEmbedUrl?: string;
 
@@ -250,6 +251,13 @@ export interface Card {
    * omitted, mirroring `platformCustomerId` semantics.
    */
   platformCardId?: string;
+
+  /**
+   * Opaque processor-side reference for the card (e.g. the Lithic card token).
+   * Useful for cross-referencing in the processor's dashboards; not used for any
+   * Grid request routing.
+   */
+  processorRef?: string;
 
   /**
    * Reason associated with the current `state`. Populated when the card is `CLOSED`
