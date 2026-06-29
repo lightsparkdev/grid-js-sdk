@@ -348,6 +348,12 @@ export interface OutgoingTransaction {
   exchangeRate?: number;
 
   /**
+   * Expected settlement time at the beneficiary. Null for instant rails (settlement
+   * is immediate) and before a rail with deferred settlement is resolved.
+   */
+  expectedSettlementAt?: string;
+
+  /**
    * If the transaction failed, this field provides the reason for failure.
    */
   failureReason?:
@@ -369,9 +375,47 @@ export interface OutgoingTransaction {
   paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
 
   /**
+   * The payment rail used to settle this transaction (e.g. ACH, WIRE, NEFT,
+   * FASTER_PAYMENTS). Uses the same values as the PaymentRail sent on quote
+   * requests. Null when no external rail is used (e.g. instant or intra-network
+   * transfers, or non-direct-destination transactions) or before a rail is resolved.
+   */
+  paymentRail?:
+    | 'ACH'
+    | 'ACH_COLOMBIA'
+    | 'BANK_TRANSFER'
+    | 'BRE_B'
+    | 'CIPS'
+    | 'FAST'
+    | 'FASTER_PAYMENTS'
+    | 'FEDNOW'
+    | 'INSTAPAY'
+    | 'MOBILE_MONEY'
+    | 'NEFT'
+    | 'PAYNOW'
+    | 'PESONET'
+    | 'PIX'
+    | 'RTGS'
+    | 'RTP'
+    | 'SEPA'
+    | 'SEPA_INSTANT'
+    | 'SPEI'
+    | 'SWIFT'
+    | 'UNIONPAY'
+    | 'UPI'
+    | 'WIRE'
+    | null;
+
+  /**
    * The ID of the quote that was used to trigger this payment
    */
   quoteId?: string;
+
+  /**
+   * How the rail was chosen — MANUAL when the platform specified a paymentRail on
+   * the destination, AUTO when Lightspark selects it. Null when no rail is resolved.
+   */
+  railSelectionMode?: 'AUTO' | 'MANUAL' | null;
 
   /**
    * Details about the rate and fees for the transaction.
@@ -404,6 +448,12 @@ export interface OutgoingTransaction {
    * When the payment was or will be settled
    */
   settledAt?: string;
+
+  /**
+   * Expected number of seconds from quote creation to settlement. Null when not yet
+   * known.
+   */
+  settlementTimelineSeconds?: number | null;
 
   /**
    * When the transaction was last updated
