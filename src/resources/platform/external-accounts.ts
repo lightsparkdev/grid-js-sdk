@@ -378,6 +378,11 @@ export interface GtqAccountInfo {
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
 
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
   paymentRails: Array<'BANK_TRANSFER'>;
 }
 
@@ -462,6 +467,11 @@ export interface JmdAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   /**
    * The branch code

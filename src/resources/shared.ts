@@ -843,6 +843,11 @@ export interface GtqExternalAccountCreateInfo {
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
 
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
   beneficiary: GtqBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 }
 
@@ -1025,6 +1030,11 @@ export interface JmdExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   beneficiary: JmdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
