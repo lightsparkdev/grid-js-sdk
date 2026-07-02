@@ -42,6 +42,8 @@ describe('resource customers', () => {
         currencies: ['USD', 'USDC'],
         email: 'john.doe@example.com',
         fullName: 'John Michael Doe',
+        identifier: '123-45-6789',
+        idType: 'SSN',
         kycStatus: 'APPROVED',
         nationality: 'US',
         phoneNumber: '+14155551234',

@@ -918,6 +918,11 @@ export interface IndividualCustomerCreateRequest {
   fullName?: string;
 
   /**
+   * Type of tax identification
+   */
+  idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
+
+  /**
    * The current KYC status of a customer
    */
   kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
