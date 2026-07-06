@@ -971,15 +971,44 @@ export interface IndividualCustomer extends CustomersAPI.Customer {
   nationality?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - NEFT: accountNumber, ifsc, rail
+ * - RTGS: accountNumber, ifsc, rail
+ * - UPI: vpa
+ */
 export interface InrExternalAccountCreateInfo {
   accountType: 'INR_ACCOUNT';
 
   beneficiary: ExternalAccountsAPI.InrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
+   * Indian bank account number (9–18 digits)
+   */
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
+
+  /**
+   * The Indian Financial System Code (IFSC) of the beneficiary's bank branch
+   * (NEFT/RTGS)
+   */
+  ifsc?: string;
+
+  /**
+   * The payment rail to route the payout over, for currencies that support more than
+   * one (e.g. NEFT or RTGS for INR).
+   */
+  rail?: string;
+
+  /**
    * The UPI Virtual Payment Address
    */
-  vpa: string;
+  vpa?: string;
 }
 
 export interface JmdBeneficiary {

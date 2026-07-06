@@ -444,15 +444,44 @@ export interface IdrAccountInfo {
   swiftCode: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - NEFT: accountNumber, ifsc, rail
+ * - RTGS: accountNumber, ifsc, rail
+ * - UPI: vpa
+ */
 export interface InrAccountInfo {
   accountType: 'INR_ACCOUNT';
 
-  paymentRails: Array<'UPI'>;
+  paymentRails: Array<'UPI' | 'NEFT' | 'RTGS'>;
+
+  /**
+   * Indian bank account number (9–18 digits)
+   */
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
+
+  /**
+   * The Indian Financial System Code (IFSC) of the beneficiary's bank branch
+   * (NEFT/RTGS)
+   */
+  ifsc?: string;
+
+  /**
+   * The payment rail to route the payout over, for currencies that support more than
+   * one (e.g. NEFT or RTGS for INR).
+   */
+  rail?: string;
 
   /**
    * The UPI Virtual Payment Address
    */
-  vpa: string;
+  vpa?: string;
 }
 
 export interface JmdAccountInfo {
