@@ -843,6 +843,13 @@ export interface InrBeneficiary {
   phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - NEFT: accountNumber, ifsc, rail
+ * - RTGS: accountNumber, ifsc, rail
+ * - UPI: vpa
+ */
 export type InrExternalAccountInfo = unknown;
 
 export type JmdExternalAccountInfo = unknown;
