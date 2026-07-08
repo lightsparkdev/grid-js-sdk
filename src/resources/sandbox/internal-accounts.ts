@@ -85,8 +85,11 @@ export interface InternalAccount {
    * - `FROZEN`: The account cannot send or receive payments. Grid may freeze an
    *   account in response to compliance or fraud signals; payments are blocked while
    *   the account remains frozen.
+   * - `FAILED`: The account could not be provisioned. Grid was unable to create the
+   *   underlying account, so it cannot send or receive payments and requires
+   *   remediation.
    */
-  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN' | 'FAILED';
 
   /**
    * The total balance, including pending and held funds
