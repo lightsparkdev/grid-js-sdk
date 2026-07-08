@@ -97,11 +97,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$platformConfig = $client->config->retrieve();\n\nvar_dump($platformConfig);",
       },
-      csharp: {
-        method: 'Config.Retrieve',
-        example:
-          'ConfigRetrieveParams parameters = new();\n\nvar platformConfig = await client.Config.Retrieve(parameters);\n\nConsole.WriteLine(platformConfig);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -161,11 +156,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$platformConfig = $client->config->update(\n  embeddedWalletConfig: [\n    'alphanumeric' => false,\n    'appName' => 'Acme Wallet',\n    'expirationSeconds' => 300,\n    'logoURL' => 'https://acme.com/logo.png',\n    'otpLength' => 6,\n    'replyToEmailAddress' => 'support@acme.com',\n    'sendFromEmailAddress' => 'noreply@acme.com',\n    'sendFromEmailSenderName' => 'Acme Notifications',\n  ],\n  supportedCurrencies: [\n    [\n      'currencyCode' => 'USD',\n      'enabledTransactionTypes' => [\n        TransactionType::OUTGOING, TransactionType::INCOMING\n      ],\n      'maxAmount' => 1000000,\n      'minAmount' => 100,\n      'requiredCounterpartyFields' => [\n        ['mandatory' => true, 'name' => CustomerInfoFieldName::FULL_NAME],\n        ['mandatory' => true, 'name' => CustomerInfoFieldName::BIRTH_DATE],\n        ['mandatory' => true, 'name' => CustomerInfoFieldName::NATIONALITY],\n      ],\n    ],\n  ],\n  umaDomain: 'mycompany.com',\n  webhookEndpoint: 'https://api.mycompany.com/webhooks/uma',\n);\n\nvar_dump($platformConfig);",
       },
-      csharp: {
-        method: 'Config.Update',
-        example:
-          'ConfigUpdateParams parameters = new();\n\nvar platformConfig = await client.Config.Update(parameters);\n\nConsole.WriteLine(platformConfig);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/config \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "umaDomain": "mycompany.com",\n          "webhookEndpoint": "https://api.mycompany.com/webhooks/uma"\n        }\'',
@@ -223,11 +213,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->create',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->create(\n  createCustomerRequest: [\n    'customerType' => 'INDIVIDUAL',\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1990-01-15',\n    'currencies' => ['USD', 'USDC'],\n    'email' => 'john.doe@example.com',\n    'fullName' => 'John Michael Doe',\n    'identifier' => '123-45-6789',\n    'idType' => 'SSN',\n    'kycStatus' => 'APPROVED',\n    'nationality' => 'US',\n    'phoneNumber' => '+14155551234',\n    'platformCustomerID' => '9f84e0c2a72c4fa',\n    'region' => 'US',\n    'umaAddress' => '$john.doe@uma.domain.com',\n  ],\n);\n\nvar_dump($customerOneOf);",
-      },
-      csharp: {
-        method: 'Customers.Create',
-        example:
-          'CustomerCreateParams parameters = new()\n{\n    CreateCustomerRequest = new IndividualCustomerCreateRequest()\n    {\n        CustomerType = CustomerType.Individual,\n        Address = new()\n        {\n            Country = "US",\n            Line1 = "123 Main Street",\n            PostalCode = "94105",\n            City = "San Francisco",\n            Line2 = "Apt 4B",\n            State = "CA",\n        },\n        BirthDate = "1990-01-15",\n        Currencies =\n        [\n            "USD", "USDC"\n        ],\n        Email = "john.doe@example.com",\n        FullName = "John Michael Doe",\n        Identifier = "123-45-6789",\n        IDType = IDType.Ssn,\n        KycStatus = KycStatus.Approved,\n        Nationality = "US",\n        PhoneNumber = "+14155551234",\n        PlatformCustomerID = "9f84e0c2a72c4fa",\n        Region = "US",\n        UmaAddress = "$john.doe@uma.domain.com",\n    },\n};\n\nvar customerOneOf = await client.Customers.Create(parameters);\n\nConsole.WriteLine(customerOneOf);',
       },
       http: {
         example:
@@ -297,11 +282,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->customers->list(\n  createdAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  createdBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  currency: 'currency',\n  cursor: 'cursor',\n  customerType: 'INDIVIDUAL',\n  isIncludingDeleted: true,\n  limit: 1,\n  platformCustomerID: 'platformCustomerId',\n  region: 'region',\n  umaAddress: 'umaAddress',\n  updatedAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  updatedBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Customers.List',
-        example:
-          'CustomerListParams parameters = new();\n\nvar page = await client.Customers.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -356,11 +336,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->retrieve('customerId');\n\nvar_dump($customerOneOf);",
-      },
-      csharp: {
-        method: 'Customers.Retrieve',
-        example:
-          'CustomerRetrieveParams parameters = new() { CustomerID = "customerId" };\n\nvar customerOneOf = await client.Customers.Retrieve(parameters);\n\nConsole.WriteLine(customerOneOf);',
       },
       http: {
         example:
@@ -423,11 +398,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->update(\n  'customerId',\n  updateCustomerRequest: [\n    'customerType' => 'INDIVIDUAL',\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1990-01-15',\n    'currencies' => ['USD', 'EUR', 'USDC'],\n    'email' => 'john.doe@example.com',\n    'fullName' => 'John Michael Doe',\n    'kycStatus' => 'APPROVED',\n    'nationality' => 'US',\n    'phoneNumber' => '+14155551234',\n    'umaAddress' => '$john.doe@uma.domain.com',\n  ],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:019542f5-b3e7-1d02-0000-000000000010',\n);\n\nvar_dump($customerOneOf);",
       },
-      csharp: {
-        method: 'Customers.Update',
-        example:
-          'CustomerUpdateParams parameters = new()\n{\n    CustomerID = "customerId",\n    UpdateCustomerRequest = new IndividualCustomerUpdateRequest()\n    {\n        CustomerType = CustomerType.Individual,\n        Address = new()\n        {\n            Country = "US",\n            Line1 = "123 Main Street",\n            PostalCode = "94105",\n            City = "San Francisco",\n            Line2 = "Apt 4B",\n            State = "CA",\n        },\n        BirthDate = "1990-01-15",\n        Currencies =\n        [\n            "USD", "EUR", "USDC"\n        ],\n        Email = "john.doe@example.com",\n        FullName = "John Michael Doe",\n        KycStatus = KycStatus.Approved,\n        Nationality = "US",\n        PhoneNumber = "+14155551234",\n        UmaAddress = "$john.doe@uma.domain.com",\n    },\n};\n\nvar customerOneOf = await client.Customers.Update(parameters);\n\nConsole.WriteLine(customerOneOf);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/$CUSTOMER_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerType": "INDIVIDUAL",\n          "address": {\n            "country": "US",\n            "line1": "123 Main Street",\n            "postalCode": "94105",\n            "city": "San Francisco",\n            "line2": "Apt 4B",\n            "state": "CA"\n          },\n          "birthDate": "1990-01-15",\n          "currencies": [\n            "USD",\n            "EUR",\n            "USDC"\n          ],\n          "email": "john.doe@example.com",\n          "fullName": "John Michael Doe",\n          "kycStatus": "APPROVED",\n          "nationality": "US",\n          "phoneNumber": "+14155551234",\n          "umaAddress": "$john.doe@uma.domain.com"\n        }\'',
@@ -482,11 +452,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$customerOneOf = $client->customers->delete('customerId');\n\nvar_dump($customerOneOf);",
-      },
-      csharp: {
-        method: 'Customers.Delete',
-        example:
-          'CustomerDeleteParams parameters = new() { CustomerID = "customerId" };\n\nvar customerOneOf = await client.Customers.Delete(parameters);\n\nConsole.WriteLine(customerOneOf);',
       },
       http: {
         example:
@@ -550,11 +515,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->customers->listInternalAccounts(\n  currency: 'currency',\n  cursor: 'cursor',\n  customerID: 'customerId',\n  limit: 1,\n  type: 'INTERNAL_FIAT',\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Customers.ListInternalAccounts',
-        example:
-          'CustomerListInternalAccountsParams parameters = new();\n\nvar page = await client.Customers.ListInternalAccounts(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/internal-accounts \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -614,11 +574,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->export',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$internalAccountExportResponse = $client->customers->export(\n  'id',\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($internalAccountExportResponse);",
-      },
-      csharp: {
-        method: 'Customers.Export',
-        example:
-          'CustomerExportParams parameters = new()\n{\n    ID = "id",\n    ClientPublicKey = "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2",\n};\n\nvar internalAccountExportResponse = await client.Customers.Export(parameters);\n\nConsole.WriteLine(internalAccountExportResponse);',
       },
       http: {
         example:
@@ -681,11 +636,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$internalAccount = $client->customers->updateInternalAccount(\n  'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n  internalAccountUpdateRequest: ['privateEnabled' => true],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:019542f5-b3e7-1d02-0000-000000000010',\n);\n\nvar_dump($internalAccount);",
       },
-      csharp: {
-        method: 'Customers.UpdateInternalAccount',
-        example:
-          'CustomerUpdateInternalAccountParams parameters = new()\n{\n    ID = "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n    InternalAccountUpdateRequest = new() { PrivateEnabled = true },\n};\n\nvar internalAccount = await client.Customers.UpdateInternalAccount(parameters);\n\nConsole.WriteLine(internalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/internal-accounts/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "privateEnabled": true\n        }\'',
@@ -745,11 +695,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$kycLinkResponse = $client->customers->createKYCLink(\n  'customerId',\n  kycLinkCreateRequest: [\n    'redirectUri' => 'https://app.example.com/onboarding/completed'\n  ],\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($kycLinkResponse);",
       },
-      csharp: {
-        method: 'Customers.CreateKycLink',
-        example:
-          'CustomerCreateKycLinkParams parameters = new() { CustomerID = "customerId" };\n\nvar kycLinkResponse = await client.Customers.CreateKycLink(parameters);\n\nConsole.WriteLine(kycLinkResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/$CUSTOMER_ID/kyc-link \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -805,11 +750,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->externalAccounts->list',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->customers->externalAccounts->list(\n  currency: 'currency', cursor: 'cursor', customerID: 'customerId', limit: 1\n);\n\nvar_dump($page);",
-      },
-      csharp: {
-        method: 'Customers.ExternalAccounts.List',
-        example:
-          'ExternalAccountListParams parameters = new();\n\nvar page = await client.Customers.ExternalAccounts.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -872,11 +812,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->customers->externalAccounts->create(\n  accountInfo: [\n    'accountType' => 'AED_ACCOUNT',\n    'beneficiary' => [\n      'address' => [\n        'country' => 'US',\n        'line1' => '123 Main Street',\n        'postalCode' => '94105',\n        'city' => 'San Francisco',\n        'line2' => 'Apt 4B',\n        'state' => 'CA',\n      ],\n      'beneficiaryType' => 'INDIVIDUAL',\n      'fullName' => 'fullName',\n      'birthDate' => 'birthDate',\n      'countryOfResidence' => 'countryOfResidence',\n      'email' => 'email',\n      'nationality' => 'nationality',\n      'phoneNumber' => 'phoneNumber',\n    ],\n    'iban' => 'AE070331234567890123456',\n    'swiftCode' => 'EBILAEAD',\n  ],\n  currency: 'USD',\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  defaultUmaDepositAccount: true,\n  platformAccountID: 'ext_acc_123456',\n);\n\nvar_dump($externalAccount);",
       },
-      csharp: {
-        method: 'Customers.ExternalAccounts.Create',
-        example:
-          'ExternalAccountCreateParams parameters = new()\n{\n    AccountInfo = new AedExternalAccountCreateInfo()\n    {\n        AccountType = AccountType.AedAccount,\n        Beneficiary = new AedBeneficiary()\n        {\n            Address = new()\n            {\n                Country = "US",\n                Line1 = "123 Main Street",\n                PostalCode = "94105",\n                City = "San Francisco",\n                Line2 = "Apt 4B",\n                State = "CA",\n            },\n            BeneficiaryType = BeneficiaryType.Individual,\n            FullName = "fullName",\n            BirthDate = "birthDate",\n            CountryOfResidence = "countryOfResidence",\n            Email = "email",\n            Nationality = "nationality",\n            PhoneNumber = "phoneNumber",\n        },\n        Iban = "AE070331234567890123456",\n        SwiftCode = "EBILAEAD",\n    },\n    Currency = "USD",\n};\n\nvar externalAccount = await client.Customers.ExternalAccounts.Create(parameters);\n\nConsole.WriteLine(externalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountInfo": {\n            "accountType": "AED_ACCOUNT",\n            "beneficiary": {\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105"\n              },\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "fullName"\n            },\n            "iban": "AE070331234567890123456",\n            "swiftCode": "EBILAEAD"\n          },\n          "currency": "USD",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -932,11 +867,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->customers->externalAccounts->retrieve(\n  'externalAccountId'\n);\n\nvar_dump($externalAccount);",
       },
-      csharp: {
-        method: 'Customers.ExternalAccounts.Retrieve',
-        example:
-          'ExternalAccountRetrieveParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nvar externalAccount = await client.Customers.ExternalAccounts.Retrieve(parameters);\n\nConsole.WriteLine(externalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -989,11 +919,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->externalAccounts->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->customers->externalAccounts->delete('externalAccountId');\n\nvar_dump($result);",
-      },
-      csharp: {
-        method: 'Customers.ExternalAccounts.Delete',
-        example:
-          'ExternalAccountDeleteParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nawait client.Customers.ExternalAccounts.Delete(parameters);',
       },
       http: {
         example:
@@ -1049,11 +974,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'customers->bulk->uploadCsv',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->customers->bulk->uploadCsv(\n  file: FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n);\n\nvar_dump($response);",
-      },
-      csharp: {
-        method: 'Customers.Bulk.UploadCsv',
-        example:
-          'BulkUploadCsvParams parameters = new()\n{\n    File = Encoding.UTF8.GetBytes("Example data")\n};\n\nvar response = await client.Customers.Bulk.UploadCsv(parameters);\n\nConsole.WriteLine(response);',
       },
       http: {
         example:
@@ -1111,11 +1031,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$response = $client->customers->bulk->getJobStatus('jobId');\n\nvar_dump($response);",
       },
-      csharp: {
-        method: 'Customers.Bulk.GetJobStatus',
-        example:
-          'BulkGetJobStatusParams parameters = new() { JobID = "jobId" };\n\nvar response = await client.Customers.Bulk.GetJobStatus(parameters);\n\nConsole.WriteLine(response);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/customers/bulk/jobs/$JOB_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1172,11 +1087,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$platformInternalAccountListResponse = $client->platform->listInternalAccounts(\n  currency: 'currency', type: 'INTERNAL_FIAT'\n);\n\nvar_dump($platformInternalAccountListResponse);",
       },
-      csharp: {
-        method: 'Platform.ListInternalAccounts',
-        example:
-          'PlatformListInternalAccountsParams parameters = new();\n\nvar platformInternalAccountListResponse = await client.Platform.ListInternalAccounts(parameters);\n\nConsole.WriteLine(platformInternalAccountListResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/internal-accounts \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1232,11 +1142,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform->externalAccounts->list',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->platform->externalAccounts->list(\n  currency: 'currency', cursor: 'cursor', limit: 1\n);\n\nvar_dump($page);",
-      },
-      csharp: {
-        method: 'Platform.ExternalAccounts.List',
-        example:
-          'ExternalAccountListParams parameters = new();\n\nvar page = await client.Platform.ExternalAccounts.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -1297,11 +1202,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->platform->externalAccounts->create(\n  accountInfo: [\n    'accountType' => 'AED_ACCOUNT',\n    'beneficiary' => [\n      'address' => [\n        'country' => 'US',\n        'line1' => '123 Main Street',\n        'postalCode' => '94105',\n        'city' => 'San Francisco',\n        'line2' => 'Apt 4B',\n        'state' => 'CA',\n      ],\n      'beneficiaryType' => 'INDIVIDUAL',\n      'fullName' => 'fullName',\n      'birthDate' => 'birthDate',\n      'countryOfResidence' => 'countryOfResidence',\n      'email' => 'email',\n      'nationality' => 'nationality',\n      'phoneNumber' => 'phoneNumber',\n    ],\n    'iban' => 'AE070331234567890123456',\n    'swiftCode' => 'EBILAEAD',\n  ],\n  currency: 'USD',\n  platformAccountID: 'ext_acc_123456',\n);\n\nvar_dump($externalAccount);",
       },
-      csharp: {
-        method: 'Platform.ExternalAccounts.Create',
-        example:
-          'ExternalAccountCreateParams parameters = new()\n{\n    AccountInfo = new AedExternalAccountCreateInfo()\n    {\n        AccountType = AccountType.AedAccount,\n        Beneficiary = new AedBeneficiary()\n        {\n            Address = new()\n            {\n                Country = "US",\n                Line1 = "123 Main Street",\n                PostalCode = "94105",\n                City = "San Francisco",\n                Line2 = "Apt 4B",\n                State = "CA",\n            },\n            BeneficiaryType = BeneficiaryType.Individual,\n            FullName = "fullName",\n            BirthDate = "birthDate",\n            CountryOfResidence = "countryOfResidence",\n            Email = "email",\n            Nationality = "nationality",\n            PhoneNumber = "phoneNumber",\n        },\n        Iban = "AE070331234567890123456",\n        SwiftCode = "EBILAEAD",\n    },\n    Currency = "USD",\n};\n\nvar externalAccount = await client.Platform.ExternalAccounts.Create(parameters);\n\nConsole.WriteLine(externalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "accountInfo": {\n            "accountType": "AED_ACCOUNT",\n            "beneficiary": {\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105"\n              },\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "fullName"\n            },\n            "iban": "AE070331234567890123456",\n            "swiftCode": "EBILAEAD"\n          },\n          "currency": "USD",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -1357,11 +1257,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccount = $client->platform->externalAccounts->retrieve(\n  'externalAccountId'\n);\n\nvar_dump($externalAccount);",
       },
-      csharp: {
-        method: 'Platform.ExternalAccounts.Retrieve',
-        example:
-          'ExternalAccountRetrieveParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nvar externalAccount = await client.Platform.ExternalAccounts.Retrieve(parameters);\n\nConsole.WriteLine(externalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/platform/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1414,11 +1309,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'platform->externalAccounts->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->platform->externalAccounts->delete('externalAccountId');\n\nvar_dump($result);",
-      },
-      csharp: {
-        method: 'Platform.ExternalAccounts.Delete',
-        example:
-          'ExternalAccountDeleteParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nawait client.Platform.ExternalAccounts.Delete(parameters);',
       },
       http: {
         example:
@@ -1480,11 +1370,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transferIn->create(\n  destination: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  source: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965'\n  ],\n  amount: 12550,\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($transaction);",
       },
-      csharp: {
-        method: 'TransferIn.Create',
-        example:
-          'TransferInCreateParams parameters = new()\n{\n    Destination = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n    Source = new("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"),\n};\n\nvar transaction = await client.TransferIn.Create(parameters);\n\nConsole.WriteLine(transaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transfer-in \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "source": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "amount": 12550\n        }\'',
@@ -1545,11 +1430,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transferOut->create(\n  destination: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    'paymentRail' => 'ACH',\n  ],\n  source: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  amount: 12550,\n  remittanceInformation: '12345',\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($transaction);",
       },
-      csharp: {
-        method: 'TransferOut.Create',
-        example:
-          'TransferOutCreateParams parameters = new()\n{\n    Destination = new()\n    {\n        AccountID = "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n        PaymentRail = PaymentRail.Ach,\n    },\n    Source = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n};\n\nvar transaction = await client.TransferOut.Create(parameters);\n\nConsole.WriteLine(transaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transfer-out \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "source": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "amount": 12550,\n          "remittanceInformation": "12345"\n        }\'',
@@ -1605,11 +1485,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'receiver->lookupUma',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaLookupResponse = $client->receiver->lookupUma(\n  'receiverUmaAddress',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n);\n\nvar_dump($umaLookupResponse);",
-      },
-      csharp: {
-        method: 'Receiver.LookupUma',
-        example:
-          'ReceiverLookupUmaParams parameters = new()\n{\n    ReceiverUmaAddress = "receiverUmaAddress"\n};\n\nvar umaLookupResponse = await client.Receiver.LookupUma(parameters);\n\nConsole.WriteLine(umaLookupResponse);',
       },
       http: {
         example:
@@ -1667,11 +1542,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccountLookupResponse = $client->receiver->lookupExternalAccount(\n  'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n);\n\nvar_dump($externalAccountLookupResponse);",
       },
-      csharp: {
-        method: 'Receiver.LookupExternalAccount',
-        example:
-          'ReceiverLookupExternalAccountParams parameters = new()\n{\n    AccountID = "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n};\n\nvar externalAccountLookupResponse = await client.Receiver.LookupExternalAccount(parameters);\n\nConsole.WriteLine(externalAccountLookupResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/receiver/external-account/$ACCOUNT_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1727,11 +1597,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$quote = $client->quotes->retrieve('quoteId');\n\nvar_dump($quote);",
-      },
-      csharp: {
-        method: 'Quotes.Retrieve',
-        example:
-          'QuoteRetrieveParams parameters = new() { QuoteID = "quoteId" };\n\nvar quote = await client.Quotes.Retrieve(parameters);\n\nConsole.WriteLine(quote);',
       },
       http: {
         example:
@@ -1800,11 +1665,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$quote = $client->quotes->create(\n  destination: (object) [],\n  lockedCurrencyAmount: 1000,\n  lockedCurrencySide: 'SENDING',\n  source: (object) [],\n  description: 'Invoice #1234 payment',\n  immediatelyExecute: false,\n  lookupID: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',\n  purposeOfPayment: 'GIFT',\n  senderCustomerInfo: ['FULL_NAME' => 'bar', 'NATIONALITY' => 'bar'],\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($quote);",
       },
-      csharp: {
-        method: 'Quotes.Create',
-        example:
-          'QuoteCreateParams parameters = new()\n{\n    Destination = JsonSerializer.Deserialize<JsonElement>("{}"),\n    LockedCurrencyAmount = 1000,\n    LockedCurrencySide = LockedCurrencySide.Sending,\n    Source = JsonSerializer.Deserialize<JsonElement>("{}"),\n};\n\nvar quote = await client.Quotes.Create(parameters);\n\nConsole.WriteLine(quote);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "destination": {},\n          "lockedCurrencyAmount": 1000,\n          "lockedCurrencySide": "SENDING",\n          "source": {},\n          "description": "Invoice #1234 payment",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
@@ -1860,11 +1720,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'quotes->execute',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$quote = $client->quotes->execute(\n  'Quote:019542f5-b3e7-1d02-0000-000000000001',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($quote);",
-      },
-      csharp: {
-        method: 'Quotes.Execute',
-        example:
-          'QuoteExecuteParams parameters = new()\n{\n    QuoteID = "Quote:019542f5-b3e7-1d02-0000-000000000001"\n};\n\nvar quote = await client.Quotes.Execute(parameters);\n\nConsole.WriteLine(quote);',
       },
       http: {
         example:
@@ -1934,11 +1789,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->transactions->list(\n  accountIdentifier: 'accountIdentifier',\n  cursor: 'cursor',\n  customerID: 'customerId',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  platformCustomerID: 'platformCustomerId',\n  receiverAccountIdentifier: 'receiverAccountIdentifier',\n  reference: 'reference',\n  senderAccountIdentifier: 'senderAccountIdentifier',\n  sortOrder: 'asc',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  status: TransactionStatus::CREATED,\n  type: TransactionType::INCOMING,\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Transactions.List',
-        example:
-          'TransactionListParams parameters = new();\n\nvar page = await client.Transactions.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -1992,11 +1842,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'transactions->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transactions->retrieve('transactionId');\n\nvar_dump($transaction);",
-      },
-      csharp: {
-        method: 'Transactions.Retrieve',
-        example:
-          'TransactionRetrieveParams parameters = new()\n{\n    TransactionID = "transactionId"\n};\n\nvar transaction = await client.Transactions.Retrieve(parameters);\n\nConsole.WriteLine(transaction);',
       },
       http: {
         example:
@@ -2054,11 +1899,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$incomingTransaction = $client->transactions->approve(\n  'transactionId', receiverCustomerInfo: ['foo' => 'bar']\n);\n\nvar_dump($incomingTransaction);",
       },
-      csharp: {
-        method: 'Transactions.Approve',
-        example:
-          'TransactionApproveParams parameters = new() { TransactionID = "transactionId" };\n\nvar incomingTransaction = await client.Transactions.Approve(parameters);\n\nConsole.WriteLine(incomingTransaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/approve \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2115,11 +1955,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$incomingTransaction = $client->transactions->reject(\n  'transactionId', reason: 'RESTRICTED_JURISDICTION'\n);\n\nvar_dump($incomingTransaction);",
       },
-      csharp: {
-        method: 'Transactions.Reject',
-        example:
-          'TransactionRejectParams parameters = new() { TransactionID = "transactionId" };\n\nvar incomingTransaction = await client.Transactions.Reject(parameters);\n\nConsole.WriteLine(incomingTransaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2175,11 +2010,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->create(\n  inviterUma: '$inviter@uma.domain',\n  amountToSend: 12550,\n  expiresAt: new \\DateTimeImmutable('2025-09-01T14:30:00Z'),\n  firstName: 'Alice',\n);\n\nvar_dump($umaInvitation);",
       },
-      csharp: {
-        method: 'Invitations.Create',
-        example:
-          'InvitationCreateParams parameters = new()\n{\n    InviterUma = "$inviter@uma.domain"\n};\n\nvar umaInvitation = await client.Invitations.Create(parameters);\n\nConsole.WriteLine(umaInvitation);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "inviterUma": "$inviter@uma.domain",\n          "amountToSend": 12550,\n          "expiresAt": "2025-09-01T14:30:00Z",\n          "firstName": "Alice"\n        }\'',
@@ -2234,11 +2064,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'invitations->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->retrieve('invitationCode');\n\nvar_dump($umaInvitation);",
-      },
-      csharp: {
-        method: 'Invitations.Retrieve',
-        example:
-          'InvitationRetrieveParams parameters = new()\n{\n    InvitationCode = "invitationCode"\n};\n\nvar umaInvitation = await client.Invitations.Retrieve(parameters);\n\nConsole.WriteLine(umaInvitation);',
       },
       http: {
         example:
@@ -2296,11 +2121,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->claim(\n  'invitationCode', inviteeUma: '$invitee@uma.domain'\n);\n\nvar_dump($umaInvitation);",
       },
-      csharp: {
-        method: 'Invitations.Claim',
-        example:
-          'InvitationClaimParams parameters = new()\n{\n    InvitationCode = "invitationCode",\n    InviteeUma = "$invitee@uma.domain",\n};\n\nvar umaInvitation = await client.Invitations.Claim(parameters);\n\nConsole.WriteLine(umaInvitation);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations/$INVITATION_CODE/claim \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "inviteeUma": "$invitee@uma.domain"\n        }\'',
@@ -2357,11 +2177,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaInvitation = $client->invitations->cancel('invitationCode');\n\nvar_dump($umaInvitation);",
       },
-      csharp: {
-        method: 'Invitations.Cancel',
-        example:
-          'InvitationCancelParams parameters = new() { InvitationCode = "invitationCode" };\n\nvar umaInvitation = await client.Invitations.Cancel(parameters);\n\nConsole.WriteLine(umaInvitation);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/invitations/$INVITATION_CODE/cancel \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2417,11 +2232,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox->sendFunds',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$outgoingTransaction = $client->sandbox->sendFunds(\n  currencyCode: 'USD',\n  quoteID: 'Quote:019542f5-b3e7-1d02-0000-000000000006',\n  currencyAmount: 1000,\n);\n\nvar_dump($outgoingTransaction);",
-      },
-      csharp: {
-        method: 'Sandbox.SendFunds',
-        example:
-          'SandboxSendFundsParams parameters = new()\n{\n    CurrencyCode = "USD",\n    QuoteID = "Quote:019542f5-b3e7-1d02-0000-000000000006",\n};\n\nvar outgoingTransaction = await client.Sandbox.SendFunds(parameters);\n\nConsole.WriteLine(outgoingTransaction);',
       },
       http: {
         example:
@@ -2485,11 +2295,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$incomingTransaction = $client->sandbox->uma->receivePayment(\n  receivingCurrencyAmount: 1000,\n  receivingCurrencyCode: 'USD',\n  senderUmaAddress: '$success.usd@sandbox.grid.uma.money',\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  receiverUmaAddress: '$receiver@uma.domain',\n);\n\nvar_dump($incomingTransaction);",
       },
-      csharp: {
-        method: 'Sandbox.Uma.ReceivePayment',
-        example:
-          'UmaReceivePaymentParams parameters = new()\n{\n    ReceivingCurrencyAmount = 1000,\n    ReceivingCurrencyCode = "USD",\n    SenderUmaAddress = "$success.usd@sandbox.grid.uma.money",\n};\n\nvar incomingTransaction = await client.Sandbox.Uma.ReceivePayment(parameters);\n\nConsole.WriteLine(incomingTransaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/uma/receive \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "receivingCurrencyAmount": 1000,\n          "receivingCurrencyCode": "USD",\n          "senderUmaAddress": "$success.usd@sandbox.grid.uma.money",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "receiverUmaAddress": "$receiver@uma.domain"\n        }\'',
@@ -2546,11 +2351,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$internalAccount = $client->sandbox->internalAccounts->fund(\n  'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123', amount: 100000\n);\n\nvar_dump($internalAccount);",
       },
-      csharp: {
-        method: 'Sandbox.InternalAccounts.Fund',
-        example:
-          'InternalAccountFundParams parameters = new()\n{\n    AccountID = "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n    Amount = 100000,\n};\n\nvar internalAccount = await client.Sandbox.InternalAccounts.Fund(parameters);\n\nConsole.WriteLine(internalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/internal-accounts/$ACCOUNT_ID/fund \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 100000\n        }\'',
@@ -2603,11 +2403,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox->webhooks->sendTest',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$testWebhookResponse = $client->sandbox->webhooks->sendTest();\n\nvar_dump($testWebhookResponse);",
-      },
-      csharp: {
-        method: 'Sandbox.Webhooks.SendTest',
-        example:
-          'WebhookSendTestParams parameters = new();\n\nvar testWebhookResponse = await client.Sandbox.Webhooks.SendTest(parameters);\n\nConsole.WriteLine(testWebhookResponse);',
       },
       http: {
         example:
@@ -2670,11 +2465,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$cardTransaction = $client->sandbox->cards->simulate->authorization(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  amount: 1250,\n  currency: [\n    'code' => 'USD',\n    'decimals' => 2,\n    'name' => 'United States Dollar',\n    'symbol' => '$',\n  ],\n  merchant: [\n    'descriptor' => 'BLUE BOTTLE COFFEE SF', 'country' => 'US', 'mcc' => '5814'\n  ],\n);\n\nvar_dump($cardTransaction);",
       },
-      csharp: {
-        method: 'Sandbox.Cards.Simulate.Authorization',
-        example:
-          'SimulateAuthorizationParams parameters = new()\n{\n    ID = "Card:019542f5-b3e7-1d02-0000-000000000010",\n    Amount = 1250,\n    Currency = new()\n    {\n        Code = "USD",\n        Decimals = 2,\n        Name = "United States Dollar",\n        Symbol = "$",\n    },\n    Merchant = new()\n    {\n        Descriptor = "BLUE BOTTLE COFFEE SF",\n        Country = "US",\n        Mcc = "5814",\n    },\n};\n\nvar cardTransaction = await client.Sandbox.Cards.Simulate.Authorization(parameters);\n\nConsole.WriteLine(cardTransaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/cards/$ID/simulate/authorization \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 1250,\n          "currency": {},\n          "merchant": {\n            "descriptor": "BLUE BOTTLE COFFEE SF"\n          }\n        }\'',
@@ -2731,11 +2521,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$cardTransaction = $client->sandbox->cards->simulate->clearing(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  amount: 1500,\n  cardTransactionID: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',\n);\n\nvar_dump($cardTransaction);",
       },
-      csharp: {
-        method: 'Sandbox.Cards.Simulate.Clearing',
-        example:
-          'SimulateClearingParams parameters = new()\n{\n    ID = "Card:019542f5-b3e7-1d02-0000-000000000010",\n    Amount = 1500,\n    CardTransactionID = "CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n};\n\nvar cardTransaction = await client.Sandbox.Cards.Simulate.Clearing(parameters);\n\nConsole.WriteLine(cardTransaction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/sandbox/cards/$ID/simulate/clearing \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "amount": 1500,\n          "cardTransactionId": "CardTransaction:019542f5-b3e7-1d02-0000-000000000100"\n        }\'',
@@ -2791,11 +2576,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'sandbox->cards->simulate->return',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$cardTransaction = $client->sandbox->cards->simulate->return(\n  'Card:019542f5-b3e7-1d02-0000-000000000010',\n  amount: 1500,\n  cardTransactionID: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',\n);\n\nvar_dump($cardTransaction);",
-      },
-      csharp: {
-        method: 'Sandbox.Cards.Simulate.Return',
-        example:
-          'SimulateReturnParams parameters = new()\n{\n    ID = "Card:019542f5-b3e7-1d02-0000-000000000010",\n    Amount = 1500,\n    CardTransactionID = "CardTransaction:019542f5-b3e7-1d02-0000-000000000100",\n};\n\nvar cardTransaction = await client.Sandbox.Cards.Simulate.Return(parameters);\n\nConsole.WriteLine(cardTransaction);',
       },
       http: {
         example:
@@ -2859,11 +2639,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->umaProviders->list(\n  countryCode: 'US',\n  currencyCode: 'USD',\n  cursor: 'cursor',\n  hasBlockedProviders: true,\n  limit: 1,\n  sortOrder: 'asc',\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'UmaProviders.List',
-        example:
-          'UmaProviderListParams parameters = new();\n\nvar page = await client.UmaProviders.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/uma-providers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -2918,11 +2693,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens->create',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$apiToken = $client->tokens->create(\n  name: 'Sandbox read-only', permissions: [Permission::VIEW]\n);\n\nvar_dump($apiToken);",
-      },
-      csharp: {
-        method: 'Tokens.Create',
-        example:
-          'TokenCreateParams parameters = new()\n{\n    Name = "Sandbox read-only",\n    Permissions =\n    [\n        Permission.View\n    ],\n};\n\nvar apiToken = await client.Tokens.Create(parameters);\n\nConsole.WriteLine(apiToken);',
       },
       http: {
         example:
@@ -2987,11 +2757,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->tokens->list(\n  createdAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  createdBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  cursor: 'cursor',\n  limit: 1,\n  name: 'name',\n  updatedAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  updatedBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Tokens.List',
-        example:
-          'TokenListParams parameters = new();\n\nvar page = await client.Tokens.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/tokens \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3047,11 +2812,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$apiToken = $client->tokens->retrieve('tokenId');\n\nvar_dump($apiToken);",
       },
-      csharp: {
-        method: 'Tokens.Retrieve',
-        example:
-          'TokenRetrieveParams parameters = new() { TokenID = "tokenId" };\n\nvar apiToken = await client.Tokens.Retrieve(parameters);\n\nConsole.WriteLine(apiToken);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/tokens/$TOKEN_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3104,11 +2864,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'tokens->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->tokens->delete('tokenId');\n\nvar_dump($result);",
-      },
-      csharp: {
-        method: 'Tokens.Delete',
-        example:
-          'TokenDeleteParams parameters = new() { TokenID = "tokenId" };\n\nawait client.Tokens.Delete(parameters);',
       },
       http: {
         example:
@@ -3165,11 +2920,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$exchangeRateListResponse = $client->exchangeRates->list(\n  destinationCurrency: ['string'],\n  sendingAmount: 0,\n  sourceCurrency: 'sourceCurrency',\n);\n\nvar_dump($exchangeRateListResponse);",
       },
-      csharp: {
-        method: 'ExchangeRates.List',
-        example:
-          'ExchangeRateListParams parameters = new();\n\nvar exchangeRateListResponse = await client.ExchangeRates.List(parameters);\n\nConsole.WriteLine(exchangeRateListResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/exchange-rates \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3216,9 +2966,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'webhooks->unwrap',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->webhooks->unwrap();\n\nvar_dump($result);",
-      },
-      csharp: {
-        example: 'WebhookUnwrapParams parameters = new();\n\nawait client.Webhooks.Unwrap(parameters);',
       },
     },
   },
@@ -3277,11 +3024,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'crypto->estimateWithdrawalFee',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$estimateCryptoWithdrawalFeeResponse = $client->crypto->estimateWithdrawalFee(\n  amount: 1000000,\n  cryptoNetwork: 'SOLANA',\n  currency: 'USDC',\n  destinationAddress: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',\n  internalAccountID: 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',\n);\n\nvar_dump($estimateCryptoWithdrawalFeeResponse);",
-      },
-      csharp: {
-        method: 'Crypto.EstimateWithdrawalFee',
-        example:
-          'CryptoEstimateWithdrawalFeeParams parameters = new()\n{\n    Amount = 1000000,\n    CryptoNetwork = "SOLANA",\n    Currency = "USDC",\n    DestinationAddress = "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",\n    InternalAccountID = "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123",\n};\n\nvar estimateCryptoWithdrawalFeeResponse = await client.Crypto.EstimateWithdrawalFee(parameters);\n\nConsole.WriteLine(estimateCryptoWithdrawalFeeResponse);',
       },
       http: {
         example:
@@ -3344,11 +3086,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$beneficialOwner = $client->beneficialOwners->create(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  ownershipPercentage: 51,\n  personalInfo: [\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1978-06-15',\n    'firstName' => 'Jane',\n    'identifier' => '123-45-6789',\n    'idType' => 'SSN',\n    'lastName' => 'Smith',\n    'nationality' => 'US',\n    'countryOfIssuance' => 'US',\n    'email' => 'jane.smith@acmecorp.com',\n    'middleName' => 'Marie',\n    'phoneNumber' => '+14155550192',\n  ],\n  roles: ['UBO', 'DIRECTOR'],\n);\n\nvar_dump($beneficialOwner);",
       },
-      csharp: {
-        method: 'BeneficialOwners.Create',
-        example:
-          'BeneficialOwnerCreateParams parameters = new()\n{\n    CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    OwnershipPercentage = 51,\n    PersonalInfo = new()\n    {\n        Address = new()\n        {\n            Country = "US",\n            Line1 = "123 Main Street",\n            PostalCode = "94105",\n            City = "San Francisco",\n            Line2 = "Apt 4B",\n            State = "CA",\n        },\n        BirthDate = "1978-06-15",\n        FirstName = "Jane",\n        Identifier = "123-45-6789",\n        IDType = IDType.Ssn,\n        LastName = "Smith",\n        Nationality = "US",\n        CountryOfIssuance = "US",\n        Email = "jane.smith@acmecorp.com",\n        MiddleName = "Marie",\n        PhoneNumber = "+14155550192",\n    },\n    Roles =\n    [\n        Role.Ubo, Role.Director\n    ],\n};\n\nvar beneficialOwner = await client.BeneficialOwners.Create(parameters);\n\nConsole.WriteLine(beneficialOwner);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "ownershipPercentage": 51,\n          "personalInfo": {\n            "address": {\n              "country": "US",\n              "line1": "123 Main Street",\n              "postalCode": "94105"\n            },\n            "birthDate": "1978-06-15",\n            "firstName": "Jane",\n            "identifier": "123-45-6789",\n            "idType": "SSN",\n            "lastName": "Smith",\n            "nationality": "US"\n          },\n          "roles": [\n            "UBO",\n            "DIRECTOR"\n          ]\n        }\'',
@@ -3404,11 +3141,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->beneficialOwners->list(\n  customerID: 'customerId', cursor: 'cursor', limit: 1\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'BeneficialOwners.List',
-        example:
-          'BeneficialOwnerListParams parameters = new() { CustomerID = "customerId" };\n\nvar page = await client.BeneficialOwners.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -3463,11 +3195,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'beneficialOwners->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$beneficialOwner = $client->beneficialOwners->retrieve('beneficialOwnerId');\n\nvar_dump($beneficialOwner);",
-      },
-      csharp: {
-        method: 'BeneficialOwners.Retrieve',
-        example:
-          'BeneficialOwnerRetrieveParams parameters = new()\n{\n    BeneficialOwnerID = "beneficialOwnerId"\n};\n\nvar beneficialOwner = await client.BeneficialOwners.Retrieve(parameters);\n\nConsole.WriteLine(beneficialOwner);',
       },
       http: {
         example:
@@ -3529,11 +3256,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$beneficialOwner = $client->beneficialOwners->update(\n  'beneficialOwnerId',\n  ownershipPercentage: 51,\n  personalInfo: [\n    'address' => [\n      'country' => 'US',\n      'line1' => '123 Main Street',\n      'postalCode' => '94105',\n      'city' => 'San Francisco',\n      'line2' => 'Apt 4B',\n      'state' => 'CA',\n    ],\n    'birthDate' => '1978-06-15',\n    'countryOfIssuance' => 'US',\n    'email' => 'jane.smith@acmecorp.com',\n    'firstName' => 'Jane',\n    'identifier' => '123-45-6789',\n    'idType' => 'SSN',\n    'lastName' => 'Smith',\n    'middleName' => 'Marie',\n    'nationality' => 'US',\n    'phoneNumber' => '+14155550192',\n  ],\n  roles: ['UBO', 'DIRECTOR'],\n);\n\nvar_dump($beneficialOwner);",
       },
-      csharp: {
-        method: 'BeneficialOwners.Update',
-        example:
-          'BeneficialOwnerUpdateParams parameters = new()\n{\n    BeneficialOwnerID = "beneficialOwnerId"\n};\n\nvar beneficialOwner = await client.BeneficialOwners.Update(parameters);\n\nConsole.WriteLine(beneficialOwner);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/beneficial-owners/$BENEFICIAL_OWNER_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "ownershipPercentage": 51,\n          "roles": [\n            "UBO",\n            "DIRECTOR"\n          ]\n        }\'',
@@ -3592,11 +3314,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$document = $client->documents->upload(\n  documentUploadRequest: [\n    'country' => 'US',\n    'documentHolder' => 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',\n    'documentType' => 'PASSPORT',\n    'file' => FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n    'documentNumber' => 'A12345678',\n    'issuingAuthority' => 'U.S. Department of State',\n    'side' => 'FRONT',\n  ],\n);\n\nvar_dump($document);",
       },
-      csharp: {
-        method: 'Documents.Upload',
-        example:
-          'DocumentUploadParams parameters = new()\n{\n    DocumentUploadRequest = new()\n    {\n        Country = "US",\n        DocumentHolder = "BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001",\n        DocumentType = DocumentType.Passport,\n        File = Encoding.UTF8.GetBytes("Example data"),\n        DocumentNumber = "A12345678",\n        IssuingAuthority = "U.S. Department of State",\n        Side = Side.Front,\n    },\n};\n\nvar document = await client.Documents.Upload(parameters);\n\nConsole.WriteLine(document);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/documents \\\n    -H \'Content-Type: multipart/form-data\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -F DocumentUploadRequest=\'{"country":"US","documentHolder":"BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001","documentType":"PASSPORT","file":"Example data"}\'',
@@ -3650,11 +3367,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents->list',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->documents->list(\n  cursor: 'cursor', documentHolder: 'documentHolder', limit: 1\n);\n\nvar_dump($page);",
-      },
-      csharp: {
-        method: 'Documents.List',
-        example:
-          'DocumentListParams parameters = new();\n\nvar page = await client.Documents.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -3710,11 +3422,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$document = $client->documents->retrieve('documentId');\n\nvar_dump($document);",
-      },
-      csharp: {
-        method: 'Documents.Retrieve',
-        example:
-          'DocumentRetrieveParams parameters = new() { DocumentID = "documentId" };\n\nvar document = await client.Documents.Retrieve(parameters);\n\nConsole.WriteLine(document);',
       },
       http: {
         example:
@@ -3775,11 +3482,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$document = $client->documents->replace(\n  'documentId',\n  documentReplaceRequest: [\n    'country' => 'US',\n    'documentType' => 'PASSPORT',\n    'file' => FileParam::fromString('Example data', filename: uniqid('file-upload-', true)),\n    'documentNumber' => 'A12345678',\n    'issuingAuthority' => 'U.S. Department of State',\n    'side' => 'FRONT',\n  ],\n);\n\nvar_dump($document);",
       },
-      csharp: {
-        method: 'Documents.Replace',
-        example:
-          'DocumentReplaceParams parameters = new()\n{\n    DocumentID = "documentId",\n    DocumentReplaceRequest = new()\n    {\n        Country = "US",\n        DocumentType = DocumentType.Passport,\n        File = Encoding.UTF8.GetBytes("Example data"),\n        DocumentNumber = "A12345678",\n        IssuingAuthority = "U.S. Department of State",\n        Side = Side.Front,\n    },\n};\n\nvar document = await client.Documents.Replace(parameters);\n\nConsole.WriteLine(document);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/documents/$DOCUMENT_ID \\\n    -X PUT \\\n    -H \'Content-Type: multipart/form-data\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -F DocumentReplaceRequest=\'{"country":"US","documentType":"PASSPORT","file":"Example data"}\'',
@@ -3833,11 +3535,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'documents->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->documents->delete('documentId');\n\nvar_dump($result);",
-      },
-      csharp: {
-        method: 'Documents.Delete',
-        example:
-          'DocumentDeleteParams parameters = new() { DocumentID = "documentId" };\n\nawait client.Documents.Delete(parameters);',
       },
       http: {
         example:
@@ -3895,11 +3592,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$verification = $client->verifications->submit(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001'\n);\n\nvar_dump($verification);",
       },
-      csharp: {
-        method: 'Verifications.Submit',
-        example:
-          'VerificationSubmitParams parameters = new()\n{\n    CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001"\n};\n\nvar verification = await client.Verifications.Submit(parameters);\n\nConsole.WriteLine(verification);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/verifications \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001"\n        }\'',
@@ -3953,11 +3645,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'verifications->list',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->verifications->list(\n  cursor: 'cursor',\n  customerID: 'customerId',\n  limit: 1,\n  verificationStatus: 'RESOLVE_ERRORS',\n);\n\nvar_dump($page);",
-      },
-      csharp: {
-        method: 'Verifications.List',
-        example:
-          'VerificationListParams parameters = new();\n\nvar page = await client.Verifications.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -4014,11 +3701,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$verification = $client->verifications->retrieve('verificationId');\n\nvar_dump($verification);",
       },
-      csharp: {
-        method: 'Verifications.Retrieve',
-        example:
-          'VerificationRetrieveParams parameters = new()\n{\n    VerificationID = "verificationId"\n};\n\nvar verification = await client.Verifications.Retrieve(parameters);\n\nConsole.WriteLine(verification);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/verifications/$VERIFICATION_ID \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4072,11 +3754,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'discoveries->list',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$discoveryListResponse = $client->discoveries->list(\n  country: 'country', currency: 'currency'\n);\n\nvar_dump($discoveryListResponse);",
-      },
-      csharp: {
-        method: 'Discoveries.List',
-        example:
-          'DiscoveryListParams parameters = new();\n\nvar discoveryListResponse = await client.Discoveries.List(parameters);\n\nConsole.WriteLine(discoveryListResponse);',
       },
       http: {
         example:
@@ -4137,11 +3814,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth->credentials->create',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authMethodResponse = $client->auth->credentials->create(\n  authCredentialCreateRequest: [\n    'accountID' => 'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n    'type' => 'EMAIL_OTP',\n  ],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authMethodResponse);",
-      },
-      csharp: {
-        method: 'Auth.Credentials.Create',
-        example:
-          'CredentialCreateParams parameters = new()\n{\n    AuthCredentialCreateRequest = new EmailOtpCredentialCreateRequest()\n    {\n        AccountID = "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n        Type = JsonSerializer.SerializeToElement("EMAIL_OTP"),\n    },\n};\n\nvar authMethodResponse = await client.Auth.Credentials.Create(parameters);\n\nConsole.WriteLine(authMethodResponse);',
       },
       http: {
         example:
@@ -4204,11 +3876,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSession = $client->auth->credentials->verify(\n  'id',\n  authCredentialVerifyRequest: [\n    'type' => 'SMS_OTP',\n    'encryptedOtpBundle' => '{\"encappedPublic\":\"044f631a2d890bc6668d997ee184e190650d06adf970987568ec641214a00403b73effe1ef406c60a5cde8508a4484567ddb8056fbd493bee614cd727aef02a838\",\"ciphertext\":\"1fa1023390a56539aa48cbb380aa28f544ed5cc04861566bb806e25ba026f14660eaf4140a05b388dd012eaa899759a6a92576cdca8c1b7d12e147bd96cc26ed9f74886794155d8ac5cf0fdc\"}',\n  ],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authSession);",
       },
-      csharp: {
-        method: 'Auth.Credentials.Verify',
-        example:
-          'CredentialVerifyParams parameters = new()\n{\n    ID = "id",\n    AuthCredentialVerifyRequest = new()\n    {\n        Type = JsonSerializer.SerializeToElement("SMS_OTP"),\n        EncryptedOtpBundle = "{\\"encappedPublic\\":\\"044f631a2d890bc6668d997ee184e190650d06adf970987568ec641214a00403b73effe1ef406c60a5cde8508a4484567ddb8056fbd493bee614cd727aef02a838\\",\\"ciphertext\\":\\"1fa1023390a56539aa48cbb380aa28f544ed5cc04861566bb806e25ba026f14660eaf4140a05b388dd012eaa899759a6a92576cdca8c1b7d12e147bd96cc26ed9f74886794155d8ac5cf0fdc\\"}",\n    },\n};\n\nvar authSession = await client.Auth.Credentials.Verify(parameters);\n\nConsole.WriteLine(authSession);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials/$ID/verify \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "type": "SMS_OTP",\n          "encryptedOtpBundle": "{\\\\"encappedPublic\\\\":\\\\"044f631a2d890bc6668d997ee184e190650d06adf970987568ec641214a00403b73effe1ef406c60a5cde8508a4484567ddb8056fbd493bee614cd727aef02a838\\\\",\\\\"ciphertext\\\\":\\\\"1fa1023390a56539aa48cbb380aa28f544ed5cc04861566bb806e25ba026f14660eaf4140a05b388dd012eaa899759a6a92576cdca8c1b7d12e147bd96cc26ed9f74886794155d8ac5cf0fdc\\\\"}"\n        }\'',
@@ -4264,11 +3931,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth->credentials->challenge',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authCredentialResponseOneOf = $client->auth->credentials->challenge(\n  'id',\n  clientPublicKey: '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n);\n\nvar_dump($authCredentialResponseOneOf);",
-      },
-      csharp: {
-        method: 'Auth.Credentials.Challenge',
-        example:
-          'CredentialChallengeParams parameters = new() { ID = "id" };\n\nvar authCredentialResponseOneOf = await client.Auth.Credentials.Challenge(parameters);\n\nConsole.WriteLine(authCredentialResponseOneOf);',
       },
       http: {
         example:
@@ -4326,11 +3988,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authCredentialListResponse = $client->auth->credentials->list(\n  accountID: 'accountId'\n);\n\nvar_dump($authCredentialListResponse);",
       },
-      csharp: {
-        method: 'Auth.Credentials.List',
-        example:
-          'CredentialListParams parameters = new() { AccountID = "accountId" };\n\nvar authCredentialListResponse = await client.Auth.Credentials.List(parameters);\n\nConsole.WriteLine(authCredentialListResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/credentials \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4385,11 +4042,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth->credentials->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSignedRequestChallenge = $client->auth->credentials->delete(\n  'id',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authSignedRequestChallenge);",
-      },
-      csharp: {
-        method: 'Auth.Credentials.Delete',
-        example:
-          'CredentialDeleteParams parameters = new() { ID = "id" };\n\nvar authSignedRequestChallenge = await client.Auth.Credentials.Delete(parameters);\n\nConsole.WriteLine(authSignedRequestChallenge);',
       },
       http: {
         example:
@@ -4446,11 +4098,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$sessionListResponse = $client->auth->sessions->list(accountID: 'accountId');\n\nvar_dump($sessionListResponse);",
       },
-      csharp: {
-        method: 'Auth.Sessions.List',
-        example:
-          'SessionListParams parameters = new() { AccountID = "accountId" };\n\nvar sessionListResponse = await client.Auth.Sessions.List(parameters);\n\nConsole.WriteLine(sessionListResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4505,11 +4152,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'auth->sessions->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSignedRequestChallenge = $client->auth->sessions->delete(\n  'id',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($authSignedRequestChallenge);",
-      },
-      csharp: {
-        method: 'Auth.Sessions.Delete',
-        example:
-          'SessionDeleteParams parameters = new() { ID = "id" };\n\nvar authSignedRequestChallenge = await client.Auth.Sessions.Delete(parameters);\n\nConsole.WriteLine(authSignedRequestChallenge);',
       },
       http: {
         example:
@@ -4572,11 +4214,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$authSession = $client->auth->sessions->refresh(\n  'Session:019542f5-b3e7-1d02-0000-000000000003',\n  authSessionRefreshRequest: [\n    'clientPublicKey' => '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',\n  ],\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  requestID: 'Request:019542f5-b3e7-1d02-0000-000000000010',\n);\n\nvar_dump($authSession);",
       },
-      csharp: {
-        method: 'Auth.Sessions.Refresh',
-        example:
-          'SessionRefreshParams parameters = new()\n{\n    ID = "Session:019542f5-b3e7-1d02-0000-000000000003",\n    AuthSessionRefreshRequest = new(\n        "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n    ),\n};\n\nvar authSession = await client.Auth.Sessions.Refresh(parameters);\n\nConsole.WriteLine(authSession);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/auth/sessions/$ID/refresh \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "clientPublicKey": "04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2"\n        }\'',
@@ -4636,11 +4273,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->create',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentCreateResponse = $client->agents->create(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  name: 'Payroll Automation Agent',\n  policy: [\n    'defaultExecutionMode' => 'AUTO',\n    'permissions' => ['VIEW_TRANSACTIONS'],\n    'spendingLimits' => [\n      'currency' => 'USD',\n      'perTransactionLimit' => 50000,\n      'dailyLimit' => 500000,\n      'dailyTransactionLimit' => 10,\n      'monthlyLimit' => 5000000,\n    ],\n    'accountRestrictions' => [\n      'accountRules' => [\n        [\n          'accountID' => 'Account:019542f5-b3e7-1d02-0000-000000000001',\n          'executionMode' => 'AUTO',\n          'perTransactionLimit' => 10000,\n        ],\n      ],\n      'allowedAccountIDs' => ['Account:019542f5-b3e7-1d02-0000-000000000001'],\n    ],\n    'approvalThresholds' => ['amount' => 100000, 'currency' => 'USD'],\n  ],\n);\n\nvar_dump($agentCreateResponse);",
-      },
-      csharp: {
-        method: 'Agents.Create',
-        example:
-          'AgentCreateParams parameters = new()\n{\n    CustomerID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    Name = "Payroll Automation Agent",\n    Policy = new()\n    {\n        DefaultExecutionMode = DefaultExecutionMode.Auto,\n        Permissions =\n        [\n            Permission.ViewTransactions\n        ],\n        SpendingLimits = new()\n        {\n            Currency = "USD",\n            PerTransactionLimit = 50000,\n            DailyLimit = 500000,\n            DailyTransactionLimit = 10,\n            MonthlyLimit = 5000000,\n        },\n        AccountRestrictions = new()\n        {\n            AccountRules =\n            [\n                new()\n                {\n                    AccountID = "Account:019542f5-b3e7-1d02-0000-000000000001",\n                    ExecutionMode = ExecutionMode.Auto,\n                    PerTransactionLimit = 10000,\n                },\n            ],\n            AllowedAccountIds =\n            [\n                "Account:019542f5-b3e7-1d02-0000-000000000001"\n            ],\n        },\n        ApprovalThresholds = new()\n        {\n            Amount = 100000,\n            Currency = "USD",\n        },\n    },\n};\n\nvar agentCreateResponse = await client.Agents.Create(parameters);\n\nConsole.WriteLine(agentCreateResponse);',
       },
       http: {
         example:
@@ -4706,11 +4338,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->agents->list(\n  createdAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  createdBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  cursor: 'cursor',\n  customerID: 'customerId',\n  isConnected: true,\n  isPaused: true,\n  limit: 1,\n  updatedAfter: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  updatedBefore: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Agents.List',
-        example:
-          'AgentListParams parameters = new();\n\nvar page = await client.Agents.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4774,11 +4401,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->agents->listApprovals(\n  agentID: 'agentId',\n  cursor: 'cursor',\n  customerID: 'customerId',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  sortOrder: 'asc',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Agents.ListApprovals',
-        example:
-          'AgentListApprovalsParams parameters = new();\n\nvar page = await client.Agents.ListApprovals(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/approvals \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -4833,11 +4455,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agent = $client->agents->retrieve('agentId');\n\nvar_dump($agent);",
-      },
-      csharp: {
-        method: 'Agents.Retrieve',
-        example:
-          'AgentRetrieveParams parameters = new() { AgentID = "agentId" };\n\nvar agent = await client.Agents.Retrieve(parameters);\n\nConsole.WriteLine(agent);',
       },
       http: {
         example:
@@ -4894,11 +4511,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agent = $client->agents->update(\n  'agentId', isPaused: true, name: 'Updated Payroll Agent'\n);\n\nvar_dump($agent);",
       },
-      csharp: {
-        method: 'Agents.Update',
-        example:
-          'AgentUpdateParams parameters = new() { AgentID = "agentId" };\n\nvar agent = await client.Agents.Update(parameters);\n\nConsole.WriteLine(agent);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "isPaused": true,\n          "name": "Updated Payroll Agent"\n        }\'',
@@ -4951,11 +4563,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$result = $client->agents->delete('agentId');\n\nvar_dump($result);",
-      },
-      csharp: {
-        method: 'Agents.Delete',
-        example:
-          'AgentDeleteParams parameters = new() { AgentID = "agentId" };\n\nawait client.Agents.Delete(parameters);',
       },
       http: {
         example:
@@ -5020,11 +4627,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agent = $client->agents->updatePolicy(\n  'agentId',\n  accountRestrictions: [\n    'accountRules' => [\n      [\n        'accountID' => 'Account:019542f5-b3e7-1d02-0000-000000000001',\n        'executionMode' => 'AUTO',\n        'perTransactionLimit' => 10000,\n      ],\n    ],\n    'allowedAccountIDs' => ['Account:019542f5-b3e7-1d02-0000-000000000001'],\n  ],\n  approvalThresholds: ['amount' => 100000, 'currency' => 'USD'],\n  defaultExecutionMode: 'AUTO',\n  permissions: ['VIEW_TRANSACTIONS'],\n  spendingLimits: [\n    'currency' => 'USD',\n    'dailyLimit' => 500000,\n    'dailyTransactionLimit' => 10,\n    'monthlyLimit' => 5000000,\n    'perTransactionLimit' => 50000,\n  ],\n);\n\nvar_dump($agent);",
       },
-      csharp: {
-        method: 'Agents.UpdatePolicy',
-        example:
-          'AgentUpdatePolicyParams parameters = new() { AgentID = "agentId" };\n\nvar agent = await client.Agents.UpdatePolicy(parameters);\n\nConsole.WriteLine(agent);',
-      },
       http: {
         example:
           "curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/policy \\\n    -X PATCH \\\n    -H 'Content-Type: application/json' \\\n    -u \"$GRID_CLIENT_ID:GRID_CLIENT_SECRET\" \\\n    -d '{}'",
@@ -5078,11 +4680,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agent = $client->agents->me->retrieve();\n\nvar_dump($agent);",
-      },
-      csharp: {
-        method: 'Agents.Me.Retrieve',
-        example:
-          'MeRetrieveParams parameters = new();\n\nvar agent = await client.Agents.Me.Retrieve(parameters);\n\nConsole.WriteLine(agent);',
       },
       http: {
         example:
@@ -5144,11 +4741,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->createTransferIn',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->createTransferIn(\n  destination: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  source: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965'\n  ],\n  amount: 12550,\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($agentAction);",
-      },
-      csharp: {
-        method: 'Agents.Me.CreateTransferIn',
-        example:
-          'MeCreateTransferInParams parameters = new()\n{\n    Destination = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n    Source = new("ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"),\n};\n\nvar agentAction = await client.Agents.Me.CreateTransferIn(parameters);\n\nConsole.WriteLine(agentAction);',
       },
       http: {
         example:
@@ -5212,11 +4804,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->createTransferOut(\n  destination: [\n    'accountID' => 'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n    'paymentRail' => 'ACH',\n  ],\n  source: [\n    'accountID' => 'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123'\n  ],\n  amount: 12550,\n  remittanceInformation: '12345',\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n);\n\nvar_dump($agentAction);",
       },
-      csharp: {
-        method: 'Agents.Me.CreateTransferOut',
-        example:
-          'MeCreateTransferOutParams parameters = new()\n{\n    Destination = new()\n    {\n        AccountID = "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965",\n        PaymentRail = PaymentRail.Ach,\n    },\n    Source = new("InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"),\n};\n\nvar agentAction = await client.Agents.Me.CreateTransferOut(parameters);\n\nConsole.WriteLine(agentAction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transfer-out \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {\n            "accountId": "ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n          },\n          "source": {\n            "accountId": "InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n          },\n          "amount": 12550,\n          "remittanceInformation": "12345"\n        }\'',
@@ -5276,11 +4863,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->listInternalAccounts',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->listInternalAccounts(\n  currency: 'currency', cursor: 'cursor', limit: 1, type: 'INTERNAL_FIAT'\n);\n\nvar_dump($page);",
-      },
-      csharp: {
-        method: 'Agents.Me.ListInternalAccounts',
-        example:
-          'MeListInternalAccountsParams parameters = new();\n\nvar page = await client.Agents.Me.ListInternalAccounts(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -5348,11 +4930,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->transactions->list(\n  accountIdentifier: 'accountIdentifier',\n  cursor: 'cursor',\n  endDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  limit: 1,\n  receiverAccountIdentifier: 'receiverAccountIdentifier',\n  reference: 'reference',\n  senderAccountIdentifier: 'senderAccountIdentifier',\n  sortOrder: 'asc',\n  startDate: new \\DateTimeImmutable('2019-12-27T18:11:19.117Z'),\n  status: TransactionStatus::CREATED,\n  type: TransactionType::INCOMING,\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Agents.Me.Transactions.List',
-        example:
-          'TransactionListParams parameters = new();\n\nvar page = await client.Agents.Me.Transactions.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/transactions \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -5407,11 +4984,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->transactions->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$transaction = $client->agents->me->transactions->retrieve('transactionId');\n\nvar_dump($transaction);",
-      },
-      csharp: {
-        method: 'Agents.Me.Transactions.Retrieve',
-        example:
-          'TransactionRetrieveParams parameters = new()\n{\n    TransactionID = "transactionId"\n};\n\nvar transaction = await client.Agents.Me.Transactions.Retrieve(parameters);\n\nConsole.WriteLine(transaction);',
       },
       http: {
         example:
@@ -5480,11 +5052,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$quote = $client->agents->me->quotes->create(\n  destination: (object) [],\n  lockedCurrencyAmount: 1000,\n  lockedCurrencySide: 'SENDING',\n  source: (object) [],\n  description: 'Invoice #1234 payment',\n  immediatelyExecute: false,\n  lookupID: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',\n  purposeOfPayment: 'GIFT',\n  senderCustomerInfo: ['FULL_NAME' => 'bar', 'NATIONALITY' => 'bar'],\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($quote);",
       },
-      csharp: {
-        method: 'Agents.Me.Quotes.Create',
-        example:
-          'QuoteCreateParams parameters = new()\n{\n    Destination = JsonSerializer.Deserialize<JsonElement>("{}"),\n    LockedCurrencyAmount = 1000,\n    LockedCurrencySide = LockedCurrencySide.Sending,\n    Source = JsonSerializer.Deserialize<JsonElement>("{}"),\n};\n\nvar quote = await client.Agents.Me.Quotes.Create(parameters);\n\nConsole.WriteLine(quote);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "destination": {},\n          "lockedCurrencyAmount": 1000,\n          "lockedCurrencySide": "SENDING",\n          "source": {},\n          "description": "Invoice #1234 payment",\n          "immediatelyExecute": false,\n          "lookupId": "Lookup:019542f5-b3e7-1d02-0000-000000000009",\n          "senderCustomerInfo": {\n            "FULL_NAME": "bar",\n            "NATIONALITY": "bar"\n          }\n        }\'',
@@ -5540,11 +5107,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->quotes->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$quote = $client->agents->me->quotes->retrieve('quoteId');\n\nvar_dump($quote);",
-      },
-      csharp: {
-        method: 'Agents.Me.Quotes.Retrieve',
-        example:
-          'QuoteRetrieveParams parameters = new() { QuoteID = "quoteId" };\n\nvar quote = await client.Agents.Me.Quotes.Retrieve(parameters);\n\nConsole.WriteLine(quote);',
       },
       http: {
         example:
@@ -5602,11 +5164,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->quotes->execute(\n  'Quote:019542f5-b3e7-1d02-0000-000000000001',\n  gridWalletSignature: 'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',\n  idempotencyKey: '<uuid>',\n);\n\nvar_dump($agentAction);",
       },
-      csharp: {
-        method: 'Agents.Me.Quotes.Execute',
-        example:
-          'QuoteExecuteParams parameters = new()\n{\n    QuoteID = "Quote:019542f5-b3e7-1d02-0000-000000000001"\n};\n\nvar agentAction = await client.Agents.Me.Quotes.Execute(parameters);\n\nConsole.WriteLine(agentAction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/quotes/$QUOTE_ID/execute \\\n    -X POST \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -5661,11 +5218,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->externalAccounts->list',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->externalAccounts->list(\n  currency: 'currency', cursor: 'cursor', limit: 1\n);\n\nvar_dump($page);",
-      },
-      csharp: {
-        method: 'Agents.Me.ExternalAccounts.List',
-        example:
-          'ExternalAccountListParams parameters = new();\n\nvar page = await client.Agents.Me.ExternalAccounts.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
       },
       http: {
         example:
@@ -5729,11 +5281,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$externalAccount = $client->agents->me->externalAccounts->add(\n  accountInfo: [\n    'accountType' => 'AED_ACCOUNT',\n    'beneficiary' => [\n      'address' => [\n        'country' => 'US',\n        'line1' => '123 Main Street',\n        'postalCode' => '94105',\n        'city' => 'San Francisco',\n        'line2' => 'Apt 4B',\n        'state' => 'CA',\n      ],\n      'beneficiaryType' => 'INDIVIDUAL',\n      'fullName' => 'fullName',\n      'birthDate' => 'birthDate',\n      'countryOfResidence' => 'countryOfResidence',\n      'email' => 'email',\n      'nationality' => 'nationality',\n      'phoneNumber' => 'phoneNumber',\n    ],\n    'iban' => 'AE070331234567890123456',\n    'swiftCode' => 'EBILAEAD',\n  ],\n  currency: 'USD',\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  defaultUmaDepositAccount: true,\n  platformAccountID: 'ext_acc_123456',\n);\n\nvar_dump($externalAccount);",
       },
-      csharp: {
-        method: 'Agents.Me.ExternalAccounts.Add',
-        example:
-          'ExternalAccountAddParams parameters = new()\n{\n    AccountInfo = new AedExternalAccountCreateInfo()\n    {\n        AccountType = AccountType.AedAccount,\n        Beneficiary = new AedBeneficiary()\n        {\n            Address = new()\n            {\n                Country = "US",\n                Line1 = "123 Main Street",\n                PostalCode = "94105",\n                City = "San Francisco",\n                Line2 = "Apt 4B",\n                State = "CA",\n            },\n            BeneficiaryType = BeneficiaryType.Individual,\n            FullName = "fullName",\n            BirthDate = "birthDate",\n            CountryOfResidence = "countryOfResidence",\n            Email = "email",\n            Nationality = "nationality",\n            PhoneNumber = "phoneNumber",\n        },\n        Iban = "AE070331234567890123456",\n        SwiftCode = "EBILAEAD",\n    },\n    Currency = "USD",\n};\n\nvar externalAccount = await client.Agents.Me.ExternalAccounts.Add(parameters);\n\nConsole.WriteLine(externalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/external-accounts \\\n    -H \'Content-Type: application/json\' \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN" \\\n    -d \'{\n          "accountInfo": {\n            "accountType": "AED_ACCOUNT",\n            "beneficiary": {\n              "address": {\n                "country": "US",\n                "line1": "123 Main Street",\n                "postalCode": "94105"\n              },\n              "beneficiaryType": "INDIVIDUAL",\n              "fullName": "fullName"\n            },\n            "iban": "AE070331234567890123456",\n            "swiftCode": "EBILAEAD"\n          },\n          "currency": "USD",\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "platformAccountId": "ext_acc_123456"\n        }\'',
@@ -5790,11 +5337,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$externalAccount = $client->agents->me->externalAccounts->retrieve(\n  'externalAccountId'\n);\n\nvar_dump($externalAccount);",
       },
-      csharp: {
-        method: 'Agents.Me.ExternalAccounts.Retrieve',
-        example:
-          'ExternalAccountRetrieveParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nvar externalAccount = await client.Agents.Me.ExternalAccounts.Retrieve(parameters);\n\nConsole.WriteLine(externalAccount);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/external-accounts/$EXTERNAL_ACCOUNT_ID \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -5848,11 +5390,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->me->externalAccounts->delete',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$result = $client->agents->me->externalAccounts->delete('externalAccountId');\n\nvar_dump($result);",
-      },
-      csharp: {
-        method: 'Agents.Me.ExternalAccounts.Delete',
-        example:
-          'ExternalAccountDeleteParams parameters = new()\n{\n    ExternalAccountID = "externalAccountId"\n};\n\nawait client.Agents.Me.ExternalAccounts.Delete(parameters);',
       },
       http: {
         example:
@@ -5913,11 +5450,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$page = $client->agents->me->actions->list(\n  cursor: 'cursor', limit: 1, status: 'PENDING_APPROVAL'\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Agents.Me.Actions.List',
-        example:
-          'ActionListParams parameters = new();\n\nvar page = await client.Agents.Me.Actions.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/actions \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -5974,11 +5506,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(agentAccessToken: 'My Agent Access Token');\n\n$agentAction = $client->agents->me->actions->retrieve('actionId');\n\nvar_dump($agentAction);",
       },
-      csharp: {
-        method: 'Agents.Me.Actions.Retrieve',
-        example:
-          'ActionRetrieveParams parameters = new() { ActionID = "actionId" };\n\nvar agentAction = await client.Agents.Me.Actions.Retrieve(parameters);\n\nConsole.WriteLine(agentAction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/me/actions/$ACTION_ID \\\n    -H "Authorization: Bearer $GRID_AGENT_ACCESS_TOKEN"',
@@ -6034,11 +5561,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentDeviceCode = $client->agents->deviceCodes->regenerate('agentId');\n\nvar_dump($agentDeviceCode);",
       },
-      csharp: {
-        method: 'Agents.DeviceCodes.Regenerate',
-        example:
-          'DeviceCodeRegenerateParams parameters = new() { AgentID = "agentId" };\n\nvar agentDeviceCode = await client.Agents.DeviceCodes.Regenerate(parameters);\n\nConsole.WriteLine(agentDeviceCode);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/device-codes \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -6093,11 +5615,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->deviceCodes->getStatus',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentDeviceCodeStatusResponse = $client->agents->deviceCodes->getStatus(\n  'code'\n);\n\nvar_dump($agentDeviceCodeStatusResponse);",
-      },
-      csharp: {
-        method: 'Agents.DeviceCodes.GetStatus',
-        example:
-          'DeviceCodeGetStatusParams parameters = new() { Code = "code" };\n\nvar agentDeviceCodeStatusResponse = await client.Agents.DeviceCodes.GetStatus(parameters);\n\nConsole.WriteLine(agentDeviceCodeStatusResponse);',
       },
       http: {
         example:
@@ -6155,11 +5672,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(\n  username: 'My Username',\n  password: 'My Password',\n  agentAccessToken: 'My Agent Access Token',\n  webhookSignature: 'My Webhook Signature',\n);\n\n$agentDeviceCodeRedeemResponse = $client->agents->deviceCodes->redeem('code');\n\nvar_dump($agentDeviceCodeRedeemResponse);",
       },
-      csharp: {
-        method: 'Agents.DeviceCodes.Redeem',
-        example:
-          'DeviceCodeRedeemParams parameters = new() { Code = "code" };\n\nvar agentDeviceCodeRedeemResponse = await client.Agents.DeviceCodes.Redeem(parameters);\n\nConsole.WriteLine(agentDeviceCodeRedeemResponse);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/device-codes/$CODE/redeem \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -6215,11 +5727,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->transactions->approve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->transactions->approve(\n  'actionId', agentID: 'agentId'\n);\n\nvar_dump($agentAction);",
-      },
-      csharp: {
-        method: 'Agents.Transactions.Approve',
-        example:
-          'TransactionApproveParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Transactions.Approve(parameters);\n\nConsole.WriteLine(agentAction);',
       },
       http: {
         example:
@@ -6277,11 +5784,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->transactions->reject(\n  'actionId',\n  agentID: 'agentId',\n  reason: 'Transaction amount exceeds customer\\'s current risk limit.',\n);\n\nvar_dump($agentAction);",
       },
-      csharp: {
-        method: 'Agents.Transactions.Reject',
-        example:
-          'TransactionRejectParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Transactions.Reject(parameters);\n\nConsole.WriteLine(agentAction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/reject \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -6338,11 +5840,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->actions->approve(\n  'actionId', agentID: 'agentId'\n);\n\nvar_dump($agentAction);",
       },
-      csharp: {
-        method: 'Agents.Actions.Approve',
-        example:
-          'ActionApproveParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Actions.Approve(parameters);\n\nConsole.WriteLine(agentAction);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/agents/$AGENT_ID/actions/$ACTION_ID/approve \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -6398,11 +5895,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'agents->actions->reject',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$agentAction = $client->agents->actions->reject(\n  'actionId',\n  agentID: 'agentId',\n  reason: 'Transaction amount exceeds customer\\'s current risk limit.',\n);\n\nvar_dump($agentAction);",
-      },
-      csharp: {
-        method: 'Agents.Actions.Reject',
-        example:
-          'ActionRejectParams parameters = new()\n{\n    AgentID = "agentId",\n    ActionID = "actionId",\n};\n\nvar agentAction = await client.Agents.Actions.Reject(parameters);\n\nConsole.WriteLine(agentAction);',
       },
       http: {
         example:
@@ -6464,11 +5956,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'cards->issue',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->issue(\n  cardholderID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  platformCardID: 'card-emp-aary-001',\n);\n\nvar_dump($card);",
-      },
-      csharp: {
-        method: 'Cards.Issue',
-        example:
-          'CardIssueParams parameters = new()\n{\n    CardholderID = "Customer:019542f5-b3e7-1d02-0000-000000000001",\n    Form = Form.Virtual,\n    FundingSources =\n    [\n        "InternalAccount:019542f5-b3e7-1d02-0000-000000000002"\n    ],\n};\n\nvar card = await client.Cards.Issue(parameters);\n\nConsole.WriteLine(card);',
       },
       http: {
         example:
@@ -6533,11 +6020,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->cards->list(\n  accountID: 'accountId',\n  cardholderID: 'cardholderId',\n  cursor: 'cursor',\n  limit: 1,\n  platformCardID: 'platformCardId',\n  sortOrder: 'asc',\n  state: 'PENDING_KYC',\n);\n\nvar_dump($page);",
       },
-      csharp: {
-        method: 'Cards.List',
-        example:
-          'CardListParams parameters = new();\n\nvar page = await client.Cards.List(parameters);\nawait foreach (var item in page.Paginate())\n{\n    Console.WriteLine(item);\n}',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/cards \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
@@ -6592,11 +6074,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         method: 'cards->retrieve',
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->retrieve('id');\n\nvar_dump($card);",
-      },
-      csharp: {
-        method: 'Cards.Retrieve',
-        example:
-          'CardRetrieveParams parameters = new() { ID = "id" };\n\nvar card = await client.Cards.Retrieve(parameters);\n\nConsole.WriteLine(card);',
       },
       http: {
         example:
@@ -6660,11 +6137,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
         example:
           "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->update(\n  'id',\n  fundingSources: [\n    'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',\n    'InternalAccount:019542f5-b3e7-1d02-0000-000000000003',\n  ],\n  state: 'FROZEN',\n  gridWalletSignature: 'MEUCIQDx7k2N0aK4p8f3vR9J6yT5wL1mB0sXnG2hQ4vJ8zYkCgIgZ4rP9dT7eWfU3oM6KjR1qSpNvBwL0tXyA2iG8fH5dE=',\n  requestID: '7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',\n);\n\nvar_dump($card);",
       },
-      csharp: {
-        method: 'Cards.Update',
-        example:
-          'CardUpdateParams parameters = new() { ID = "id" };\n\nvar card = await client.Cards.Update(parameters);\n\nConsole.WriteLine(card);',
-      },
       http: {
         example:
           'curl https://api.lightspark.com/grid/2025-10-13/cards/$ID \\\n    -X PATCH \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "fundingSources": [\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000002",\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000003"\n          ],\n          "state": "FROZEN"\n        }\'',
@@ -6678,11 +6150,6 @@ const EMBEDDED_READMES: { language: string; content: string }[] = [
     language: 'cli',
     content:
       "# Lightspark Grid CLI\n\nThe official CLI for the [Lightspark Grid REST API](grid.lightspark.com).\n\nIt is generated with [Stainless](https://www.stainless.com/).\n\n## Installation\n\n### Installing with Go\n\nTo test or install the CLI locally, you need [Go](https://go.dev/doc/install) version 1.22 or later installed.\n\n~~~sh\ngo install 'github.com/stainless-sdks/grid-cli/cmd/grid@latest'\n~~~\n\nOnce you have run `go install`, the binary is placed in your Go bin directory:\n\n- **Default location**: `$HOME/go/bin` (or `$GOPATH/bin` if GOPATH is set)\n- **Check your path**: Run `go env GOPATH` to see the base directory\n\nIf commands aren't found after installation, add the Go bin directory to your PATH:\n\n~~~sh\n# Add to your shell profile (.zshrc, .bashrc, etc.)\nexport PATH=\"$PATH:$(go env GOPATH)/bin\"\n~~~\n\n### Running Locally\n\nAfter cloning the git repository for this project, you can use the\n`scripts/run` script to run the tool locally:\n\n~~~sh\n./scripts/run args...\n~~~\n\n## Usage\n\nThe CLI follows a resource-based command structure:\n\n~~~sh\ngrid [resource] <command> [flags...]\n~~~\n\n~~~sh\ngrid quotes create \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --destination '{destinationType: ACCOUNT, accountId: ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123}' \\\n  --locked-currency-amount 10000 \\\n  --locked-currency-side SENDING \\\n  --source '{sourceType: ACCOUNT, accountId: InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965}'\n~~~\n\nFor details about specific commands, use the `--help` flag.\n\n### Environment variables\n\n| Environment variable      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Required | Default value |\n| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------------- |\n| `GRID_CLIENT_ID`          | API token authentication using format `<api token id>:<api client secret>`                                                                                                                                                                                                                                                                                                                                                                                                     | no       | `null`        |\n| `GRID_CLIENT_SECRET`      | API token authentication using format `<api token id>:<api client secret>`                                                                                                                                                                                                                                                                                                                                                                                                     | no       | `null`        |\n| `GRID_AGENT_ACCESS_TOKEN` | Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations.                                                                                                                                                                                                                                                                                                 | no       | `null`        |\n| `GRID_WEBHOOK_PUBKEY`     | Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.\n\nTo verify the signature:\n1. Get the Grid public key provided to you during integration\n2. Decode the base64 signature from the header\n3. Create a SHA-256 hash of the request body\n4. Verify the signature using the public key and the hash\n\nIf the signature verification succeeds, the webhook is authentic. If not, it should be rejected.\n | no       | `null`        |\n\n### Global flags\n\n- `--username` - API token authentication using format `<api token id>:<api client secret>` (can also be set with `GRID_CLIENT_ID` env var)\n- `--password` - API token authentication using format `<api token id>:<api client secret>` (can also be set with `GRID_CLIENT_SECRET` env var)\n- `--agent-access-token` - Bearer access token obtained by redeeming a device code. Required when calling agent-scoped endpoints (e.g. `GET /agents/me/...`). Leave unset for platform-scoped operations. (can also be set with `GRID_AGENT_ACCESS_TOKEN` env var)\n- `--webhook-signature` - Secp256r1 (P-256) asymmetric signature of the webhook payload, which can be used to verify that the webhook was sent by Grid.\n\nTo verify the signature:\n1. Get the Grid public key provided to you during integration\n2. Decode the base64 signature from the header\n3. Create a SHA-256 hash of the request body\n4. Verify the signature using the public key and the hash\n\nIf the signature verification succeeds, the webhook is authentic. If not, it should be rejected.\n (can also be set with `GRID_WEBHOOK_PUBKEY` env var)\n- `--help` - Show command line usage\n- `--debug` - Enable debug logging (includes HTTP request/response details)\n- `--version`, `-v` - Show the CLI version\n- `--base-url` - Use a custom API backend URL\n- `--format` - Change the output format (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--format-error` - Change the output format for errors (`auto`, `explore`, `json`, `jsonl`, `pretty`, `raw`, `yaml`)\n- `--transform` - Transform the data output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n- `--transform-error` - Transform the error output using [GJSON syntax](https://github.com/tidwall/gjson/blob/master/SYNTAX.md)\n\n### Passing files as arguments\n\nTo pass files to your API, you can use the `@myfile.ext` syntax:\n\n~~~bash\ngrid <command> --arg @abe.jpg\n~~~\n\nFiles can also be passed inside JSON or YAML blobs:\n\n~~~bash\ngrid <command> --arg '{image: \"@abe.jpg\"}'\n# Equivalent:\ngrid <command> <<YAML\narg:\n  image: \"@abe.jpg\"\nYAML\n~~~\n\nIf you need to pass a string literal that begins with an `@` sign, you can\nescape the `@` sign to avoid accidentally passing a file.\n\n~~~bash\ngrid <command> --username '\\@abe'\n~~~\n\n#### Explicit encoding\n\nFor JSON endpoints, the CLI tool does filetype sniffing to determine whether the\nfile contents should be sent as a string literal (for plain text files) or as a\nbase64-encoded string literal (for binary files). If you need to explicitly send\nthe file as either plain text or base64-encoded data, you can use\n`@file://myfile.txt` (for string encoding) or `@data://myfile.dat` (for\nbase64-encoding). Note that absolute paths will begin with `@file://` or\n`@data://`, followed by a third `/` (for example, `@file:///tmp/file.txt`).\n\n~~~bash\ngrid <command> --arg @data://file.txt\n~~~\n\n## Linking different Go SDK versions\n\nYou can link the CLI against a different version of the Lightspark Grid Go SDK\nfor development purposes using the `./scripts/link` script.\n\nTo link to a specific version from a repository (version can be a branch,\ngit tag, or commit hash):\n\n~~~bash\n./scripts/link github.com/org/repo@version\n~~~\n\nTo link to a local copy of the SDK:\n\n~~~bash\n./scripts/link ../path/to/grid-go\n~~~\n\nIf you run the link script without any arguments, it will default to `../grid-go`.\n",
-  },
-  {
-    language: 'csharp',
-    content:
-      '# Lightspark Grid C# API Library\n\nThe Lightspark Grid C# SDK provides convenient access to the [Lightspark Grid REST API](grid.lightspark.com) from applications written in   C#.\n\n## Installation\n\n```bash\ngit clone git@github.com:stainless-sdks/grid-csharp.git\ndotnet add reference grid-csharp/src/Grid\n```\n\n## Requirements\n\nThis library requires .NET Standard 2.0 or later.\n\n## Usage\n\nSee the [`examples`](examples) directory for complete and runnable examples.\n\n```csharp\nLightsparkGridClient client = new();\n\nQuoteCreateParams parameters = new()\n{\n    Destination = JsonSerializer.Deserialize<JsonElement>(\n        """\n        {\n          "destinationType": "ACCOUNT",\n          "accountId": "ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123"\n        }\n        """\n    ),\n    LockedCurrencyAmount = 10000,\n    LockedCurrencySide = LockedCurrencySide.Sending,\n    Source = JsonSerializer.Deserialize<JsonElement>(\n        """\n        {\n          "sourceType": "ACCOUNT",\n          "accountId": "InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965"\n        }\n        """\n    ),\n};\n\nvar quote = await client.Quotes.Create(parameters);\n\nConsole.WriteLine(quote);\n```',
   },
   {
     language: 'go',
