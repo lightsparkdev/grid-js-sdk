@@ -424,9 +424,10 @@ export interface BusinessCustomerCreateRequest {
   email?: string;
 
   /**
-   * The current KYB status of a business customer
+   * The current KYB status of a business customer. `HOLD` means the customer is
+   * placed on hold and may be required to update or provide more information.
    */
-  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Phone number for the customer in strict E.164 format.
@@ -621,9 +622,10 @@ export interface BusinessCustomerUpdateRequest {
   email?: string;
 
   /**
-   * The current KYB status of a business customer
+   * The current KYB status of a business customer. `HOLD` means the customer is
+   * placed on hold and may be required to update or provide more information.
    */
-  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Phone number for the customer in strict E.164 format. For customers with tied
@@ -923,9 +925,10 @@ export interface IndividualCustomerCreateRequest {
   idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 
   /**
-   * The current KYC status of a customer
+   * The current KYC status of a customer. `HOLD` means the customer is placed on
+   * hold and may be required to update or provide more information.
    */
-  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Country code (ISO 3166-1 alpha-2)
@@ -1002,9 +1005,10 @@ export interface IndividualCustomerUpdateRequest {
   fullName?: string;
 
   /**
-   * The current KYC status of a customer
+   * The current KYC status of a customer. `HOLD` means the customer is placed on
+   * hold and may be required to update or provide more information.
    */
-  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Country code (ISO 3166-1 alpha-2)

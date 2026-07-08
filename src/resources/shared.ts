@@ -172,9 +172,10 @@ export interface BeneficialOwner {
   customerId: string;
 
   /**
-   * The current KYC status of a customer
+   * The current KYC status of a customer. `HOLD` means the customer is placed on
+   * hold and may be required to update or provide more information.
    */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Percentage of ownership in the business (0-100)
@@ -255,9 +256,10 @@ export interface BusinessCustomer extends CustomersAPI.Customer {
   businessInfo?: BusinessCustomer.BusinessInfo;
 
   /**
-   * The current KYB status of a business customer
+   * The current KYB status of a business customer. `HOLD` means the customer is
+   * placed on hold and may be required to update or provide more information.
    */
-  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 }
 
 export namespace BusinessCustomer {
@@ -961,9 +963,10 @@ export interface IndividualCustomer extends CustomersAPI.Customer {
   fullName?: string;
 
   /**
-   * The current KYC status of a customer
+   * The current KYC status of a customer. `HOLD` means the customer is placed on
+   * hold and may be required to update or provide more information.
    */
-  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Country code (ISO 3166-1 alpha-2)
