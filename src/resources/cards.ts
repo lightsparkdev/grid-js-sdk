@@ -14,7 +14,9 @@ import { path } from '../internal/utils/path';
  */
 export class Cards extends APIResource {
   /**
-   * Retrieve a card by its system-generated id.
+   * Retrieve a card by its system-generated id. To display the card's full PAN, CVV,
+   * and expiry to the cardholder, request a reveal with `POST /cards/{id}/reveal` —
+   * the card resource itself never carries the reveal URL.
    *
    * @example
    * ```ts
@@ -238,13 +240,6 @@ export interface Card {
    * Last four digits of the card PAN.
    */
   last4?: string;
-
-  /**
-   * URL of the card processor's iframe that securely displays the PAN, CVV, and
-   * expiry to the cardholder. The full PAN and CVV never cross Grid's servers —
-   * render this URL in an iframe in your client to reveal card details.
-   */
-  panEmbedUrl?: string;
 
   /**
    * Platform-specific card identifier. Optional on create — system-generated if

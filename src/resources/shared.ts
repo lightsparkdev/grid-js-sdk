@@ -846,7 +846,7 @@ export interface GtqExternalAccountCreateInfo {
   bankAccountType: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the bank
+   * The name of the beneficiary's bank
    */
   bankName: string;
 
