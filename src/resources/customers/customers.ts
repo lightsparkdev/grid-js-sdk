@@ -532,6 +532,12 @@ export namespace BusinessCustomerCreateRequest {
       | 'OTHER';
 
     /**
+     * List of countries of the business's expected transaction counterparties (ISO
+     * 3166-1 alpha-2)
+     */
+    expectedCounterpartyCountries?: Array<string>;
+
+    /**
      * Expected number of transactions per month
      */
     expectedMonthlyTransactionCount?:
@@ -558,6 +564,11 @@ export namespace BusinessCustomerCreateRequest {
     expectedRecipientJurisdictions?: Array<string>;
 
     /**
+     * NAICS code describing the nature of the business (2-6 digits)
+     */
+    naicsCode?: string;
+
+    /**
      * The intended purpose for using the Grid account
      */
     purposeOfAccount?:
@@ -576,6 +587,11 @@ export namespace BusinessCustomerCreateRequest {
       | 'OTHER';
 
     /**
+     * Description of the account purpose when OTHER is selected
+     */
+    purposeOfAccountOtherDescription?: string;
+
+    /**
      * Business registration number
      */
     registrationNumber?: string;
@@ -584,6 +600,16 @@ export namespace BusinessCustomerCreateRequest {
      * The primary source of funds for the business
      */
     sourceOfFunds?: string;
+
+    /**
+     * Structured source-of-funds categories for the business
+     */
+    sourceOfFundsCategories?: Array<unknown>;
+
+    /**
+     * Description of the source of funds when OTHER is selected
+     */
+    sourceOfFundsOtherDescription?: string;
   }
 }
 
@@ -700,6 +726,12 @@ export namespace BusinessCustomerUpdateRequest {
       | 'OTHER';
 
     /**
+     * List of countries of the business's expected transaction counterparties (ISO
+     * 3166-1 alpha-2)
+     */
+    expectedCounterpartyCountries?: Array<string>;
+
+    /**
      * Expected number of transactions per month
      */
     expectedMonthlyTransactionCount?:
@@ -736,6 +768,11 @@ export namespace BusinessCustomerUpdateRequest {
     legalName?: string;
 
     /**
+     * NAICS code describing the nature of the business (2-6 digits)
+     */
+    naicsCode?: string;
+
+    /**
      * The intended purpose for using the Grid account
      */
     purposeOfAccount?:
@@ -754,6 +791,11 @@ export namespace BusinessCustomerUpdateRequest {
       | 'OTHER';
 
     /**
+     * Description of the account purpose when OTHER is selected
+     */
+    purposeOfAccountOtherDescription?: string;
+
+    /**
      * Business registration number
      */
     registrationNumber?: string;
@@ -762,6 +804,24 @@ export namespace BusinessCustomerUpdateRequest {
      * The primary source of funds for the business
      */
     sourceOfFunds?: string;
+
+    /**
+     * Structured source-of-funds categories for the business
+     */
+    sourceOfFundsCategories?: Array<
+      | 'OPERATING_REVENUE'
+      | 'INVESTMENT_INCOME'
+      | 'LOANS'
+      | 'VENTURE_CAPITAL'
+      | 'PERSONAL_SAVINGS'
+      | 'DONATIONS'
+      | 'OTHER'
+    >;
+
+    /**
+     * Description of the source of funds when OTHER is selected
+     */
+    sourceOfFundsOtherDescription?: string;
 
     /**
      * Tax identification number

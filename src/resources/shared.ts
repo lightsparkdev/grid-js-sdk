@@ -327,6 +327,12 @@ export namespace BusinessCustomer {
       | 'OTHER';
 
     /**
+     * List of countries of the business's expected transaction counterparties (ISO
+     * 3166-1 alpha-2)
+     */
+    expectedCounterpartyCountries?: Array<string>;
+
+    /**
      * Expected number of transactions per month
      */
     expectedMonthlyTransactionCount?:
@@ -358,6 +364,11 @@ export namespace BusinessCustomer {
     incorporatedOn?: string;
 
     /**
+     * NAICS code describing the nature of the business (2-6 digits)
+     */
+    naicsCode?: string;
+
+    /**
      * The intended purpose for using the Grid account
      */
     purposeOfAccount?:
@@ -376,6 +387,11 @@ export namespace BusinessCustomer {
       | 'OTHER';
 
     /**
+     * Description of the account purpose when OTHER is selected
+     */
+    purposeOfAccountOtherDescription?: string;
+
+    /**
      * Business registration number
      */
     registrationNumber?: string;
@@ -384,6 +400,16 @@ export namespace BusinessCustomer {
      * The primary source of funds for the business
      */
     sourceOfFunds?: string;
+
+    /**
+     * Structured source-of-funds categories for the business
+     */
+    sourceOfFundsCategories?: Array<unknown>;
+
+    /**
+     * Description of the source of funds when OTHER is selected
+     */
+    sourceOfFundsOtherDescription?: string;
 
     /**
      * Tax identification number
@@ -1738,7 +1764,9 @@ export interface VerificationError {
     | 'APPLICANT_FRAUD'
     | 'APPLICANT_CRIMINAL_RECORD'
     | 'APPLICANT_REJECTED'
-    | 'MISSING_BENEFICIAL_OWNER';
+    | 'MISSING_BENEFICIAL_OWNER'
+    | 'MISSING_CONTROL_PERSON'
+    | 'MISSING_GOOD_STANDING_DOCUMENT';
 
   /**
    * Document types that would satisfy this requirement. The integrator can upload
