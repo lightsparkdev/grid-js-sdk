@@ -173,6 +173,15 @@ export interface QuoteCreateParams {
     | 'OTHER';
 
   /**
+   * Body param: Free-form information about the payment that travels with it to the
+   * recipient. The field this populates depends on the payment rail: for ACH it
+   * populates the Addenda record, for FedNow and RTP it populates the
+   * remittanceInformation field, and for wires it populates the OBI (Originator to
+   * Beneficiary Information) / beneficiary information.
+   */
+  remittanceInformation?: string;
+
+  /**
    * Body param: Key-value pairs of additional information about the sender which was
    * requested by the destination. This is relevant when the destination requires
    * more sender info than was provided during customer creation. Any fields
