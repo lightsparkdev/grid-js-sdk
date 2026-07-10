@@ -39,6 +39,7 @@ describe('resource quotes', () => {
       immediatelyExecute: false,
       lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
       purposeOfPayment: 'GIFT',
+      remittanceInformation: '12345',
       senderCustomerInfo: { FULL_NAME: 'bar', NATIONALITY: 'bar' },
       'Idempotency-Key': '<uuid>',
     });
