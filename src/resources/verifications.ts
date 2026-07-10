@@ -21,7 +21,7 @@ export class Verifications extends APIResource {
    * );
    * ```
    */
-  retrieve(verificationID: string, options?: RequestOptions): APIPromise<VerificationRetrieveResponse> {
+  retrieve(verificationID: string, options?: RequestOptions): APIPromise<Verification> {
     return this._client.get(path`/verifications/${verificationID}`, {
       ...options,
       __security: { basicAuth: true },
@@ -35,7 +35,7 @@ export class Verifications extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const verificationListResponse of client.verifications.list()) {
+   * for await (const verification of client.verifications.list()) {
    *   // ...
    * }
    * ```
@@ -43,8 +43,8 @@ export class Verifications extends APIResource {
   list(
     query: VerificationListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<VerificationListResponsesDefaultPagination, VerificationListResponse> {
-    return this._client.getAPIList('/verifications', DefaultPagination<VerificationListResponse>, {
+  ): PagePromise<VerificationsDefaultPagination, Verification> {
+    return this._client.getAPIList('/verifications', DefaultPagination<Verification>, {
       query,
       ...options,
       __security: { basicAuth: true },
@@ -59,22 +59,64 @@ export class Verifications extends APIResource {
    *
    * Call this endpoint again after resolving errors to re-submit.
    *
+   * ### What to collect for KYB
+   *
+   * Before submitting a `BUSINESS` customer, collect the following via
+   * `POST /customers`, `POST /beneficial-owners`, and `POST /documents`:
+   *
+   * **Business identifying information**
+   *
+   * - Entity full legal name
+   * - Doing Business As (DBA) name, if applicable
+   * - Physical address — principal place of business
+   * - Countries of operation
+   * - Identification number — U.S. taxpayer identification number, or, for a foreign
+   *   business without one, alternative government-issued documentation certifying
+   *   the existence of the business
+   *
+   * **Ownership and control structure** — collected for **one control person** (an
+   * individual with significant responsibility to control, manage, or direct the
+   * legal entity) **and all beneficial owners** (every individual who owns 25% or
+   * more, directly or indirectly). For each, provide:
+   *
+   * - Full name
+   * - Date of birth
+   * - Address
+   * - Identification number:
+   *   - U.S. persons — SSN or ITIN
+   *   - Non-U.S. persons — one or more of: ITIN, passport (with country of
+   *     issuance), alien identification card, or another government-issued photo ID
+   *     evidencing nationality or residence
+   *
+   * **Required documents**
+   *
+   * - Company formation and existence documents (certificate of incorporation,
+   *   articles of association, etc.)
+   * - Proof of ownership and control structure (organization and ownership chart,
+   *   shareholder agreements, operating agreements, register of members, or
+   *   certification of controlling person and beneficial owners)
+   * - Proof of address dated within the last 3 months (utility bill, bank statement,
+   *   lease agreement, or official correspondence)
+   * - Tax ID or equivalent identifying-number documents
+   * - For non-U.S. beneficial owners — passport plus one additional
+   *   government-issued ID
+   *
    * @example
    * ```ts
-   * const response = await client.verifications.submit({
+   * const verification = await client.verifications.submit({
    *   customerId:
    *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
    * });
    * ```
    */
-  submit(body: VerificationSubmitParams, options?: RequestOptions): APIPromise<VerificationSubmitResponse> {
+  submit(body: VerificationSubmitParams, options?: RequestOptions): APIPromise<Verification> {
     return this._client.post('/verifications', { body, ...options, __security: { basicAuth: true } });
   }
 }
 
-export type VerificationListResponsesDefaultPagination = DefaultPagination<VerificationListResponse>;
+export type VerificationsDefaultPagination = DefaultPagination<Verification>;
 
-export interface VerificationRetrieveResponse {
+export interface Verification {
   /**
    * Unique identifier for this verification
    */
@@ -115,80 +157,31 @@ export interface VerificationRetrieveResponse {
 
 export interface VerificationListResponse {
   /**
-   * Unique identifier for this verification
+   * List of verifications matching the filter criteria
    */
-  id: string;
+  data: Array<Verification>;
 
   /**
-   * When this verification was created
+   * Indicates if more results are available beyond this page
    */
-  createdAt: string;
+  hasMore: boolean;
 
   /**
-   * The ID of the customer being verified
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
    */
-  customerId: string;
+  nextCursor?: string;
 
   /**
-   * List of issues preventing verification from proceeding. Empty when
-   * verificationStatus is APPROVED or IN_PROGRESS.
+   * Total number of results matching the criteria
    */
-  errors: Array<Shared.VerificationError>;
-
-  /**
-   * Current status of the KYC/KYB verification
-   */
-  verificationStatus:
-    | 'RESOLVE_ERRORS'
-    | 'PENDING_MANUAL_REVIEW'
-    | 'IN_PROGRESS'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'READY_FOR_VERIFICATION';
-
-  /**
-   * When this verification was last updated
-   */
-  updatedAt?: string;
+  totalCount?: number;
 }
 
-export interface VerificationSubmitResponse {
+export interface VerificationRequest {
   /**
-   * Unique identifier for this verification
-   */
-  id: string;
-
-  /**
-   * When this verification was created
-   */
-  createdAt: string;
-
-  /**
-   * The ID of the customer being verified
+   * The ID of the customer to verify
    */
   customerId: string;
-
-  /**
-   * List of issues preventing verification from proceeding. Empty when
-   * verificationStatus is APPROVED or IN_PROGRESS.
-   */
-  errors: Array<Shared.VerificationError>;
-
-  /**
-   * Current status of the KYC/KYB verification
-   */
-  verificationStatus:
-    | 'RESOLVE_ERRORS'
-    | 'PENDING_MANUAL_REVIEW'
-    | 'IN_PROGRESS'
-    | 'APPROVED'
-    | 'REJECTED'
-    | 'READY_FOR_VERIFICATION';
-
-  /**
-   * When this verification was last updated
-   */
-  updatedAt?: string;
 }
 
 export interface VerificationListParams extends DefaultPaginationParams {
@@ -223,10 +216,10 @@ export interface VerificationSubmitParams {
 
 export declare namespace Verifications {
   export {
-    type VerificationRetrieveResponse as VerificationRetrieveResponse,
+    type Verification as Verification,
     type VerificationListResponse as VerificationListResponse,
-    type VerificationSubmitResponse as VerificationSubmitResponse,
-    type VerificationListResponsesDefaultPagination as VerificationListResponsesDefaultPagination,
+    type VerificationRequest as VerificationRequest,
+    type VerificationsDefaultPagination as VerificationsDefaultPagination,
     type VerificationListParams as VerificationListParams,
     type VerificationSubmitParams as VerificationSubmitParams,
   };

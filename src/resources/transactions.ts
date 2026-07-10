@@ -5,6 +5,7 @@ import * as InvitationsAPI from './invitations';
 import * as QuotesAPI from './quotes';
 import * as TransferInAPI from './transfer-in';
 import { TransactionsDefaultPagination } from './transfer-in';
+import * as SimulateAPI from './sandbox/cards/simulate';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { RequestOptions } from '../internal/request-options';
@@ -35,6 +36,11 @@ export class Transactions extends APIResource {
    * Retrieve a paginated list of transactions with optional filtering. The
    * transactions can be filtered by customer ID, platform customer ID, UMA address,
    * date range, status, and transaction type.
+   *
+   * Card transactions are included and identified by `type: CARD`. In Sandbox this
+   * is how you discover a `CardTransaction` id after simulating an authorization —
+   * list the transactions, take the card transaction's `id`, and pass it as the
+   * `cardTransactionId` to the clearing and return simulate endpoints.
    *
    * @example
    * ```ts
@@ -159,6 +165,11 @@ export interface IncomingTransaction {
   destination: unknown;
 
   /**
+   * Whether this transaction credits or debits the customer's account.
+   */
+  direction: 'CREDIT' | 'DEBIT';
+
+  /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
    * incoming)
    */
@@ -237,6 +248,12 @@ export interface IncomingTransaction {
   rateDetails?: IncomingRateDetails;
 
   /**
+   * The time at which the platform confirmed delivery of the receipt to their
+   * customer.
+   */
+  receiptDeliveryConfirmedAt?: string;
+
+  /**
    * Included for all transactions except those with "CREATED" status
    */
   reconciliationInstructions?: ReconciliationInstructions;
@@ -266,6 +283,11 @@ export interface OutgoingTransaction {
   customerId: string;
 
   destination: unknown;
+
+  /**
+   * Whether this transaction credits or debits the customer's account.
+   */
+  direction: 'CREDIT' | 'DEBIT';
 
   /**
    * Platform-specific ID of the customer (sender for outgoing, recipient for
@@ -326,6 +348,12 @@ export interface OutgoingTransaction {
   exchangeRate?: number;
 
   /**
+   * Expected settlement time at the beneficiary. Null for instant rails (settlement
+   * is immediate) and before a rail with deferred settlement is resolved.
+   */
+  expectedSettlementAt?: string;
+
+  /**
    * If the transaction failed, this field provides the reason for failure.
    */
   failureReason?:
@@ -347,14 +375,58 @@ export interface OutgoingTransaction {
   paymentInstructions?: Array<QuotesAPI.PaymentInstructions>;
 
   /**
+   * The payment rail used to settle this transaction (e.g. ACH, WIRE, NEFT,
+   * FASTER_PAYMENTS). Uses the same values as the PaymentRail sent on quote
+   * requests. Null when no external rail is used (e.g. instant or intra-network
+   * transfers, or non-direct-destination transactions) or before a rail is resolved.
+   */
+  paymentRail?:
+    | 'ACH'
+    | 'ACH_COLOMBIA'
+    | 'BANK_TRANSFER'
+    | 'BRE_B'
+    | 'CIPS'
+    | 'FAST'
+    | 'FASTER_PAYMENTS'
+    | 'FEDNOW'
+    | 'INSTAPAY'
+    | 'MOBILE_MONEY'
+    | 'NEFT'
+    | 'PAYNOW'
+    | 'PESONET'
+    | 'PIX'
+    | 'RTGS'
+    | 'RTP'
+    | 'SEPA'
+    | 'SEPA_INSTANT'
+    | 'SPEI'
+    | 'SWIFT'
+    | 'UNIONPAY'
+    | 'UPI'
+    | 'WIRE'
+    | null;
+
+  /**
    * The ID of the quote that was used to trigger this payment
    */
   quoteId?: string;
 
   /**
+   * How the rail was chosen — MANUAL when the platform specified a paymentRail on
+   * the destination, AUTO when Lightspark selects it. Null when no rail is resolved.
+   */
+  railSelectionMode?: 'AUTO' | 'MANUAL' | null;
+
+  /**
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: QuotesAPI.OutgoingRateDetails;
+
+  /**
+   * The time at which the platform confirmed delivery of the receipt to their
+   * customer.
+   */
+  receiptDeliveryConfirmedAt?: string;
 
   /**
    * Amount to be received by recipient in the recipient's currency
@@ -370,7 +442,7 @@ export interface OutgoingTransaction {
   /**
    * The refund if transaction was refunded.
    */
-  refund?: OutgoingTransaction.Refund;
+  refund?: SimulateAPI.Refund;
 
   /**
    * When the payment was or will be settled
@@ -378,41 +450,15 @@ export interface OutgoingTransaction {
   settledAt?: string;
 
   /**
+   * Expected number of seconds from quote creation to settlement. Null when not yet
+   * known.
+   */
+  settlementTimelineSeconds?: number | null;
+
+  /**
    * When the transaction was last updated
    */
   updatedAt?: string;
-}
-
-export namespace OutgoingTransaction {
-  /**
-   * The refund if transaction was refunded.
-   */
-  export interface Refund {
-    /**
-     * When the refund was initiated
-     */
-    initiatedAt: string;
-
-    /**
-     * The unique reference ID of the refund
-     */
-    reference: string;
-
-    /**
-     * Current status of the refund
-     */
-    status: 'PENDING' | 'COMPLETED' | 'FAILED';
-
-    /**
-     * Reason for the refund
-     */
-    reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION' | 'TIMEOUT';
-
-    /**
-     * When the refund was settled
-     */
-    settledAt?: string;
-  }
 }
 
 /**
@@ -440,6 +486,28 @@ export interface ReconciliationInstructions {
    * destination, when available.
    */
   transactionHash?: string;
+}
+
+export interface TransactionListResponse {
+  /**
+   * List of transactions matching the criteria
+   */
+  data: Array<TransferInAPI.Transaction>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of transactions matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
 }
 
 export type TransactionSourceOneOf = unknown;
@@ -571,6 +639,7 @@ export declare namespace Transactions {
     type OutgoingTransaction as OutgoingTransaction,
     type OutgoingTransactionStatus as OutgoingTransactionStatus,
     type ReconciliationInstructions as ReconciliationInstructions,
+    type TransactionListResponse as TransactionListResponse,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,

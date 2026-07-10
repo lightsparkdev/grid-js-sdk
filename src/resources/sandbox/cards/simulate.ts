@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as InvitationsAPI from '../../invitations';
+import * as CardsAPI from '../../cards';
 import * as QuotesAPI from '../../quotes';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -31,7 +31,7 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
+   * const cardTransaction =
    *   await client.sandbox.cards.simulate.authorization(
    *     'Card:019542f5-b3e7-1d02-0000-000000000010',
    *     {
@@ -50,7 +50,7 @@ export class Simulate extends APIResource {
     id: string,
     body: SimulateAuthorizationParams,
     options?: RequestOptions,
-  ): APIPromise<SimulateAuthorizationResponse> {
+  ): APIPromise<CardsAPI.CardTransaction> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/authorization`, {
       body,
       ...options,
@@ -74,7 +74,7 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
+   * const cardTransaction =
    *   await client.sandbox.cards.simulate.clearing(
    *     'Card:019542f5-b3e7-1d02-0000-000000000010',
    *     {
@@ -89,7 +89,7 @@ export class Simulate extends APIResource {
     id: string,
     body: SimulateClearingParams,
     options?: RequestOptions,
-  ): APIPromise<SimulateClearingResponse> {
+  ): APIPromise<CardsAPI.CardTransaction> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/clearing`, {
       body,
       ...options,
@@ -107,27 +107,46 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const response = await client.sandbox.cards.simulate.return(
-   *   'Card:019542f5-b3e7-1d02-0000-000000000010',
-   *   {
-   *     amount: 1500,
-   *     cardTransactionId:
-   *       'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
-   *   },
-   * );
+   * const cardTransaction =
+   *   await client.sandbox.cards.simulate.return(
+   *     'Card:019542f5-b3e7-1d02-0000-000000000010',
+   *     {
+   *       amount: 1500,
+   *       cardTransactionId:
+   *         'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
+   *     },
+   *   );
    * ```
    */
   return(
     id: string,
     body: SimulateReturnParams,
     options?: RequestOptions,
-  ): APIPromise<SimulateReturnResponse> {
+  ): APIPromise<CardsAPI.CardTransaction> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/return`, {
       body,
       ...options,
       __security: { basicAuth: true },
     });
   }
+}
+
+/**
+ * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/authorization`.
+ * Drives the same internal authorization + reconcile paths that the issuer would
+ * call in production. The decisioning outcome is controlled by the last three
+ * characters of `merchant.descriptor` — see the endpoint documentation for the
+ * suffix table.
+ */
+export interface AuthorizationRequest {
+  /**
+   * Authorization amount in the smallest unit of `currency` (e.g. cents for USD).
+   */
+  amount: number;
+
+  currency: QuotesAPI.Currency;
+
+  merchant: CardMerchant;
 }
 
 export interface CardMerchant {
@@ -194,240 +213,72 @@ export interface CardSettlementSummary {
 }
 
 /**
- * Parent transaction row for a card authorization and all of the pulls /
- * settlements / refunds that reconcile against it. Child events are rolled up into
- * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
- * Delivered as the payload of the generic transaction webhook stream (extends the
- * Transaction model with a card destination type) on every transition.
+ * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/clearing`.
+ * Drives a clearing event against an existing `CardTransaction`. Pass an `amount`
+ * greater than the authorized amount to exercise the over-auth / restaurant-tip
+ * post-hoc-pull path; pass `0` to exercise `AUTHORIZATION_EXPIRY`. Suffix-driven
+ * outcomes on the parent transaction's id govern whether the post-hoc pull
+ * succeeds.
  */
-export interface SimulateAuthorizationResponse {
+export interface ClearingRequest {
   /**
-   * System-generated unique card transaction identifier
+   * Clearing amount in the smallest unit of the transaction's currency. Set to `0`
+   * to simulate an authorization expiry with no clearing.
    */
-  id: string;
-
-  /**
-   * Internal account id that funded this transaction (the funding source selected by
-   * Authorization Decisioning at auth time).
-   */
-  accountId: string;
-
-  authorizedAmount: InvitationsAPI.CurrencyAmount;
+  amount: number;
 
   /**
-   * When the auth was approved.
+   * The id of the `CardTransaction` to clear against. Must be in `AUTHORIZED` or
+   * `PARTIALLY_SETTLED` state.
    */
-  authorizedAt: string;
+  cardTransactionId: string;
+}
+
+export interface Refund {
+  /**
+   * When the refund was initiated
+   */
+  initiatedAt: string;
 
   /**
-   * The id of the `Card` this transaction was made on.
+   * The unique reference ID of the refund
    */
-  cardId: string;
+  reference: string;
 
   /**
-   * Creation timestamp (same as `authorizedAt` for card transactions).
+   * Current status of the refund
    */
-  createdAt: string;
-
-  merchant: CardMerchant;
-
-  pullSummary: CardPullSummary;
-
-  refundSummary: CardRefundSummary;
-
-  settlementSummary: CardSettlementSummary;
+  status: 'PENDING' | 'COMPLETED' | 'FAILED';
 
   /**
-   * Lifecycle status of a card transaction.
-   *
-   * | Status              | Description                                                                                                                                                                                                                                     |
-   * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
-   * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
-   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source.                                                                                                                                                |
-   * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
-   * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
+   * Reason for the refund
    */
-  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
+  reason?: 'TRANSACTION_FAILED' | 'USER_CANCELLATION' | 'TIMEOUT';
 
   /**
-   * Last update timestamp.
+   * When the refund was settled
    */
-  updatedAt: string;
-
-  /**
-   * Opaque identifier for the transaction on the underlying issuer. Used to
-   * cross-reference Grid records against issuer dashboards and webhooks.
-   */
-  issuerTransactionToken?: string;
-
-  /**
-   * Timestamp of the most recent reconcile event (pull / clearing / refund) against
-   * this transaction.
-   */
-  lastEventAt?: string;
-
-  refundedAmount?: InvitationsAPI.CurrencyAmount;
-
-  settledAmount?: InvitationsAPI.CurrencyAmount;
+  settledAt?: string;
 }
 
 /**
- * Parent transaction row for a card authorization and all of the pulls /
- * settlements / refunds that reconcile against it. Child events are rolled up into
- * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
- * Delivered as the payload of the generic transaction webhook stream (extends the
- * Transaction model with a card destination type) on every transition.
+ * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/return`. Drives
+ * a `RETURN` event against an existing settled `CardTransaction`, which creates a
+ * `CardRefund` and pushes the parent transaction towards `REFUNDED` (full) or
+ * keeps it `SETTLED` (partial).
  */
-export interface SimulateClearingResponse {
+export interface RefundRequest {
   /**
-   * System-generated unique card transaction identifier
+   * Return amount in the smallest unit of the transaction's currency. Must be less
+   * than or equal to the net settled amount (settled minus previously-refunded).
    */
-  id: string;
-
-  /**
-   * Internal account id that funded this transaction (the funding source selected by
-   * Authorization Decisioning at auth time).
-   */
-  accountId: string;
-
-  authorizedAmount: InvitationsAPI.CurrencyAmount;
+  amount: number;
 
   /**
-   * When the auth was approved.
+   * The id of the `CardTransaction` to refund against. Must have at least one
+   * settled clearing.
    */
-  authorizedAt: string;
-
-  /**
-   * The id of the `Card` this transaction was made on.
-   */
-  cardId: string;
-
-  /**
-   * Creation timestamp (same as `authorizedAt` for card transactions).
-   */
-  createdAt: string;
-
-  merchant: CardMerchant;
-
-  pullSummary: CardPullSummary;
-
-  refundSummary: CardRefundSummary;
-
-  settlementSummary: CardSettlementSummary;
-
-  /**
-   * Lifecycle status of a card transaction.
-   *
-   * | Status              | Description                                                                                                                                                                                                                                     |
-   * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
-   * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
-   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source.                                                                                                                                                |
-   * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
-   * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
-   */
-  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
-
-  /**
-   * Last update timestamp.
-   */
-  updatedAt: string;
-
-  /**
-   * Opaque identifier for the transaction on the underlying issuer. Used to
-   * cross-reference Grid records against issuer dashboards and webhooks.
-   */
-  issuerTransactionToken?: string;
-
-  /**
-   * Timestamp of the most recent reconcile event (pull / clearing / refund) against
-   * this transaction.
-   */
-  lastEventAt?: string;
-
-  refundedAmount?: InvitationsAPI.CurrencyAmount;
-
-  settledAmount?: InvitationsAPI.CurrencyAmount;
-}
-
-/**
- * Parent transaction row for a card authorization and all of the pulls /
- * settlements / refunds that reconcile against it. Child events are rolled up into
- * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
- * Delivered as the payload of the generic transaction webhook stream (extends the
- * Transaction model with a card destination type) on every transition.
- */
-export interface SimulateReturnResponse {
-  /**
-   * System-generated unique card transaction identifier
-   */
-  id: string;
-
-  /**
-   * Internal account id that funded this transaction (the funding source selected by
-   * Authorization Decisioning at auth time).
-   */
-  accountId: string;
-
-  authorizedAmount: InvitationsAPI.CurrencyAmount;
-
-  /**
-   * When the auth was approved.
-   */
-  authorizedAt: string;
-
-  /**
-   * The id of the `Card` this transaction was made on.
-   */
-  cardId: string;
-
-  /**
-   * Creation timestamp (same as `authorizedAt` for card transactions).
-   */
-  createdAt: string;
-
-  merchant: CardMerchant;
-
-  pullSummary: CardPullSummary;
-
-  refundSummary: CardRefundSummary;
-
-  settlementSummary: CardSettlementSummary;
-
-  /**
-   * Lifecycle status of a card transaction.
-   *
-   * | Status              | Description                                                                                                                                                                                                                                     |
-   * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
-   * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
-   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source.                                                                                                                                                |
-   * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
-   * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
-   */
-  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
-
-  /**
-   * Last update timestamp.
-   */
-  updatedAt: string;
-
-  /**
-   * Opaque identifier for the transaction on the underlying issuer. Used to
-   * cross-reference Grid records against issuer dashboards and webhooks.
-   */
-  issuerTransactionToken?: string;
-
-  /**
-   * Timestamp of the most recent reconcile event (pull / clearing / refund) against
-   * this transaction.
-   */
-  lastEventAt?: string;
-
-  refundedAmount?: InvitationsAPI.CurrencyAmount;
-
-  settledAmount?: InvitationsAPI.CurrencyAmount;
+  cardTransactionId: string;
 }
 
 export interface SimulateAuthorizationParams {
@@ -471,13 +322,14 @@ export interface SimulateReturnParams {
 
 export declare namespace Simulate {
   export {
+    type AuthorizationRequest as AuthorizationRequest,
     type CardMerchant as CardMerchant,
     type CardPullSummary as CardPullSummary,
     type CardRefundSummary as CardRefundSummary,
     type CardSettlementSummary as CardSettlementSummary,
-    type SimulateAuthorizationResponse as SimulateAuthorizationResponse,
-    type SimulateClearingResponse as SimulateClearingResponse,
-    type SimulateReturnResponse as SimulateReturnResponse,
+    type ClearingRequest as ClearingRequest,
+    type Refund as Refund,
+    type RefundRequest as RefundRequest,
     type SimulateAuthorizationParams as SimulateAuthorizationParams,
     type SimulateClearingParams as SimulateClearingParams,
     type SimulateReturnParams as SimulateReturnParams,

@@ -26,6 +26,7 @@ export {
   type NgnAccountInfo,
   type PhpAccountInfo,
   type PkrAccountInfo,
+  type PlatformExternalAccountCreateRequest,
   type RwfAccountInfo,
   type SgdAccountInfo,
   type ThbAccountInfo,
@@ -42,6 +43,6 @@ export {
 } from './external-accounts';
 export {
   Platform,
-  type PlatformListInternalAccountsResponse,
+  type PlatformInternalAccountListResponse,
   type PlatformListInternalAccountsParams,
 } from './platform';

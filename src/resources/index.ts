@@ -17,6 +17,7 @@ export {
   type AgentDeviceCodeStatusResponse,
   type AgentListResponse,
   type AgentPolicy,
+  type AgentPolicyUpdateRequest,
   type AgentUpdateRequest,
   type AgentUsage,
   type AgentCreateParams,
@@ -30,76 +31,95 @@ export {
 export { Auth } from './auth/auth';
 export {
   BeneficialOwners,
+  type BeneficialOwnerCreateRequest,
+  type BeneficialOwnerListResponse,
   type BeneficialOwnerPersonalInfo,
+  type BeneficialOwnerUpdateRequest,
   type BeneficialOwnerCreateParams,
   type BeneficialOwnerUpdateParams,
   type BeneficialOwnerListParams,
 } from './beneficial-owners';
 export {
   Cards,
-  type CardRetrieveResponse,
-  type CardUpdateResponse,
+  type Card,
+  type CardCreateRequest,
   type CardListResponse,
-  type CardIssueResponse,
+  type CardTransaction,
+  type CardUpdateRequest,
   type CardUpdateParams,
   type CardListParams,
   type CardIssueParams,
-  type CardListResponsesDefaultPagination,
+  type CardsDefaultPagination,
 } from './cards';
 export {
   Config,
   type CustomerInfoFieldName,
   type EmbeddedWalletConfig,
   type PlatformConfig,
+  type PlatformConfigUpdateRequest,
   type PlatformCurrencyConfig,
   type ConfigUpdateParams,
 } from './config';
 export {
   Crypto,
-  type CryptoEstimateWithdrawalFeeResponse,
+  type EstimateCryptoWithdrawalFeeRequest,
+  type EstimateCryptoWithdrawalFeeResponse,
   type CryptoEstimateWithdrawalFeeParams,
 } from './crypto';
 export {
   Customers,
-  type CustomerCreateResponse,
-  type CustomerRetrieveResponse,
-  type CustomerUpdateResponse,
+  type BusinessCustomerCreateRequest,
+  type BusinessCustomerUpdateRequest,
+  type Customer,
+  type CustomerCreateRequestOneOf,
   type CustomerListResponse,
-  type CustomerDeleteResponse,
-  type CustomerExportResponse,
-  type CustomerGenerateKYCLinkResponse,
+  type CustomerOneOf,
+  type CustomerUpdateRequestOneOf,
+  type IndividualCustomerCreateRequest,
+  type IndividualCustomerUpdateRequest,
+  type InternalAccountExportRequest,
+  type InternalAccountExportResponse,
+  type InternalAccountListResponse,
+  type InternalAccountUpdateRequest,
+  type KYCLinkCreateRequest,
+  type KYCLinkResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,
+  type CustomerCreateKYCLinkParams,
   type CustomerExportParams,
-  type CustomerGenerateKYCLinkParams,
   type CustomerListInternalAccountsParams,
   type CustomerUpdateInternalAccountParams,
-  type CustomerListResponsesDefaultPagination,
+  type CustomerOneovesDefaultPagination,
 } from './customers/customers';
 export { Discoveries, type DiscoveryListResponse, type DiscoveryListParams } from './discoveries';
 export {
   Documents,
-  type DocumentRetrieveResponse,
+  type Document,
   type DocumentListResponse,
-  type DocumentReplaceResponse,
-  type DocumentUploadResponse,
   type DocumentListParams,
   type DocumentReplaceParams,
   type DocumentUploadParams,
-  type DocumentListResponsesDefaultPagination,
+  type DocumentsDefaultPagination,
 } from './documents';
-export { ExchangeRates, type ExchangeRateListResponse, type ExchangeRateListParams } from './exchange-rates';
+export {
+  ExchangeRates,
+  type ExchangeRate,
+  type ExchangeRateListResponse,
+  type ExchangeRateListParams,
+} from './exchange-rates';
 export {
   Invitations,
   type CurrencyAmount,
   type UmaInvitation,
+  type UmaInvitationClaimRequest,
+  type UmaInvitationCreateRequest,
   type InvitationCreateParams,
   type InvitationClaimParams,
 } from './invitations';
 export {
   Platform,
-  type PlatformListInternalAccountsResponse,
+  type PlatformInternalAccountListResponse,
   type PlatformListInternalAccountsParams,
 } from './platform/platform';
 export {
@@ -111,6 +131,7 @@ export {
   type PaymentInstructions,
   type Quote,
   type QuoteDestinationOneOf,
+  type QuoteRequest,
   type QuoteSourceOneOf,
   type QuoteCreateParams,
   type QuoteExecuteParams,
@@ -118,17 +139,19 @@ export {
 export {
   Receiver,
   type CounterpartyFieldDefinition,
+  type ExternalAccountLookupResponse,
   type LookupResponse,
-  type ReceiverLookupExternalAccountResponse,
-  type ReceiverLookupUmaResponse,
+  type UmaLookupResponse,
   type ReceiverLookupExternalAccountParams,
   type ReceiverLookupUmaParams,
 } from './receiver';
-export { Sandbox, type SandboxSendFundsParams } from './sandbox/sandbox';
+export { Sandbox, type SendRequest, type SandboxSendFundsParams } from './sandbox/sandbox';
 export {
   Tokens,
   type APIToken,
+  type APITokenCreateRequest,
   type Permission,
+  type TokenListResponse,
   type TokenCreateParams,
   type TokenListParams,
   type APITokensDefaultPagination,
@@ -141,6 +164,7 @@ export {
   type OutgoingTransaction,
   type OutgoingTransactionStatus,
   type ReconciliationInstructions,
+  type TransactionListResponse,
   type TransactionSourceOneOf,
   type TransactionStatus,
   type TransactionType,
@@ -154,31 +178,32 @@ export {
   type ExternalAccountReference,
   type InternalAccountReference,
   type Transaction,
+  type TransferInRequest,
   type TransferInCreateParams,
   type TransactionsDefaultPagination,
 } from './transfer-in';
-export { TransferOut, type TransferOutCreateParams } from './transfer-out';
+export { TransferOut, type TransferOutRequest, type TransferOutCreateParams } from './transfer-out';
 export {
   UmaProviders,
+  type UmaProvider,
   type UmaProviderListResponse,
   type UmaProviderListParams,
-  type UmaProviderListResponsesDefaultPagination,
+  type UmaProvidersDefaultPagination,
 } from './uma-providers';
 export {
   Verifications,
-  type VerificationRetrieveResponse,
+  type Verification,
   type VerificationListResponse,
-  type VerificationSubmitResponse,
+  type VerificationRequest,
   type VerificationListParams,
   type VerificationSubmitParams,
-  type VerificationListResponsesDefaultPagination,
+  type VerificationsDefaultPagination,
 } from './verifications';
 export {
   Webhooks,
   type AgentActionWebhookEvent,
   type IncomingPaymentWebhookEvent,
   type OutgoingPaymentWebhookEvent,
-  type TestWebhookWebhookEvent,
   type BulkUploadWebhookEvent,
   type InvitationClaimedWebhookEvent,
   type CustomerUpdateWebhookEvent,

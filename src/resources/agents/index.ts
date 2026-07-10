@@ -17,6 +17,7 @@ export {
   type AgentDeviceCodeStatusResponse,
   type AgentListResponse,
   type AgentPolicy,
+  type AgentPolicyUpdateRequest,
   type AgentUpdateRequest,
   type AgentUsage,
   type AgentCreateParams,

@@ -168,7 +168,18 @@ export interface QuoteCreateParams {
     | 'UTILITY_BILL'
     | 'DONATION'
     | 'TRAVEL'
+    | 'FAMILY_SUPPORT'
+    | 'SALARY_PAYMENT'
     | 'OTHER';
+
+  /**
+   * Body param: Free-form information about the payment that travels with it to the
+   * recipient. The field this populates depends on the payment rail: for ACH it
+   * populates the Addenda record, for FedNow and RTP it populates the
+   * remittanceInformation field, and for wires it populates the OBI (Originator to
+   * Beneficiary Information) / beneficiary information.
+   */
+  remittanceInformation?: string;
 
   /**
    * Body param: Key-value pairs of additional information about the sender which was
@@ -191,7 +202,7 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Full Turnkey API-key stamp over the `payloadToSign` returned in the quote's
+   * Full Grid wallet signature over the `payloadToSign` returned in the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
    * private key of a verified authentication credential on the source Embedded
    * Wallet. Required when the quote's source is an internal account of type

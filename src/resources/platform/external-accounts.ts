@@ -139,11 +139,16 @@ export interface AedAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface BdtAccountInfo {
   accountType: 'BDT_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -229,31 +234,31 @@ export interface CadAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankAccountType, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface CopAccountInfo {
   accountType: 'COP_ACCOUNT';
 
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
-   * The account number of the bank (BANK_TRANSFER only)
+   * The account number of the bank
    */
   accountNumber?: string;
 
   /**
-   * The bank account type (BANK_TRANSFER only)
+   * The bank account type
    */
   bankAccountType?: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the bank (BANK_TRANSFER only)
-   */
-  bankName?: string;
-
-  /**
-   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
+   * The phone number in international format
    */
   phoneNumber?: string;
 }
@@ -274,12 +279,13 @@ export interface DkkAccountInfo {
   swiftCode?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: bankName, iban
+ * - MOBILE_MONEY: bankName, phoneNumber
+ */
 export interface EgpAccountInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'EGP_ACCOUNT';
 
   /**
@@ -287,7 +293,7 @@ export interface EgpAccountInfo {
    */
   bankName: string;
 
-  paymentRails: Array<'BANK_TRANSFER'>;
+  paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
   /**
    * Egyptian IBAN (29 characters, starting with EG)
@@ -295,9 +301,9 @@ export interface EgpAccountInfo {
   iban?: string;
 
   /**
-   * The SWIFT/BIC code of the bank
+   * The phone number in international format
    */
-  swiftCode?: string;
+  phoneNumber?: string;
 }
 
 export interface EurAccountInfo {
@@ -335,11 +341,16 @@ export interface GbpAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface GhsAccountInfo {
   accountType: 'GHS_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -366,6 +377,11 @@ export interface GtqAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the beneficiary's bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER'>;
 }
@@ -428,15 +444,44 @@ export interface IdrAccountInfo {
   swiftCode: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - NEFT: accountNumber, ifsc, rail
+ * - RTGS: accountNumber, ifsc, rail
+ * - UPI: vpa
+ */
 export interface InrAccountInfo {
   accountType: 'INR_ACCOUNT';
 
-  paymentRails: Array<'UPI'>;
+  paymentRails: Array<'UPI' | 'NEFT' | 'RTGS'>;
+
+  /**
+   * Indian bank account number (9–18 digits)
+   */
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
+
+  /**
+   * The Indian Financial System Code (IFSC) of the beneficiary's bank branch
+   * (NEFT/RTGS)
+   */
+  ifsc?: string;
+
+  /**
+   * The payment rail to route the payout over, for currencies that support more than
+   * one (e.g. NEFT or RTGS for INR).
+   */
+  rail?: string;
 
   /**
    * The UPI Virtual Payment Address
    */
-  vpa: string;
+  vpa?: string;
 }
 
 export interface JmdAccountInfo {
@@ -451,6 +496,11 @@ export interface JmdAccountInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   /**
    * The branch code
@@ -559,11 +609,16 @@ export interface PhpAccountInfo {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
+ * - BANK_TRANSFER: accountNumber, bankName
  * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface PkrAccountInfo {
   accountType: 'PKR_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -571,11 +626,6 @@ export interface PkrAccountInfo {
    * The account number of the bank
    */
   accountNumber?: string;
-
-  /**
-   * The name of the bank
-   */
-  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)
@@ -586,6 +636,132 @@ export interface PkrAccountInfo {
    * The phone number in international format
    */
   phoneNumber?: string;
+}
+
+export interface PlatformExternalAccountCreateRequest {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
+   */
+  accountInfo:
+    | Shared.AedExternalAccountCreateInfo
+    | Shared.BdtExternalAccountCreateInfo
+    | Shared.BrlExternalAccountCreateInfo
+    | Shared.BwpExternalAccountCreateInfo
+    | Shared.CadExternalAccountCreateInfo
+    | PlatformExternalAccountCreateRequest.CnyAccount
+    | Shared.CopExternalAccountCreateInfo
+    | Shared.DkkExternalAccountCreateInfo
+    | Shared.EgpExternalAccountCreateInfo
+    | Shared.EurExternalAccountCreateInfo
+    | Shared.GbpExternalAccountCreateInfo
+    | Shared.GhsExternalAccountCreateInfo
+    | Shared.GtqExternalAccountCreateInfo
+    | Shared.HkdExternalAccountCreateInfo
+    | Shared.HtgExternalAccountCreateInfo
+    | Shared.IdrExternalAccountCreateInfo
+    | Shared.InrExternalAccountCreateInfo
+    | Shared.JmdExternalAccountCreateInfo
+    | Shared.KesExternalAccountCreateInfo
+    | Shared.MwkExternalAccountCreateInfo
+    | Shared.MxnExternalAccountCreateInfo
+    | Shared.MyrExternalAccountCreateInfo
+    | Shared.NgnExternalAccountCreateInfo
+    | Shared.PhpExternalAccountCreateInfo
+    | Shared.PkrExternalAccountCreateInfo
+    | Shared.RwfExternalAccountCreateInfo
+    | Shared.SgdExternalAccountCreateInfo
+    | Shared.SlvExternalAccountCreateInfo
+    | Shared.ThbExternalAccountCreateInfo
+    | Shared.TzsExternalAccountCreateInfo
+    | Shared.UgxExternalAccountCreateInfo
+    | Shared.UsdExternalAccountCreateInfo
+    | Shared.VndExternalAccountCreateInfo
+    | Shared.XafExternalAccountCreateInfo
+    | Shared.XofExternalAccountCreateInfo
+    | Shared.ZarExternalAccountCreateInfo
+    | Shared.ZmwExternalAccountCreateInfo
+    | Shared.SwiftExternalAccountCreateInfo;
+
+  /**
+   * The ISO 4217 currency code
+   */
+  currency: string;
+
+  /**
+   * Your platform's identifier for the account in your system. This can be used to
+   * reference the account by your own identifier.
+   */
+  platformAccountId?: string;
+}
+
+export namespace PlatformExternalAccountCreateRequest {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
+   */
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The account number of the bank
+     */
+    accountNumber?: string;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber?: string;
+  }
+
+  export namespace CnyAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
 }
 
 export interface RwfAccountInfo {
@@ -612,17 +788,18 @@ export interface SgdAccountInfo {
 
   accountType: 'SGD_ACCOUNT';
 
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
   paymentRails: Array<'PAYNOW' | 'FAST' | 'BANK_TRANSFER'>;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+
+  /**
+   * Name of the beneficiary's bank. When omitted, resolved from swiftCode via the
+   * payout partner bank directory at account creation.
+   */
+  bankName?: string;
 }
 
 export interface ThbAccountInfo {
@@ -793,8 +970,8 @@ export interface ExternalAccountCreateParams {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber
-   * - MOBILE_MONEY: phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
    */
   accountInfo:
     | Shared.AedExternalAccountCreateInfo
@@ -802,6 +979,7 @@ export interface ExternalAccountCreateParams {
     | Shared.BrlExternalAccountCreateInfo
     | Shared.BwpExternalAccountCreateInfo
     | Shared.CadExternalAccountCreateInfo
+    | ExternalAccountCreateParams.CnyAccount
     | Shared.CopExternalAccountCreateInfo
     | Shared.DkkExternalAccountCreateInfo
     | Shared.EgpExternalAccountCreateInfo
@@ -847,6 +1025,73 @@ export interface ExternalAccountCreateParams {
   platformAccountId?: string;
 }
 
+export namespace ExternalAccountCreateParams {
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
+   */
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+
+    /**
+     * The account number of the bank
+     */
+    accountNumber?: string;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber?: string;
+  }
+
+  export namespace CnyAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+  }
+}
+
 export interface ExternalAccountListParams extends DefaultPaginationParams {
   /**
    * Filter by currency code
@@ -885,6 +1130,7 @@ export declare namespace ExternalAccounts {
     type NgnAccountInfo as NgnAccountInfo,
     type PhpAccountInfo as PhpAccountInfo,
     type PkrAccountInfo as PkrAccountInfo,
+    type PlatformExternalAccountCreateRequest as PlatformExternalAccountCreateRequest,
     type RwfAccountInfo as RwfAccountInfo,
     type SgdAccountInfo as SgdAccountInfo,
     type ThbAccountInfo as ThbAccountInfo,

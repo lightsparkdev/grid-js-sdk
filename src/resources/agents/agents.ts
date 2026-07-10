@@ -603,6 +603,81 @@ export namespace AgentPolicy {
 }
 
 /**
+ * Partial update to an agent's policy. Only provided fields will be updated;
+ * omitted fields retain their current values.
+ */
+export interface AgentPolicyUpdateRequest {
+  /**
+   * Optional restrictions that limit the agent to specific accounts or override
+   * policy per account.
+   */
+  accountRestrictions?: AgentAccountRestrictions;
+
+  /**
+   * Thresholds that force approval for high-value transactions, overriding the
+   * default execution mode. When a transaction is denominated in a different
+   * currency than the threshold, Grid converts using the exchange rate at evaluation
+   * time.
+   */
+  approvalThresholds?: AgentApprovalThresholds;
+
+  /**
+   * Execution mode controlling whether agent actions require human approval. AUTO:
+   * The agent can execute actions autonomously without explicit approval.
+   * APPROVAL_REQUIRED: All agent actions require explicit human approval before
+   * execution.
+   */
+  defaultExecutionMode?: 'AUTO' | 'APPROVAL_REQUIRED';
+
+  /**
+   * Updated list of permissions. Replaces the entire permissions list when provided.
+   */
+  permissions?: Array<
+    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
+  >;
+
+  /**
+   * Partial update to spending limits. Only provided fields will be updated; omitted
+   * fields retain their current values.
+   */
+  spendingLimits?: AgentPolicyUpdateRequest.SpendingLimits;
+}
+
+export namespace AgentPolicyUpdateRequest {
+  /**
+   * Partial update to spending limits. Only provided fields will be updated; omitted
+   * fields retain their current values.
+   */
+  export interface SpendingLimits {
+    /**
+     * ISO 4217 currency code that all amount limits are denominated in. Updating this
+     * recasts all existing limits into the new currency denomination.
+     */
+    currency?: string;
+
+    /**
+     * Maximum daily spend. Set to null to remove the daily limit.
+     */
+    dailyLimit?: number | null;
+
+    /**
+     * Maximum number of transactions per day.
+     */
+    dailyTransactionLimit?: number;
+
+    /**
+     * Maximum monthly spend. Set to null to remove the monthly limit.
+     */
+    monthlyLimit?: number | null;
+
+    /**
+     * Maximum amount per transaction.
+     */
+    perTransactionLimit?: number;
+  }
+}
+
+/**
  * Partial update to an agent's basic fields. At least one field must be provided.
  */
 export interface AgentUpdateRequest {
@@ -846,6 +921,7 @@ export declare namespace Agents {
     type AgentDeviceCodeStatusResponse as AgentDeviceCodeStatusResponse,
     type AgentListResponse as AgentListResponse,
     type AgentPolicy as AgentPolicy,
+    type AgentPolicyUpdateRequest as AgentPolicyUpdateRequest,
     type AgentUpdateRequest as AgentUpdateRequest,
     type AgentUsage as AgentUsage,
     type AgentsDefaultPagination as AgentsDefaultPagination,

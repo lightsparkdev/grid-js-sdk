@@ -65,9 +65,11 @@ describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('replace: only required params', async () => {
     const responsePromise = client.documents.replace('documentId', {
-      country: 'US',
-      documentType: 'PASSPORT',
-      file: await toFile(Buffer.from('Example data'), 'README.md'),
+      DocumentReplaceRequest: {
+        country: 'US',
+        documentType: 'PASSPORT',
+        file: await toFile(Buffer.from('Example data'), 'README.md'),
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -81,22 +83,26 @@ describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('replace: required and optional params', async () => {
     const response = await client.documents.replace('documentId', {
-      country: 'US',
-      documentType: 'PASSPORT',
-      file: await toFile(Buffer.from('Example data'), 'README.md'),
-      documentNumber: 'A12345678',
-      issuingAuthority: 'U.S. Department of State',
-      side: 'FRONT',
+      DocumentReplaceRequest: {
+        country: 'US',
+        documentType: 'PASSPORT',
+        file: await toFile(Buffer.from('Example data'), 'README.md'),
+        documentNumber: 'A12345678',
+        issuingAuthority: 'U.S. Department of State',
+        side: 'FRONT',
+      },
     });
   });
 
   // Mock server tests are disabled
   test.skip('upload: only required params', async () => {
     const responsePromise = client.documents.upload({
-      country: 'US',
-      documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
-      documentType: 'PASSPORT',
-      file: await toFile(Buffer.from('Example data'), 'README.md'),
+      DocumentUploadRequest: {
+        country: 'US',
+        documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
+        documentType: 'PASSPORT',
+        file: await toFile(Buffer.from('Example data'), 'README.md'),
+      },
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -110,13 +116,15 @@ describe('resource documents', () => {
   // Mock server tests are disabled
   test.skip('upload: required and optional params', async () => {
     const response = await client.documents.upload({
-      country: 'US',
-      documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
-      documentType: 'PASSPORT',
-      file: await toFile(Buffer.from('Example data'), 'README.md'),
-      documentNumber: 'A12345678',
-      issuingAuthority: 'U.S. Department of State',
-      side: 'FRONT',
+      DocumentUploadRequest: {
+        country: 'US',
+        documentHolder: 'BeneficialOwner:019542f5-b3e7-1d02-0000-000000000001',
+        documentType: 'PASSPORT',
+        file: await toFile(Buffer.from('Example data'), 'README.md'),
+        documentNumber: 'A12345678',
+        issuingAuthority: 'U.S. Department of State',
+        side: 'FRONT',
+      },
     });
   });
 });

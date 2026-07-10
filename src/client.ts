@@ -21,21 +21,25 @@ import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
 import {
   BeneficialOwnerCreateParams,
+  BeneficialOwnerCreateRequest,
   BeneficialOwnerListParams,
+  BeneficialOwnerListResponse,
   BeneficialOwnerPersonalInfo,
   BeneficialOwnerUpdateParams,
+  BeneficialOwnerUpdateRequest,
   BeneficialOwners,
 } from './resources/beneficial-owners';
 import {
+  Card,
+  CardCreateRequest,
   CardIssueParams,
-  CardIssueResponse,
   CardListParams,
   CardListResponse,
-  CardListResponsesDefaultPagination,
-  CardRetrieveResponse,
+  CardTransaction,
   CardUpdateParams,
-  CardUpdateResponse,
+  CardUpdateRequest,
   Cards,
+  CardsDefaultPagination,
 } from './resources/cards';
 import {
   Config,
@@ -43,32 +47,39 @@ import {
   CustomerInfoFieldName,
   EmbeddedWalletConfig,
   PlatformConfig,
+  PlatformConfigUpdateRequest,
   PlatformCurrencyConfig,
 } from './resources/config';
 import {
   Crypto,
   CryptoEstimateWithdrawalFeeParams,
-  CryptoEstimateWithdrawalFeeResponse,
+  EstimateCryptoWithdrawalFeeRequest,
+  EstimateCryptoWithdrawalFeeResponse,
 } from './resources/crypto';
 import { Discoveries, DiscoveryListParams, DiscoveryListResponse } from './resources/discoveries';
 import {
+  Document,
   DocumentListParams,
   DocumentListResponse,
-  DocumentListResponsesDefaultPagination,
   DocumentReplaceParams,
-  DocumentReplaceResponse,
-  DocumentRetrieveResponse,
   DocumentUploadParams,
-  DocumentUploadResponse,
   Documents,
+  DocumentsDefaultPagination,
 } from './resources/documents';
-import { ExchangeRateListParams, ExchangeRateListResponse, ExchangeRates } from './resources/exchange-rates';
+import {
+  ExchangeRate,
+  ExchangeRateListParams,
+  ExchangeRateListResponse,
+  ExchangeRates,
+} from './resources/exchange-rates';
 import {
   CurrencyAmount,
   InvitationClaimParams,
   InvitationCreateParams,
   Invitations,
   UmaInvitation,
+  UmaInvitationClaimRequest,
+  UmaInvitationCreateRequest,
 } from './resources/invitations';
 import {
   BaseDestination,
@@ -80,24 +91,27 @@ import {
   QuoteCreateParams,
   QuoteDestinationOneOf,
   QuoteExecuteParams,
+  QuoteRequest,
   QuoteSourceOneOf,
   Quotes,
 } from './resources/quotes';
 import {
   CounterpartyFieldDefinition,
+  ExternalAccountLookupResponse,
   LookupResponse,
   Receiver,
   ReceiverLookupExternalAccountParams,
-  ReceiverLookupExternalAccountResponse,
   ReceiverLookupUmaParams,
-  ReceiverLookupUmaResponse,
+  UmaLookupResponse,
 } from './resources/receiver';
 import {
   APIToken,
+  APITokenCreateRequest,
   APITokensDefaultPagination,
   Permission,
   TokenCreateParams,
   TokenListParams,
+  TokenListResponse,
   Tokens,
 } from './resources/tokens';
 import {
@@ -109,6 +123,7 @@ import {
   ReconciliationInstructions,
   TransactionApproveParams,
   TransactionListParams,
+  TransactionListResponse,
   TransactionRejectParams,
   TransactionSourceOneOf,
   TransactionStatus,
@@ -122,22 +137,24 @@ import {
   Transaction,
   TransferIn,
   TransferInCreateParams,
+  TransferInRequest,
 } from './resources/transfer-in';
-import { TransferOut, TransferOutCreateParams } from './resources/transfer-out';
+import { TransferOut, TransferOutCreateParams, TransferOutRequest } from './resources/transfer-out';
 import {
+  UmaProvider,
   UmaProviderListParams,
   UmaProviderListResponse,
-  UmaProviderListResponsesDefaultPagination,
   UmaProviders,
+  UmaProvidersDefaultPagination,
 } from './resources/uma-providers';
 import {
+  Verification,
   VerificationListParams,
   VerificationListResponse,
-  VerificationListResponsesDefaultPagination,
-  VerificationRetrieveResponse,
+  VerificationRequest,
   VerificationSubmitParams,
-  VerificationSubmitResponse,
   Verifications,
+  VerificationsDefaultPagination,
 } from './resources/verifications';
 import {
   AgentActionWebhookEvent,
@@ -149,7 +166,6 @@ import {
   InternalAccountStatusWebhookEvent,
   InvitationClaimedWebhookEvent,
   OutgoingPaymentWebhookEvent,
-  TestWebhookWebhookEvent,
   UnwrapWebhookEvent,
   VerificationUpdateWebhookEvent,
   Webhooks,
@@ -173,6 +189,7 @@ import {
   AgentListParams,
   AgentListResponse,
   AgentPolicy,
+  AgentPolicyUpdateRequest,
   AgentUpdateParams,
   AgentUpdatePolicyParams,
   AgentUpdateRequest,
@@ -182,29 +199,37 @@ import {
 } from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
+  BusinessCustomerCreateRequest,
+  BusinessCustomerUpdateRequest,
+  Customer,
+  CustomerCreateKYCLinkParams,
   CustomerCreateParams,
-  CustomerCreateResponse,
-  CustomerDeleteResponse,
+  CustomerCreateRequestOneOf,
   CustomerExportParams,
-  CustomerExportResponse,
-  CustomerGenerateKYCLinkParams,
-  CustomerGenerateKYCLinkResponse,
   CustomerListInternalAccountsParams,
   CustomerListParams,
   CustomerListResponse,
-  CustomerListResponsesDefaultPagination,
-  CustomerRetrieveResponse,
+  CustomerOneOf,
+  CustomerOneovesDefaultPagination,
   CustomerUpdateInternalAccountParams,
   CustomerUpdateParams,
-  CustomerUpdateResponse,
+  CustomerUpdateRequestOneOf,
   Customers,
+  IndividualCustomerCreateRequest,
+  IndividualCustomerUpdateRequest,
+  InternalAccountExportRequest,
+  InternalAccountExportResponse,
+  InternalAccountListResponse,
+  InternalAccountUpdateRequest,
+  KYCLinkCreateRequest,
+  KYCLinkResponse,
 } from './resources/customers/customers';
 import {
   Platform,
+  PlatformInternalAccountListResponse,
   PlatformListInternalAccountsParams,
-  PlatformListInternalAccountsResponse,
 } from './resources/platform/platform';
-import { Sandbox, SandboxSendFundsParams } from './resources/sandbox/sandbox';
+import { Sandbox, SandboxSendFundsParams, SendRequest } from './resources/sandbox/sandbox';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -972,11 +997,19 @@ export class LightsparkGrid {
     return () => controller.abort();
   }
 
-  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
+  private buildBody({ options }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
+    const { body, headers: rawHeaders } = options;
     if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -1151,32 +1184,41 @@ export declare namespace LightsparkGrid {
     type CustomerInfoFieldName as CustomerInfoFieldName,
     type EmbeddedWalletConfig as EmbeddedWalletConfig,
     type PlatformConfig as PlatformConfig,
+    type PlatformConfigUpdateRequest as PlatformConfigUpdateRequest,
     type PlatformCurrencyConfig as PlatformCurrencyConfig,
     type ConfigUpdateParams as ConfigUpdateParams,
   };
 
   export {
     Customers as Customers,
-    type CustomerCreateResponse as CustomerCreateResponse,
-    type CustomerRetrieveResponse as CustomerRetrieveResponse,
-    type CustomerUpdateResponse as CustomerUpdateResponse,
+    type BusinessCustomerCreateRequest as BusinessCustomerCreateRequest,
+    type BusinessCustomerUpdateRequest as BusinessCustomerUpdateRequest,
+    type Customer as Customer,
+    type CustomerCreateRequestOneOf as CustomerCreateRequestOneOf,
     type CustomerListResponse as CustomerListResponse,
-    type CustomerDeleteResponse as CustomerDeleteResponse,
-    type CustomerExportResponse as CustomerExportResponse,
-    type CustomerGenerateKYCLinkResponse as CustomerGenerateKYCLinkResponse,
-    type CustomerListResponsesDefaultPagination as CustomerListResponsesDefaultPagination,
+    type CustomerOneOf as CustomerOneOf,
+    type CustomerUpdateRequestOneOf as CustomerUpdateRequestOneOf,
+    type IndividualCustomerCreateRequest as IndividualCustomerCreateRequest,
+    type IndividualCustomerUpdateRequest as IndividualCustomerUpdateRequest,
+    type InternalAccountExportRequest as InternalAccountExportRequest,
+    type InternalAccountExportResponse as InternalAccountExportResponse,
+    type InternalAccountListResponse as InternalAccountListResponse,
+    type InternalAccountUpdateRequest as InternalAccountUpdateRequest,
+    type KYCLinkCreateRequest as KYCLinkCreateRequest,
+    type KYCLinkResponse as KYCLinkResponse,
+    type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
     type CustomerListParams as CustomerListParams,
+    type CustomerCreateKYCLinkParams as CustomerCreateKYCLinkParams,
     type CustomerExportParams as CustomerExportParams,
-    type CustomerGenerateKYCLinkParams as CustomerGenerateKYCLinkParams,
     type CustomerListInternalAccountsParams as CustomerListInternalAccountsParams,
     type CustomerUpdateInternalAccountParams as CustomerUpdateInternalAccountParams,
   };
 
   export {
     Platform as Platform,
-    type PlatformListInternalAccountsResponse as PlatformListInternalAccountsResponse,
+    type PlatformInternalAccountListResponse as PlatformInternalAccountListResponse,
     type PlatformListInternalAccountsParams as PlatformListInternalAccountsParams,
   };
 
@@ -1186,17 +1228,22 @@ export declare namespace LightsparkGrid {
     type ExternalAccountReference as ExternalAccountReference,
     type InternalAccountReference as InternalAccountReference,
     type Transaction as Transaction,
+    type TransferInRequest as TransferInRequest,
     type TransferInCreateParams as TransferInCreateParams,
   };
 
-  export { TransferOut as TransferOut, type TransferOutCreateParams as TransferOutCreateParams };
+  export {
+    TransferOut as TransferOut,
+    type TransferOutRequest as TransferOutRequest,
+    type TransferOutCreateParams as TransferOutCreateParams,
+  };
 
   export {
     Receiver as Receiver,
     type CounterpartyFieldDefinition as CounterpartyFieldDefinition,
+    type ExternalAccountLookupResponse as ExternalAccountLookupResponse,
     type LookupResponse as LookupResponse,
-    type ReceiverLookupExternalAccountResponse as ReceiverLookupExternalAccountResponse,
-    type ReceiverLookupUmaResponse as ReceiverLookupUmaResponse,
+    type UmaLookupResponse as UmaLookupResponse,
     type ReceiverLookupExternalAccountParams as ReceiverLookupExternalAccountParams,
     type ReceiverLookupUmaParams as ReceiverLookupUmaParams,
   };
@@ -1210,6 +1257,7 @@ export declare namespace LightsparkGrid {
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteRequest as QuoteRequest,
     type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteExecuteParams as QuoteExecuteParams,
@@ -1223,6 +1271,7 @@ export declare namespace LightsparkGrid {
     type OutgoingTransaction as OutgoingTransaction,
     type OutgoingTransactionStatus as OutgoingTransactionStatus,
     type ReconciliationInstructions as ReconciliationInstructions,
+    type TransactionListResponse as TransactionListResponse,
     type TransactionSourceOneOf as TransactionSourceOneOf,
     type TransactionStatus as TransactionStatus,
     type TransactionType as TransactionType,
@@ -1235,23 +1284,32 @@ export declare namespace LightsparkGrid {
     Invitations as Invitations,
     type CurrencyAmount as CurrencyAmount,
     type UmaInvitation as UmaInvitation,
+    type UmaInvitationClaimRequest as UmaInvitationClaimRequest,
+    type UmaInvitationCreateRequest as UmaInvitationCreateRequest,
     type InvitationCreateParams as InvitationCreateParams,
     type InvitationClaimParams as InvitationClaimParams,
   };
 
-  export { Sandbox as Sandbox, type SandboxSendFundsParams as SandboxSendFundsParams };
+  export {
+    Sandbox as Sandbox,
+    type SendRequest as SendRequest,
+    type SandboxSendFundsParams as SandboxSendFundsParams,
+  };
 
   export {
     UmaProviders as UmaProviders,
+    type UmaProvider as UmaProvider,
     type UmaProviderListResponse as UmaProviderListResponse,
-    type UmaProviderListResponsesDefaultPagination as UmaProviderListResponsesDefaultPagination,
+    type UmaProvidersDefaultPagination as UmaProvidersDefaultPagination,
     type UmaProviderListParams as UmaProviderListParams,
   };
 
   export {
     Tokens as Tokens,
     type APIToken as APIToken,
+    type APITokenCreateRequest as APITokenCreateRequest,
     type Permission as Permission,
+    type TokenListResponse as TokenListResponse,
     type APITokensDefaultPagination as APITokensDefaultPagination,
     type TokenCreateParams as TokenCreateParams,
     type TokenListParams as TokenListParams,
@@ -1259,6 +1317,7 @@ export declare namespace LightsparkGrid {
 
   export {
     ExchangeRates as ExchangeRates,
+    type ExchangeRate as ExchangeRate,
     type ExchangeRateListResponse as ExchangeRateListResponse,
     type ExchangeRateListParams as ExchangeRateListParams,
   };
@@ -1268,7 +1327,6 @@ export declare namespace LightsparkGrid {
     type AgentActionWebhookEvent as AgentActionWebhookEvent,
     type IncomingPaymentWebhookEvent as IncomingPaymentWebhookEvent,
     type OutgoingPaymentWebhookEvent as OutgoingPaymentWebhookEvent,
-    type TestWebhookWebhookEvent as TestWebhookWebhookEvent,
     type BulkUploadWebhookEvent as BulkUploadWebhookEvent,
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
@@ -1281,13 +1339,17 @@ export declare namespace LightsparkGrid {
 
   export {
     Crypto as Crypto,
-    type CryptoEstimateWithdrawalFeeResponse as CryptoEstimateWithdrawalFeeResponse,
+    type EstimateCryptoWithdrawalFeeRequest as EstimateCryptoWithdrawalFeeRequest,
+    type EstimateCryptoWithdrawalFeeResponse as EstimateCryptoWithdrawalFeeResponse,
     type CryptoEstimateWithdrawalFeeParams as CryptoEstimateWithdrawalFeeParams,
   };
 
   export {
     BeneficialOwners as BeneficialOwners,
+    type BeneficialOwnerCreateRequest as BeneficialOwnerCreateRequest,
+    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
+    type BeneficialOwnerUpdateRequest as BeneficialOwnerUpdateRequest,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
     type BeneficialOwnerListParams as BeneficialOwnerListParams,
@@ -1295,11 +1357,9 @@ export declare namespace LightsparkGrid {
 
   export {
     Documents as Documents,
-    type DocumentRetrieveResponse as DocumentRetrieveResponse,
+    type Document as Document,
     type DocumentListResponse as DocumentListResponse,
-    type DocumentReplaceResponse as DocumentReplaceResponse,
-    type DocumentUploadResponse as DocumentUploadResponse,
-    type DocumentListResponsesDefaultPagination as DocumentListResponsesDefaultPagination,
+    type DocumentsDefaultPagination as DocumentsDefaultPagination,
     type DocumentListParams as DocumentListParams,
     type DocumentReplaceParams as DocumentReplaceParams,
     type DocumentUploadParams as DocumentUploadParams,
@@ -1307,10 +1367,10 @@ export declare namespace LightsparkGrid {
 
   export {
     Verifications as Verifications,
-    type VerificationRetrieveResponse as VerificationRetrieveResponse,
+    type Verification as Verification,
     type VerificationListResponse as VerificationListResponse,
-    type VerificationSubmitResponse as VerificationSubmitResponse,
-    type VerificationListResponsesDefaultPagination as VerificationListResponsesDefaultPagination,
+    type VerificationRequest as VerificationRequest,
+    type VerificationsDefaultPagination as VerificationsDefaultPagination,
     type VerificationListParams as VerificationListParams,
     type VerificationSubmitParams as VerificationSubmitParams,
   };
@@ -1339,6 +1399,7 @@ export declare namespace LightsparkGrid {
     type AgentDeviceCodeStatusResponse as AgentDeviceCodeStatusResponse,
     type AgentListResponse as AgentListResponse,
     type AgentPolicy as AgentPolicy,
+    type AgentPolicyUpdateRequest as AgentPolicyUpdateRequest,
     type AgentUpdateRequest as AgentUpdateRequest,
     type AgentUsage as AgentUsage,
     type AgentsDefaultPagination as AgentsDefaultPagination,
@@ -1352,11 +1413,12 @@ export declare namespace LightsparkGrid {
 
   export {
     Cards as Cards,
-    type CardRetrieveResponse as CardRetrieveResponse,
-    type CardUpdateResponse as CardUpdateResponse,
+    type Card as Card,
+    type CardCreateRequest as CardCreateRequest,
     type CardListResponse as CardListResponse,
-    type CardIssueResponse as CardIssueResponse,
-    type CardListResponsesDefaultPagination as CardListResponsesDefaultPagination,
+    type CardTransaction as CardTransaction,
+    type CardUpdateRequest as CardUpdateRequest,
+    type CardsDefaultPagination as CardsDefaultPagination,
     type CardUpdateParams as CardUpdateParams,
     type CardListParams as CardListParams,
     type CardIssueParams as CardIssueParams,
@@ -1371,7 +1433,6 @@ export declare namespace LightsparkGrid {
   export type BrlExternalAccountCreateInfo = API.BrlExternalAccountCreateInfo;
   export type BulkCustomerImportErrorEntry = API.BulkCustomerImportErrorEntry;
   export type BusinessCustomer = API.BusinessCustomer;
-  export type BusinessInfoUpdate = API.BusinessInfoUpdate;
   export type BwpBeneficiary = API.BwpBeneficiary;
   export type BwpExternalAccountCreateInfo = API.BwpExternalAccountCreateInfo;
   export type CadBeneficiary = API.CadBeneficiary;

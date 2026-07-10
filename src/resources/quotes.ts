@@ -92,7 +92,7 @@ export class Quotes extends APIResource {
    *
    * When the quote's `source` is an internal account of type `EMBEDDED_WALLET`, the
    * request must include a `Grid-Wallet-Signature` header. The header value is the
-   * full Turnkey API-key stamp built over the `payloadToSign` value from the quote's
+   * full Grid wallet signature built over the `payloadToSign` value from the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry with the session private key
    * of a verified authentication credential on the source Embedded Wallet.
    *
@@ -212,6 +212,8 @@ export interface PaymentInstructions {
   accountOrWalletInfo:
     | PaymentInstructions.ArsAccount
     | PaymentInstructions.SlvAccount
+    | PaymentInstructions.SwiftAccount
+    | PaymentInstructions.CnyAccount
     | PaymentInstructions.EmbeddedWallet;
 
   /**
@@ -273,6 +275,78 @@ export namespace PaymentInstructions {
     phoneNumber?: string;
   }
 
+  export interface SwiftAccount {
+    accountType: 'SWIFT_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    /**
+     * The ISO 3166-1 alpha-2 country code of the bank account
+     */
+    country: string;
+
+    paymentRails: Array<'SWIFT'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The SWIFT/BIC code of the bank
+     */
+    swiftCode: string;
+
+    /**
+     * The bank account number. Required for most corridors. Use iban instead for
+     * IBAN-only corridors (e.g. BR, GB).
+     */
+    accountNumber?: string;
+
+    /**
+     * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
+     * Use accountNumber for all other corridors.
+     */
+    iban?: string;
+  }
+
+  /**
+   * Required fields depend on the selected paymentRails:
+   *
+   * - BANK_TRANSFER: accountNumber, bankName
+   * - MOBILE_MONEY: bankName, phoneNumber
+   */
+  export interface CnyAccount {
+    accountType: 'CNY_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+
+    /**
+     * The account number of the bank
+     */
+    accountNumber?: string;
+
+    /**
+     * The phone number in international format
+     */
+    phoneNumber?: string;
+  }
+
   export interface EmbeddedWallet {
     /**
      * Discriminator value identifying this as Embedded Wallet payment instructions.
@@ -283,7 +357,7 @@ export namespace PaymentInstructions {
      * JSON-encoded transaction signing payload that must be stamped, as-is
      * (byte-for-byte, without re-serialization), with the session private key of a
      * verified authentication credential on the source Embedded Wallet. The resulting
-     * Turnkey API-key stamp is passed as the `Grid-Wallet-Signature` header on
+     * Grid wallet signature is passed as the `Grid-Wallet-Signature` header on
      * `POST /quotes/{quoteId}/execute` to authorize the outbound transfer from the
      * wallet.
      */
@@ -378,9 +452,110 @@ export interface Quote {
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: OutgoingRateDetails;
+
+  /**
+   * Free-form information about the payment that travels with it to the recipient,
+   * as provided on the quote request. The field this populates depends on the
+   * payment rail: for ACH it populates the Addenda record, for FedNow and RTP it
+   * populates the remittanceInformation field, and for wires it populates the OBI
+   * (Originator to Beneficiary Information) / beneficiary information.
+   */
+  remittanceInformation?: string;
 }
 
 export type QuoteDestinationOneOf = unknown;
+
+export interface QuoteRequest {
+  destination: QuoteDestinationOneOf;
+
+  /**
+   * The amount to send/receive in the smallest unit of the locked currency (eg.
+   * cents). See `lockedCurrencySide` for more information.
+   */
+  lockedCurrencyAmount: number;
+
+  /**
+   * The side of the quote which should be locked and specified in the
+   * `lockedCurrencyAmount`. For example, if I want to send exactly $5 MXN from my
+   * wallet, I would set this to "sending", and the `lockedCurrencyAmount` to 500 (in
+   * cents). If I want the receiver to receive exactly $10 USD, I would set this to
+   * "receiving" and the `lockedCurrencyAmount` to 10000 (in cents).
+   */
+  lockedCurrencySide: 'SENDING' | 'RECEIVING';
+
+  source: QuoteSourceOneOf;
+
+  /**
+   * Optional description/memo for the transfer
+   */
+  description?: string;
+
+  /**
+   * Whether to immediately execute the quote after creation. If true, the quote will
+   * be executed and the transaction will be created at the current exchange rate. It
+   * should only be used if you don't want to lock and view rate details before
+   * executing the quote. If you are executing a pre-existing quote, use the
+   * `/quotes/{quoteId}/execute` endpoint instead. This is false by default. This can
+   * only be used for quotes with a `source` which is either an internal account, or
+   * has direct pull functionality (e.g. ACH pull with an external account). Not
+   * supported when the `source` is an internal account of type `EMBEDDED_WALLET`:
+   * those transfers require a `Grid-Wallet-Signature` over the `payloadToSign`
+   * returned in the quote response, which is not available in a combined
+   * create-and-execute call. Create the quote first with `immediatelyExecute: false`
+   * and then call `POST /quotes/{quoteId}/execute` with the `Grid-Wallet-Signature`
+   * stamp header.
+   */
+  immediatelyExecute?: boolean;
+
+  /**
+   * Lookup ID from a previous receiver lookup request. If provided, this can make
+   * the quote creation more efficient by reusing cached lookup data. NOTE: This is
+   * required for UMA destinations due to counterparty institution requirements. See
+   * `senderCustomerInfo` for more information.
+   */
+  lookupId?: string;
+
+  /**
+   * The purpose of the payment. This may be required when sending to certain
+   * geographies (e.g. India).
+   */
+  purposeOfPayment?:
+    | 'GIFT'
+    | 'SELF'
+    | 'GOODS_OR_SERVICES'
+    | 'EDUCATION'
+    | 'HEALTH_OR_MEDICAL'
+    | 'REAL_ESTATE_PURCHASE'
+    | 'TAX_PAYMENT'
+    | 'LOAN_PAYMENT'
+    | 'UTILITY_BILL'
+    | 'DONATION'
+    | 'TRAVEL'
+    | 'FAMILY_SUPPORT'
+    | 'SALARY_PAYMENT'
+    | 'OTHER';
+
+  /**
+   * Free-form information about the payment that travels with it to the recipient.
+   * The field this populates depends on the payment rail: for ACH it populates the
+   * Addenda record, for FedNow and RTP it populates the remittanceInformation field,
+   * and for wires it populates the OBI (Originator to Beneficiary Information) /
+   * beneficiary information.
+   */
+  remittanceInformation?: string;
+
+  /**
+   * Key-value pairs of additional information about the sender which was requested
+   * by the destination. This is relevant when the destination requires more sender
+   * info than was provided during customer creation. Any fields specified in
+   * `requiredPayerDataFields` from the response of the
+   * `/receiver/uma/{receiverUmaAddress}` (lookupUma) or
+   * `/receiver/external-account/{accountId}` (lookupExternalAccount) endpoints MUST
+   * be provided here if they were requested. If the destination did not request any
+   * additional information, this field can be omitted.
+   */
+  senderCustomerInfo?: { [key: string]: unknown };
+}
 
 export type QuoteSourceOneOf = unknown;
 
@@ -456,7 +631,18 @@ export interface QuoteCreateParams {
     | 'UTILITY_BILL'
     | 'DONATION'
     | 'TRAVEL'
+    | 'FAMILY_SUPPORT'
+    | 'SALARY_PAYMENT'
     | 'OTHER';
+
+  /**
+   * Body param: Free-form information about the payment that travels with it to the
+   * recipient. The field this populates depends on the payment rail: for ACH it
+   * populates the Addenda record, for FedNow and RTP it populates the
+   * remittanceInformation field, and for wires it populates the OBI (Originator to
+   * Beneficiary Information) / beneficiary information.
+   */
+  remittanceInformation?: string;
 
   /**
    * Body param: Key-value pairs of additional information about the sender which was
@@ -479,7 +665,7 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Full Turnkey API-key stamp over the `payloadToSign` returned in the quote's
+   * Full Grid wallet signature over the `payloadToSign` returned in the quote's
    * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
    * private key of a verified authentication credential on the source Embedded
    * Wallet. Required when the quote's source is an internal account of type
@@ -503,6 +689,7 @@ export declare namespace Quotes {
     type PaymentInstructions as PaymentInstructions,
     type Quote as Quote,
     type QuoteDestinationOneOf as QuoteDestinationOneOf,
+    type QuoteRequest as QuoteRequest,
     type QuoteSourceOneOf as QuoteSourceOneOf,
     type QuoteCreateParams as QuoteCreateParams,
     type QuoteExecuteParams as QuoteExecuteParams,

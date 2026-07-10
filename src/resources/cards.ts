@@ -1,6 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as InvitationsAPI from './invitations';
+import * as SimulateAPI from './sandbox/cards/simulate';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
 import { buildHeaders } from '../internal/headers';
@@ -12,14 +14,16 @@ import { path } from '../internal/utils/path';
  */
 export class Cards extends APIResource {
   /**
-   * Retrieve a card by its system-generated id.
+   * Retrieve a card by its system-generated id. To display the card's full PAN, CVV,
+   * and expiry to the cardholder, request a reveal with `POST /cards/{id}/reveal` —
+   * the card resource itself never carries the reveal URL.
    *
    * @example
    * ```ts
    * const card = await client.cards.retrieve('id');
    * ```
    */
-  retrieve(id: string, options?: RequestOptions): APIPromise<CardRetrieveResponse> {
+  retrieve(id: string, options?: RequestOptions): APIPromise<Card> {
     return this._client.get(path`/cards/${id}`, { ...options, __security: { basicAuth: true } });
   }
 
@@ -77,7 +81,7 @@ export class Cards extends APIResource {
    * });
    * ```
    */
-  update(id: string, params: CardUpdateParams, options?: RequestOptions): APIPromise<CardUpdateResponse> {
+  update(id: string, params: CardUpdateParams, options?: RequestOptions): APIPromise<Card> {
     const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
     return this._client.patch(path`/cards/${id}`, {
       body,
@@ -101,7 +105,7 @@ export class Cards extends APIResource {
    * @example
    * ```ts
    * // Automatically fetches more pages as needed.
-   * for await (const cardListResponse of client.cards.list()) {
+   * for await (const card of client.cards.list()) {
    *   // ...
    * }
    * ```
@@ -109,8 +113,8 @@ export class Cards extends APIResource {
   list(
     query: CardListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<CardListResponsesDefaultPagination, CardListResponse> {
-    return this._client.getAPIList('/cards', DefaultPagination<CardListResponse>, {
+  ): PagePromise<CardsDefaultPagination, Card> {
+    return this._client.getAPIList('/cards', DefaultPagination<Card>, {
       query,
       ...options,
       __security: { basicAuth: true },
@@ -123,13 +127,21 @@ export class Cards extends APIResource {
    * before a card can be issued; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    *
-   * New cards start in `state: "PENDING_ISSUE"` while the card issuer provisions the
-   * card. The `card.state_change` webhook fires on the transition to `ACTIVE` (or to
-   * `CLOSED` with `stateReason: "ISSUER_REJECTED"` if provisioning fails).
+   * If any funding source is an Embedded Wallet internal account, the cardholder
+   * must authorize Grid to sign Spark token transactions for that card funding
+   * source by completing the delegated-key creation flow with
+   * `POST /auth/delegated-keys`. Until an active delegated key exists for that
+   * funding source, Authorization Decisioning cannot use it to fund card
+   * transactions.
+   *
+   * New cards start in `state: "PROCESSING"` while the card issuer provisions the
+   * card. The `card.state_change` webhook fires on each state transition, including
+   * the transition to `ACTIVE` (or to `CLOSED` with `stateReason: "ISSUER_REJECTED"`
+   * if provisioning fails).
    *
    * @example
    * ```ts
-   * const response = await client.cards.issue({
+   * const card = await client.cards.issue({
    *   cardholderId:
    *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
    *   form: 'VIRTUAL',
@@ -140,14 +152,14 @@ export class Cards extends APIResource {
    * });
    * ```
    */
-  issue(body: CardIssueParams, options?: RequestOptions): APIPromise<CardIssueResponse> {
+  issue(body: CardIssueParams, options?: RequestOptions): APIPromise<Card> {
     return this._client.post('/cards', { body, ...options, __security: { basicAuth: true } });
   }
 }
 
-export type CardListResponsesDefaultPagination = DefaultPagination<CardListResponse>;
+export type CardsDefaultPagination = DefaultPagination<Card>;
 
-export interface CardRetrieveResponse {
+export interface Card {
   /**
    * System-generated unique card identifier
    */
@@ -179,15 +191,15 @@ export interface CardRetrieveResponse {
   /**
    * Lifecycle state of a card.
    *
-   * | State           | Description                                                                                                                                                   |
-   * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-   * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
+   * | State         | Description                                                                                                                                                   |
+   * | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `PENDING_KYC` | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
+   * | `PROCESSING`  | The card has been requested and is being provisioned with the issuer.                                                                                         |
+   * | `ACTIVE`      | The card is live and can authorize transactions.                                                                                                              |
+   * | `FROZEN`      | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
+   * | `CLOSED`      | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
    */
-  state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+  state: 'PENDING_KYC' | 'PROCESSING' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 
   /**
    * Last update timestamp
@@ -218,8 +230,9 @@ export interface CardRetrieveResponse {
   expYear?: number;
 
   /**
-   * Opaque identifier for the card on the underlying issuer. Useful for
-   * cross-referencing in issuer dashboards; not used for any Grid request routing.
+   * Opaque identifier for the card on the issuer of record (e.g. the Lead Bank
+   * account/card identifier). Useful for cross-referencing in issuer dashboards; not
+   * used for any Grid request routing.
    */
   issuerRef?: string;
 
@@ -229,17 +242,17 @@ export interface CardRetrieveResponse {
   last4?: string;
 
   /**
-   * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-   * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-   * URL in an iframe in your client to reveal card details.
-   */
-  panEmbedUrl?: string;
-
-  /**
    * Platform-specific card identifier. Optional on create — system-generated if
    * omitted, mirroring `platformCustomerId` semantics.
    */
   platformCardId?: string;
+
+  /**
+   * Opaque processor-side reference for the card (e.g. the Lithic card token).
+   * Useful for cross-referencing in the processor's dashboards; not used for any
+   * Grid request routing.
+   */
+  processorRef?: string;
 
   /**
    * Reason associated with the current `state`. Populated when the card is `CLOSED`
@@ -248,21 +261,13 @@ export interface CardRetrieveResponse {
   stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
 
-export interface CardUpdateResponse {
+export interface CardCreateRequest {
   /**
-   * System-generated unique card identifier
-   */
-  id: string;
-
-  /**
-   * The id of the `Customer` who holds this card.
+   * The id of the `Customer` to issue the card to. The customer must have KYC status
+   * `APPROVED`; otherwise the request is rejected with
+   * `CARDHOLDER_KYC_NOT_APPROVED`.
    */
   cardholderId: string;
-
-  /**
-   * Creation timestamp
-   */
-  createdAt: string;
 
   /**
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
@@ -271,284 +276,169 @@ export interface CardUpdateResponse {
   form: 'VIRTUAL';
 
   /**
-   * Internal account ids bound to this card as funding sources, in priority order —
-   * the first entry is tried first by Authorization Decisioning. Every card has at
-   * least one funding source.
+   * Internal account ids to bind as funding sources, in priority order. The first
+   * entry is tried first by Authorization Decisioning. Every card must be bound to
+   * at least one source, and every source must belong to the cardholder and be
+   * denominated in a card-eligible currency (USDB in v1); otherwise the request is
+   * rejected with `FUNDING_SOURCE_INELIGIBLE`.
    */
   fundingSources: Array<string>;
 
   /**
-   * Lifecycle state of a card.
-   *
-   * | State           | Description                                                                                                                                                   |
-   * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-   * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
-   */
-  state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt: string;
-
-  /**
-   * Card network brand. Read-only — determined by Grid when the card is provisioned
-   * with the issuer.
-   */
-  brand?: 'VISA' | 'MASTERCARD';
-
-  /**
-   * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-   * from the funding sources at issue time — all funding sources bound to a card
-   * must be denominated in the same card-eligible currency.
-   */
-  currency?: string;
-
-  /**
-   * Card expiration month (1–12).
-   */
-  expMonth?: number;
-
-  /**
-   * Card expiration year (four digits).
-   */
-  expYear?: number;
-
-  /**
-   * Opaque identifier for the card on the underlying issuer. Useful for
-   * cross-referencing in issuer dashboards; not used for any Grid request routing.
-   */
-  issuerRef?: string;
-
-  /**
-   * Last four digits of the card PAN.
-   */
-  last4?: string;
-
-  /**
-   * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-   * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-   * URL in an iframe in your client to reveal card details.
-   */
-  panEmbedUrl?: string;
-
-  /**
-   * Platform-specific card identifier. Optional on create — system-generated if
-   * omitted, mirroring `platformCustomerId` semantics.
+   * Optional platform-specific card identifier. System-generated when omitted,
+   * mirroring `platformCustomerId` semantics.
    */
   platformCardId?: string;
-
-  /**
-   * Reason associated with the current `state`. Populated when the card is `CLOSED`
-   * or when provisioning was rejected; otherwise null.
-   */
-  stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
 }
 
 export interface CardListResponse {
   /**
-   * System-generated unique card identifier
+   * List of cards matching the filter criteria
    */
-  id: string;
+  data: Array<Card>;
 
   /**
-   * The id of the `Customer` who holds this card.
+   * Indicates if more results are available beyond this page
    */
-  cardholderId: string;
+  hasMore: boolean;
 
   /**
-   * Creation timestamp
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
    */
-  createdAt: string;
+  nextCursor?: string;
 
   /**
-   * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
-   * will be added in a later release.
+   * Total number of cards matching the criteria (excluding pagination)
    */
-  form: 'VIRTUAL';
-
-  /**
-   * Internal account ids bound to this card as funding sources, in priority order —
-   * the first entry is tried first by Authorization Decisioning. Every card has at
-   * least one funding source.
-   */
-  fundingSources: Array<string>;
-
-  /**
-   * Lifecycle state of a card.
-   *
-   * | State           | Description                                                                                                                                                   |
-   * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-   * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
-   */
-  state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt: string;
-
-  /**
-   * Card network brand. Read-only — determined by Grid when the card is provisioned
-   * with the issuer.
-   */
-  brand?: 'VISA' | 'MASTERCARD';
-
-  /**
-   * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-   * from the funding sources at issue time — all funding sources bound to a card
-   * must be denominated in the same card-eligible currency.
-   */
-  currency?: string;
-
-  /**
-   * Card expiration month (1–12).
-   */
-  expMonth?: number;
-
-  /**
-   * Card expiration year (four digits).
-   */
-  expYear?: number;
-
-  /**
-   * Opaque identifier for the card on the underlying issuer. Useful for
-   * cross-referencing in issuer dashboards; not used for any Grid request routing.
-   */
-  issuerRef?: string;
-
-  /**
-   * Last four digits of the card PAN.
-   */
-  last4?: string;
-
-  /**
-   * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-   * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-   * URL in an iframe in your client to reveal card details.
-   */
-  panEmbedUrl?: string;
-
-  /**
-   * Platform-specific card identifier. Optional on create — system-generated if
-   * omitted, mirroring `platformCustomerId` semantics.
-   */
-  platformCardId?: string;
-
-  /**
-   * Reason associated with the current `state`. Populated when the card is `CLOSED`
-   * or when provisioning was rejected; otherwise null.
-   */
-  stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
+  totalCount?: number;
 }
 
-export interface CardIssueResponse {
+/**
+ * Parent transaction row for a card authorization and all of the pulls /
+ * settlements / refunds that reconcile against it. Child events are rolled up into
+ * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
+ * Delivered as the payload of the generic transaction webhook stream (extends the
+ * Transaction model with a card destination type) on every transition.
+ */
+export interface CardTransaction {
   /**
-   * System-generated unique card identifier
+   * System-generated unique card transaction identifier
    */
   id: string;
 
   /**
-   * The id of the `Customer` who holds this card.
+   * Internal account id that funded this transaction (the funding source selected by
+   * Authorization Decisioning at auth time).
    */
-  cardholderId: string;
+  accountId: string;
+
+  authorizedAmount: InvitationsAPI.CurrencyAmount;
 
   /**
-   * Creation timestamp
+   * When the auth was approved.
+   */
+  authorizedAt: string;
+
+  /**
+   * Creation timestamp (same as `authorizedAt` for card transactions).
    */
   createdAt: string;
 
   /**
-   * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
-   * will be added in a later release.
+   * System ID of the customer (cardholder) this transaction belongs to.
    */
-  form: 'VIRTUAL';
+  customerId: string;
 
   /**
-   * Internal account ids bound to this card as funding sources, in priority order —
-   * the first entry is tried first by Authorization Decisioning. Every card has at
-   * least one funding source.
+   * Card transactions debit the customer's account.
    */
-  fundingSources: Array<string>;
+  direction: 'CREDIT' | 'DEBIT';
+
+  merchant: SimulateAPI.CardMerchant;
 
   /**
-   * Lifecycle state of a card.
+   * Platform-specific ID of the customer (cardholder) this transaction belongs to.
+   */
+  platformCustomerId: string;
+
+  /**
+   * Lifecycle status of a card transaction.
    *
-   * | State           | Description                                                                                                                                                   |
-   * | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC`   | The cardholder has not yet completed KYC. Cards in this state cannot transact.                                                                                |
-   * | `PENDING_ISSUE` | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`        | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`        | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`        | The card is permanently closed. Terminal, irreversible state.                                                                                                 |
+   * | Status              | Description                                                                                                                                                                                                                                     |
+   * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
+   * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
+   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source.                                                                                                                                                |
+   * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
+   * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
    */
-  state: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
 
   /**
-   * Last update timestamp
+   * Discriminator identifying this transaction as a card transaction in the
+   * `Transaction` list.
+   */
+  type: 'CARD';
+
+  /**
+   * Last update timestamp.
    */
   updatedAt: string;
 
   /**
-   * Card network brand. Read-only — determined by Grid when the card is provisioned
-   * with the issuer.
+   * The id of the `Card` this transaction was made on.
    */
-  brand?: 'VISA' | 'MASTERCARD';
+  cardId?: string;
 
   /**
-   * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-   * from the funding sources at issue time — all funding sources bound to a card
-   * must be denominated in the same card-eligible currency.
+   * Opaque identifier for the transaction on the underlying issuer. Used to
+   * cross-reference Grid records against issuer dashboards and webhooks.
    */
-  currency?: string;
+  issuerTransactionToken?: string;
 
   /**
-   * Card expiration month (1–12).
+   * Timestamp of the most recent reconcile event (pull / clearing / refund) against
+   * this transaction.
    */
-  expMonth?: number;
+  lastEventAt?: string;
+
+  pullSummary?: SimulateAPI.CardPullSummary;
+
+  refundedAmount?: InvitationsAPI.CurrencyAmount;
+
+  refundSummary?: SimulateAPI.CardRefundSummary;
+
+  settledAmount?: InvitationsAPI.CurrencyAmount;
+
+  settlementSummary?: SimulateAPI.CardSettlementSummary;
+}
+
+/**
+ * Update request for `PATCH /cards/{id}`. At least one of `state` or
+ * `fundingSources` must be supplied. `state` transitions are limited to
+ * `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`; any other transition returns
+ * `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal and irreversible and cannot
+ * be combined with `fundingSources`. `fundingSources`, when supplied, fully
+ * replaces the card's bound funding sources — the array order determines the
+ * priority Authorization Decisioning tries them in.
+ */
+export interface CardUpdateRequest {
+  /**
+   * New ordered list of internal account ids to bind as funding sources. Fully
+   * replaces the previous binding. Each id must belong to the cardholder and be
+   * denominated in the card's currency. The list must contain at least one source —
+   * to stop a card from spending without removing all sources, transition it to
+   * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
+   */
+  fundingSources?: Array<string>;
 
   /**
-   * Card expiration year (four digits).
+   * Target state for the card. Permitted transitions are `ACTIVE ⇄ FROZEN` and
+   * `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible; once closed,
+   * the card stays in the system for audit and reconciliation but cannot transact
+   * again.
    */
-  expYear?: number;
-
-  /**
-   * Opaque identifier for the card on the underlying issuer. Useful for
-   * cross-referencing in issuer dashboards; not used for any Grid request routing.
-   */
-  issuerRef?: string;
-
-  /**
-   * Last four digits of the card PAN.
-   */
-  last4?: string;
-
-  /**
-   * URL of the card issuer's iframe that securely displays the PAN, CVV, and expiry
-   * to the cardholder. The full PAN and CVV never cross Grid's servers — render this
-   * URL in an iframe in your client to reveal card details.
-   */
-  panEmbedUrl?: string;
-
-  /**
-   * Platform-specific card identifier. Optional on create — system-generated if
-   * omitted, mirroring `platformCustomerId` semantics.
-   */
-  platformCardId?: string;
-
-  /**
-   * Reason associated with the current `state`. Populated when the card is `CLOSED`
-   * or when provisioning was rejected; otherwise null.
-   */
-  stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
+  state?: 'ACTIVE' | 'FROZEN' | 'CLOSED';
 }
 
 export interface CardUpdateParams {
@@ -615,7 +505,7 @@ export interface CardListParams extends DefaultPaginationParams {
   /**
    * Filter by card state.
    */
-  state?: 'PENDING_KYC' | 'PENDING_ISSUE' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
+  state?: 'PENDING_KYC' | 'PROCESSING' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 }
 
 export interface CardIssueParams {
@@ -650,11 +540,12 @@ export interface CardIssueParams {
 
 export declare namespace Cards {
   export {
-    type CardRetrieveResponse as CardRetrieveResponse,
-    type CardUpdateResponse as CardUpdateResponse,
+    type Card as Card,
+    type CardCreateRequest as CardCreateRequest,
     type CardListResponse as CardListResponse,
-    type CardIssueResponse as CardIssueResponse,
-    type CardListResponsesDefaultPagination as CardListResponsesDefaultPagination,
+    type CardTransaction as CardTransaction,
+    type CardUpdateRequest as CardUpdateRequest,
+    type CardsDefaultPagination as CardsDefaultPagination,
     type CardUpdateParams as CardUpdateParams,
     type CardListParams as CardListParams,
     type CardIssueParams as CardIssueParams,

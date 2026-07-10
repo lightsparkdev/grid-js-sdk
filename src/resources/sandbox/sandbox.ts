@@ -3,11 +3,16 @@
 import { APIResource } from '../../core/resource';
 import * as TransactionsAPI from '../transactions';
 import * as InternalAccountsAPI from './internal-accounts';
-import { InternalAccount, InternalAccountFundParams, InternalAccounts } from './internal-accounts';
+import {
+  FundRequest,
+  InternalAccount,
+  InternalAccountFundParams,
+  InternalAccounts,
+} from './internal-accounts';
 import * as UmaAPI from './uma';
-import { Uma, UmaReceivePaymentParams } from './uma';
+import { ReceiveRequest, Uma, UmaReceivePaymentParams } from './uma';
 import * as WebhooksAPI from './webhooks';
-import { WebhookSendTestResponse, Webhooks } from './webhooks';
+import { TestWebhookRequest, TestWebhookResponse, Webhooks } from './webhooks';
 import * as CardsAPI from './cards/cards';
 import { Cards } from './cards/cards';
 import { APIPromise } from '../../core/api-promise';
@@ -45,6 +50,24 @@ export class Sandbox extends APIResource {
   }
 }
 
+export interface SendRequest {
+  /**
+   * Currency code for the funds to be sent
+   */
+  currencyCode: string;
+
+  /**
+   * The unique identifier of the quote
+   */
+  quoteId: string;
+
+  /**
+   * The amount to send in the smallest unit of the currency (eg. cents). If not
+   * provided, the amount will be derived from the quote.
+   */
+  currencyAmount?: number;
+}
+
 export interface SandboxSendFundsParams {
   /**
    * Currency code for the funds to be sent
@@ -69,17 +92,26 @@ Sandbox.Webhooks = Webhooks;
 Sandbox.Cards = Cards;
 
 export declare namespace Sandbox {
-  export { type SandboxSendFundsParams as SandboxSendFundsParams };
+  export { type SendRequest as SendRequest, type SandboxSendFundsParams as SandboxSendFundsParams };
 
-  export { Uma as Uma, type UmaReceivePaymentParams as UmaReceivePaymentParams };
+  export {
+    Uma as Uma,
+    type ReceiveRequest as ReceiveRequest,
+    type UmaReceivePaymentParams as UmaReceivePaymentParams,
+  };
 
   export {
     InternalAccounts as InternalAccounts,
+    type FundRequest as FundRequest,
     type InternalAccount as InternalAccount,
     type InternalAccountFundParams as InternalAccountFundParams,
   };
 
-  export { Webhooks as Webhooks, type WebhookSendTestResponse as WebhookSendTestResponse };
+  export {
+    Webhooks as Webhooks,
+    type TestWebhookRequest as TestWebhookRequest,
+    type TestWebhookResponse as TestWebhookResponse,
+  };
 
   export { Cards as Cards };
 }

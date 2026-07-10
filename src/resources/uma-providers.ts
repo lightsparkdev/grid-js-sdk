@@ -14,8 +14,8 @@ export class UmaProviders extends APIResource {
   list(
     query: UmaProviderListParams | null | undefined = {},
     options?: RequestOptions,
-  ): PagePromise<UmaProviderListResponsesDefaultPagination, UmaProviderListResponse> {
-    return this._client.getAPIList('/uma-providers', DefaultPagination<UmaProviderListResponse>, {
+  ): PagePromise<UmaProvidersDefaultPagination, UmaProvider> {
+    return this._client.getAPIList('/uma-providers', DefaultPagination<UmaProvider>, {
       query,
       ...options,
       __security: { basicAuth: true },
@@ -23,9 +23,9 @@ export class UmaProviders extends APIResource {
   }
 }
 
-export type UmaProviderListResponsesDefaultPagination = DefaultPagination<UmaProviderListResponse>;
+export type UmaProvidersDefaultPagination = DefaultPagination<UmaProvider>;
 
-export interface UmaProviderListResponse {
+export interface UmaProvider {
   /**
    * Whether this UMA Provider is on your allow list
    */
@@ -62,6 +62,28 @@ export interface UmaProviderListResponse {
   supportedRegions?: Array<string>;
 }
 
+export interface UmaProviderListResponse {
+  /**
+   * List of available UMA Providers using Grid
+   */
+  data?: Array<UmaProvider>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore?: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of transactions matching the criteria (excluding pagination)
+   */
+  totalCount?: number;
+}
+
 export interface UmaProviderListParams extends DefaultPaginationParams {
   /**
    * The alpha-2 representation of a country, as defined by the ISO 3166-1 standard.
@@ -92,8 +114,9 @@ export interface UmaProviderListParams extends DefaultPaginationParams {
 
 export declare namespace UmaProviders {
   export {
+    type UmaProvider as UmaProvider,
     type UmaProviderListResponse as UmaProviderListResponse,
-    type UmaProviderListResponsesDefaultPagination as UmaProviderListResponsesDefaultPagination,
+    type UmaProvidersDefaultPagination as UmaProvidersDefaultPagination,
     type UmaProviderListParams as UmaProviderListParams,
   };
 }

@@ -109,6 +109,48 @@ export class BeneficialOwners extends APIResource {
   }
 }
 
+export interface BeneficialOwnerCreateRequest {
+  /**
+   * The ID of the business customer this beneficial owner is associated with
+   */
+  customerId: string;
+
+  /**
+   * Percentage of ownership in the business (0-100). Relevant when role includes
+   * UBO.
+   */
+  ownershipPercentage: number;
+
+  personalInfo: BeneficialOwnerPersonalInfo;
+
+  /**
+   * Roles of this person within the business
+   */
+  roles: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
+}
+
+export interface BeneficialOwnerListResponse {
+  /**
+   * List of beneficial owners matching the filter criteria
+   */
+  data: Array<Shared.BeneficialOwner>;
+
+  /**
+   * Indicates if more results are available beyond this page
+   */
+  hasMore: boolean;
+
+  /**
+   * Cursor to retrieve the next page of results (only present if hasMore is true)
+   */
+  nextCursor?: string;
+
+  /**
+   * Total number of results matching the criteria
+   */
+  totalCount?: number;
+}
+
 export interface BeneficialOwnerPersonalInfo {
   address: ExternalAccountsAPI.Address;
 
@@ -161,6 +203,84 @@ export interface BeneficialOwnerPersonalInfo {
    * Phone number in E.164 format
    */
   phoneNumber?: string;
+}
+
+export interface BeneficialOwnerUpdateRequest {
+  /**
+   * Percentage of ownership in the business (0-100)
+   */
+  ownershipPercentage?: number;
+
+  /**
+   * Partial update for beneficial owner personal information. Only provided fields
+   * are updated.
+   */
+  personalInfo?: BeneficialOwnerUpdateRequest.PersonalInfo;
+
+  /**
+   * Roles of this person within the business
+   */
+  roles?: Array<'UBO' | 'DIRECTOR' | 'COMPANY_OFFICER' | 'CONTROL_PERSON' | 'TRUSTEE' | 'GENERAL_PARTNER'>;
+}
+
+export namespace BeneficialOwnerUpdateRequest {
+  /**
+   * Partial update for beneficial owner personal information. Only provided fields
+   * are updated.
+   */
+  export interface PersonalInfo {
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * Date of birth in ISO 8601 format (YYYY-MM-DD)
+     */
+    birthDate?: string;
+
+    /**
+     * Country that issued the identification (ISO 3166-1 alpha-2)
+     */
+    countryOfIssuance?: string;
+
+    /**
+     * Email address of the individual
+     */
+    email?: string;
+
+    /**
+     * First name of the individual
+     */
+    firstName?: string;
+
+    /**
+     * The identification number or value
+     */
+    identifier?: string;
+
+    /**
+     * Type of tax identification
+     */
+    idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
+
+    /**
+     * Last name of the individual
+     */
+    lastName?: string;
+
+    /**
+     * Middle name of the individual
+     */
+    middleName?: string;
+
+    /**
+     * Country of nationality (ISO 3166-1 alpha-2)
+     */
+    nationality?: string;
+
+    /**
+     * Phone number in E.164 format
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface BeneficialOwnerCreateParams {
@@ -275,7 +395,10 @@ export interface BeneficialOwnerListParams extends DefaultPaginationParams {
 
 export declare namespace BeneficialOwners {
   export {
+    type BeneficialOwnerCreateRequest as BeneficialOwnerCreateRequest,
+    type BeneficialOwnerListResponse as BeneficialOwnerListResponse,
     type BeneficialOwnerPersonalInfo as BeneficialOwnerPersonalInfo,
+    type BeneficialOwnerUpdateRequest as BeneficialOwnerUpdateRequest,
     type BeneficialOwnerCreateParams as BeneficialOwnerCreateParams,
     type BeneficialOwnerUpdateParams as BeneficialOwnerUpdateParams,
     type BeneficialOwnerListParams as BeneficialOwnerListParams,

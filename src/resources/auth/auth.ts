@@ -3,6 +3,7 @@
 import { APIResource } from '../../core/resource';
 import * as CredentialsAPI from './credentials';
 import {
+  AuthCredentialChallengeRequest,
   AuthCredentialCreateRequest,
   AuthCredentialCreateRequestOneOf,
   AuthCredentialListResponse,
@@ -33,6 +34,7 @@ import {
 } from './credentials';
 import * as SessionsAPI from './sessions';
 import {
+  AuthSessionRefreshRequest,
   SessionDeleteParams,
   SessionListParams,
   SessionListResponse,
@@ -51,6 +53,7 @@ Auth.Sessions = Sessions;
 export declare namespace Auth {
   export {
     Credentials as Credentials,
+    type AuthCredentialChallengeRequest as AuthCredentialChallengeRequest,
     type AuthCredentialCreateRequest as AuthCredentialCreateRequest,
     type AuthCredentialCreateRequestOneOf as AuthCredentialCreateRequestOneOf,
     type AuthCredentialListResponse as AuthCredentialListResponse,
@@ -81,6 +84,7 @@ export declare namespace Auth {
 
   export {
     Sessions as Sessions,
+    type AuthSessionRefreshRequest as AuthSessionRefreshRequest,
     type SessionListResponse as SessionListResponse,
     type SessionListParams as SessionListParams,
     type SessionDeleteParams as SessionDeleteParams,

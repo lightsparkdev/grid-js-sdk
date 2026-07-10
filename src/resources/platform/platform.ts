@@ -30,6 +30,7 @@ import {
   NgnAccountInfo,
   PhpAccountInfo,
   PkrAccountInfo,
+  PlatformExternalAccountCreateRequest,
   RwfAccountInfo,
   SgdAccountInfo,
   ThbAccountInfo,
@@ -64,14 +65,14 @@ export class Platform extends APIResource {
    *
    * @example
    * ```ts
-   * const response =
+   * const platformInternalAccountListResponse =
    *   await client.platform.listInternalAccounts();
    * ```
    */
   listInternalAccounts(
     query: PlatformListInternalAccountsParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<PlatformListInternalAccountsResponse> {
+  ): APIPromise<PlatformInternalAccountListResponse> {
     return this._client.get('/platform/internal-accounts', {
       query,
       ...options,
@@ -80,7 +81,7 @@ export class Platform extends APIResource {
   }
 }
 
-export interface PlatformListInternalAccountsResponse {
+export interface PlatformInternalAccountListResponse {
   /**
    * List of internal accounts matching the filter criteria
    */
@@ -105,7 +106,7 @@ Platform.ExternalAccounts = ExternalAccounts;
 
 export declare namespace Platform {
   export {
-    type PlatformListInternalAccountsResponse as PlatformListInternalAccountsResponse,
+    type PlatformInternalAccountListResponse as PlatformInternalAccountListResponse,
     type PlatformListInternalAccountsParams as PlatformListInternalAccountsParams,
   };
 
@@ -135,6 +136,7 @@ export declare namespace Platform {
     type NgnAccountInfo as NgnAccountInfo,
     type PhpAccountInfo as PhpAccountInfo,
     type PkrAccountInfo as PkrAccountInfo,
+    type PlatformExternalAccountCreateRequest as PlatformExternalAccountCreateRequest,
     type RwfAccountInfo as RwfAccountInfo,
     type SgdAccountInfo as SgdAccountInfo,
     type ThbAccountInfo as ThbAccountInfo,

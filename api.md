@@ -11,7 +11,6 @@ Types:
 - <code><a href="./src/resources/shared.ts">BrlExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BulkCustomerImportErrorEntry</a></code>
 - <code><a href="./src/resources/shared.ts">BusinessCustomer</a></code>
-- <code><a href="./src/resources/shared.ts">BusinessInfoUpdate</a></code>
 - <code><a href="./src/resources/shared.ts">BwpBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BwpExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">CadBeneficiary</a></code>
@@ -79,6 +78,7 @@ Types:
 - <code><a href="./src/resources/config.ts">CustomerInfoFieldName</a></code>
 - <code><a href="./src/resources/config.ts">EmbeddedWalletConfig</a></code>
 - <code><a href="./src/resources/config.ts">PlatformConfig</a></code>
+- <code><a href="./src/resources/config.ts">PlatformConfigUpdateRequest</a></code>
 - <code><a href="./src/resources/config.ts">PlatformCurrencyConfig</a></code>
 
 Methods:
@@ -90,23 +90,31 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/customers/customers.ts">CustomerCreateResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerRetrieveResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerUpdateResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerCreateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">BusinessCustomerUpdateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerCreateRequestOneOf</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerDeleteResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerExportResponse</a></code>
-- <code><a href="./src/resources/customers/customers.ts">CustomerGenerateKYCLinkResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
+- <code><a href="./src/resources/customers/customers.ts">CustomerUpdateRequestOneOf</a></code>
+- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerCreateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">IndividualCustomerUpdateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">InternalAccountExportResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">InternalAccountListResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">InternalAccountUpdateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">KYCLinkCreateRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">KYCLinkResponse</a></code>
 
 Methods:
 
-- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerCreateResponse</code>
-- <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerRetrieveResponse</code>
-- <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerUpdateResponse</code>
-- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerListResponsesDefaultPagination</code>
-- <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerDeleteResponse</code>
-- <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> CustomerExportResponse</code>
-- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">generateKYCLink</a>(customerID, { ...params }) -> CustomerGenerateKYCLinkResponse</code>
+- <code title="post /customers">client.customers.<a href="./src/resources/customers/customers.ts">create</a>({ ...params }) -> CustomerOneOf</code>
+- <code title="get /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">retrieve</a>(customerID) -> CustomerOneOf</code>
+- <code title="patch /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">update</a>(customerID, { ...params }) -> CustomerOneOf</code>
+- <code title="get /customers">client.customers.<a href="./src/resources/customers/customers.ts">list</a>({ ...params }) -> CustomerOneovesDefaultPagination</code>
+- <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
+- <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">createKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
+- <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 - <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
 
@@ -132,6 +140,7 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccount</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountCreate</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountInfoOneOf</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">ExternalAccountListResponse</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">GbpBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">GbpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">GhsExternalAccountInfo</a></code>
@@ -198,11 +207,11 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/platform/platform.ts">PlatformListInternalAccountsResponse</a></code>
+- <code><a href="./src/resources/platform/platform.ts">PlatformInternalAccountListResponse</a></code>
 
 Methods:
 
-- <code title="get /platform/internal-accounts">client.platform.<a href="./src/resources/platform/platform.ts">listInternalAccounts</a>({ ...params }) -> PlatformListInternalAccountsResponse</code>
+- <code title="get /platform/internal-accounts">client.platform.<a href="./src/resources/platform/platform.ts">listInternalAccounts</a>({ ...params }) -> PlatformInternalAccountListResponse</code>
 
 ## ExternalAccounts
 
@@ -232,6 +241,7 @@ Types:
 - <code><a href="./src/resources/platform/external-accounts.ts">NgnAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">PhpAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">PkrAccountInfo</a></code>
+- <code><a href="./src/resources/platform/external-accounts.ts">PlatformExternalAccountCreateRequest</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">RwfAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">SgdAccountInfo</a></code>
 - <code><a href="./src/resources/platform/external-accounts.ts">ThbAccountInfo</a></code>
@@ -259,12 +269,17 @@ Types:
 - <code><a href="./src/resources/transfer-in.ts">ExternalAccountReference</a></code>
 - <code><a href="./src/resources/transfer-in.ts">InternalAccountReference</a></code>
 - <code><a href="./src/resources/transfer-in.ts">Transaction</a></code>
+- <code><a href="./src/resources/transfer-in.ts">TransferInRequest</a></code>
 
 Methods:
 
 - <code title="post /transfer-in">client.transferIn.<a href="./src/resources/transfer-in.ts">create</a>({ ...params }) -> Transaction</code>
 
 # TransferOut
+
+Types:
+
+- <code><a href="./src/resources/transfer-out.ts">TransferOutRequest</a></code>
 
 Methods:
 
@@ -275,14 +290,14 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/receiver.ts">CounterpartyFieldDefinition</a></code>
+- <code><a href="./src/resources/receiver.ts">ExternalAccountLookupResponse</a></code>
 - <code><a href="./src/resources/receiver.ts">LookupResponse</a></code>
-- <code><a href="./src/resources/receiver.ts">ReceiverLookupExternalAccountResponse</a></code>
-- <code><a href="./src/resources/receiver.ts">ReceiverLookupUmaResponse</a></code>
+- <code><a href="./src/resources/receiver.ts">UmaLookupResponse</a></code>
 
 Methods:
 
-- <code title="get /receiver/external-account/{accountId}">client.receiver.<a href="./src/resources/receiver.ts">lookupExternalAccount</a>(accountID, { ...params }) -> ReceiverLookupExternalAccountResponse</code>
-- <code title="get /receiver/uma/{receiverUmaAddress}">client.receiver.<a href="./src/resources/receiver.ts">lookupUma</a>(receiverUmaAddress, { ...params }) -> ReceiverLookupUmaResponse</code>
+- <code title="get /receiver/external-account/{accountId}">client.receiver.<a href="./src/resources/receiver.ts">lookupExternalAccount</a>(accountID, { ...params }) -> ExternalAccountLookupResponse</code>
+- <code title="get /receiver/uma/{receiverUmaAddress}">client.receiver.<a href="./src/resources/receiver.ts">lookupUma</a>(receiverUmaAddress, { ...params }) -> UmaLookupResponse</code>
 
 # Quotes
 
@@ -295,6 +310,7 @@ Types:
 - <code><a href="./src/resources/quotes.ts">PaymentInstructions</a></code>
 - <code><a href="./src/resources/quotes.ts">Quote</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteDestinationOneOf</a></code>
+- <code><a href="./src/resources/quotes.ts">QuoteRequest</a></code>
 - <code><a href="./src/resources/quotes.ts">QuoteSourceOneOf</a></code>
 
 Methods:
@@ -313,6 +329,7 @@ Types:
 - <code><a href="./src/resources/transactions.ts">OutgoingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">OutgoingTransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">ReconciliationInstructions</a></code>
+- <code><a href="./src/resources/transactions.ts">TransactionListResponse</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionSourceOneOf</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionStatus</a></code>
 - <code><a href="./src/resources/transactions.ts">TransactionType</a></code>
@@ -330,6 +347,8 @@ Types:
 
 - <code><a href="./src/resources/invitations.ts">CurrencyAmount</a></code>
 - <code><a href="./src/resources/invitations.ts">UmaInvitation</a></code>
+- <code><a href="./src/resources/invitations.ts">UmaInvitationClaimRequest</a></code>
+- <code><a href="./src/resources/invitations.ts">UmaInvitationCreateRequest</a></code>
 
 Methods:
 
@@ -340,11 +359,19 @@ Methods:
 
 # Sandbox
 
+Types:
+
+- <code><a href="./src/resources/sandbox/sandbox.ts">SendRequest</a></code>
+
 Methods:
 
 - <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> OutgoingTransaction</code>
 
 ## Uma
+
+Types:
+
+- <code><a href="./src/resources/sandbox/uma.ts">ReceiveRequest</a></code>
 
 Methods:
 
@@ -354,6 +381,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/sandbox/internal-accounts.ts">FundRequest</a></code>
 - <code><a href="./src/resources/sandbox/internal-accounts.ts">InternalAccount</a></code>
 
 Methods:
@@ -364,11 +392,12 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/sandbox/webhooks.ts">WebhookSendTestResponse</a></code>
+- <code><a href="./src/resources/sandbox/webhooks.ts">TestWebhookRequest</a></code>
+- <code><a href="./src/resources/sandbox/webhooks.ts">TestWebhookResponse</a></code>
 
 Methods:
 
-- <code title="post /sandbox/webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> WebhookSendTestResponse</code>
+- <code title="post /sandbox/webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> TestWebhookResponse</code>
 
 ## Cards
 
@@ -376,36 +405,40 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">AuthorizationRequest</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardMerchant</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardPullSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardRefundSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">ClearingRequest</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">Refund</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">RefundRequest</a></code>
 
 Methods:
 
-- <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
-- <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
-- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> CardTransaction</code>
+- <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> CardTransaction</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> CardTransaction</code>
 
 # UmaProviders
 
 Types:
 
+- <code><a href="./src/resources/uma-providers.ts">UmaProvider</a></code>
 - <code><a href="./src/resources/uma-providers.ts">UmaProviderListResponse</a></code>
 
 Methods:
 
-- <code title="get /uma-providers">client.umaProviders.<a href="./src/resources/uma-providers.ts">list</a>({ ...params }) -> UmaProviderListResponsesDefaultPagination</code>
+- <code title="get /uma-providers">client.umaProviders.<a href="./src/resources/uma-providers.ts">list</a>({ ...params }) -> UmaProvidersDefaultPagination</code>
 
 # Tokens
 
 Types:
 
 - <code><a href="./src/resources/tokens.ts">APIToken</a></code>
+- <code><a href="./src/resources/tokens.ts">APITokenCreateRequest</a></code>
 - <code><a href="./src/resources/tokens.ts">Permission</a></code>
+- <code><a href="./src/resources/tokens.ts">TokenListResponse</a></code>
 
 Methods:
 
@@ -418,6 +451,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/exchange-rates.ts">ExchangeRate</a></code>
 - <code><a href="./src/resources/exchange-rates.ts">ExchangeRateListResponse</a></code>
 
 Methods:
@@ -431,7 +465,6 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">AgentActionWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">IncomingPaymentWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">OutgoingPaymentWebhookEvent</a></code>
-- <code><a href="./src/resources/webhooks.ts">TestWebhookWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">BulkUploadWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CustomerUpdateWebhookEvent</a></code>
@@ -449,17 +482,21 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/crypto.ts">CryptoEstimateWithdrawalFeeResponse</a></code>
+- <code><a href="./src/resources/crypto.ts">EstimateCryptoWithdrawalFeeRequest</a></code>
+- <code><a href="./src/resources/crypto.ts">EstimateCryptoWithdrawalFeeResponse</a></code>
 
 Methods:
 
-- <code title="post /crypto/estimate-withdrawal-fee">client.crypto.<a href="./src/resources/crypto.ts">estimateWithdrawalFee</a>({ ...params }) -> CryptoEstimateWithdrawalFeeResponse</code>
+- <code title="post /crypto/estimate-withdrawal-fee">client.crypto.<a href="./src/resources/crypto.ts">estimateWithdrawalFee</a>({ ...params }) -> EstimateCryptoWithdrawalFeeResponse</code>
 
 # BeneficialOwners
 
 Types:
 
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerCreateRequest</a></code>
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerListResponse</a></code>
 - <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerPersonalInfo</a></code>
+- <code><a href="./src/resources/beneficial-owners.ts">BeneficialOwnerUpdateRequest</a></code>
 
 Methods:
 
@@ -472,32 +509,30 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/documents.ts">DocumentRetrieveResponse</a></code>
+- <code><a href="./src/resources/documents.ts">Document</a></code>
 - <code><a href="./src/resources/documents.ts">DocumentListResponse</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentReplaceResponse</a></code>
-- <code><a href="./src/resources/documents.ts">DocumentUploadResponse</a></code>
 
 Methods:
 
-- <code title="get /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(documentID) -> DocumentRetrieveResponse</code>
-- <code title="get /documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentListResponsesDefaultPagination</code>
+- <code title="get /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">retrieve</a>(documentID) -> Document</code>
+- <code title="get /documents">client.documents.<a href="./src/resources/documents.ts">list</a>({ ...params }) -> DocumentsDefaultPagination</code>
 - <code title="delete /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">delete</a>(documentID) -> void</code>
-- <code title="put /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">replace</a>(documentID, { ...params }) -> DocumentReplaceResponse</code>
-- <code title="post /documents">client.documents.<a href="./src/resources/documents.ts">upload</a>({ ...params }) -> DocumentUploadResponse</code>
+- <code title="put /documents/{documentId}">client.documents.<a href="./src/resources/documents.ts">replace</a>(documentID, { ...params }) -> Document</code>
+- <code title="post /documents">client.documents.<a href="./src/resources/documents.ts">upload</a>({ ...params }) -> Document</code>
 
 # Verifications
 
 Types:
 
-- <code><a href="./src/resources/verifications.ts">VerificationRetrieveResponse</a></code>
+- <code><a href="./src/resources/verifications.ts">Verification</a></code>
 - <code><a href="./src/resources/verifications.ts">VerificationListResponse</a></code>
-- <code><a href="./src/resources/verifications.ts">VerificationSubmitResponse</a></code>
+- <code><a href="./src/resources/verifications.ts">VerificationRequest</a></code>
 
 Methods:
 
-- <code title="get /verifications/{verificationId}">client.verifications.<a href="./src/resources/verifications.ts">retrieve</a>(verificationID) -> VerificationRetrieveResponse</code>
-- <code title="get /verifications">client.verifications.<a href="./src/resources/verifications.ts">list</a>({ ...params }) -> VerificationListResponsesDefaultPagination</code>
-- <code title="post /verifications">client.verifications.<a href="./src/resources/verifications.ts">submit</a>({ ...params }) -> VerificationSubmitResponse</code>
+- <code title="get /verifications/{verificationId}">client.verifications.<a href="./src/resources/verifications.ts">retrieve</a>(verificationID) -> Verification</code>
+- <code title="get /verifications">client.verifications.<a href="./src/resources/verifications.ts">list</a>({ ...params }) -> VerificationsDefaultPagination</code>
+- <code title="post /verifications">client.verifications.<a href="./src/resources/verifications.ts">submit</a>({ ...params }) -> Verification</code>
 
 # Discoveries
 
@@ -515,6 +550,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/auth/credentials.ts">AuthCredentialChallengeRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthCredentialCreateRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthCredentialCreateRequestOneOf</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">AuthCredentialListResponse</a></code>
@@ -549,6 +585,7 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/auth/sessions.ts">AuthSessionRefreshRequest</a></code>
 - <code><a href="./src/resources/auth/sessions.ts">SessionListResponse</a></code>
 
 Methods:
@@ -575,6 +612,7 @@ Types:
 - <code><a href="./src/resources/agents/agents.ts">AgentDeviceCodeStatusResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentListResponse</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentPolicy</a></code>
+- <code><a href="./src/resources/agents/agents.ts">AgentPolicyUpdateRequest</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUpdateRequest</a></code>
 - <code><a href="./src/resources/agents/agents.ts">AgentUsage</a></code>
 
@@ -654,14 +692,15 @@ Methods:
 
 Types:
 
-- <code><a href="./src/resources/cards.ts">CardRetrieveResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardUpdateResponse</a></code>
+- <code><a href="./src/resources/cards.ts">Card</a></code>
+- <code><a href="./src/resources/cards.ts">CardCreateRequest</a></code>
 - <code><a href="./src/resources/cards.ts">CardListResponse</a></code>
-- <code><a href="./src/resources/cards.ts">CardIssueResponse</a></code>
+- <code><a href="./src/resources/cards.ts">CardTransaction</a></code>
+- <code><a href="./src/resources/cards.ts">CardUpdateRequest</a></code>
 
 Methods:
 
-- <code title="get /cards/{id}">client.cards.<a href="./src/resources/cards.ts">retrieve</a>(id) -> CardRetrieveResponse</code>
-- <code title="patch /cards/{id}">client.cards.<a href="./src/resources/cards.ts">update</a>(id, { ...params }) -> CardUpdateResponse</code>
-- <code title="get /cards">client.cards.<a href="./src/resources/cards.ts">list</a>({ ...params }) -> CardListResponsesDefaultPagination</code>
-- <code title="post /cards">client.cards.<a href="./src/resources/cards.ts">issue</a>({ ...params }) -> CardIssueResponse</code>
+- <code title="get /cards/{id}">client.cards.<a href="./src/resources/cards.ts">retrieve</a>(id) -> Card</code>
+- <code title="patch /cards/{id}">client.cards.<a href="./src/resources/cards.ts">update</a>(id, { ...params }) -> Card</code>
+- <code title="get /cards">client.cards.<a href="./src/resources/cards.ts">list</a>({ ...params }) -> CardsDefaultPagination</code>
+- <code title="post /cards">client.cards.<a href="./src/resources/cards.ts">issue</a>({ ...params }) -> Card</code>

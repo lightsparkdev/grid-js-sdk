@@ -3,6 +3,7 @@
 export { Auth } from './auth';
 export {
   Credentials,
+  type AuthCredentialChallengeRequest,
   type AuthCredentialCreateRequest,
   type AuthCredentialCreateRequestOneOf,
   type AuthCredentialListResponse,
@@ -32,6 +33,7 @@ export {
 } from './credentials';
 export {
   Sessions,
+  type AuthSessionRefreshRequest,
   type SessionListResponse,
   type SessionListParams,
   type SessionDeleteParams,

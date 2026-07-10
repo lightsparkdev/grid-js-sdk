@@ -43,12 +43,23 @@ export class InternalAccounts extends APIResource {
 
 export type InternalAccountsDefaultPagination = DefaultPagination<InternalAccount>;
 
+export interface FundRequest {
+  /**
+   * Amount to add in the smallest unit of the account's currency (e.g., cents for
+   * USD/EUR, satoshis for BTC)
+   */
+  amount: number;
+}
+
 export interface InternalAccount {
   /**
    * The ID of the internal account
    */
   id: string;
 
+  /**
+   * The balance available to spend, excluding pending and held funds
+   */
   balance: InvitationsAPI.CurrencyAmount;
 
   /**
@@ -74,8 +85,16 @@ export interface InternalAccount {
    * - `FROZEN`: The account cannot send or receive payments. Grid may freeze an
    *   account in response to compliance or fraud signals; payments are blocked while
    *   the account remains frozen.
+   * - `FAILED`: The account could not be provisioned. Grid was unable to create the
+   *   underlying account, so it cannot send or receive payments and requires
+   *   remediation.
    */
-  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN';
+  status: 'PENDING' | 'ACTIVE' | 'CLOSED' | 'FROZEN' | 'FAILED';
+
+  /**
+   * The total balance, including pending and held funds
+   */
+  totalBalance: InvitationsAPI.CurrencyAmount;
 
   /**
    * Classification of an internal account.
@@ -118,6 +137,7 @@ export interface InternalAccountFundParams {
 
 export declare namespace InternalAccounts {
   export {
+    type FundRequest as FundRequest,
     type InternalAccount as InternalAccount,
     type InternalAccountFundParams as InternalAccountFundParams,
   };

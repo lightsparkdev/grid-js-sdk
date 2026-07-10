@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import * as Shared from './shared';
 import * as BeneficialOwnersAPI from './beneficial-owners';
+import * as CustomersAPI from './customers/customers';
 import * as ExternalAccountsAPI from './customers/external-accounts';
 import { DefaultPagination } from '../core/pagination';
 
@@ -121,11 +121,16 @@ export interface BdtBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface BdtExternalAccountCreateInfo {
   accountType: 'BDT_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   beneficiary: BdtBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -167,9 +172,10 @@ export interface BeneficialOwner {
   customerId: string;
 
   /**
-   * The current KYC status of a customer
+   * The current KYC status of a customer. `HOLD` means the customer is placed on
+   * hold and may be required to update or provide more information.
    */
-  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Percentage of ownership in the business (0-100)
@@ -235,76 +241,34 @@ export interface BulkCustomerImportErrorEntry {
   message?: string;
 }
 
-export interface BusinessCustomer {
+export interface BusinessCustomer extends CustomersAPI.Customer {
   customerType: 'BUSINESS';
-
-  /**
-   * Platform-specific customer identifier
-   */
-  platformCustomerId: string;
-
-  /**
-   * Full UMA address (always present in responses, even if system-generated). This
-   * is an optional identifier to route payments to the customer.
-   */
-  umaAddress: string;
-
-  /**
-   * System-generated unique identifier
-   */
-  id?: string;
 
   address?: ExternalAccountsAPI.Address;
 
   beneficialOwners?: Array<BeneficialOwner>;
 
   /**
-   * Additional information for business entities
+   * Business information returned on a customer. `taxId` and `incorporatedOn` are
+   * required on creation but may be absent on legacy customers that pre-date the
+   * requirement, so both are optional in responses.
    */
   businessInfo?: BusinessCustomer.BusinessInfo;
 
   /**
-   * Creation timestamp
+   * The current KYB status of a business customer. `HOLD` means the customer is
+   * placed on hold and may be required to update or provide more information.
    */
-  createdAt?: string;
-
-  /**
-   * List of currency codes enabled for this customer.
-   */
-  currencies?: Array<string>;
-
-  /**
-   * Email address for the customer.
-   */
-  email?: string;
-
-  /**
-   * Whether the customer is marked as deleted
-   */
-  isDeleted?: boolean;
-
-  /**
-   * The current KYB status of a business customer
-   */
-  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
-
-  /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
-   * and regulatory jurisdiction.
-   */
-  region?: string;
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt?: string;
+  kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 }
 
 export namespace BusinessCustomer {
   /**
-   * Additional information for business entities
+   * Business information returned on a customer. `taxId` and `incorporatedOn` are
+   * required on creation but may be absent on legacy customers that pre-date the
+   * requirement, so both are optional in responses.
    */
-  export interface BusinessInfo extends Shared.BusinessInfoUpdate {
+  export interface BusinessInfo {
     /**
      * Legal name of the business
      */
@@ -363,6 +327,12 @@ export namespace BusinessCustomer {
       | 'OTHER';
 
     /**
+     * List of countries of the business's expected transaction counterparties (ISO
+     * 3166-1 alpha-2)
+     */
+    expectedCounterpartyCountries?: Array<string>;
+
+    /**
      * Expected number of transactions per month
      */
     expectedMonthlyTransactionCount?:
@@ -394,6 +364,11 @@ export namespace BusinessCustomer {
     incorporatedOn?: string;
 
     /**
+     * NAICS code describing the nature of the business (2-6 digits)
+     */
+    naicsCode?: string;
+
+    /**
      * The intended purpose for using the Grid account
      */
     purposeOfAccount?:
@@ -412,6 +387,11 @@ export namespace BusinessCustomer {
       | 'OTHER';
 
     /**
+     * Description of the account purpose when OTHER is selected
+     */
+    purposeOfAccountOtherDescription?: string;
+
+    /**
      * Business registration number
      */
     registrationNumber?: string;
@@ -422,136 +402,20 @@ export namespace BusinessCustomer {
     sourceOfFunds?: string;
 
     /**
+     * Structured source-of-funds categories for the business
+     */
+    sourceOfFundsCategories?: Array<unknown>;
+
+    /**
+     * Description of the source of funds when OTHER is selected
+     */
+    sourceOfFundsOtherDescription?: string;
+
+    /**
      * Tax identification number
      */
     taxId?: string;
   }
-}
-
-/**
- * Additional information for business entities
- */
-export interface BusinessInfoUpdate {
-  /**
-   * The high-level industry category of the business
-   */
-  businessType?:
-    | 'AGRICULTURE_FORESTRY_FISHING_AND_HUNTING'
-    | 'MINING_QUARRYING_AND_OIL_AND_GAS_EXTRACTION'
-    | 'UTILITIES'
-    | 'CONSTRUCTION'
-    | 'MANUFACTURING'
-    | 'WHOLESALE_TRADE'
-    | 'RETAIL_TRADE'
-    | 'TRANSPORTATION_AND_WAREHOUSING'
-    | 'INFORMATION'
-    | 'FINANCE_AND_INSURANCE'
-    | 'REAL_ESTATE_AND_RENTAL_AND_LEASING'
-    | 'PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_SERVICES'
-    | 'MANAGEMENT_OF_COMPANIES_AND_ENTERPRISES'
-    | 'ADMINISTRATIVE_AND_SUPPORT_AND_WASTE_MANAGEMENT_AND_REMEDIATION_SERVICES'
-    | 'EDUCATIONAL_SERVICES'
-    | 'HEALTH_CARE_AND_SOCIAL_ASSISTANCE'
-    | 'ARTS_ENTERTAINMENT_AND_RECREATION'
-    | 'ACCOMMODATION_AND_FOOD_SERVICES'
-    | 'OTHER_SERVICES'
-    | 'PUBLIC_ADMINISTRATION';
-
-  /**
-   * List of countries where the business operates (ISO 3166-1 alpha-2)
-   */
-  countriesOfOperation?: Array<string>;
-
-  /**
-   * Country of incorporation or registration (ISO 3166-1 alpha-2)
-   */
-  country?: string;
-
-  /**
-   * Trade name or DBA name of the business, if different from the legal name
-   */
-  doingBusinessAs?: string;
-
-  /**
-   * Legal entity type of the business
-   */
-  entityType?:
-    | 'SOLE_PROPRIETORSHIP'
-    | 'PARTNERSHIP'
-    | 'LLC'
-    | 'CORPORATION'
-    | 'S_CORPORATION'
-    | 'NON_PROFIT'
-    | 'OTHER';
-
-  /**
-   * Expected number of transactions per month
-   */
-  expectedMonthlyTransactionCount?:
-    | 'COUNT_UNDER_10'
-    | 'COUNT_10_TO_100'
-    | 'COUNT_100_TO_500'
-    | 'COUNT_500_TO_1000'
-    | 'COUNT_OVER_1000';
-
-  /**
-   * Expected total transaction volume per month in USD equivalent
-   */
-  expectedMonthlyTransactionVolume?:
-    | 'VOLUME_UNDER_10K'
-    | 'VOLUME_10K_TO_100K'
-    | 'VOLUME_100K_TO_1M'
-    | 'VOLUME_1M_TO_10M'
-    | 'VOLUME_OVER_10M';
-
-  /**
-   * List of countries where the business expects to send payments (ISO 3166-1
-   * alpha-2)
-   */
-  expectedRecipientJurisdictions?: Array<string>;
-
-  /**
-   * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
-   */
-  incorporatedOn?: string;
-
-  /**
-   * Legal name of the business
-   */
-  legalName?: string;
-
-  /**
-   * The intended purpose for using the Grid account
-   */
-  purposeOfAccount?:
-    | 'CONTRACTOR_PAYOUTS'
-    | 'CREATOR_PAYOUTS'
-    | 'EMPLOYEE_PAYOUTS'
-    | 'MARKETPLACE_SELLER_PAYOUTS'
-    | 'SUPPLIER_PAYMENTS'
-    | 'CROSS_BORDER_B2B'
-    | 'AR_AUTOMATION'
-    | 'AP_AUTOMATION'
-    | 'EMBEDDED_PAYMENTS'
-    | 'PLATFORM_FEE_COLLECTION'
-    | 'P2P_TRANSFERS'
-    | 'CHARITABLE_DONATIONS'
-    | 'OTHER';
-
-  /**
-   * Business registration number
-   */
-  registrationNumber?: string;
-
-  /**
-   * The primary source of funds for the business
-   */
-  sourceOfFunds?: string;
-
-  /**
-   * Tax identification number
-   */
-  taxId?: string;
 }
 
 export interface BwpBeneficiary {
@@ -689,14 +553,12 @@ export interface CopBeneficiary {
   countryOfResidence?: string;
 
   /**
-   * Identity document number — required by most Colombian banks
+   * The identity document number
    */
   documentNumber?: string;
 
   /**
-   * Identity document type — required by most Colombian banks. CC: Cédula de
-   * Ciudadanía, CE: Cédula de Extranjería, TI: Tarjeta de Identidad, NIT: Número de
-   * Identificación Tributaria, PP: Passport
+   * Identity document type (Colombia)
    */
   documentType?: 'CC' | 'CE' | 'TI' | 'NIT' | 'PP';
 
@@ -719,31 +581,31 @@ export interface CopBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: bankName, accountNumber, bankAccountType
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankAccountType, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface CopExternalAccountCreateInfo {
   accountType: 'COP_ACCOUNT';
 
+  /**
+   * The name of the bank
+   */
+  bankName: string;
+
   beneficiary: CopBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
-   * The account number of the bank (BANK_TRANSFER only)
+   * The account number of the bank
    */
   accountNumber?: string;
 
   /**
-   * The bank account type (BANK_TRANSFER only)
+   * The bank account type
    */
   bankAccountType?: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the bank (BANK_TRANSFER only)
-   */
-  bankName?: string;
-
-  /**
-   * The phone number in international format (MOBILE_MONEY only — Nequi, Daviplata)
+   * The phone number in international format
    */
   phoneNumber?: string;
 }
@@ -765,29 +627,24 @@ export interface DkkExternalAccountCreateInfo {
 }
 
 export interface EgpBeneficiary {
-  address: ExternalAccountsAPI.Address;
-
   beneficiaryType: 'INDIVIDUAL';
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence: string;
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
 
-  /**
-   * The phone number of the beneficiary
-   */
-  phoneNumber: string;
+  address?: ExternalAccountsAPI.Address;
 
   /**
    * The birth date of the beneficiary
    */
   birthDate?: string;
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -798,14 +655,20 @@ export interface EgpBeneficiary {
    * The nationality of the beneficiary
    */
   nationality?: string;
+
+  /**
+   * The phone number of the beneficiary
+   */
+  phoneNumber?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - BANK_TRANSFER: bankName, iban
+ * - MOBILE_MONEY: bankName, phoneNumber
+ */
 export interface EgpExternalAccountCreateInfo {
-  /**
-   * The account number of the bank
-   */
-  accountNumber: string;
-
   accountType: 'EGP_ACCOUNT';
 
   /**
@@ -821,32 +684,32 @@ export interface EgpExternalAccountCreateInfo {
   iban?: string;
 
   /**
-   * The SWIFT/BIC code of the bank
+   * The phone number in international format
    */
-  swiftCode?: string;
+  phoneNumber?: string;
 }
 
 export type EthereumWalletExternalAccountInfo = unknown;
 
 export interface EurBeneficiary {
-  address: ExternalAccountsAPI.Address;
-
   beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The country of residence of the beneficiary
+   */
+  countryOfResidence: string;
 
   /**
    * The full name of the beneficiary
    */
   fullName: string;
 
+  address?: ExternalAccountsAPI.Address;
+
   /**
    * The birth date of the beneficiary
    */
   birthDate?: string;
-
-  /**
-   * The country of residence of the beneficiary
-   */
-  countryOfResidence?: string;
 
   /**
    * The email of the beneficiary
@@ -935,11 +798,16 @@ export interface GhsBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
- * - MOBILE_MONEY: phoneNumber
+ * - BANK_TRANSFER: accountNumber, bankName
+ * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface GhsExternalAccountCreateInfo {
   accountType: 'GHS_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   beneficiary: GhsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1002,6 +870,11 @@ export interface GtqExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the beneficiary's bank
+   */
+  bankName: string;
 
   beneficiary: GtqBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 }
@@ -1100,24 +973,8 @@ export interface IdrExternalAccountCreateInfo {
   swiftCode: string;
 }
 
-export interface IndividualCustomer {
+export interface IndividualCustomer extends CustomersAPI.Customer {
   customerType: 'INDIVIDUAL';
-
-  /**
-   * Platform-specific customer identifier
-   */
-  platformCustomerId: string;
-
-  /**
-   * Full UMA address (always present in responses, even if system-generated). This
-   * is an optional identifier to route payments to the customer.
-   */
-  umaAddress: string;
-
-  /**
-   * System-generated unique identifier
-   */
-  id?: string;
 
   address?: ExternalAccountsAPI.Address;
 
@@ -1127,61 +984,60 @@ export interface IndividualCustomer {
   birthDate?: string;
 
   /**
-   * Creation timestamp
-   */
-  createdAt?: string;
-
-  /**
-   * List of currency codes enabled for this customer.
-   */
-  currencies?: Array<string>;
-
-  /**
-   * Email address for the customer.
-   */
-  email?: string;
-
-  /**
    * Individual's full name
    */
   fullName?: string;
 
   /**
-   * Whether the customer is marked as deleted
+   * The current KYC status of a customer. `HOLD` means the customer is placed on
+   * hold and may be required to update or provide more information.
    */
-  isDeleted?: boolean;
-
-  /**
-   * The current KYC status of a customer
-   */
-  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED';
+  kycStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
    * Country code (ISO 3166-1 alpha-2)
    */
   nationality?: string;
-
-  /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity
-   * and regulatory jurisdiction.
-   */
-  region?: string;
-
-  /**
-   * Last update timestamp
-   */
-  updatedAt?: string;
 }
 
+/**
+ * Required fields depend on the selected paymentRails:
+ *
+ * - NEFT: accountNumber, ifsc, rail
+ * - RTGS: accountNumber, ifsc, rail
+ * - UPI: vpa
+ */
 export interface InrExternalAccountCreateInfo {
   accountType: 'INR_ACCOUNT';
 
   beneficiary: ExternalAccountsAPI.InrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
+   * Indian bank account number (9–18 digits)
+   */
+  accountNumber?: string;
+
+  /**
+   * The name of the bank
+   */
+  bankName?: string;
+
+  /**
+   * The Indian Financial System Code (IFSC) of the beneficiary's bank branch
+   * (NEFT/RTGS)
+   */
+  ifsc?: string;
+
+  /**
+   * The payment rail to route the payout over, for currencies that support more than
+   * one (e.g. NEFT or RTGS for INR).
+   */
+  rail?: string;
+
+  /**
    * The UPI Virtual Payment Address
    */
-  vpa: string;
+  vpa?: string;
 }
 
 export interface JmdBeneficiary {
@@ -1232,6 +1088,11 @@ export interface JmdExternalAccountCreateInfo {
    * The bank account type
    */
   bankAccountType: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   beneficiary: JmdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1484,11 +1345,16 @@ export interface PkrBeneficiary {
 /**
  * Required fields depend on the selected paymentRails:
  *
- * - BANK_TRANSFER: accountNumber
+ * - BANK_TRANSFER: accountNumber, bankName
  * - MOBILE_MONEY: bankName, phoneNumber
  */
 export interface PkrExternalAccountCreateInfo {
   accountType: 'PKR_ACCOUNT';
+
+  /**
+   * The name of the bank
+   */
+  bankName: string;
 
   beneficiary: PkrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
@@ -1496,11 +1362,6 @@ export interface PkrExternalAccountCreateInfo {
    * The account number of the bank
    */
   accountNumber?: string;
-
-  /**
-   * The name of the bank
-   */
-  bankName?: string;
 
   /**
    * Pakistani IBAN (24 characters, starting with PK)
@@ -1573,17 +1434,18 @@ export interface SgdExternalAccountCreateInfo {
 
   accountType: 'SGD_ACCOUNT';
 
-  /**
-   * Name of the beneficiary's bank
-   */
-  bankName: string;
-
   beneficiary: ExternalAccountsAPI.SgdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+
+  /**
+   * Name of the beneficiary's bank. When omitted, resolved from swiftCode via the
+   * payout partner bank directory at account creation.
+   */
+  bankName?: string;
 }
 
 export interface SlvBeneficiary {
@@ -1902,7 +1764,9 @@ export interface VerificationError {
     | 'APPLICANT_FRAUD'
     | 'APPLICANT_CRIMINAL_RECORD'
     | 'APPLICANT_REJECTED'
-    | 'MISSING_BENEFICIAL_OWNER';
+    | 'MISSING_BENEFICIAL_OWNER'
+    | 'MISSING_CONTROL_PERSON'
+    | 'MISSING_GOOD_STANDING_DOCUMENT';
 
   /**
    * Document types that would satisfy this requirement. The integrator can upload

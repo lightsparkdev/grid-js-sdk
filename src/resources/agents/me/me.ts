@@ -181,7 +181,7 @@ export interface MeCreateTransferOutParams {
   /**
    * Body param: Destination external account details
    */
-  destination: TransferInAPI.ExternalAccountReference;
+  destination: MeCreateTransferOutParams.Destination;
 
   /**
    * Body param: Source internal account details
@@ -195,10 +195,61 @@ export interface MeCreateTransferOutParams {
   amount?: number;
 
   /**
+   * Body param: Free-form information about the payment that travels with it to the
+   * recipient. The field this populates depends on the payment rail: for ACH it
+   * populates the Addenda record, for FedNow and RTP it populates the
+   * remittanceInformation field, and for wires it populates the OBI (Originator to
+   * Beneficiary Information) / beneficiary information.
+   */
+  remittanceInformation?: string;
+
+  /**
    * Header param: A unique identifier for the request. If the same key is sent
    * multiple times, the server will return the same response as the first request.
    */
   'Idempotency-Key'?: string;
+}
+
+export namespace MeCreateTransferOutParams {
+  /**
+   * Destination external account details
+   */
+  export interface Destination {
+    /**
+     * Reference to an external account ID
+     */
+    accountId: string;
+
+    /**
+     * The payment rail to use for the transfer. Must be one of the rails supported by
+     * the destination account. If not specified, the system will select a default
+     * rail.
+     */
+    paymentRail?:
+      | 'ACH'
+      | 'ACH_COLOMBIA'
+      | 'BANK_TRANSFER'
+      | 'BRE_B'
+      | 'CIPS'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'INSTAPAY'
+      | 'MOBILE_MONEY'
+      | 'NEFT'
+      | 'PAYNOW'
+      | 'PESONET'
+      | 'PIX'
+      | 'RTGS'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UNIONPAY'
+      | 'UPI'
+      | 'WIRE';
+  }
 }
 
 export interface MeListInternalAccountsParams extends DefaultPaginationParams {
