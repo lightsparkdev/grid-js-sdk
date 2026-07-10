@@ -1,5 +1,68 @@
 # Changelog
 
+## 1.9.0 (2026-07-10)
+
+Full Changelog: [v1.8.0...v1.9.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v1.8.0...v1.9.0)
+
+### Features
+
+* Add encrypted OTP flow ([948a93b](https://github.com/lightsparkdev/grid-js-sdk/commit/948a93b3665eab90f89e3cf4c6dc9bb53daa2daf))
+* **api:** add BANK_TRANSFER rail support to CNY accounts with accountNumber field ([d0e7b9a](https://github.com/lightsparkdev/grid-js-sdk/commit/d0e7b9a52cfbbe1d89bd75fafb2b7636d927092b))
+* **api:** add bankName field to GTQ/JMD external accounts ([5c5c59c](https://github.com/lightsparkdev/grid-js-sdk/commit/5c5c59cb883e2a54f5bce2d64e1773b70fce8a1e))
+* **api:** add businessInfo fields to customers, verification error enum values ([98f92ce](https://github.com/lightsparkdev/grid-js-sdk/commit/98f92ce828c3d6ffa969b0b15b24336141e87f14))
+* **api:** add card transaction type to transaction union responses ([5f7a560](https://github.com/lightsparkdev/grid-js-sdk/commit/5f7a56011f66c418a088c7a5b6f9243251cb92e8))
+* **api:** add CNY_ACCOUNT support to external accounts ([98235f5](https://github.com/lightsparkdev/grid-js-sdk/commit/98235f5f29738efd5cdea95bd09e17640e0aa680))
+* **api:** add CNY_ACCOUNT support to external accounts and payment instructions ([2a4c89d](https://github.com/lightsparkdev/grid-js-sdk/commit/2a4c89d2b685fc1ceb4601583f777d337951d549))
+* **api:** add contactVerification field to customer responses ([6798574](https://github.com/lightsparkdev/grid-js-sdk/commit/6798574dff4c5a4103d033507742995a6628f8ce))
+* **api:** add direction field to transaction responses ([8eea143](https://github.com/lightsparkdev/grid-js-sdk/commit/8eea143207cbeb94169091b15de46cf330710385))
+* **api:** add FAMILY_SUPPORT and SALARY_PAYMENT to quotes purpose field ([2a7f1a0](https://github.com/lightsparkdev/grid-js-sdk/commit/2a7f1a0c2af396917dcf265ffbef6f69408595ce))
+* **api:** add ID_TYPE and ID_NUMBER to CustomerInfoFieldName enum ([51b3b49](https://github.com/lightsparkdev/grid-js-sdk/commit/51b3b497f1333727a577df3f0d47a84255e8faf3))
+* **api:** add identifier and idType fields to customers create ([21e8cea](https://github.com/lightsparkdev/grid-js-sdk/commit/21e8cea7d288781bfdf73750b14be044def415ff))
+* **api:** add NEFT/RTGS rails, optional fields to INR external accounts ([306f1f1](https://github.com/lightsparkdev/grid-js-sdk/commit/306f1f19947e5570e08b293f76188b25e78077d4))
+* **api:** add payment rail enum values to transfer-out operations ([c4a11cd](https://github.com/lightsparkdev/grid-js-sdk/commit/c4a11cd83f81f5f9845b20ec5920d944b6216a62))
+* **api:** add PENDING_AUTH state to cards ([225d436](https://github.com/lightsparkdev/grid-js-sdk/commit/225d436a0923663cfe8e0152d5abdc0a12b160cc))
+* **api:** add phoneNumber field to customers create/update/response ([7c9470b](https://github.com/lightsparkdev/grid-js-sdk/commit/7c9470b6f7cc4cd65cea539a35d7ee18e19be5f6))
+* **api:** add processorRef field to cards ([83719ec](https://github.com/lightsparkdev/grid-js-sdk/commit/83719ecf4bd54561b2ee7455d94489529c345cb2))
+* **api:** add receiptDeliveryConfirmedAt to transaction responses ([c6d1dba](https://github.com/lightsparkdev/grid-js-sdk/commit/c6d1dbac640733dcef2e55d8f32276a26188439b))
+* **api:** add remittanceInformation param to transferOut and agents.me methods ([9bd9746](https://github.com/lightsparkdev/grid-js-sdk/commit/9bd97469002e0e489f2e632d220ba634bbd9cf24))
+* **api:** add remittanceInformation parameter and field to quotes ([a0586ce](https://github.com/lightsparkdev/grid-js-sdk/commit/a0586ceb10093e9148f702ba52cc1311414ba156))
+* **api:** add settlement timing and rail fields to outgoing transactions ([ee77680](https://github.com/lightsparkdev/grid-js-sdk/commit/ee7768062646ee28bbe364d07a2ec7c0826445c8))
+* **api:** add SMS_OTP credential type to auth credentials ([0b35a73](https://github.com/lightsparkdev/grid-js-sdk/commit/0b35a73ee1cccfa68a307aac4589d5a1b8f20684))
+* **api:** add SWIFT account type, update COP/EGP account requirements ([23edde7](https://github.com/lightsparkdev/grid-js-sdk/commit/23edde7b90e3eb32de909ed1731f336a2b17da3e))
+* **api:** add total field to exchange rate fees ([c0d40f5](https://github.com/lightsparkdev/grid-js-sdk/commit/c0d40f50492fe0ecaed30b394055e95625680441))
+* **api:** add totalBalance field to internal account responses ([1e47f85](https://github.com/lightsparkdev/grid-js-sdk/commit/1e47f85bdae0e87997f97922115a517bcc243e0b))
+* **api:** manual updates ([bcb7d4c](https://github.com/lightsparkdev/grid-js-sdk/commit/bcb7d4cee483d96684a55eb85144fe44f7449089))
+* **api:** manual updates ([605f969](https://github.com/lightsparkdev/grid-js-sdk/commit/605f96997736f07612b2cd89ea0c7d300ff17f2b))
+* **api:** manual updates ([96b093a](https://github.com/lightsparkdev/grid-js-sdk/commit/96b093a646dfed74e80872b04d3da5b6abbf61b0))
+* **api:** manual updates ([3e10796](https://github.com/lightsparkdev/grid-js-sdk/commit/3e10796ee5b6831ad5deeb95501cd1b48544e3c4))
+* **transfers:** allow selecting payment rail on transfer-out destination ([11e1ce3](https://github.com/lightsparkdev/grid-js-sdk/commit/11e1ce3d50faed7c148b472443e350a36206ae54))
+* **types:** add HOLD to kyc/kyb status, FAILED to internal account status ([b534c1d](https://github.com/lightsparkdev/grid-js-sdk/commit/b534c1d2ecfdc959d89323a746f4480eda573644))
+
+
+### Bug Fixes
+
+* **client:** send content-type header for requests with an omitted optional body ([4b556f3](https://github.com/lightsparkdev/grid-js-sdk/commit/4b556f3fde004614930a06b5c857c79ba7d5969a))
+* **types:** make address optional, countryOfResidence required in EUR beneficiary ([901d0c4](https://github.com/lightsparkdev/grid-js-sdk/commit/901d0c44e38fed524eb8d9da7bfdbce37ff4d759))
+* **types:** make bankName optional in sgd_account ([f51e638](https://github.com/lightsparkdev/grid-js-sdk/commit/f51e638c38665b3ac157a7484e02571898acdcab))
+* **types:** remove PENDING_AUTH state from cards model and list params ([df34d0f](https://github.com/lightsparkdev/grid-js-sdk/commit/df34d0ffec870c6bf53d7928c020723e74a85960))
+* **types:** rename PENDING_ISSUE to PROCESSING in cards state enum ([a295fca](https://github.com/lightsparkdev/grid-js-sdk/commit/a295fcabc28d49feae6cfa49c284219acf74f194))
+* **types:** require bankName field in BDT/COP/EGP/GHS/PKR external account types ([f9c3f11](https://github.com/lightsparkdev/grid-js-sdk/commit/f9c3f11a720b40d03e2b2ed4ad0bb23da7745bde))
+
+
+### Chores
+
+* **internal:** regenerate SDK with no functional changes ([857b039](https://github.com/lightsparkdev/grid-js-sdk/commit/857b0391e508b1ef6f51a0c458b241e6e263096f))
+
+
+### Documentation
+
+* **api:** add KYB requirements to verifications submit method ([8cac5e8](https://github.com/lightsparkdev/grid-js-sdk/commit/8cac5e8f3d2263b69324f0814a83cd7a9fb27907))
+* **api:** clarify otpEncryptionTargetBundle behavior in auth credentials EMAIL_OTP flow ([0695f3c](https://github.com/lightsparkdev/grid-js-sdk/commit/0695f3c3f7ba16e5d0e6fb982eec07e7731178d9))
+* **api:** clarify passkey challenge encoding in auth credentials ([fdecfc0](https://github.com/lightsparkdev/grid-js-sdk/commit/fdecfc0e410ec1316281c3092413bd8ea08b83b7))
+* **api:** update cards retrieve method and panEmbedUrl field docs ([c0d20b4](https://github.com/lightsparkdev/grid-js-sdk/commit/c0d20b41cc1b05d7efadddf65e4526158ea08e1a))
+* **internal:** remove C# examples and documentation ([b3ce136](https://github.com/lightsparkdev/grid-js-sdk/commit/b3ce136a2a58f4ddbafe7ee45787684adfc87553))
+* **types:** document passkey assertion in auth credentials ([4bbc90c](https://github.com/lightsparkdev/grid-js-sdk/commit/4bbc90c878b58f252944ebf592e37964bd60ef4f))
+
 ## 1.8.0 (2026-05-28)
 
 Full Changelog: [v1.7.1...v1.8.0](https://github.com/lightsparkdev/grid-js-sdk/compare/v1.7.1...v1.8.0)
