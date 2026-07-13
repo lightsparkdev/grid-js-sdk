@@ -434,8 +434,9 @@ export interface OutgoingTransaction {
   receivedAmount?: InvitationsAPI.CurrencyAmount;
 
   /**
-   * Reconciliation details for this transaction, including crypto transaction hash
-   * when available.
+   * Reconciliation details for this transaction. For the on-chain hash of a crypto
+   * payout to an external wallet, see the destination's `onChainTransaction`
+   * instead.
    */
   reconciliationInstructions?: ReconciliationInstructions;
 
@@ -474,6 +475,12 @@ export interface OutgoingTransaction {
  */
 export type OutgoingTransactionStatus = 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
 
+/**
+ * Instructions for reconciling a payment with this transaction. For the on-chain
+ * transaction to or from an external crypto wallet that is the transaction's own
+ * source or destination, use the `onChainTransaction` on the relevant source or
+ * destination instead.
+ */
 export interface ReconciliationInstructions {
   /**
    * Unique reference code to include with the payment to match it with the correct
@@ -482,8 +489,10 @@ export interface ReconciliationInstructions {
   reference?: string;
 
   /**
-   * Transaction hash for the crypto transfer that delivered funds to the transaction
-   * destination, when available.
+   * Transaction hash of the internal settlement transfer used to deliver a UMA
+   * payment — the inter-VASP settlement leg (e.g. USDC on Solana to the receiving
+   * partner), when available. This is not a transfer to a customer's own wallet; for
+   * that, see the `onChainTransaction` on the transaction's source or destination.
    */
   transactionHash?: string;
 }
