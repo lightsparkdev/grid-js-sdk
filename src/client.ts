@@ -161,6 +161,7 @@ import {
   BulkUploadWebhookEvent,
   CardFundingSourceChangeWebhookEvent,
   CardStateChangeWebhookEvent,
+  CardTransactionWebhookEvent,
   CustomerUpdateWebhookEvent,
   IncomingPaymentWebhookEvent,
   InternalAccountStatusWebhookEvent,
@@ -1334,6 +1335,7 @@ export declare namespace LightsparkGrid {
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
     type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
+    type CardTransactionWebhookEvent as CardTransactionWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 

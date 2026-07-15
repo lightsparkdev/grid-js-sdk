@@ -264,6 +264,34 @@ export interface CardFundingSourceChangeWebhookEvent {
   type: 'CARD.FUNDING_SOURCE_CHANGE';
 }
 
+export interface CardTransactionWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  /**
+   * Parent transaction row for a card authorization and all of the pulls /
+   * settlements / refunds that reconcile against it. Child events are rolled up into
+   * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
+   * Delivered as the payload of the generic transaction webhook stream (extends the
+   * Transaction model with a card destination type) on every transition.
+   */
+  data: CardsAPI.CardTransaction;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type:
+    | 'CARD_TRANSACTION.AUTHORIZED'
+    | 'CARD_TRANSACTION.PARTIALLY_SETTLED'
+    | 'CARD_TRANSACTION.SETTLED'
+    | 'CARD_TRANSACTION.REFUNDED'
+    | 'CARD_TRANSACTION.EXCEPTION';
+}
+
 export type UnwrapWebhookEvent =
   | AgentActionWebhookEvent
   | IncomingPaymentWebhookEvent
@@ -275,7 +303,8 @@ export type UnwrapWebhookEvent =
   | InternalAccountStatusWebhookEvent
   | VerificationUpdateWebhookEvent
   | CardStateChangeWebhookEvent
-  | CardFundingSourceChangeWebhookEvent;
+  | CardFundingSourceChangeWebhookEvent
+  | CardTransactionWebhookEvent;
 
 export declare namespace Webhooks {
   export {
@@ -289,6 +318,7 @@ export declare namespace Webhooks {
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
     type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
+    type CardTransactionWebhookEvent as CardTransactionWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }
