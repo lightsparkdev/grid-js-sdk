@@ -204,15 +204,6 @@ export interface MeCreateTransferOutParams {
   remittanceInformation?: string;
 
   /**
-   * Body param: Optional preferred factor for the Strong Customer Authentication
-   * challenge this call issues. Only relevant for customers in a region where SCA is
-   * required (e.g. EU); ignored otherwise. Valid values for a per-transaction
-   * challenge are `SMS_OTP` (default) and `PASSKEY` — `TOTP` cannot carry the
-   * required dynamic linking and is rejected here. Omit to default to `SMS_OTP`.
-   */
-  scaFactor?: 'SMS_OTP' | 'TOTP' | 'PASSKEY';
-
-  /**
    * Header param: A unique identifier for the request. If the same key is sent
    * multiple times, the server will return the same response as the first request.
    */
