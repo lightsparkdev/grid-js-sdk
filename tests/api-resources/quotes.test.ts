@@ -40,6 +40,7 @@ describe('resource quotes', () => {
       lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
       purposeOfPayment: 'GIFT',
       remittanceInformation: '12345',
+      scaFactor: 'SMS_OTP',
       senderCustomerInfo: { FULL_NAME: 'bar', NATIONALITY: 'bar' },
       'Idempotency-Key': '<uuid>',
     });
@@ -76,6 +77,7 @@ describe('resource quotes', () => {
       client.quotes.execute(
         'Quote:019542f5-b3e7-1d02-0000-000000000001',
         {
+          scaFactor: 'SMS_OTP',
           'Grid-Wallet-Signature':
             'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',
           'Idempotency-Key': '<uuid>',

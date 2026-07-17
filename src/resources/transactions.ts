@@ -183,16 +183,17 @@ export interface IncomingTransaction {
   /**
    * Status of a payment transaction.
    *
-   * | Status       | Description                                                                                        |
-   * | ------------ | -------------------------------------------------------------------------------------------------- |
-   * | `CREATED`    | Initial lookup has been created                                                                    |
-   * | `PENDING`    | Quote has been created                                                                             |
-   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
-   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
-   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
-   * | `FAILED`     | An error occurred during payment                                                                   |
-   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
-   * | `EXPIRED`    | Quote has expired                                                                                  |
+   * | Status                  | Description                                                                                                                                                            |
+   * | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `CREATED`               | Initial lookup has been created                                                                                                                                        |
+   * | `PENDING`               | Quote has been created                                                                                                                                                 |
+   * | `PENDING_AUTHORIZATION` | Awaiting Strong Customer Authentication. Only occurs for customers in a region where SCA is required (e.g. EU); authorize the transaction's `scaChallenge` to proceed. |
+   * | `PROCESSING`            | Funding has been received and payment initiated                                                                                                                        |
+   * | `COMPLETED`             | Cross border payment has been received, converted and payment has been sent to the offramp network                                                                     |
+   * | `REJECTED`              | Receiving institution or wallet rejected payment, payment has been refunded                                                                                            |
+   * | `FAILED`                | An error occurred during payment                                                                                                                                       |
+   * | `REFUNDED`              | Payment was unable to complete and refunded                                                                                                                            |
+   * | `EXPIRED`               | Quote has expired                                                                                                                                                      |
    */
   status: TransactionStatus;
 
@@ -305,15 +306,16 @@ export interface OutgoingTransaction {
   /**
    * Status of an outgoing payment transaction.
    *
-   * | Status       | Description                                             |
-   * | ------------ | ------------------------------------------------------- |
-   * | `PENDING`    | Quote is pending confirmation                           |
-   * | `EXPIRED`    | Quote wasn't executed before expiry window              |
-   * | `PROCESSING` | Executing the quote after receiving funds               |
-   * | `COMPLETED`  | Payout successfully reached the destination             |
-   * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+   * | Status                  | Description                                                                                                                                                            |
+   * | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `PENDING`               | Quote is pending confirmation                                                                                                                                          |
+   * | `PENDING_AUTHORIZATION` | Awaiting Strong Customer Authentication. Only occurs for customers in a region where SCA is required (e.g. EU); authorize the transaction's `scaChallenge` to proceed. |
+   * | `EXPIRED`               | Quote wasn't executed before expiry window                                                                                                                             |
+   * | `PROCESSING`            | Executing the quote after receiving funds                                                                                                                              |
+   * | `COMPLETED`             | Payout successfully reached the destination                                                                                                                            |
+   * | `FAILED`                | Something went wrong — accompanied by a `failureReason`                                                                                                                |
    */
-  status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
+  status: 'PENDING' | 'PENDING_AUTHORIZATION' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
 
   /**
    * Type of transaction (incoming payment or outgoing payment)
@@ -465,15 +467,22 @@ export interface OutgoingTransaction {
 /**
  * Status of an outgoing payment transaction.
  *
- * | Status       | Description                                             |
- * | ------------ | ------------------------------------------------------- |
- * | `PENDING`    | Quote is pending confirmation                           |
- * | `EXPIRED`    | Quote wasn't executed before expiry window              |
- * | `PROCESSING` | Executing the quote after receiving funds               |
- * | `COMPLETED`  | Payout successfully reached the destination             |
- * | `FAILED`     | Something went wrong — accompanied by a `failureReason` |
+ * | Status                  | Description                                                                                                                                                            |
+ * | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+ * | `PENDING`               | Quote is pending confirmation                                                                                                                                          |
+ * | `PENDING_AUTHORIZATION` | Awaiting Strong Customer Authentication. Only occurs for customers in a region where SCA is required (e.g. EU); authorize the transaction's `scaChallenge` to proceed. |
+ * | `EXPIRED`               | Quote wasn't executed before expiry window                                                                                                                             |
+ * | `PROCESSING`            | Executing the quote after receiving funds                                                                                                                              |
+ * | `COMPLETED`             | Payout successfully reached the destination                                                                                                                            |
+ * | `FAILED`                | Something went wrong — accompanied by a `failureReason`                                                                                                                |
  */
-export type OutgoingTransactionStatus = 'PENDING' | 'EXPIRED' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+export type OutgoingTransactionStatus =
+  | 'PENDING'
+  | 'PENDING_AUTHORIZATION'
+  | 'EXPIRED'
+  | 'PROCESSING'
+  | 'COMPLETED'
+  | 'FAILED';
 
 /**
  * Instructions for reconciling a payment with this transaction. For the on-chain
@@ -524,20 +533,22 @@ export type TransactionSourceOneOf = unknown;
 /**
  * Status of a payment transaction.
  *
- * | Status       | Description                                                                                        |
- * | ------------ | -------------------------------------------------------------------------------------------------- |
- * | `CREATED`    | Initial lookup has been created                                                                    |
- * | `PENDING`    | Quote has been created                                                                             |
- * | `PROCESSING` | Funding has been received and payment initiated                                                    |
- * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
- * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
- * | `FAILED`     | An error occurred during payment                                                                   |
- * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
- * | `EXPIRED`    | Quote has expired                                                                                  |
+ * | Status                  | Description                                                                                                                                                            |
+ * | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+ * | `CREATED`               | Initial lookup has been created                                                                                                                                        |
+ * | `PENDING`               | Quote has been created                                                                                                                                                 |
+ * | `PENDING_AUTHORIZATION` | Awaiting Strong Customer Authentication. Only occurs for customers in a region where SCA is required (e.g. EU); authorize the transaction's `scaChallenge` to proceed. |
+ * | `PROCESSING`            | Funding has been received and payment initiated                                                                                                                        |
+ * | `COMPLETED`             | Cross border payment has been received, converted and payment has been sent to the offramp network                                                                     |
+ * | `REJECTED`              | Receiving institution or wallet rejected payment, payment has been refunded                                                                                            |
+ * | `FAILED`                | An error occurred during payment                                                                                                                                       |
+ * | `REFUNDED`              | Payment was unable to complete and refunded                                                                                                                            |
+ * | `EXPIRED`               | Quote has expired                                                                                                                                                      |
  */
 export type TransactionStatus =
   | 'CREATED'
   | 'PENDING'
+  | 'PENDING_AUTHORIZATION'
   | 'PROCESSING'
   | 'COMPLETED'
   | 'REJECTED'
@@ -605,16 +616,17 @@ export interface TransactionListParams extends DefaultPaginationParams {
   /**
    * Status of a payment transaction.
    *
-   * | Status       | Description                                                                                        |
-   * | ------------ | -------------------------------------------------------------------------------------------------- |
-   * | `CREATED`    | Initial lookup has been created                                                                    |
-   * | `PENDING`    | Quote has been created                                                                             |
-   * | `PROCESSING` | Funding has been received and payment initiated                                                    |
-   * | `COMPLETED`  | Cross border payment has been received, converted and payment has been sent to the offramp network |
-   * | `REJECTED`   | Receiving institution or wallet rejected payment, payment has been refunded                        |
-   * | `FAILED`     | An error occurred during payment                                                                   |
-   * | `REFUNDED`   | Payment was unable to complete and refunded                                                        |
-   * | `EXPIRED`    | Quote has expired                                                                                  |
+   * | Status                  | Description                                                                                                                                                            |
+   * | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `CREATED`               | Initial lookup has been created                                                                                                                                        |
+   * | `PENDING`               | Quote has been created                                                                                                                                                 |
+   * | `PENDING_AUTHORIZATION` | Awaiting Strong Customer Authentication. Only occurs for customers in a region where SCA is required (e.g. EU); authorize the transaction's `scaChallenge` to proceed. |
+   * | `PROCESSING`            | Funding has been received and payment initiated                                                                                                                        |
+   * | `COMPLETED`             | Cross border payment has been received, converted and payment has been sent to the offramp network                                                                     |
+   * | `REJECTED`              | Receiving institution or wallet rejected payment, payment has been refunded                                                                                            |
+   * | `FAILED`                | An error occurred during payment                                                                                                                                       |
+   * | `REFUNDED`              | Payment was unable to complete and refunded                                                                                                                            |
+   * | `EXPIRED`               | Quote has expired                                                                                                                                                      |
    */
   status?: TransactionStatus;
 

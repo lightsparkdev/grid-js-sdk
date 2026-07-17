@@ -110,8 +110,13 @@ export class Quotes extends APIResource {
     params: QuoteExecuteParams | null | undefined = {},
     options?: RequestOptions,
   ): APIPromise<Quote> {
-    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Idempotency-Key': idempotencyKey } = params ?? {};
+    const {
+      'Grid-Wallet-Signature': gridWalletSignature,
+      'Idempotency-Key': idempotencyKey,
+      ...body
+    } = params ?? {};
     return this._client.post(path`/quotes/${quoteID}/execute`, {
+      body,
       ...options,
       headers: buildHeaders([
         {
@@ -415,9 +420,13 @@ export interface Quote {
   source: QuoteSourceOneOf;
 
   /**
-   * Current status of the quote
+   * Current status of the quote. `PENDING_AUTHORIZATION` occurs only for customers
+   * in a region where Strong Customer Authentication is required (e.g. EU): the
+   * quote carries an `scaChallenge` that must be authorized before execution, and
+   * for realtime-funding sources `paymentInstructions` are withheld until it is
+   * satisfied.
    */
-  status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
+  status: 'PENDING' | 'PENDING_AUTHORIZATION' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
 
   /**
    * The total amount that will be received in the smallest unit of the receiving
@@ -461,6 +470,74 @@ export interface Quote {
    * (Originator to Beneficiary Information) / beneficiary information.
    */
   remittanceInformation?: string;
+
+  /**
+   * Present only while `status` is `PENDING_AUTHORIZATION`: the Strong Customer
+   * Authentication challenge to satisfy before this quote can be executed (or, for
+   * realtime-funding sources, before `paymentInstructions` are issued). Omitted for
+   * customers outside SCA-regulated regions (non-EU).
+   */
+  scaChallenge?: Quote.ScaChallenge;
+}
+
+export namespace Quote {
+  /**
+   * Present only while `status` is `PENDING_AUTHORIZATION`: the Strong Customer
+   * Authentication challenge to satisfy before this quote can be executed (or, for
+   * realtime-funding sources, before `paymentInstructions` are issued). Omitted for
+   * customers outside SCA-regulated regions (non-EU).
+   */
+  export interface ScaChallenge {
+    /**
+     * Unique identifier for this challenge. The server resolves the active challenge
+     * from the quote or transaction being authorized, so this field need not be
+     * supplied back; it is informational (e.g. for logging or correlation).
+     */
+    id: string;
+
+    /**
+     * The factors the customer may use to satisfy this challenge.
+     */
+    availableFactors: Array<'SMS_OTP' | 'TOTP' | 'PASSKEY'>;
+
+    /**
+     * Absolute UTC timestamp after which this challenge can no longer be authorized.
+     */
+    expiresAt: string;
+
+    /**
+     * The factor this challenge was issued for. Defaults to `SMS_OTP`.
+     */
+    factor: 'SMS_OTP' | 'TOTP' | 'PASSKEY';
+
+    /**
+     * The origins the WebAuthn ceremony may run against. Populated for enrollment and
+     * login passkey challenges; the origin the assertion is produced against must be
+     * one of these and echoed back as `ScaAuthorization.origin`. Per-transaction
+     * passkey challenges omit this (they carry `passkeyAssertionOptions` only) — see
+     * `ScaAuthorization.origin` for how to source the origin in that case.
+     */
+    passkeyAllowedOrigins?: Array<string>;
+
+    /**
+     * Opaque WebAuthn assertion request options (including the relying-party id,
+     * challenge, and allowed credentials), present only when `factor` is `PASSKEY`.
+     * Pass to the device's WebAuthn API to produce the assertion submitted back in
+     * `ScaAuthorization.passkeyAssertion`.
+     */
+    passkeyAssertionOptions?: { [key: string]: unknown };
+
+    /**
+     * Optional, informational label for what this particular challenge in the sequence
+     * authorizes — useful for step UX (e.g. "Authorize the currency conversion" vs
+     * "Authorize the payout"). Known values include `CURRENCY_CONVERSION`, `PAYOUT`,
+     * and `TRANSFER`, but the set is **non-exhaustive and may grow** — treat
+     * unrecognized values as a generic authorization step and do not branch program
+     * logic on it. Omitted when steps are not distinguished (e.g. a
+     * single-authorization flow).
+     */
+    purpose?: string | null;
+  }
 }
 
 export type QuoteDestinationOneOf = unknown;
@@ -543,6 +620,16 @@ export interface QuoteRequest {
    * beneficiary information.
    */
   remittanceInformation?: string;
+
+  /**
+   * Optional preferred factor for a Strong Customer Authentication challenge issued
+   * at quote creation. Only relevant for a realtime-funding source in a region where
+   * SCA is required (e.g. EU); ignored otherwise. Valid values are `SMS_OTP`
+   * (default) and `PASSKEY` — `TOTP` cannot carry the required dynamic linking and
+   * is rejected. When the quote is returned in `PENDING_AUTHORIZATION`, authorize it
+   * via `POST /quotes/{quoteId}/authorize`.
+   */
+  scaFactor?: 'SMS_OTP' | 'TOTP' | 'PASSKEY';
 
   /**
    * Key-value pairs of additional information about the sender which was requested
@@ -645,6 +732,16 @@ export interface QuoteCreateParams {
   remittanceInformation?: string;
 
   /**
+   * Body param: Optional preferred factor for a Strong Customer Authentication
+   * challenge issued at quote creation. Only relevant for a realtime-funding source
+   * in a region where SCA is required (e.g. EU); ignored otherwise. Valid values are
+   * `SMS_OTP` (default) and `PASSKEY` — `TOTP` cannot carry the required dynamic
+   * linking and is rejected. When the quote is returned in `PENDING_AUTHORIZATION`,
+   * authorize it via `POST /quotes/{quoteId}/authorize`.
+   */
+  scaFactor?: 'SMS_OTP' | 'TOTP' | 'PASSKEY';
+
+  /**
    * Body param: Key-value pairs of additional information about the sender which was
    * requested by the destination. This is relevant when the destination requires
    * more sender info than was provided during customer creation. Any fields
@@ -665,17 +762,26 @@ export interface QuoteCreateParams {
 
 export interface QuoteExecuteParams {
   /**
-   * Full Grid wallet signature over the `payloadToSign` returned in the quote's
-   * `paymentInstructions[].accountOrWalletInfo` entry, produced with the session
-   * private key of a verified authentication credential on the source Embedded
-   * Wallet. Required when the quote's source is an internal account of type
+   * Body param: Optional preferred factor for the Strong Customer Authentication
+   * challenge this call issues. Only relevant for customers in a region where SCA is
+   * required (e.g. EU); ignored otherwise. Valid values for a per-transaction
+   * challenge are `SMS_OTP` (default) and `PASSKEY` — `TOTP` cannot carry the
+   * required dynamic linking and is rejected here. Omit to default to `SMS_OTP`.
+   */
+  scaFactor?: 'SMS_OTP' | 'TOTP' | 'PASSKEY';
+
+  /**
+   * Header param: Full Grid wallet signature over the `payloadToSign` returned in
+   * the quote's `paymentInstructions[].accountOrWalletInfo` entry, produced with the
+   * session private key of a verified authentication credential on the source
+   * Embedded Wallet. Required when the quote's source is an internal account of type
    * `EMBEDDED_WALLET`; ignored for other source types.
    */
   'Grid-Wallet-Signature'?: string;
 
   /**
-   * A unique identifier for the request. If the same key is sent multiple times, the
-   * server will return the same response as the first request.
+   * Header param: A unique identifier for the request. If the same key is sent
+   * multiple times, the server will return the same response as the first request.
    */
   'Idempotency-Key'?: string;
 }

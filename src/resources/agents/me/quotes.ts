@@ -182,6 +182,16 @@ export interface QuoteCreateParams {
   remittanceInformation?: string;
 
   /**
+   * Body param: Optional preferred factor for a Strong Customer Authentication
+   * challenge issued at quote creation. Only relevant for a realtime-funding source
+   * in a region where SCA is required (e.g. EU); ignored otherwise. Valid values are
+   * `SMS_OTP` (default) and `PASSKEY` — `TOTP` cannot carry the required dynamic
+   * linking and is rejected. When the quote is returned in `PENDING_AUTHORIZATION`,
+   * authorize it via `POST /quotes/{quoteId}/authorize`.
+   */
+  scaFactor?: 'SMS_OTP' | 'TOTP' | 'PASSKEY';
+
+  /**
    * Body param: Key-value pairs of additional information about the sender which was
    * requested by the destination. This is relevant when the destination requires
    * more sender info than was provided during customer creation. Any fields
