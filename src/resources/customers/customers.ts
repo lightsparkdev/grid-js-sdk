@@ -399,14 +399,14 @@ export class Customers extends APIResource {
 export type CustomerOneovesDefaultPagination = DefaultPagination<CustomerOneOf>;
 
 export interface BusinessCustomerCreateRequest {
-  customerType: 'BUSINESS';
-
-  address?: ExternalAccountsAPI.Address;
-
   /**
    * Additional information required for business entities
    */
-  businessInfo?: BusinessCustomerCreateRequest.BusinessInfo;
+  businessInfo: BusinessCustomerCreateRequest.BusinessInfo;
+
+  customerType: 'BUSINESS';
+
+  address?: ExternalAccountsAPI.Address;
 
   /**
    * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
