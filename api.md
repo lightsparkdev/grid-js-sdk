@@ -413,12 +413,15 @@ Types:
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">ClearingRequest</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">Refund</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">RefundRequest</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateAuthorizationResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateClearingResponse</a></code>
+- <code><a href="./src/resources/sandbox/cards/simulate.ts">SimulateReturnResponse</a></code>
 
 Methods:
 
-- <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> CardTransaction</code>
-- <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> CardTransaction</code>
-- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> CardTransaction</code>
+- <code title="post /sandbox/cards/{id}/simulate/authorization">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">authorization</a>(id, { ...params }) -> SimulateAuthorizationResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
+- <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
 
 # UmaProviders
 

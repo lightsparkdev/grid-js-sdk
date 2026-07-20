@@ -13,8 +13,11 @@ import {
   RefundRequest,
   Simulate,
   SimulateAuthorizationParams,
+  SimulateAuthorizationResponse,
   SimulateClearingParams,
+  SimulateClearingResponse,
   SimulateReturnParams,
+  SimulateReturnResponse,
 } from './simulate';
 
 export class Cards extends APIResource {
@@ -34,6 +37,9 @@ export declare namespace Cards {
     type ClearingRequest as ClearingRequest,
     type Refund as Refund,
     type RefundRequest as RefundRequest,
+    type SimulateAuthorizationResponse as SimulateAuthorizationResponse,
+    type SimulateClearingResponse as SimulateClearingResponse,
+    type SimulateReturnResponse as SimulateReturnResponse,
     type SimulateAuthorizationParams as SimulateAuthorizationParams,
     type SimulateClearingParams as SimulateClearingParams,
     type SimulateReturnParams as SimulateReturnParams,

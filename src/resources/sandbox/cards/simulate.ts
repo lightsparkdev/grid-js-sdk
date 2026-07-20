@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../../core/resource';
-import * as CardsAPI from '../../cards';
 import * as QuotesAPI from '../../quotes';
 import { APIPromise } from '../../../core/api-promise';
 import { RequestOptions } from '../../../internal/request-options';
@@ -31,7 +30,7 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const cardTransaction =
+   * const response =
    *   await client.sandbox.cards.simulate.authorization(
    *     'Card:019542f5-b3e7-1d02-0000-000000000010',
    *     {
@@ -50,7 +49,7 @@ export class Simulate extends APIResource {
     id: string,
     body: SimulateAuthorizationParams,
     options?: RequestOptions,
-  ): APIPromise<CardsAPI.CardTransaction> {
+  ): APIPromise<SimulateAuthorizationResponse> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/authorization`, {
       body,
       ...options,
@@ -74,7 +73,7 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const cardTransaction =
+   * const response =
    *   await client.sandbox.cards.simulate.clearing(
    *     'Card:019542f5-b3e7-1d02-0000-000000000010',
    *     {
@@ -89,7 +88,7 @@ export class Simulate extends APIResource {
     id: string,
     body: SimulateClearingParams,
     options?: RequestOptions,
-  ): APIPromise<CardsAPI.CardTransaction> {
+  ): APIPromise<SimulateClearingResponse> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/clearing`, {
       body,
       ...options,
@@ -107,22 +106,21 @@ export class Simulate extends APIResource {
    *
    * @example
    * ```ts
-   * const cardTransaction =
-   *   await client.sandbox.cards.simulate.return(
-   *     'Card:019542f5-b3e7-1d02-0000-000000000010',
-   *     {
-   *       amount: 1500,
-   *       cardTransactionId:
-   *         'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
-   *     },
-   *   );
+   * const response = await client.sandbox.cards.simulate.return(
+   *   'Card:019542f5-b3e7-1d02-0000-000000000010',
+   *   {
+   *     amount: 1500,
+   *     cardTransactionId:
+   *       'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
+   *   },
+   * );
    * ```
    */
   return(
     id: string,
     body: SimulateReturnParams,
     options?: RequestOptions,
-  ): APIPromise<CardsAPI.CardTransaction> {
+  ): APIPromise<SimulateReturnResponse> {
     return this._client.post(path`/sandbox/cards/${id}/simulate/return`, {
       body,
       ...options,
@@ -132,10 +130,13 @@ export class Simulate extends APIResource {
 }
 
 /**
- * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/authorization`.
- * Drives the same internal authorization + reconcile paths that the issuer would
- * call in production. The decisioning outcome is controlled by the last three
- * characters of `merchant.descriptor` — see the endpoint documentation for the
+ * Sandbox-only request body shared by the card authorization-family simulate
+ * endpoints: `simulate/authorization`, `simulate/credit_authorization`,
+ * `simulate/financial_authorization`, `simulate/financial_credit_authorization`,
+ * and `simulate/credit_authorization_advice`. Drives the same internal
+ * authorization + reconcile paths that the issuer would call in production. The
+ * decisioning outcome is controlled by the last three characters of
+ * `merchant.descriptor` — see the `simulate/authorization` documentation for the
  * suffix table.
  */
 export interface AuthorizationRequest {
@@ -281,6 +282,45 @@ export interface RefundRequest {
   cardTransactionId: string;
 }
 
+/**
+ * Response body for the sandbox card-event simulators. The simulate call pokes the
+ * card issuer's sandbox; the resulting card operation is delivered asynchronously
+ * via the issuer's events webhook, never synchronously in this response.
+ */
+export interface SimulateAuthorizationResponse {
+  /**
+   * The card issuer's transaction token for the simulated event. Correlates the
+   * eventual webhook-delivered card operation back to this simulate call.
+   */
+  issuerTransactionToken: string;
+}
+
+/**
+ * Response body for the sandbox card-event simulators. The simulate call pokes the
+ * card issuer's sandbox; the resulting card operation is delivered asynchronously
+ * via the issuer's events webhook, never synchronously in this response.
+ */
+export interface SimulateClearingResponse {
+  /**
+   * The card issuer's transaction token for the simulated event. Correlates the
+   * eventual webhook-delivered card operation back to this simulate call.
+   */
+  issuerTransactionToken: string;
+}
+
+/**
+ * Response body for the sandbox card-event simulators. The simulate call pokes the
+ * card issuer's sandbox; the resulting card operation is delivered asynchronously
+ * via the issuer's events webhook, never synchronously in this response.
+ */
+export interface SimulateReturnResponse {
+  /**
+   * The card issuer's transaction token for the simulated event. Correlates the
+   * eventual webhook-delivered card operation back to this simulate call.
+   */
+  issuerTransactionToken: string;
+}
+
 export interface SimulateAuthorizationParams {
   /**
    * Authorization amount in the smallest unit of `currency` (e.g. cents for USD).
@@ -330,6 +370,9 @@ export declare namespace Simulate {
     type ClearingRequest as ClearingRequest,
     type Refund as Refund,
     type RefundRequest as RefundRequest,
+    type SimulateAuthorizationResponse as SimulateAuthorizationResponse,
+    type SimulateClearingResponse as SimulateClearingResponse,
+    type SimulateReturnResponse as SimulateReturnResponse,
     type SimulateAuthorizationParams as SimulateAuthorizationParams,
     type SimulateClearingParams as SimulateClearingParams,
     type SimulateReturnParams as SimulateReturnParams,
