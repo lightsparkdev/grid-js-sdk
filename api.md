@@ -365,7 +365,7 @@ Types:
 
 Methods:
 
-- <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> OutgoingTransaction</code>
+- <code title="post /sandbox/send">client.sandbox.<a href="./src/resources/sandbox/sandbox.ts">sendFunds</a>({ ...params }) -> Transaction</code>
 
 ## Uma
 

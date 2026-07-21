@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as TransactionsAPI from '../transactions';
+import * as TransferInAPI from '../transfer-in';
 import * as InternalAccountsAPI from './internal-accounts';
 import {
   FundRequest,
@@ -36,16 +36,13 @@ export class Sandbox extends APIResource {
    *
    * @example
    * ```ts
-   * const outgoingTransaction = await client.sandbox.sendFunds({
+   * const transaction = await client.sandbox.sendFunds({
    *   currencyCode: 'USD',
    *   quoteId: 'Quote:019542f5-b3e7-1d02-0000-000000000006',
    * });
    * ```
    */
-  sendFunds(
-    body: SandboxSendFundsParams,
-    options?: RequestOptions,
-  ): APIPromise<TransactionsAPI.OutgoingTransaction> {
+  sendFunds(body: SandboxSendFundsParams, options?: RequestOptions): APIPromise<TransferInAPI.Transaction> {
     return this._client.post('/sandbox/send', { body, ...options, __security: { basicAuth: true } });
   }
 }
