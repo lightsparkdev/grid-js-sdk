@@ -154,40 +154,6 @@ export interface CancelTransactionRequest {
   reason?: string;
 }
 
-/**
- * Details about the rate and fees for an incoming transaction. Note:
- * `gridApiFixedFee` is denominated in the receiving currency, so its equivalent
- * value in the sending currency fluctuates with the FX rate. As a result, the
- * total fee on a subsequent quote for the same transfer may differ even if the
- * underlying fee structure is unchanged.
- */
-export interface IncomingRateDetails {
-  /**
-   * The fixed fee charged by the Grid product to execute the quote in the smallest
-   * unit of the receiving currency (eg. cents).
-   */
-  gridApiFixedFee: number;
-
-  /**
-   * The underlying multiplier from the mSATS to the receiving currency, including
-   * variable fees.
-   */
-  gridApiMultiplier: number;
-
-  /**
-   * The variable fee amount charged by the Grid product to execute the quote in the
-   * smallest unit of the receiving currency (eg. cents). This is the receiving
-   * amount times gridApiVariableFeeRate.
-   */
-  gridApiVariableFeeAmount: number;
-
-  /**
-   * The variable fee rate charged by the Grid product to execute the quote as a
-   * percentage of the receiving currency amount.
-   */
-  gridApiVariableFeeRate: number;
-}
-
 export interface IncomingTransaction {
   /**
    * Unique identifier for the transaction
@@ -262,6 +228,11 @@ export interface IncomingTransaction {
   description?: string;
 
   /**
+   * Number of sending currency units per receiving currency unit.
+   */
+  exchangeRate?: number;
+
+  /**
    * If the transaction failed, this field provides the reason for failure.
    */
   failureReason?:
@@ -276,14 +247,14 @@ export interface IncomingTransaction {
 
   /**
    * The total fees available from the receive quote in the smallest unit of the
-   * receiving currency (eg. cents).
+   * sending currency (eg. cents).
    */
   fees?: number;
 
   /**
-   * Details about the rate and fees for the transaction.
+   * The ID of the quote that was used to trigger this payment
    */
-  rateDetails?: IncomingRateDetails;
+  quoteId?: string;
 
   /**
    * The time at which the platform confirmed delivery of the receipt to their
@@ -295,6 +266,16 @@ export interface IncomingTransaction {
    * Included for all transactions except those with "CREATED" status
    */
   reconciliationInstructions?: ReconciliationInstructions;
+
+  /**
+   * The refund if transaction was refunded.
+   */
+  refund?: SimulateAPI.Refund;
+
+  /**
+   * Amount sent in the sender's currency
+   */
+  sentAmount?: InvitationsAPI.CurrencyAmount;
 
   /**
    * When the payment was or will be settled
@@ -701,7 +682,6 @@ export declare namespace Transactions {
   export {
     type BaseTransactionSource as BaseTransactionSource,
     type CancelTransactionRequest as CancelTransactionRequest,
-    type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
     type OutgoingTransaction as OutgoingTransaction,
     type OutgoingTransactionStatus as OutgoingTransactionStatus,

@@ -117,7 +117,6 @@ import {
 import {
   BaseTransactionSource,
   CancelTransactionRequest,
-  IncomingRateDetails,
   IncomingTransaction,
   OutgoingTransaction,
   OutgoingTransactionStatus,
@@ -1270,7 +1269,6 @@ export declare namespace LightsparkGrid {
     Transactions as Transactions,
     type BaseTransactionSource as BaseTransactionSource,
     type CancelTransactionRequest as CancelTransactionRequest,
-    type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
     type OutgoingTransaction as OutgoingTransaction,
     type OutgoingTransactionStatus as OutgoingTransactionStatus,

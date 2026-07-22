@@ -160,7 +160,6 @@ export {
   Transactions,
   type BaseTransactionSource,
   type CancelTransactionRequest,
-  type IncomingRateDetails,
   type IncomingTransaction,
   type OutgoingTransaction,
   type OutgoingTransactionStatus,

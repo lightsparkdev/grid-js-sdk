@@ -325,7 +325,6 @@ Types:
 
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
 - <code><a href="./src/resources/transactions.ts">CancelTransactionRequest</a></code>
-- <code><a href="./src/resources/transactions.ts">IncomingRateDetails</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">OutgoingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">OutgoingTransactionStatus</a></code>
