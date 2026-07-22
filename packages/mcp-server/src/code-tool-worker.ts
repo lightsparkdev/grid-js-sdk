@@ -138,6 +138,7 @@ const fuse = new Fuse(
     'client.quotes.execute',
     'client.quotes.retrieve',
     'client.transactions.approve',
+    'client.transactions.cancel',
     'client.transactions.list',
     'client.transactions.reject',
     'client.transactions.retrieve',

@@ -159,6 +159,7 @@ export {
 export {
   Transactions,
   type BaseTransactionSource,
+  type CancelTransactionRequest,
   type IncomingRateDetails,
   type IncomingTransaction,
   type OutgoingTransaction,
@@ -170,6 +171,7 @@ export {
   type TransactionType,
   type TransactionListParams,
   type TransactionApproveParams,
+  type TransactionCancelParams,
   type TransactionRejectParams,
 } from './transactions';
 export {

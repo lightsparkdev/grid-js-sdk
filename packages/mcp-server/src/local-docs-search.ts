@@ -1969,6 +1969,61 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
+    name: 'cancel',
+    endpoint: '/transactions/{transactionId}/cancel',
+    httpMethod: 'post',
+    summary: 'Cancel a bank transfer',
+    description:
+      "Request cancellation of a pending bank transfer — an ACH transfer (push or pull) or a wire — before it has settled, for example a payment or collection initiated outside of the receiving bank's processing window.\nWhether a transfer can still be cancelled is determined by the banking partner that is settling it: the request is forwarded to the partner's own cancellation facility, and a transfer that the partner has already processed (or that is otherwise past its cancellation window) cannot be cancelled. Cancellation applies to bank-rail transfers; requests for transaction types that cannot be cancelled are rejected.\n",
+    stainlessPath: '(resource) transactions > (method) cancel',
+    qualified: 'client.transactions.cancel',
+    params: ['transactionId: string;', 'reason?: string;'],
+    response: 'object | object | object',
+    markdown:
+      "## cancel\n\n`client.transactions.cancel(transactionId: string, reason?: string): object | object | object`\n\n**post** `/transactions/{transactionId}/cancel`\n\nRequest cancellation of a pending bank transfer — an ACH transfer (push or pull) or a wire — before it has settled, for example a payment or collection initiated outside of the receiving bank's processing window.\nWhether a transfer can still be cancelled is determined by the banking partner that is settling it: the request is forwarded to the partner's own cancellation facility, and a transfer that the partner has already processed (or that is otherwise past its cancellation window) cannot be cancelled. Cancellation applies to bank-rail transfers; requests for transaction types that cannot be cancelled are rejected.\n\n\n### Parameters\n\n- `transactionId: string`\n\n- `reason?: string`\n  Optional reason for cancelling the transaction. This is just for debugging purposes or can be used for a platform's own purposes.\n\n### Returns\n\n- `{ id: string; customerId: string; destination: object; direction: 'CREDIT' | 'DEBIT'; platformCustomerId: string; receivedAmount: object; status: string; type: 'INCOMING'; agentId?: string; counterpartyInformation?: object; createdAt?: string; description?: string; failureReason?: string; fees?: number; rateDetails?: object; receiptDeliveryConfirmedAt?: string; reconciliationInstructions?: object; settledAt?: string; source?: object; updatedAt?: string; } | { id: string; customerId: string; destination: object; direction: 'CREDIT' | 'DEBIT'; platformCustomerId: string; sentAmount: object; source: object; status: 'PENDING' | 'PENDING_AUTHORIZATION' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED'; type: 'OUTGOING'; agentId?: string; counterpartyInformation?: object; createdAt?: string; description?: string; exchangeRate?: number; expectedSettlementAt?: string; failureReason?: string; fees?: number; paymentInstructions?: object[]; paymentRail?: string; quoteId?: string; railSelectionMode?: 'AUTO' | 'MANUAL'; rateDetails?: object; receiptDeliveryConfirmedAt?: string; receivedAmount?: object; reconciliationInstructions?: object; refund?: object; settledAt?: string; settlementTimelineSeconds?: number; updatedAt?: string; } | { id: string; accountId: string; authorizedAmount: object; authorizedAt: string; createdAt: string; customerId: string; direction: 'CREDIT' | 'DEBIT'; merchant: object; platformCustomerId: string; status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION'; type: 'CARD'; updatedAt: string; cardId?: string; issuerTransactionToken?: string; lastEventAt?: string; pullSummary?: object; refundedAmount?: object; refundSummary?: object; settledAmount?: object; settlementSummary?: object; }`\n  Parent transaction row for a card authorization and all of the pulls / settlements / refunds that reconcile against it. Child events are rolled up into the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates. Delivered as the payload of the generic transaction webhook stream (extends the Transaction model with a card destination type) on every transition.\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst transaction = await client.transactions.cancel('transactionId');\n\nconsole.log(transaction);\n```",
+    perLanguage: {
+      typescript: {
+        method: 'client.transactions.cancel',
+        example:
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst transaction = await client.transactions.cancel('transactionId');\n\nconsole.log(transaction);",
+      },
+      python: {
+        method: 'transactions.cancel',
+        example:
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ntransaction = client.transactions.cancel(\n    transaction_id="transactionId",\n)\nprint(transaction)',
+      },
+      kotlin: {
+        method: 'transactions().cancel',
+        example:
+          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.transactions.TransactionCancelParams\nimport com.lightspark.grid.models.transferin.Transaction\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val transaction: Transaction = client.transactions().cancel("transactionId")\n}',
+      },
+      go: {
+        method: 'client.Transactions.Cancel',
+        example:
+          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\ttransaction, err := client.Transactions.Cancel(\n\t\tcontext.TODO(),\n\t\t"transactionId",\n\t\tgrid.TransactionCancelParams{},\n\t)\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", transaction)\n}\n',
+      },
+      ruby: {
+        method: 'transactions.cancel',
+        example:
+          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\ntransaction = lightspark_grid.transactions.cancel("transactionId")\n\nputs(transaction)',
+      },
+      cli: {
+        method: 'transactions cancel',
+        example:
+          "grid transactions cancel \\\n  --username 'My Username' \\\n  --password 'My Password' \\\n  --transaction-id transactionId",
+      },
+      php: {
+        method: 'transactions->cancel',
+        example:
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$transaction = $client->transactions->cancel(\n  'transactionId', reason: 'REQUESTED_AFTER_HOURS'\n);\n\nvar_dump($transaction);",
+      },
+      http: {
+        example:
+          'curl https://api.lightspark.com/grid/2025-10-13/transactions/$TRANSACTION_ID/cancel \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+      },
+    },
+  },
+  {
     name: 'create',
     endpoint: '/invitations',
     httpMethod: 'post',

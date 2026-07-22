@@ -116,12 +116,14 @@ import {
 } from './resources/tokens';
 import {
   BaseTransactionSource,
+  CancelTransactionRequest,
   IncomingRateDetails,
   IncomingTransaction,
   OutgoingTransaction,
   OutgoingTransactionStatus,
   ReconciliationInstructions,
   TransactionApproveParams,
+  TransactionCancelParams,
   TransactionListParams,
   TransactionListResponse,
   TransactionRejectParams,
@@ -1267,6 +1269,7 @@ export declare namespace LightsparkGrid {
   export {
     Transactions as Transactions,
     type BaseTransactionSource as BaseTransactionSource,
+    type CancelTransactionRequest as CancelTransactionRequest,
     type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
     type OutgoingTransaction as OutgoingTransaction,
@@ -1278,6 +1281,7 @@ export declare namespace LightsparkGrid {
     type TransactionType as TransactionType,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
+    type TransactionCancelParams as TransactionCancelParams,
     type TransactionRejectParams as TransactionRejectParams,
   };
 

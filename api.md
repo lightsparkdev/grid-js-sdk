@@ -324,6 +324,7 @@ Methods:
 Types:
 
 - <code><a href="./src/resources/transactions.ts">BaseTransactionSource</a></code>
+- <code><a href="./src/resources/transactions.ts">CancelTransactionRequest</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingRateDetails</a></code>
 - <code><a href="./src/resources/transactions.ts">IncomingTransaction</a></code>
 - <code><a href="./src/resources/transactions.ts">OutgoingTransaction</a></code>
@@ -339,6 +340,7 @@ Methods:
 - <code title="get /transactions/{transactionId}">client.transactions.<a href="./src/resources/transactions.ts">retrieve</a>(transactionID) -> Transaction</code>
 - <code title="get /transactions">client.transactions.<a href="./src/resources/transactions.ts">list</a>({ ...params }) -> TransactionsDefaultPagination</code>
 - <code title="post /transactions/{transactionId}/approve">client.transactions.<a href="./src/resources/transactions.ts">approve</a>(transactionID, { ...params }) -> IncomingTransaction</code>
+- <code title="post /transactions/{transactionId}/cancel">client.transactions.<a href="./src/resources/transactions.ts">cancel</a>(transactionID, { ...params }) -> Transaction</code>
 - <code title="post /transactions/{transactionId}/reject">client.transactions.<a href="./src/resources/transactions.ts">reject</a>(transactionID, { ...params }) -> IncomingTransaction</code>
 
 # Invitations

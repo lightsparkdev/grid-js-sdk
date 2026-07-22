@@ -203,6 +203,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/transactions/{transactionId}/approve',
   },
   {
+    clientCallName: 'client.transactions.cancel',
+    fullyQualifiedName: 'transactions.cancel',
+    httpMethod: 'post',
+    httpPath: '/transactions/{transactionId}/cancel',
+  },
+  {
     clientCallName: 'client.transactions.reject',
     fullyQualifiedName: 'transactions.reject',
     httpMethod: 'post',

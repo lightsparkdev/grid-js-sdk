@@ -85,6 +85,35 @@ export class Transactions extends APIResource {
   }
 
   /**
+   * Request cancellation of a pending bank transfer — an ACH transfer (push or pull)
+   * or a wire — before it has settled, for example a payment or collection initiated
+   * outside of the receiving bank's processing window. Whether a transfer can still
+   * be cancelled is determined by the banking partner that is settling it: the
+   * request is forwarded to the partner's own cancellation facility, and a transfer
+   * that the partner has already processed (or that is otherwise past its
+   * cancellation window) cannot be cancelled. Cancellation applies to bank-rail
+   * transfers; requests for transaction types that cannot be cancelled are rejected.
+   *
+   * @example
+   * ```ts
+   * const transaction = await client.transactions.cancel(
+   *   'transactionId',
+   * );
+   * ```
+   */
+  cancel(
+    transactionID: string,
+    body: TransactionCancelParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<TransferInAPI.Transaction> {
+    return this._client.post(path`/transactions/${transactionID}/cancel`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
+  }
+
+  /**
    * Reject a pending incoming payment that was previously acknowledged with a 202
    * response. This endpoint allows platforms to asynchronously reject payments after
    * additional processing.
@@ -115,6 +144,14 @@ export interface BaseTransactionSource {
    * Currency code for the source
    */
   currency?: string;
+}
+
+export interface CancelTransactionRequest {
+  /**
+   * Optional reason for cancelling the transaction. This is just for debugging
+   * purposes or can be used for a platform's own purposes.
+   */
+  reason?: string;
 }
 
 /**
@@ -644,6 +681,14 @@ export interface TransactionApproveParams {
   receiverCustomerInfo?: { [key: string]: unknown };
 }
 
+export interface TransactionCancelParams {
+  /**
+   * Optional reason for cancelling the transaction. This is just for debugging
+   * purposes or can be used for a platform's own purposes.
+   */
+  reason?: string;
+}
+
 export interface TransactionRejectParams {
   /**
    * Optional reason for rejecting the payment. This is just for debugging purposes
@@ -655,6 +700,7 @@ export interface TransactionRejectParams {
 export declare namespace Transactions {
   export {
     type BaseTransactionSource as BaseTransactionSource,
+    type CancelTransactionRequest as CancelTransactionRequest,
     type IncomingRateDetails as IncomingRateDetails,
     type IncomingTransaction as IncomingTransaction,
     type OutgoingTransaction as OutgoingTransaction,
@@ -666,6 +712,7 @@ export declare namespace Transactions {
     type TransactionType as TransactionType,
     type TransactionListParams as TransactionListParams,
     type TransactionApproveParams as TransactionApproveParams,
+    type TransactionCancelParams as TransactionCancelParams,
     type TransactionRejectParams as TransactionRejectParams,
   };
 }
