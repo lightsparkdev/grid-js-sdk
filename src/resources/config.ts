@@ -28,6 +28,12 @@ export class Config extends APIResource {
    * @example
    * ```ts
    * const platformConfig = await client.config.update({
+   *   cardTokenization2faConfig: {
+   *     displayName: 'Acme',
+   *     logoUrl: 'https://acme.com/card-email-logo.png',
+   *     email: { ... },
+   *     sms: { ... },
+   *   },
    *   embeddedWalletConfig: {
    *     appName: 'Acme Wallet',
    *     sendFromEmailAddress: 'noreply@acme.com',
@@ -42,9 +48,9 @@ export class Config extends APIResource {
    *       maxAmount: 1000000,
    *       enabledTransactionTypes: ['OUTGOING', 'INCOMING'],
    *       requiredCounterpartyFields: [
-   *         { name: 'FULL_NAME', mandatory: true },
-   *         { name: 'NATIONALITY', mandatory: true },
-   *         { name: 'BIRTH_DATE', mandatory: true },
+   *         { ... },
+   *         { ... },
+   *         { ... },
    *       ],
    *     },
    *   ],
@@ -139,6 +145,12 @@ export interface PlatformConfig {
   id?: string;
 
   /**
+   * Branding and sender configuration for card-tokenization authentication messages.
+   * This configuration is independent of embedded-wallet support.
+   */
+  cardTokenization2faConfig?: PlatformConfig.CardTokenization2faConfig;
+
+  /**
    * Creation timestamp
    */
   createdAt?: string;
@@ -183,7 +195,97 @@ export interface PlatformConfig {
   webhookEndpoint?: string;
 }
 
+export namespace PlatformConfig {
+  /**
+   * Branding and sender configuration for card-tokenization authentication messages.
+   * This configuration is independent of embedded-wallet support.
+   */
+  export interface CardTokenization2faConfig {
+    /**
+     * Platform name displayed in authentication messages.
+     */
+    displayName?: string;
+
+    /**
+     * Email branding and sender settings for card-tokenization authentication
+     * messages. Invalid or unverified sender identities can cause delivery to fail.
+     */
+    email?: CardTokenization2faConfig.Email;
+
+    /**
+     * HTTPS URL of the logo displayed in email messages.
+     */
+    logoUrl?: string;
+
+    /**
+     * SMS settings for card-tokenization authentication messages delivered through a
+     * Lightspark-managed Twilio sender.
+     */
+    sms?: CardTokenization2faConfig.SMS;
+  }
+
+  export namespace CardTokenization2faConfig {
+    /**
+     * Email branding and sender settings for card-tokenization authentication
+     * messages. Invalid or unverified sender identities can cause delivery to fail.
+     */
+    export interface Email {
+      /**
+       * Plain-text message content. Lightspark inserts the authentication code into a
+       * controlled text and HTML template; arbitrary HTML and template variables are not
+       * supported.
+       */
+      bodyText?: string;
+
+      /**
+       * Sender address for card-tokenization authentication emails.
+       */
+      fromAddress?: string;
+
+      /**
+       * Sender display name.
+       */
+      fromName?: string;
+
+      /**
+       * Reply-to address for card-tokenization authentication emails.
+       */
+      replyToAddress?: string;
+
+      /**
+       * Subject for the authentication email.
+       */
+      subject?: string;
+    }
+
+    /**
+     * SMS settings for card-tokenization authentication messages delivered through a
+     * Lightspark-managed Twilio sender.
+     */
+    export interface SMS {
+      /**
+       * Plain-text fallback message used when Twilio Verify is unavailable for the
+       * authentication code. Lightspark appends the code to this text.
+       */
+      bodyText?: string;
+
+      /**
+       * Twilio Verify template SID to use for this platform. An invalid or unavailable
+       * template can cause delivery to fail.
+       */
+      templateSid?: string;
+    }
+  }
+}
+
 export interface PlatformConfigUpdateRequest {
+  /**
+   * Update card-tokenization authentication branding and delivery settings. Fields
+   * omitted from the nested object are left unchanged. Changes apply to subsequent
+   * delivery attempts.
+   */
+  cardTokenization2faConfig?: PlatformConfigUpdateRequest.CardTokenization2faConfig;
+
   /**
    * Update or create the embedded-wallet configuration for this platform. Fields
    * omitted from the nested object are left unchanged. Omit this field at the top
@@ -196,6 +298,90 @@ export interface PlatformConfigUpdateRequest {
   umaDomain?: string;
 
   webhookEndpoint?: string;
+}
+
+export namespace PlatformConfigUpdateRequest {
+  /**
+   * Update card-tokenization authentication branding and delivery settings. Fields
+   * omitted from the nested object are left unchanged. Changes apply to subsequent
+   * delivery attempts.
+   */
+  export interface CardTokenization2faConfig {
+    /**
+     * Platform name displayed in authentication messages.
+     */
+    displayName?: string;
+
+    /**
+     * Email branding and sender settings for card-tokenization authentication
+     * messages. Invalid or unverified sender identities can cause delivery to fail.
+     */
+    email?: CardTokenization2faConfig.Email;
+
+    /**
+     * HTTPS URL of the logo displayed in email messages.
+     */
+    logoUrl?: string;
+
+    /**
+     * SMS settings for card-tokenization authentication messages delivered through a
+     * Lightspark-managed Twilio sender.
+     */
+    sms?: CardTokenization2faConfig.SMS;
+  }
+
+  export namespace CardTokenization2faConfig {
+    /**
+     * Email branding and sender settings for card-tokenization authentication
+     * messages. Invalid or unverified sender identities can cause delivery to fail.
+     */
+    export interface Email {
+      /**
+       * Plain-text message content. Lightspark inserts the authentication code into a
+       * controlled text and HTML template; arbitrary HTML and template variables are not
+       * supported.
+       */
+      bodyText?: string;
+
+      /**
+       * Sender address for card-tokenization authentication emails.
+       */
+      fromAddress?: string;
+
+      /**
+       * Sender display name.
+       */
+      fromName?: string;
+
+      /**
+       * Reply-to address for card-tokenization authentication emails.
+       */
+      replyToAddress?: string;
+
+      /**
+       * Subject for the authentication email.
+       */
+      subject?: string;
+    }
+
+    /**
+     * SMS settings for card-tokenization authentication messages delivered through a
+     * Lightspark-managed Twilio sender.
+     */
+    export interface SMS {
+      /**
+       * Plain-text fallback message used when Twilio Verify is unavailable for the
+       * authentication code. Lightspark appends the code to this text.
+       */
+      bodyText?: string;
+
+      /**
+       * Twilio Verify template SID to use for this platform. An invalid or unavailable
+       * template can cause delivery to fail.
+       */
+      templateSid?: string;
+    }
+  }
 }
 
 export interface PlatformCurrencyConfig {
@@ -245,6 +431,13 @@ export interface PlatformCurrencyConfig {
 
 export interface ConfigUpdateParams {
   /**
+   * Update card-tokenization authentication branding and delivery settings. Fields
+   * omitted from the nested object are left unchanged. Changes apply to subsequent
+   * delivery attempts.
+   */
+  cardTokenization2faConfig?: ConfigUpdateParams.CardTokenization2faConfig;
+
+  /**
    * Update or create the embedded-wallet configuration for this platform. Fields
    * omitted from the nested object are left unchanged. Omit this field at the top
    * level to leave the embedded-wallet configuration unchanged entirely.
@@ -256,6 +449,90 @@ export interface ConfigUpdateParams {
   umaDomain?: string;
 
   webhookEndpoint?: string;
+}
+
+export namespace ConfigUpdateParams {
+  /**
+   * Update card-tokenization authentication branding and delivery settings. Fields
+   * omitted from the nested object are left unchanged. Changes apply to subsequent
+   * delivery attempts.
+   */
+  export interface CardTokenization2faConfig {
+    /**
+     * Platform name displayed in authentication messages.
+     */
+    displayName?: string;
+
+    /**
+     * Email branding and sender settings for card-tokenization authentication
+     * messages. Invalid or unverified sender identities can cause delivery to fail.
+     */
+    email?: CardTokenization2faConfig.Email;
+
+    /**
+     * HTTPS URL of the logo displayed in email messages.
+     */
+    logoUrl?: string;
+
+    /**
+     * SMS settings for card-tokenization authentication messages delivered through a
+     * Lightspark-managed Twilio sender.
+     */
+    sms?: CardTokenization2faConfig.SMS;
+  }
+
+  export namespace CardTokenization2faConfig {
+    /**
+     * Email branding and sender settings for card-tokenization authentication
+     * messages. Invalid or unverified sender identities can cause delivery to fail.
+     */
+    export interface Email {
+      /**
+       * Plain-text message content. Lightspark inserts the authentication code into a
+       * controlled text and HTML template; arbitrary HTML and template variables are not
+       * supported.
+       */
+      bodyText?: string;
+
+      /**
+       * Sender address for card-tokenization authentication emails.
+       */
+      fromAddress?: string;
+
+      /**
+       * Sender display name.
+       */
+      fromName?: string;
+
+      /**
+       * Reply-to address for card-tokenization authentication emails.
+       */
+      replyToAddress?: string;
+
+      /**
+       * Subject for the authentication email.
+       */
+      subject?: string;
+    }
+
+    /**
+     * SMS settings for card-tokenization authentication messages delivered through a
+     * Lightspark-managed Twilio sender.
+     */
+    export interface SMS {
+      /**
+       * Plain-text fallback message used when Twilio Verify is unavailable for the
+       * authentication code. Lightspark appends the code to this text.
+       */
+      bodyText?: string;
+
+      /**
+       * Twilio Verify template SID to use for this platform. An invalid or unavailable
+       * template can cause delivery to fail.
+       */
+      templateSid?: string;
+    }
+  }
 }
 
 export declare namespace Config {
