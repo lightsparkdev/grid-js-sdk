@@ -161,7 +161,7 @@ export interface IncomingTransaction {
   id: string;
 
   /**
-   * System ID of the customer (sender for outgoing, recipient for incoming)
+   * System ID of the customer this transaction belongs to
    */
   customerId: string;
 
@@ -173,8 +173,7 @@ export interface IncomingTransaction {
   direction: 'CREDIT' | 'DEBIT';
 
   /**
-   * Platform-specific ID of the customer (sender for outgoing, recipient for
-   * incoming)
+   * Platform-specific ID of the customer this transaction belongs to
    */
   platformCustomerId: string;
 
@@ -297,7 +296,7 @@ export interface OutgoingTransaction {
   id: string;
 
   /**
-   * System ID of the customer (sender for outgoing, recipient for incoming)
+   * System ID of the customer this transaction belongs to
    */
   customerId: string;
 
@@ -309,8 +308,7 @@ export interface OutgoingTransaction {
   direction: 'CREDIT' | 'DEBIT';
 
   /**
-   * Platform-specific ID of the customer (sender for outgoing, recipient for
-   * incoming)
+   * Platform-specific ID of the customer this transaction belongs to
    */
   platformCustomerId: string;
 

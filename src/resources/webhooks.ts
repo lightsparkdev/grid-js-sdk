@@ -53,7 +53,13 @@ export interface IncomingPaymentWebhookEvent {
    */
   timestamp: string;
 
-  type: 'INCOMING_PAYMENT.PENDING' | 'INCOMING_PAYMENT.COMPLETED' | 'INCOMING_PAYMENT.FAILED';
+  type:
+    | 'INCOMING_PAYMENT.PENDING'
+    | 'INCOMING_PAYMENT.COMPLETED'
+    | 'INCOMING_PAYMENT.FAILED'
+    | 'INCOMING_PAYMENT.REFUND_PENDING'
+    | 'INCOMING_PAYMENT.REFUND_COMPLETED'
+    | 'INCOMING_PAYMENT.REFUND_FAILED';
 }
 
 export namespace IncomingPaymentWebhookEvent {
