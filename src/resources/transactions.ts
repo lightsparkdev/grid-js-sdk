@@ -425,6 +425,13 @@ export interface OutgoingTransaction {
     | null;
 
   /**
+   * The portion of `fees` collected by the platform (platform-configured transaction
+   * fees), in the smallest unit of the sending currency. 0 when the platform has no
+   * applicable fee configured. Already included in `fees`.
+   */
+  platformFees?: number;
+
+  /**
    * The ID of the quote that was used to trigger this payment
    */
   quoteId?: string;

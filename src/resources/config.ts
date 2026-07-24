@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
+import * as InvitationsAPI from './invitations';
 import * as ReceiverAPI from './receiver';
 import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
@@ -162,6 +163,12 @@ export interface PlatformConfig {
   embeddedWalletConfig?: EmbeddedWalletConfig;
 
   /**
+   * Platform-collected fees that should be added on top of Grid-collected fees.
+   * Contains every currently-active fee config for the platform.
+   */
+  feeConfigs?: Array<PlatformConfig.FeeConfig>;
+
+  /**
    * Whether the platform is a regulated financial institution. This is used to
    * determine if the platform's customers must be KYC/KYB'd by Lightspark via the
    * KYC link flow. This can only be set by Lightspark during platform creation.
@@ -276,6 +283,40 @@ export namespace PlatformConfig {
       templateSid?: string;
     }
   }
+
+  /**
+   * A platform-configured fee collected by Grid and settled to the platform internal
+   * account. There can be at most one fee config for a given fee type and source
+   * currency pair. The fee will apply to all transactions of the fee type that
+   * originate in the source currency.
+   */
+  export interface FeeConfig {
+    /**
+     * The kind of activity this fee applies to.
+     *
+     * - `CROSS_CURRENCY_TRANSACTION` — fee charged on a cross-currency Grid
+     *   transaction (source currency differs from destination currency).
+     */
+    feeType: 'CROSS_CURRENCY_TRANSACTION';
+
+    /**
+     * Fixed fee charged per transaction, in the smallest unit of the source currency.
+     * The fixed fee currency must match the fee config's `sourceCurrency`.
+     */
+    fixedFee: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Currency code of the sending side this fee applies to. Only `USD` is accepted
+     * today; other currencies return a `NOT_IMPLEMENTED` error.
+     */
+    sourceCurrency: string;
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to a transaction's
+     * source-currency amount.
+     */
+    variableFeeBps: number;
+  }
 }
 
 export interface PlatformConfigUpdateRequest {
@@ -292,6 +333,14 @@ export interface PlatformConfigUpdateRequest {
    * level to leave the embedded-wallet configuration unchanged entirely.
    */
   embeddedWalletConfig?: EmbeddedWalletConfig;
+
+  /**
+   * Merge-by-key upsert of platform fee configs, keyed by
+   * `(feeType, sourceCurrency)`. Setting variable and fixed fees to 0 for an
+   * existing fee config deactivates it. Only `sourceCurrency: USD` is accepted
+   * today. Omit this field to leave fee configs unchanged.
+   */
+  feeConfigs?: Array<PlatformConfigUpdateRequest.FeeConfig>;
 
   supportedCurrencies?: Array<PlatformCurrencyConfig>;
 
@@ -382,6 +431,40 @@ export namespace PlatformConfigUpdateRequest {
       templateSid?: string;
     }
   }
+
+  /**
+   * A platform-configured fee collected by Grid and settled to the platform internal
+   * account. There can be at most one fee config for a given fee type and source
+   * currency pair. The fee will apply to all transactions of the fee type that
+   * originate in the source currency.
+   */
+  export interface FeeConfig {
+    /**
+     * The kind of activity this fee applies to.
+     *
+     * - `CROSS_CURRENCY_TRANSACTION` — fee charged on a cross-currency Grid
+     *   transaction (source currency differs from destination currency).
+     */
+    feeType: 'CROSS_CURRENCY_TRANSACTION';
+
+    /**
+     * Fixed fee charged per transaction, in the smallest unit of the source currency.
+     * The fixed fee currency must match the fee config's `sourceCurrency`.
+     */
+    fixedFee: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Currency code of the sending side this fee applies to. Only `USD` is accepted
+     * today; other currencies return a `NOT_IMPLEMENTED` error.
+     */
+    sourceCurrency: string;
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to a transaction's
+     * source-currency amount.
+     */
+    variableFeeBps: number;
+  }
 }
 
 export interface PlatformCurrencyConfig {
@@ -443,6 +526,14 @@ export interface ConfigUpdateParams {
    * level to leave the embedded-wallet configuration unchanged entirely.
    */
   embeddedWalletConfig?: EmbeddedWalletConfig;
+
+  /**
+   * Merge-by-key upsert of platform fee configs, keyed by
+   * `(feeType, sourceCurrency)`. Setting variable and fixed fees to 0 for an
+   * existing fee config deactivates it. Only `sourceCurrency: USD` is accepted
+   * today. Omit this field to leave fee configs unchanged.
+   */
+  feeConfigs?: Array<ConfigUpdateParams.FeeConfig>;
 
   supportedCurrencies?: Array<PlatformCurrencyConfig>;
 
@@ -532,6 +623,40 @@ export namespace ConfigUpdateParams {
        */
       templateSid?: string;
     }
+  }
+
+  /**
+   * A platform-configured fee collected by Grid and settled to the platform internal
+   * account. There can be at most one fee config for a given fee type and source
+   * currency pair. The fee will apply to all transactions of the fee type that
+   * originate in the source currency.
+   */
+  export interface FeeConfig {
+    /**
+     * The kind of activity this fee applies to.
+     *
+     * - `CROSS_CURRENCY_TRANSACTION` — fee charged on a cross-currency Grid
+     *   transaction (source currency differs from destination currency).
+     */
+    feeType: 'CROSS_CURRENCY_TRANSACTION';
+
+    /**
+     * Fixed fee charged per transaction, in the smallest unit of the source currency.
+     * The fixed fee currency must match the fee config's `sourceCurrency`.
+     */
+    fixedFee: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Currency code of the sending side this fee applies to. Only `USD` is accepted
+     * today; other currencies return a `NOT_IMPLEMENTED` error.
+     */
+    sourceCurrency: string;
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to a transaction's
+     * source-currency amount.
+     */
+    variableFeeBps: number;
   }
 }
 

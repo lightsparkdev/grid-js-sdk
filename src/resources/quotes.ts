@@ -458,6 +458,14 @@ export interface Quote {
   paymentInstructions?: Array<PaymentInstructions>;
 
   /**
+   * The portion of `feesIncluded` collected by the platform (platform-configured
+   * transaction fees), in the smallest unit of the sending currency. 0 when the
+   * platform has no applicable fee configured. Already included in `feesIncluded`.
+   * May be omitted from payloads produced before platform fees existed.
+   */
+  platformFeesIncluded?: number;
+
+  /**
    * Details about the rate and fees for the transaction.
    */
   rateDetails?: OutgoingRateDetails;
