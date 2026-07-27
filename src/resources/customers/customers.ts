@@ -419,7 +419,8 @@ export interface BusinessCustomerCreateRequest {
   currencies?: Array<string>;
 
   /**
-   * Email address for the customer.
+   * Email address for the customer. **Required in regions that verify the email
+   * address before identity verification** (e.g. the EU); optional otherwise.
    */
   email?: string;
 
@@ -430,7 +431,9 @@ export interface BusinessCustomerCreateRequest {
   kybStatus?: 'UNVERIFIED' | 'PENDING' | 'APPROVED' | 'REJECTED' | 'HOLD';
 
   /**
-   * Phone number for the customer in strict E.164 format.
+   * Phone number for the customer in strict E.164 format. **Required in regions that
+   * verify the phone number before identity verification** (e.g. the EU); optional
+   * otherwise.
    */
   phoneNumber?: string;
 
@@ -970,7 +973,8 @@ export interface IndividualCustomerCreateRequest {
   currencies?: Array<string>;
 
   /**
-   * Email address for the customer.
+   * Email address for the customer. **Required in regions that verify the email
+   * address before identity verification** (e.g. the EU); optional otherwise.
    */
   email?: string;
 
@@ -996,7 +1000,9 @@ export interface IndividualCustomerCreateRequest {
   nationality?: string;
 
   /**
-   * Phone number for the customer in strict E.164 format.
+   * Phone number for the customer in strict E.164 format. **Required in regions that
+   * verify the phone number before identity verification** (e.g. the EU); optional
+   * otherwise.
    */
   phoneNumber?: string;
 
