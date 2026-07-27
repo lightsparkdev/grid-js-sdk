@@ -915,6 +915,15 @@ export namespace Customer {
   }
 }
 
+/**
+ * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
+ * on an individual customer. Referenced via `allOf` from
+ * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+ * customer resource itself; there is no separate EDD resource. The specific set
+ * required for a given customer is driven by the KYC provider's per-jurisdiction /
+ * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+ * `POST /verifications`).
+ */
 export type CustomerCreateRequestOneOf = IndividualCustomerCreateRequest | BusinessCustomerCreateRequest;
 
 export interface CustomerListResponse {
@@ -939,23 +948,47 @@ export interface CustomerListResponse {
   totalCount?: number;
 }
 
+/**
+ * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
+ * on an individual customer. Referenced via `allOf` from
+ * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+ * customer resource itself; there is no separate EDD resource. The specific set
+ * required for a given customer is driven by the KYC provider's per-jurisdiction /
+ * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+ * `POST /verifications`).
+ */
 export type CustomerOneOf = Shared.IndividualCustomer | Shared.BusinessCustomer;
 
 /**
- * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
- * customer with tied Embedded Wallet internal accounts, Grid updates the customer
- * email and every tied `EMAIL_OTP` credential through the endpoint's signed-retry
- * flow. When `phoneNumber` changes for a customer with tied Embedded Wallet
- * internal accounts, Grid updates the customer phone number and every tied
- * `SMS_OTP` credential through the same signed-retry flow. Update `email` and
- * `phoneNumber` in separate PATCH calls.
+ * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
+ * on an individual customer. Referenced via `allOf` from
+ * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+ * customer resource itself; there is no separate EDD resource. The specific set
+ * required for a given customer is driven by the KYC provider's per-jurisdiction /
+ * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+ * `POST /verifications`).
  */
 export type CustomerUpdateRequestOneOf = IndividualCustomerUpdateRequest | BusinessCustomerUpdateRequest;
 
+/**
+ * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
+ * on an individual customer. Referenced via `allOf` from
+ * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+ * customer resource itself; there is no separate EDD resource. The specific set
+ * required for a given customer is driven by the KYC provider's per-jurisdiction /
+ * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+ * `POST /verifications`).
+ */
 export interface IndividualCustomerCreateRequest {
   customerType: 'INDIVIDUAL';
 
   address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Bucketed annual income (USD equivalent). Used for enhanced due diligence on
+   * higher-risk profiles.
+   */
+  annualIncomeRange?: 'UNDER_50K' | 'RANGE_50K_100K' | 'RANGE_100K_250K' | 'RANGE_250K_1M' | 'OVER_1M';
 
   /**
    * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -979,6 +1012,26 @@ export interface IndividualCustomerCreateRequest {
   email?: string;
 
   /**
+   * Expected number of transactions per month
+   */
+  expectedMonthlyTransactionCount?:
+    | 'COUNT_UNDER_10'
+    | 'COUNT_10_TO_100'
+    | 'COUNT_100_TO_500'
+    | 'COUNT_500_TO_1000'
+    | 'COUNT_OVER_1000';
+
+  /**
+   * Expected total transaction volume per month in USD equivalent
+   */
+  expectedMonthlyTransactionVolume?:
+    | 'VOLUME_UNDER_10K'
+    | 'VOLUME_10K_TO_100K'
+    | 'VOLUME_100K_TO_1M'
+    | 'VOLUME_1M_TO_10M'
+    | 'VOLUME_OVER_10M';
+
+  /**
    * Individual's full name
    */
   fullName?: string;
@@ -1000,6 +1053,25 @@ export interface IndividualCustomerCreateRequest {
   nationality?: string;
 
   /**
+   * Bucketed total net worth (USD equivalent). Used for enhanced due diligence on
+   * higher-risk profiles.
+   */
+  netWorthRange?:
+    | 'UNDER_100K'
+    | 'RANGE_100K_500K'
+    | 'RANGE_500K_1M'
+    | 'RANGE_1M_5M'
+    | 'RANGE_5M_25M'
+    | 'OVER_25M';
+
+  /**
+   * Political exposure declaration (Politically Exposed Person status). `HIO` = head
+   * of an international organization. `FAMILY_OR_ASSOCIATE` covers close family
+   * members and known close associates of a PEP.
+   */
+  pepStatus?: 'NONE' | 'DOMESTIC' | 'FOREIGN' | 'HIO' | 'FAMILY_OR_ASSOCIATE';
+
+  /**
    * Phone number for the customer in strict E.164 format. **Required in regions that
    * verify the phone number before identity verification** (e.g. the EU); optional
    * otherwise.
@@ -1013,6 +1085,30 @@ export interface IndividualCustomerCreateRequest {
   platformCustomerId?: string;
 
   /**
+   * The intended purpose for using the Grid account
+   */
+  purposeOfAccount?:
+    | 'CONTRACTOR_PAYOUTS'
+    | 'CREATOR_PAYOUTS'
+    | 'EMPLOYEE_PAYOUTS'
+    | 'MARKETPLACE_SELLER_PAYOUTS'
+    | 'SUPPLIER_PAYMENTS'
+    | 'CROSS_BORDER_B2B'
+    | 'AR_AUTOMATION'
+    | 'AP_AUTOMATION'
+    | 'EMBEDDED_PAYMENTS'
+    | 'PLATFORM_FEE_COLLECTION'
+    | 'P2P_TRANSFERS'
+    | 'CHARITABLE_DONATIONS'
+    | 'OTHER';
+
+  /**
+   * Free-form description of the customer's intended purpose for the Grid account.
+   * Required when `purposeOfAccount` is `OTHER`; otherwise omitted.
+   */
+  purposeOfAccountOtherDescription?: string;
+
+  /**
    * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
    * This determines the regulatory jurisdiction and KYC requirements for the
    * customer. Required if the customer will use currencies with different KYC
@@ -1020,6 +1116,68 @@ export interface IndividualCustomerCreateRequest {
    * be registered as separate customers. This field is immutable after creation.
    */
   region?: string;
+
+  /**
+   * Structured source-of-funds categories (FLOW of funds for this account).
+   */
+  sourceOfFundsCategories?: Array<
+    | 'SALARY'
+    | 'SELF_EMPLOYMENT_INCOME'
+    | 'INVESTMENT_INCOME'
+    | 'PENSION'
+    | 'RENTAL_INCOME'
+    | 'GIFT'
+    | 'INHERITANCE'
+    | 'LOAN'
+    | 'SAVINGS'
+    | 'SALE_OF_ASSETS'
+    | 'OTHER'
+  >;
+
+  /**
+   * Free-form description of the customer's source of funds. Required when
+   * `sourceOfFundsCategories` includes `OTHER`; otherwise omitted.
+   */
+  sourceOfFundsOtherDescription?: string;
+
+  /**
+   * Structured source-of-wealth categories (STOCK — origin of accumulated wealth).
+   */
+  sourceOfWealthCategories?: Array<
+    | 'SALARY'
+    | 'BUSINESS_INCOME'
+    | 'INVESTMENTS'
+    | 'INHERITANCE'
+    | 'PROPERTY_SALE'
+    | 'GIFT'
+    | 'RETIREMENT'
+    | 'SAVINGS'
+    | 'OTHER'
+  >;
+
+  /**
+   * Free-form description of the customer's source of wealth. Required when
+   * `sourceOfWealthCategories` includes `OTHER`; otherwise omitted.
+   */
+  sourceOfWealthOtherDescription?: string;
+
+  /**
+   * Country that issued the tax identifier (ISO 3166-1 alpha-2). Required when
+   * `taxIdType` is `NON_US_TAX_ID`.
+   */
+  taxIdCountryOfIssuance?: string;
+
+  /**
+   * Tax-identification number. For US persons this is the SSN (format `###-##-####`)
+   * or ITIN. For non-US persons this is the tax number issued by
+   * `taxIdCountryOfIssuance`.
+   */
+  taxIdentifier?: string;
+
+  /**
+   * Type of tax identification
+   */
+  taxIdType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 
   /**
    * Optional UMA address identifier. If not provided during customer creation, one
@@ -1032,18 +1190,24 @@ export interface IndividualCustomerCreateRequest {
 }
 
 /**
- * Request body for `PATCH /customers/{customerId}`. When `email` changes for a
- * customer with tied Embedded Wallet internal accounts, Grid updates the customer
- * email and every tied `EMAIL_OTP` credential through the endpoint's signed-retry
- * flow. When `phoneNumber` changes for a customer with tied Embedded Wallet
- * internal accounts, Grid updates the customer phone number and every tied
- * `SMS_OTP` credential through the same signed-retry flow. Update `email` and
- * `phoneNumber` in separate PATCH calls.
+ * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
+ * on an individual customer. Referenced via `allOf` from
+ * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+ * customer resource itself; there is no separate EDD resource. The specific set
+ * required for a given customer is driven by the KYC provider's per-jurisdiction /
+ * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+ * `POST /verifications`).
  */
 export interface IndividualCustomerUpdateRequest {
   customerType: 'INDIVIDUAL';
 
   address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Bucketed annual income (USD equivalent). Used for enhanced due diligence on
+   * higher-risk profiles.
+   */
+  annualIncomeRange?: 'UNDER_50K' | 'RANGE_50K_100K' | 'RANGE_100K_250K' | 'RANGE_250K_1M' | 'OVER_1M';
 
   /**
    * Date of birth in ISO 8601 format (YYYY-MM-DD)
@@ -1066,6 +1230,26 @@ export interface IndividualCustomerUpdateRequest {
   email?: string;
 
   /**
+   * Expected number of transactions per month
+   */
+  expectedMonthlyTransactionCount?:
+    | 'COUNT_UNDER_10'
+    | 'COUNT_10_TO_100'
+    | 'COUNT_100_TO_500'
+    | 'COUNT_500_TO_1000'
+    | 'COUNT_OVER_1000';
+
+  /**
+   * Expected total transaction volume per month in USD equivalent
+   */
+  expectedMonthlyTransactionVolume?:
+    | 'VOLUME_UNDER_10K'
+    | 'VOLUME_10K_TO_100K'
+    | 'VOLUME_100K_TO_1M'
+    | 'VOLUME_1M_TO_10M'
+    | 'VOLUME_OVER_10M';
+
+  /**
    * Individual's full name
    */
   fullName?: string;
@@ -1082,12 +1266,117 @@ export interface IndividualCustomerUpdateRequest {
   nationality?: string;
 
   /**
+   * Bucketed total net worth (USD equivalent). Used for enhanced due diligence on
+   * higher-risk profiles.
+   */
+  netWorthRange?:
+    | 'UNDER_100K'
+    | 'RANGE_100K_500K'
+    | 'RANGE_500K_1M'
+    | 'RANGE_1M_5M'
+    | 'RANGE_5M_25M'
+    | 'OVER_25M';
+
+  /**
+   * Political exposure declaration (Politically Exposed Person status). `HIO` = head
+   * of an international organization. `FAMILY_OR_ASSOCIATE` covers close family
+   * members and known close associates of a PEP.
+   */
+  pepStatus?: 'NONE' | 'DOMESTIC' | 'FOREIGN' | 'HIO' | 'FAMILY_OR_ASSOCIATE';
+
+  /**
    * Phone number for the customer in strict E.164 format. For customers with tied
    * Embedded Wallet internal accounts, changing this value also updates every tied
    * `SMS_OTP` credential across all tied Embedded Wallets. Send phone number and
    * email updates as separate PATCH calls.
    */
   phoneNumber?: string;
+
+  /**
+   * The intended purpose for using the Grid account
+   */
+  purposeOfAccount?:
+    | 'CONTRACTOR_PAYOUTS'
+    | 'CREATOR_PAYOUTS'
+    | 'EMPLOYEE_PAYOUTS'
+    | 'MARKETPLACE_SELLER_PAYOUTS'
+    | 'SUPPLIER_PAYMENTS'
+    | 'CROSS_BORDER_B2B'
+    | 'AR_AUTOMATION'
+    | 'AP_AUTOMATION'
+    | 'EMBEDDED_PAYMENTS'
+    | 'PLATFORM_FEE_COLLECTION'
+    | 'P2P_TRANSFERS'
+    | 'CHARITABLE_DONATIONS'
+    | 'OTHER';
+
+  /**
+   * Free-form description of the customer's intended purpose for the Grid account.
+   * Required when `purposeOfAccount` is `OTHER`; otherwise omitted.
+   */
+  purposeOfAccountOtherDescription?: string;
+
+  /**
+   * Structured source-of-funds categories (FLOW of funds for this account).
+   */
+  sourceOfFundsCategories?: Array<
+    | 'SALARY'
+    | 'SELF_EMPLOYMENT_INCOME'
+    | 'INVESTMENT_INCOME'
+    | 'PENSION'
+    | 'RENTAL_INCOME'
+    | 'GIFT'
+    | 'INHERITANCE'
+    | 'LOAN'
+    | 'SAVINGS'
+    | 'SALE_OF_ASSETS'
+    | 'OTHER'
+  >;
+
+  /**
+   * Free-form description of the customer's source of funds. Required when
+   * `sourceOfFundsCategories` includes `OTHER`; otherwise omitted.
+   */
+  sourceOfFundsOtherDescription?: string;
+
+  /**
+   * Structured source-of-wealth categories (STOCK — origin of accumulated wealth).
+   */
+  sourceOfWealthCategories?: Array<
+    | 'SALARY'
+    | 'BUSINESS_INCOME'
+    | 'INVESTMENTS'
+    | 'INHERITANCE'
+    | 'PROPERTY_SALE'
+    | 'GIFT'
+    | 'RETIREMENT'
+    | 'SAVINGS'
+    | 'OTHER'
+  >;
+
+  /**
+   * Free-form description of the customer's source of wealth. Required when
+   * `sourceOfWealthCategories` includes `OTHER`; otherwise omitted.
+   */
+  sourceOfWealthOtherDescription?: string;
+
+  /**
+   * Country that issued the tax identifier (ISO 3166-1 alpha-2). Required when
+   * `taxIdType` is `NON_US_TAX_ID`.
+   */
+  taxIdCountryOfIssuance?: string;
+
+  /**
+   * Tax-identification number. For US persons this is the SSN (format `###-##-####`)
+   * or ITIN. For non-US persons this is the tax number issued by
+   * `taxIdCountryOfIssuance`.
+   */
+  taxIdentifier?: string;
+
+  /**
+   * Type of tax identification
+   */
+  taxIdType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 
   /**
    * Optional UMA address identifier. If provided, the customer's UMA address will be
@@ -1220,18 +1509,27 @@ export interface KYCLinkResponse {
 }
 
 export interface CustomerCreateParams {
+  /**
+   * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
+   * on an individual customer. Referenced via `allOf` from
+   * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+   * customer resource itself; there is no separate EDD resource. The specific set
+   * required for a given customer is driven by the KYC provider's per-jurisdiction /
+   * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+   * `POST /verifications`).
+   */
   CreateCustomerRequest: CustomerCreateRequestOneOf;
 }
 
 export interface CustomerUpdateParams {
   /**
-   * Body param: Request body for `PATCH /customers/{customerId}`. When `email`
-   * changes for a customer with tied Embedded Wallet internal accounts, Grid updates
-   * the customer email and every tied `EMAIL_OTP` credential through the endpoint's
-   * signed-retry flow. When `phoneNumber` changes for a customer with tied Embedded
-   * Wallet internal accounts, Grid updates the customer phone number and every tied
-   * `SMS_OTP` credential through the same signed-retry flow. Update `email` and
-   * `phoneNumber` in separate PATCH calls.
+   * Body param: Enhanced-due-diligence (EDD) fields available as optional patchable
+   * attributes on an individual customer. Referenced via `allOf` from
+   * `IndividualCustomerFields`, so these appear as top-level optional fields on the
+   * customer resource itself; there is no separate EDD resource. The specific set
+   * required for a given customer is driven by the KYC provider's per-jurisdiction /
+   * per-flow / per-volume-tier rules (surfaced through `MISSING_FIELD` errors on
+   * `POST /verifications`).
    */
   UpdateCustomerRequest: CustomerUpdateRequestOneOf;
 
