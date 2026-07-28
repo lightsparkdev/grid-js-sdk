@@ -471,15 +471,6 @@ export interface Quote {
   rateDetails?: OutgoingRateDetails;
 
   /**
-   * Free-form information about the payment that travels with it to the recipient,
-   * as provided on the quote request. The field this populates depends on the
-   * payment rail: for ACH it populates the Addenda record, for FedNow and RTP it
-   * populates the remittanceInformation field, and for wires it populates the OBI
-   * (Originator to Beneficiary Information) / beneficiary information.
-   */
-  remittanceInformation?: string;
-
-  /**
    * Present only while `status` is `PENDING_AUTHORIZATION`: the Strong Customer
    * Authentication challenge to satisfy before this quote can be executed (or, for
    * realtime-funding sources, before `paymentInstructions` are issued). Omitted for
