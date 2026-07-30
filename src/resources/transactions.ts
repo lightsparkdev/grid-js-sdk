@@ -379,7 +379,8 @@ export interface OutgoingTransaction {
     | 'QUOTE_EXECUTION_FAILED'
     | 'LIGHTNING_PAYMENT_FAILED'
     | 'FUNDING_AMOUNT_MISMATCH'
-    | 'COUNTERPARTY_POST_TX_FAILED';
+    | 'COUNTERPARTY_POST_TX_FAILED'
+    | 'SCA_NOT_COMPLETED';
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
