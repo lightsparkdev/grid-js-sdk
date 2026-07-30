@@ -380,7 +380,11 @@ export interface OutgoingTransaction {
     | 'LIGHTNING_PAYMENT_FAILED'
     | 'FUNDING_AMOUNT_MISMATCH'
     | 'COUNTERPARTY_POST_TX_FAILED'
-    | 'SCA_NOT_COMPLETED';
+    | 'SCA_NOT_COMPLETED'
+    | 'EXECUTION_FAILED_POST_DEBIT'
+    | 'SETTLEMENT_FAILED'
+    | 'TIMEOUT'
+    | 'MANUAL_REFUND';
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
