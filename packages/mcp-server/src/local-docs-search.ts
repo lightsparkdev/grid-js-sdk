@@ -880,12 +880,13 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     endpoint: '/customers/external-accounts/{externalAccountId}',
     httpMethod: 'delete',
     summary: 'Delete customer external account by ID',
-    description: 'Delete a customer external account by its system-generated ID',
+    description:
+      'Delete a customer external account by its system-generated ID.\nAn account that is currently a trusted beneficiary for SCA cannot be deleted — untrust it first via `POST /customers/external-accounts/{externalAccountId}/untrust` (and its `/confirm`), then delete.',
     stainlessPath: '(resource) customers.external_accounts > (method) delete',
     qualified: 'client.customers.externalAccounts.delete',
     params: ['externalAccountId: string;'],
     markdown:
-      "## delete\n\n`client.customers.externalAccounts.delete(externalAccountId: string): void`\n\n**delete** `/customers/external-accounts/{externalAccountId}`\n\nDelete a customer external account by its system-generated ID\n\n### Parameters\n\n- `externalAccountId: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nawait client.customers.externalAccounts.delete('externalAccountId')\n```",
+      "## delete\n\n`client.customers.externalAccounts.delete(externalAccountId: string): void`\n\n**delete** `/customers/external-accounts/{externalAccountId}`\n\nDelete a customer external account by its system-generated ID.\nAn account that is currently a trusted beneficiary for SCA cannot be deleted — untrust it first via `POST /customers/external-accounts/{externalAccountId}/untrust` (and its `/confirm`), then delete.\n\n### Parameters\n\n- `externalAccountId: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nawait client.customers.externalAccounts.delete('externalAccountId')\n```",
     perLanguage: {
       typescript: {
         method: 'client.customers.externalAccounts.delete',
