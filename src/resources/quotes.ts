@@ -219,6 +219,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.SlvAccount
     | PaymentInstructions.SwiftAccount
     | PaymentInstructions.CnyAccount
+    | PaymentInstructions.BitcoinL1DepositAddress
     | PaymentInstructions.EmbeddedWallet;
 
   /**
@@ -350,6 +351,20 @@ export namespace PaymentInstructions {
      * The phone number in international format
      */
     phoneNumber?: string;
+  }
+
+  export interface BitcoinL1DepositAddress {
+    accountType: 'BITCOIN_L1';
+
+    /**
+     * On-chain Bitcoin (L1) deposit address to send funds to
+     */
+    address: string;
+
+    /**
+     * The blockchain network for the deposit address.
+     */
+    network?: 'BITCOIN';
   }
 
   export interface EmbeddedWallet {
