@@ -164,6 +164,7 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">PhpBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PhpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PkrExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">PlasmaWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PolygonWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">RwfExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">SgdBeneficiary</a></code>

@@ -76,6 +76,7 @@ export {
   type PhpBeneficiary,
   type PhpExternalAccountInfo,
   type PkrExternalAccountInfo,
+  type PlasmaWalletInfo,
   type PolygonWalletInfo,
   type RwfExternalAccountInfo,
   type SgdBeneficiary,

@@ -988,6 +988,8 @@ export type PhpExternalAccountInfo = unknown;
  */
 export type PkrExternalAccountInfo = unknown;
 
+export type PlasmaWalletInfo = unknown;
+
 export type PolygonWalletInfo = unknown;
 
 export type RwfExternalAccountInfo = unknown;
@@ -1367,6 +1369,7 @@ export declare namespace ExternalAccounts {
     type PhpBeneficiary as PhpBeneficiary,
     type PhpExternalAccountInfo as PhpExternalAccountInfo,
     type PkrExternalAccountInfo as PkrExternalAccountInfo,
+    type PlasmaWalletInfo as PlasmaWalletInfo,
     type PolygonWalletInfo as PolygonWalletInfo,
     type RwfExternalAccountInfo as RwfExternalAccountInfo,
     type SgdBeneficiary as SgdBeneficiary,
