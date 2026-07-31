@@ -324,6 +324,10 @@ export namespace BusinessCustomer {
       | 'CORPORATION'
       | 'S_CORPORATION'
       | 'NON_PROFIT'
+      | 'PUBLICLY_LISTED_COMPANY'
+      | 'TRUST'
+      | 'PRIVATE_FOUNDATION'
+      | 'CHARITY'
       | 'OTHER';
 
     /**

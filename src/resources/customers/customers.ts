@@ -533,6 +533,10 @@ export namespace BusinessCustomerCreateRequest {
       | 'CORPORATION'
       | 'S_CORPORATION'
       | 'NON_PROFIT'
+      | 'PUBLICLY_LISTED_COMPANY'
+      | 'TRUST'
+      | 'PRIVATE_FOUNDATION'
+      | 'CHARITY'
       | 'OTHER';
 
     /**
@@ -727,6 +731,10 @@ export namespace BusinessCustomerUpdateRequest {
       | 'CORPORATION'
       | 'S_CORPORATION'
       | 'NON_PROFIT'
+      | 'PUBLICLY_LISTED_COMPANY'
+      | 'TRUST'
+      | 'PRIVATE_FOUNDATION'
+      | 'CHARITY'
       | 'OTHER';
 
     /**
