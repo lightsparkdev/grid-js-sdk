@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as InvitationsAPI from './invitations';
 import * as ReceiverAPI from './receiver';
 import * as TransactionsAPI from './transactions';
 import { APIPromise } from '../core/api-promise';
@@ -300,10 +299,10 @@ export namespace PlatformConfig {
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
-     * Fixed fee charged per transaction, in the smallest unit of the source currency.
-     * The fixed fee currency must match the fee config's `sourceCurrency`.
+     * Fixed fee charged per transaction, denominated in the smallest unit of the fee
+     * config's `sourceCurrency` (e.g., cents for USD).
      */
-    fixedFee: InvitationsAPI.CurrencyAmount;
+    fixedFee: number;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -448,10 +447,10 @@ export namespace PlatformConfigUpdateRequest {
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
-     * Fixed fee charged per transaction, in the smallest unit of the source currency.
-     * The fixed fee currency must match the fee config's `sourceCurrency`.
+     * Fixed fee charged per transaction, denominated in the smallest unit of the fee
+     * config's `sourceCurrency` (e.g., cents for USD).
      */
-    fixedFee: InvitationsAPI.CurrencyAmount;
+    fixedFee: number;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -641,10 +640,10 @@ export namespace ConfigUpdateParams {
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
-     * Fixed fee charged per transaction, in the smallest unit of the source currency.
-     * The fixed fee currency must match the fee config's `sourceCurrency`.
+     * Fixed fee charged per transaction, denominated in the smallest unit of the fee
+     * config's `sourceCurrency` (e.g., cents for USD).
      */
-    fixedFee: InvitationsAPI.CurrencyAmount;
+    fixedFee: number;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
