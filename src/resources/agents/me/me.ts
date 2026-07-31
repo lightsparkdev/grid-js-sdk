@@ -195,6 +195,26 @@ export interface MeCreateTransferOutParams {
   amount?: number;
 
   /**
+   * Body param: The purpose of the payment. This may be required when sending to
+   * certain geographies (e.g. India).
+   */
+  purposeOfPayment?:
+    | 'GIFT'
+    | 'SELF'
+    | 'GOODS_OR_SERVICES'
+    | 'EDUCATION'
+    | 'HEALTH_OR_MEDICAL'
+    | 'REAL_ESTATE_PURCHASE'
+    | 'TAX_PAYMENT'
+    | 'LOAN_PAYMENT'
+    | 'UTILITY_BILL'
+    | 'DONATION'
+    | 'TRAVEL'
+    | 'FAMILY_SUPPORT'
+    | 'SALARY_PAYMENT'
+    | 'OTHER';
+
+  /**
    * Body param: Free-form information about the payment that travels with it to the
    * recipient. The field this populates depends on the payment rail: for ACH it
    * populates the Addenda record, for FedNow and RTP it populates the

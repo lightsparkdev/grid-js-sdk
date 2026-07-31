@@ -1864,6 +1864,38 @@ export interface UsdExternalAccountCreateInfo {
    * The ABA routing number
    */
   routingNumber: string;
+
+  /**
+   * Whether the account is a checking or a savings account. Optional on every rail;
+   * when omitted, the account is treated as a checking account.
+   */
+  bankAccountType?: 'CHECKING' | 'SAVINGS';
+
+  /**
+   * The name of the financial institution holding the account. Optional on every
+   * rail, and recommended for wires, where it identifies the beneficiary's
+   * institution on the payment message.
+   */
+  bankName?: string;
+
+  /**
+   * Bank-to-bank instructions carried alongside the payment. Used on the WIRE rail;
+   * ignored on ACH, RTP and FEDNOW.
+   */
+  fiToFiInformation?: string;
+
+  /**
+   * The name of the intermediary financial institution, for accounts reachable only
+   * through a correspondent bank. Used on the WIRE rail; ignored on ACH, RTP and
+   * FEDNOW.
+   */
+  intermediaryBankName?: string;
+
+  /**
+   * The ABA routing number of the intermediary financial institution. Used on the
+   * WIRE rail; ignored on ACH, RTP and FEDNOW.
+   */
+  intermediaryRoutingNumber?: string;
 }
 
 export interface VerificationError {

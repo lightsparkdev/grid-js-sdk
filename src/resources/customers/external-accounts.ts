@@ -24,6 +24,8 @@ export class ExternalAccounts extends APIResource {
    *       accountType: 'USD_ACCOUNT',
    *       accountNumber: '12345678901',
    *       routingNumber: '123456789',
+   *       bankAccountType: 'CHECKING',
+   *       bankName: 'Chase Bank',
    *       beneficiary: {
    *         beneficiaryType: 'INDIVIDUAL',
    *         fullName: 'John Doe',
