@@ -299,10 +299,9 @@ export namespace PlatformConfig {
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
-     * Fixed fee charged per transaction, denominated in the smallest unit of the fee
-     * config's `sourceCurrency` (e.g., cents for USD).
+     * Fixed fee charged per transaction.
      */
-    fixedFee: number;
+    fixedFee: FeeConfig.FixedFee;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -315,6 +314,26 @@ export namespace PlatformConfig {
      * source-currency amount.
      */
     variableFeeBps: number;
+  }
+
+  export namespace FeeConfig {
+    /**
+     * Fixed fee charged per transaction.
+     */
+    export interface FixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
   }
 }
 
@@ -447,10 +466,9 @@ export namespace PlatformConfigUpdateRequest {
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
-     * Fixed fee charged per transaction, denominated in the smallest unit of the fee
-     * config's `sourceCurrency` (e.g., cents for USD).
+     * Fixed fee charged per transaction.
      */
-    fixedFee: number;
+    fixedFee: FeeConfig.FixedFee;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -463,6 +481,26 @@ export namespace PlatformConfigUpdateRequest {
      * source-currency amount.
      */
     variableFeeBps: number;
+  }
+
+  export namespace FeeConfig {
+    /**
+     * Fixed fee charged per transaction.
+     */
+    export interface FixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
   }
 }
 
@@ -640,10 +678,9 @@ export namespace ConfigUpdateParams {
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
-     * Fixed fee charged per transaction, denominated in the smallest unit of the fee
-     * config's `sourceCurrency` (e.g., cents for USD).
+     * Fixed fee charged per transaction.
      */
-    fixedFee: number;
+    fixedFee: FeeConfig.FixedFee;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -656,6 +693,26 @@ export namespace ConfigUpdateParams {
      * source-currency amount.
      */
     variableFeeBps: number;
+  }
+
+  export namespace FeeConfig {
+    /**
+     * Fixed fee charged per transaction.
+     */
+    export interface FixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
   }
 }
 
