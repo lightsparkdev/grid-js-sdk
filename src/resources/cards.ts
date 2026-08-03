@@ -289,6 +289,16 @@ export interface CardCreateRequest {
    * mirroring `platformCustomerId` semantics.
    */
   platformCardId?: string;
+
+  /**
+   * Optional static password used as the card's 3-D Secure factor. Only accepted for
+   * card programs whose issuer supports a static-password factor (EU cards today);
+   * supplying it for a program that does not is rejected with `INVALID_INPUT`. When
+   * omitted, one is generated on the cardholder's behalf. Grid does not retain the
+   * value: it is forwarded to the issuer and discarded, so it cannot be read back
+   * afterwards.
+   */
+  threeDSecurePassword?: string;
 }
 
 export interface CardListResponse {
@@ -536,6 +546,16 @@ export interface CardIssueParams {
    * mirroring `platformCustomerId` semantics.
    */
   platformCardId?: string;
+
+  /**
+   * Optional static password used as the card's 3-D Secure factor. Only accepted for
+   * card programs whose issuer supports a static-password factor (EU cards today);
+   * supplying it for a program that does not is rejected with `INVALID_INPUT`. When
+   * omitted, one is generated on the cardholder's behalf. Grid does not retain the
+   * value: it is forwarded to the issuer and discarded, so it cannot be read back
+   * afterwards.
+   */
+  threeDSecurePassword?: string;
 }
 
 export declare namespace Cards {
