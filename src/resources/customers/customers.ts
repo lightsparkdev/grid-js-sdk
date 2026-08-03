@@ -410,12 +410,10 @@ export interface BusinessCustomerCreateRequest {
   address?: ExternalAccountsAPI.Address;
 
   /**
-   * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
-   * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
-   * use more than one sending currency, since the correct currencies cannot always
-   * be inferred. If not provided, currencies will be inferred from the customer's
-   * region. Some currency combinations may require separate customers — if so, the
-   * request will be rejected with details.
+   * Currency codes the customer will use — ISO 4217 for fiat, tickers for crypto
+   * (e.g. "USDC"). Optional — send them if your platform supports more than one
+   * currency, so we know which ones this customer needs. Some combinations require
+   * separate customers.
    */
   currencies?: Array<string>;
 
@@ -445,11 +443,9 @@ export interface BusinessCustomerCreateRequest {
   platformCustomerId?: string;
 
   /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
-   * This determines the regulatory jurisdiction and KYC requirements for the
-   * customer. Required if the customer will use currencies with different KYC
-   * requirements across regions. A customer with accounts in multiple regions should
-   * be registered as separate customers. This field is immutable after creation.
+   * Country code (ISO 3166-1 alpha-2) for the customer's region. Optional — send it
+   * only when the same currency is offered in more than one of your regions, to pick
+   * the one that applies to this customer.
    */
   region?: string;
 
@@ -1005,12 +1001,10 @@ export interface IndividualCustomerCreateRequest {
   birthDate?: string;
 
   /**
-   * List of currency codes the customer will use (ISO 4217 for fiat, e.g. "USD",
-   * "EUR"; tickers for crypto, e.g. "BTC", "USDC"). Required if the customer will
-   * use more than one sending currency, since the correct currencies cannot always
-   * be inferred. If not provided, currencies will be inferred from the customer's
-   * region. Some currency combinations may require separate customers — if so, the
-   * request will be rejected with details.
+   * Currency codes the customer will use — ISO 4217 for fiat, tickers for crypto
+   * (e.g. "USDC"). Optional — send them if your platform supports more than one
+   * currency, so we know which ones this customer needs. Some combinations require
+   * separate customers.
    */
   currencies?: Array<string>;
 
@@ -1118,11 +1112,9 @@ export interface IndividualCustomerCreateRequest {
   purposeOfAccountOtherDescription?: string;
 
   /**
-   * Country code (ISO 3166-1 alpha-2) representing the customer's regional identity.
-   * This determines the regulatory jurisdiction and KYC requirements for the
-   * customer. Required if the customer will use currencies with different KYC
-   * requirements across regions. A customer with accounts in multiple regions should
-   * be registered as separate customers. This field is immutable after creation.
+   * Country code (ISO 3166-1 alpha-2) for the customer's region. Optional — send it
+   * only when the same currency is offered in more than one of your regions, to pick
+   * the one that applies to this customer.
    */
   region?: string;
 
