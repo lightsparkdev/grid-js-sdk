@@ -71,6 +71,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/internal-accounts',
   },
   {
+    clientCallName: 'client.customers.retrieveEndUserTerms',
+    fullyQualifiedName: 'customers.retrieveEndUserTerms',
+    httpMethod: 'get',
+    httpPath: '/customers/end-user-terms',
+  },
+  {
     clientCallName: 'client.customers.updateInternalAccount',
     fullyQualifiedName: 'customers.updateInternalAccount',
     httpMethod: 'patch',

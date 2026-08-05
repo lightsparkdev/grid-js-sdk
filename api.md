@@ -97,6 +97,9 @@ Types:
 - <code><a href="./src/resources/customers/customers.ts">CustomerListResponse</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdateRequestOneOf</a></code>
+- <code><a href="./src/resources/customers/customers.ts">EndUserTerms</a></code>
+- <code><a href="./src/resources/customers/customers.ts">EndUserTermsConsent</a></code>
+- <code><a href="./src/resources/customers/customers.ts">EndUserTermsConsentRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerCreateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerUpdateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
@@ -116,6 +119,7 @@ Methods:
 - <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">createKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
 - <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> InternalAccountExportResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
+- <code title="get /customers/end-user-terms">client.customers.<a href="./src/resources/customers/customers.ts">retrieveEndUserTerms</a>() -> EndUserTerms</code>
 - <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>
 
 ## ExternalAccounts

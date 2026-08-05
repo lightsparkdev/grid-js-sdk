@@ -117,6 +117,7 @@ const fuse = new Fuse(
     'client.customers.list',
     'client.customers.listInternalAccounts',
     'client.customers.retrieve',
+    'client.customers.retrieveEndUserTerms',
     'client.customers.update',
     'client.customers.updateInternalAccount',
     'client.customers.externalAccounts.create',

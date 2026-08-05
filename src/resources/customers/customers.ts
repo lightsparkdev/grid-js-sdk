@@ -347,6 +347,19 @@ export class Customers extends APIResource {
   }
 
   /**
+   * Retrieve the current version and Grid-hosted URL of the End User Terms.
+   *
+   * @example
+   * ```ts
+   * const endUserTerms =
+   *   await client.customers.retrieveEndUserTerms();
+   * ```
+   */
+  retrieveEndUserTerms(options?: RequestOptions): APIPromise<EndUserTerms> {
+    return this._client.get('/customers/end-user-terms', { ...options, __security: { basicAuth: true } });
+  }
+
+  /**
    * Update mutable fields on an internal account. Today this supports updating the
    * wallet privacy setting for an Embedded Wallet internal account.
    *
@@ -422,6 +435,14 @@ export interface BusinessCustomerCreateRequest {
    * address before identity verification** (e.g. the EU); optional otherwise.
    */
   email?: string;
+
+  /**
+   * Evidence that the customer accepted the Grid End User Terms. Unregulated
+   * platforms must provide this before initiating customer-scoped transactions;
+   * those transactions fail until consent is recorded. This can be supplied during
+   * customer creation or in a later customer update.
+   */
+  endUserTermsConsent?: EndUserTermsConsentRequest;
 
   /**
    * The current KYB status of a business customer. `HOLD` means the customer is
@@ -652,6 +673,13 @@ export interface BusinessCustomerUpdateRequest {
   email?: string;
 
   /**
+   * Evidence that the customer accepted the Grid End User Terms. Unregulated
+   * platforms must provide this before initiating customer-scoped transactions;
+   * those transactions fail until consent is recorded.
+   */
+  endUserTermsConsent?: EndUserTermsConsentRequest;
+
+  /**
    * The current KYB status of a business customer. `HOLD` means the customer is
    * placed on hold and may be required to update or provide more information.
    */
@@ -879,6 +907,12 @@ export interface Customer {
   email?: string;
 
   /**
+   * The customer's recorded acceptance of the End User Terms. Omitted until
+   * acceptance has been recorded.
+   */
+  endUserTermsConsent?: EndUserTermsConsentRequest;
+
+  /**
    * Whether the customer is marked as deleted
    */
   isDeleted?: boolean;
@@ -975,6 +1009,62 @@ export type CustomerOneOf = Shared.IndividualCustomer | Shared.BusinessCustomer;
  */
 export type CustomerUpdateRequestOneOf = IndividualCustomerUpdateRequest | BusinessCustomerUpdateRequest;
 
+export interface EndUserTerms {
+  /**
+   * URL where Grid hosts this version of the End User Terms.
+   */
+  url: string;
+
+  /**
+   * Current version identifier of the Grid End User Terms.
+   */
+  version: string;
+}
+
+export interface EndUserTermsConsent {
+  /**
+   * Method the customer used to affirmatively accept the End User Terms.
+   */
+  acceptanceMethod: 'CHECKBOX' | 'CLICK_TO_ACCEPT';
+
+  /**
+   * Date and time when the customer accepted the End User Terms.
+   */
+  acceptedAt: string;
+
+  /**
+   * IP address of the device the customer used when accepting the terms.
+   */
+  ipAddress: string;
+
+  /**
+   * Version identifier of the accepted Grid End User Terms.
+   */
+  termsVersion: string;
+}
+
+export interface EndUserTermsConsentRequest {
+  /**
+   * Method the customer used to affirmatively accept the End User Terms.
+   */
+  acceptanceMethod: 'CHECKBOX' | 'CLICK_TO_ACCEPT';
+
+  /**
+   * Date and time when the customer accepted the End User Terms.
+   */
+  acceptedAt: string;
+
+  /**
+   * IP address of the device the customer used when accepting the terms.
+   */
+  ipAddress: string;
+
+  /**
+   * Version identifier of the accepted Grid End User Terms.
+   */
+  termsVersion: string;
+}
+
 /**
  * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
  * on an individual customer. Referenced via `allOf` from
@@ -1013,6 +1103,14 @@ export interface IndividualCustomerCreateRequest {
    * address before identity verification** (e.g. the EU); optional otherwise.
    */
   email?: string;
+
+  /**
+   * Evidence that the customer accepted the Grid End User Terms. Unregulated
+   * platforms must provide this before initiating customer-scoped transactions;
+   * those transactions fail until consent is recorded. This can be supplied during
+   * customer creation or in a later customer update.
+   */
+  endUserTermsConsent?: EndUserTermsConsentRequest;
 
   /**
    * Expected number of transactions per month
@@ -1229,6 +1327,13 @@ export interface IndividualCustomerUpdateRequest {
    * across all tied Embedded Wallets.
    */
   email?: string;
+
+  /**
+   * Evidence that the customer accepted the Grid End User Terms. Unregulated
+   * platforms must provide this before initiating customer-scoped transactions;
+   * those transactions fail until consent is recorded.
+   */
+  endUserTermsConsent?: EndUserTermsConsentRequest;
 
   /**
    * Expected number of transactions per month
@@ -1709,6 +1814,9 @@ export declare namespace Customers {
     type CustomerListResponse as CustomerListResponse,
     type CustomerOneOf as CustomerOneOf,
     type CustomerUpdateRequestOneOf as CustomerUpdateRequestOneOf,
+    type EndUserTerms as EndUserTerms,
+    type EndUserTermsConsent as EndUserTermsConsent,
+    type EndUserTermsConsentRequest as EndUserTermsConsentRequest,
     type IndividualCustomerCreateRequest as IndividualCustomerCreateRequest,
     type IndividualCustomerUpdateRequest as IndividualCustomerUpdateRequest,
     type InternalAccountExportRequest as InternalAccountExportRequest,

@@ -42,6 +42,12 @@ describe('resource customers', () => {
         birthDate: '1990-01-15',
         currencies: ['USD', 'USDC'],
         email: 'john.doe@example.com',
+        endUserTermsConsent: {
+          acceptanceMethod: 'CHECKBOX',
+          acceptedAt: '2019-12-27T18:11:19.117Z',
+          ipAddress: '198.51.100.24',
+          termsVersion: 'V1',
+        },
         expectedMonthlyTransactionCount: 'COUNT_100_TO_500',
         expectedMonthlyTransactionVolume: 'VOLUME_100K_TO_1M',
         fullName: 'John Michael Doe',
@@ -111,6 +117,12 @@ describe('resource customers', () => {
         birthDate: '1990-01-15',
         currencies: ['USD', 'EUR', 'USDC'],
         email: 'john.doe@example.com',
+        endUserTermsConsent: {
+          acceptanceMethod: 'CHECKBOX',
+          acceptedAt: '2019-12-27T18:11:19.117Z',
+          ipAddress: '198.51.100.24',
+          termsVersion: 'V1',
+        },
         expectedMonthlyTransactionCount: 'COUNT_100_TO_500',
         expectedMonthlyTransactionVolume: 'VOLUME_100K_TO_1M',
         fullName: 'John Michael Doe',
@@ -264,6 +276,18 @@ describe('resource customers', () => {
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieveEndUserTerms', async () => {
+    const responsePromise = client.customers.retrieveEndUserTerms();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled
