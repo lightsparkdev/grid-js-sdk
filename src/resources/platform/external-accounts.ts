@@ -693,6 +693,12 @@ export interface PlatformExternalAccountCreateRequest {
   currency: string;
 
   /**
+   * Whether the external account belongs to the customer themselves (first party) or
+   * to someone else (third party)
+   */
+  ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
+
+  /**
    * Your platform's identifier for the account in your system. This can be used to
    * reference the account by your own identifier.
    */
@@ -1051,6 +1057,12 @@ export interface ExternalAccountCreateParams {
    * The ISO 4217 currency code
    */
   currency: string;
+
+  /**
+   * Whether the external account belongs to the customer themselves (first party) or
+   * to someone else (third party)
+   */
+  ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 
   /**
    * Your platform's identifier for the account in your system. This can be used to

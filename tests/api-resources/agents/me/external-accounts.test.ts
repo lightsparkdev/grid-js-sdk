@@ -117,6 +117,7 @@ describe('resource externalAccounts', () => {
       currency: 'USD',
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       defaultUmaDepositAccount: true,
+      ownershipType: 'FIRST_PARTY',
       platformAccountId: 'ext_acc_123456',
     });
   });

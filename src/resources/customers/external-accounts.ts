@@ -366,6 +366,12 @@ export interface ExternalAccount {
   defaultUmaDepositAccount?: boolean;
 
   /**
+   * Whether the external account belongs to the customer themselves (first party) or
+   * to someone else (third party)
+   */
+  ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
+
+  /**
    * Optional platform-specific identifier for this account
    */
   platformAccountId?: string;
@@ -440,6 +446,12 @@ export interface ExternalAccountCreate {
    * account for the customer.
    */
   defaultUmaDepositAccount?: boolean;
+
+  /**
+   * Whether the external account belongs to the customer themselves (first party) or
+   * to someone else (third party)
+   */
+  ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 
   /**
    * Your platform's identifier for the account in your system. This can be used to
@@ -1238,6 +1250,12 @@ export interface ExternalAccountCreateParams {
    * account for the customer.
    */
   defaultUmaDepositAccount?: boolean;
+
+  /**
+   * Whether the external account belongs to the customer themselves (first party) or
+   * to someone else (third party)
+   */
+  ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 
   /**
    * Your platform's identifier for the account in your system. This can be used to

@@ -64,6 +64,7 @@ describe('resource externalAccounts', () => {
         swiftCode: 'EBILAEAD',
       },
       currency: 'USD',
+      ownershipType: 'FIRST_PARTY',
       platformAccountId: 'ext_acc_123456',
     });
   });

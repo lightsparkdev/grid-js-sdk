@@ -209,6 +209,12 @@ export interface ExternalAccountAddParams {
   defaultUmaDepositAccount?: boolean;
 
   /**
+   * Whether the external account belongs to the customer themselves (first party) or
+   * to someone else (third party)
+   */
+  ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
+
+  /**
    * Your platform's identifier for the account in your system. This can be used to
    * reference the account by your own identifier.
    */
