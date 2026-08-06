@@ -594,6 +594,19 @@ export namespace BusinessCustomerCreateRequest {
     naicsCode?: string;
 
     /**
+     * First name of the business's primary contact — a registered director or
+     * authorised representative of the business. Required in regions where a named
+     * individual is verified against the business during onboarding (e.g. the EU). The
+     * customer's `email` and `phoneNumber` are this person's contact details.
+     */
+    primaryContactFirstName?: string;
+
+    /**
+     * Last name of the business's primary contact.
+     */
+    primaryContactLastName?: string;
+
+    /**
      * The intended purpose for using the Grid account
      */
     purposeOfAccount?:
@@ -807,6 +820,19 @@ export namespace BusinessCustomerUpdateRequest {
      * NAICS code describing the nature of the business (2-6 digits)
      */
     naicsCode?: string;
+
+    /**
+     * First name of the business's primary contact — a registered director or
+     * authorised representative of the business. Required in regions where a named
+     * individual is verified against the business during onboarding (e.g. the EU). The
+     * customer's `email` and `phoneNumber` are this person's contact details.
+     */
+    primaryContactFirstName?: string;
+
+    /**
+     * Last name of the business's primary contact.
+     */
+    primaryContactLastName?: string;
 
     /**
      * The intended purpose for using the Grid account
