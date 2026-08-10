@@ -153,6 +153,14 @@ export interface QuoteCreateParams {
   lookupId?: string;
 
   /**
+   * Body param: Overrides the platform-collected fee for this transaction. When
+   * present, it replaces any configured platform-collected fees that would otherwise
+   * apply to the transaction. Currently only supported when the quote's source
+   * currency is USD; the fixed fee must be denominated in the source currency.
+   */
+  platformFeeOverride?: QuoteCreateParams.PlatformFeeOverride;
+
+  /**
    * Body param: The purpose of the payment. This may be required when sending to
    * certain geographies (e.g. India).
    */
@@ -208,6 +216,49 @@ export interface QuoteCreateParams {
    * multiple times, the server will return the same response as the first request.
    */
   'Idempotency-Key'?: string;
+}
+
+export namespace QuoteCreateParams {
+  /**
+   * Overrides the platform-collected fee for this transaction. When present, it
+   * replaces any configured platform-collected fees that would otherwise apply to
+   * the transaction. Currently only supported when the quote's source currency is
+   * USD; the fixed fee must be denominated in the source currency.
+   */
+  export interface PlatformFeeOverride {
+    /**
+     * Fixed fee charged for this transaction. Must be denominated in the quote's
+     * source currency (USD today).
+     */
+    platformFixedFee: PlatformFeeOverride.PlatformFixedFee;
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to the transaction's
+     * source-currency amount.
+     */
+    platformVariableFeeBps: number;
+  }
+
+  export namespace PlatformFeeOverride {
+    /**
+     * Fixed fee charged for this transaction. Must be denominated in the quote's
+     * source currency (USD today).
+     */
+    export interface PlatformFixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
+  }
 }
 
 export interface QuoteExecuteParams {

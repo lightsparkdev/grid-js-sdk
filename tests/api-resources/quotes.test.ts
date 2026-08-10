@@ -38,6 +38,10 @@ describe('resource quotes', () => {
       description: 'Invoice #1234 payment',
       immediatelyExecute: false,
       lookupId: 'Lookup:019542f5-b3e7-1d02-0000-000000000009',
+      platformFeeOverride: {
+        platformFixedFee: { amount: 50, currency: 'USD' },
+        platformVariableFeeBps: 30,
+      },
       purposeOfPayment: 'GIFT',
       remittanceInformation: '12345',
       scaFactor: 'SMS_OTP',
