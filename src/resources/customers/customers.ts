@@ -486,6 +486,11 @@ export namespace BusinessCustomerCreateRequest {
    */
   export interface BusinessInfo {
     /**
+     * Country of incorporation or registration (ISO 3166-1 alpha-2)
+     */
+    country: string;
+
+    /**
      * Date of incorporation in ISO 8601 format (YYYY-MM-DD)
      */
     incorporatedOn: string;
@@ -529,11 +534,6 @@ export namespace BusinessCustomerCreateRequest {
      * List of countries where the business operates (ISO 3166-1 alpha-2)
      */
     countriesOfOperation?: Array<string>;
-
-    /**
-     * Country of incorporation or registration (ISO 3166-1 alpha-2)
-     */
-    country?: string;
 
     /**
      * Trade name or DBA name of the business, if different from the legal name
