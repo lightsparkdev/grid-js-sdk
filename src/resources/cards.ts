@@ -5,7 +5,6 @@ import * as InvitationsAPI from './invitations';
 import * as SimulateAPI from './sandbox/cards/simulate';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
-import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -40,18 +39,16 @@ export class Cards extends APIResource {
    *   card's currency; the list must contain at least one source. `fundingSources`
    *   cannot be supplied alongside `state: CLOSED`.
    *
-   * Because both updates are sensitive state changes, this endpoint uses Grid's 202
-   * → signed-retry pattern (same shape as `DELETE /auth/credentials/{id}` and
-   * `POST /internal-accounts/{id}/export`):
-   *
-   * 1. Call `PATCH /cards/{id}` with the target fields and no signing headers. The
-   *    response is `202` with a `payloadToSign`, `requestId`, and `expiresAt`.
-   *
-   * 2. Sign the `payloadToSign` with the session private key of a verified
-   *    authentication credential on the card's owning internal account and retry
-   *    with the signature as the `Grid-Wallet-Signature` header and the `requestId`
-   *    echoed back as the `Request-Id` header. The signed retry returns `200` with
-   *    the updated `Card`.
+   * This endpoint is authenticated by the platform credential alone and returns
+   * `200` directly. It deliberately does not use Grid's 202 → signed-retry pattern:
+   * that pattern signs with the session key of a credential on the owning internal
+   * account, so it models actions taken _by_ the end user on their own credentials
+   * or funds. Freezing or closing a card is routinely an action taken _about_ a user
+   * and without them present - fraud response, offboarding, an ops-driven freeze -
+   * and requiring the cardholder's signature would make exactly those cases
+   * impossible. Operations that expose sensitive card data
+   * (`POST /cards/{id}/reveal`, 3DS password retrieval) are SCA-railed instead,
+   * because there the cardholder is the party being served.
    *
    * Effects:
    *
@@ -81,20 +78,8 @@ export class Cards extends APIResource {
    * });
    * ```
    */
-  update(id: string, params: CardUpdateParams, options?: RequestOptions): APIPromise<Card> {
-    const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
-    return this._client.patch(path`/cards/${id}`, {
-      body,
-      ...options,
-      headers: buildHeaders([
-        {
-          ...(gridWalletSignature != null ? { 'Grid-Wallet-Signature': gridWalletSignature } : undefined),
-          ...(requestID != null ? { 'Request-Id': requestID } : undefined),
-        },
-        options?.headers,
-      ]),
-      __security: { basicAuth: true },
-    });
+  update(id: string, body: CardUpdateParams, options?: RequestOptions): APIPromise<Card> {
+    return this._client.patch(path`/cards/${id}`, { body, ...options, __security: { basicAuth: true } });
   }
 
   /**
@@ -453,36 +438,21 @@ export interface CardUpdateRequest {
 
 export interface CardUpdateParams {
   /**
-   * Body param: New ordered list of internal account ids to bind as funding sources.
-   * Fully replaces the previous binding. Each id must belong to the cardholder and
-   * be denominated in the card's currency. The list must contain at least one source
-   * — to stop a card from spending without removing all sources, transition it to
+   * New ordered list of internal account ids to bind as funding sources. Fully
+   * replaces the previous binding. Each id must belong to the cardholder and be
+   * denominated in the card's currency. The list must contain at least one source —
+   * to stop a card from spending without removing all sources, transition it to
    * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
    */
   fundingSources?: Array<string>;
 
   /**
-   * Body param: Target state for the card. Permitted transitions are
-   * `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and
-   * irreversible; once closed, the card stays in the system for audit and
-   * reconciliation but cannot transact again.
+   * Target state for the card. Permitted transitions are `ACTIVE ⇄ FROZEN` and
+   * `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible; once closed,
+   * the card stays in the system for audit and reconciliation but cannot transact
+   * again.
    */
   state?: 'ACTIVE' | 'FROZEN' | 'CLOSED';
-
-  /**
-   * Header param: Signature over the `payloadToSign` returned in a prior `202`
-   * response, produced with the session private key of a verified authentication
-   * credential on the card's owning internal account and base64-encoded. Required on
-   * the signed retry; ignored on the initial call.
-   */
-  'Grid-Wallet-Signature'?: string;
-
-  /**
-   * Header param: The `requestId` returned in a prior `202` response, echoed back on
-   * the signed retry so the server can correlate it with the issued challenge.
-   * Required on the signed retry; must be paired with `Grid-Wallet-Signature`.
-   */
-  'Request-Id'?: string;
 }
 
 export interface CardListParams extends DefaultPaginationParams {
