@@ -119,4 +119,47 @@ describe('resource externalAccounts', () => {
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
   });
+
+  // Mock server tests are disabled
+  test.skip('challenge: only required params', async () => {
+    const responsePromise = client.platform.externalAccounts.challenge('externalAccountId', {
+      method: 'WALLET_SIGNATURE',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('challenge: required and optional params', async () => {
+    const response = await client.platform.externalAccounts.challenge('externalAccountId', {
+      method: 'WALLET_SIGNATURE',
+    });
+  });
+
+  // Mock server tests are disabled
+  test.skip('verify: only required params', async () => {
+    const responsePromise = client.platform.externalAccounts.verify('externalAccountId', {
+      signature: '0x52d75f01c9e7b8b2ce2fbcbd21bfeeee7bcd1a2f01ce6b8ad9a67a45e83a8f5d1c',
+    });
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('verify: required and optional params', async () => {
+    const response = await client.platform.externalAccounts.verify('externalAccountId', {
+      signature: '0x52d75f01c9e7b8b2ce2fbcbd21bfeeee7bcd1a2f01ce6b8ad9a67a45e83a8f5d1c',
+      signatureScheme: 'bip137',
+    });
+  });
 });

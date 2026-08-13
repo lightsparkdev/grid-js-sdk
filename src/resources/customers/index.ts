@@ -76,6 +76,10 @@ export {
   type MyrBeneficiary,
   type MyrExternalAccountInfo,
   type NgnExternalAccountInfo,
+  type OwnershipChallenge,
+  type OwnershipChallengeRequest,
+  type OwnershipVerificationMethod,
+  type OwnershipVerifyRequest,
   type PhpBeneficiary,
   type PhpExternalAccountInfo,
   type PkrExternalAccountInfo,
@@ -101,5 +105,7 @@ export {
   type ZmwExternalAccountInfo,
   type ExternalAccountCreateParams,
   type ExternalAccountListParams,
+  type ExternalAccountChallengeParams,
+  type ExternalAccountVerifyParams,
   type ExternalAccountsDefaultPagination,
 } from './external-accounts';

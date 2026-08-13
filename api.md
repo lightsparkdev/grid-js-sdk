@@ -165,6 +165,10 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">MyrBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">MyrExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">NgnExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">OwnershipChallenge</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">OwnershipChallengeRequest</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">OwnershipVerificationMethod</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">OwnershipVerifyRequest</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PhpBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PhpExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">PkrExternalAccountInfo</a></code>
@@ -195,6 +199,8 @@ Methods:
 - <code title="get /customers/external-accounts/{externalAccountId}">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
 - <code title="get /customers/external-accounts">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
 - <code title="delete /customers/external-accounts/{externalAccountId}">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
+- <code title="post /customers/external-accounts/{externalAccountId}/challenge">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">challenge</a>(externalAccountID, { ...params }) -> OwnershipChallenge</code>
+- <code title="post /customers/external-accounts/{externalAccountId}/verify">client.customers.externalAccounts.<a href="./src/resources/customers/external-accounts.ts">verify</a>(externalAccountID, { ...params }) -> ExternalAccount</code>
 
 ## Bulk
 
@@ -265,6 +271,8 @@ Methods:
 - <code title="get /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">retrieve</a>(externalAccountID) -> ExternalAccount</code>
 - <code title="get /platform/external-accounts">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">list</a>({ ...params }) -> ExternalAccountsDefaultPagination</code>
 - <code title="delete /platform/external-accounts/{externalAccountId}">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">delete</a>(externalAccountID) -> void</code>
+- <code title="post /platform/external-accounts/{externalAccountId}/challenge">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">challenge</a>(externalAccountID, { ...params }) -> OwnershipChallenge</code>
+- <code title="post /platform/external-accounts/{externalAccountId}/verify">client.platform.externalAccounts.<a href="./src/resources/platform/external-accounts.ts">verify</a>(externalAccountID, { ...params }) -> ExternalAccount</code>
 
 # TransferIn
 
@@ -478,6 +486,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">InvitationClaimedWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CustomerUpdateWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">InternalAccountStatusWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">ExternalAccountStatusWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">VerificationUpdateWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CardStateChangeWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CardFundingSourceChangeWebhookEvent</a></code>

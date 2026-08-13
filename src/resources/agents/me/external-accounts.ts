@@ -209,8 +209,12 @@ export interface ExternalAccountAddParams {
   defaultUmaDepositAccount?: boolean;
 
   /**
-   * Whether the external account belongs to the customer themselves (first party) or
-   * to someone else (third party)
+   * Whether the external account belongs to the customer themselves (`FIRST_PARTY`)
+   * or to someone else (`THIRD_PARTY`). Required when creating self-custody crypto
+   * wallet external accounts on platforms subject to counterparty requirements — for
+   * example, under the EU Travel Rule or similar requirements in other regions;
+   * recommended for all other accounts, where providing it can unlock additional
+   * capabilities and smoother compliance handling.
    */
   ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 

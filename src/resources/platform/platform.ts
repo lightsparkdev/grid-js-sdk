@@ -12,8 +12,10 @@ import {
   DkkAccountInfo,
   EgpAccountInfo,
   EurAccountInfo,
+  ExternalAccountChallengeParams,
   ExternalAccountCreateParams,
   ExternalAccountListParams,
+  ExternalAccountVerifyParams,
   ExternalAccounts,
   GbpAccountInfo,
   GhsAccountInfo,
@@ -150,5 +152,7 @@ export declare namespace Platform {
     type ZmwAccountInfo as ZmwAccountInfo,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
+    type ExternalAccountChallengeParams as ExternalAccountChallengeParams,
+    type ExternalAccountVerifyParams as ExternalAccountVerifyParams,
   };
 }

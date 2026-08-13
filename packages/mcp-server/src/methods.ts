@@ -107,6 +107,18 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/customers/external-accounts/{externalAccountId}',
   },
   {
+    clientCallName: 'client.customers.externalAccounts.challenge',
+    fullyQualifiedName: 'customers.externalAccounts.challenge',
+    httpMethod: 'post',
+    httpPath: '/customers/external-accounts/{externalAccountId}/challenge',
+  },
+  {
+    clientCallName: 'client.customers.externalAccounts.verify',
+    fullyQualifiedName: 'customers.externalAccounts.verify',
+    httpMethod: 'post',
+    httpPath: '/customers/external-accounts/{externalAccountId}/verify',
+  },
+  {
     clientCallName: 'client.customers.bulk.getJobStatus',
     fullyQualifiedName: 'customers.bulk.getJobStatus',
     httpMethod: 'get',
@@ -147,6 +159,18 @@ export const sdkMethods: SdkMethod[] = [
     fullyQualifiedName: 'platform.externalAccounts.delete',
     httpMethod: 'delete',
     httpPath: '/platform/external-accounts/{externalAccountId}',
+  },
+  {
+    clientCallName: 'client.platform.externalAccounts.challenge',
+    fullyQualifiedName: 'platform.externalAccounts.challenge',
+    httpMethod: 'post',
+    httpPath: '/platform/external-accounts/{externalAccountId}/challenge',
+  },
+  {
+    clientCallName: 'client.platform.externalAccounts.verify',
+    fullyQualifiedName: 'platform.externalAccounts.verify',
+    httpMethod: 'post',
+    httpPath: '/platform/external-accounts/{externalAccountId}/verify',
   },
   {
     clientCallName: 'client.transferIn.create',

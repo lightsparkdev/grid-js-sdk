@@ -40,6 +40,8 @@ export {
   type ZmwAccountInfo,
   type ExternalAccountCreateParams,
   type ExternalAccountListParams,
+  type ExternalAccountChallengeParams,
+  type ExternalAccountVerifyParams,
 } from './external-accounts';
 export {
   Platform,

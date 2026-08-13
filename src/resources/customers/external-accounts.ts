@@ -119,6 +119,83 @@ export class ExternalAccounts extends APIResource {
       __security: { basicAuth: true },
     });
   }
+
+  /**
+   * Start (or restart) ownership verification for a `FIRST_PARTY` self-custody
+   * crypto wallet external account in `PENDING_OWNERSHIP_VERIFICATION` or
+   * `UNVERIFIED` status. The response carries the method-specific challenge
+   * material:
+   *
+   * - `WALLET_SIGNATURE` — a `messageToSign`; have the wallet sign it exactly and
+   *   submit the result to the verify endpoint to complete verification
+   *   synchronously.
+   * - `LIVENESS` — a hosted `verificationLink` (and possibly an embed `token`); the
+   *   user completes a biometric flow and verification completes asynchronously. The
+   *   outcome is delivered via `EXTERNAL_ACCOUNT.STATUS_UPDATED` webhooks or by
+   *   polling the account.
+   *
+   * Calling this endpoint again abandons any in-flight challenge and issues a new
+   * one with the requested method — use it to retry after a failed attempt, to
+   * replace an expired challenge, or to switch methods. An `UNVERIFIED` account
+   * returns to `PENDING_OWNERSHIP_VERIFICATION` when a new challenge is issued.
+   *
+   * Completing ownership verification moves the account to `ACTIVE`.
+   *
+   * @example
+   * ```ts
+   * const ownershipChallenge =
+   *   await client.customers.externalAccounts.challenge(
+   *     'externalAccountId',
+   *     { method: 'WALLET_SIGNATURE' },
+   *   );
+   * ```
+   */
+  challenge(
+    externalAccountID: string,
+    body: ExternalAccountChallengeParams,
+    options?: RequestOptions,
+  ): APIPromise<OwnershipChallenge> {
+    return this._client.post(path`/customers/external-accounts/${externalAccountID}/challenge`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
+  }
+
+  /**
+   * Complete a `WALLET_SIGNATURE` challenge by submitting the signature the wallet
+   * produced for the challenge's `messageToSign`. The message must be signed exactly
+   * as returned, and the signature must be submitted before the challenge's
+   * `expiresAt` — after expiry, start a new challenge.
+   *
+   * On success the account moves to `ACTIVE`; on an invalid signature it moves to
+   * `UNVERIFIED` (start a new challenge to retry). `LIVENESS` challenges complete
+   * asynchronously and never use this endpoint — their outcome is delivered via
+   * `EXTERNAL_ACCOUNT.STATUS_UPDATED` webhooks or by polling the account.
+   *
+   * @example
+   * ```ts
+   * const externalAccount =
+   *   await client.customers.externalAccounts.verify(
+   *     'externalAccountId',
+   *     {
+   *       signature:
+   *         '0x52d75f01c9e7b8b2ce2fbcbd21bfeeee7bcd1a2f01ce6b8ad9a67a45e83a8f5d1c',
+   *     },
+   *   );
+   * ```
+   */
+  verify(
+    externalAccountID: string,
+    body: ExternalAccountVerifyParams,
+    options?: RequestOptions,
+  ): APIPromise<ExternalAccount> {
+    return this._client.post(path`/customers/external-accounts/${externalAccountID}/verify`, {
+      body,
+      ...options,
+      __security: { basicAuth: true },
+    });
+  }
 }
 
 export type ExternalAccountsDefaultPagination = DefaultPagination<ExternalAccount>;
@@ -330,7 +407,13 @@ export interface ExternalAccount {
   /**
    * Status of the external account
    */
-  status: 'PENDING' | 'ACTIVE' | 'UNDER_REVIEW' | 'INACTIVE';
+  status:
+    | 'PENDING'
+    | 'ACTIVE'
+    | 'PENDING_OWNERSHIP_VERIFICATION'
+    | 'UNVERIFIED'
+    | 'UNDER_REVIEW'
+    | 'INACTIVE';
 
   /**
    * The result of verifying the beneficiary name against the account holder name
@@ -366,8 +449,12 @@ export interface ExternalAccount {
   defaultUmaDepositAccount?: boolean;
 
   /**
-   * Whether the external account belongs to the customer themselves (first party) or
-   * to someone else (third party)
+   * Whether the external account belongs to the customer themselves (`FIRST_PARTY`)
+   * or to someone else (`THIRD_PARTY`). Required when creating self-custody crypto
+   * wallet external accounts on platforms subject to counterparty requirements — for
+   * example, under the EU Travel Rule or similar requirements in other regions;
+   * recommended for all other accounts, where providing it can unlock additional
+   * capabilities and smoother compliance handling.
    */
   ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 
@@ -448,8 +535,12 @@ export interface ExternalAccountCreate {
   defaultUmaDepositAccount?: boolean;
 
   /**
-   * Whether the external account belongs to the customer themselves (first party) or
-   * to someone else (third party)
+   * Whether the external account belongs to the customer themselves (`FIRST_PARTY`)
+   * or to someone else (`THIRD_PARTY`). Required when creating self-custody crypto
+   * wallet external accounts on platforms subject to counterparty requirements — for
+   * example, under the EU Travel Rule or similar requirements in other regions;
+   * recommended for all other accounts, where providing it can unlock additional
+   * capabilities and smoother compliance handling.
    */
   ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 
@@ -959,6 +1050,110 @@ export type MyrExternalAccountInfo = unknown;
 
 export type NgnExternalAccountInfo = unknown;
 
+/**
+ * An ownership verification challenge for a crypto wallet external account. The
+ * shape is determined by the challenge `method`.
+ */
+export type OwnershipChallenge =
+  | OwnershipChallenge.WalletSignatureChallenge
+  | OwnershipChallenge.LivenessChallenge;
+
+export namespace OwnershipChallenge {
+  /**
+   * A challenge to prove ownership of the wallet by signing a message with the
+   * wallet's key.
+   */
+  export interface WalletSignatureChallenge {
+    /**
+     * When this challenge expires. Prompt the user promptly; after expiry, start a new
+     * challenge.
+     */
+    expiresAt: string;
+
+    /**
+     * The exact message the wallet must sign, character-for-character. Submit the
+     * resulting signature via the verify endpoint.
+     */
+    messageToSign: string;
+
+    /**
+     * The verification method. Always `WALLET_SIGNATURE` for this shape.
+     */
+    method: 'WALLET_SIGNATURE';
+  }
+
+  /**
+   * A challenge to prove ownership through a hosted biometric verification flow.
+   * Completes asynchronously — the outcome is delivered via
+   * `EXTERNAL_ACCOUNT.STATUS_UPDATED` webhooks or by polling the external account.
+   */
+  export interface LivenessChallenge {
+    /**
+     * When this challenge expires. Prompt the user promptly; after expiry, start a new
+     * challenge.
+     */
+    expiresAt: string;
+
+    /**
+     * The verification method. Always `LIVENESS` for this shape.
+     */
+    method: 'LIVENESS';
+
+    /**
+     * Hosted verification URL to present to the user.
+     */
+    verificationLink: string;
+
+    /**
+     * Provider-specific token that can be used in place of `verificationLink` — for
+     * example, to embed the provider's SDK directly in your application. Only returned
+     * for providers that support direct SDK integration. Whether to use the hosted URL
+     * or the embedded SDK is up to you; both flows result in the same verification
+     * outcome.
+     */
+    token?: string;
+  }
+}
+
+/**
+ * Starts (or restarts) an ownership verification challenge for a crypto wallet
+ * external account.
+ */
+export interface OwnershipChallengeRequest {
+  /**
+   * The verification method to use for this challenge.
+   */
+  method: OwnershipVerificationMethod;
+}
+
+/**
+ * The method used to verify ownership of a self-custody crypto wallet.
+ *
+ * | Method             | Description                                                            |
+ * | ------------------ | ---------------------------------------------------------------------- |
+ * | `WALLET_SIGNATURE` | Prove control of the wallet by signing a message with the wallet's key |
+ * | `LIVENESS`         | Prove identity via a hosted biometric verification flow                |
+ */
+export type OwnershipVerificationMethod = 'WALLET_SIGNATURE' | 'LIVENESS';
+
+/**
+ * Completes a `WALLET_SIGNATURE` challenge by submitting the signature the wallet
+ * produced for the challenge's `messageToSign`.
+ */
+export interface OwnershipVerifyRequest {
+  /**
+   * The signature produced over the exact `messageToSign` — EIP-191 hex for EVM
+   * chains, base64 for Bitcoin, base58-encoded Ed25519 for Solana.
+   */
+  signature: string;
+
+  /**
+   * Bitcoin message-signing format. Defaults to `bip137`; use `electrum` for
+   * Electrum/Sparrow wallets. Ignored for non-Bitcoin chains.
+   */
+  signatureScheme?: 'bip137' | 'electrum';
+}
+
 export interface PhpBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
@@ -1252,8 +1447,12 @@ export interface ExternalAccountCreateParams {
   defaultUmaDepositAccount?: boolean;
 
   /**
-   * Whether the external account belongs to the customer themselves (first party) or
-   * to someone else (third party)
+   * Whether the external account belongs to the customer themselves (`FIRST_PARTY`)
+   * or to someone else (`THIRD_PARTY`). Required when creating self-custody crypto
+   * wallet external accounts on platforms subject to counterparty requirements — for
+   * example, under the EU Travel Rule or similar requirements in other regions;
+   * recommended for all other accounts, where providing it can unlock additional
+   * capabilities and smoother compliance handling.
    */
   ownershipType?: 'FIRST_PARTY' | 'THIRD_PARTY';
 
@@ -1348,6 +1547,27 @@ export interface ExternalAccountListParams extends DefaultPaginationParams {
   limit?: number;
 }
 
+export interface ExternalAccountChallengeParams {
+  /**
+   * The verification method to use for this challenge.
+   */
+  method: OwnershipVerificationMethod;
+}
+
+export interface ExternalAccountVerifyParams {
+  /**
+   * The signature produced over the exact `messageToSign` — EIP-191 hex for EVM
+   * chains, base64 for Bitcoin, base58-encoded Ed25519 for Solana.
+   */
+  signature: string;
+
+  /**
+   * Bitcoin message-signing format. Defaults to `bip137`; use `electrum` for
+   * Electrum/Sparrow wallets. Ignored for non-Bitcoin chains.
+   */
+  signatureScheme?: 'bip137' | 'electrum';
+}
+
 export declare namespace ExternalAccounts {
   export {
     type Address as Address,
@@ -1389,6 +1609,10 @@ export declare namespace ExternalAccounts {
     type MyrBeneficiary as MyrBeneficiary,
     type MyrExternalAccountInfo as MyrExternalAccountInfo,
     type NgnExternalAccountInfo as NgnExternalAccountInfo,
+    type OwnershipChallenge as OwnershipChallenge,
+    type OwnershipChallengeRequest as OwnershipChallengeRequest,
+    type OwnershipVerificationMethod as OwnershipVerificationMethod,
+    type OwnershipVerifyRequest as OwnershipVerifyRequest,
     type PhpBeneficiary as PhpBeneficiary,
     type PhpExternalAccountInfo as PhpExternalAccountInfo,
     type PkrExternalAccountInfo as PkrExternalAccountInfo,
@@ -1415,5 +1639,7 @@ export declare namespace ExternalAccounts {
     type ExternalAccountsDefaultPagination as ExternalAccountsDefaultPagination,
     type ExternalAccountCreateParams as ExternalAccountCreateParams,
     type ExternalAccountListParams as ExternalAccountListParams,
+    type ExternalAccountChallengeParams as ExternalAccountChallengeParams,
+    type ExternalAccountVerifyParams as ExternalAccountVerifyParams,
   };
 }

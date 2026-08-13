@@ -212,6 +212,7 @@ export {
   type InvitationClaimedWebhookEvent,
   type CustomerUpdateWebhookEvent,
   type InternalAccountStatusWebhookEvent,
+  type ExternalAccountStatusWebhookEvent,
   type VerificationUpdateWebhookEvent,
   type CardStateChangeWebhookEvent,
   type CardFundingSourceChangeWebhookEvent,

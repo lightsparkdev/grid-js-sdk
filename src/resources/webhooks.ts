@@ -9,6 +9,7 @@ import * as TransactionsAPI from './transactions';
 import * as VerificationsAPI from './verifications';
 import * as AgentsAPI from './agents/agents';
 import * as CustomersAPI from './customers/customers';
+import * as ExternalAccountsAPI from './customers/external-accounts';
 import * as InternalAccountsAPI from './sandbox/internal-accounts';
 import * as SandboxWebhooksAPI from './sandbox/webhooks';
 
@@ -227,6 +228,22 @@ export interface InternalAccountStatusWebhookEvent {
   type: 'INTERNAL_ACCOUNT.BALANCE_UPDATED' | 'INTERNAL_ACCOUNT.STATUS_UPDATED';
 }
 
+export interface ExternalAccountStatusWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data: ExternalAccountsAPI.ExternalAccount;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type: 'EXTERNAL_ACCOUNT.STATUS_UPDATED';
+}
+
 export interface VerificationUpdateWebhookEvent {
   /**
    * Unique identifier for this webhook delivery (can be used for idempotency)
@@ -317,6 +334,7 @@ export type UnwrapWebhookEvent =
   | InvitationClaimedWebhookEvent
   | CustomerUpdateWebhookEvent
   | InternalAccountStatusWebhookEvent
+  | ExternalAccountStatusWebhookEvent
   | VerificationUpdateWebhookEvent
   | CardStateChangeWebhookEvent
   | CardFundingSourceChangeWebhookEvent
@@ -331,6 +349,7 @@ export declare namespace Webhooks {
     type InvitationClaimedWebhookEvent as InvitationClaimedWebhookEvent,
     type CustomerUpdateWebhookEvent as CustomerUpdateWebhookEvent,
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
+    type ExternalAccountStatusWebhookEvent as ExternalAccountStatusWebhookEvent,
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
     type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
