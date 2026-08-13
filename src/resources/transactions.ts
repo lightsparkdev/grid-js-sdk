@@ -377,14 +377,15 @@ export interface OutgoingTransaction {
   failureReason?:
     | 'QUOTE_EXPIRED'
     | 'QUOTE_EXECUTION_FAILED'
-    | 'LIGHTNING_PAYMENT_FAILED'
     | 'FUNDING_AMOUNT_MISMATCH'
-    | 'COUNTERPARTY_POST_TX_FAILED'
     | 'SCA_NOT_COMPLETED'
-    | 'EXECUTION_FAILED_POST_DEBIT'
-    | 'SETTLEMENT_FAILED'
-    | 'TIMEOUT'
-    | 'MANUAL_REFUND';
+    | 'PAYOUT_RETURNED'
+    | 'LIMIT_EXCEEDED'
+    | 'ACCOUNT_CANNOT_RECEIVE'
+    | 'ACCOUNT_INVALID'
+    | 'COMPLIANCE_REJECTED'
+    | 'LIGHTNING_PAYMENT_FAILED'
+    | 'COUNTERPARTY_POST_TX_FAILED';
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency
