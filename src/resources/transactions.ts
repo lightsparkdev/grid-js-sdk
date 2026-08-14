@@ -242,13 +242,24 @@ export interface IncomingTransaction {
     | 'OFFRAMP_FAILED'
     | 'MISSING_MANDATORY_PAYEE_DATA'
     | 'QUOTE_EXPIRED'
-    | 'QUOTE_EXECUTION_FAILED';
+    | 'QUOTE_EXECUTION_FAILED'
+    | 'COMPLIANCE_REJECTED';
 
   /**
    * The total fees available from the receive quote in the smallest unit of the
    * sending currency (eg. cents).
    */
   fees?: number;
+
+  /**
+   * Present when compliance review or required customer action is delaying
+   * settlement.
+   */
+  pendingReason?:
+    | 'COUNTERPARTY_DECLARATION_REQUIRED'
+    | 'WALLET_VERIFICATION_REQUIRED'
+    | 'COUNTERPARTY_INFORMATION_REQUIRED'
+    | 'COMPLIANCE_REVIEW';
 
   /**
    * The ID of the quote that was used to trigger this payment
@@ -429,6 +440,16 @@ export interface OutgoingTransaction {
     | 'UPI'
     | 'WIRE'
     | null;
+
+  /**
+   * Present when compliance review or required customer action is delaying
+   * settlement.
+   */
+  pendingReason?:
+    | 'COUNTERPARTY_DECLARATION_REQUIRED'
+    | 'WALLET_VERIFICATION_REQUIRED'
+    | 'COUNTERPARTY_INFORMATION_REQUIRED'
+    | 'COMPLIANCE_REVIEW';
 
   /**
    * The portion of `fees` collected by the platform (platform-configured transaction
