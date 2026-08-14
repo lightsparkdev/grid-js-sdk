@@ -1368,6 +1368,35 @@ export interface VndBeneficiary {
 
 export type VndExternalAccountInfo = unknown;
 
+export interface WalletBeneficiaryFields {
+  /**
+   * The wallet's owner. Optional for `FIRST_PARTY` accounts — the customer's
+   * verified identity is used. Required for `THIRD_PARTY` wallets on platforms with
+   * counterparty requirements (e.g. EU Travel Rule); if missing there, creation
+   * fails with `400 INVALID_INPUT`.
+   */
+  beneficiary?: WalletBeneficiaryOneOf;
+}
+
+/**
+ * The person or business that owns a crypto wallet external account.
+ */
+export type WalletBeneficiaryOneOf = WalletIndividualBeneficiary | BusinessBeneficiary;
+
+export interface WalletIndividualBeneficiary {
+  beneficiaryType: 'INDIVIDUAL';
+
+  /**
+   * The country of residence of the beneficiary (ISO 3166-1 alpha-2)
+   */
+  countryOfResidence: string;
+
+  /**
+   * The full name of the beneficiary
+   */
+  fullName: string;
+}
+
 export type XafExternalAccountInfo = unknown;
 
 export type XofExternalAccountInfo = unknown;
@@ -1632,6 +1661,9 @@ export declare namespace ExternalAccounts {
     type UsdExternalAccountInfo as UsdExternalAccountInfo,
     type VndBeneficiary as VndBeneficiary,
     type VndExternalAccountInfo as VndExternalAccountInfo,
+    type WalletBeneficiaryFields as WalletBeneficiaryFields,
+    type WalletBeneficiaryOneOf as WalletBeneficiaryOneOf,
+    type WalletIndividualBeneficiary as WalletIndividualBeneficiary,
     type XafExternalAccountInfo as XafExternalAccountInfo,
     type XofExternalAccountInfo as XofExternalAccountInfo,
     type ZarExternalAccountInfo as ZarExternalAccountInfo,

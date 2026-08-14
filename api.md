@@ -188,6 +188,9 @@ Types:
 - <code><a href="./src/resources/customers/external-accounts.ts">UsdExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">VndBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">VndExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">WalletBeneficiaryFields</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">WalletBeneficiaryOneOf</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">WalletIndividualBeneficiary</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">XafExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">XofExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">ZarExternalAccountInfo</a></code>
