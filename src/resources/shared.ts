@@ -1016,6 +1016,13 @@ export interface IndividualCustomer extends CustomersAPI.Customer {
   birthDate?: string;
 
   /**
+   * Country that issued the identification (ISO 3166-1 alpha-2). Optional for an
+   * individual account holder: SSN and ITIN are US-issued, so this defaults to `US`
+   * and is rejected if set to anything else.
+   */
+  countryOfIssuance?: string;
+
+  /**
    * Expected number of transactions per month
    */
   expectedMonthlyTransactionCount?:
@@ -1039,6 +1046,11 @@ export interface IndividualCustomer extends CustomersAPI.Customer {
    * Individual's full name
    */
   fullName?: string;
+
+  /**
+   * Type of tax identification
+   */
+  idType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 
   /**
    * The current KYC status of a customer. `HOLD` means the customer is placed on
@@ -1137,24 +1149,6 @@ export interface IndividualCustomer extends CustomersAPI.Customer {
    * `sourceOfWealthCategories` includes `OTHER`; otherwise omitted.
    */
   sourceOfWealthOtherDescription?: string;
-
-  /**
-   * Country that issued the tax identifier (ISO 3166-1 alpha-2). Required when
-   * `taxIdType` is `NON_US_TAX_ID`.
-   */
-  taxIdCountryOfIssuance?: string;
-
-  /**
-   * Tax-identification number. For US persons this is the SSN (format `###-##-####`)
-   * or ITIN. For non-US persons this is the tax number issued by
-   * `taxIdCountryOfIssuance`.
-   */
-  taxIdentifier?: string;
-
-  /**
-   * Type of tax identification
-   */
-  taxIdType?: 'SSN' | 'ITIN' | 'EIN' | 'NON_US_TAX_ID';
 }
 
 /**

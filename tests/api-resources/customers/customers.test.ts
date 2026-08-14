@@ -40,6 +40,7 @@ describe('resource customers', () => {
         },
         annualIncomeRange: 'RANGE_100K_250K',
         birthDate: '1990-01-15',
+        countryOfIssuance: 'US',
         currencies: ['USD', 'USDC'],
         email: 'john.doe@example.com',
         endUserTermsConsent: {
@@ -66,9 +67,6 @@ describe('resource customers', () => {
         sourceOfFundsOtherDescription: 'Contest winnings',
         sourceOfWealthCategories: ['SALARY', 'INVESTMENTS'],
         sourceOfWealthOtherDescription: 'Royalty income from published works',
-        taxIdCountryOfIssuance: 'US',
-        taxIdentifier: '123-45-6789',
-        taxIdType: 'SSN',
         umaAddress: '$john.doe@uma.domain.com',
       },
     });
@@ -115,6 +113,7 @@ describe('resource customers', () => {
         },
         annualIncomeRange: 'RANGE_100K_250K',
         birthDate: '1990-01-15',
+        countryOfIssuance: 'US',
         currencies: ['USD', 'EUR', 'USDC'],
         email: 'john.doe@example.com',
         endUserTermsConsent: {
@@ -126,6 +125,8 @@ describe('resource customers', () => {
         expectedMonthlyTransactionCount: 'COUNT_100_TO_500',
         expectedMonthlyTransactionVolume: 'VOLUME_100K_TO_1M',
         fullName: 'John Michael Doe',
+        identifier: '123-45-6789',
+        idType: 'SSN',
         kycStatus: 'APPROVED',
         nationality: 'US',
         netWorthRange: 'RANGE_500K_1M',
@@ -137,9 +138,6 @@ describe('resource customers', () => {
         sourceOfFundsOtherDescription: 'Contest winnings',
         sourceOfWealthCategories: ['SALARY', 'INVESTMENTS'],
         sourceOfWealthOtherDescription: 'Royalty income from published works',
-        taxIdCountryOfIssuance: 'US',
-        taxIdentifier: '123-45-6789',
-        taxIdType: 'SSN',
         umaAddress: '$john.doe@uma.domain.com',
       },
       'Grid-Wallet-Signature':
