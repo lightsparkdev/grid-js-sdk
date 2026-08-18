@@ -229,8 +229,10 @@ export namespace ExternalAccountAddParams {
   /**
    * Required fields depend on the selected paymentRails:
    *
-   * - BANK_TRANSFER: accountNumber, bankName
-   * - MOBILE_MONEY: bankName, phoneNumber
+   * - BANK_TRANSFER: accountNumber, bankName. Business-to-business only, so the
+   *   beneficiary must be a business.
+   * - MOBILE_MONEY: bankName, phoneNumber. Pays an AliPay or WeChat Pay wallet;
+   *   bankName selects the wallet.
    */
   export interface CnyAccount {
     accountType: 'CNY_ACCOUNT';
