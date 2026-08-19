@@ -548,10 +548,20 @@ export interface ReconciliationInstructions {
   reference?: string;
 
   /**
-   * Transaction hash of the internal settlement transfer used to deliver a UMA
-   * payment — the inter-VASP settlement leg (e.g. USDC on Solana to the receiving
-   * partner), when available. This is not a transfer to a customer's own wallet; for
-   * that, see the `onChainTransaction` on the transaction's source or destination.
+   * @deprecated Transaction hash of the settlement transfer, when available. This
+   * field reports two different transfers, and only one of them has a replacement
+   * today:
+   *
+   * For a crypto transfer to or from a customer's own external wallet, use the
+   * `onChainTransaction` on the relevant source or destination instead — it names
+   * the network alongside the hash. That is the transfer this field is deprecated
+   * for.
+   *
+   * For the inter-VASP settlement leg of a UMA payment (e.g. USDC on Solana to the
+   * receiving partner), this field remains the only place the hash is reported: a
+   * UMA address is not a wallet you hold, so its source and destination carry no
+   * `onChainTransaction`. The field will not be removed before that leg has a
+   * replacement.
    */
   transactionHash?: string;
 }
