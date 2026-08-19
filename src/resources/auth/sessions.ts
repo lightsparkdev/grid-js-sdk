@@ -82,16 +82,21 @@ export class Sessions extends APIResource {
    * key. Session refresh is a two-step signed-retry flow:
    *
    * 1. Call `POST /auth/sessions/{id}/refresh` with the request body
-   *    `{ "clientPublicKey": "04..." }` and no signature headers. Grid builds a Grid
-   *    session-refresh payload, binds the supplied `clientPublicKey` into that
-   *    payload, persists it as a pending request, and returns `202` with
-   *    `payloadToSign`, `requestId`, and `expiresAt`.
+   *    `{ "clientPublicKey": "02..." }` and no signature headers. Send a freshly
+   *    generated client public key and retain its private key. Grid binds the
+   *    supplied `clientPublicKey` into the session-refresh payload, persists it as a
+   *    pending request, and returns `202` with `payloadToSign`, `requestId`, and
+   *    `expiresAt`.
    *
    * 2. Sign `payloadToSign` with the current session signing key, then retry the
    *    same request with the full API-key stamp as `Grid-Wallet-Signature`, the
    *    `requestId` echoed back as `Request-Id`, and the same `clientPublicKey` in
-   *    the request body. On success, Grid returns a new `AuthSession` with an
-   *    `encryptedSessionSigningKey` sealed to that client public key.
+   *    the request body. On success, Grid returns a new `AuthSession`. Sending a
+   *    compressed `clientPublicKey` selects the recommended client-held-key model,
+   *    where the client retains the new session signing key and no key material is
+   *    returned; sending an uncompressed key selects the deprecated legacy flow,
+   *    where the new key is sealed to it and returned as
+   *    `encryptedSessionSigningKey`.
    *
    * The original session must still be active on both steps so it can authorize the
    * refresh. If the session has already expired, use the credential reauthentication
@@ -104,7 +109,7 @@ export class Sessions extends APIResource {
    *   {
    *     AuthSessionRefreshRequest: {
    *       clientPublicKey:
-   *         '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   *         '02f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31',
    *     },
    *   },
    * );
@@ -137,18 +142,24 @@ export class Sessions extends APIResource {
 
 /**
  * Request body for refreshing an active authentication session. The
- * `clientPublicKey` is required on both steps of the signed-retry flow. On the
- * initial call, Grid binds this key into the session-creation payload returned as
- * `payloadToSign`; on the signed retry, the client echoes the same key back and
- * Grid uses it to encrypt the newly issued session signing key.
+ * `clientPublicKey` is required on both steps of the signed-retry flow and must
+ * match on both. Its SEC1 encoding selects how the refreshed session signing key
+ * is delivered: a compressed key gets the recommended client-held-key model, where
+ * the client retains the new signing key itself; an uncompressed key gets the
+ * deprecated legacy flow, where Grid returns the new key as
+ * `encryptedSessionSigningKey` sealed to it. On the initial call, Grid binds the
+ * supplied key into the session-creation payload returned as `payloadToSign`.
  */
 export interface AuthSessionRefreshRequest {
   /**
-   * Client-generated P-256 public key, hex-encoded in uncompressed SEC1 format (`04`
-   * prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex characters
-   * total). The matching private key must remain on the client. Grid binds this key
-   * into the session-creation payload on the initial call and seals the returned
-   * `encryptedSessionSigningKey` to it on the signed retry.
+   * Client-generated P-256 public key; the matching private key is retained on the
+   * client. Send a compressed SEC1 key (`02`/`03` prefix followed by the 32-byte X
+   * coordinate; 66 hex characters) for the recommended client-held-key model, where
+   * that private key becomes the new session signing key. Send an uncompressed SEC1
+   * key (`04` prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+   * characters) for the deprecated legacy flow, where Grid seals the new session
+   * signing key to it and returns it as `encryptedSessionSigningKey` on the signed
+   * retry.
    */
   clientPublicKey: string;
 }
@@ -186,10 +197,13 @@ export interface SessionDeleteParams {
 export interface SessionRefreshParams {
   /**
    * Body param: Request body for refreshing an active authentication session. The
-   * `clientPublicKey` is required on both steps of the signed-retry flow. On the
-   * initial call, Grid binds this key into the session-creation payload returned as
-   * `payloadToSign`; on the signed retry, the client echoes the same key back and
-   * Grid uses it to encrypt the newly issued session signing key.
+   * `clientPublicKey` is required on both steps of the signed-retry flow and must
+   * match on both. Its SEC1 encoding selects how the refreshed session signing key
+   * is delivered: a compressed key gets the recommended client-held-key model, where
+   * the client retains the new signing key itself; an uncompressed key gets the
+   * deprecated legacy flow, where Grid returns the new key as
+   * `encryptedSessionSigningKey` sealed to it. On the initial call, Grid binds the
+   * supplied key into the session-creation payload returned as `payloadToSign`.
    */
   AuthSessionRefreshRequest: AuthSessionRefreshRequest;
 

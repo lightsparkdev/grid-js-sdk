@@ -24,13 +24,13 @@ export class Credentials extends APIResource {
    * Adding a credential requires a signature from an existing verified credential on
    * the same account. Call this endpoint with the new credential's details to
    * receive `202` with `payloadToSign` and `requestId`. Use the session API keypair
-   * of an existing verified credential (decrypted client-side from its
-   * `encryptedSessionSigningKey`) to build an API-key stamp over `payloadToSign`,
-   * then retry the same request with that full stamp as the `Grid-Wallet-Signature`
-   * header and the `requestId` echoed back as the `Request-Id` header. The signed
-   * retry returns `201` with the created `AuthMethod`. For OTP credentials, the
-   * one-time password is triggered on the signed retry, and the credential must then
-   * be activated via `POST /auth/credentials/{id}/verify`.
+   * of an existing verified credential (the session signing key the client holds for
+   * it) to build an API-key stamp over `payloadToSign`, then retry the same request
+   * with that full stamp as the `Grid-Wallet-Signature` header and the `requestId`
+   * echoed back as the `Request-Id` header. The signed retry returns `201` with the
+   * created `AuthMethod`. For OTP credentials, the one-time password is triggered on
+   * the signed retry, and the credential must then be activated via
+   * `POST /auth/credentials/{id}/verify`.
    *
    * @example
    * ```ts
@@ -144,8 +144,10 @@ export class Credentials extends APIResource {
    * For `PASSKEY` credentials, this issues a fresh Grid reauthentication challenge.
    * The request body must carry the client's ephemeral `clientPublicKey` so Grid can
    * bake it into the session-creation payload the returned challenge is computed
-   * from — this seals the resulting session signing key to the client. The response
-   * is a `PasskeyAuthChallenge` — the passkey auth method fields plus the WebAuthn
+   * from — send a compressed key for the recommended client-held-key model, where
+   * the client retains the matching private key as the resulting session signing
+   * key, or an uncompressed key for the deprecated legacy flow. The response is a
+   * `PasskeyAuthChallenge` — the passkey auth method fields plus the WebAuthn
    * `credentialId`, new `challenge`, `requestId`, and `expiresAt`. The `challenge`
    * value is the lowercase hex-encoded SHA-256 digest of the canonical
    * session-creation body, not a base64url string. The client base64url-decodes
@@ -160,7 +162,7 @@ export class Credentials extends APIResource {
    * const authCredentialResponseOneOf =
    *   await client.auth.credentials.challenge('id', {
    *     clientPublicKey:
-   *       '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   *       '02f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31',
    *   });
    * ```
    */
@@ -210,12 +212,14 @@ export class Credentials extends APIResource {
    * pending session-creation request.
    *
    * On success for `OAUTH` and `PASSKEY`, and on the signed retry for OTP
-   * credentials, the response contains an `AuthSession`. For `OAUTH` and `PASSKEY`
-   * the session signing key is delivered as `encryptedSessionSigningKey`
-   * (HPKE-sealed to the supplied `clientPublicKey`); for OTP credentials the client
-   * already holds the session signing key (the TEK private key it generated) and
-   * that field is omitted from the response. The `expiresAt` timestamp marks when
-   * the session expires.
+   * credentials, the response contains an `AuthSession`. Sending a compressed
+   * `clientPublicKey` selects the recommended client-held-key model: the client
+   * already holds the session signing key — the private key it generated before
+   * authentication — so no key material is returned and the deprecated
+   * `encryptedSessionSigningKey` is omitted. Sending an uncompressed
+   * `clientPublicKey` selects the deprecated legacy flow, where the session signing
+   * key is HPKE-sealed to that key and returned as `encryptedSessionSigningKey` for
+   * the client to decrypt. The `expiresAt` timestamp marks when the session expires.
    *
    * @example
    * ```ts
@@ -263,12 +267,15 @@ export class Credentials extends APIResource {
  */
 export interface AuthCredentialChallengeRequest {
   /**
-   * Required for `PASSKEY` credentials. Client-generated P-256 public key,
-   * hex-encoded in uncompressed SEC1 format (`04` prefix followed by the 32-byte X
-   * and 32-byte Y coordinates; 130 hex characters total). The matching private key
-   * must remain on the client. Grid bakes this key into the session-creation payload
-   * that the returned `challenge` is computed from, so the resulting session signing
-   * key is sealed to the client. Ignored for `EMAIL_OTP` and `SMS_OTP`.
+   * Required for `PASSKEY` credentials; the matching private key is retained on the
+   * client. Send a compressed SEC1 key (`02`/`03` prefix followed by the 32-byte X
+   * coordinate; 66 hex characters) for the recommended client-held-key model, where
+   * that private key becomes the session signing key. Send an uncompressed SEC1 key
+   * (`04` prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+   * characters) for the deprecated legacy flow, where Grid seals the session signing
+   * key to it instead. Grid bakes this public key into the session-creation payload
+   * that the returned `challenge` is computed from. Ignored for `EMAIL_OTP` and
+   * `SMS_OTP`.
    */
   clientPublicKey?: string;
 }
@@ -444,9 +451,12 @@ export type AuthMethodType = 'OAUTH' | 'EMAIL_OTP' | 'SMS_OTP' | 'PASSKEY';
  * An authentication session on an Embedded Wallet internal account. Returned from
  * `GET /auth/sessions` (list) and `POST /auth/credentials/{id}/verify` (on
  * credential verification) or `POST /auth/sessions/{id}/refresh` (on mid-session
- * refresh). Only session-issuing responses include `encryptedSessionSigningKey` —
- * it is delivered exactly once at the moment the session is issued and is never
- * returned by the list endpoint.
+ * refresh). The `clientPublicKey` encoding on the issuing request selects the
+ * flow: a compressed key gets the client-held-key model, where the client
+ * generates and retains the session signing key and session-issuing responses
+ * carry no key material; an uncompressed key gets the deprecated legacy flow,
+ * where Grid seals the session signing key to that public key and returns it as
+ * `encryptedSessionSigningKey`. Never returned by the list endpoint.
  */
 export interface AuthSession extends AuthMethod {
   /**
@@ -458,24 +468,23 @@ export interface AuthSession extends AuthMethod {
   id: string;
 
   /**
-   * Timestamp after which the session is no longer valid and the
-   * `encryptedSessionSigningKey` must not be used to sign further requests.
+   * Timestamp after which the session is no longer valid and the session signing key
+   * must not be used to sign further requests.
    */
   expiresAt: string;
 
   /**
-   * HPKE-encrypted session signing key, sealed to the `clientPublicKey` supplied on
-   * the verification or refresh request. Encoded as a base58check string: the
-   * decoded payload is a 33-byte compressed P-256 encapsulated public key followed
-   * by AES-256-GCM ciphertext. The client decrypts this key with its private key and
-   * uses it to sign subsequent Embedded Wallet requests until `expiresAt`.
+   * @deprecated Deprecated; present only for the legacy flow, selected by sending an
+   * uncompressed `clientPublicKey` on the verification or refresh request. Grid
+   * seals the session signing key to that public key and returns it here as a
+   * base58check string (a 33-byte compressed P-256 encapsulated public key followed
+   * by AES-256-GCM ciphertext) for the client to decrypt with its private key.
    *
-   * Returned only by session-issuing responses for `OAUTH` and `PASSKEY`
-   * credentials. `EMAIL_OTP` and `SMS_OTP` sessions omit this field — the client
-   * generates a TEK keypair before verification and retains the private key
-   * throughout, so the server has nothing to deliver. Always omitted from list
-   * responses (`GET /auth/sessions`) since Grid does not retain the plaintext key
-   * after the client has decrypted it.
+   * The recommended client-held-key flow sends a compressed `clientPublicKey`
+   * instead: the client generates and retains the session signing key itself, so
+   * this field is omitted — the same way `EMAIL_OTP` and `SMS_OTP` sessions have
+   * always worked. See the "Client keys & signing" guide. Always omitted from list
+   * responses (`GET /auth/sessions`).
    */
   encryptedSessionSigningKey?: string;
 }
@@ -789,12 +798,15 @@ export interface CredentialDeleteParams {
 
 export interface CredentialChallengeParams {
   /**
-   * Required for `PASSKEY` credentials. Client-generated P-256 public key,
-   * hex-encoded in uncompressed SEC1 format (`04` prefix followed by the 32-byte X
-   * and 32-byte Y coordinates; 130 hex characters total). The matching private key
-   * must remain on the client. Grid bakes this key into the session-creation payload
-   * that the returned `challenge` is computed from, so the resulting session signing
-   * key is sealed to the client. Ignored for `EMAIL_OTP` and `SMS_OTP`.
+   * Required for `PASSKEY` credentials; the matching private key is retained on the
+   * client. Send a compressed SEC1 key (`02`/`03` prefix followed by the 32-byte X
+   * coordinate; 66 hex characters) for the recommended client-held-key model, where
+   * that private key becomes the session signing key. Send an uncompressed SEC1 key
+   * (`04` prefix followed by the 32-byte X and 32-byte Y coordinates; 130 hex
+   * characters) for the deprecated legacy flow, where Grid seals the session signing
+   * key to it instead. Grid bakes this public key into the session-creation payload
+   * that the returned `challenge` is computed from. Ignored for `EMAIL_OTP` and
+   * `SMS_OTP`.
    */
   clientPublicKey?: string;
 }
