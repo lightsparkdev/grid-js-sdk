@@ -194,6 +194,7 @@ export {
   type UmaProviderListParams,
   type UmaProvidersDefaultPagination,
 } from './uma-providers';
+export { Vasps, type Vasp, type VaspListResponse, type VaspListParams } from './vasps';
 export {
   Verifications,
   type Verification,

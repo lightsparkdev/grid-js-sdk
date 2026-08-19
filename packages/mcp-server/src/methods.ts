@@ -317,6 +317,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/uma-providers',
   },
   {
+    clientCallName: 'client.vasps.list',
+    fullyQualifiedName: 'vasps.list',
+    httpMethod: 'get',
+    httpPath: '/vasps',
+  },
+  {
     clientCallName: 'client.tokens.create',
     fullyQualifiedName: 'tokens.create',
     httpMethod: 'post',

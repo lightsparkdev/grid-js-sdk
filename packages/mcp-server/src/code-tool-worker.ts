@@ -159,6 +159,7 @@ const fuse = new Fuse(
     'client.sandbox.cards.simulate.clearing',
     'client.sandbox.cards.simulate.return',
     'client.umaProviders.list',
+    'client.vasps.list',
     'client.tokens.create',
     'client.tokens.delete',
     'client.tokens.list',
