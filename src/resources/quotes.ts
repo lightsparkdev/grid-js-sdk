@@ -281,7 +281,18 @@ export namespace PaymentInstructions {
     phoneNumber?: string;
   }
 
+  /**
+   * At least one of accountNumber or iban is always present: IBAN-only corridors
+   * (e.g. BR, GB) use iban, other corridors use accountNumber, and both appear when
+   * the bank exposes both identifiers for the same account.
+   */
   export interface SwiftAccount {
+    /**
+     * The name of the account holder as it must appear on the wire. Remitting banks
+     * match this against the beneficiary name field, so payers should copy it exactly.
+     */
+    accountHolderName: string;
+
     accountType: 'SWIFT_ACCOUNT';
 
     /**
@@ -297,12 +308,6 @@ export namespace PaymentInstructions {
     paymentRails: Array<'SWIFT'>;
 
     /**
-     * Unique reference code that must be included with the payment to properly credit
-     * it
-     */
-    reference: string;
-
-    /**
      * The SWIFT/BIC code of the bank
      */
     swiftCode: string;
@@ -314,10 +319,22 @@ export namespace PaymentInstructions {
     accountNumber?: string;
 
     /**
+     * The address of the bank holding the account, when known.
+     */
+    bankAddress?: string;
+
+    /**
      * The IBAN of the bank account. Required for IBAN-only corridors (e.g. BR, GB).
      * Use accountNumber for all other corridors.
      */
     iban?: string;
+
+    /**
+     * Reference code to include with the payment when present. SWIFT payments are
+     * attributed by the destination account number/IBAN, so this account type
+     * typically requires no reference.
+     */
+    reference?: string;
   }
 
   /**

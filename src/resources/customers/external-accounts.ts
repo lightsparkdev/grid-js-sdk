@@ -666,6 +666,11 @@ export namespace ExternalAccountInfoOneOf {
     phoneNumber?: string;
   }
 
+  /**
+   * At least one of accountNumber or iban is always present: IBAN-only corridors
+   * (e.g. BR, GB) use iban, other corridors use accountNumber, and both appear when
+   * the bank exposes both identifiers for the same account.
+   */
   export interface SwiftAccount {
     accountType: 'SWIFT_ACCOUNT';
 

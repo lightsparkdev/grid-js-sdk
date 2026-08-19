@@ -225,7 +225,10 @@ export interface InternalAccountStatusWebhookEvent {
    */
   timestamp: string;
 
-  type: 'INTERNAL_ACCOUNT.BALANCE_UPDATED' | 'INTERNAL_ACCOUNT.STATUS_UPDATED';
+  type:
+    | 'INTERNAL_ACCOUNT.BALANCE_UPDATED'
+    | 'INTERNAL_ACCOUNT.STATUS_UPDATED'
+    | 'INTERNAL_ACCOUNT.FUNDING_INSTRUCTIONS_UPDATED';
 }
 
 export interface ExternalAccountStatusWebhookEvent {

@@ -243,7 +243,8 @@ export interface IncomingTransaction {
     | 'MISSING_MANDATORY_PAYEE_DATA'
     | 'QUOTE_EXPIRED'
     | 'QUOTE_EXECUTION_FAILED'
-    | 'COMPLIANCE_REJECTED';
+    | 'COMPLIANCE_REJECTED'
+    | 'COLLECTION_FAILED';
 
   /**
    * The total fees available from the receive quote in the smallest unit of the
