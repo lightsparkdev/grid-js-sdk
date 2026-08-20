@@ -241,8 +241,24 @@ export class Customers extends APIResource {
    * verification flow directly via the provider's SDK.
    *
    * The customer must already exist — create them with `POST /customers` first.
-   * Calling this endpoint does not change the customer's `kycStatus`; the customer
-   * remains `PENDING` until they complete (or fail) the hosted flow.
+   * Calling this endpoint does not change the customer's verification status; the
+   * customer remains at their current status until they complete (or fail) the
+   * hosted flow.
+   *
+   * This endpoint generates the link for both customer types; `customerType` selects
+   * which flow the provider runs. `INDIVIDUAL` runs identity verification (KYC),
+   * tracked on `kycStatus`. `BUSINESS` runs business verification (KYB), tracked on
+   * `kybStatus` — the flow confirms the company details, collects formation,
+   * ownership, and proof-of-address documents, and gathers the control person and
+   * every beneficial owner holding 25% or more. Business information already
+   * supplied via `POST /customers` or `PATCH /customers/{customerId}` is prefilled,
+   * so send what you have before generating the link.
+   *
+   * The hosted link is one of two ways to verify a customer. To collect the data
+   * yourself instead, submit it through `POST /customers`, `POST /beneficial-owners`
+   * (business customers), and `POST /documents`, then call `POST /verifications`.
+   * Both paths produce the same status transitions and the same `CUSTOMER.KYC_*` /
+   * `CUSTOMER.KYB_*` webhooks.
    *
    * Each call returns a fresh link. Previously-issued links are not invalidated, but
    * they remain single-use and will expire on their own. For request-level retry
