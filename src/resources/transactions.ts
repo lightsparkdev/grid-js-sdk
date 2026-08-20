@@ -388,6 +388,7 @@ export interface OutgoingTransaction {
    */
   failureReason?:
     | 'QUOTE_EXPIRED'
+    | 'QUOTE_RATE_UNAVAILABLE'
     | 'QUOTE_EXECUTION_FAILED'
     | 'FUNDING_AMOUNT_MISMATCH'
     | 'SCA_NOT_COMPLETED'
