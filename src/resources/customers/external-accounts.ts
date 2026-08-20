@@ -1392,6 +1392,16 @@ export interface WalletBeneficiaryFields {
  */
 export type WalletBeneficiaryOneOf = WalletIndividualBeneficiary | BusinessBeneficiary;
 
+export interface WalletCustodyFields {
+  /**
+   * Name of the VASP that custodies this account, from the VASP directory
+   * (`GET /vasps`). Present when the wallet is held at an exchange or other
+   * custodial platform; omit it for self-custody wallets. Ownership verification
+   * applies only to self-custody wallets.
+   */
+  vaspName?: string;
+}
+
 export interface WalletIndividualBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 
@@ -1674,6 +1684,7 @@ export declare namespace ExternalAccounts {
     type VndExternalAccountInfo as VndExternalAccountInfo,
     type WalletBeneficiaryFields as WalletBeneficiaryFields,
     type WalletBeneficiaryOneOf as WalletBeneficiaryOneOf,
+    type WalletCustodyFields as WalletCustodyFields,
     type WalletIndividualBeneficiary as WalletIndividualBeneficiary,
     type XafExternalAccountInfo as XafExternalAccountInfo,
     type XofExternalAccountInfo as XofExternalAccountInfo,

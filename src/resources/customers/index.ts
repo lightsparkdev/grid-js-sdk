@@ -101,6 +101,7 @@ export {
   type VndExternalAccountInfo,
   type WalletBeneficiaryFields,
   type WalletBeneficiaryOneOf,
+  type WalletCustodyFields,
   type WalletIndividualBeneficiary,
   type XafExternalAccountInfo,
   type XofExternalAccountInfo,
