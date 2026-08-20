@@ -29,15 +29,15 @@ export class Vasps extends APIResource {
  */
 export interface Vasp {
   /**
-   * The VASP's website.
-   */
-  url: string;
-
-  /**
    * Name of this VASP. Pass this value as `vaspName` when declaring a VASP-hosted
    * counterparty.
    */
   vaspName: string;
+
+  /**
+   * The VASP's website, when known.
+   */
+  url?: string;
 }
 
 export interface VaspListResponse {
