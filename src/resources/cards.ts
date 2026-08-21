@@ -27,8 +27,8 @@ export class Cards extends APIResource {
   }
 
   /**
-   * Update a card's `state` and / or its bound `fundingSources`. At least one of the
-   * two fields must be supplied.
+   * Update a card's `state`, bound `fundingSources`, and / or
+   * `maxSpendPerTransaction`. At least one field must be supplied.
    *
    * - `state` transitions are limited to `ACTIVE ⇄ FROZEN` and
    *   `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible. Any other
@@ -38,6 +38,11 @@ export class Cards extends APIResource {
    *   them in. Each id must belong to the cardholder and be denominated in the
    *   card's currency; the list must contain at least one source. `fundingSources`
    *   cannot be supplied alongside `state: CLOSED`.
+   * - `maxSpendPerTransaction`, when supplied, replaces the card's
+   *   application-enforced per-transaction limit. Supply a positive integer in the
+   *   smallest unit of the card's currency to set it or null to clear it. Limits are
+   *   supported only for card programs where Grid makes the authorization decision.
+   *   `maxSpendPerTransaction` cannot be supplied alongside `state: CLOSED`.
    *
    * This endpoint is authenticated by the platform credential alone and returns
    * `200` directly. It deliberately does not use Grid's 202 → signed-retry pattern:
@@ -112,6 +117,12 @@ export class Cards extends APIResource {
    * before a card can be issued; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    *
+   * An optional `maxSpendPerTransaction` value sets the largest amount a single card
+   * transaction may authorize. The limit is enforced by Grid for card programs where
+   * Grid makes the authorization decision, whether the card is funded by an Embedded
+   * Wallet account or custodial fiat. Omit it for no limit. The value is in the
+   * smallest unit of the card's currency.
+   *
    * If any funding source is an Embedded Wallet internal account, the cardholder
    * must authorize Grid to sign Spark token transactions for that card funding
    * source by completing the delegated-key creation flow with
@@ -133,6 +144,7 @@ export class Cards extends APIResource {
    *   fundingSources: [
    *     'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
    *   ],
+   *   maxSpendPerTransaction: 5000,
    *   platformCardId: 'card-emp-aary-001',
    * });
    * ```
@@ -172,6 +184,13 @@ export interface Card {
    * least one funding source.
    */
   fundingSources: Array<string>;
+
+  /**
+   * Largest amount a single card transaction may authorize, in the smallest unit of
+   * the card's `currency`. Null means the card has no application-enforced
+   * per-transaction limit. A transaction for exactly this amount is allowed.
+   */
+  maxSpendPerTransaction: number | null;
 
   /**
    * Lifecycle state of a card.
@@ -264,10 +283,18 @@ export interface CardCreateRequest {
    * Internal account ids to bind as funding sources, in priority order. The first
    * entry is tried first by Authorization Decisioning. Every card must be bound to
    * at least one source, and every source must belong to the cardholder and be
-   * denominated in a card-eligible currency (USDB in v1); otherwise the request is
-   * rejected with `FUNDING_SOURCE_INELIGIBLE`.
+   * denominated in a card-eligible currency; otherwise the request is rejected with
+   * `FUNDING_SOURCE_INELIGIBLE`.
    */
   fundingSources: Array<string>;
+
+  /**
+   * Optional largest amount a single card transaction may authorize, in the smallest
+   * unit of the card currency derived from its funding sources. Omit this field for
+   * no limit. Supported only for card programs whose authorization decisions are
+   * made by Grid. A transaction for exactly this amount is allowed.
+   */
+  maxSpendPerTransaction?: number;
 
   /**
    * Optional platform-specific card identifier. System-generated when omitted,
@@ -409,13 +436,14 @@ export interface CardTransaction {
 }
 
 /**
- * Update request for `PATCH /cards/{id}`. At least one of `state` or
- * `fundingSources` must be supplied. `state` transitions are limited to
- * `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`; any other transition returns
- * `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal and irreversible and cannot
- * be combined with `fundingSources`. `fundingSources`, when supplied, fully
- * replaces the card's bound funding sources — the array order determines the
- * priority Authorization Decisioning tries them in.
+ * Update request for `PATCH /cards/{id}`. At least one of `state`,
+ * `fundingSources`, or `maxSpendPerTransaction` must be supplied. `state`
+ * transitions are limited to `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`; any
+ * other transition returns `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal
+ * and irreversible and cannot be combined with `fundingSources` or
+ * `maxSpendPerTransaction`. `fundingSources`, when supplied, fully replaces the
+ * card's bound funding sources — the array order determines the priority
+ * Authorization Decisioning tries them in.
  */
 export interface CardUpdateRequest {
   /**
@@ -426,6 +454,15 @@ export interface CardUpdateRequest {
    * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
    */
   fundingSources?: Array<string>;
+
+  /**
+   * Replacement per-transaction spending limit for the card, in the smallest unit of
+   * its currency. Omit this field to leave the current limit unchanged, supply null
+   * to clear it, or supply a positive integer to set it. Supported only for card
+   * programs whose authorization decisions are made by Grid. Cannot be supplied
+   * alongside `state: CLOSED`.
+   */
+  maxSpendPerTransaction?: number | null;
 
   /**
    * Target state for the card. Permitted transitions are `ACTIVE ⇄ FROZEN` and
@@ -445,6 +482,15 @@ export interface CardUpdateParams {
    * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
    */
   fundingSources?: Array<string>;
+
+  /**
+   * Replacement per-transaction spending limit for the card, in the smallest unit of
+   * its currency. Omit this field to leave the current limit unchanged, supply null
+   * to clear it, or supply a positive integer to set it. Supported only for card
+   * programs whose authorization decisions are made by Grid. Cannot be supplied
+   * alongside `state: CLOSED`.
+   */
+  maxSpendPerTransaction?: number | null;
 
   /**
    * Target state for the card. Permitted transitions are `ACTIVE ⇄ FROZEN` and
@@ -506,10 +552,18 @@ export interface CardIssueParams {
    * Internal account ids to bind as funding sources, in priority order. The first
    * entry is tried first by Authorization Decisioning. Every card must be bound to
    * at least one source, and every source must belong to the cardholder and be
-   * denominated in a card-eligible currency (USDB in v1); otherwise the request is
-   * rejected with `FUNDING_SOURCE_INELIGIBLE`.
+   * denominated in a card-eligible currency; otherwise the request is rejected with
+   * `FUNDING_SOURCE_INELIGIBLE`.
    */
   fundingSources: Array<string>;
+
+  /**
+   * Optional largest amount a single card transaction may authorize, in the smallest
+   * unit of the card currency derived from its funding sources. Omit this field for
+   * no limit. Supported only for card programs whose authorization decisions are
+   * made by Grid. A transaction for exactly this amount is allowed.
+   */
+  maxSpendPerTransaction?: number;
 
   /**
    * Optional platform-specific card identifier. System-generated when omitted,

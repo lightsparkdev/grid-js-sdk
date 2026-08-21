@@ -88,6 +88,7 @@ describe('resource cards', () => {
       cardholderId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       form: 'VIRTUAL',
       fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],
+      maxSpendPerTransaction: 5000,
       platformCardId: 'card-emp-aary-001',
       threeDSecurePassword: 'AbCd1234EfGh5678',
     });
