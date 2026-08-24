@@ -8,7 +8,7 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Endpoints for creating and confirming quotes for cross-currency transfers
+ * Endpoints for creating and confirming quotes for transfers, both same-currency and cross-currency
  */
 export class Receiver extends APIResource {
   /**

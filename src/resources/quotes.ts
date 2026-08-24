@@ -7,18 +7,18 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Endpoints for creating and confirming quotes for cross-currency transfers
+ * Endpoints for creating and confirming quotes for transfers, both same-currency and cross-currency
  */
 export class Quotes extends APIResource {
   /**
-   * Generate a quote for a cross-currency transfer between any combination of
-   * accounts and UMA addresses. This endpoint handles currency exchange and provides
-   * the necessary instructions to execute the transfer.
+   * Generate a quote for a transfer between any combination of accounts and UMA
+   * addresses. This endpoint handles same-currency and cross-currency transfers
+   * alike, and provides the necessary instructions to execute the transfer.
    *
    * **Transfer Types Supported:**
    *
-   * - **Account to Account**: Transfer between internal/external accounts with
-   *   currency exchange.
+   * - **Account to Account**: Transfer between internal/external accounts, with or
+   *   without currency exchange.
    * - **Account to UMA**: Transfer from an internal account to an UMA address.
    * - **UMA to Account or UMA to UMA**: This transfer type will only be funded by
    *   payment instructions, not from an internal account.
@@ -32,8 +32,9 @@ export class Quotes extends APIResource {
    * - **Payment Instructions**: For UMA or customer ID sources, provides banking
    *   details needed for execution
    *
-   * **Important:** If you are transferring funds in the same currency (no exchange
-   * required), use the `/transfer-in` or `/transfer-out` endpoints instead.
+   * **Same-currency transfers:** Use this endpoint for same-currency transfers too.
+   * Set `immediatelyExecute: true` to create and execute in a single request. The
+   * older `/transfer-in` and `/transfer-out` endpoints are deprecated.
    *
    * Requires a token with the `TRANSACT` permission; `VIEW` alone is not sufficient.
    * A quote is the instrument a later execute draws on, and `immediatelyExecute`
@@ -45,17 +46,20 @@ export class Quotes extends APIResource {
    *   destination: {
    *     destinationType: 'ACCOUNT',
    *     accountId:
-   *       'ExternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
+   *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *     paymentRail: 'ACH',
    *   },
-   *   lockedCurrencyAmount: 10000,
+   *   lockedCurrencyAmount: 12550,
    *   lockedCurrencySide: 'SENDING',
    *   source: {
    *     sourceType: 'ACCOUNT',
    *     accountId:
-   *       'InternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
+   *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
    *   },
    *   description:
-   *     'Transfer between accounts, either internal or external.',
+   *     'Same-currency payout, no exchange required.',
+   *   immediatelyExecute: true,
+   *   remittanceInformation: 'INV-12345',
    * });
    * ```
    */

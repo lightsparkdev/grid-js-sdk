@@ -29,10 +29,5 @@ export {
   type AgentsDefaultPagination,
 } from './agents';
 export { DeviceCodes } from './device-codes';
-export {
-  Me,
-  type MeCreateTransferInParams,
-  type MeCreateTransferOutParams,
-  type MeListInternalAccountsParams,
-} from './me/index';
+export { Me, type MeListInternalAccountsParams } from './me/index';
 export { Transactions, type TransactionApproveParams, type TransactionRejectParams } from './transactions';

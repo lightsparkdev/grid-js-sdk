@@ -195,8 +195,6 @@ const fuse = new Fuse(
     'client.agents.retrieve',
     'client.agents.update',
     'client.agents.updatePolicy',
-    'client.agents.me.createTransferIn',
-    'client.agents.me.createTransferOut',
     'client.agents.me.listInternalAccounts',
     'client.agents.me.retrieve',
     'client.agents.me.transactions.list',

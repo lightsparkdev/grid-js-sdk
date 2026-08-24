@@ -9,29 +9,35 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * Endpoints for transferring funds between internal and external accounts with the same currency
+ * Deprecated endpoints for transferring funds between internal and external accounts with the same currency. Use the quote endpoints under Cross-Currency Transfers instead, which now serve same-currency transfers as well.
  */
 export class TransferIn extends APIResource {
   /**
+   * **Deprecated. Use `POST /quotes` instead.**
+   *
+   * Same-currency transfers are now served by the quote endpoint. Create a quote
+   * with an external account source and an internal account destination and set
+   * `immediatelyExecute: true` to move the funds in a single request, exactly as
+   * this endpoint does. This endpoint continues to work and its request and response
+   * shapes are unchanged.
+   *
+   * To migrate a request to `POST /quotes`:
+   *
+   * - add `sourceType: ACCOUNT` to `source` and `destinationType: ACCOUNT` to
+   *   `destination`; the account IDs are unchanged
+   * - rename `amount` to `lockedCurrencyAmount` and add
+   *   `lockedCurrencySide: SENDING`
+   * - add `immediatelyExecute: true` to keep the single-request behavior
+   *
+   * The quote response is a `Quote` rather than a `Transaction`; read
+   * `transactionId` from it to track the resulting transaction.
+   *
    * Transfer funds from an external account to an internal account for a specific
    * customer. This endpoint should only be used for external account sources with
    * pull functionality (e.g. ACH Pull). Otherwise, use the paymentInstructions on
    * the internal account to deposit funds.
    *
-   * @example
-   * ```ts
-   * const transaction = await client.transferIn.create({
-   *   destination: {
-   *     accountId:
-   *       'InternalAccount:a12dcbd6-dced-4ec4-b756-3c3a9ea3d123',
-   *   },
-   *   source: {
-   *     accountId:
-   *       'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
-   *   },
-   *   amount: 12550,
-   * });
-   * ```
+   * @deprecated
    */
   create(params: TransferInCreateParams, options?: RequestOptions): APIPromise<Transaction> {
     const { 'Idempotency-Key': idempotencyKey, ...body } = params;

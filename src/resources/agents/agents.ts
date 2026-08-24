@@ -2,7 +2,6 @@
 
 import { APIResource } from '../../core/resource';
 import * as QuotesAPI from '../quotes';
-import * as Shared from '../shared';
 import * as TransferInAPI from '../transfer-in';
 import * as ActionsAPI from './actions';
 import { ActionApproveParams, ActionRejectParams, Actions } from './actions';
@@ -11,12 +10,7 @@ import { DeviceCodes } from './device-codes';
 import * as TransactionsAPI from './transactions';
 import { TransactionApproveParams, TransactionRejectParams, Transactions } from './transactions';
 import * as MeAPI from './me/me';
-import {
-  Me,
-  MeCreateTransferInParams,
-  MeCreateTransferOutParams,
-  MeListInternalAccountsParams,
-} from './me/me';
+import { Me, MeListInternalAccountsParams } from './me/me';
 import { APIPromise } from '../../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../../core/pagination';
 import { buildHeaders } from '../../internal/headers';
@@ -319,13 +313,11 @@ export interface AgentAction {
   /**
    * The type of action the agent is requesting.
    *
-   * | Type            | Description                                              |
-   * | --------------- | -------------------------------------------------------- |
-   * | `EXECUTE_QUOTE` | Execute a cross-currency quote                           |
-   * | `TRANSFER_OUT`  | Transfer from an internal account to an external account |
-   * | `TRANSFER_IN`   | Transfer from an external account to an internal account |
+   * | Type            | Description     |
+   * | --------------- | --------------- |
+   * | `EXECUTE_QUOTE` | Execute a quote |
    */
-  type: 'EXECUTE_QUOTE' | 'TRANSFER_OUT' | 'TRANSFER_IN';
+  type: 'EXECUTE_QUOTE';
 
   /**
    * When the action was last updated.
@@ -333,9 +325,8 @@ export interface AgentAction {
   updatedAt: string;
 
   /**
-   * The quote being executed. Populated for `EXECUTE_QUOTE` actions; absent for
-   * transfer actions. Contains the full amount, currency, destination, and rate
-   * details needed to present an approval decision to the user.
+   * The quote being executed. Contains the full amount, currency, destination, and
+   * rate details needed to present an approval decision to the user.
    */
   quote?: QuotesAPI.Quote;
 
@@ -351,12 +342,6 @@ export interface AgentAction {
    * `REJECTED`.
    */
   transaction?: TransferInAPI.Transaction;
-
-  /**
-   * Details of the transfer being requested. Populated for `TRANSFER_OUT` and
-   * `TRANSFER_IN` actions; absent for `EXECUTE_QUOTE` actions.
-   */
-  transferDetails?: Shared.AgentTransferDetails;
 }
 
 export interface AgentActionListResponse {
@@ -539,9 +524,7 @@ export interface AgentPolicy {
   /**
    * List of permissions granted to the agent.
    */
-  permissions: Array<
-    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
-  >;
+  permissions: Array<'VIEW_TRANSACTIONS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'>;
 
   /**
    * Spending limits that cap the agent's transaction amounts and frequency. All
@@ -632,9 +615,7 @@ export interface AgentPolicyUpdateRequest {
   /**
    * Updated list of permissions. Replaces the entire permissions list when provided.
    */
-  permissions?: Array<
-    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
-  >;
+  permissions?: Array<'VIEW_TRANSACTIONS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'>;
 
   /**
    * Partial update to spending limits. Only provided fields will be updated; omitted
@@ -855,9 +836,7 @@ export interface AgentUpdatePolicyParams {
   /**
    * Updated list of permissions. Replaces the entire permissions list when provided.
    */
-  permissions?: Array<
-    'VIEW_TRANSACTIONS' | 'CREATE_TRANSFERS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'
-  >;
+  permissions?: Array<'VIEW_TRANSACTIONS' | 'CREATE_QUOTES' | 'EXECUTE_QUOTES' | 'MANAGE_EXTERNAL_ACCOUNTS'>;
 
   /**
    * Partial update to spending limits. Only provided fields will be updated; omitted
@@ -933,12 +912,7 @@ export declare namespace Agents {
     type AgentUpdatePolicyParams as AgentUpdatePolicyParams,
   };
 
-  export {
-    Me as Me,
-    type MeCreateTransferInParams as MeCreateTransferInParams,
-    type MeCreateTransferOutParams as MeCreateTransferOutParams,
-    type MeListInternalAccountsParams as MeListInternalAccountsParams,
-  };
+  export { Me as Me, type MeListInternalAccountsParams as MeListInternalAccountsParams };
 
   export { DeviceCodes as DeviceCodes };
 

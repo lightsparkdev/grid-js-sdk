@@ -4,7 +4,6 @@ Types:
 
 - <code><a href="./src/resources/shared.ts">AedBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">AedExternalAccountCreateInfo</a></code>
-- <code><a href="./src/resources/shared.ts">AgentTransferDetails</a></code>
 - <code><a href="./src/resources/shared.ts">BdtBeneficiary</a></code>
 - <code><a href="./src/resources/shared.ts">BdtExternalAccountCreateInfo</a></code>
 - <code><a href="./src/resources/shared.ts">BeneficialOwner</a></code>
@@ -671,8 +670,6 @@ Methods:
 Methods:
 
 - <code title="get /agents/me">client.agents.me.<a href="./src/resources/agents/me/me.ts">retrieve</a>() -> Agent</code>
-- <code title="post /agents/me/transfer-in">client.agents.me.<a href="./src/resources/agents/me/me.ts">createTransferIn</a>({ ...params }) -> AgentAction</code>
-- <code title="post /agents/me/transfer-out">client.agents.me.<a href="./src/resources/agents/me/me.ts">createTransferOut</a>({ ...params }) -> AgentAction</code>
 - <code title="get /agents/me/internal-accounts">client.agents.me.<a href="./src/resources/agents/me/me.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 
 ### Transactions

@@ -534,18 +534,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/agents/me',
   },
   {
-    clientCallName: 'client.agents.me.createTransferIn',
-    fullyQualifiedName: 'agents.me.createTransferIn',
-    httpMethod: 'post',
-    httpPath: '/agents/me/transfer-in',
-  },
-  {
-    clientCallName: 'client.agents.me.createTransferOut',
-    fullyQualifiedName: 'agents.me.createTransferOut',
-    httpMethod: 'post',
-    httpPath: '/agents/me/transfer-out',
-  },
-  {
     clientCallName: 'client.agents.me.listInternalAccounts',
     fullyQualifiedName: 'agents.me.listInternalAccounts',
     httpMethod: 'get',

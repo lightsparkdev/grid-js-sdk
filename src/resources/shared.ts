@@ -57,31 +57,6 @@ export interface AedExternalAccountCreateInfo {
   swiftCode?: string;
 }
 
-/**
- * Details of a transfer-type agent action (TRANSFER_OUT or TRANSFER_IN).
- */
-export interface AgentTransferDetails {
-  /**
-   * Transfer amount in the smallest unit of the specified currency.
-   */
-  amount: number;
-
-  /**
-   * ISO 4217 currency code for the transfer amount.
-   */
-  currency: string;
-
-  /**
-   * ID of the destination account (internal or external).
-   */
-  destinationAccountId: string;
-
-  /**
-   * ID of the source account (internal or external).
-   */
-  sourceAccountId: string;
-}
-
 export interface BdtBeneficiary {
   beneficiaryType: 'INDIVIDUAL';
 

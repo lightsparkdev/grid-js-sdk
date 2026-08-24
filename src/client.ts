@@ -1086,19 +1086,19 @@ export class LightsparkGrid {
    */
   platform: API.Platform = new API.Platform(this);
   /**
-   * Endpoints for transferring funds between internal and external accounts with the same currency
+   * Deprecated endpoints for transferring funds between internal and external accounts with the same currency. Use the quote endpoints under Cross-Currency Transfers instead, which now serve same-currency transfers as well.
    */
   transferIn: API.TransferIn = new API.TransferIn(this);
   /**
-   * Endpoints for transferring funds between internal and external accounts with the same currency
+   * Deprecated endpoints for transferring funds between internal and external accounts with the same currency. Use the quote endpoints under Cross-Currency Transfers instead, which now serve same-currency transfers as well.
    */
   transferOut: API.TransferOut = new API.TransferOut(this);
   /**
-   * Endpoints for creating and confirming quotes for cross-currency transfers
+   * Endpoints for creating and confirming quotes for transfers, both same-currency and cross-currency
    */
   receiver: API.Receiver = new API.Receiver(this);
   /**
-   * Endpoints for creating and confirming quotes for cross-currency transfers
+   * Endpoints for creating and confirming quotes for transfers, both same-currency and cross-currency
    */
   quotes: API.Quotes = new API.Quotes(this);
   /**
@@ -1128,7 +1128,7 @@ export class LightsparkGrid {
   exchangeRates: API.ExchangeRates = new API.ExchangeRates(this);
   webhooks: API.Webhooks = new API.Webhooks(this);
   /**
-   * Endpoints for creating and confirming quotes for cross-currency transfers
+   * Endpoints for creating and confirming quotes for transfers, both same-currency and cross-currency
    */
   crypto: API.Crypto = new API.Crypto(this);
   /**
@@ -1451,7 +1451,6 @@ export declare namespace LightsparkGrid {
 
   export type AedBeneficiary = API.AedBeneficiary;
   export type AedExternalAccountCreateInfo = API.AedExternalAccountCreateInfo;
-  export type AgentTransferDetails = API.AgentTransferDetails;
   export type BdtBeneficiary = API.BdtBeneficiary;
   export type BdtExternalAccountCreateInfo = API.BdtExternalAccountCreateInfo;
   export type BeneficialOwner = API.BeneficialOwner;

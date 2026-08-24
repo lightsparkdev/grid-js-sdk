@@ -5,7 +5,7 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * Endpoints for creating and confirming quotes for cross-currency transfers
+ * Endpoints for creating and confirming quotes for transfers, both same-currency and cross-currency
  */
 export class Crypto extends APIResource {
   /**
