@@ -54,15 +54,14 @@ export class Sessions extends APIResource {
    *
    * @example
    * ```ts
-   * const authSignedRequestChallenge =
-   *   await client.auth.sessions.delete('id');
+   * const session = await client.auth.sessions.delete('id');
    * ```
    */
   delete(
     id: string,
     params: SessionDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<CredentialsAPI.AuthSignedRequestChallenge> {
+  ): APIPromise<SessionDeleteResponse> {
     const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID } = params ?? {};
     return this._client.delete(path`/auth/sessions/${id}`, {
       ...options,
@@ -104,7 +103,7 @@ export class Sessions extends APIResource {
    *
    * @example
    * ```ts
-   * const authSession = await client.auth.sessions.refresh(
+   * const response = await client.auth.sessions.refresh(
    *   'Session:019542f5-b3e7-1d02-0000-000000000003',
    *   {
    *     AuthSessionRefreshRequest: {
@@ -119,7 +118,7 @@ export class Sessions extends APIResource {
     id: string,
     params: SessionRefreshParams,
     options?: RequestOptions,
-  ): APIPromise<CredentialsAPI.AuthSession> {
+  ): APIPromise<SessionRefreshResponse> {
     const {
       AuthSessionRefreshRequest,
       'Grid-Wallet-Signature': gridWalletSignature,
@@ -169,6 +168,52 @@ export interface SessionListResponse {
    * List of active authentication sessions for the internal account.
    */
   data: Array<CredentialsAPI.AuthSession>;
+}
+
+/**
+ * `200` response returned by an Embedded Wallet operation that the wallet provider
+ * has accepted but not yet settled — a consensus- or approval-gated activity that
+ * is still in flight. It is not an error and needs no client action beyond
+ * patience: the backend reconciles the operation to its terminal state on its own.
+ * The client MAY re-send the byte-identical request to converge sooner; the
+ * request is idempotent and returns the settled success response once the
+ * operation completes.
+ */
+export interface SessionDeleteResponse {
+  /**
+   * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+   * not yet available.
+   */
+  status: 'PROCESSING';
+
+  /**
+   * Human-readable explanation that the operation is still being processed and the
+   * same request may be retried.
+   */
+  message?: string;
+}
+
+/**
+ * `200` response returned by an Embedded Wallet operation that the wallet provider
+ * has accepted but not yet settled — a consensus- or approval-gated activity that
+ * is still in flight. It is not an error and needs no client action beyond
+ * patience: the backend reconciles the operation to its terminal state on its own.
+ * The client MAY re-send the byte-identical request to converge sooner; the
+ * request is idempotent and returns the settled success response once the
+ * operation completes.
+ */
+export interface SessionRefreshResponse {
+  /**
+   * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+   * not yet available.
+   */
+  status: 'PROCESSING';
+
+  /**
+   * Human-readable explanation that the operation is still being processed and the
+   * same request may be retried.
+   */
+  message?: string;
 }
 
 export interface SessionListParams {
@@ -226,6 +271,8 @@ export declare namespace Sessions {
   export {
     type AuthSessionRefreshRequest as AuthSessionRefreshRequest,
     type SessionListResponse as SessionListResponse,
+    type SessionDeleteResponse as SessionDeleteResponse,
+    type SessionRefreshResponse as SessionRefreshResponse,
     type SessionListParams as SessionListParams,
     type SessionDeleteParams as SessionDeleteParams,
     type SessionRefreshParams as SessionRefreshParams,

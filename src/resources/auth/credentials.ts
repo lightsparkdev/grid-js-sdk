@@ -34,17 +34,16 @@ export class Credentials extends APIResource {
    *
    * @example
    * ```ts
-   * const authMethodResponse =
-   *   await client.auth.credentials.create({
-   *     AuthCredentialCreateRequest: {
-   *       accountId:
-   *         'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
-   *       type: 'EMAIL_OTP',
-   *     },
-   *   });
+   * const credential = await client.auth.credentials.create({
+   *   AuthCredentialCreateRequest: {
+   *     accountId:
+   *       'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
+   *     type: 'EMAIL_OTP',
+   *   },
+   * });
    * ```
    */
-  create(params: CredentialCreateParams, options?: RequestOptions): APIPromise<AuthMethodResponse> {
+  create(params: CredentialCreateParams, options?: RequestOptions): APIPromise<CredentialCreateResponse> {
     const {
       AuthCredentialCreateRequest,
       'Grid-Wallet-Signature': gridWalletSignature,
@@ -105,15 +104,16 @@ export class Credentials extends APIResource {
    *
    * @example
    * ```ts
-   * const authSignedRequestChallenge =
-   *   await client.auth.credentials.delete('id');
+   * const credential = await client.auth.credentials.delete(
+   *   'id',
+   * );
    * ```
    */
   delete(
     id: string,
     params: CredentialDeleteParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AuthSignedRequestChallenge> {
+  ): APIPromise<CredentialDeleteResponse> {
     const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID } = params ?? {};
     return this._client.delete(path`/auth/credentials/${id}`, {
       ...options,
@@ -159,18 +159,20 @@ export class Credentials extends APIResource {
    *
    * @example
    * ```ts
-   * const authCredentialResponseOneOf =
-   *   await client.auth.credentials.challenge('id', {
+   * const response = await client.auth.credentials.challenge(
+   *   'id',
+   *   {
    *     clientPublicKey:
    *       '02f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31',
-   *   });
+   *   },
+   * );
    * ```
    */
   challenge(
     id: string,
     body: CredentialChallengeParams | null | undefined = {},
     options?: RequestOptions,
-  ): APIPromise<AuthCredentialResponseOneOf> {
+  ): APIPromise<CredentialChallengeResponse> {
     return this._client.post(path`/auth/credentials/${id}/challenge`, {
       body,
       ...options,
@@ -223,7 +225,7 @@ export class Credentials extends APIResource {
    *
    * @example
    * ```ts
-   * const authSession = await client.auth.credentials.verify(
+   * const response = await client.auth.credentials.verify(
    *   'id',
    *   {
    *     AuthCredentialVerifyRequest: {
@@ -235,7 +237,11 @@ export class Credentials extends APIResource {
    * );
    * ```
    */
-  verify(id: string, params: CredentialVerifyParams, options?: RequestOptions): APIPromise<AuthSession> {
+  verify(
+    id: string,
+    params: CredentialVerifyParams,
+    options?: RequestOptions,
+  ): APIPromise<CredentialVerifyResponse> {
     const {
       AuthCredentialVerifyRequest,
       'Grid-Wallet-Signature': gridWalletSignature,
@@ -750,6 +756,124 @@ export interface SignedRequestChallenge {
   requestId: string;
 }
 
+/**
+ * `200` response returned by an Embedded Wallet operation that the wallet provider
+ * has accepted but not yet settled — a consensus- or approval-gated activity that
+ * is still in flight. It is not an error and needs no client action beyond
+ * patience: the backend reconciles the operation to its terminal state on its own.
+ * The client MAY re-send the byte-identical request to converge sooner; the
+ * request is idempotent and returns the settled success response once the
+ * operation completes.
+ */
+export interface CredentialCreateResponse {
+  /**
+   * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+   * not yet available.
+   */
+  status: 'PROCESSING';
+
+  /**
+   * Human-readable explanation that the operation is still being processed and the
+   * same request may be retried.
+   */
+  message?: string;
+}
+
+/**
+ * `200` response returned by an Embedded Wallet operation that the wallet provider
+ * has accepted but not yet settled — a consensus- or approval-gated activity that
+ * is still in flight. It is not an error and needs no client action beyond
+ * patience: the backend reconciles the operation to its terminal state on its own.
+ * The client MAY re-send the byte-identical request to converge sooner; the
+ * request is idempotent and returns the settled success response once the
+ * operation completes.
+ */
+export interface CredentialDeleteResponse {
+  /**
+   * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+   * not yet available.
+   */
+  status: 'PROCESSING';
+
+  /**
+   * Human-readable explanation that the operation is still being processed and the
+   * same request may be retried.
+   */
+  message?: string;
+}
+
+/**
+ * Response body for `POST /auth/credentials/{id}/challenge`. Normally an
+ * `AuthCredentialResponseOneOf` — the re-issued challenge or re-sent OTP. When the
+ * OTP send's underlying wallet-provider activity is still in flight, this is
+ * instead a `WalletOperationProcessing` body with `status: "PROCESSING"` —
+ * re-request the challenge until the send settles; the backend also reconciles it
+ * to terminal on its own.
+ */
+export type CredentialChallengeResponse =
+  | AuthCredentialResponseOneOf
+  | CredentialChallengeResponse.WalletOperationProcessing;
+
+export namespace CredentialChallengeResponse {
+  /**
+   * `200` response returned by an Embedded Wallet operation that the wallet provider
+   * has accepted but not yet settled — a consensus- or approval-gated activity that
+   * is still in flight. It is not an error and needs no client action beyond
+   * patience: the backend reconciles the operation to its terminal state on its own.
+   * The client MAY re-send the byte-identical request to converge sooner; the
+   * request is idempotent and returns the settled success response once the
+   * operation completes.
+   */
+  export interface WalletOperationProcessing {
+    /**
+     * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+     * not yet available.
+     */
+    status: 'PROCESSING';
+
+    /**
+     * Human-readable explanation that the operation is still being processed and the
+     * same request may be retried.
+     */
+    message?: string;
+  }
+}
+
+/**
+ * Response body for `POST /auth/credentials/{id}/verify`. Normally an
+ * `AuthSession` — the issued session on successful verification. When the
+ * underlying wallet-provider activity is still in flight, this is instead a
+ * `WalletOperationProcessing` body with `status: "PROCESSING"` — the client
+ * re-sends the byte-identical request until it gets the session; the backend also
+ * reconciles the activity to terminal on its own.
+ */
+export type CredentialVerifyResponse = AuthSession | CredentialVerifyResponse.WalletOperationProcessing;
+
+export namespace CredentialVerifyResponse {
+  /**
+   * `200` response returned by an Embedded Wallet operation that the wallet provider
+   * has accepted but not yet settled — a consensus- or approval-gated activity that
+   * is still in flight. It is not an error and needs no client action beyond
+   * patience: the backend reconciles the operation to its terminal state on its own.
+   * The client MAY re-send the byte-identical request to converge sooner; the
+   * request is idempotent and returns the settled success response once the
+   * operation completes.
+   */
+  export interface WalletOperationProcessing {
+    /**
+     * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+     * not yet available.
+     */
+    status: 'PROCESSING';
+
+    /**
+     * Human-readable explanation that the operation is still being processed and the
+     * same request may be retried.
+     */
+    message?: string;
+  }
+}
+
 export interface CredentialCreateParams {
   /**
    * Body param
@@ -869,6 +993,10 @@ export declare namespace Credentials {
     type PasskeyCredentialCreateRequest as PasskeyCredentialCreateRequest,
     type PasskeyCredentialVerifyRequest as PasskeyCredentialVerifyRequest,
     type SignedRequestChallenge as SignedRequestChallenge,
+    type CredentialCreateResponse as CredentialCreateResponse,
+    type CredentialDeleteResponse as CredentialDeleteResponse,
+    type CredentialChallengeResponse as CredentialChallengeResponse,
+    type CredentialVerifyResponse as CredentialVerifyResponse,
     type CredentialCreateParams as CredentialCreateParams,
     type CredentialListParams as CredentialListParams,
     type CredentialDeleteParams as CredentialDeleteParams,

@@ -606,14 +606,18 @@ Types:
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialCreateRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">PasskeyCredentialVerifyRequest</a></code>
 - <code><a href="./src/resources/auth/credentials.ts">SignedRequestChallenge</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">CredentialCreateResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">CredentialDeleteResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">CredentialChallengeResponse</a></code>
+- <code><a href="./src/resources/auth/credentials.ts">CredentialVerifyResponse</a></code>
 
 Methods:
 
-- <code title="post /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">create</a>({ ...params }) -> AuthMethodResponse</code>
+- <code title="post /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">create</a>({ ...params }) -> CredentialCreateResponse</code>
 - <code title="get /auth/credentials">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">list</a>({ ...params }) -> AuthCredentialListResponse</code>
-- <code title="delete /auth/credentials/{id}">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">delete</a>(id, { ...params }) -> AuthSignedRequestChallenge</code>
-- <code title="post /auth/credentials/{id}/challenge">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">challenge</a>(id, { ...params }) -> AuthCredentialResponseOneOf</code>
-- <code title="post /auth/credentials/{id}/verify">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">verify</a>(id, { ...params }) -> AuthSession</code>
+- <code title="delete /auth/credentials/{id}">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">delete</a>(id, { ...params }) -> CredentialDeleteResponse</code>
+- <code title="post /auth/credentials/{id}/challenge">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">challenge</a>(id, { ...params }) -> CredentialChallengeResponse</code>
+- <code title="post /auth/credentials/{id}/verify">client.auth.credentials.<a href="./src/resources/auth/credentials.ts">verify</a>(id, { ...params }) -> CredentialVerifyResponse</code>
 
 ## Sessions
 
@@ -621,12 +625,14 @@ Types:
 
 - <code><a href="./src/resources/auth/sessions.ts">AuthSessionRefreshRequest</a></code>
 - <code><a href="./src/resources/auth/sessions.ts">SessionListResponse</a></code>
+- <code><a href="./src/resources/auth/sessions.ts">SessionDeleteResponse</a></code>
+- <code><a href="./src/resources/auth/sessions.ts">SessionRefreshResponse</a></code>
 
 Methods:
 
 - <code title="get /auth/sessions">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">list</a>({ ...params }) -> SessionListResponse</code>
-- <code title="delete /auth/sessions/{id}">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">delete</a>(id, { ...params }) -> AuthSignedRequestChallenge</code>
-- <code title="post /auth/sessions/{id}/refresh">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">refresh</a>(id, { ...params }) -> AuthSession</code>
+- <code title="delete /auth/sessions/{id}">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">delete</a>(id, { ...params }) -> SessionDeleteResponse</code>
+- <code title="post /auth/sessions/{id}/refresh">client.auth.sessions.<a href="./src/resources/auth/sessions.ts">refresh</a>(id, { ...params }) -> SessionRefreshResponse</code>
 
 # Agents
 
