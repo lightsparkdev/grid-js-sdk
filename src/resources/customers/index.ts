@@ -26,6 +26,7 @@ export {
   type InternalAccountUpdateRequest,
   type KYCLinkCreateRequest,
   type KYCLinkResponse,
+  type CustomerExportResponse,
   type CustomerCreateParams,
   type CustomerUpdateParams,
   type CustomerListParams,

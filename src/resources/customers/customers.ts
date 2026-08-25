@@ -311,6 +311,16 @@ export class Customers extends APIResource {
    *    signed retry returns `200` with `encryptedWalletCredentials`, which the
    *    client decrypts with the matching private key.
    *
+   * The export may not settle within that request: an approval- or consensus-gated
+   * wallet-provider activity answers `200` with `status: "PROCESSING"` instead. The
+   * credentials are never stored server-side, so collecting them is the client's job
+   * — re-send the byte-identical signed retry (same headers, same body) until it
+   * returns `encryptedWalletCredentials`. The `Request-Id` challenge stays usable
+   * until an attempt actually delivers them, so a `PROCESSING` response never burns
+   * it; a delivered export does, and a later re-send is then rejected with `401`.
+   * Subscribe to `wallet_operation.completed` to learn when re-sending will succeed
+   * rather than polling blind.
+   *
    * The `clientPublicKey` is ephemeral: generate a fresh P-256 keypair for this
    * export and discard the private key after decrypting. Do not reuse the keypair
    * from any prior verify call — that private key was already discarded after
@@ -318,18 +328,17 @@ export class Customers extends APIResource {
    *
    * @example
    * ```ts
-   * const internalAccountExportResponse =
-   *   await client.customers.export('id', {
-   *     clientPublicKey:
-   *       '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
-   *   });
+   * const response = await client.customers.export('id', {
+   *   clientPublicKey:
+   *     '04f45f2a22c908b9ce09a7150e514afd24627c401c38a4afc164e1ea783adaaa31d4245acfb88c2ebd42b47628d63ecabf345484f0a9f665b63c54c897d5578be2',
+   * });
    * ```
    */
   export(
     id: string,
     params: CustomerExportParams,
     options?: RequestOptions,
-  ): APIPromise<InternalAccountExportResponse> {
+  ): APIPromise<CustomerExportResponse> {
     const { 'Grid-Wallet-Signature': gridWalletSignature, 'Request-Id': requestID, ...body } = params;
     return this._client.post(path`/internal-accounts/${id}/export`, {
       body,
@@ -1649,6 +1658,45 @@ export interface KYCLinkResponse {
   token?: string;
 }
 
+/**
+ * Response body for the signed retry of
+ * `POST /internal-accounts/{internalAccountId}/export`. Normally an
+ * `InternalAccountExportResponse` — the encrypted wallet credentials. When the
+ * underlying wallet-provider activity is still in flight, this is instead a
+ * `WalletOperationProcessing` body with `status: "PROCESSING"`. The credentials
+ * are never stored server-side, so re-sending the byte-identical signed retry is
+ * how they are collected: the re-send returns them as soon as the activity has
+ * settled, and the challenge is consumed only by the attempt that delivers them.
+ */
+export type CustomerExportResponse =
+  | InternalAccountExportResponse
+  | CustomerExportResponse.WalletOperationProcessing;
+
+export namespace CustomerExportResponse {
+  /**
+   * `200` response returned by an Embedded Wallet operation that the wallet provider
+   * has accepted but not yet settled — a consensus- or approval-gated activity that
+   * is still in flight. It is not an error and needs no client action beyond
+   * patience: the backend reconciles the operation to its terminal state on its own.
+   * The client MAY re-send the byte-identical request to converge sooner; the
+   * request is idempotent and returns the settled success response once the
+   * operation completes.
+   */
+  export interface WalletOperationProcessing {
+    /**
+     * Always `PROCESSING`. Marks a still-in-flight operation whose terminal result is
+     * not yet available.
+     */
+    status: 'PROCESSING';
+
+    /**
+     * Human-readable explanation that the operation is still being processed and the
+     * same request may be retried.
+     */
+    message?: string;
+  }
+}
+
 export interface CustomerCreateParams {
   /**
    * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
@@ -1860,6 +1908,7 @@ export declare namespace Customers {
     type InternalAccountUpdateRequest as InternalAccountUpdateRequest,
     type KYCLinkCreateRequest as KYCLinkCreateRequest,
     type KYCLinkResponse as KYCLinkResponse,
+    type CustomerExportResponse as CustomerExportResponse,
     type CustomerOneovesDefaultPagination as CustomerOneovesDefaultPagination,
     type CustomerCreateParams as CustomerCreateParams,
     type CustomerUpdateParams as CustomerUpdateParams,
