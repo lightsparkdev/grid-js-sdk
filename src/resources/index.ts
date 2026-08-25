@@ -219,5 +219,6 @@ export {
   type CardStateChangeWebhookEvent,
   type CardFundingSourceChangeWebhookEvent,
   type CardTransactionWebhookEvent,
+  type WalletOperationWebhookEvent,
   type UnwrapWebhookEvent,
 } from './webhooks';

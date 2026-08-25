@@ -329,6 +329,137 @@ export interface CardTransactionWebhookEvent {
     | 'CARD_TRANSACTION.EXCEPTION';
 }
 
+export interface WalletOperationWebhookEvent {
+  /**
+   * Unique identifier for this webhook delivery (can be used for idempotency)
+   */
+  id: string;
+
+  data:
+    | WalletOperationWebhookEvent.WalletOperationCompletedData
+    | WalletOperationWebhookEvent.WalletOperationFailedData;
+
+  /**
+   * ISO 8601 timestamp of when the webhook was sent
+   */
+  timestamp: string;
+
+  type: 'WALLET_OPERATION.COMPLETED' | 'WALLET_OPERATION.FAILED';
+}
+
+export namespace WalletOperationWebhookEvent {
+  export interface WalletOperationCompletedData {
+    /**
+     * Grid-internal identifier for this operation. Useful when contacting support
+     * about a specific operation; not a correlation key — use `requestId` to match
+     * this webhook to the request you made.
+     */
+    operationId: string;
+
+    /**
+     * The kind of operation that reached a terminal state.
+     */
+    operationType: 'auth_credential.create' | 'auth_credential.delete' | 'session.revoke' | 'wallet.export';
+
+    /**
+     * The `Request-Id` you supplied on the signed retry that produced this terminal
+     * result — the same value you would have echoed on every retry had you received a
+     * `200 { status: "PROCESSING" }` response while it was settling. This is the
+     * primary way to correlate this webhook to the request you made.
+     */
+    requestId: string;
+
+    /**
+     * LSID of the business resource this operation affected. For
+     * `auth_credential.create`, this is the **primary way to learn the new
+     * credential's id** — the request that created it can't have supplied one in
+     * advance. For `auth_credential.delete` and `session.revoke` it echoes the
+     * `AuthMethod:<uuid>` / `Session:<uuid>` you already knew and referenced in the
+     * request; for `wallet.export` it's the `InternalAccount:<uuid>` whose wallet was
+     * exported.
+     */
+    resourceId: string;
+
+    /**
+     * The kind of business resource `resourceId` identifies. Determined by
+     * `operationType`: `auth_credential.create` and `auth_credential.delete` →
+     * `AUTH_METHOD`, `session.revoke` → `SESSION`, `wallet.export` →
+     * `INTERNAL_ACCOUNT`.
+     */
+    resourceType: 'AUTH_METHOD' | 'SESSION' | 'INTERNAL_ACCOUNT';
+
+    /**
+     * Terminal status of the operation.
+     */
+    status: 'completed';
+  }
+
+  export interface WalletOperationFailedData {
+    /**
+     * Failure details for a terminally failed operation.
+     */
+    error: WalletOperationFailedData.Error;
+
+    /**
+     * Grid-internal identifier for this operation. Useful when contacting support
+     * about a specific operation; not a correlation key — use `requestId` to match
+     * this webhook to the request you made.
+     */
+    operationId: string;
+
+    /**
+     * The kind of operation that reached a terminal state.
+     */
+    operationType: 'auth_credential.create' | 'auth_credential.delete' | 'session.revoke' | 'wallet.export';
+
+    /**
+     * The `Request-Id` you supplied on the signed retry that produced this terminal
+     * result — the same value you would have echoed on every retry had you received a
+     * `200 { status: "PROCESSING" }` response while it was settling. This is the
+     * primary way to correlate this webhook to the request you made.
+     */
+    requestId: string;
+
+    /**
+     * LSID of the business resource this operation affected. For
+     * `auth_credential.create`, this is the **primary way to learn the new
+     * credential's id** — the request that created it can't have supplied one in
+     * advance. For `auth_credential.delete` and `session.revoke` it echoes the
+     * `AuthMethod:<uuid>` / `Session:<uuid>` you already knew and referenced in the
+     * request; for `wallet.export` it's the `InternalAccount:<uuid>` whose wallet was
+     * exported.
+     */
+    resourceId: string;
+
+    /**
+     * The kind of business resource `resourceId` identifies. Determined by
+     * `operationType`: `auth_credential.create` and `auth_credential.delete` →
+     * `AUTH_METHOD`, `session.revoke` → `SESSION`, `wallet.export` →
+     * `INTERNAL_ACCOUNT`.
+     */
+    resourceType: 'AUTH_METHOD' | 'SESSION' | 'INTERNAL_ACCOUNT';
+
+    /**
+     * Terminal status of the operation.
+     */
+    status: 'failed';
+  }
+
+  export namespace WalletOperationFailedData {
+    /**
+     * Failure details for a terminally failed operation.
+     */
+    export interface Error {
+      /**
+       * Machine-readable failure code for a `FAILED` operation. Codes are Grid-defined
+       * and stable regardless of which vendor Grid uses under the hood for a given
+       * operation.
+       */
+      code: string;
+    }
+  }
+}
+
 export type UnwrapWebhookEvent =
   | AgentActionWebhookEvent
   | IncomingPaymentWebhookEvent
@@ -342,7 +473,8 @@ export type UnwrapWebhookEvent =
   | VerificationUpdateWebhookEvent
   | CardStateChangeWebhookEvent
   | CardFundingSourceChangeWebhookEvent
-  | CardTransactionWebhookEvent;
+  | CardTransactionWebhookEvent
+  | WalletOperationWebhookEvent;
 
 export declare namespace Webhooks {
   export {
@@ -358,6 +490,7 @@ export declare namespace Webhooks {
     type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
     type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
     type CardTransactionWebhookEvent as CardTransactionWebhookEvent,
+    type WalletOperationWebhookEvent as WalletOperationWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
   };
 }

@@ -506,6 +506,7 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">CardStateChangeWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CardFundingSourceChangeWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">CardTransactionWebhookEvent</a></code>
+- <code><a href="./src/resources/webhooks.ts">WalletOperationWebhookEvent</a></code>
 - <code><a href="./src/resources/webhooks.ts">UnwrapWebhookEvent</a></code>
 
 Methods:
