@@ -47,9 +47,36 @@ export class Documents extends APIResource {
   }
 
   /**
-   * Replace an existing document with a new file and/or updated metadata. This is
-   * useful when a document was rejected and needs to be re-uploaded. The request
-   * must use multipart/form-data.
+   * Replace an existing document with a new file and/or updated metadata. The
+   * request must use multipart/form-data.
+   *
+   * Use this when a stored document was rejected during review, which arrives as an
+   * entry in the verification's `errors` array rather than as an error on upload.
+   * Replacing marks the previously submitted file inactive, which a second
+   * `POST /documents` would not do: that leaves the rejected file active alongside
+   * the new one, and the rejection can carry. Call `POST /verifications` afterwards
+   * to start a new review, since existing errors persist until a new review produces
+   * a new verdict.
+   *
+   * A file rejected on upload with `422 DOCUMENT_REJECTED` never creates a document,
+   * so there is nothing to replace. Retry those with `POST /documents`.
+   *
+   * Supported file types: `application/pdf`, `image/jpeg`, and `image/png`. Grid
+   * matches on the `Content-Type` of the multipart part, not the file extension. Any
+   * other type, and any file over 10 MB, returns `400 INVALID_INPUT`.
+   *
+   * Grid forwards the file to its verification provider, which screens it as the
+   * request is handled and can reject it with `422 DOCUMENT_REJECTED`. To pass that
+   * screen, a photo or scan of a document must:
+   *
+   * - show the whole document, with all four corners inside the frame and nothing
+   *   overlapping an edge
+   * - be in focus and free of glare, so every field and the machine-readable zone
+   *   can be read
+   * - be in color, not a black-and-white copy
+   * - be a photo or scan of the physical document, not a screen capture, and not
+   *   retouched in an image editor
+   * - be unexpired
    */
   replace(documentID: string, params: DocumentReplaceParams, options?: RequestOptions): APIPromise<Document> {
     const { DocumentReplaceRequest } = params;
@@ -67,7 +94,22 @@ export class Documents extends APIResource {
    * must use multipart/form-data with the file in the `file` field and metadata in
    * the remaining fields.
    *
-   * Supported file types: PDF, JPEG, PNG. Maximum file size: 10 MB.
+   * Supported file types: `application/pdf`, `image/jpeg`, and `image/png`. Grid
+   * matches on the `Content-Type` of the multipart part, not the file extension. Any
+   * other type, and any file over 10 MB, returns `400 INVALID_INPUT`.
+   *
+   * Grid forwards the file to its verification provider, which screens it as the
+   * request is handled and can reject it with `422 DOCUMENT_REJECTED`. To pass that
+   * screen, a photo or scan of a document must:
+   *
+   * - show the whole document, with all four corners inside the frame and nothing
+   *   overlapping an edge
+   * - be in focus and free of glare, so every field and the machine-readable zone
+   *   can be read
+   * - be in color, not a black-and-white copy
+   * - be a photo or scan of the physical document, not a screen capture, and not
+   *   retouched in an image editor
+   * - be unexpired
    */
   upload(params: DocumentUploadParams, options?: RequestOptions): APIPromise<Document> {
     const { DocumentUploadRequest } = params;
@@ -256,7 +298,11 @@ export namespace DocumentReplaceParams {
       | 'OTHER';
 
     /**
-     * The document file (PDF, JPEG, or PNG, max 10 MB)
+     * The document file. Grid accepts three formats, matched on the `Content-Type` of
+     * the multipart part rather than the file extension: `application/pdf`,
+     * `image/jpeg`, and `image/png`. Any other type, including `image/heic`,
+     * `image/webp`, and `image/tiff`, returns `400 INVALID_INPUT`. The file must be 10
+     * MB or smaller.
      */
     file: Uploadable;
 
@@ -334,7 +380,11 @@ export namespace DocumentUploadParams {
       | 'OTHER';
 
     /**
-     * The document file (PDF, JPEG, or PNG, max 10 MB)
+     * The document file. Grid accepts three formats, matched on the `Content-Type` of
+     * the multipart part rather than the file extension: `application/pdf`,
+     * `image/jpeg`, and `image/png`. Any other type, including `image/heic`,
+     * `image/webp`, and `image/tiff`, returns `400 INVALID_INPUT`. The file must be 10
+     * MB or smaller.
      */
     file: Uploadable;
 
