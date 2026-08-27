@@ -31,7 +31,11 @@ describe('resource receiver', () => {
     await expect(
       client.receiver.lookupExternalAccount(
         'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',
-        { customerId: 'customerId', senderUmaAddress: 'senderUmaAddress' },
+        {
+          customerId: 'customerId',
+          senderUmaAddress: 'senderUmaAddress',
+          sendingCurrency: 'sendingCurrency',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);
@@ -55,7 +59,11 @@ describe('resource receiver', () => {
     await expect(
       client.receiver.lookupUma(
         'receiverUmaAddress',
-        { customerId: 'customerId', senderUmaAddress: 'senderUmaAddress' },
+        {
+          customerId: 'customerId',
+          senderUmaAddress: 'senderUmaAddress',
+          sendingCurrency: 'sendingCurrency',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);

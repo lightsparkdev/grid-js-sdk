@@ -1730,11 +1730,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Lookup a receiving UMA address to determine supported currencies and exchange rates.\nThis endpoint helps platforms determine what currencies they can send to a given UMA address.\n',
     stainlessPath: '(resource) receiver > (method) lookup_uma',
     qualified: 'client.receiver.lookupUma',
-    params: ['receiverUmaAddress: string;', 'customerId?: string;', 'senderUmaAddress?: string;'],
+    params: [
+      'receiverUmaAddress: string;',
+      'customerId?: string;',
+      'senderUmaAddress?: string;',
+      'sendingCurrency?: string;',
+    ],
     response:
-      '{ lookupId: string; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; }[]; requiredPayerDataFields?: object[]; }',
+      '{ lookupId: string; sendingCurrency: object; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; maxSendingAmount?: number; minSendingAmount?: number; }[]; requiredPayerDataFields?: object[]; }',
     markdown:
-      "## lookup_uma\n\n`client.receiver.lookupUma(receiverUmaAddress: string, customerId?: string, senderUmaAddress?: string): object`\n\n**get** `/receiver/uma/{receiverUmaAddress}`\n\nLookup a receiving UMA address to determine supported currencies and exchange rates.\nThis endpoint helps platforms determine what currencies they can send to a given UMA address.\n\n\n### Parameters\n\n- `receiverUmaAddress: string`\n\n- `customerId?: string`\n  System ID of the sender (optional if senderUmaAddress is provided)\n\n- `senderUmaAddress?: string`\n  UMA address of the sender (optional if customerId is provided)\n\n### Returns\n\n- `{ lookupId: string; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; }[]; requiredPayerDataFields?: object[]; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst umaLookupResponse = await client.receiver.lookupUma('receiverUmaAddress');\n\nconsole.log(umaLookupResponse);\n```",
+      "## lookup_uma\n\n`client.receiver.lookupUma(receiverUmaAddress: string, customerId?: string, senderUmaAddress?: string, sendingCurrency?: string): object`\n\n**get** `/receiver/uma/{receiverUmaAddress}`\n\nLookup a receiving UMA address to determine supported currencies and exchange rates.\nThis endpoint helps platforms determine what currencies they can send to a given UMA address.\n\n\n### Parameters\n\n- `receiverUmaAddress: string`\n\n- `customerId?: string`\n  System ID of the sender (optional if senderUmaAddress is provided)\n\n- `senderUmaAddress?: string`\n  UMA address of the sender (optional if customerId is provided)\n\n- `sendingCurrency?: string`\n  Currency code the sender will send from (e.g., USD). Selects which of the sender's configured currencies the response is priced against: it is echoed back as the response's `sendingCurrency`, and the `minSendingAmount`/`maxSendingAmount` bounds are denominated in its smallest unit. Defaults to the sender's default currency.\n\n### Returns\n\n- `{ lookupId: string; sendingCurrency: object; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; maxSendingAmount?: number; minSendingAmount?: number; }[]; requiredPayerDataFields?: object[]; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst umaLookupResponse = await client.receiver.lookupUma('receiverUmaAddress');\n\nconsole.log(umaLookupResponse);\n```",
     perLanguage: {
       typescript: {
         method: 'client.receiver.lookupUma',
@@ -1769,7 +1774,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       php: {
         method: 'receiver->lookupUma',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaLookupResponse = $client->receiver->lookupUma(\n  'receiverUmaAddress',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n);\n\nvar_dump($umaLookupResponse);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$umaLookupResponse = $client->receiver->lookupUma(\n  'receiverUmaAddress',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n  sendingCurrency: 'sendingCurrency',\n);\n\nvar_dump($umaLookupResponse);",
       },
       http: {
         example:
@@ -1786,11 +1791,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       'Lookup an external account by ID to determine supported currencies and exchange rates.\nThis endpoint helps platforms determine what currencies they can send to a given external account, along with the current estimated exchange rates and minimum and maximum amounts that can be sent.\n',
     stainlessPath: '(resource) receiver > (method) lookup_external_account',
     qualified: 'client.receiver.lookupExternalAccount',
-    params: ['accountId: string;', 'customerId?: string;', 'senderUmaAddress?: string;'],
+    params: [
+      'accountId: string;',
+      'customerId?: string;',
+      'senderUmaAddress?: string;',
+      'sendingCurrency?: string;',
+    ],
     response:
-      '{ lookupId: string; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; }[]; requiredPayerDataFields?: object[]; }',
+      '{ lookupId: string; sendingCurrency: object; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; maxSendingAmount?: number; minSendingAmount?: number; }[]; requiredPayerDataFields?: object[]; }',
     markdown:
-      "## lookup_external_account\n\n`client.receiver.lookupExternalAccount(accountId: string, customerId?: string, senderUmaAddress?: string): object`\n\n**get** `/receiver/external-account/{accountId}`\n\nLookup an external account by ID to determine supported currencies and exchange rates.\nThis endpoint helps platforms determine what currencies they can send to a given external account, along with the current estimated exchange rates and minimum and maximum amounts that can be sent.\n\n\n### Parameters\n\n- `accountId: string`\n\n- `customerId?: string`\n  System ID of the sender (optional if senderUmaAddress is provided)\n\n- `senderUmaAddress?: string`\n  UMA address of the sender (optional if customerId is provided)\n\n### Returns\n\n- `{ lookupId: string; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; }[]; requiredPayerDataFields?: object[]; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst externalAccountLookupResponse = await client.receiver.lookupExternalAccount('ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965');\n\nconsole.log(externalAccountLookupResponse);\n```",
+      "## lookup_external_account\n\n`client.receiver.lookupExternalAccount(accountId: string, customerId?: string, senderUmaAddress?: string, sendingCurrency?: string): object`\n\n**get** `/receiver/external-account/{accountId}`\n\nLookup an external account by ID to determine supported currencies and exchange rates.\nThis endpoint helps platforms determine what currencies they can send to a given external account, along with the current estimated exchange rates and minimum and maximum amounts that can be sent.\n\n\n### Parameters\n\n- `accountId: string`\n\n- `customerId?: string`\n  System ID of the sender (optional if senderUmaAddress is provided)\n\n- `senderUmaAddress?: string`\n  UMA address of the sender (optional if customerId is provided)\n\n- `sendingCurrency?: string`\n  Currency code the sender will send from (e.g., USD). Selects which of the sender's configured currencies the response is priced against: it is echoed back as the response's `sendingCurrency`, and the `minSendingAmount`/`maxSendingAmount` bounds are denominated in its smallest unit. Defaults to the sender's default currency.\n\n### Returns\n\n- `{ lookupId: string; sendingCurrency: object; supportedCurrencies: { currency: currency; estimatedExchangeRate: number; max: number; min: number; maxSendingAmount?: number; minSendingAmount?: number; }[]; requiredPayerDataFields?: object[]; }`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst externalAccountLookupResponse = await client.receiver.lookupExternalAccount('ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965');\n\nconsole.log(externalAccountLookupResponse);\n```",
     perLanguage: {
       typescript: {
         method: 'client.receiver.lookupExternalAccount',
@@ -1825,7 +1835,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       php: {
         method: 'receiver->lookupExternalAccount',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccountLookupResponse = $client->receiver->lookupExternalAccount(\n  'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n);\n\nvar_dump($externalAccountLookupResponse);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$externalAccountLookupResponse = $client->receiver->lookupExternalAccount(\n  'ExternalAccount:e85dcbd6-dced-4ec4-b756-3c3a9ea3d965',\n  customerID: 'customerId',\n  senderUmaAddress: 'senderUmaAddress',\n  sendingCurrency: 'sendingCurrency',\n);\n\nvar_dump($externalAccountLookupResponse);",
       },
       http: {
         example:

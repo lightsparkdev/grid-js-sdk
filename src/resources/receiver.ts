@@ -74,6 +74,14 @@ export interface LookupResponse {
   lookupId: string;
 
   /**
+   * The currency the payment is sent from — the sender's default, or the one named
+   * by the `sendingCurrency` query parameter. Every `estimatedExchangeRate` in
+   * `supportedCurrencies` converts from this currency, and any
+   * `minSendingAmount`/`maxSendingAmount` is denominated in its smallest unit.
+   */
+  sendingCurrency: unknown;
+
+  /**
    * List of currencies supported by the receiving account
    */
   supportedCurrencies: Array<LookupResponse.SupportedCurrency>;
@@ -104,6 +112,24 @@ export namespace LookupResponse {
      * The minimum amount that can be received in this currency.
      */
     min: number;
+
+    /**
+     * The maximum amount that can be sent for this currency, in the smallest unit of
+     * the sender's currency (e.g. cents for USD). Same semantics as `maxSendingAmount`
+     * on the exchange rates endpoint. This is an estimate based on the current
+     * exchange rate and is subject to change when calling the quotes endpoint. Omitted
+     * when the sending-side bound cannot be resolved.
+     */
+    maxSendingAmount?: number;
+
+    /**
+     * The minimum amount that can be sent for this currency, in the smallest unit of
+     * the sender's currency (e.g. cents for USD). Same semantics as `minSendingAmount`
+     * on the exchange rates endpoint. This is an estimate based on the current
+     * exchange rate and is subject to change when calling the quotes endpoint. Omitted
+     * when the sending-side bound cannot be resolved.
+     */
+    minSendingAmount?: number;
   }
 }
 
@@ -124,6 +150,15 @@ export interface ReceiverLookupExternalAccountParams {
    * UMA address of the sender (optional if customerId is provided)
    */
   senderUmaAddress?: string;
+
+  /**
+   * Currency code the sender will send from (e.g., USD). Selects which of the
+   * sender's configured currencies the response is priced against: it is echoed back
+   * as the response's `sendingCurrency`, and the
+   * `minSendingAmount`/`maxSendingAmount` bounds are denominated in its smallest
+   * unit. Defaults to the sender's default currency.
+   */
+  sendingCurrency?: string;
 }
 
 export interface ReceiverLookupUmaParams {
@@ -136,6 +171,15 @@ export interface ReceiverLookupUmaParams {
    * UMA address of the sender (optional if customerId is provided)
    */
   senderUmaAddress?: string;
+
+  /**
+   * Currency code the sender will send from (e.g., USD). Selects which of the
+   * sender's configured currencies the response is priced against: it is echoed back
+   * as the response's `sendingCurrency`, and the
+   * `minSendingAmount`/`maxSendingAmount` bounds are denominated in its smallest
+   * unit. Defaults to the sender's default currency.
+   */
+  sendingCurrency?: string;
 }
 
 export declare namespace Receiver {
