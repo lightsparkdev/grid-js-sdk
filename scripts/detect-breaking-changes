@@ -26,7 +26,6 @@ TEST_PATHS=(
 	tests/api-resources/sandbox/cards/cards.test.ts
 	tests/api-resources/sandbox/cards/simulate.test.ts
 	tests/api-resources/uma-providers.test.ts
-	tests/api-resources/vasps.test.ts
 	tests/api-resources/tokens.test.ts
 	tests/api-resources/exchange-rates.test.ts
 	tests/api-resources/crypto.test.ts

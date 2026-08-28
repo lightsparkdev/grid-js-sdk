@@ -452,17 +452,6 @@ Methods:
 
 - <code title="get /uma-providers">client.umaProviders.<a href="./src/resources/uma-providers.ts">list</a>({ ...params }) -> UmaProvidersDefaultPagination</code>
 
-# Vasps
-
-Types:
-
-- <code><a href="./src/resources/vasps.ts">Vasp</a></code>
-- <code><a href="./src/resources/vasps.ts">VaspListResponse</a></code>
-
-Methods:
-
-- <code title="get /vasps">client.vasps.<a href="./src/resources/vasps.ts">list</a>({ ...params }) -> VaspListResponse</code>
-
 # Tokens
 
 Types:

@@ -3000,60 +3000,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'list',
-    endpoint: '/vasps',
-    httpMethod: 'get',
-    summary: 'List VASPs',
-    description:
-      'Retrieve the directory of Virtual Asset Service Providers (exchanges and\nother custodial platforms) recognized for counterparty declarations.\n\nThe `vaspName` field in each result is the value to pass as `vaspName`\nwhen declaring a VASP-hosted counterparty.\n',
-    stainlessPath: '(resource) vasps > (method) list',
-    qualified: 'client.vasps.list',
-    params: ['cursor?: string;', 'limit?: number;'],
-    response: '{ data: { vaspName: string; url?: string; }[]; hasMore: boolean; nextCursor?: string; }',
-    markdown:
-      "## list\n\n`client.vasps.list(cursor?: string, limit?: number): { data: vasp[]; hasMore: boolean; nextCursor?: string; }`\n\n**get** `/vasps`\n\nRetrieve the directory of Virtual Asset Service Providers (exchanges and\nother custodial platforms) recognized for counterparty declarations.\n\nThe `vaspName` field in each result is the value to pass as `vaspName`\nwhen declaring a VASP-hosted counterparty.\n\n\n### Parameters\n\n- `cursor?: string`\n  Cursor for pagination (returned from previous request)\n\n- `limit?: number`\n  Maximum number of results to return (default 20, max 100)\n\n### Returns\n\n- `{ data: { vaspName: string; url?: string; }[]; hasMore: boolean; nextCursor?: string; }`\n\n  - `data: { vaspName: string; url?: string; }[]`\n  - `hasMore: boolean`\n  - `nextCursor?: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst vaspListResponse = await client.vasps.list();\n\nconsole.log(vaspListResponse);\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.vasps.list',
-        example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst vaspListResponse = await client.vasps.list();\n\nconsole.log(vaspListResponse.data);",
-      },
-      python: {
-        method: 'vasps.list',
-        example:
-          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\nvasp_list_response = client.vasps.list()\nprint(vasp_list_response.data)',
-      },
-      kotlin: {
-        method: 'vasps().list',
-        example:
-          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.vasps.VaspListParams\nimport com.lightspark.grid.models.vasps.VaspListResponse\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val vaspListResponse: VaspListResponse = client.vasps().list()\n}',
-      },
-      go: {
-        method: 'client.Vasps.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tvaspListResponse, err := client.Vasps.List(context.TODO(), grid.VaspListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", vaspListResponse.Data)\n}\n',
-      },
-      ruby: {
-        method: 'vasps.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\nvasp_list_response = lightspark_grid.vasps.list\n\nputs(vasp_list_response)',
-      },
-      cli: {
-        method: 'vasps list',
-        example: "grid vasps list \\\n  --username 'My Username' \\\n  --password 'My Password'",
-      },
-      php: {
-        method: 'vasps->list',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$vaspListResponse = $client->vasps->list(cursor: 'cursor', limit: 1);\n\nvar_dump($vaspListResponse);",
-      },
-      http: {
-        example:
-          'curl https://api.lightspark.com/grid/2025-10-13/vasps \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
-      },
-    },
-  },
-  {
     name: 'create',
     endpoint: '/tokens',
     httpMethod: 'post',

@@ -148,7 +148,6 @@ import {
   UmaProviders,
   UmaProvidersDefaultPagination,
 } from './resources/uma-providers';
-import { Vasp, VaspListParams, VaspListResponse, Vasps } from './resources/vasps';
 import {
   Verification,
   VerificationListParams,
@@ -1117,10 +1116,6 @@ export class LightsparkGrid {
   sandbox: API.Sandbox = new API.Sandbox(this);
   umaProviders: API.UmaProviders = new API.UmaProviders(this);
   /**
-   * Directory of Virtual Asset Service Providers (exchanges and other custodial platforms) recognized for counterparty declarations.
-   */
-  vasps: API.Vasps = new API.Vasps(this);
-  /**
    * Endpoints to programmatically manage API tokens
    */
   tokens: API.Tokens = new API.Tokens(this);
@@ -1171,7 +1166,6 @@ LightsparkGrid.Transactions = Transactions;
 LightsparkGrid.Invitations = Invitations;
 LightsparkGrid.Sandbox = Sandbox;
 LightsparkGrid.UmaProviders = UmaProviders;
-LightsparkGrid.Vasps = Vasps;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
 LightsparkGrid.Webhooks = Webhooks;
@@ -1321,13 +1315,6 @@ export declare namespace LightsparkGrid {
     type UmaProviderListResponse as UmaProviderListResponse,
     type UmaProvidersDefaultPagination as UmaProvidersDefaultPagination,
     type UmaProviderListParams as UmaProviderListParams,
-  };
-
-  export {
-    Vasps as Vasps,
-    type Vasp as Vasp,
-    type VaspListResponse as VaspListResponse,
-    type VaspListParams as VaspListParams,
   };
 
   export {
