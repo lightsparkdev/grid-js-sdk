@@ -509,7 +509,8 @@ export interface ExternalAccountCreate {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | Shared.SwiftExternalAccountCreateInfo;
+    | Shared.SwiftExternalAccountCreateInfo
+    | ExternalAccountCreate.IlsAccount;
 
   /**
    * The ISO 4217 currency code
@@ -568,7 +569,7 @@ export namespace ExternalAccountCreate {
      */
     bankName: string;
 
-    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+    beneficiary: CnyAccount.IndividualBeneficiary | CnyAccount.BusinessBeneficiary;
 
     /**
      * The account number of the bank
@@ -617,6 +618,132 @@ export namespace ExternalAccountCreate {
        */
       phoneNumber?: string;
     }
+
+    export interface BusinessBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
+  }
+
+  export interface IlsAccount {
+    accountType: 'ILS_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: IlsAccount.IndividualBeneficiary | IlsAccount.BusinessBeneficiary;
+
+    /**
+     * Israeli IBAN (23 characters, starting with IL)
+     */
+    iban: string;
+  }
+
+  export namespace IlsAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
   }
 }
 
@@ -629,7 +756,8 @@ export namespace ExternalAccountCreate {
 export type ExternalAccountInfoOneOf =
   | ExternalAccountInfoOneOf.SlvAccount
   | ExternalAccountInfoOneOf.SwiftAccount
-  | ExternalAccountInfoOneOf.CnyAccount;
+  | ExternalAccountInfoOneOf.CnyAccount
+  | ExternalAccountInfoOneOf.IlsAccount;
 
 export namespace ExternalAccountInfoOneOf {
   /**
@@ -722,7 +850,7 @@ export namespace ExternalAccountInfoOneOf {
      */
     bankName: string;
 
-    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+    beneficiary: CnyAccount.IndividualBeneficiary | CnyAccount.BusinessBeneficiary;
 
     paymentRails: Array<'BANK_TRANSFER' | 'MOBILE_MONEY'>;
 
@@ -772,6 +900,134 @@ export namespace ExternalAccountInfoOneOf {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
+  }
+
+  export interface IlsAccount {
+    accountType: 'ILS_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: IlsAccount.IndividualBeneficiary | IlsAccount.BusinessBeneficiary;
+
+    /**
+     * Israeli IBAN (23 characters, starting with IL)
+     */
+    iban: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+  }
+
+  export namespace IlsAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
     }
   }
 }
@@ -1468,7 +1724,8 @@ export interface ExternalAccountCreateParams {
     | Shared.XofExternalAccountCreateInfo
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
-    | Shared.SwiftExternalAccountCreateInfo;
+    | Shared.SwiftExternalAccountCreateInfo
+    | ExternalAccountCreateParams.IlsAccount;
 
   /**
    * The ISO 4217 currency code
@@ -1527,7 +1784,7 @@ export namespace ExternalAccountCreateParams {
      */
     bankName: string;
 
-    beneficiary: CnyAccount.IndividualBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+    beneficiary: CnyAccount.IndividualBeneficiary | CnyAccount.BusinessBeneficiary;
 
     /**
      * The account number of the bank
@@ -1575,6 +1832,132 @@ export namespace ExternalAccountCreateParams {
        * The phone number of the beneficiary
        */
       phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
+  }
+
+  export interface IlsAccount {
+    accountType: 'ILS_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    beneficiary: IlsAccount.IndividualBeneficiary | IlsAccount.BusinessBeneficiary;
+
+    /**
+     * Israeli IBAN (23 characters, starting with IL)
+     */
+    iban: string;
+  }
+
+  export namespace IlsAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      address: ExternalAccountsAPI.Address;
+
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
     }
   }
 }

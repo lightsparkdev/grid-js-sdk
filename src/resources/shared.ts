@@ -44,7 +44,7 @@ export interface AedBeneficiary {
 export interface AedExternalAccountCreateInfo {
   accountType: 'AED_ACCOUNT';
 
-  beneficiary: AedBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: AedBeneficiary | AedExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * UAE IBAN (23 characters, starting with AE)
@@ -55,6 +55,44 @@ export interface AedExternalAccountCreateInfo {
    * The SWIFT/BIC code of the bank
    */
   swiftCode?: string;
+}
+
+export namespace AedExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    address: ExternalAccountsAPI.Address;
+
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface BdtBeneficiary {
@@ -173,7 +211,7 @@ export interface BeneficialOwner {
 export interface BrlExternalAccountCreateInfo {
   accountType: 'BRL_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.BrlBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.BrlBeneficiary | BrlExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The PIX key (email, phone, CPF, CNPJ, or random)
@@ -189,6 +227,44 @@ export interface BrlExternalAccountCreateInfo {
    * The tax ID (CPF or CNPJ)
    */
   taxId: string;
+}
+
+export namespace BrlExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 /**
@@ -449,7 +525,7 @@ export interface BwpBeneficiary {
 export interface BwpExternalAccountCreateInfo {
   accountType: 'BWP_ACCOUNT';
 
-  beneficiary: BwpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: BwpBeneficiary | BwpExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The phone number in international format
@@ -460,6 +536,44 @@ export interface BwpExternalAccountCreateInfo {
    * The mobile money provider name
    */
   provider: string;
+}
+
+export namespace BwpExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface CadBeneficiary {
@@ -605,7 +719,7 @@ export interface CopExternalAccountCreateInfo {
 export interface DkkExternalAccountCreateInfo {
   accountType: 'DKK_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.DkkBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.DkkBeneficiary | DkkExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Danish IBAN (18 characters, starting with DK)
@@ -616,6 +730,44 @@ export interface DkkExternalAccountCreateInfo {
    * The SWIFT/BIC code of the bank
    */
   swiftCode?: string;
+}
+
+export namespace DkkExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface EgpBeneficiary {
@@ -722,7 +874,7 @@ export interface EurBeneficiary {
 export interface EurExternalAccountCreateInfo {
   accountType: 'EUR_ACCOUNT';
 
-  beneficiary: EurBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: EurBeneficiary | EurExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The IBAN of the bank account
@@ -735,6 +887,44 @@ export interface EurExternalAccountCreateInfo {
   swiftCode?: string;
 }
 
+export namespace EurExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence: string;
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
+}
+
 export interface GbpExternalAccountCreateInfo {
   /**
    * UK bank account number (8 digits)
@@ -743,12 +933,50 @@ export interface GbpExternalAccountCreateInfo {
 
   accountType: 'GBP_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.GbpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.GbpBeneficiary | GbpExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The UK sort code
    */
   sortCode: string;
+}
+
+export namespace GbpExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface GhsBeneficiary {
@@ -884,12 +1112,50 @@ export interface HkdExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ExternalAccountsAPI.HkdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.HkdBeneficiary | HkdExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export namespace HkdExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface HtgBeneficiary {
@@ -952,7 +1218,7 @@ export interface IdrExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ExternalAccountsAPI.IdrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.IdrBeneficiary | IdrExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Indonesian phone number for e-wallet payments
@@ -963,6 +1229,44 @@ export interface IdrExternalAccountCreateInfo {
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export namespace IdrExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 /**
@@ -1136,7 +1440,7 @@ export interface IndividualCustomer extends CustomersAPI.Customer {
 export interface InrExternalAccountCreateInfo {
   accountType: 'INR_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.InrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.InrBeneficiary | InrExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Indian bank account number (9–18 digits)
@@ -1155,8 +1459,8 @@ export interface InrExternalAccountCreateInfo {
   ifsc?: string;
 
   /**
-   * The payment rail to route the payout over, for currencies that support more than
-   * one (e.g. NEFT or RTGS for INR).
+   * The payment rail to route the payout over: NEFT or RTGS. Omitted, the payout
+   * resolves it by amount.
    */
   rail?: string;
 
@@ -1164,6 +1468,44 @@ export interface InrExternalAccountCreateInfo {
    * The UPI Virtual Payment Address
    */
   vpa?: string;
+}
+
+export namespace InrExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface JmdBeneficiary {
@@ -1267,7 +1609,7 @@ export interface KesBeneficiary {
 export interface KesExternalAccountCreateInfo {
   accountType: 'KES_ACCOUNT';
 
-  beneficiary: KesBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: KesBeneficiary | KesExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Kenyan mobile money phone number
@@ -1278,6 +1620,44 @@ export interface KesExternalAccountCreateInfo {
    * The mobile money provider name
    */
   provider: string;
+}
+
+export namespace KesExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface MwkBeneficiary {
@@ -1319,7 +1699,7 @@ export interface MwkBeneficiary {
 export interface MwkExternalAccountCreateInfo {
   accountType: 'MWK_ACCOUNT';
 
-  beneficiary: MwkBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: MwkBeneficiary | MwkExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The phone number in international format
@@ -1332,15 +1712,91 @@ export interface MwkExternalAccountCreateInfo {
   provider: string;
 }
 
+export namespace MwkExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
+}
+
 export interface MxnExternalAccountCreateInfo {
   accountType: 'MXN_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.MxnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.MxnBeneficiary | MxnExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The CLABE number of the bank
    */
   clabeNumber: string;
+}
+
+export namespace MxnExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface MyrExternalAccountCreateInfo {
@@ -1356,12 +1812,50 @@ export interface MyrExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ExternalAccountsAPI.MyrBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.MyrBeneficiary | MyrExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export namespace MyrExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface NgnBeneficiary {
@@ -1413,7 +1907,45 @@ export interface NgnExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: NgnBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: NgnBeneficiary | NgnExternalAccountCreateInfo.BusinessBeneficiary;
+}
+
+export namespace NgnExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface PhpExternalAccountCreateInfo {
@@ -1429,7 +1961,51 @@ export interface PhpExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ExternalAccountsAPI.PhpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.PhpBeneficiary | PhpExternalAccountCreateInfo.BusinessBeneficiary;
+
+  /**
+   * The payment rail to route the payout over: INSTAPAY or PESONET. Omitted, the
+   * payout resolves it by amount.
+   */
+  rail?: string;
+}
+
+export namespace PhpExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface PkrBeneficiary {
@@ -1539,7 +2115,7 @@ export interface RwfBeneficiary {
 export interface RwfExternalAccountCreateInfo {
   accountType: 'RWF_ACCOUNT';
 
-  beneficiary: RwfBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: RwfBeneficiary | RwfExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Rwandan mobile money phone number
@@ -1552,6 +2128,44 @@ export interface RwfExternalAccountCreateInfo {
   provider: string;
 }
 
+export namespace RwfExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
+}
+
 export interface SgdExternalAccountCreateInfo {
   /**
    * Bank account number
@@ -1560,7 +2174,7 @@ export interface SgdExternalAccountCreateInfo {
 
   accountType: 'SGD_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.SgdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.SgdBeneficiary | SgdExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
@@ -1572,6 +2186,44 @@ export interface SgdExternalAccountCreateInfo {
    * payout partner bank directory at account creation.
    */
   bankName?: string;
+}
+
+export namespace SgdExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface SlvBeneficiary {
@@ -1729,12 +2381,50 @@ export interface ThbExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ExternalAccountsAPI.ThbBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.ThbBeneficiary | ThbExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export namespace ThbExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface TzsBeneficiary {
@@ -1776,7 +2466,7 @@ export interface TzsBeneficiary {
 export interface TzsExternalAccountCreateInfo {
   accountType: 'TZS_ACCOUNT';
 
-  beneficiary: TzsBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: TzsBeneficiary | TzsExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Tanzanian mobile money phone number
@@ -1787,6 +2477,44 @@ export interface TzsExternalAccountCreateInfo {
    * The mobile money provider name
    */
   provider: string;
+}
+
+export namespace TzsExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface UgxBeneficiary {
@@ -1828,7 +2556,7 @@ export interface UgxBeneficiary {
 export interface UgxExternalAccountCreateInfo {
   accountType: 'UGX_ACCOUNT';
 
-  beneficiary: UgxBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: UgxBeneficiary | UgxExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The phone number in international format
@@ -1841,6 +2569,44 @@ export interface UgxExternalAccountCreateInfo {
   provider: string;
 }
 
+export namespace UgxExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
+}
+
 export interface UsdExternalAccountCreateInfo {
   /**
    * The account number of the bank
@@ -1849,7 +2615,7 @@ export interface UsdExternalAccountCreateInfo {
 
   accountType: 'USD_ACCOUNT';
 
-  beneficiary: ExternalAccountsAPI.UsdBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.UsdBeneficiary | UsdExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The ABA routing number
@@ -1887,6 +2653,44 @@ export interface UsdExternalAccountCreateInfo {
    * WIRE rail; ignored on ACH, RTP and FEDNOW.
    */
   intermediaryRoutingNumber?: string;
+}
+
+export namespace UsdExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface VerificationError {
@@ -1995,12 +2799,50 @@ export interface VndExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ExternalAccountsAPI.VndBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ExternalAccountsAPI.VndBeneficiary | VndExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+}
+
+export namespace VndExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export interface XafBeneficiary {
@@ -2042,7 +2884,7 @@ export interface XafBeneficiary {
 export interface XafExternalAccountCreateInfo {
   accountType: 'XAF_ACCOUNT';
 
-  beneficiary: XafBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: XafBeneficiary | XafExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The phone number in international format
@@ -2058,6 +2900,44 @@ export interface XafExternalAccountCreateInfo {
    * Country code within the Central African CFA franc zone
    */
   region: 'CM' | 'CG';
+}
+
+export namespace XafExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface XofBeneficiary {
@@ -2099,7 +2979,7 @@ export interface XofBeneficiary {
 export interface XofExternalAccountCreateInfo {
   accountType: 'XOF_ACCOUNT';
 
-  beneficiary: XofBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: XofBeneficiary | XofExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The phone number in international format
@@ -2115,6 +2995,44 @@ export interface XofExternalAccountCreateInfo {
    * Country code within the West African CFA franc zone
    */
   region: 'BJ' | 'CI' | 'SN' | 'TG';
+}
+
+export namespace XofExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface ZarBeneficiary {
@@ -2166,7 +3084,45 @@ export interface ZarExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: ZarBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ZarBeneficiary | ZarExternalAccountCreateInfo.BusinessBeneficiary;
+}
+
+export namespace ZarExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export interface ZmwBeneficiary {
@@ -2208,7 +3164,7 @@ export interface ZmwBeneficiary {
 export interface ZmwExternalAccountCreateInfo {
   accountType: 'ZMW_ACCOUNT';
 
-  beneficiary: ZmwBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: ZmwBeneficiary | ZmwExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Zambian mobile money phone number
@@ -2219,6 +3175,44 @@ export interface ZmwExternalAccountCreateInfo {
    * The mobile money provider name
    */
   provider: string;
+}
+
+export namespace ZmwExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId: string;
+
+    address?: ExternalAccountsAPI.Address;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+  }
 }
 
 export type BeneficialOwnersDefaultPagination = DefaultPagination<BeneficialOwner>;

@@ -233,6 +233,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.SlvAccount
     | PaymentInstructions.SwiftAccount
     | PaymentInstructions.CnyAccount
+    | PaymentInstructions.IlsAccount
     | PaymentInstructions.BitcoinL1DepositAddress
     | PaymentInstructions.EmbeddedWallet;
 
@@ -384,6 +385,28 @@ export namespace PaymentInstructions {
      * The phone number in international format
      */
     phoneNumber?: string;
+  }
+
+  export interface IlsAccount {
+    accountType: 'ILS_ACCOUNT';
+
+    /**
+     * The name of the bank
+     */
+    bankName: string;
+
+    /**
+     * Israeli IBAN (23 characters, starting with IL)
+     */
+    iban: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
   }
 
   export interface BitcoinL1DepositAddress {
