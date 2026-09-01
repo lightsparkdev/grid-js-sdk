@@ -23,11 +23,15 @@ export class Config extends APIResource {
   }
 
   /**
-   * Update the platform configuration settings
+   * Update platform configuration settings. Setting
+   * `cardConfigs.maxSpendPerTransaction` establishes a platform-level card cap; Grid
+   * enforces the lower of that cap and each card's configured
+   * `maxSpendPerTransaction` without replacing the card-specific value.
    *
    * @example
    * ```ts
    * const platformConfig = await client.config.update({
+   *   cardConfigs: { maxSpendPerTransaction: 10000 },
    *   cardTokenization2faConfig: {
    *     displayName: 'Acme',
    *     logoUrl: 'https://acme.com/card-email-logo.png',
@@ -145,6 +149,11 @@ export interface PlatformConfig {
   id?: string;
 
   /**
+   * Platform-level settings for cards issued by this platform.
+   */
+  cardConfigs?: PlatformConfig.CardConfigs;
+
+  /**
    * Branding and sender configuration for card-tokenization authentication messages.
    * This configuration is independent of embedded-wallet support.
    */
@@ -202,6 +211,21 @@ export interface PlatformConfig {
 }
 
 export namespace PlatformConfig {
+  /**
+   * Platform-level settings for cards issued by this platform.
+   */
+  export interface CardConfigs {
+    /**
+     * Platform-level cap on a single transaction for every card whose authorization
+     * decisions are made by Grid. The value is interpreted in the smallest unit of
+     * each card's currency. Grid enforces the lower of this cap and the card's
+     * configured `maxSpendPerTransaction`; null means no platform-level cap. The cap
+     * applies to existing cards and to cards issued later. Provider-decided card
+     * programs are unaffected.
+     */
+    maxSpendPerTransaction?: number | null;
+  }
+
   /**
    * Branding and sender configuration for card-tokenization authentication messages.
    * This configuration is independent of embedded-wallet support.
@@ -339,6 +363,14 @@ export namespace PlatformConfig {
 
 export interface PlatformConfigUpdateRequest {
   /**
+   * Update platform-level card settings. Fields omitted from the nested object are
+   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
+   * cap or a positive integer to set it. Omit this field at the top level to leave
+   * all card settings unchanged.
+   */
+  cardConfigs?: PlatformConfigUpdateRequest.CardConfigs;
+
+  /**
    * Update card-tokenization authentication branding and delivery settings. Fields
    * omitted from the nested object are left unchanged. Changes apply to subsequent
    * delivery attempts.
@@ -368,6 +400,24 @@ export interface PlatformConfigUpdateRequest {
 }
 
 export namespace PlatformConfigUpdateRequest {
+  /**
+   * Update platform-level card settings. Fields omitted from the nested object are
+   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
+   * cap or a positive integer to set it. Omit this field at the top level to leave
+   * all card settings unchanged.
+   */
+  export interface CardConfigs {
+    /**
+     * Platform-level cap on a single transaction for every card whose authorization
+     * decisions are made by Grid. The value is interpreted in the smallest unit of
+     * each card's currency. Grid enforces the lower of this cap and the card's
+     * configured `maxSpendPerTransaction`; null means no platform-level cap. The cap
+     * applies to existing cards and to cards issued later. Provider-decided card
+     * programs are unaffected.
+     */
+    maxSpendPerTransaction?: number | null;
+  }
+
   /**
    * Update card-tokenization authentication branding and delivery settings. Fields
    * omitted from the nested object are left unchanged. Changes apply to subsequent
@@ -551,6 +601,14 @@ export interface PlatformCurrencyConfig {
 
 export interface ConfigUpdateParams {
   /**
+   * Update platform-level card settings. Fields omitted from the nested object are
+   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
+   * cap or a positive integer to set it. Omit this field at the top level to leave
+   * all card settings unchanged.
+   */
+  cardConfigs?: ConfigUpdateParams.CardConfigs;
+
+  /**
    * Update card-tokenization authentication branding and delivery settings. Fields
    * omitted from the nested object are left unchanged. Changes apply to subsequent
    * delivery attempts.
@@ -580,6 +638,24 @@ export interface ConfigUpdateParams {
 }
 
 export namespace ConfigUpdateParams {
+  /**
+   * Update platform-level card settings. Fields omitted from the nested object are
+   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
+   * cap or a positive integer to set it. Omit this field at the top level to leave
+   * all card settings unchanged.
+   */
+  export interface CardConfigs {
+    /**
+     * Platform-level cap on a single transaction for every card whose authorization
+     * decisions are made by Grid. The value is interpreted in the smallest unit of
+     * each card's currency. Grid enforces the lower of this cap and the card's
+     * configured `maxSpendPerTransaction`; null means no platform-level cap. The cap
+     * applies to existing cards and to cards issued later. Provider-decided card
+     * programs are unaffected.
+     */
+    maxSpendPerTransaction?: number | null;
+  }
+
   /**
    * Update card-tokenization authentication branding and delivery settings. Fields
    * omitted from the nested object are left unchanged. Changes apply to subsequent
