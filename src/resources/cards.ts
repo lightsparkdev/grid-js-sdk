@@ -28,7 +28,8 @@ export class Cards extends APIResource {
 
   /**
    * Update a card's `state`, bound `fundingSources`, and / or
-   * `maxSpendPerTransaction`. At least one field must be supplied.
+   * `maxSpendPerTransaction`, or `maxSpendPerDay`. At least one field must be
+   * supplied.
    *
    * - `state` transitions are limited to `ACTIVE ⇄ FROZEN` and
    *   `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible. Any other
@@ -44,6 +45,13 @@ export class Cards extends APIResource {
    *   `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the card and
    *   platform values. Limits are supported only for card programs where Grid makes
    *   the authorization decision. `maxSpendPerTransaction` cannot be supplied
+   *   alongside `state: CLOSED`.
+   * - `maxSpendPerDay`, when supplied, replaces the card-specific cap on cumulative
+   *   new spend during one UTC calendar day. Supply a positive integer in the
+   *   smallest unit of the card's currency to set it or null to clear it. If the
+   *   platform config sets `cardConfigs.maxSpendPerDay`, Grid enforces the lower of
+   *   the card and platform values. Refunds, reversals, and authorization expiries
+   *   do not restore capacity during the day. `maxSpendPerDay` cannot be supplied
    *   alongside `state: CLOSED`.
    *
    * This endpoint is authenticated by the platform credential alone and returns
@@ -119,12 +127,12 @@ export class Cards extends APIResource {
    * before a card can be issued; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    *
-   * An optional `maxSpendPerTransaction` value sets the card-specific cap on a
-   * single transaction. The limit is enforced by Grid for card programs where Grid
-   * makes the authorization decision, whether the card is funded by an Embedded
-   * Wallet account or custodial fiat. Omit it for no card-specific cap. If the
-   * platform config sets `cardConfigs.maxSpendPerTransaction`, Grid enforces the
-   * lower of the card and platform values. Both values use the smallest unit of the
+   * Optional `maxSpendPerTransaction` and `maxSpendPerDay` values set the
+   * card-specific caps on one transaction and one UTC calendar day. The limits are
+   * enforced by Grid for card programs where Grid makes the authorization decision,
+   * whether the card is funded by an Embedded Wallet account or custodial fiat. If
+   * the platform config sets the corresponding `cardConfigs` value, Grid enforces
+   * the lower of the card and platform caps. All values use the smallest unit of the
    * card's currency.
    *
    * If any funding source is an Embedded Wallet internal account, the cardholder
@@ -148,6 +156,7 @@ export class Cards extends APIResource {
    *   fundingSources: [
    *     'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
    *   ],
+   *   maxSpendPerDay: 25000,
    *   maxSpendPerTransaction: 5000,
    *   platformCardId: 'card-emp-aary-001',
    * });
@@ -188,6 +197,17 @@ export interface Card {
    * least one funding source.
    */
   fundingSources: Array<string>;
+
+  /**
+   * Card-specific cap on cumulative new spend during one UTC calendar day, in the
+   * smallest unit of the card's `currency`. The window resets at 00:00 UTC. Null
+   * means the card has no card-specific daily cap. When the platform config also
+   * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two values
+   * without replacing this configured value. Refunds, reversals, and authorization
+   * expiries do not restore capacity during the day. Spend exactly equal to the
+   * effective limit is allowed.
+   */
+  maxSpendPerDay: number | null;
 
   /**
    * Card-specific cap on a single transaction, in the smallest unit of the card's
@@ -293,6 +313,18 @@ export interface CardCreateRequest {
    * `FUNDING_SOURCE_INELIGIBLE`.
    */
   fundingSources: Array<string>;
+
+  /**
+   * Optional card-specific cap on cumulative new spend during one UTC calendar day,
+   * in the smallest unit of the card currency derived from its funding sources. Omit
+   * this field for no card-specific daily cap. When the platform config also
+   * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
+   * values. The window resets at 00:00 UTC, and refunds, reversals, and
+   * authorization expiries do not restore capacity during the day. Supported only
+   * for card programs whose authorization decisions are made by Grid. Spend exactly
+   * equal to the effective limit is allowed.
+   */
+  maxSpendPerDay?: number;
 
   /**
    * Optional card-specific cap on a single transaction, in the smallest unit of the
@@ -445,13 +477,14 @@ export interface CardTransaction {
 
 /**
  * Update request for `PATCH /cards/{id}`. At least one of `state`,
- * `fundingSources`, or `maxSpendPerTransaction` must be supplied. `state`
- * transitions are limited to `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`; any
- * other transition returns `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal
- * and irreversible and cannot be combined with `fundingSources` or
- * `maxSpendPerTransaction`. `fundingSources`, when supplied, fully replaces the
- * card's bound funding sources — the array order determines the priority
- * Authorization Decisioning tries them in.
+ * `fundingSources`, `maxSpendPerTransaction`, or `maxSpendPerDay` must be
+ * supplied. `state` transitions are limited to `ACTIVE ⇄ FROZEN` and
+ * `ACTIVE | FROZEN → CLOSED`; any other transition returns
+ * `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal and irreversible and cannot
+ * be combined with `fundingSources`, `maxSpendPerTransaction`, or
+ * `maxSpendPerDay`. `fundingSources`, when supplied, fully replaces the card's
+ * bound funding sources — the array order determines the priority Authorization
+ * Decisioning tries them in.
  */
 export interface CardUpdateRequest {
   /**
@@ -462,6 +495,17 @@ export interface CardUpdateRequest {
    * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
    */
   fundingSources?: Array<string>;
+
+  /**
+   * Replacement card-specific UTC-calendar-day cap, in the smallest unit of the
+   * card's currency. Omit this field to leave the current cap unchanged, supply null
+   * to clear it, or supply a positive integer to set it. When the platform config
+   * also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
+   * values. Refunds, reversals, and authorization expiries do not restore capacity
+   * during the day. Supported only for card programs whose authorization decisions
+   * are made by Grid. Cannot be supplied alongside `state: CLOSED`.
+   */
+  maxSpendPerDay?: number | null;
 
   /**
    * Replacement card-specific per-transaction cap, in the smallest unit of the
@@ -491,6 +535,17 @@ export interface CardUpdateParams {
    * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
    */
   fundingSources?: Array<string>;
+
+  /**
+   * Replacement card-specific UTC-calendar-day cap, in the smallest unit of the
+   * card's currency. Omit this field to leave the current cap unchanged, supply null
+   * to clear it, or supply a positive integer to set it. When the platform config
+   * also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
+   * values. Refunds, reversals, and authorization expiries do not restore capacity
+   * during the day. Supported only for card programs whose authorization decisions
+   * are made by Grid. Cannot be supplied alongside `state: CLOSED`.
+   */
+  maxSpendPerDay?: number | null;
 
   /**
    * Replacement card-specific per-transaction cap, in the smallest unit of the
@@ -566,6 +621,18 @@ export interface CardIssueParams {
    * `FUNDING_SOURCE_INELIGIBLE`.
    */
   fundingSources: Array<string>;
+
+  /**
+   * Optional card-specific cap on cumulative new spend during one UTC calendar day,
+   * in the smallest unit of the card currency derived from its funding sources. Omit
+   * this field for no card-specific daily cap. When the platform config also
+   * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
+   * values. The window resets at 00:00 UTC, and refunds, reversals, and
+   * authorization expiries do not restore capacity during the day. Supported only
+   * for card programs whose authorization decisions are made by Grid. Spend exactly
+   * equal to the effective limit is allowed.
+   */
+  maxSpendPerDay?: number;
 
   /**
    * Optional card-specific cap on a single transaction, in the smallest unit of the

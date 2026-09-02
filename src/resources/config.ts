@@ -23,15 +23,15 @@ export class Config extends APIResource {
   }
 
   /**
-   * Update platform configuration settings. Setting
-   * `cardConfigs.maxSpendPerTransaction` establishes a platform-level card cap; Grid
-   * enforces the lower of that cap and each card's configured
-   * `maxSpendPerTransaction` without replacing the card-specific value.
+   * Update platform configuration settings. `cardConfigs` can establish
+   * platform-level per-transaction and UTC-calendar-day card caps. Grid enforces the
+   * lower of each platform cap and its corresponding card-specific value without
+   * replacing the card-specific value. Daily limits reset at 00:00 UTC.
    *
    * @example
    * ```ts
    * const platformConfig = await client.config.update({
-   *   cardConfigs: { maxSpendPerTransaction: 10000 },
+   *   cardConfigs: { maxSpendPerTransaction: 10000, maxSpendPerDay: 50000 },
    *   cardTokenization2faConfig: {
    *     displayName: 'Acme',
    *     logoUrl: 'https://acme.com/card-email-logo.png',
@@ -216,6 +216,17 @@ export namespace PlatformConfig {
    */
   export interface CardConfigs {
     /**
+     * Platform-level cap on cumulative new spend during one UTC calendar day for every
+     * card whose authorization decisions are made by Grid. The value is interpreted in
+     * the smallest unit of each card's currency. Grid enforces the lower of this cap
+     * and the card's configured `maxSpendPerDay`; null means no platform-level daily
+     * cap. The window resets at 00:00 UTC. Refunds, reversals, and authorization
+     * expiries do not restore capacity during the day. The cap applies to existing
+     * cards and cards issued later. Provider-decided card programs are unaffected.
+     */
+    maxSpendPerDay?: number | null;
+
+    /**
      * Platform-level cap on a single transaction for every card whose authorization
      * decisions are made by Grid. The value is interpreted in the smallest unit of
      * each card's currency. Grid enforces the lower of this cap and the card's
@@ -364,9 +375,9 @@ export namespace PlatformConfig {
 export interface PlatformConfigUpdateRequest {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
-   * cap or a positive integer to set it. Omit this field at the top level to leave
-   * all card settings unchanged.
+   * left unchanged. For either spending limit, supply null to clear the platform cap
+   * or a positive integer to set it. Omit this field at the top level to leave all
+   * card settings unchanged.
    */
   cardConfigs?: PlatformConfigUpdateRequest.CardConfigs;
 
@@ -402,11 +413,22 @@ export interface PlatformConfigUpdateRequest {
 export namespace PlatformConfigUpdateRequest {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
-   * cap or a positive integer to set it. Omit this field at the top level to leave
-   * all card settings unchanged.
+   * left unchanged. For either spending limit, supply null to clear the platform cap
+   * or a positive integer to set it. Omit this field at the top level to leave all
+   * card settings unchanged.
    */
   export interface CardConfigs {
+    /**
+     * Platform-level cap on cumulative new spend during one UTC calendar day for every
+     * card whose authorization decisions are made by Grid. The value is interpreted in
+     * the smallest unit of each card's currency. Grid enforces the lower of this cap
+     * and the card's configured `maxSpendPerDay`; null means no platform-level daily
+     * cap. The window resets at 00:00 UTC. Refunds, reversals, and authorization
+     * expiries do not restore capacity during the day. The cap applies to existing
+     * cards and cards issued later. Provider-decided card programs are unaffected.
+     */
+    maxSpendPerDay?: number | null;
+
     /**
      * Platform-level cap on a single transaction for every card whose authorization
      * decisions are made by Grid. The value is interpreted in the smallest unit of
@@ -602,9 +624,9 @@ export interface PlatformCurrencyConfig {
 export interface ConfigUpdateParams {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
-   * cap or a positive integer to set it. Omit this field at the top level to leave
-   * all card settings unchanged.
+   * left unchanged. For either spending limit, supply null to clear the platform cap
+   * or a positive integer to set it. Omit this field at the top level to leave all
+   * card settings unchanged.
    */
   cardConfigs?: ConfigUpdateParams.CardConfigs;
 
@@ -640,11 +662,22 @@ export interface ConfigUpdateParams {
 export namespace ConfigUpdateParams {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For `maxSpendPerTransaction`, supply null to clear the platform
-   * cap or a positive integer to set it. Omit this field at the top level to leave
-   * all card settings unchanged.
+   * left unchanged. For either spending limit, supply null to clear the platform cap
+   * or a positive integer to set it. Omit this field at the top level to leave all
+   * card settings unchanged.
    */
   export interface CardConfigs {
+    /**
+     * Platform-level cap on cumulative new spend during one UTC calendar day for every
+     * card whose authorization decisions are made by Grid. The value is interpreted in
+     * the smallest unit of each card's currency. Grid enforces the lower of this cap
+     * and the card's configured `maxSpendPerDay`; null means no platform-level daily
+     * cap. The window resets at 00:00 UTC. Refunds, reversals, and authorization
+     * expiries do not restore capacity during the day. The cap applies to existing
+     * cards and cards issued later. Provider-decided card programs are unaffected.
+     */
+    maxSpendPerDay?: number | null;
+
     /**
      * Platform-level cap on a single transaction for every card whose authorization
      * decisions are made by Grid. The value is interpreted in the smallest unit of
