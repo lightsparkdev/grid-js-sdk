@@ -222,7 +222,9 @@ export interface IncomingTransaction {
   description?: string;
 
   /**
-   * Number of sending currency units per receiving currency unit.
+   * Number of sending currency units per receiving currency unit. The rate is
+   * fee-exclusive: Grid deducts fees from the sending amount before converting at
+   * this rate.
    */
   exchangeRate?: number;
 
@@ -376,7 +378,9 @@ export interface OutgoingTransaction {
   description?: string;
 
   /**
-   * Number of sending currency units per receiving currency unit.
+   * Number of sending currency units per receiving currency unit. The rate is
+   * fee-exclusive: Grid deducts fees from the sending amount before converting at
+   * this rate.
    */
   exchangeRate?: number;
 

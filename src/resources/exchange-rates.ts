@@ -41,7 +41,9 @@ export interface ExchangeRate {
   destinationPaymentRail: unknown;
 
   /**
-   * Number of sending currency units per receiving currency unit.
+   * Number of sending currency units per receiving currency unit. The rate is
+   * fee-exclusive: it covers the currency conversion only, and Grid charges `fees`
+   * separately rather than pricing them into the rate.
    */
   exchangeRate: number;
 

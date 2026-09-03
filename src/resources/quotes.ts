@@ -455,7 +455,9 @@ export interface Quote {
   destination: QuoteDestinationOneOf;
 
   /**
-   * Number of sending currency units per receiving currency unit.
+   * Number of sending currency units per receiving currency unit. The rate is
+   * fee-exclusive: Grid deducts `feesIncluded` from `totalSendingAmount` first, then
+   * converts the remainder at this rate to reach `totalReceivingAmount`.
    */
   exchangeRate: number;
 
