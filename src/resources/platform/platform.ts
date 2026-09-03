@@ -98,10 +98,11 @@ export interface PlatformListInternalAccountsParams {
 
   /**
    * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
-   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
-   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   * self-custodial wallet provisioned for a customer, `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for the platform-managed holding accounts, or `RULE_BASED` for
+   * the additional account numbers issued with a sweep rule.
    */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED';
 }
 
 Platform.ExternalAccounts = ExternalAccounts;

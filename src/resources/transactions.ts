@@ -178,11 +178,6 @@ export interface IncomingTransaction {
   platformCustomerId: string;
 
   /**
-   * Amount received in the recipient's currency
-   */
-  receivedAmount: InvitationsAPI.CurrencyAmount;
-
-  /**
    * Status of a payment transaction.
    *
    * | Status                  | Description                                                                                                                                                                                                                                                                                                             |
@@ -244,7 +239,9 @@ export interface IncomingTransaction {
     | 'QUOTE_EXPIRED'
     | 'QUOTE_EXECUTION_FAILED'
     | 'COMPLIANCE_REJECTED'
-    | 'COLLECTION_FAILED';
+    | 'COLLECTION_FAILED'
+    | 'SWEEP_AMOUNT_OUT_OF_RANGE'
+    | 'SWEEP_QUOTE_FAILED';
 
   /**
    * The total fees available from the receive quote in the smallest unit of the
@@ -272,6 +269,12 @@ export interface IncomingTransaction {
    * customer.
    */
   receiptDeliveryConfirmedAt?: string;
+
+  /**
+   * Amount received in the recipient's currency. This is only absent for rule-based
+   * account sweeps if the sweep couldn't be quoted. It's always present otherwise.
+   */
+  receivedAmount?: InvitationsAPI.CurrencyAmount;
 
   /**
    * Included for all transactions except those with "CREATED" status
@@ -398,7 +401,9 @@ export interface OutgoingTransaction {
     | 'ACCOUNT_INVALID'
     | 'COMPLIANCE_REJECTED'
     | 'LIGHTNING_PAYMENT_FAILED'
-    | 'COUNTERPARTY_POST_TX_FAILED';
+    | 'COUNTERPARTY_POST_TX_FAILED'
+    | 'SWEEP_AMOUNT_OUT_OF_RANGE'
+    | 'SWEEP_QUOTE_FAILED';
 
   /**
    * The fees associated with the quote in the smallest unit of the sending currency

@@ -106,8 +106,12 @@ export interface InternalAccount {
    * - `EMBEDDED_WALLET`: A self-custodial Embedded Wallet provisioned for the
    *   customer. Outbound transfers require a session signature produced by the
    *   customer's device — see the Embedded Wallets guide.
+   * - `RULE_BASED`: An additional account number for an existing account holder,
+   *   with a routing rule attached, so incoming payments can be attributed to a
+   *   specific payer and swept automatically. Created with
+   *   `POST /internal-accounts`.
    */
-  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED';
 
   /**
    * Timestamp when the internal account was last updated
@@ -121,10 +125,166 @@ export interface InternalAccount {
   customerId?: string;
 
   /**
+   * The platform-supplied label recorded when the account was created. Null for
+   * accounts that carry none.
+   */
+  label?: string;
+
+  /**
    * Whether wallet privacy is enabled for the Embedded Wallet. Only present for
    * `EMBEDDED_WALLET` internal accounts.
    */
   privateEnabled?: boolean;
+
+  /**
+   * The routing rule attached to this account. Null for accounts that carry no rule,
+   * which is every account other than a `RULE_BASED` one.
+   */
+  sweepRule?: InternalAccount.SweepRule;
+}
+
+export namespace InternalAccount {
+  /**
+   * The routing rule attached to this account. Null for accounts that carry no rule,
+   * which is every account other than a `RULE_BASED` one.
+   */
+  export interface SweepRule {
+    /**
+     * Where funds that settle into this account are swept.
+     */
+    destination: SweepRule.Destination;
+
+    /**
+     * Free-form description recorded on each sweep. Not delivered to the recipient.
+     */
+    description?: string;
+
+    /**
+     * **In this rule-based account's currency, not the destination's.** The largest
+     * balance the corridor to the destination can carry; a settled balance above it is
+     * not swept. Null means no ceiling.
+     */
+    maximumAmount?: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * **In this rule-based account's currency, not the destination's.** The smallest
+     * balance the corridor to the destination can carry; a settled balance below it is
+     * not swept. Zero means no floor, which is the case for a same-currency internal
+     * destination — a book transfer with no rail, fee or conversion to justify one.
+     * Configuration rather than a moving estimate, so there is nothing to re-poll.
+     */
+    minimumAmount?: InvitationsAPI.CurrencyAmount;
+
+    /**
+     * Fee terms applied to every sweep this rule drives. Null when the platform's
+     * configured fees apply.
+     */
+    platformFeeOverride?: SweepRule.PlatformFeeOverride;
+
+    /**
+     * The purpose of payment applied to each sweep.
+     */
+    purposeOfPayment?:
+      | 'GIFT'
+      | 'SELF'
+      | 'GOODS_OR_SERVICES'
+      | 'EDUCATION'
+      | 'HEALTH_OR_MEDICAL'
+      | 'REAL_ESTATE_PURCHASE'
+      | 'TAX_PAYMENT'
+      | 'LOAN_PAYMENT'
+      | 'UTILITY_BILL'
+      | 'DONATION'
+      | 'TRAVEL'
+      | 'FAMILY_SUPPORT'
+      | 'SALARY_PAYMENT'
+      | 'OTHER';
+
+    /**
+     * Free-form information that travels with each sweep to the recipient.
+     */
+    remittanceInformation?: string;
+  }
+
+  export namespace SweepRule {
+    /**
+     * Where funds that settle into this account are swept.
+     */
+    export interface Destination {
+      /**
+       * The account that receives the swept funds.
+       */
+      accountId: string;
+
+      /**
+       * The rail each sweep is sent over. Null when a rail is selected automatically per
+       * sweep, in which case none is resolved ahead of time.
+       */
+      paymentRail?:
+        | 'ACH'
+        | 'ACH_COLOMBIA'
+        | 'BANK_TRANSFER'
+        | 'BRE_B'
+        | 'CIPS'
+        | 'FAST'
+        | 'FASTER_PAYMENTS'
+        | 'FEDNOW'
+        | 'INSTAPAY'
+        | 'MOBILE_MONEY'
+        | 'NEFT'
+        | 'PAYNOW'
+        | 'PESONET'
+        | 'PIX'
+        | 'RTGS'
+        | 'RTP'
+        | 'SEPA'
+        | 'SEPA_INSTANT'
+        | 'SPEI'
+        | 'SWIFT'
+        | 'UNIONPAY'
+        | 'UPI'
+        | 'WIRE';
+    }
+
+    /**
+     * Fee terms applied to every sweep this rule drives. Null when the platform's
+     * configured fees apply.
+     */
+    export interface PlatformFeeOverride {
+      /**
+       * Fixed fee charged for this transaction. Must be denominated in the quote's
+       * source currency (USD today).
+       */
+      platformFixedFee: PlatformFeeOverride.PlatformFixedFee;
+
+      /**
+       * Variable fee in basis points (1 bps = 0.01%) to apply to the transaction's
+       * source-currency amount.
+       */
+      platformVariableFeeBps: number;
+    }
+
+    export namespace PlatformFeeOverride {
+      /**
+       * Fixed fee charged for this transaction. Must be denominated in the quote's
+       * source currency (USD today).
+       */
+      export interface PlatformFixedFee {
+        /**
+         * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+         * USD).
+         */
+        amount: number;
+
+        /**
+         * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+         * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+         * "USDC" for USDC, etc.)
+         */
+        currency: string;
+      }
+    }
+  }
 }
 
 export interface InternalAccountFundParams {

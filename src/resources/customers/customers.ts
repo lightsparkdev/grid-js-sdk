@@ -1855,10 +1855,11 @@ export interface CustomerListInternalAccountsParams extends DefaultPaginationPar
 
   /**
    * Filter by internal account type. Use `EMBEDDED_WALLET` to find the
-   * self-custodial wallet provisioned for a customer, or `INTERNAL_FIAT` /
-   * `INTERNAL_CRYPTO` for the platform-managed holding accounts.
+   * self-custodial wallet provisioned for a customer, `INTERNAL_FIAT` /
+   * `INTERNAL_CRYPTO` for the platform-managed holding accounts, or `RULE_BASED` for
+   * the additional account numbers issued for a customer.
    */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET';
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED';
 }
 
 export interface CustomerUpdateInternalAccountParams {
