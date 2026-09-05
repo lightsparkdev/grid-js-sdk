@@ -174,7 +174,7 @@ export interface PlatformConfig {
    * Platform-collected fees that should be added on top of Grid-collected fees.
    * Contains every currently-active fee config for the platform.
    */
-  feeConfigs?: Array<PlatformConfig.FeeConfig>;
+  feeConfigs?: Array<PlatformConfig.CrossCurrencyTransactionFeeConfig | PlatformConfig.RailFeeConfig>;
 
   /**
    * Whether the platform is a regulated financial institution. This is used to
@@ -319,24 +319,24 @@ export namespace PlatformConfig {
   }
 
   /**
-   * A platform-configured fee collected by Grid and settled to the platform internal
-   * account. There can be at most one fee config for a given fee type and source
-   * currency pair. The fee will apply to all transactions of the fee type that
-   * originate in the source currency.
+   * A fee charged for a cross-currency transaction. There can be at most one
+   * cross-currency transaction fee config for a given source currency. The fee will
+   * apply to all cross-currency transactions that originate in the source currency.
    */
-  export interface FeeConfig {
+  export interface CrossCurrencyTransactionFeeConfig {
     /**
      * The kind of activity this fee applies to.
      *
-     * - `CROSS_CURRENCY_TRANSACTION` — fee charged on a cross-currency Grid
-     *   transaction (source currency differs from destination currency).
+     * - `CROSS_CURRENCY_TRANSACTION` — a fee charged on transactions where the sending
+     *   currency differs from the receiving currency
+     * - `RAIL` — a fee charged on any transaction that uses the specified payment rail
      */
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
      * Fixed fee charged per transaction.
      */
-    fixedFee: FeeConfig.FixedFee;
+    fixedFee: CrossCurrencyTransactionFeeConfig.FixedFee;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -351,7 +351,98 @@ export namespace PlatformConfig {
     variableFeeBps: number;
   }
 
-  export namespace FeeConfig {
+  export namespace CrossCurrencyTransactionFeeConfig {
+    /**
+     * Fixed fee charged per transaction.
+     */
+    export interface FixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
+  }
+
+  /**
+   * A fee charged when a transaction uses the specified rail. There can be at most
+   * one for a given rail, direction and originator. For example, a config with rail:
+   * ACH, direction: OUT, originator: GRID will charge a fee on all outgoing ACH
+   * transactions.
+   */
+  export interface RailFeeConfig {
+    /**
+     * Whether the money is coming in or going out, relative to Grid. Only `OUT` is
+     * accepted today.
+     */
+    direction: 'IN' | 'OUT';
+
+    /**
+     * The kind of activity this fee applies to.
+     *
+     * - `CROSS_CURRENCY_TRANSACTION` — a fee charged on transactions where the sending
+     *   currency differs from the receiving currency
+     * - `RAIL` — a fee charged on any transaction that uses the specified payment rail
+     */
+    feeType: 'RAIL';
+
+    /**
+     * Fixed fee charged per transaction.
+     */
+    fixedFee: RailFeeConfig.FixedFee;
+
+    /**
+     * Who originated the movement over the rail. An ACH OUT where Grid is the
+     * originator means Grid is pushing out the funds, while an ACH OUT with an
+     * EXTERNAL originator indicates Grid received an ACH pull request from an external
+     * source.
+     */
+    originator: 'GRID' | 'EXTERNAL';
+
+    /**
+     * The rail used in the transaction. `ACH`, `RTP`, `FEDNOW` and `WIRE` are accepted
+     * today; other rails return a `NOT_IMPLEMENTED` error.
+     */
+    rail:
+      | 'ACH'
+      | 'ACH_COLOMBIA'
+      | 'BANK_TRANSFER'
+      | 'BRE_B'
+      | 'CIPS'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'INSTAPAY'
+      | 'MOBILE_MONEY'
+      | 'NEFT'
+      | 'PAYNOW'
+      | 'PESONET'
+      | 'PIX'
+      | 'RTGS'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UNIONPAY'
+      | 'UPI'
+      | 'WIRE';
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to a transaction's
+     * source-currency amount.
+     */
+    variableFeeBps: number;
+  }
+
+  export namespace RailFeeConfig {
     /**
      * Fixed fee charged per transaction.
      */
@@ -396,12 +487,15 @@ export interface PlatformConfigUpdateRequest {
   embeddedWalletConfig?: EmbeddedWalletConfig;
 
   /**
-   * Merge-by-key upsert of platform fee configs, keyed by
-   * `(feeType, sourceCurrency)`. Setting variable and fixed fees to 0 for an
-   * existing fee config deactivates it. Only `sourceCurrency: USD` is accepted
-   * today. Omit this field to leave fee configs unchanged.
+   * Merge-by-key upsert of platform fee configs. A cross-currency transaction fee
+   * config is keyed by `(feeType, sourceCurrency)` and a rail fee config by
+   * `(feeType, rail, direction, originator)`. Setting variable and fixed fees to 0
+   * for an existing config deactivates it. Omit this field to leave fee configs
+   * unchanged.
    */
-  feeConfigs?: Array<PlatformConfigUpdateRequest.FeeConfig>;
+  feeConfigs?: Array<
+    PlatformConfigUpdateRequest.CrossCurrencyTransactionFeeConfig | PlatformConfigUpdateRequest.RailFeeConfig
+  >;
 
   supportedCurrencies?: Array<PlatformCurrencyConfig>;
 
@@ -523,24 +617,24 @@ export namespace PlatformConfigUpdateRequest {
   }
 
   /**
-   * A platform-configured fee collected by Grid and settled to the platform internal
-   * account. There can be at most one fee config for a given fee type and source
-   * currency pair. The fee will apply to all transactions of the fee type that
-   * originate in the source currency.
+   * A fee charged for a cross-currency transaction. There can be at most one
+   * cross-currency transaction fee config for a given source currency. The fee will
+   * apply to all cross-currency transactions that originate in the source currency.
    */
-  export interface FeeConfig {
+  export interface CrossCurrencyTransactionFeeConfig {
     /**
      * The kind of activity this fee applies to.
      *
-     * - `CROSS_CURRENCY_TRANSACTION` — fee charged on a cross-currency Grid
-     *   transaction (source currency differs from destination currency).
+     * - `CROSS_CURRENCY_TRANSACTION` — a fee charged on transactions where the sending
+     *   currency differs from the receiving currency
+     * - `RAIL` — a fee charged on any transaction that uses the specified payment rail
      */
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
      * Fixed fee charged per transaction.
      */
-    fixedFee: FeeConfig.FixedFee;
+    fixedFee: CrossCurrencyTransactionFeeConfig.FixedFee;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -555,7 +649,98 @@ export namespace PlatformConfigUpdateRequest {
     variableFeeBps: number;
   }
 
-  export namespace FeeConfig {
+  export namespace CrossCurrencyTransactionFeeConfig {
+    /**
+     * Fixed fee charged per transaction.
+     */
+    export interface FixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
+  }
+
+  /**
+   * A fee charged when a transaction uses the specified rail. There can be at most
+   * one for a given rail, direction and originator. For example, a config with rail:
+   * ACH, direction: OUT, originator: GRID will charge a fee on all outgoing ACH
+   * transactions.
+   */
+  export interface RailFeeConfig {
+    /**
+     * Whether the money is coming in or going out, relative to Grid. Only `OUT` is
+     * accepted today.
+     */
+    direction: 'IN' | 'OUT';
+
+    /**
+     * The kind of activity this fee applies to.
+     *
+     * - `CROSS_CURRENCY_TRANSACTION` — a fee charged on transactions where the sending
+     *   currency differs from the receiving currency
+     * - `RAIL` — a fee charged on any transaction that uses the specified payment rail
+     */
+    feeType: 'RAIL';
+
+    /**
+     * Fixed fee charged per transaction.
+     */
+    fixedFee: RailFeeConfig.FixedFee;
+
+    /**
+     * Who originated the movement over the rail. An ACH OUT where Grid is the
+     * originator means Grid is pushing out the funds, while an ACH OUT with an
+     * EXTERNAL originator indicates Grid received an ACH pull request from an external
+     * source.
+     */
+    originator: 'GRID' | 'EXTERNAL';
+
+    /**
+     * The rail used in the transaction. `ACH`, `RTP`, `FEDNOW` and `WIRE` are accepted
+     * today; other rails return a `NOT_IMPLEMENTED` error.
+     */
+    rail:
+      | 'ACH'
+      | 'ACH_COLOMBIA'
+      | 'BANK_TRANSFER'
+      | 'BRE_B'
+      | 'CIPS'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'INSTAPAY'
+      | 'MOBILE_MONEY'
+      | 'NEFT'
+      | 'PAYNOW'
+      | 'PESONET'
+      | 'PIX'
+      | 'RTGS'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UNIONPAY'
+      | 'UPI'
+      | 'WIRE';
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to a transaction's
+     * source-currency amount.
+     */
+    variableFeeBps: number;
+  }
+
+  export namespace RailFeeConfig {
     /**
      * Fixed fee charged per transaction.
      */
@@ -645,12 +830,13 @@ export interface ConfigUpdateParams {
   embeddedWalletConfig?: EmbeddedWalletConfig;
 
   /**
-   * Merge-by-key upsert of platform fee configs, keyed by
-   * `(feeType, sourceCurrency)`. Setting variable and fixed fees to 0 for an
-   * existing fee config deactivates it. Only `sourceCurrency: USD` is accepted
-   * today. Omit this field to leave fee configs unchanged.
+   * Merge-by-key upsert of platform fee configs. A cross-currency transaction fee
+   * config is keyed by `(feeType, sourceCurrency)` and a rail fee config by
+   * `(feeType, rail, direction, originator)`. Setting variable and fixed fees to 0
+   * for an existing config deactivates it. Omit this field to leave fee configs
+   * unchanged.
    */
-  feeConfigs?: Array<ConfigUpdateParams.FeeConfig>;
+  feeConfigs?: Array<ConfigUpdateParams.CrossCurrencyTransactionFeeConfig | ConfigUpdateParams.RailFeeConfig>;
 
   supportedCurrencies?: Array<PlatformCurrencyConfig>;
 
@@ -772,24 +958,24 @@ export namespace ConfigUpdateParams {
   }
 
   /**
-   * A platform-configured fee collected by Grid and settled to the platform internal
-   * account. There can be at most one fee config for a given fee type and source
-   * currency pair. The fee will apply to all transactions of the fee type that
-   * originate in the source currency.
+   * A fee charged for a cross-currency transaction. There can be at most one
+   * cross-currency transaction fee config for a given source currency. The fee will
+   * apply to all cross-currency transactions that originate in the source currency.
    */
-  export interface FeeConfig {
+  export interface CrossCurrencyTransactionFeeConfig {
     /**
      * The kind of activity this fee applies to.
      *
-     * - `CROSS_CURRENCY_TRANSACTION` — fee charged on a cross-currency Grid
-     *   transaction (source currency differs from destination currency).
+     * - `CROSS_CURRENCY_TRANSACTION` — a fee charged on transactions where the sending
+     *   currency differs from the receiving currency
+     * - `RAIL` — a fee charged on any transaction that uses the specified payment rail
      */
     feeType: 'CROSS_CURRENCY_TRANSACTION';
 
     /**
      * Fixed fee charged per transaction.
      */
-    fixedFee: FeeConfig.FixedFee;
+    fixedFee: CrossCurrencyTransactionFeeConfig.FixedFee;
 
     /**
      * Currency code of the sending side this fee applies to. Only `USD` is accepted
@@ -804,7 +990,98 @@ export namespace ConfigUpdateParams {
     variableFeeBps: number;
   }
 
-  export namespace FeeConfig {
+  export namespace CrossCurrencyTransactionFeeConfig {
+    /**
+     * Fixed fee charged per transaction.
+     */
+    export interface FixedFee {
+      /**
+       * Fee amount in the smallest unit of the fixed fee's `currency` (e.g., cents for
+       * USD).
+       */
+      amount: number;
+
+      /**
+       * Three-letter currency code (ISO 4217) the fixed fee is denominated in. Some
+       * cryptocurrencies may use their own ticker symbols (e.g. "BTC" for Bitcoin,
+       * "USDC" for USDC, etc.)
+       */
+      currency: string;
+    }
+  }
+
+  /**
+   * A fee charged when a transaction uses the specified rail. There can be at most
+   * one for a given rail, direction and originator. For example, a config with rail:
+   * ACH, direction: OUT, originator: GRID will charge a fee on all outgoing ACH
+   * transactions.
+   */
+  export interface RailFeeConfig {
+    /**
+     * Whether the money is coming in or going out, relative to Grid. Only `OUT` is
+     * accepted today.
+     */
+    direction: 'IN' | 'OUT';
+
+    /**
+     * The kind of activity this fee applies to.
+     *
+     * - `CROSS_CURRENCY_TRANSACTION` — a fee charged on transactions where the sending
+     *   currency differs from the receiving currency
+     * - `RAIL` — a fee charged on any transaction that uses the specified payment rail
+     */
+    feeType: 'RAIL';
+
+    /**
+     * Fixed fee charged per transaction.
+     */
+    fixedFee: RailFeeConfig.FixedFee;
+
+    /**
+     * Who originated the movement over the rail. An ACH OUT where Grid is the
+     * originator means Grid is pushing out the funds, while an ACH OUT with an
+     * EXTERNAL originator indicates Grid received an ACH pull request from an external
+     * source.
+     */
+    originator: 'GRID' | 'EXTERNAL';
+
+    /**
+     * The rail used in the transaction. `ACH`, `RTP`, `FEDNOW` and `WIRE` are accepted
+     * today; other rails return a `NOT_IMPLEMENTED` error.
+     */
+    rail:
+      | 'ACH'
+      | 'ACH_COLOMBIA'
+      | 'BANK_TRANSFER'
+      | 'BRE_B'
+      | 'CIPS'
+      | 'FAST'
+      | 'FASTER_PAYMENTS'
+      | 'FEDNOW'
+      | 'INSTAPAY'
+      | 'MOBILE_MONEY'
+      | 'NEFT'
+      | 'PAYNOW'
+      | 'PESONET'
+      | 'PIX'
+      | 'RTGS'
+      | 'RTP'
+      | 'SEPA'
+      | 'SEPA_INSTANT'
+      | 'SPEI'
+      | 'SWIFT'
+      | 'UNIONPAY'
+      | 'UPI'
+      | 'WIRE';
+
+    /**
+     * Variable fee in basis points (1 bps = 0.01%) to apply to a transaction's
+     * source-currency amount.
+     */
+    variableFeeBps: number;
+  }
+
+  export namespace RailFeeConfig {
     /**
      * Fixed fee charged per transaction.
      */
