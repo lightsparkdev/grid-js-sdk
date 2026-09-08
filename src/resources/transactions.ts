@@ -476,9 +476,9 @@ export interface OutgoingTransaction {
 
   /**
    * How the rail was chosen — MANUAL when the platform specified a paymentRail on
-   * the destination, AUTO when Lightspark selects it. Null when no rail is resolved.
+   * the destination, AUTO when Lightspark selects it.
    */
-  railSelectionMode?: 'AUTO' | 'MANUAL' | null;
+  railSelectionMode?: 'AUTO' | 'MANUAL';
 
   /**
    * Details about the rate and fees for the transaction.
