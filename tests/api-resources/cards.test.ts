@@ -72,6 +72,7 @@ describe('resource cards', () => {
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       form: 'VIRTUAL',
       fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],
+      'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',
     });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -88,6 +89,7 @@ describe('resource cards', () => {
       customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       form: 'VIRTUAL',
       fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],
+      'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',
       maxSpendPerDay: 25000,
       maxSpendPerTransaction: 5000,
       maxTransactionsPerDay: 20,

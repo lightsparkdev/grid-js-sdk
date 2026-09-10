@@ -5,6 +5,7 @@ import * as InvitationsAPI from './invitations';
 import * as SimulateAPI from './sandbox/cards/simulate';
 import { APIPromise } from '../core/api-promise';
 import { DefaultPagination, type DefaultPaginationParams, PagePromise } from '../core/pagination';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
@@ -130,6 +131,9 @@ export class Cards extends APIResource {
    * before a card can be issued; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    *
+   * Card issuance is fee-bearing and cannot be reversed, so an `Idempotency-Key`
+   * header is required. Retries must carry the same key.
+   *
    * Optional `maxSpendPerTransaction`, `maxSpendPerDay`, and `maxTransactionsPerDay`
    * values set the card-specific caps on one transaction, on spend during one UTC
    * calendar day, and on the number of transactions during one UTC calendar day. The
@@ -165,6 +169,7 @@ export class Cards extends APIResource {
    *   fundingSources: [
    *     'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
    *   ],
+   *   'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',
    *   maxSpendPerDay: 25000,
    *   maxSpendPerTransaction: 5000,
    *   maxTransactionsPerDay: 20,
@@ -172,8 +177,14 @@ export class Cards extends APIResource {
    * });
    * ```
    */
-  issue(body: CardIssueParams, options?: RequestOptions): APIPromise<Card> {
-    return this._client.post('/cards', { body, ...options, __security: { basicAuth: true } });
+  issue(params: CardIssueParams, options?: RequestOptions): APIPromise<Card> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/cards', {
+      body,
+      ...options,
+      headers: buildHeaders([{ 'Idempotency-Key': idempotencyKey }, options?.headers]),
+      __security: { basicAuth: true },
+    });
   }
 }
 
@@ -660,33 +671,40 @@ export interface CardListParams extends DefaultPaginationParams {
 
 export interface CardIssueParams {
   /**
-   * The id of the `Customer` to issue the card to. The customer must have KYC status
-   * `APPROVED`; otherwise the request is rejected with
+   * Body param: The id of the `Customer` to issue the card to. The customer must
+   * have KYC status `APPROVED`; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    */
   customerId: string;
 
   /**
-   * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
-   * will be added in a later release.
+   * Body param: Physical form factor of the card. Only `VIRTUAL` is supported in v1;
+   * `PHYSICAL` will be added in a later release.
    */
   form: 'VIRTUAL';
 
   /**
-   * Internal account ids to bind as funding sources, in priority order. The first
-   * entry is tried first by Authorization Decisioning. Every card must be bound to
-   * at least one source, and every source must belong to the cardholder and be
-   * denominated in a card-eligible currency; otherwise the request is rejected with
-   * `FUNDING_SOURCE_INELIGIBLE`.
+   * Body param: Internal account ids to bind as funding sources, in priority order.
+   * The first entry is tried first by Authorization Decisioning. Every card must be
+   * bound to at least one source, and every source must belong to the cardholder and
+   * be denominated in a card-eligible currency; otherwise the request is rejected
+   * with `FUNDING_SOURCE_INELIGIBLE`.
    */
   fundingSources: Array<string>;
 
   /**
-   * Optional card-specific cap on cumulative new spend during one UTC calendar day,
-   * in the smallest unit of the card currency derived from its funding sources. Omit
-   * this field for no card-specific daily cap. When the platform config also
-   * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
-   * values. The window resets at 00:00 UTC, and refunds, reversals, and
+   * Header param: A unique identifier for the request, up to 255 characters. A retry
+   * carrying the same key returns the card created by the first request; reusing a
+   * key for a materially different card request is rejected with `409`.
+   */
+  'Idempotency-Key': string;
+
+  /**
+   * Body param: Optional card-specific cap on cumulative new spend during one UTC
+   * calendar day, in the smallest unit of the card currency derived from its funding
+   * sources. Omit this field for no card-specific daily cap. When the platform
+   * config also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of
+   * the two values. The window resets at 00:00 UTC, and refunds, reversals, and
    * authorization expiries do not restore capacity during the day. Supported only
    * for card programs whose authorization decisions are made by Grid. Spend exactly
    * equal to the effective limit is allowed.
@@ -694,9 +712,9 @@ export interface CardIssueParams {
   maxSpendPerDay?: number;
 
   /**
-   * Optional card-specific cap on a single transaction, in the smallest unit of the
-   * card currency derived from its funding sources. Omit this field for no
-   * card-specific cap. When the platform config also supplies
+   * Body param: Optional card-specific cap on a single transaction, in the smallest
+   * unit of the card currency derived from its funding sources. Omit this field for
+   * no card-specific cap. When the platform config also supplies
    * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
    * Supported only for card programs whose authorization decisions are made by Grid.
    * A transaction for exactly the effective limit is allowed.
@@ -704,9 +722,9 @@ export interface CardIssueParams {
   maxSpendPerTransaction?: number;
 
   /**
-   * Optional card-specific cap on the number of transactions the card may authorize
-   * during one UTC calendar day. Omit this field for no card-specific daily
-   * transaction cap. When the platform config also supplies
+   * Body param: Optional card-specific cap on the number of transactions the card
+   * may authorize during one UTC calendar day. Omit this field for no card-specific
+   * daily transaction cap. When the platform config also supplies
    * `cardConfigs.maxTransactionsPerDay`, Grid enforces the lower of the two values.
    * The window resets at 00:00 UTC. Each approved authorization counts once;
    * refunds, reversals, and authorization expiries do not restore capacity during
@@ -716,18 +734,18 @@ export interface CardIssueParams {
   maxTransactionsPerDay?: number;
 
   /**
-   * Platform-specific card identifier. Always generated by the server; any value
-   * supplied in the request is ignored.
+   * Body param: Platform-specific card identifier. Always generated by the server;
+   * any value supplied in the request is ignored.
    */
   platformCardId?: string;
 
   /**
-   * Optional static password used as the card's 3-D Secure factor. Only accepted for
-   * card programs whose issuer supports a static-password factor (EU cards today);
-   * supplying it for a program that does not is rejected with `INVALID_INPUT`. When
-   * omitted, one is generated on the cardholder's behalf. Grid does not retain the
-   * value: it is forwarded to the issuer and discarded, so it cannot be read back
-   * afterwards.
+   * Body param: Optional static password used as the card's 3-D Secure factor. Only
+   * accepted for card programs whose issuer supports a static-password factor (EU
+   * cards today); supplying it for a program that does not is rejected with
+   * `INVALID_INPUT`. When omitted, one is generated on the cardholder's behalf. Grid
+   * does not retain the value: it is forwarded to the issuer and discarded, so it
+   * cannot be read back afterwards.
    */
   threeDSecurePassword?: string;
 }
