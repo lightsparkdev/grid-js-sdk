@@ -24,14 +24,20 @@ export class Config extends APIResource {
 
   /**
    * Update platform configuration settings. `cardConfigs` can establish
-   * platform-level per-transaction and UTC-calendar-day card caps. Grid enforces the
-   * lower of each platform cap and its corresponding card-specific value without
-   * replacing the card-specific value. Daily limits reset at 00:00 UTC.
+   * platform-level caps on a single card transaction, on spend during one UTC
+   * calendar day, and on the number of transactions during one UTC calendar day.
+   * Grid enforces the lower of each platform cap and its corresponding card-specific
+   * value without replacing the card-specific value. Daily limits reset at 00:00
+   * UTC.
    *
    * @example
    * ```ts
    * const platformConfig = await client.config.update({
-   *   cardConfigs: { maxSpendPerTransaction: 10000, maxSpendPerDay: 50000 },
+   *   cardConfigs: {
+   *     maxSpendPerTransaction: 10000,
+   *     maxSpendPerDay: 50000,
+   *     maxTransactionsPerDay: 50,
+   *   },
    *   cardTokenization2faConfig: {
    *     displayName: 'Acme',
    *     logoUrl: 'https://acme.com/card-email-logo.png',
@@ -235,6 +241,18 @@ export namespace PlatformConfig {
      * programs are unaffected.
      */
     maxSpendPerTransaction?: number | null;
+
+    /**
+     * Platform-level cap on the number of transactions each card may authorize during
+     * one UTC calendar day, for every card whose authorization decisions are made by
+     * Grid. Grid enforces the lower of this cap and the card's configured
+     * `maxTransactionsPerDay`; null means no platform-level daily transaction cap. The
+     * window resets at 00:00 UTC. Each approved authorization counts once; refunds,
+     * reversals, and authorization expiries do not restore capacity during the day.
+     * The cap applies to existing cards and cards issued later. Provider-decided card
+     * programs are unaffected.
+     */
+    maxTransactionsPerDay?: number | null;
   }
 
   /**
@@ -470,9 +488,9 @@ export namespace PlatformConfig {
 export interface PlatformConfigUpdateRequest {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For either spending limit, supply null to clear the platform cap
-   * or a positive integer to set it. Omit this field at the top level to leave all
-   * card settings unchanged.
+   * left unchanged. For any card limit, supply null to clear the platform cap or a
+   * positive integer to set it. Omit this field at the top level to leave all card
+   * settings unchanged.
    */
   cardConfigs?: PlatformConfigUpdateRequest.CardConfigs;
 
@@ -511,9 +529,9 @@ export interface PlatformConfigUpdateRequest {
 export namespace PlatformConfigUpdateRequest {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For either spending limit, supply null to clear the platform cap
-   * or a positive integer to set it. Omit this field at the top level to leave all
-   * card settings unchanged.
+   * left unchanged. For any card limit, supply null to clear the platform cap or a
+   * positive integer to set it. Omit this field at the top level to leave all card
+   * settings unchanged.
    */
   export interface CardConfigs {
     /**
@@ -536,6 +554,18 @@ export namespace PlatformConfigUpdateRequest {
      * programs are unaffected.
      */
     maxSpendPerTransaction?: number | null;
+
+    /**
+     * Platform-level cap on the number of transactions each card may authorize during
+     * one UTC calendar day, for every card whose authorization decisions are made by
+     * Grid. Grid enforces the lower of this cap and the card's configured
+     * `maxTransactionsPerDay`; null means no platform-level daily transaction cap. The
+     * window resets at 00:00 UTC. Each approved authorization counts once; refunds,
+     * reversals, and authorization expiries do not restore capacity during the day.
+     * The cap applies to existing cards and cards issued later. Provider-decided card
+     * programs are unaffected.
+     */
+    maxTransactionsPerDay?: number | null;
   }
 
   /**
@@ -817,9 +847,9 @@ export interface PlatformCurrencyConfig {
 export interface ConfigUpdateParams {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For either spending limit, supply null to clear the platform cap
-   * or a positive integer to set it. Omit this field at the top level to leave all
-   * card settings unchanged.
+   * left unchanged. For any card limit, supply null to clear the platform cap or a
+   * positive integer to set it. Omit this field at the top level to leave all card
+   * settings unchanged.
    */
   cardConfigs?: ConfigUpdateParams.CardConfigs;
 
@@ -856,9 +886,9 @@ export interface ConfigUpdateParams {
 export namespace ConfigUpdateParams {
   /**
    * Update platform-level card settings. Fields omitted from the nested object are
-   * left unchanged. For either spending limit, supply null to clear the platform cap
-   * or a positive integer to set it. Omit this field at the top level to leave all
-   * card settings unchanged.
+   * left unchanged. For any card limit, supply null to clear the platform cap or a
+   * positive integer to set it. Omit this field at the top level to leave all card
+   * settings unchanged.
    */
   export interface CardConfigs {
     /**
@@ -881,6 +911,18 @@ export namespace ConfigUpdateParams {
      * programs are unaffected.
      */
     maxSpendPerTransaction?: number | null;
+
+    /**
+     * Platform-level cap on the number of transactions each card may authorize during
+     * one UTC calendar day, for every card whose authorization decisions are made by
+     * Grid. Grid enforces the lower of this cap and the card's configured
+     * `maxTransactionsPerDay`; null means no platform-level daily transaction cap. The
+     * window resets at 00:00 UTC. Each approved authorization counts once; refunds,
+     * reversals, and authorization expiries do not restore capacity during the day.
+     * The cap applies to existing cards and cards issued later. Provider-decided card
+     * programs are unaffected.
+     */
+    maxTransactionsPerDay?: number | null;
   }
 
   /**
