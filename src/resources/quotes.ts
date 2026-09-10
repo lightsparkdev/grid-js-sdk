@@ -364,7 +364,9 @@ export namespace PaymentInstructions {
     accountType: 'CNY_ACCOUNT';
 
     /**
-     * The name of the bank
+     * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+     * returns for this country and currency. Send it exactly as returned; any other
+     * name is rejected.
      */
     bankName: string;
 
@@ -391,7 +393,9 @@ export namespace PaymentInstructions {
     accountType: 'ILS_ACCOUNT';
 
     /**
-     * The name of the bank
+     * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+     * returns for this country and currency. Send it exactly as returned; any other
+     * name is rejected.
      */
     bankName: string;
 

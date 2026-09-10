@@ -141,7 +141,9 @@ export interface BdtExternalAccountCreateInfo {
   accountType: 'BDT_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -694,7 +696,9 @@ export interface CopExternalAccountCreateInfo {
   accountType: 'COP_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -816,7 +820,9 @@ export interface EgpExternalAccountCreateInfo {
   accountType: 'EGP_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -1026,7 +1032,9 @@ export interface GhsExternalAccountCreateInfo {
   accountType: 'GHS_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -1093,7 +1101,9 @@ export interface GtqExternalAccountCreateInfo {
   bankAccountType: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the beneficiary's bank
+   * The name of the beneficiary's bank. Must be one of the `bankName` values
+   * `GET /discoveries` returns for this country and currency. Send it exactly as
+   * returned; any other name is rejected.
    */
   bankName: string;
 
@@ -1108,17 +1118,19 @@ export interface HkdExternalAccountCreateInfo {
 
   accountType: 'HKD_ACCOUNT';
 
-  /**
-   * The name of the bank
-   */
-  bankName: string;
-
   beneficiary: ExternalAccountsAPI.HkdBeneficiary | HkdExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * The SWIFT/BIC code of the bank
    */
   swiftCode: string;
+
+  /**
+   * Name of the beneficiary's bank. When omitted, resolved from swiftCode via the
+   * payout partner bank directory at account creation. Not checked against
+   * `GET /discoveries`.
+   */
+  bankName?: string;
 }
 
 export namespace HkdExternalAccountCreateInfo {
@@ -1215,7 +1227,9 @@ export interface IdrExternalAccountCreateInfo {
   accountType: 'IDR_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -1449,11 +1463,6 @@ export interface InrExternalAccountCreateInfo {
   accountNumber?: string;
 
   /**
-   * The name of the bank
-   */
-  bankName?: string;
-
-  /**
    * The Indian Financial System Code (IFSC) of the beneficiary's bank branch
    * (NEFT/RTGS)
    */
@@ -1559,7 +1568,9 @@ export interface JmdExternalAccountCreateInfo {
   bankAccountType: 'CHECKING' | 'SAVINGS';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -1809,7 +1820,9 @@ export interface MyrExternalAccountCreateInfo {
   accountType: 'MYR_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -1904,7 +1917,9 @@ export interface NgnExternalAccountCreateInfo {
   accountType: 'NGN_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -1958,7 +1973,9 @@ export interface PhpExternalAccountCreateInfo {
   accountType: 'PHP_ACCOUNT';
 
   /**
-   * Name of the beneficiary's bank
+   * Name of the beneficiary's bank. Must be one of the `bankName` values
+   * `GET /discoveries` returns for this country and currency. Send it exactly as
+   * returned; any other name is rejected.
    */
   bankName: string;
 
@@ -2055,7 +2072,9 @@ export interface PkrExternalAccountCreateInfo {
   accountType: 'PKR_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -2184,7 +2203,8 @@ export interface SgdExternalAccountCreateInfo {
 
   /**
    * Name of the beneficiary's bank. When omitted, resolved from swiftCode via the
-   * payout partner bank directory at account creation.
+   * payout partner bank directory at account creation. Not checked against
+   * `GET /discoveries`.
    */
   bankName?: string;
 }
@@ -2378,7 +2398,9 @@ export interface ThbExternalAccountCreateInfo {
   accountType: 'THB_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -2632,7 +2654,7 @@ export interface UsdExternalAccountCreateInfo {
   /**
    * The name of the financial institution holding the account. Optional on every
    * rail, and recommended for wires, where it identifies the beneficiary's
-   * institution on the payment message.
+   * institution on the payment message. Not checked against `GET /discoveries`.
    */
   bankName?: string;
 
@@ -2796,7 +2818,9 @@ export interface VndExternalAccountCreateInfo {
   accountType: 'VND_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
@@ -3081,7 +3105,9 @@ export interface ZarExternalAccountCreateInfo {
   accountType: 'ZAR_ACCOUNT';
 
   /**
-   * The name of the bank
+   * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+   * returns for this country and currency. Send it exactly as returned; any other
+   * name is rejected.
    */
   bankName: string;
 
