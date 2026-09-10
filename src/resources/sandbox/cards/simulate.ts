@@ -99,8 +99,8 @@ export class Simulate extends APIResource {
   /**
    * Simulate a merchant-initiated `RETURN` against an existing settled card
    * transaction in the sandbox environment. Creates a `CardRefund` on the parent and
-   * either flips the parent to `REFUNDED` (full refund) or keeps it `SETTLED` with a
-   * non-zero `refundedAmount` (partial refund).
+   * keeps the parent `SETTLED` with the returned value in `refundedAmount`, whether
+   * the return is full or partial.
    *
    * Production returns `404` on this path.
    *
@@ -265,8 +265,8 @@ export interface Refund {
 /**
  * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/return`. Drives
  * a `RETURN` event against an existing settled `CardTransaction`, which creates a
- * `CardRefund` and pushes the parent transaction towards `REFUNDED` (full) or
- * keeps it `SETTLED` (partial).
+ * `CardRefund` and leaves the parent transaction `SETTLED` with the returned value
+ * in `refundedAmount`.
  */
 export interface RefundRequest {
   /**

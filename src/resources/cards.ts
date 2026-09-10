@@ -417,7 +417,8 @@ export interface CardTransaction {
   customerId: string;
 
   /**
-   * Card transactions debit the customer's account.
+   * A purchase is a `DEBIT`. A standalone merchant refund with no purchase to return
+   * against is a `CREDIT`, with the credited value in `settledAmount`.
    */
   direction: 'CREDIT' | 'DEBIT';
 
@@ -429,17 +430,18 @@ export interface CardTransaction {
   platformCustomerId: string;
 
   /**
-   * Lifecycle status of a card transaction.
+   * Lifecycle status of a card transaction. The status tracks settlement only — a
+   * return is reported through `direction` and `refundedAmount`, not through a
+   * status of its own.
    *
    * | Status              | Description                                                                                                                                                                                                                                     |
    * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
    * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
-   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source.                                                                                                                                                |
-   * | `REFUNDED`          | A `RETURN` was received from the merchant; the net settled amount has been refunded in part or whole.                                                                                                                                           |
+   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source. A `RETURN` received afterwards keeps the transaction `SETTLED` and reports the returned value in `refundedAmount`.                             |
    * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
    */
-  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'REFUNDED' | 'EXCEPTION';
+  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'EXCEPTION';
 
   /**
    * Discriminator identifying this transaction as a card transaction in the
