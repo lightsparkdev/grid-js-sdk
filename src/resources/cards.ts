@@ -142,6 +142,11 @@ export class Cards extends APIResource {
    * funding source, Authorization Decisioning cannot use it to fund card
    * transactions.
    *
+   * A platform may be limited to a maximum number of live cards. Once that limit is
+   * reached, further issuance is rejected with `CARD_LIMIT_REACHED` until a card is
+   * closed or Lightspark raises the limit. Cards in `CLOSED` state do not count
+   * toward the limit.
+   *
    * New cards start in `state: "PROCESSING"` while the card issuer provisions the
    * card. The `card.state_change` webhook fires on each state transition, including
    * the transition to `ACTIVE` (or to `CLOSED` with `stateReason: "ISSUER_REJECTED"`
