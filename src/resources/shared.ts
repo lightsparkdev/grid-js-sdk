@@ -882,7 +882,8 @@ export interface EurExternalAccountCreateInfo {
   iban: string;
 
   /**
-   * The SWIFT/BIC code of the bank
+   * The SWIFT/BIC code of the bank. When omitted, Grid derives it from the IBAN when
+   * possible. Provide it when automatic derivation is unavailable.
    */
   swiftCode?: string;
 }

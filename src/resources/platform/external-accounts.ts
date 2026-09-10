@@ -396,7 +396,8 @@ export interface EurAccountInfo {
   paymentRails: Array<'SEPA' | 'SEPA_INSTANT'>;
 
   /**
-   * The SWIFT/BIC code of the bank
+   * The SWIFT/BIC code of the bank. When omitted, Grid derives it from the IBAN when
+   * possible. Provide it when automatic derivation is unavailable.
    */
   swiftCode?: string;
 }
