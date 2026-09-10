@@ -195,7 +195,7 @@ export interface IncomingTransaction {
   status: TransactionStatus;
 
   /**
-   * Type of transaction (incoming payment or outgoing payment)
+   * Type of transaction
    */
   type: 'INCOMING';
 
@@ -351,7 +351,7 @@ export interface OutgoingTransaction {
   status: 'PENDING' | 'PENDING_AUTHORIZATION' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'EXPIRED';
 
   /**
-   * Type of transaction (incoming payment or outgoing payment)
+   * Type of transaction
    */
   type: 'OUTGOING';
 
@@ -628,9 +628,9 @@ export type TransactionStatus =
   | 'EXPIRED';
 
 /**
- * Type of transaction (incoming payment or outgoing payment)
+ * Type of transaction
  */
-export type TransactionType = 'INCOMING' | 'OUTGOING';
+export type TransactionType = 'INCOMING' | 'OUTGOING' | 'CARD';
 
 export interface TransactionListParams extends DefaultPaginationParams {
   /**
@@ -702,7 +702,7 @@ export interface TransactionListParams extends DefaultPaginationParams {
   status?: TransactionStatus;
 
   /**
-   * Type of transaction (incoming payment or outgoing payment)
+   * Type of transaction
    */
   type?: TransactionType;
 }

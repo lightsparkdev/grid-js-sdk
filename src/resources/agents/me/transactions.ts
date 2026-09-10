@@ -116,7 +116,7 @@ export interface TransactionListParams extends DefaultPaginationParams {
   status?: TransactionsAPI.TransactionStatus;
 
   /**
-   * Type of transaction (incoming payment or outgoing payment)
+   * Type of transaction
    */
   type?: TransactionsAPI.TransactionType;
 }
