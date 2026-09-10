@@ -159,7 +159,7 @@ export class Cards extends APIResource {
    * @example
    * ```ts
    * const card = await client.cards.issue({
-   *   cardholderId:
+   *   customerId:
    *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
    *   form: 'VIRTUAL',
    *   fundingSources: [
@@ -186,14 +186,14 @@ export interface Card {
   id: string;
 
   /**
-   * The id of the `Customer` who holds this card.
-   */
-  cardholderId: string;
-
-  /**
    * Creation timestamp
    */
   createdAt: string;
+
+  /**
+   * The id of the `Customer` who holds this card.
+   */
+  customerId: string;
 
   /**
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
@@ -318,7 +318,7 @@ export interface CardCreateRequest {
    * `APPROVED`; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    */
-  cardholderId: string;
+  customerId: string;
 
   /**
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`
@@ -633,9 +633,9 @@ export interface CardListParams extends DefaultPaginationParams {
   accountId?: string;
 
   /**
-   * Filter by cardholder (customer) id.
+   * Filter by customer id.
    */
-  cardholderId?: string;
+  customerId?: string;
 
   /**
    * Maximum number of results to return (default 20, max 100)
@@ -664,7 +664,7 @@ export interface CardIssueParams {
    * `APPROVED`; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    */
-  cardholderId: string;
+  customerId: string;
 
   /**
    * Physical form factor of the card. Only `VIRTUAL` is supported in v1; `PHYSICAL`

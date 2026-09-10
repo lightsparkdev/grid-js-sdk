@@ -54,8 +54,8 @@ describe('resource cards', () => {
       client.cards.list(
         {
           accountId: 'accountId',
-          cardholderId: 'cardholderId',
           cursor: 'cursor',
+          customerId: 'customerId',
           limit: 1,
           platformCardId: 'platformCardId',
           sortOrder: 'asc',
@@ -69,7 +69,7 @@ describe('resource cards', () => {
   // Mock server tests are disabled
   test.skip('issue: only required params', async () => {
     const responsePromise = client.cards.issue({
-      cardholderId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
+      customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       form: 'VIRTUAL',
       fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],
     });
@@ -85,7 +85,7 @@ describe('resource cards', () => {
   // Mock server tests are disabled
   test.skip('issue: required and optional params', async () => {
     const response = await client.cards.issue({
-      cardholderId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
+      customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',
       form: 'VIRTUAL',
       fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],
       maxSpendPerDay: 25000,
