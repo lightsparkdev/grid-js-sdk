@@ -79,7 +79,7 @@ export class Simulate extends APIResource {
    *     {
    *       amount: 1500,
    *       cardTransactionId:
-   *         'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
+   *         'Transaction:019542f5-b3e7-1d02-0000-000000000100',
    *     },
    *   );
    * ```
@@ -111,7 +111,7 @@ export class Simulate extends APIResource {
    *   {
    *     amount: 1500,
    *     cardTransactionId:
-   *       'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
+   *       'Transaction:019542f5-b3e7-1d02-0000-000000000100',
    *   },
    * );
    * ```

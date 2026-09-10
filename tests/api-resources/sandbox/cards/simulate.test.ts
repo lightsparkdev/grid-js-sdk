@@ -55,7 +55,7 @@ describe('resource simulate', () => {
   test.skip('clearing: only required params', async () => {
     const responsePromise = client.sandbox.cards.simulate.clearing(
       'Card:019542f5-b3e7-1d02-0000-000000000010',
-      { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' },
+      { amount: 1500, cardTransactionId: 'Transaction:019542f5-b3e7-1d02-0000-000000000100' },
     );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -70,7 +70,7 @@ describe('resource simulate', () => {
   test.skip('clearing: required and optional params', async () => {
     const response = await client.sandbox.cards.simulate.clearing(
       'Card:019542f5-b3e7-1d02-0000-000000000010',
-      { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' },
+      { amount: 1500, cardTransactionId: 'Transaction:019542f5-b3e7-1d02-0000-000000000100' },
     );
   });
 
@@ -78,7 +78,7 @@ describe('resource simulate', () => {
   test.skip('return: only required params', async () => {
     const responsePromise = client.sandbox.cards.simulate.return(
       'Card:019542f5-b3e7-1d02-0000-000000000010',
-      { amount: 1500, cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100' },
+      { amount: 1500, cardTransactionId: 'Transaction:019542f5-b3e7-1d02-0000-000000000100' },
     );
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
@@ -93,7 +93,7 @@ describe('resource simulate', () => {
   test.skip('return: required and optional params', async () => {
     const response = await client.sandbox.cards.simulate.return('Card:019542f5-b3e7-1d02-0000-000000000010', {
       amount: 1500,
-      cardTransactionId: 'CardTransaction:019542f5-b3e7-1d02-0000-000000000100',
+      cardTransactionId: 'Transaction:019542f5-b3e7-1d02-0000-000000000100',
     });
   });
 });
