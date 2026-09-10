@@ -39,7 +39,11 @@ export class Cards extends APIResource {
    *   sources. Array order determines the priority Authorization Decisioning tries
    *   them in. Each id must belong to the cardholder and be denominated in the
    *   card's currency; the list must contain at least one source. `fundingSources`
-   *   cannot be supplied alongside `state: CLOSED`.
+   *   cannot be supplied alongside `state: CLOSED`. On card programs where the card
+   *   issuer makes authorization decisions, `fundingSources` cannot be combined with
+   *   any `state` change, so send the changes as separate requests. On card programs
+   *   where Grid makes the authorization decision, the combination remains valid for
+   *   `state` changes other than `CLOSED`.
    * - `maxSpendPerTransaction`, when supplied, replaces the card-specific
    *   per-transaction cap. Supply a positive integer in the smallest unit of the
    *   card's currency to set it or null to clear it. If the platform config sets
