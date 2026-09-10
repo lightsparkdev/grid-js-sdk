@@ -306,10 +306,10 @@ export interface Card {
   processorRef?: string;
 
   /**
-   * Reason associated with the current `state`. Populated when the card is `CLOSED`
-   * or when provisioning was rejected; otherwise null.
+   * Reason associated with the current `state`. Present when the card is `CLOSED` or
+   * when provisioning was rejected; absent otherwise.
    */
-  stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID' | null;
+  stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID';
 }
 
 export interface CardCreateRequest {
