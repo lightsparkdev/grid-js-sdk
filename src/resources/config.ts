@@ -243,7 +243,8 @@ export namespace PlatformConfig {
    */
   export interface CardTokenization2faConfig {
     /**
-     * Platform name displayed in authentication messages.
+     * Name shown in authentication messages and used to build the default subject,
+     * body, and sender name. Defaults to the platform's name.
      */
     displayName?: string;
 
@@ -274,7 +275,8 @@ export namespace PlatformConfig {
       /**
        * Plain-text message content. Lightspark inserts the authentication code into a
        * controlled text and HTML template; arbitrary HTML and template variables are not
-       * supported.
+       * supported. Defaults to "Use this code to finish adding your {displayName} card
+       * to your wallet."
        */
       bodyText?: string;
 
@@ -284,7 +286,7 @@ export namespace PlatformConfig {
       fromAddress?: string;
 
       /**
-       * Sender display name.
+       * Sender display name. Defaults to `displayName`.
        */
       fromName?: string;
 
@@ -294,7 +296,8 @@ export namespace PlatformConfig {
       replyToAddress?: string;
 
       /**
-       * Subject for the authentication email.
+       * Subject for the authentication email. Defaults to "Your {displayName}
+       * verification code".
        */
       subject?: string;
     }
@@ -306,7 +309,8 @@ export namespace PlatformConfig {
     export interface SMS {
       /**
        * Plain-text fallback message used when Twilio Verify is unavailable for the
-       * authentication code. Lightspark appends the code to this text.
+       * authentication code. Lightspark appends the code to this text. Defaults to "Your
+       * {displayName} verification code is:".
        */
       bodyText?: string;
 
@@ -541,7 +545,8 @@ export namespace PlatformConfigUpdateRequest {
    */
   export interface CardTokenization2faConfig {
     /**
-     * Platform name displayed in authentication messages.
+     * Name shown in authentication messages and used to build the default subject,
+     * body, and sender name. Defaults to the platform's name.
      */
     displayName?: string;
 
@@ -572,7 +577,8 @@ export namespace PlatformConfigUpdateRequest {
       /**
        * Plain-text message content. Lightspark inserts the authentication code into a
        * controlled text and HTML template; arbitrary HTML and template variables are not
-       * supported.
+       * supported. Defaults to "Use this code to finish adding your {displayName} card
+       * to your wallet."
        */
       bodyText?: string;
 
@@ -582,7 +588,7 @@ export namespace PlatformConfigUpdateRequest {
       fromAddress?: string;
 
       /**
-       * Sender display name.
+       * Sender display name. Defaults to `displayName`.
        */
       fromName?: string;
 
@@ -592,7 +598,8 @@ export namespace PlatformConfigUpdateRequest {
       replyToAddress?: string;
 
       /**
-       * Subject for the authentication email.
+       * Subject for the authentication email. Defaults to "Your {displayName}
+       * verification code".
        */
       subject?: string;
     }
@@ -604,7 +611,8 @@ export namespace PlatformConfigUpdateRequest {
     export interface SMS {
       /**
        * Plain-text fallback message used when Twilio Verify is unavailable for the
-       * authentication code. Lightspark appends the code to this text.
+       * authentication code. Lightspark appends the code to this text. Defaults to "Your
+       * {displayName} verification code is:".
        */
       bodyText?: string;
 
@@ -882,7 +890,8 @@ export namespace ConfigUpdateParams {
    */
   export interface CardTokenization2faConfig {
     /**
-     * Platform name displayed in authentication messages.
+     * Name shown in authentication messages and used to build the default subject,
+     * body, and sender name. Defaults to the platform's name.
      */
     displayName?: string;
 
@@ -913,7 +922,8 @@ export namespace ConfigUpdateParams {
       /**
        * Plain-text message content. Lightspark inserts the authentication code into a
        * controlled text and HTML template; arbitrary HTML and template variables are not
-       * supported.
+       * supported. Defaults to "Use this code to finish adding your {displayName} card
+       * to your wallet."
        */
       bodyText?: string;
 
@@ -923,7 +933,7 @@ export namespace ConfigUpdateParams {
       fromAddress?: string;
 
       /**
-       * Sender display name.
+       * Sender display name. Defaults to `displayName`.
        */
       fromName?: string;
 
@@ -933,7 +943,8 @@ export namespace ConfigUpdateParams {
       replyToAddress?: string;
 
       /**
-       * Subject for the authentication email.
+       * Subject for the authentication email. Defaults to "Your {displayName}
+       * verification code".
        */
       subject?: string;
     }
@@ -945,7 +956,8 @@ export namespace ConfigUpdateParams {
     export interface SMS {
       /**
        * Plain-text fallback message used when Twilio Verify is unavailable for the
-       * authentication code. Lightspark appends the code to this text.
+       * authentication code. Lightspark appends the code to this text. Defaults to "Your
+       * {displayName} verification code is:".
        */
       bodyText?: string;
 
