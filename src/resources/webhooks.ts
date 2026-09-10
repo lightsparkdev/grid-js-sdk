@@ -285,22 +285,6 @@ export interface CardStateChangeWebhookEvent {
   type: 'CARD.STATE_CHANGE';
 }
 
-export interface CardFundingSourceChangeWebhookEvent {
-  /**
-   * Unique identifier for this webhook delivery (can be used for idempotency)
-   */
-  id: string;
-
-  data: CardsAPI.Card;
-
-  /**
-   * ISO 8601 timestamp of when the webhook was sent
-   */
-  timestamp: string;
-
-  type: 'CARD.FUNDING_SOURCE_CHANGE';
-}
-
 export interface CardTransactionWebhookEvent {
   /**
    * Unique identifier for this webhook delivery (can be used for idempotency)
@@ -471,7 +455,6 @@ export type UnwrapWebhookEvent =
   | ExternalAccountStatusWebhookEvent
   | VerificationUpdateWebhookEvent
   | CardStateChangeWebhookEvent
-  | CardFundingSourceChangeWebhookEvent
   | CardTransactionWebhookEvent
   | WalletOperationWebhookEvent;
 
@@ -487,7 +470,6 @@ export declare namespace Webhooks {
     type ExternalAccountStatusWebhookEvent as ExternalAccountStatusWebhookEvent,
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
     type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
-    type CardFundingSourceChangeWebhookEvent as CardFundingSourceChangeWebhookEvent,
     type CardTransactionWebhookEvent as CardTransactionWebhookEvent,
     type WalletOperationWebhookEvent as WalletOperationWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,

@@ -79,12 +79,8 @@ export class Cards extends APIResource {
    *   if a post-hoc pull on the now-unbound source fails. Funding-source bindings
    *   are detached. Refunds already in flight still complete because Lightspark
    *   holds the card-reserve keys.
-   * - `fundingSources` change: emits `card.funding_source_change` reflecting the new
-   *   ordered binding.
    *
-   * The `card.state_change` webhook fires on every successful `state` transition;
-   * the `card.funding_source_change` webhook fires whenever `fundingSources` is
-   * updated.
+   * The `card.state_change` webhook fires on every successful `state` transition.
    *
    * @example
    * ```ts
