@@ -470,9 +470,9 @@ export interface CardListResponse {
 /**
  * Parent transaction row for a card authorization and all of the pulls /
  * settlements / refunds that reconcile against it. Child events are rolled up into
- * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
- * Delivered as the payload of the generic transaction webhook stream (extends the
- * Transaction model with a card destination type) on every transition.
+ * the `settledAmount` and `refundedAmount` totals. Delivered as the payload of the
+ * generic transaction webhook stream (extends the Transaction model with a card
+ * destination type) on every transition.
  */
 export interface CardTransaction {
   /**
@@ -552,21 +552,9 @@ export interface CardTransaction {
    */
   issuerTransactionToken?: string;
 
-  /**
-   * Timestamp of the most recent reconcile event (pull / clearing / refund) against
-   * this transaction.
-   */
-  lastEventAt?: string;
-
-  pullSummary?: SimulateAPI.CardPullSummary;
-
   refundedAmount?: InvitationsAPI.CurrencyAmount;
 
-  refundSummary?: SimulateAPI.CardRefundSummary;
-
   settledAmount?: InvitationsAPI.CurrencyAmount;
-
-  settlementSummary?: SimulateAPI.CardSettlementSummary;
 }
 
 /**

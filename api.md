@@ -425,9 +425,6 @@ Types:
 
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">AuthorizationRequest</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">CardMerchant</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardPullSummary</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardRefundSummary</a></code>
-- <code><a href="./src/resources/sandbox/cards/simulate.ts">CardSettlementSummary</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">ClearingRequest</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">Refund</a></code>
 - <code><a href="./src/resources/sandbox/cards/simulate.ts">RefundRequest</a></code>

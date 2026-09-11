@@ -167,52 +167,6 @@ export interface CardMerchant {
   mcc?: string;
 }
 
-export interface CardPullSummary {
-  /**
-   * Total number of pulls (debits) executed against the funding source for this
-   * transaction. `> 1` indicates one or more post-hoc pulls — e.g. restaurant tip /
-   * over-auth clearings.
-   */
-  count: number;
-
-  /**
-   * Sum of all pull amounts in the smallest unit of the funding source's currency.
-   */
-  totalAmount: number;
-
-  /**
-   * Number of pulls still in the `PENDING` state. Drops to zero when every pull has
-   * reached a terminal state. Non-zero values that persist beyond the expected
-   * settlement window are an early signal for the `EXCEPTION` path.
-   */
-  pendingCount?: number;
-}
-
-export interface CardRefundSummary {
-  /**
-   * Number of refund (return) events received for this transaction.
-   */
-  count: number;
-
-  /**
-   * Sum of all refund amounts in the smallest unit of the funding source's currency.
-   */
-  totalAmount: number;
-}
-
-export interface CardSettlementSummary {
-  /**
-   * Number of settlement (clearing) events received for this transaction.
-   */
-  count: number;
-
-  /**
-   * Sum of all settled amounts in the smallest unit of the funding source's
-   * currency.
-   */
-  totalAmount: number;
-}
-
 /**
  * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/clearing`.
  * Drives a clearing event against an existing `CardTransaction`. Pass an `amount`
@@ -364,9 +318,6 @@ export declare namespace Simulate {
   export {
     type AuthorizationRequest as AuthorizationRequest,
     type CardMerchant as CardMerchant,
-    type CardPullSummary as CardPullSummary,
-    type CardRefundSummary as CardRefundSummary,
-    type CardSettlementSummary as CardSettlementSummary,
     type ClearingRequest as ClearingRequest,
     type Refund as Refund,
     type RefundRequest as RefundRequest,

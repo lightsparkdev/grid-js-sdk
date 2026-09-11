@@ -81,9 +81,9 @@ export interface InternalAccountReference {
 /**
  * Parent transaction row for a card authorization and all of the pulls /
  * settlements / refunds that reconcile against it. Child events are rolled up into
- * the `pullSummary`, `refundSummary`, and `settlementSummary` aggregates.
- * Delivered as the payload of the generic transaction webhook stream (extends the
- * Transaction model with a card destination type) on every transition.
+ * the `settledAmount` and `refundedAmount` totals. Delivered as the payload of the
+ * generic transaction webhook stream (extends the Transaction model with a card
+ * destination type) on every transition.
  */
 export type Transaction =
   | TransactionsAPI.IncomingTransaction
