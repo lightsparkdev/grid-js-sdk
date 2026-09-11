@@ -48,23 +48,24 @@ export class Cards extends APIResource {
    *   per-transaction cap. Supply a positive integer in the smallest unit of the
    *   card's currency to set it or null to clear it. If the platform config sets
    *   `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the card and
-   *   platform values. Limits are supported only for card programs where Grid makes
-   *   the authorization decision. `maxSpendPerTransaction` cannot be supplied
-   *   alongside `state: CLOSED`.
+   *   platform values. The card's `cardCapabilities.supportsSpendLimits` must be
+   *   true. `maxSpendPerTransaction` cannot be supplied alongside `state: CLOSED`.
    * - `maxSpendPerDay`, when supplied, replaces the card-specific cap on cumulative
    *   new spend during one UTC calendar day. Supply a positive integer in the
    *   smallest unit of the card's currency to set it or null to clear it. If the
    *   platform config sets `cardConfigs.maxSpendPerDay`, Grid enforces the lower of
    *   the card and platform values. Refunds, reversals, and authorization expiries
-   *   do not restore capacity during the day. `maxSpendPerDay` cannot be supplied
-   *   alongside `state: CLOSED`.
+   *   do not restore capacity during the day. The card's
+   *   `cardCapabilities.supportsSpendLimits` must be true. `maxSpendPerDay` cannot
+   *   be supplied alongside `state: CLOSED`.
    * - `maxTransactionsPerDay`, when supplied, replaces the card-specific cap on the
    *   number of transactions the card may authorize during one UTC calendar day.
    *   Supply a positive integer to set it or null to clear it. If the platform
    *   config sets `cardConfigs.maxTransactionsPerDay`, Grid enforces the lower of
    *   the card and platform values. Refunds, reversals, and authorization expiries
-   *   do not restore capacity during the day. `maxTransactionsPerDay` cannot be
-   *   supplied alongside `state: CLOSED`.
+   *   do not restore capacity during the day. `maxTransactionsPerDay` requires the
+   *   card's `cardCapabilities.supportsTransactionCountLimit` to be true and cannot
+   *   be supplied alongside `state: CLOSED`.
    *
    * This endpoint is authenticated by the platform credential alone and returns
    * `200` directly. It deliberately does not use Grid's 202 → signed-retry pattern:
@@ -140,12 +141,13 @@ export class Cards extends APIResource {
    *
    * Optional `maxSpendPerTransaction`, `maxSpendPerDay`, and `maxTransactionsPerDay`
    * values set the card-specific caps on one transaction, on spend during one UTC
-   * calendar day, and on the number of transactions during one UTC calendar day. The
-   * limits are enforced by Grid for card programs where Grid makes the authorization
-   * decision, whether the card is funded by an Embedded Wallet account or custodial
-   * fiat. If the platform config sets the corresponding `cardConfigs` value, Grid
-   * enforces the lower of the card and platform caps. Amounts use the smallest unit
-   * of the card's currency.
+   * calendar day, and on the number of transactions during one UTC calendar day.
+   * Check the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` before supplying either spend limit, and
+   * `cardCapabilities.supportsTransactionCountLimit` before supplying the
+   * transaction count limit. If the platform config sets the corresponding
+   * `cardConfigs` value, Grid enforces the lower of the card and platform caps.
+   * Amounts use the smallest unit of the card's currency.
    *
    * If any funding source is an Embedded Wallet internal account, the cardholder
    * must authorize Grid to sign Spark token transactions for that card funding
@@ -280,6 +282,13 @@ export interface Card {
   brand?: 'VISA' | 'MASTERCARD';
 
   /**
+   * Actions supported for this card by the issuer selected at issuance. Present for
+   * cards whose program has been resolved; absent otherwise. These capabilities are
+   * fixed at issuance for the card's lifetime.
+   */
+  cardCapabilities?: Card.CardCapabilities;
+
+  /**
    * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
    * from the funding sources at issue time — all funding sources bound to a card
    * must be denominated in the same card-eligible currency.
@@ -327,6 +336,36 @@ export interface Card {
   stateReason?: 'ISSUER_REJECTED' | 'CLOSED_BY_PLATFORM' | 'CLOSED_BY_GRID';
 }
 
+export namespace Card {
+  /**
+   * Actions supported for this card by the issuer selected at issuance. Present for
+   * cards whose program has been resolved; absent otherwise. These capabilities are
+   * fixed at issuance for the card's lifetime.
+   */
+  export interface CardCapabilities {
+    /**
+     * Whether cards in this program accept a caller-supplied `threeDSecurePassword`.
+     */
+    supports3dSecurePassword: boolean;
+
+    /**
+     * Whether cards in this program can be revealed through `POST /cards/{id}/reveal`.
+     */
+    supportsPanReveal: boolean;
+
+    /**
+     * Whether cards in this program accept `maxSpendPerTransaction` and
+     * `maxSpendPerDay`.
+     */
+    supportsSpendLimits: boolean;
+
+    /**
+     * Whether cards in this program accept `maxTransactionsPerDay`.
+     */
+    supportsTransactionCountLimit: boolean;
+  }
+}
+
 export interface CardCreateRequest {
   /**
    * The id of the `Customer` to issue the card to. The customer must have KYC status
@@ -343,6 +382,7 @@ export interface CardCreateRequest {
 
   /**
    * Internal account ids to bind as funding sources, in priority order. The first
+   * entry selects the card issuer and therefore the card's capabilities. The first
    * entry is tried first by Authorization Decisioning. Every card must be bound to
    * at least one source, and every source must belong to the cardholder and be
    * denominated in a card-eligible currency; otherwise the request is rejected with
@@ -356,9 +396,10 @@ export interface CardCreateRequest {
    * this field for no card-specific daily cap. When the platform config also
    * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
    * values. The window resets at 00:00 UTC, and refunds, reversals, and
-   * authorization expiries do not restore capacity during the day. Supported only
-   * for card programs whose authorization decisions are made by Grid. Spend exactly
-   * equal to the effective limit is allowed.
+   * authorization expiries do not restore capacity during the day. Accepted only
+   * when the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` is true. Spend exactly equal to the
+   * effective limit is allowed.
    */
   maxSpendPerDay?: number;
 
@@ -367,8 +408,9 @@ export interface CardCreateRequest {
    * card currency derived from its funding sources. Omit this field for no
    * card-specific cap. When the platform config also supplies
    * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
-   * Supported only for card programs whose authorization decisions are made by Grid.
-   * A transaction for exactly the effective limit is allowed.
+   * Accepted only when the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` is true. A transaction for exactly the
+   * effective limit is allowed.
    */
   maxSpendPerTransaction?: number;
 
@@ -379,8 +421,8 @@ export interface CardCreateRequest {
    * `cardConfigs.maxTransactionsPerDay`, Grid enforces the lower of the two values.
    * The window resets at 00:00 UTC. Each approved authorization counts once;
    * refunds, reversals, and authorization expiries do not restore capacity during
-   * the day. Supported only for card programs whose authorization decisions are made
-   * by Grid.
+   * the day. Accepted only when the funding-source internal account's
+   * `cardCapabilities.supportsTransactionCountLimit` is true.
    */
   maxTransactionsPerDay?: number;
 
@@ -391,12 +433,14 @@ export interface CardCreateRequest {
   platformCardId?: string;
 
   /**
-   * Optional static password used as the card's 3-D Secure factor. Only accepted for
-   * card programs whose issuer supports a static-password factor (EU cards today);
-   * supplying it for a program that does not is rejected with `INVALID_INPUT`. When
-   * omitted, one is generated on the cardholder's behalf. Grid does not retain the
-   * value: it is forwarded to the issuer and discarded, so it cannot be read back
-   * afterwards.
+   * Static password used as the card's 3-D Secure factor. Required when the first
+   * funding-source internal account's `cardCapabilities.supports3dSecurePassword` is
+   * true; omitting it or supplying an empty or whitespace-only string is rejected
+   * with `INVALID_INPUT`. When the capability is false, supplying this field is
+   * rejected with `INVALID_INPUT` because cards in that program have no
+   * static-password factor. Grid does not retain the value: it is forwarded to the
+   * issuer and discarded, so it cannot be read back afterwards; a cardholder who
+   * forgets it must set a new one through `PATCH /cards/{id}`.
    */
   threeDSecurePassword?: string;
 }
@@ -552,8 +596,9 @@ export interface CardUpdateRequest {
    * to clear it, or supply a positive integer to set it. When the platform config
    * also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
    * values. Refunds, reversals, and authorization expiries do not restore capacity
-   * during the day. Supported only for card programs whose authorization decisions
-   * are made by Grid. Cannot be supplied alongside `state: CLOSED`.
+   * during the day. Accepted only when the card's
+   * `cardCapabilities.supportsSpendLimits` is true. Cannot be supplied alongside
+   * `state: CLOSED`.
    */
   maxSpendPerDay?: number | null;
 
@@ -562,8 +607,9 @@ export interface CardUpdateRequest {
    * card's currency. Omit this field to leave the current cap unchanged, supply null
    * to clear it, or supply a positive integer to set it. When the platform config
    * also supplies `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of
-   * the two values. Supported only for card programs whose authorization decisions
-   * are made by Grid. Cannot be supplied alongside `state: CLOSED`.
+   * the two values. Accepted only when the card's
+   * `cardCapabilities.supportsSpendLimits` is true. Cannot be supplied alongside
+   * `state: CLOSED`.
    */
   maxSpendPerTransaction?: number | null;
 
@@ -573,8 +619,8 @@ export interface CardUpdateRequest {
    * unchanged, supply null to clear it, or supply a positive integer to set it. When
    * the platform config also supplies `cardConfigs.maxTransactionsPerDay`, Grid
    * enforces the lower of the two values. Refunds, reversals, and authorization
-   * expiries do not restore capacity during the day. Supported only for card
-   * programs whose authorization decisions are made by Grid. Cannot be supplied
+   * expiries do not restore capacity during the day. Accepted only when the card's
+   * `cardCapabilities.supportsTransactionCountLimit` is true. Cannot be supplied
    * alongside `state: CLOSED`.
    */
   maxTransactionsPerDay?: number | null;
@@ -604,8 +650,9 @@ export interface CardUpdateParams {
    * to clear it, or supply a positive integer to set it. When the platform config
    * also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
    * values. Refunds, reversals, and authorization expiries do not restore capacity
-   * during the day. Supported only for card programs whose authorization decisions
-   * are made by Grid. Cannot be supplied alongside `state: CLOSED`.
+   * during the day. Accepted only when the card's
+   * `cardCapabilities.supportsSpendLimits` is true. Cannot be supplied alongside
+   * `state: CLOSED`.
    */
   maxSpendPerDay?: number | null;
 
@@ -614,8 +661,9 @@ export interface CardUpdateParams {
    * card's currency. Omit this field to leave the current cap unchanged, supply null
    * to clear it, or supply a positive integer to set it. When the platform config
    * also supplies `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of
-   * the two values. Supported only for card programs whose authorization decisions
-   * are made by Grid. Cannot be supplied alongside `state: CLOSED`.
+   * the two values. Accepted only when the card's
+   * `cardCapabilities.supportsSpendLimits` is true. Cannot be supplied alongside
+   * `state: CLOSED`.
    */
   maxSpendPerTransaction?: number | null;
 
@@ -625,8 +673,8 @@ export interface CardUpdateParams {
    * unchanged, supply null to clear it, or supply a positive integer to set it. When
    * the platform config also supplies `cardConfigs.maxTransactionsPerDay`, Grid
    * enforces the lower of the two values. Refunds, reversals, and authorization
-   * expiries do not restore capacity during the day. Supported only for card
-   * programs whose authorization decisions are made by Grid. Cannot be supplied
+   * expiries do not restore capacity during the day. Accepted only when the card's
+   * `cardCapabilities.supportsTransactionCountLimit` is true. Cannot be supplied
    * alongside `state: CLOSED`.
    */
   maxTransactionsPerDay?: number | null;
@@ -689,6 +737,7 @@ export interface CardIssueParams {
 
   /**
    * Body param: Internal account ids to bind as funding sources, in priority order.
+   * The first entry selects the card issuer and therefore the card's capabilities.
    * The first entry is tried first by Authorization Decisioning. Every card must be
    * bound to at least one source, and every source must belong to the cardholder and
    * be denominated in a card-eligible currency; otherwise the request is rejected
@@ -709,9 +758,10 @@ export interface CardIssueParams {
    * sources. Omit this field for no card-specific daily cap. When the platform
    * config also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of
    * the two values. The window resets at 00:00 UTC, and refunds, reversals, and
-   * authorization expiries do not restore capacity during the day. Supported only
-   * for card programs whose authorization decisions are made by Grid. Spend exactly
-   * equal to the effective limit is allowed.
+   * authorization expiries do not restore capacity during the day. Accepted only
+   * when the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` is true. Spend exactly equal to the
+   * effective limit is allowed.
    */
   maxSpendPerDay?: number;
 
@@ -720,8 +770,9 @@ export interface CardIssueParams {
    * unit of the card currency derived from its funding sources. Omit this field for
    * no card-specific cap. When the platform config also supplies
    * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
-   * Supported only for card programs whose authorization decisions are made by Grid.
-   * A transaction for exactly the effective limit is allowed.
+   * Accepted only when the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` is true. A transaction for exactly the
+   * effective limit is allowed.
    */
   maxSpendPerTransaction?: number;
 
@@ -732,8 +783,8 @@ export interface CardIssueParams {
    * `cardConfigs.maxTransactionsPerDay`, Grid enforces the lower of the two values.
    * The window resets at 00:00 UTC. Each approved authorization counts once;
    * refunds, reversals, and authorization expiries do not restore capacity during
-   * the day. Supported only for card programs whose authorization decisions are made
-   * by Grid.
+   * the day. Accepted only when the funding-source internal account's
+   * `cardCapabilities.supportsTransactionCountLimit` is true.
    */
   maxTransactionsPerDay?: number;
 
@@ -744,12 +795,15 @@ export interface CardIssueParams {
   platformCardId?: string;
 
   /**
-   * Body param: Optional static password used as the card's 3-D Secure factor. Only
-   * accepted for card programs whose issuer supports a static-password factor (EU
-   * cards today); supplying it for a program that does not is rejected with
-   * `INVALID_INPUT`. When omitted, one is generated on the cardholder's behalf. Grid
-   * does not retain the value: it is forwarded to the issuer and discarded, so it
-   * cannot be read back afterwards.
+   * Body param: Static password used as the card's 3-D Secure factor. Required when
+   * the first funding-source internal account's
+   * `cardCapabilities.supports3dSecurePassword` is true; omitting it or supplying an
+   * empty or whitespace-only string is rejected with `INVALID_INPUT`. When the
+   * capability is false, supplying this field is rejected with `INVALID_INPUT`
+   * because cards in that program have no static-password factor. Grid does not
+   * retain the value: it is forwarded to the issuer and discarded, so it cannot be
+   * read back afterwards; a cardholder who forgets it must set a new one through
+   * `PATCH /cards/{id}`.
    */
   threeDSecurePassword?: string;
 }

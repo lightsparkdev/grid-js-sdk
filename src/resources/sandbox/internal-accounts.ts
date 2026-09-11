@@ -119,6 +119,16 @@ export interface InternalAccount {
   updatedAt: string;
 
   /**
+   * Actions supported for a card issued now with this account as the first funding
+   * source. They can change if the platform's card routing changes and do not
+   * describe cards already issued using the account. When a create request supplies
+   * several funding sources, the first entry selects the issuer and therefore the
+   * resulting card's capabilities; read this field from that account. Absent when
+   * this account cannot fund a card.
+   */
+  cardCapabilities?: InternalAccount.CardCapabilities;
+
+  /**
    * The ID of the customer associated with the internal account. If this field is
    * empty, the internal account belongs to the platform.
    */
@@ -144,6 +154,37 @@ export interface InternalAccount {
 }
 
 export namespace InternalAccount {
+  /**
+   * Actions supported for a card issued now with this account as the first funding
+   * source. They can change if the platform's card routing changes and do not
+   * describe cards already issued using the account. When a create request supplies
+   * several funding sources, the first entry selects the issuer and therefore the
+   * resulting card's capabilities; read this field from that account. Absent when
+   * this account cannot fund a card.
+   */
+  export interface CardCapabilities {
+    /**
+     * Whether cards in this program accept a caller-supplied `threeDSecurePassword`.
+     */
+    supports3dSecurePassword: boolean;
+
+    /**
+     * Whether cards in this program can be revealed through `POST /cards/{id}/reveal`.
+     */
+    supportsPanReveal: boolean;
+
+    /**
+     * Whether cards in this program accept `maxSpendPerTransaction` and
+     * `maxSpendPerDay`.
+     */
+    supportsSpendLimits: boolean;
+
+    /**
+     * Whether cards in this program accept `maxTransactionsPerDay`.
+     */
+    supportsTransactionCountLimit: boolean;
+  }
+
   /**
    * The routing rule attached to this account. Null for accounts that carry no rule,
    * which is every account other than a `RULE_BASED` one.
