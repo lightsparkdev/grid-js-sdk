@@ -93,7 +93,7 @@ describe('resource cards', () => {
       maxSpendPerDay: 25000,
       maxSpendPerTransaction: 5000,
       maxTransactionsPerDay: 20,
-      platformCardId: 'card-emp-aary-001',
+      platformCardId: 'card-emp-001',
       threeDSecurePassword: 'AbCd1234EfGh5678',
     });
   });

@@ -179,7 +179,7 @@ export class Cards extends APIResource {
    *   maxSpendPerDay: 25000,
    *   maxSpendPerTransaction: 5000,
    *   maxTransactionsPerDay: 20,
-   *   platformCardId: 'card-emp-aary-001',
+   *   platformCardId: 'card-emp-001',
    * });
    * ```
    */

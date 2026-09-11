@@ -6167,12 +6167,12 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       typescript: {
         method: 'client.cards.issue',
         example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst card = await client.cards.issue({\n  customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',\n  maxSpendPerDay: 25000,\n  maxSpendPerTransaction: 5000,\n  maxTransactionsPerDay: 20,\n  platformCardId: 'card-emp-aary-001',\n});\n\nconsole.log(card.id);",
+          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\nconst card = await client.cards.issue({\n  customerId: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',\n  maxSpendPerDay: 25000,\n  maxSpendPerTransaction: 5000,\n  maxTransactionsPerDay: 20,\n  platformCardId: 'card-emp-001',\n});\n\nconsole.log(card.id);",
       },
       python: {
         method: 'cards.issue',
         example:
-          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncard = client.cards.issue(\n    customer_id="Customer:019542f5-b3e7-1d02-0000-000000000001",\n    form="VIRTUAL",\n    funding_sources=["InternalAccount:019542f5-b3e7-1d02-0000-000000000002"],\n    idempotency_key="550e8400-e29b-41d4-a716-446655440000",\n    max_spend_per_day=25000,\n    max_spend_per_transaction=5000,\n    max_transactions_per_day=20,\n    platform_card_id="card-emp-aary-001",\n)\nprint(card.id)',
+          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\ncard = client.cards.issue(\n    customer_id="Customer:019542f5-b3e7-1d02-0000-000000000001",\n    form="VIRTUAL",\n    funding_sources=["InternalAccount:019542f5-b3e7-1d02-0000-000000000002"],\n    idempotency_key="550e8400-e29b-41d4-a716-446655440000",\n    max_spend_per_day=25000,\n    max_spend_per_transaction=5000,\n    max_transactions_per_day=20,\n    platform_card_id="card-emp-001",\n)\nprint(card.id)',
       },
       kotlin: {
         method: 'cards().issue',
@@ -6197,11 +6197,11 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       php: {
         method: 'cards->issue',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->issue(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n  maxSpendPerDay: 25000,\n  maxSpendPerTransaction: 5000,\n  maxTransactionsPerDay: 20,\n  platformCardID: 'card-emp-aary-001',\n  threeDSecurePassword: 'AbCd1234EfGh5678',\n);\n\nvar_dump($card);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$card = $client->cards->issue(\n  customerID: 'Customer:019542f5-b3e7-1d02-0000-000000000001',\n  form: 'VIRTUAL',\n  fundingSources: ['InternalAccount:019542f5-b3e7-1d02-0000-000000000002'],\n  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000',\n  maxSpendPerDay: 25000,\n  maxSpendPerTransaction: 5000,\n  maxTransactionsPerDay: 20,\n  platformCardID: 'card-emp-001',\n  threeDSecurePassword: 'AbCd1234EfGh5678',\n);\n\nvar_dump($card);",
       },
       http: {
         example:
-          'curl https://api.lightspark.com/grid/2025-10-13/cards \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "form": "VIRTUAL",\n          "fundingSources": [\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000002"\n          ],\n          "maxSpendPerDay": 25000,\n          "maxSpendPerTransaction": 5000,\n          "maxTransactionsPerDay": 20,\n          "platformCardId": "card-emp-aary-001",\n          "threeDSecurePassword": "AbCd1234EfGh5678"\n        }\'',
+          'curl https://api.lightspark.com/grid/2025-10-13/cards \\\n    -H \'Content-Type: application/json\' \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET" \\\n    -d \'{\n          "customerId": "Customer:019542f5-b3e7-1d02-0000-000000000001",\n          "form": "VIRTUAL",\n          "fundingSources": [\n            "InternalAccount:019542f5-b3e7-1d02-0000-000000000002"\n          ],\n          "maxSpendPerDay": 25000,\n          "maxSpendPerTransaction": 5000,\n          "maxTransactionsPerDay": 20,\n          "platformCardId": "card-emp-001",\n          "threeDSecurePassword": "AbCd1234EfGh5678"\n        }\'',
       },
     },
   },
