@@ -215,7 +215,7 @@ export {
   type InternalAccountStatusWebhookEvent,
   type ExternalAccountStatusWebhookEvent,
   type VerificationUpdateWebhookEvent,
-  type CardStateChangeWebhookEvent,
+  type CardStatusChangeWebhookEvent,
   type CardTransactionWebhookEvent,
   type WalletOperationWebhookEvent,
   type UnwrapWebhookEvent,

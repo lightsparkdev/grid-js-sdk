@@ -269,7 +269,7 @@ export interface VerificationUpdateWebhookEvent {
     | 'VERIFICATION.PENDING_MANUAL_REVIEW';
 }
 
-export interface CardStateChangeWebhookEvent {
+export interface CardStatusChangeWebhookEvent {
   /**
    * Unique identifier for this webhook delivery (can be used for idempotency)
    */
@@ -282,7 +282,7 @@ export interface CardStateChangeWebhookEvent {
    */
   timestamp: string;
 
-  type: 'CARD.STATE_CHANGE';
+  type: 'CARD.STATUS_CHANGE';
 }
 
 export interface CardTransactionWebhookEvent {
@@ -457,7 +457,7 @@ export type UnwrapWebhookEvent =
   | InternalAccountStatusWebhookEvent
   | ExternalAccountStatusWebhookEvent
   | VerificationUpdateWebhookEvent
-  | CardStateChangeWebhookEvent
+  | CardStatusChangeWebhookEvent
   | CardTransactionWebhookEvent
   | WalletOperationWebhookEvent;
 
@@ -472,7 +472,7 @@ export declare namespace Webhooks {
     type InternalAccountStatusWebhookEvent as InternalAccountStatusWebhookEvent,
     type ExternalAccountStatusWebhookEvent as ExternalAccountStatusWebhookEvent,
     type VerificationUpdateWebhookEvent as VerificationUpdateWebhookEvent,
-    type CardStateChangeWebhookEvent as CardStateChangeWebhookEvent,
+    type CardStatusChangeWebhookEvent as CardStatusChangeWebhookEvent,
     type CardTransactionWebhookEvent as CardTransactionWebhookEvent,
     type WalletOperationWebhookEvent as WalletOperationWebhookEvent,
     type UnwrapWebhookEvent as UnwrapWebhookEvent,
