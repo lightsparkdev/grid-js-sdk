@@ -47,7 +47,7 @@ export interface EstimateCryptoWithdrawalFeeRequest {
 
   /**
    * The blockchain network for the withdrawal. Example values: SOLANA, ETHEREUM,
-   * BASE, POLYGON, SPARK, LIGHTNING, BITCOIN.
+   * BASE, POLYGON, ARBITRUM, SPARK, LIGHTNING, BITCOIN.
    */
   cryptoNetwork: string;
 
@@ -111,7 +111,7 @@ export interface CryptoEstimateWithdrawalFeeParams {
 
   /**
    * The blockchain network for the withdrawal. Example values: SOLANA, ETHEREUM,
-   * BASE, POLYGON, SPARK, LIGHTNING, BITCOIN.
+   * BASE, POLYGON, ARBITRUM, SPARK, LIGHTNING, BITCOIN.
    */
   cryptoNetwork: string;
 

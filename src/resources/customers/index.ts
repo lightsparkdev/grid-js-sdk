@@ -40,6 +40,7 @@ export {
   ExternalAccounts,
   type Address,
   type AedExternalAccountInfo,
+  type ArbitrumWalletInfo,
   type BaseWalletInfo,
   type BdtExternalAccountInfo,
   type BeneficiaryVerifiedData,

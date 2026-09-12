@@ -8,6 +8,7 @@ import * as ExternalAccountsAPI from './external-accounts';
 import {
   Address,
   AedExternalAccountInfo,
+  ArbitrumWalletInfo,
   BaseWalletInfo,
   BdtExternalAccountInfo,
   BeneficiaryVerifiedData,
@@ -1924,6 +1925,7 @@ export declare namespace Customers {
     ExternalAccounts as ExternalAccounts,
     type Address as Address,
     type AedExternalAccountInfo as AedExternalAccountInfo,
+    type ArbitrumWalletInfo as ArbitrumWalletInfo,
     type BaseWalletInfo as BaseWalletInfo,
     type BdtExternalAccountInfo as BdtExternalAccountInfo,
     type BeneficiaryVerifiedData as BeneficiaryVerifiedData,

@@ -234,6 +234,8 @@ export interface Address {
 
 export type AedExternalAccountInfo = unknown;
 
+export type ArbitrumWalletInfo = unknown;
+
 export type BaseWalletInfo = unknown;
 
 /**
@@ -2016,6 +2018,7 @@ export declare namespace ExternalAccounts {
   export {
     type Address as Address,
     type AedExternalAccountInfo as AedExternalAccountInfo,
+    type ArbitrumWalletInfo as ArbitrumWalletInfo,
     type BaseWalletInfo as BaseWalletInfo,
     type BdtExternalAccountInfo as BdtExternalAccountInfo,
     type BeneficiaryVerifiedData as BeneficiaryVerifiedData,

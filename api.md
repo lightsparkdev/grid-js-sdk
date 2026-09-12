@@ -128,6 +128,7 @@ Types:
 
 - <code><a href="./src/resources/customers/external-accounts.ts">Address</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">AedExternalAccountInfo</a></code>
+- <code><a href="./src/resources/customers/external-accounts.ts">ArbitrumWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BaseWalletInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BdtExternalAccountInfo</a></code>
 - <code><a href="./src/resources/customers/external-accounts.ts">BeneficiaryVerifiedData</a></code>
