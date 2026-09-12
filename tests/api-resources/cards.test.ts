@@ -59,7 +59,7 @@ describe('resource cards', () => {
           limit: 1,
           platformCardId: 'platformCardId',
           sortOrder: 'asc',
-          state: 'PENDING_KYC',
+          status: 'PENDING_KYC',
         },
         { path: '/_stainless_unknown_path' },
       ),
