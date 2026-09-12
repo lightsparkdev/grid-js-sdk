@@ -42,6 +42,7 @@ describe('resource transactions', () => {
       client.transactions.list(
         {
           accountIdentifier: 'accountIdentifier',
+          cardId: 'Card:019542f5-b3e7-1d02-0000-000000000010',
           cursor: 'cursor',
           customerId: 'customerId',
           endDate: '2019-12-27T18:11:19.117Z',

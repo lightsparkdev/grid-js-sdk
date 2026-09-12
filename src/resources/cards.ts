@@ -468,11 +468,13 @@ export interface CardListResponse {
 }
 
 /**
- * Parent transaction row for a card authorization and all of the pulls /
- * settlements / refunds that reconcile against it. Child events are rolled up into
- * the `settledAmount` and `refundedAmount` totals. Delivered as the payload of the
- * generic transaction webhook stream (extends the Transaction model with a card
- * destination type) on every transition.
+ * One row per cardholder-visible card transaction. A purchase row rolls its
+ * clearings up into `settledAmount`; a merchant return is its own dated `CREDIT`
+ * row linked back to the purchase via `originalTransactionId` rather than a rollup
+ * on the parent, so statements can list purchases and refunds as separate dated
+ * lines. Delivered as the payload of the generic transaction webhook stream
+ * (extends the Transaction model with a card destination type) on every
+ * transition.
  */
 export interface CardTransaction {
   /**
@@ -504,8 +506,9 @@ export interface CardTransaction {
   customerId: string;
 
   /**
-   * A purchase is a `DEBIT`. A standalone merchant refund with no purchase to return
-   * against is a `CREDIT`, with the credited value in `settledAmount`.
+   * A purchase is a `DEBIT`. A merchant refund is a `CREDIT` with the credited value
+   * in `settledAmount`; when the refund returns against a known purchase,
+   * `originalTransactionId` identifies it.
    */
   direction: 'CREDIT' | 'DEBIT';
 
@@ -518,17 +521,18 @@ export interface CardTransaction {
 
   /**
    * Lifecycle status of a card transaction. The status tracks settlement only — a
-   * return is reported through `direction` and `refundedAmount`, not through a
-   * status of its own.
+   * return against a purchase is its own dated `CREDIT` row linked to the purchase
+   * via `originalTransactionId`, not a status of its own.
    *
    * | Status              | Description                                                                                                                                                                                                                                     |
    * | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
    * | `AUTHORIZED`        | The auth has been approved and a hold placed on the funding source; no clearing has arrived yet.                                                                                                                                                |
    * | `PARTIALLY_SETTLED` | At least one clearing has arrived and posted, but more clearings are still expected (split shipments, tips, multi-leg trips).                                                                                                                   |
-   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source. A `RETURN` received afterwards keeps the transaction `SETTLED` and reports the returned value in `refundedAmount`.                             |
+   * | `SETTLED`           | All clearings for the auth have posted and the transaction is closed against the funding source. A `RETURN` received afterwards keeps the purchase `SETTLED`; the return appears as its own `CREDIT` transaction.                               |
+   * | `DECLINED`          | The authorization was declined before any money moved. Declines carry no settlement and must be excluded from cardholder statements.                                                                                                            |
    * | `EXCEPTION`         | The transaction settled to the card network but the corresponding pull from the funding source failed (e.g. balance no longer covers the post-hoc clearing). Surfaces high-urgency alerts and is the dashboard query for stuck reconciliations. |
    */
-  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'EXCEPTION';
+  status: 'AUTHORIZED' | 'PARTIALLY_SETTLED' | 'SETTLED' | 'DECLINED' | 'EXCEPTION';
 
   /**
    * Discriminator identifying this transaction as a card transaction in the
@@ -551,6 +555,13 @@ export interface CardTransaction {
    * cross-reference Grid records against issuer dashboards and webhooks.
    */
   issuerTransactionToken?: string;
+
+  /**
+   * On a refund row (`direction: CREDIT`), the id of the purchase this return
+   * credits back against. Absent on purchases and on standalone credits with no
+   * matching purchase.
+   */
+  originalTransactionId?: string;
 
   refundedAmount?: InvitationsAPI.CurrencyAmount;
 

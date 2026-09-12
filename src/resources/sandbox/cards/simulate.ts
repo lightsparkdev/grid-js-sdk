@@ -98,9 +98,10 @@ export class Simulate extends APIResource {
 
   /**
    * Simulate a merchant-initiated `RETURN` against an existing settled card
-   * transaction in the sandbox environment. Creates a `CardRefund` on the parent and
-   * keeps the parent `SETTLED` with the returned value in `refundedAmount`, whether
-   * the return is full or partial.
+   * transaction in the sandbox environment. Creates a `CardRefund` and posts the
+   * return as its own dated `CREDIT` `CardTransaction` linked to the purchase via
+   * `originalTransactionId`; the purchase keeps its `SETTLED` status, whether the
+   * return is full or partial.
    *
    * Production returns `404` on this path.
    *
@@ -157,6 +158,11 @@ export interface CardMerchant {
   descriptor: string;
 
   /**
+   * Merchant city as reported by the card network, when present.
+   */
+  city?: string;
+
+  /**
    * Two-letter ISO 3166-1 alpha-2 country code of the merchant.
    */
   country?: string;
@@ -165,6 +171,11 @@ export interface CardMerchant {
    * Merchant Category Code (ISO 18245) — four-digit numeric string.
    */
   mcc?: string;
+
+  /**
+   * Merchant state or region as reported by the card network, when present.
+   */
+  state?: string;
 }
 
 /**
@@ -219,8 +230,8 @@ export interface Refund {
 /**
  * Sandbox-only request body for `POST /sandbox/cards/{id}/simulate/return`. Drives
  * a `RETURN` event against an existing settled `CardTransaction`, which creates a
- * `CardRefund` and leaves the parent transaction `SETTLED` with the returned value
- * in `refundedAmount`.
+ * `CardRefund` and posts the return as its own dated `CREDIT` `CardTransaction`
+ * linked to the purchase via `originalTransactionId`.
  */
 export interface RefundRequest {
   /**

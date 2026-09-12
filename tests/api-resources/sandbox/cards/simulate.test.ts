@@ -44,8 +44,10 @@ describe('resource simulate', () => {
         },
         merchant: {
           descriptor: 'BLUE BOTTLE COFFEE SF',
+          city: 'San Francisco',
           country: 'US',
           mcc: '5814',
+          state: 'CA',
         },
       },
     );

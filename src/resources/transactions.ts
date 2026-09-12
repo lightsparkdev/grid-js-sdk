@@ -639,6 +639,13 @@ export interface TransactionListParams extends DefaultPaginationParams {
   accountIdentifier?: string;
 
   /**
+   * Filter to card transactions made on a single card. Accepts a `Card:` LSID or a
+   * bare UUID. Only card transactions match, so this implies `type=CARD` and can be
+   * combined with `customerId` to list one card of a multi-card cardholder.
+   */
+  cardId?: string;
+
+  /**
    * Filter by system customer ID. To filter to transactions made on behalf of the
    * platform, specify the platform ID as the customer ID.
    */
