@@ -1149,7 +1149,7 @@ export class LightsparkGrid {
    */
   agents: API.Agents = new API.Agents(this);
   /**
-   * Card management endpoints. Issue debit cards against an internal account, freeze / unfreeze, close, manage card funding sources, and list card transactions.
+   * Card management endpoints. Issue debit cards against an internal account, freeze / unfreeze, close, manage a card's funding source, and list card transactions.
    */
   cards: API.Cards = new API.Cards(this);
 }

@@ -10,7 +10,7 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Card management endpoints. Issue debit cards against an internal account, freeze / unfreeze, close, manage card funding sources, and list card transactions.
+ * Card management endpoints. Issue debit cards against an internal account, freeze / unfreeze, close, manage a card's funding source, and list card transactions.
  */
 export class Cards extends APIResource {
   /**
@@ -28,22 +28,20 @@ export class Cards extends APIResource {
   }
 
   /**
-   * Update a card's `state`, bound `fundingSources`, and / or
+   * Update a card's `state`, bound `fundingSource`, and / or
    * `maxSpendPerTransaction`, `maxSpendPerDay`, or `maxTransactionsPerDay`. At least
    * one field must be supplied.
    *
    * - `state` transitions are limited to `ACTIVE ⇄ FROZEN` and
    *   `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible. Any other
    *   transition returns `409 INVALID_STATE_TRANSITION`.
-   * - `fundingSources`, when supplied, fully replaces the card's bound funding
-   *   sources. Array order determines the priority Authorization Decisioning tries
-   *   them in. Each id must belong to the cardholder and be denominated in the
-   *   card's currency; the list must contain at least one source. `fundingSources`
-   *   cannot be supplied alongside `state: CLOSED`. On card programs where the card
-   *   issuer makes authorization decisions, `fundingSources` cannot be combined with
-   *   any `state` change, so send the changes as separate requests. On card programs
-   *   where Grid makes the authorization decision, the combination remains valid for
-   *   `state` changes other than `CLOSED`.
+   * - `fundingSource`, when supplied, replaces the card's bound internal account. It
+   *   must belong to the customer and be denominated in the card's currency.
+   *   `fundingSource` cannot be supplied alongside `state: CLOSED`. On card programs
+   *   where the card issuer makes authorization decisions, `fundingSource` cannot be
+   *   combined with any `state` change, so send the changes as separate requests. On
+   *   card programs where Grid makes the authorization decision, the combination
+   *   remains valid for `state` changes other than `CLOSED`.
    * - `maxSpendPerTransaction`, when supplied, replaces the card-specific
    *   per-transaction cap. Supply a positive integer in the smallest unit of the
    *   card's currency to set it or null to clear it. If the platform config sets
@@ -89,9 +87,11 @@ export class Cards extends APIResource {
    *   reconciliation. All pending auths reconcile to a terminal state via the
    *   existing reconcile primitive. Inbound clearings received after close follow
    *   the standard force-post / late-presentment path — Lightspark absorbs the loss
-   *   if a post-hoc pull on the now-unbound source fails. Funding-source bindings
-   *   are detached. Refunds already in flight still complete because Lightspark
-   *   holds the card-reserve keys.
+   *   if a post-hoc pull on the now-unbound source fails. The funding source is
+   *   detached. Refunds already in flight still complete because Lightspark holds
+   *   the card-reserve keys.
+   * - `fundingSource` change: returns the updated card with the new binding and
+   *   fires no webhook.
    *
    * The `card.state_change` webhook fires on every successful `state` transition.
    *
@@ -131,8 +131,8 @@ export class Cards extends APIResource {
   }
 
   /**
-   * Issue a new card for a cardholder. Every card must be bound to at least one
-   * funding source at create time. The cardholder must have KYC status `APPROVED`
+   * Issue a new card for a cardholder. Every card is bound to one internal account,
+   * `fundingSource`, at create time. The cardholder must have KYC status `APPROVED`
    * before a card can be issued; otherwise the request is rejected with
    * `CARDHOLDER_KYC_NOT_APPROVED`.
    *
@@ -149,7 +149,7 @@ export class Cards extends APIResource {
    * `cardConfigs` value, Grid enforces the lower of the card and platform caps.
    * Amounts use the smallest unit of the card's currency.
    *
-   * If any funding source is an Embedded Wallet internal account, the cardholder
+   * If the funding source is an Embedded Wallet internal account, the cardholder
    * must authorize Grid to sign Spark token transactions for that card funding
    * source by completing the delegated-key creation flow with
    * `POST /auth/delegated-keys`. Until an active delegated key exists for that
@@ -172,9 +172,8 @@ export class Cards extends APIResource {
    *   customerId:
    *     'Customer:019542f5-b3e7-1d02-0000-000000000001',
    *   form: 'VIRTUAL',
-   *   fundingSources: [
+   *   fundingSource:
    *     'InternalAccount:019542f5-b3e7-1d02-0000-000000000002',
-   *   ],
    *   'Idempotency-Key': '550e8400-e29b-41d4-a716-446655440000',
    *   maxSpendPerDay: 25000,
    *   maxSpendPerTransaction: 5000,
@@ -219,11 +218,9 @@ export interface Card {
   form: 'VIRTUAL';
 
   /**
-   * Internal account ids bound to this card as funding sources, in priority order —
-   * the first entry is tried first by Authorization Decisioning. Every card has at
-   * least one funding source.
+   * Internal account id that funds this card.
    */
-  fundingSources: Array<string>;
+  fundingSource: string;
 
   /**
    * Card-specific cap on cumulative new spend during one UTC calendar day, in the
@@ -290,8 +287,7 @@ export interface Card {
 
   /**
    * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-   * from the funding sources at issue time — all funding sources bound to a card
-   * must be denominated in the same card-eligible currency.
+   * from the funding source at issue time.
    */
   currency?: string;
 
@@ -381,18 +377,15 @@ export interface CardCreateRequest {
   form: 'VIRTUAL';
 
   /**
-   * Internal account ids to bind as funding sources, in priority order. The first
-   * entry selects the card issuer and therefore the card's capabilities. The first
-   * entry is tried first by Authorization Decisioning. Every card must be bound to
-   * at least one source, and every source must belong to the cardholder and be
-   * denominated in a card-eligible currency; otherwise the request is rejected with
-   * `FUNDING_SOURCE_INELIGIBLE`.
+   * Internal account id that funds this card. The account must belong to the
+   * customer and be denominated in a card-eligible currency; otherwise the request
+   * is rejected with `FUNDING_SOURCE_INELIGIBLE`.
    */
-  fundingSources: Array<string>;
+  fundingSource: string;
 
   /**
    * Optional card-specific cap on cumulative new spend during one UTC calendar day,
-   * in the smallest unit of the card currency derived from its funding sources. Omit
+   * in the smallest unit of the card currency derived from its funding source. Omit
    * this field for no card-specific daily cap. When the platform config also
    * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
    * values. The window resets at 00:00 UTC, and refunds, reversals, and
@@ -405,7 +398,7 @@ export interface CardCreateRequest {
 
   /**
    * Optional card-specific cap on a single transaction, in the smallest unit of the
-   * card currency derived from its funding sources. Omit this field for no
+   * card currency derived from its funding source. Omit this field for no
    * card-specific cap. When the platform config also supplies
    * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
    * Accepted only when the funding-source internal account's
@@ -570,24 +563,20 @@ export interface CardTransaction {
 
 /**
  * Update request for `PATCH /cards/{id}`. At least one of `state`,
- * `fundingSources`, `maxSpendPerTransaction`, `maxSpendPerDay`, or
+ * `fundingSource`, `maxSpendPerTransaction`, `maxSpendPerDay`, or
  * `maxTransactionsPerDay` must be supplied. `state` transitions are limited to
  * `ACTIVE ⇄ FROZEN` and `ACTIVE | FROZEN → CLOSED`; any other transition returns
  * `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal and irreversible and cannot
- * be combined with `fundingSources`, `maxSpendPerTransaction`, `maxSpendPerDay`,
- * or `maxTransactionsPerDay`. `fundingSources`, when supplied, fully replaces the
- * card's bound funding sources — the array order determines the priority
- * Authorization Decisioning tries them in.
+ * be combined with `fundingSource`, `maxSpendPerTransaction`, `maxSpendPerDay`, or
+ * `maxTransactionsPerDay`.
  */
 export interface CardUpdateRequest {
   /**
-   * New ordered list of internal account ids to bind as funding sources. Fully
-   * replaces the previous binding. Each id must belong to the cardholder and be
-   * denominated in the card's currency. The list must contain at least one source —
-   * to stop a card from spending without removing all sources, transition it to
-   * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
+   * Replaces the card's funding source. Must belong to the customer and be
+   * denominated in the card's currency. Cannot be supplied alongside
+   * `state: CLOSED`. To stop a card from spending, set `state: FROZEN` instead.
    */
-  fundingSources?: Array<string>;
+  fundingSource?: string;
 
   /**
    * Replacement card-specific UTC-calendar-day cap, in the smallest unit of the
@@ -635,13 +624,11 @@ export interface CardUpdateRequest {
 
 export interface CardUpdateParams {
   /**
-   * New ordered list of internal account ids to bind as funding sources. Fully
-   * replaces the previous binding. Each id must belong to the cardholder and be
-   * denominated in the card's currency. The list must contain at least one source —
-   * to stop a card from spending without removing all sources, transition it to
-   * `FROZEN` instead. Cannot be supplied alongside `state: CLOSED`.
+   * Replaces the card's funding source. Must belong to the customer and be
+   * denominated in the card's currency. Cannot be supplied alongside
+   * `state: CLOSED`. To stop a card from spending, set `state: FROZEN` instead.
    */
-  fundingSources?: Array<string>;
+  fundingSource?: string;
 
   /**
    * Replacement card-specific UTC-calendar-day cap, in the smallest unit of the
@@ -689,8 +676,8 @@ export interface CardUpdateParams {
 
 export interface CardListParams extends DefaultPaginationParams {
   /**
-   * Filter by internal account id. Returns cards whose `fundingSources` array
-   * contains the given internal account id.
+   * Filter by internal account id. Returns cards whose `fundingSource` is the given
+   * internal account id.
    */
   accountId?: string;
 
@@ -735,14 +722,11 @@ export interface CardIssueParams {
   form: 'VIRTUAL';
 
   /**
-   * Body param: Internal account ids to bind as funding sources, in priority order.
-   * The first entry selects the card issuer and therefore the card's capabilities.
-   * The first entry is tried first by Authorization Decisioning. Every card must be
-   * bound to at least one source, and every source must belong to the cardholder and
-   * be denominated in a card-eligible currency; otherwise the request is rejected
-   * with `FUNDING_SOURCE_INELIGIBLE`.
+   * Body param: Internal account id that funds this card. The account must belong to
+   * the customer and be denominated in a card-eligible currency; otherwise the
+   * request is rejected with `FUNDING_SOURCE_INELIGIBLE`.
    */
-  fundingSources: Array<string>;
+  fundingSource: string;
 
   /**
    * Header param: A unique identifier for the request, up to 255 characters. A retry
@@ -754,9 +738,9 @@ export interface CardIssueParams {
   /**
    * Body param: Optional card-specific cap on cumulative new spend during one UTC
    * calendar day, in the smallest unit of the card currency derived from its funding
-   * sources. Omit this field for no card-specific daily cap. When the platform
-   * config also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of
-   * the two values. The window resets at 00:00 UTC, and refunds, reversals, and
+   * source. Omit this field for no card-specific daily cap. When the platform config
+   * also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
+   * values. The window resets at 00:00 UTC, and refunds, reversals, and
    * authorization expiries do not restore capacity during the day. Accepted only
    * when the funding-source internal account's
    * `cardCapabilities.supportsSpendLimits` is true. Spend exactly equal to the
@@ -766,7 +750,7 @@ export interface CardIssueParams {
 
   /**
    * Body param: Optional card-specific cap on a single transaction, in the smallest
-   * unit of the card currency derived from its funding sources. Omit this field for
+   * unit of the card currency derived from its funding source. Omit this field for
    * no card-specific cap. When the platform config also supplies
    * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
    * Accepted only when the funding-source internal account's

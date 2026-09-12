@@ -119,12 +119,11 @@ export interface InternalAccount {
   updatedAt: string;
 
   /**
-   * Actions supported for a card issued now with this account as the first funding
-   * source. They can change if the platform's card routing changes and do not
-   * describe cards already issued using the account. When a create request supplies
-   * several funding sources, the first entry selects the issuer and therefore the
-   * resulting card's capabilities; read this field from that account. Absent when
-   * this account cannot fund a card.
+   * Actions supported for a card issued now with this account as its funding source.
+   * They can change if the platform's card routing changes and do not describe cards
+   * already issued using the account. The funding source a create request supplies
+   * selects the issuer and therefore the resulting card's capabilities; read this
+   * field from that account. Absent when this account cannot fund a card.
    */
   cardCapabilities?: InternalAccount.CardCapabilities;
 
@@ -155,12 +154,11 @@ export interface InternalAccount {
 
 export namespace InternalAccount {
   /**
-   * Actions supported for a card issued now with this account as the first funding
-   * source. They can change if the platform's card routing changes and do not
-   * describe cards already issued using the account. When a create request supplies
-   * several funding sources, the first entry selects the issuer and therefore the
-   * resulting card's capabilities; read this field from that account. Absent when
-   * this account cannot fund a card.
+   * Actions supported for a card issued now with this account as its funding source.
+   * They can change if the platform's card routing changes and do not describe cards
+   * already issued using the account. The funding source a create request supplies
+   * selects the issuer and therefore the resulting card's capabilities; read this
+   * field from that account. Absent when this account cannot fund a card.
    */
   export interface CardCapabilities {
     /**
