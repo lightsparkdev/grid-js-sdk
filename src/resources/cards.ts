@@ -42,12 +42,15 @@ export class Cards extends APIResource {
    *   cannot be combined with any `status` change, so send the changes as separate
    *   requests. On card programs where Grid makes the authorization decision, the
    *   combination remains valid for `status` changes other than `CLOSED`.
-   * - `maxSpendPerTransaction`, when supplied, replaces the card-specific
-   *   per-transaction cap. Supply a positive integer in the smallest unit of the
-   *   card's currency to set it or null to clear it. If the platform config sets
-   *   `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the card and
-   *   platform values. The card's `cardCapabilities.supportsSpendLimits` must be
-   *   true. `maxSpendPerTransaction` cannot be supplied alongside `status: CLOSED`.
+   * - `maxSpendPerTransaction` sets the largest amount the card can authorize on a
+   *   single transaction. An authorization for exactly the limit is allowed, and a
+   *   later clearing can still settle above it — a restaurant tip, for example — so
+   *   this caps the authorization, not the final settled amount. Send a positive
+   *   integer in the smallest unit of the card's currency (cents for USD) to set the
+   *   limit, or null to remove it. If your platform config sets
+   *   `cardConfigs.maxSpendPerTransaction`, the lower of the two applies. You can
+   *   only send this when the card's `cardCapabilities.supportsSpendLimits` is true,
+   *   and not together with `status: CLOSED`.
    * - `maxSpendPerDay`, when supplied, replaces the card-specific cap on cumulative
    *   new spend during one UTC calendar day. Supply a positive integer in the
    *   smallest unit of the card's currency to set it or null to clear it. If the
@@ -234,11 +237,13 @@ export interface Card {
   maxSpendPerDay: number | null;
 
   /**
-   * Card-specific cap on a single transaction, in the smallest unit of the card's
-   * `currency`. Null means the card has no card-specific cap. When the platform
-   * config also supplies `cardConfigs.maxSpendPerTransaction`, Grid enforces the
-   * lower of the two values without replacing this configured value. A transaction
-   * for exactly the effective limit is allowed.
+   * The largest amount this card can authorize on a single transaction, in the
+   * smallest unit of its `currency` (cents for USD). An authorization for exactly
+   * the limit is allowed. A later clearing can still settle above it — a restaurant
+   * tip, for example — so this caps the authorization, not the final settled amount.
+   * `null` means the card sets no limit of its own. If your platform config also
+   * sets `cardConfigs.maxSpendPerTransaction` (the platform-level limit), the lower
+   * of the two applies and this value stays as you set it.
    */
   maxSpendPerTransaction: number | null;
 
@@ -397,13 +402,14 @@ export interface CardCreateRequest {
   maxSpendPerDay?: number;
 
   /**
-   * Optional card-specific cap on a single transaction, in the smallest unit of the
-   * card currency derived from its funding source. Omit this field for no
-   * card-specific cap. When the platform config also supplies
-   * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
-   * Accepted only when the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` is true. A transaction for exactly the
-   * effective limit is allowed.
+   * The largest amount this card can authorize on a single transaction, in the
+   * smallest unit of its currency (cents for USD). An authorization for exactly the
+   * limit is allowed. A later clearing can still settle above it — a restaurant tip,
+   * for example — so this caps the authorization, not the final settled amount. Omit
+   * the field to set no limit. If your platform config also sets
+   * `cardConfigs.maxSpendPerTransaction`, the lower of the two applies. You can only
+   * send this when the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` is true.
    */
   maxSpendPerTransaction?: number;
 
@@ -591,12 +597,15 @@ export interface CardUpdateRequest {
   maxSpendPerDay?: number | null;
 
   /**
-   * Replacement card-specific per-transaction cap, in the smallest unit of the
-   * card's currency. Omit this field to leave the current cap unchanged, supply null
-   * to clear it, or supply a positive integer to set it. When the platform config
-   * also supplies `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of
-   * the two values. Accepted only when the card's
-   * `cardCapabilities.supportsSpendLimits` is true. Cannot be supplied alongside
+   * A new limit on the largest amount this card can authorize on a single
+   * transaction, in the smallest unit of its currency (cents for USD). An
+   * authorization for exactly the limit is allowed. A later clearing can still
+   * settle above it — a restaurant tip, for example — so this caps the
+   * authorization, not the final settled amount. Send a positive integer to set the
+   * limit, `null` to remove it, or omit the field to leave it unchanged. If your
+   * platform config also sets `cardConfigs.maxSpendPerTransaction`, the lower of the
+   * two applies. You can only send this when the card's
+   * `cardCapabilities.supportsSpendLimits` is true, and not together with
    * `status: CLOSED`.
    */
   maxSpendPerTransaction?: number | null;
@@ -643,12 +652,15 @@ export interface CardUpdateParams {
   maxSpendPerDay?: number | null;
 
   /**
-   * Replacement card-specific per-transaction cap, in the smallest unit of the
-   * card's currency. Omit this field to leave the current cap unchanged, supply null
-   * to clear it, or supply a positive integer to set it. When the platform config
-   * also supplies `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of
-   * the two values. Accepted only when the card's
-   * `cardCapabilities.supportsSpendLimits` is true. Cannot be supplied alongside
+   * A new limit on the largest amount this card can authorize on a single
+   * transaction, in the smallest unit of its currency (cents for USD). An
+   * authorization for exactly the limit is allowed. A later clearing can still
+   * settle above it — a restaurant tip, for example — so this caps the
+   * authorization, not the final settled amount. Send a positive integer to set the
+   * limit, `null` to remove it, or omit the field to leave it unchanged. If your
+   * platform config also sets `cardConfigs.maxSpendPerTransaction`, the lower of the
+   * two applies. You can only send this when the card's
+   * `cardCapabilities.supportsSpendLimits` is true, and not together with
    * `status: CLOSED`.
    */
   maxSpendPerTransaction?: number | null;
@@ -749,13 +761,14 @@ export interface CardIssueParams {
   maxSpendPerDay?: number;
 
   /**
-   * Body param: Optional card-specific cap on a single transaction, in the smallest
-   * unit of the card currency derived from its funding source. Omit this field for
-   * no card-specific cap. When the platform config also supplies
-   * `cardConfigs.maxSpendPerTransaction`, Grid enforces the lower of the two values.
-   * Accepted only when the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` is true. A transaction for exactly the
-   * effective limit is allowed.
+   * Body param: The largest amount this card can authorize on a single transaction,
+   * in the smallest unit of its currency (cents for USD). An authorization for
+   * exactly the limit is allowed. A later clearing can still settle above it — a
+   * restaurant tip, for example — so this caps the authorization, not the final
+   * settled amount. Omit the field to set no limit. If your platform config also
+   * sets `cardConfigs.maxSpendPerTransaction`, the lower of the two applies. You can
+   * only send this when the funding-source internal account's
+   * `cardCapabilities.supportsSpendLimits` is true.
    */
   maxSpendPerTransaction?: number;
 

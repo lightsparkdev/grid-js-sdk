@@ -233,12 +233,15 @@ export namespace PlatformConfig {
     maxSpendPerDay?: number | null;
 
     /**
-     * Platform-level cap on a single transaction for every card whose authorization
-     * decisions are made by Grid. The value is interpreted in the smallest unit of
-     * each card's currency. Grid enforces the lower of this cap and the card's
-     * configured `maxSpendPerTransaction`; null means no platform-level cap. The cap
-     * applies to existing cards and to cards issued later. Provider-decided card
-     * programs are unaffected.
+     * The largest amount any of your cards can authorize on a single transaction, in
+     * the smallest unit of each card's currency (cents for USD). An authorization for
+     * exactly the limit is allowed. A later clearing can still settle above it — a
+     * restaurant tip, for example — so this caps the authorization, not the final
+     * settled amount. It covers every card Grid makes authorization decisions for,
+     * both those you have already issued and any you issue later, and does not apply
+     * to cards whose issuer makes the decisions. Where a card sets its own
+     * `maxSpendPerTransaction`, the lower of the two applies. `null` means no
+     * platform-wide limit.
      */
     maxSpendPerTransaction?: number | null;
 
@@ -546,12 +549,15 @@ export namespace PlatformConfigUpdateRequest {
     maxSpendPerDay?: number | null;
 
     /**
-     * Platform-level cap on a single transaction for every card whose authorization
-     * decisions are made by Grid. The value is interpreted in the smallest unit of
-     * each card's currency. Grid enforces the lower of this cap and the card's
-     * configured `maxSpendPerTransaction`; null means no platform-level cap. The cap
-     * applies to existing cards and to cards issued later. Provider-decided card
-     * programs are unaffected.
+     * The largest amount any of your cards can authorize on a single transaction, in
+     * the smallest unit of each card's currency (cents for USD). An authorization for
+     * exactly the limit is allowed. A later clearing can still settle above it — a
+     * restaurant tip, for example — so this caps the authorization, not the final
+     * settled amount. It covers every card Grid makes authorization decisions for,
+     * both those you have already issued and any you issue later, and does not apply
+     * to cards whose issuer makes the decisions. Where a card sets its own
+     * `maxSpendPerTransaction`, the lower of the two applies. `null` means no
+     * platform-wide limit.
      */
     maxSpendPerTransaction?: number | null;
 
@@ -903,12 +909,15 @@ export namespace ConfigUpdateParams {
     maxSpendPerDay?: number | null;
 
     /**
-     * Platform-level cap on a single transaction for every card whose authorization
-     * decisions are made by Grid. The value is interpreted in the smallest unit of
-     * each card's currency. Grid enforces the lower of this cap and the card's
-     * configured `maxSpendPerTransaction`; null means no platform-level cap. The cap
-     * applies to existing cards and to cards issued later. Provider-decided card
-     * programs are unaffected.
+     * The largest amount any of your cards can authorize on a single transaction, in
+     * the smallest unit of each card's currency (cents for USD). An authorization for
+     * exactly the limit is allowed. A later clearing can still settle above it — a
+     * restaurant tip, for example — so this caps the authorization, not the final
+     * settled amount. It covers every card Grid makes authorization decisions for,
+     * both those you have already issued and any you issue later, and does not apply
+     * to cards whose issuer makes the decisions. Where a card sets its own
+     * `maxSpendPerTransaction`, the lower of the two applies. `null` means no
+     * platform-wide limit.
      */
     maxSpendPerTransaction?: number | null;
 
