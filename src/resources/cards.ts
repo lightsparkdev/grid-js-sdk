@@ -82,8 +82,9 @@ export class Cards extends APIResource {
    * Effects:
    *
    * - `status: FROZEN`: Authorization Decisioning declines new auths with
-   *   `CARD_PAUSED`. Existing pulls and in-flight reconciliation continue — freezing
-   *   does not pause the lifecycle of authorizations that already passed.
+   *   `cardDeclinedReason: CARD_NOT_ACTIVE`. Existing pulls and in-flight
+   *   reconciliation continue — freezing does not pause the lifecycle of
+   *   authorizations that already passed.
    * - `status: ACTIVE`: normal authorization behavior resumes.
    * - `status: CLOSED`: terminal close. The card transitions to `status: "CLOSED"`
    *   with `statusReason: "CLOSED_BY_PLATFORM"` and stays in the system for audit
@@ -262,13 +263,13 @@ export interface Card {
   /**
    * Lifecycle status of a card.
    *
-   * | Status        | Description                                                                                                                                                   |
-   * | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-   * | `PENDING_KYC` | The cardholder has not yet completed KYC. Cards in this status cannot transact.                                                                               |
-   * | `PROCESSING`  | The card has been requested and is being provisioned with the issuer.                                                                                         |
-   * | `ACTIVE`      | The card is live and can authorize transactions.                                                                                                              |
-   * | `FROZEN`      | The card is temporarily disabled by the platform. New authorizations are declined with `CARD_PAUSED`. Existing settlements and refunds continue to reconcile. |
-   * | `CLOSED`      | The card is permanently closed. Terminal, irreversible status.                                                                                                |
+   * | Status        | Description                                                                                                                                                                           |
+   * | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+   * | `PENDING_KYC` | The cardholder has not yet completed KYC. Cards in this status cannot transact.                                                                                                       |
+   * | `PROCESSING`  | The card has been requested and is being provisioned with the issuer.                                                                                                                 |
+   * | `ACTIVE`      | The card is live and can authorize transactions.                                                                                                                                      |
+   * | `FROZEN`      | The card is temporarily disabled by the platform. New authorizations are declined with `cardDeclinedReason: CARD_NOT_ACTIVE`. Existing settlements and refunds continue to reconcile. |
+   * | `CLOSED`      | The card is permanently closed. Terminal, irreversible status.                                                                                                                        |
    */
   status: 'PENDING_KYC' | 'PROCESSING' | 'ACTIVE' | 'FROZEN' | 'CLOSED';
 
@@ -490,7 +491,7 @@ export interface CardTransaction {
   authorizedAmount: InvitationsAPI.CurrencyAmount;
 
   /**
-   * When the auth was approved.
+   * When the authorization was approved or declined.
    */
   authorizedAt: string;
 
@@ -543,6 +544,18 @@ export interface CardTransaction {
    * Last update timestamp.
    */
   updatedAt: string;
+
+  /**
+   * Present only when `status` is `DECLINED`.
+   */
+  cardDeclinedReason?:
+    | 'CARD_NOT_ACTIVE'
+    | 'SPEND_LIMIT_EXCEEDED'
+    | 'INSUFFICIENT_FUNDS'
+    | 'NO_ELIGIBLE_FUNDING_SOURCE'
+    | 'BLOCKED'
+    | 'UNSUPPORTED_NETWORK'
+    | 'OTHER';
 
   /**
    * The id of the `Card` this transaction was made on.

@@ -19,12 +19,14 @@ export class Simulate extends APIResource {
    * The decisioning outcome is controlled by the last three characters of
    * `merchant.descriptor`:
    *
-   * | Suffix | Outcome | | ------ | ------- | | `002` | Decline —
-   * `INSUFFICIENT_FUNDS` (the pull on the funding source fails) | | `003` | Decline
-   * — `CARD_PAUSED` (intended to verify a frozen card refuses auths) | | `005` |
-   * Delayed pull (~30s) — exercises the `PENDING → CONFIRMED` path | | `006` | Pull
-   * succeeds but the confirmation event reports `FAILED` — exercises the
-   * high-urgency `EXCEPTION` alert | | any other | Approved |
+   * | Suffix | Outcome | | ------ | ------- | | `002` | Declined,
+   * `cardDeclinedReason: INSUFFICIENT_FUNDS`. Sandbox only: production approves an
+   * underfunded authorization and resolves it as `EXCEPTION` when the pull fails | |
+   * `003` | Declined, `cardDeclinedReason: CARD_NOT_ACTIVE`. Use against a `FROZEN`
+   * card to verify it refuses authorizations | | `005` | Delayed pull (~30s) —
+   * exercises the `PENDING → CONFIRMED` path | | `006` | Pull succeeds but the
+   * confirmation event reports `FAILED` — exercises the high-urgency `EXCEPTION`
+   * alert | | any other | Approved |
    *
    * Production returns `404` on this path.
    *
