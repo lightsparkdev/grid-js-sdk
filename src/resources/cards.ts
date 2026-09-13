@@ -550,6 +550,14 @@ export interface CardTransaction {
   cardId?: string;
 
   /**
+   * The merchant descriptor, repeated from `merchant.descriptor` so a transaction
+   * list reads without expanding each card row. Unlike `description` on other
+   * transaction types, this is set by Grid from the card network's descriptor, not
+   * supplied by the platform.
+   */
+  description?: string;
+
+  /**
    * Opaque identifier for the transaction on the underlying issuer. Used to
    * cross-reference Grid records against issuer dashboards and webhooks.
    */
