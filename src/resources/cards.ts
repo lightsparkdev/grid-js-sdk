@@ -147,8 +147,8 @@ export class Cards extends APIResource {
    * values set the card-specific caps on one transaction, on spend during one UTC
    * calendar day, and on the number of transactions during one UTC calendar day.
    * Check the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` before supplying either spend limit, and
-   * `cardCapabilities.supportsTransactionCountLimit` before supplying the
+   * `cardCapabilities.supportsSpendLimitsAtIssuance` before supplying either spend
+   * limit, and `cardCapabilities.supportsTransactionCountLimit` before supplying the
    * transaction count limit. If the platform config sets the corresponding
    * `cardConfigs` value, Grid enforces the lower of the card and platform caps.
    * Amounts use the smallest unit of the card's currency.
@@ -356,10 +356,21 @@ export namespace Card {
     supportsPanReveal: boolean;
 
     /**
-     * Whether cards in this program accept `maxSpendPerTransaction` and
-     * `maxSpendPerDay`.
+     * Whether a card in this program can have `maxSpendPerTransaction` and
+     * `maxSpendPerDay` at all. On card programs where the card issuer makes
+     * authorization decisions, these limits can only be set after issuance through
+     * `PATCH /cards/{id}`. Check `supportsSpendLimitsAtIssuance` to determine whether
+     * you can supply them when issuing a card.
      */
     supportsSpendLimits: boolean;
+
+    /**
+     * Whether `maxSpendPerTransaction` and `maxSpendPerDay` may be supplied on
+     * `POST /cards`. This is true for card programs where Grid makes the authorization
+     * decision and false for card programs where the card issuer makes authorization
+     * decisions.
+     */
+    supportsSpendLimitsAtIssuance: boolean;
 
     /**
      * Whether cards in this program accept `maxTransactionsPerDay`.
@@ -397,8 +408,8 @@ export interface CardCreateRequest {
    * values. The window resets at 00:00 UTC, and refunds, reversals, and
    * authorization expiries do not restore capacity during the day. Accepted only
    * when the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` is true. Spend exactly equal to the
-   * effective limit is allowed.
+   * `cardCapabilities.supportsSpendLimitsAtIssuance` is true. Spend exactly equal to
+   * the effective limit is allowed.
    */
   maxSpendPerDay?: number;
 
@@ -410,7 +421,7 @@ export interface CardCreateRequest {
    * the field to set no limit. If your platform config also sets
    * `cardConfigs.maxSpendPerTransaction`, the lower of the two applies. You can only
    * send this when the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` is true.
+   * `cardCapabilities.supportsSpendLimitsAtIssuance` is true.
    */
   maxSpendPerTransaction?: number;
 
@@ -776,8 +787,8 @@ export interface CardIssueParams {
    * values. The window resets at 00:00 UTC, and refunds, reversals, and
    * authorization expiries do not restore capacity during the day. Accepted only
    * when the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` is true. Spend exactly equal to the
-   * effective limit is allowed.
+   * `cardCapabilities.supportsSpendLimitsAtIssuance` is true. Spend exactly equal to
+   * the effective limit is allowed.
    */
   maxSpendPerDay?: number;
 
@@ -789,7 +800,7 @@ export interface CardIssueParams {
    * settled amount. Omit the field to set no limit. If your platform config also
    * sets `cardConfigs.maxSpendPerTransaction`, the lower of the two applies. You can
    * only send this when the funding-source internal account's
-   * `cardCapabilities.supportsSpendLimits` is true.
+   * `cardCapabilities.supportsSpendLimitsAtIssuance` is true.
    */
   maxSpendPerTransaction?: number;
 

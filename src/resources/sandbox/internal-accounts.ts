@@ -172,10 +172,21 @@ export namespace InternalAccount {
     supportsPanReveal: boolean;
 
     /**
-     * Whether cards in this program accept `maxSpendPerTransaction` and
-     * `maxSpendPerDay`.
+     * Whether a card in this program can have `maxSpendPerTransaction` and
+     * `maxSpendPerDay` at all. On card programs where the card issuer makes
+     * authorization decisions, these limits can only be set after issuance through
+     * `PATCH /cards/{id}`. Check `supportsSpendLimitsAtIssuance` to determine whether
+     * you can supply them when issuing a card.
      */
     supportsSpendLimits: boolean;
+
+    /**
+     * Whether `maxSpendPerTransaction` and `maxSpendPerDay` may be supplied on
+     * `POST /cards`. This is true for card programs where Grid makes the authorization
+     * decision and false for card programs where the card issuer makes authorization
+     * decisions.
+     */
+    supportsSpendLimitsAtIssuance: boolean;
 
     /**
      * Whether cards in this program accept `maxTransactionsPerDay`.
