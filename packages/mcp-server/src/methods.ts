@@ -311,12 +311,6 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/sandbox/cards/{id}/simulate/return',
   },
   {
-    clientCallName: 'client.umaProviders.list',
-    fullyQualifiedName: 'umaProviders.list',
-    httpMethod: 'get',
-    httpPath: '/uma-providers',
-  },
-  {
     clientCallName: 'client.tokens.create',
     fullyQualifiedName: 'tokens.create',
     httpMethod: 'post',

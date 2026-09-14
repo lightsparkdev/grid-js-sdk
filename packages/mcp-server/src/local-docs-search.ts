@@ -2944,68 +2944,6 @@ const EMBEDDED_METHODS: MethodEntry[] = [
     },
   },
   {
-    name: 'list',
-    endpoint: '/uma-providers',
-    httpMethod: 'get',
-    summary: 'List available Counterparty Providers',
-    description:
-      'Retrieve a list of available Counterparty Providers. The response includes basic information about each provider, such as its UMA address, name, and supported currencies.\n',
-    stainlessPath: '(resource) uma_providers > (method) list',
-    qualified: 'client.umaProviders.list',
-    params: [
-      'countryCode?: string;',
-      'currencyCode?: string;',
-      'cursor?: string;',
-      'hasBlockedProviders?: boolean;',
-      'limit?: number;',
-      "sortOrder?: 'asc' | 'desc';",
-    ],
-    response:
-      '{ allowListStatus?: boolean; domain?: string; lei?: string; logoUrl?: string; name?: string; supportedCurrencies?: { code?: string; decimals?: number; name?: string; symbol?: string; }[]; supportedRegions?: string[]; }',
-    markdown:
-      "## list\n\n`client.umaProviders.list(countryCode?: string, currencyCode?: string, cursor?: string, hasBlockedProviders?: boolean, limit?: number, sortOrder?: 'asc' | 'desc'): { allowListStatus?: boolean; domain?: string; lei?: string; logoUrl?: string; name?: string; supportedCurrencies?: currency[]; supportedRegions?: string[]; }`\n\n**get** `/uma-providers`\n\nRetrieve a list of available Counterparty Providers. The response includes basic information about each provider, such as its UMA address, name, and supported currencies.\n\n\n### Parameters\n\n- `countryCode?: string`\n  The alpha-2 representation of a country, as defined by the ISO 3166-1 standard.\n\n- `currencyCode?: string`\n  The ISO 4217 currency code to filter providers by supported currency.\n\n- `cursor?: string`\n  Cursor for pagination (returned from previous request)\n\n- `hasBlockedProviders?: boolean`\n  Whether to include providers which are not on your allowlist in the response. By default the response will include blocked providers.\n\n- `limit?: number`\n  Maximum number of results to return (default 20, max 100)\n\n- `sortOrder?: 'asc' | 'desc'`\n  Order to sort results in\n\n### Returns\n\n- `{ allowListStatus?: boolean; domain?: string; lei?: string; logoUrl?: string; name?: string; supportedCurrencies?: { code?: string; decimals?: number; name?: string; symbol?: string; }[]; supportedRegions?: string[]; }`\n\n  - `allowListStatus?: boolean`\n  - `domain?: string`\n  - `lei?: string`\n  - `logoUrl?: string`\n  - `name?: string`\n  - `supportedCurrencies?: { code?: string; decimals?: number; name?: string; symbol?: string; }[]`\n  - `supportedRegions?: string[]`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\n// Automatically fetches more pages as needed.\nfor await (const umaProvider of client.umaProviders.list()) {\n  console.log(umaProvider);\n}\n```",
-    perLanguage: {
-      typescript: {
-        method: 'client.umaProviders.list',
-        example:
-          "import LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid({\n  username: process.env['GRID_CLIENT_ID'], // This is the default and can be omitted\n  password: process.env['GRID_CLIENT_SECRET'], // This is the default and can be omitted\n});\n\n// Automatically fetches more pages as needed.\nfor await (const umaProvider of client.umaProviders.list()) {\n  console.log(umaProvider.allowListStatus);\n}",
-      },
-      python: {
-        method: 'uma_providers.list',
-        example:
-          'import os\nfrom grid import LightsparkGrid\n\nclient = LightsparkGrid(\n    username=os.environ.get("GRID_CLIENT_ID"),  # This is the default and can be omitted\n    password=os.environ.get("GRID_CLIENT_SECRET"),  # This is the default and can be omitted\n)\npage = client.uma_providers.list()\npage = page.data[0]\nprint(page.allow_list_status)',
-      },
-      kotlin: {
-        method: 'umaProviders().list',
-        example:
-          'package com.lightspark.grid.example\n\nimport com.lightspark.grid.client.LightsparkGridClient\nimport com.lightspark.grid.client.okhttp.LightsparkGridOkHttpClient\nimport com.lightspark.grid.models.umaproviders.UmaProviderListPage\nimport com.lightspark.grid.models.umaproviders.UmaProviderListParams\n\nfun main() {\n    val client: LightsparkGridClient = LightsparkGridOkHttpClient.fromEnv()\n\n    val page: UmaProviderListPage = client.umaProviders().list()\n}',
-      },
-      go: {
-        method: 'client.UmaProviders.List',
-        example:
-          'package main\n\nimport (\n\t"context"\n\t"fmt"\n\n\t"github.com/stainless-sdks/grid-go"\n\t"github.com/stainless-sdks/grid-go/option"\n)\n\nfunc main() {\n\tclient := grid.NewClient(\n\t\toption.WithUsername("My Username"),\n\t\toption.WithPassword("My Password"),\n\t)\n\tpage, err := client.UmaProviders.List(context.TODO(), grid.UmaProviderListParams{})\n\tif err != nil {\n\t\tpanic(err.Error())\n\t}\n\tfmt.Printf("%+v\\n", page)\n}\n',
-      },
-      ruby: {
-        method: 'uma_providers.list',
-        example:
-          'require "grid"\n\nlightspark_grid = Grid::Client.new(username: "My Username", password: "My Password")\n\npage = lightspark_grid.uma_providers.list\n\nputs(page)',
-      },
-      cli: {
-        method: 'uma_providers list',
-        example: "grid uma-providers list \\\n  --username 'My Username' \\\n  --password 'My Password'",
-      },
-      php: {
-        method: 'umaProviders->list',
-        example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$page = $client->umaProviders->list(\n  countryCode: 'US',\n  currencyCode: 'USD',\n  cursor: 'cursor',\n  hasBlockedProviders: true,\n  limit: 1,\n  sortOrder: 'asc',\n);\n\nvar_dump($page);",
-      },
-      http: {
-        example:
-          'curl https://api.lightspark.com/grid/2025-10-13/uma-providers \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
-      },
-    },
-  },
-  {
     name: 'create',
     endpoint: '/tokens',
     httpMethod: 'post',

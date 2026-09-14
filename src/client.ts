@@ -142,13 +142,6 @@ import {
 } from './resources/transfer-in';
 import { TransferOut, TransferOutCreateParams, TransferOutRequest } from './resources/transfer-out';
 import {
-  UmaProvider,
-  UmaProviderListParams,
-  UmaProviderListResponse,
-  UmaProviders,
-  UmaProvidersDefaultPagination,
-} from './resources/uma-providers';
-import {
   Verification,
   VerificationListParams,
   VerificationListResponse,
@@ -1113,7 +1106,6 @@ export class LightsparkGrid {
    * Endpoints to trigger test cases in sandbox
    */
   sandbox: API.Sandbox = new API.Sandbox(this);
-  umaProviders: API.UmaProviders = new API.UmaProviders(this);
   /**
    * Endpoints to programmatically manage API tokens
    */
@@ -1164,7 +1156,6 @@ LightsparkGrid.Quotes = Quotes;
 LightsparkGrid.Transactions = Transactions;
 LightsparkGrid.Invitations = Invitations;
 LightsparkGrid.Sandbox = Sandbox;
-LightsparkGrid.UmaProviders = UmaProviders;
 LightsparkGrid.Tokens = Tokens;
 LightsparkGrid.ExchangeRates = ExchangeRates;
 LightsparkGrid.Webhooks = Webhooks;
@@ -1306,14 +1297,6 @@ export declare namespace LightsparkGrid {
     Sandbox as Sandbox,
     type SendRequest as SendRequest,
     type SandboxSendFundsParams as SandboxSendFundsParams,
-  };
-
-  export {
-    UmaProviders as UmaProviders,
-    type UmaProvider as UmaProvider,
-    type UmaProviderListResponse as UmaProviderListResponse,
-    type UmaProvidersDefaultPagination as UmaProvidersDefaultPagination,
-    type UmaProviderListParams as UmaProviderListParams,
   };
 
   export {

@@ -439,17 +439,6 @@ Methods:
 - <code title="post /sandbox/cards/{id}/simulate/clearing">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">clearing</a>(id, { ...params }) -> SimulateClearingResponse</code>
 - <code title="post /sandbox/cards/{id}/simulate/return">client.sandbox.cards.simulate.<a href="./src/resources/sandbox/cards/simulate.ts">return</a>(id, { ...params }) -> SimulateReturnResponse</code>
 
-# UmaProviders
-
-Types:
-
-- <code><a href="./src/resources/uma-providers.ts">UmaProvider</a></code>
-- <code><a href="./src/resources/uma-providers.ts">UmaProviderListResponse</a></code>
-
-Methods:
-
-- <code title="get /uma-providers">client.umaProviders.<a href="./src/resources/uma-providers.ts">list</a>({ ...params }) -> UmaProvidersDefaultPagination</code>
-
 # Tokens
 
 Types:

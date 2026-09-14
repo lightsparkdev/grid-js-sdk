@@ -189,13 +189,6 @@ export {
 } from './transfer-in';
 export { TransferOut, type TransferOutRequest, type TransferOutCreateParams } from './transfer-out';
 export {
-  UmaProviders,
-  type UmaProvider,
-  type UmaProviderListResponse,
-  type UmaProviderListParams,
-  type UmaProvidersDefaultPagination,
-} from './uma-providers';
-export {
   Verifications,
   type Verification,
   type VerificationListResponse,
