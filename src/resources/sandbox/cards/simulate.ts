@@ -28,6 +28,9 @@ export class Simulate extends APIResource {
    * confirmation event reports `FAILED` — exercises the high-urgency `EXCEPTION`
    * alert | | any other | Approved |
    *
+   * `merchant.descriptor` must be 1–25 characters — the width of the card network's
+   * acceptor-name field. A longer one is rejected with `400` `INVALID_INPUT`.
+   *
    * Production returns `404` on this path.
    *
    * @example
@@ -140,7 +143,7 @@ export class Simulate extends APIResource {
  * authorization + reconcile paths that the issuer would call in production. The
  * decisioning outcome is controlled by the last three characters of
  * `merchant.descriptor` — see the `simulate/authorization` documentation for the
- * suffix table.
+ * suffix table. `merchant.descriptor` must be 1–25 characters.
  */
 export interface AuthorizationRequest {
   /**
@@ -156,6 +159,9 @@ export interface AuthorizationRequest {
 export interface CardMerchant {
   /**
    * Merchant descriptor string captured from the card network at authorization time.
+   * On the sandbox simulate endpoints, where this is supplied rather than reported,
+   * it must be 1–25 characters — the width of the card network's acceptor-name
+   * field.
    */
   descriptor: string;
 
