@@ -115,6 +115,7 @@ const fuse = new Fuse(
     'client.customers.delete',
     'client.customers.export',
     'client.customers.list',
+    'client.customers.listAgreements',
     'client.customers.listInternalAccounts',
     'client.customers.retrieve',
     'client.customers.retrieveEndUserTerms',

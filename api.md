@@ -89,6 +89,12 @@ Methods:
 
 Types:
 
+- <code><a href="./src/resources/customers/customers.ts">AgreementAcceptanceMethod</a></code>
+- <code><a href="./src/resources/customers/customers.ts">AgreementConsent</a></code>
+- <code><a href="./src/resources/customers/customers.ts">AgreementConsentRequest</a></code>
+- <code><a href="./src/resources/customers/customers.ts">AgreementDocument</a></code>
+- <code><a href="./src/resources/customers/customers.ts">AgreementDocumentListResponse</a></code>
+- <code><a href="./src/resources/customers/customers.ts">AgreementType</a></code>
 - <code><a href="./src/resources/customers/customers.ts">BusinessCustomerCreateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">BusinessCustomerUpdateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">Customer</a></code>
@@ -97,8 +103,6 @@ Types:
 - <code><a href="./src/resources/customers/customers.ts">CustomerOneOf</a></code>
 - <code><a href="./src/resources/customers/customers.ts">CustomerUpdateRequestOneOf</a></code>
 - <code><a href="./src/resources/customers/customers.ts">EndUserTerms</a></code>
-- <code><a href="./src/resources/customers/customers.ts">EndUserTermsConsent</a></code>
-- <code><a href="./src/resources/customers/customers.ts">EndUserTermsConsentRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerCreateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">IndividualCustomerUpdateRequest</a></code>
 - <code><a href="./src/resources/customers/customers.ts">InternalAccountExportRequest</a></code>
@@ -118,6 +122,7 @@ Methods:
 - <code title="delete /customers/{customerId}">client.customers.<a href="./src/resources/customers/customers.ts">delete</a>(customerID) -> CustomerOneOf</code>
 - <code title="post /customers/{customerId}/kyc-link">client.customers.<a href="./src/resources/customers/customers.ts">createKYCLink</a>(customerID, { ...params }) -> KYCLinkResponse</code>
 - <code title="post /internal-accounts/{id}/export">client.customers.<a href="./src/resources/customers/customers.ts">export</a>(id, { ...params }) -> CustomerExportResponse</code>
+- <code title="get /customers/agreements">client.customers.<a href="./src/resources/customers/customers.ts">listAgreements</a>() -> AgreementDocumentListResponse</code>
 - <code title="get /customers/internal-accounts">client.customers.<a href="./src/resources/customers/customers.ts">listInternalAccounts</a>({ ...params }) -> InternalAccountsDefaultPagination</code>
 - <code title="get /customers/end-user-terms">client.customers.<a href="./src/resources/customers/customers.ts">retrieveEndUserTerms</a>() -> EndUserTerms</code>
 - <code title="patch /internal-accounts/{id}">client.customers.<a href="./src/resources/customers/customers.ts">updateInternalAccount</a>(id, { ...params }) -> InternalAccount</code>

@@ -38,6 +38,15 @@ describe('resource customers', () => {
           line2: 'Apt 4B',
           state: 'CA',
         },
+        agreementConsents: [
+          {
+            acceptanceMethod: 'CHECKBOX',
+            acceptedAt: '2019-12-27T18:11:19.117Z',
+            ipAddress: '198.51.100.24',
+            termsVersion: '2025-10-13',
+            type: 'LIGHTSPARK_END_USER_TERMS',
+          },
+        ],
         annualIncomeRange: 'RANGE_100K_250K',
         birthDate: '1990-01-15',
         countryOfIssuance: 'US',
@@ -111,6 +120,15 @@ describe('resource customers', () => {
           line2: 'Apt 4B',
           state: 'CA',
         },
+        agreementConsents: [
+          {
+            acceptanceMethod: 'CHECKBOX',
+            acceptedAt: '2019-12-27T18:11:19.117Z',
+            ipAddress: '198.51.100.24',
+            termsVersion: '2025-10-13',
+            type: 'LIGHTSPARK_END_USER_TERMS',
+          },
+        ],
         annualIncomeRange: 'RANGE_100K_250K',
         birthDate: '1990-01-15',
         countryOfIssuance: 'US',
@@ -245,6 +263,18 @@ describe('resource customers', () => {
         'eyJwdWJsaWNLZXkiOiIwMmExYjIuLi4iLCJzY2hlbWUiOiJTSUdOQVRVUkVfU0NIRU1FX1RLX0FQSV9QMjU2Iiwic2lnbmF0dXJlIjoiMzA0NTAyMjEwMC4uLiJ9',
       'Request-Id': 'Request:7c4a8d09-ca37-4e3e-9e0d-8c2b3e9a1f21',
     });
+  });
+
+  // Mock server tests are disabled
+  test.skip('listAgreements', async () => {
+    const responsePromise = client.customers.listAgreements();
+    const rawResponse = await responsePromise.asResponse();
+    expect(rawResponse).toBeInstanceOf(Response);
+    const response = await responsePromise;
+    expect(response).not.toBeInstanceOf(Response);
+    const dataAndResponse = await responsePromise.withResponse();
+    expect(dataAndResponse.data).toBe(response);
+    expect(dataAndResponse.response).toBe(rawResponse);
   });
 
   // Mock server tests are disabled

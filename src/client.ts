@@ -195,6 +195,12 @@ import {
 } from './resources/agents/agents';
 import { Auth } from './resources/auth/auth';
 import {
+  AgreementAcceptanceMethod,
+  AgreementConsent,
+  AgreementConsentRequest,
+  AgreementDocument,
+  AgreementDocumentListResponse,
+  AgreementType,
   BusinessCustomerCreateRequest,
   BusinessCustomerUpdateRequest,
   Customer,
@@ -213,8 +219,6 @@ import {
   CustomerUpdateRequestOneOf,
   Customers,
   EndUserTerms,
-  EndUserTermsConsent,
-  EndUserTermsConsentRequest,
   IndividualCustomerCreateRequest,
   IndividualCustomerUpdateRequest,
   InternalAccountExportRequest,
@@ -1189,6 +1193,12 @@ export declare namespace LightsparkGrid {
 
   export {
     Customers as Customers,
+    type AgreementAcceptanceMethod as AgreementAcceptanceMethod,
+    type AgreementConsent as AgreementConsent,
+    type AgreementConsentRequest as AgreementConsentRequest,
+    type AgreementDocument as AgreementDocument,
+    type AgreementDocumentListResponse as AgreementDocumentListResponse,
+    type AgreementType as AgreementType,
     type BusinessCustomerCreateRequest as BusinessCustomerCreateRequest,
     type BusinessCustomerUpdateRequest as BusinessCustomerUpdateRequest,
     type Customer as Customer,
@@ -1197,8 +1207,6 @@ export declare namespace LightsparkGrid {
     type CustomerOneOf as CustomerOneOf,
     type CustomerUpdateRequestOneOf as CustomerUpdateRequestOneOf,
     type EndUserTerms as EndUserTerms,
-    type EndUserTermsConsent as EndUserTermsConsent,
-    type EndUserTermsConsentRequest as EndUserTermsConsentRequest,
     type IndividualCustomerCreateRequest as IndividualCustomerCreateRequest,
     type IndividualCustomerUpdateRequest as IndividualCustomerUpdateRequest,
     type InternalAccountExportRequest as InternalAccountExportRequest,

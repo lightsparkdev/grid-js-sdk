@@ -1,6 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
+import * as CustomersAPI from './customers';
 import * as Shared from '../shared';
 import * as BulkAPI from './bulk';
 import { Bulk, BulkGetJobStatusResponse, BulkUploadCsvParams, BulkUploadCsvResponse } from './bulk';
@@ -356,6 +357,22 @@ export class Customers extends APIResource {
   }
 
   /**
+   * Retrieve the current version and Grid-hosted URL of every agreement Grid
+   * supports. Supply an entry's `version` as `termsVersion` when recording a
+   * customer's acceptance of that agreement. The list is a catalog of available
+   * agreements, not a list of the agreements a given customer is required to accept.
+   *
+   * @example
+   * ```ts
+   * const agreementDocumentListResponse =
+   *   await client.customers.listAgreements();
+   * ```
+   */
+  listAgreements(options?: RequestOptions): APIPromise<AgreementDocumentListResponse> {
+    return this._client.get('/customers/agreements', { ...options, __security: { basicAuth: true } });
+  }
+
+  /**
    * Retrieve a list of internal accounts with optional filtering parameters. Returns
    * all internal accounts that match the specified filters. If no filters are
    * provided, returns all internal accounts (paginated).
@@ -383,13 +400,11 @@ export class Customers extends APIResource {
   }
 
   /**
-   * Retrieve the current version and Grid-hosted URL of the End User Terms.
+   * Deprecated; use `GET /customers/agreements`, which lists every agreement Grid
+   * supports rather than the End User Terms alone. This operation keeps its original
+   * single-document response, so existing integrations continue to work unchanged.
    *
-   * @example
-   * ```ts
-   * const endUserTerms =
-   *   await client.customers.retrieveEndUserTerms();
-   * ```
+   * @deprecated
    */
   retrieveEndUserTerms(options?: RequestOptions): APIPromise<EndUserTerms> {
     return this._client.get('/customers/end-user-terms', { ...options, __security: { basicAuth: true } });
@@ -448,6 +463,123 @@ export class Customers extends APIResource {
 
 export type CustomerOneovesDefaultPagination = DefaultPagination<CustomerOneOf>;
 
+/**
+ * Method the customer used to affirmatively accept an agreement.
+ */
+export type AgreementAcceptanceMethod = 'CHECKBOX' | 'CLICK_TO_ACCEPT';
+
+export interface AgreementConsent {
+  /**
+   * Method the customer used to affirmatively accept an agreement.
+   */
+  acceptanceMethod: AgreementAcceptanceMethod;
+
+  /**
+   * Date and time when the customer accepted this agreement. Must include a timezone
+   * offset and must not be in the future.
+   */
+  acceptedAt: string;
+
+  /**
+   * IP address of the device the customer used when accepting this agreement.
+   */
+  ipAddress: string;
+
+  /**
+   * Version identifier of the accepted agreement, as returned for this type by the
+   * agreement documents endpoint. A version is scoped to its type; a version valid
+   * for one agreement is not valid for another.
+   */
+  termsVersion: string;
+
+  /**
+   * Identifies which Grid agreement a consent record or document refers to. Values
+   * are stable identifiers: a document's hosted URL or version may change, but its
+   * type does not. Accepting one agreement never implies acceptance of another, even
+   * when two agreements share a hosted page.
+   */
+  type: AgreementType;
+}
+
+export interface AgreementConsentRequest {
+  /**
+   * Method the customer used to affirmatively accept an agreement.
+   */
+  acceptanceMethod: AgreementAcceptanceMethod;
+
+  /**
+   * Date and time when the customer accepted this agreement. Must include a timezone
+   * offset and must not be in the future.
+   */
+  acceptedAt: string;
+
+  /**
+   * IP address of the device the customer used when accepting this agreement.
+   */
+  ipAddress: string;
+
+  /**
+   * Version identifier of the accepted agreement, as returned for this type by the
+   * agreement documents endpoint. A version is scoped to its type; a version valid
+   * for one agreement is not valid for another.
+   */
+  termsVersion: string;
+
+  /**
+   * Identifies which Grid agreement a consent record or document refers to. Values
+   * are stable identifiers: a document's hosted URL or version may change, but its
+   * type does not. Accepting one agreement never implies acceptance of another, even
+   * when two agreements share a hosted page.
+   */
+  type: AgreementType;
+}
+
+export interface AgreementDocument {
+  /**
+   * Identifies which Grid agreement a consent record or document refers to. Values
+   * are stable identifiers: a document's hosted URL or version may change, but its
+   * type does not. Accepting one agreement never implies acceptance of another, even
+   * when two agreements share a hosted page.
+   */
+  type: AgreementType;
+
+  /**
+   * URL where Grid hosts this version of the agreement. Platform-specific agreements
+   * resolve to a URL for the authenticated platform.
+   */
+  url: string;
+
+  /**
+   * Current version identifier of this agreement. Supply it as `termsVersion` when
+   * recording the customer's acceptance. Versions are independent per type.
+   */
+  version: string;
+}
+
+export interface AgreementDocumentListResponse {
+  /**
+   * Every agreement Grid supports, one entry per type. The list is a catalog of
+   * available agreements, not a list of the agreements a given customer is required
+   * to accept.
+   */
+  data: Array<AgreementDocument>;
+}
+
+/**
+ * Identifies which Grid agreement a consent record or document refers to. Values
+ * are stable identifiers: a document's hosted URL or version may change, but its
+ * type does not. Accepting one agreement never implies acceptance of another, even
+ * when two agreements share a hosted page.
+ */
+export type AgreementType =
+  | 'LIGHTSPARK_END_USER_TERMS'
+  | 'LIGHTSPARK_E_SIGN_CONSENT'
+  | 'LIGHTSPARK_PRIVACY_POLICY'
+  | 'LEAD_E_SIGN_CONSENT'
+  | 'LEAD_ACCOUNTHOLDER_AGREEMENT'
+  | 'LEAD_PRIVACY_POLICY'
+  | 'LEAD_CARDHOLDER_AGREEMENT';
+
 export interface BusinessCustomerCreateRequest {
   /**
    * Additional information required for business entities
@@ -457,6 +589,15 @@ export interface BusinessCustomerCreateRequest {
   customerType: 'BUSINESS';
 
   address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Evidence that the customer accepted Grid agreements, at most one entry per type.
+   * Unregulated platforms must record acceptance of the Lightspark End User Terms
+   * before initiating customer-scoped transactions; those transactions fail until
+   * that consent is recorded. Consents can be supplied during customer creation or
+   * in a later customer update.
+   */
+  agreementConsents?: Array<AgreementConsentRequest>;
 
   /**
    * Currency codes the customer will use — ISO 4217 for fiat, tickers for crypto
@@ -473,12 +614,12 @@ export interface BusinessCustomerCreateRequest {
   email?: string;
 
   /**
-   * Evidence that the customer accepted the Grid End User Terms. Unregulated
-   * platforms must provide this before initiating customer-scoped transactions;
-   * those transactions fail until consent is recorded. This can be supplied during
-   * customer creation or in a later customer update.
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
    */
-  endUserTermsConsent?: EndUserTermsConsentRequest;
+  endUserTermsConsent?: BusinessCustomerCreateRequest.EndUserTermsConsent;
 
   /**
    * The current KYB status of a business customer. `HOLD` means the customer is
@@ -685,6 +826,34 @@ export namespace BusinessCustomerCreateRequest {
      */
     sourceOfFundsOtherDescription?: string;
   }
+
+  /**
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
+   */
+  export interface EndUserTermsConsent {
+    /**
+     * Method the customer used to affirmatively accept an agreement.
+     */
+    acceptanceMethod: CustomersAPI.AgreementAcceptanceMethod;
+
+    /**
+     * Date and time when the customer accepted the End User Terms.
+     */
+    acceptedAt: string;
+
+    /**
+     * IP address of the device the customer used when accepting the terms.
+     */
+    ipAddress: string;
+
+    /**
+     * Version identifier of the accepted Grid End User Terms.
+     */
+    termsVersion: string;
+  }
 }
 
 /**
@@ -700,6 +869,14 @@ export interface BusinessCustomerUpdateRequest {
   customerType: 'BUSINESS';
 
   address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Evidence that the customer accepted Grid agreements, at most one entry per type.
+   * Supplying this records additional acceptances; it never withdraws or replaces
+   * evidence already recorded for other types. Omitting the field leaves recorded
+   * consents unchanged.
+   */
+  agreementConsents?: Array<AgreementConsentRequest>;
 
   /**
    * Additional information for business entities
@@ -722,11 +899,12 @@ export interface BusinessCustomerUpdateRequest {
   email?: string;
 
   /**
-   * Evidence that the customer accepted the Grid End User Terms. Unregulated
-   * platforms must provide this before initiating customer-scoped transactions;
-   * those transactions fail until consent is recorded.
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
    */
-  endUserTermsConsent?: EndUserTermsConsentRequest;
+  endUserTermsConsent?: BusinessCustomerUpdateRequest.EndUserTermsConsent;
 
   /**
    * The current KYB status of a business customer. `HOLD` means the customer is
@@ -926,6 +1104,34 @@ export namespace BusinessCustomerUpdateRequest {
      */
     taxId?: string;
   }
+
+  /**
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
+   */
+  export interface EndUserTermsConsent {
+    /**
+     * Method the customer used to affirmatively accept an agreement.
+     */
+    acceptanceMethod: CustomersAPI.AgreementAcceptanceMethod;
+
+    /**
+     * Date and time when the customer accepted the End User Terms.
+     */
+    acceptedAt: string;
+
+    /**
+     * IP address of the device the customer used when accepting the terms.
+     */
+    ipAddress: string;
+
+    /**
+     * Version identifier of the accepted Grid End User Terms.
+     */
+    termsVersion: string;
+  }
 }
 
 export interface Customer {
@@ -946,6 +1152,13 @@ export interface Customer {
    * System-generated unique identifier
    */
   id?: string;
+
+  /**
+   * The customer's recorded agreement acceptances, one entry per accepted type
+   * holding that type's most recent acceptance. Omitted when the customer has not
+   * accepted any agreement yet.
+   */
+  agreementConsents?: Array<AgreementConsent>;
 
   /**
    * Email and phone verification state. **Only present when the customer's payment
@@ -969,10 +1182,11 @@ export interface Customer {
   email?: string;
 
   /**
-   * The customer's recorded acceptance of the End User Terms. Omitted until
-   * acceptance has been recorded.
+   * @deprecated Deprecated; read `agreementConsents` instead. Mirrors the customer's
+   * `LIGHTSPARK_END_USER_TERMS` acceptance when one is on file, and is omitted
+   * otherwise.
    */
-  endUserTermsConsent?: EndUserTermsConsentRequest;
+  endUserTermsConsent?: Customer.EndUserTermsConsent;
 
   /**
    * Whether the customer is marked as deleted
@@ -1013,6 +1227,33 @@ export namespace Customer {
      * provider requires phone verification.
      */
     phone?: 'PENDING' | 'VERIFIED';
+  }
+
+  /**
+   * @deprecated Deprecated; read `agreementConsents` instead. Mirrors the customer's
+   * `LIGHTSPARK_END_USER_TERMS` acceptance when one is on file, and is omitted
+   * otherwise.
+   */
+  export interface EndUserTermsConsent {
+    /**
+     * Method the customer used to affirmatively accept an agreement.
+     */
+    acceptanceMethod: CustomersAPI.AgreementAcceptanceMethod;
+
+    /**
+     * Date and time when the customer accepted the End User Terms.
+     */
+    acceptedAt: string;
+
+    /**
+     * IP address of the device the customer used when accepting the terms.
+     */
+    ipAddress: string;
+
+    /**
+     * Version identifier of the accepted Grid End User Terms.
+     */
+    termsVersion: string;
   }
 }
 
@@ -1071,6 +1312,10 @@ export type CustomerOneOf = Shared.IndividualCustomer | Shared.BusinessCustomer;
  */
 export type CustomerUpdateRequestOneOf = IndividualCustomerUpdateRequest | BusinessCustomerUpdateRequest;
 
+/**
+ * @deprecated Deprecated; read the agreement documents list instead, which reports
+ * every agreement Grid supports rather than the End User Terms alone.
+ */
 export interface EndUserTerms {
   /**
    * URL where Grid hosts this version of the End User Terms.
@@ -1081,50 +1326,6 @@ export interface EndUserTerms {
    * Current version identifier of the Grid End User Terms.
    */
   version: string;
-}
-
-export interface EndUserTermsConsent {
-  /**
-   * Method the customer used to affirmatively accept the End User Terms.
-   */
-  acceptanceMethod: 'CHECKBOX' | 'CLICK_TO_ACCEPT';
-
-  /**
-   * Date and time when the customer accepted the End User Terms.
-   */
-  acceptedAt: string;
-
-  /**
-   * IP address of the device the customer used when accepting the terms.
-   */
-  ipAddress: string;
-
-  /**
-   * Version identifier of the accepted Grid End User Terms.
-   */
-  termsVersion: string;
-}
-
-export interface EndUserTermsConsentRequest {
-  /**
-   * Method the customer used to affirmatively accept the End User Terms.
-   */
-  acceptanceMethod: 'CHECKBOX' | 'CLICK_TO_ACCEPT';
-
-  /**
-   * Date and time when the customer accepted the End User Terms.
-   */
-  acceptedAt: string;
-
-  /**
-   * IP address of the device the customer used when accepting the terms.
-   */
-  ipAddress: string;
-
-  /**
-   * Version identifier of the accepted Grid End User Terms.
-   */
-  termsVersion: string;
 }
 
 /**
@@ -1140,6 +1341,15 @@ export interface IndividualCustomerCreateRequest {
   customerType: 'INDIVIDUAL';
 
   address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Evidence that the customer accepted Grid agreements, at most one entry per type.
+   * Unregulated platforms must record acceptance of the Lightspark End User Terms
+   * before initiating customer-scoped transactions; those transactions fail until
+   * that consent is recorded. Consents can be supplied during customer creation or
+   * in a later customer update.
+   */
+  agreementConsents?: Array<AgreementConsentRequest>;
 
   /**
    * Bucketed annual income (USD equivalent). Used for enhanced due diligence on
@@ -1174,12 +1384,12 @@ export interface IndividualCustomerCreateRequest {
   email?: string;
 
   /**
-   * Evidence that the customer accepted the Grid End User Terms. Unregulated
-   * platforms must provide this before initiating customer-scoped transactions;
-   * those transactions fail until consent is recorded. This can be supplied during
-   * customer creation or in a later customer update.
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
    */
-  endUserTermsConsent?: EndUserTermsConsentRequest;
+  endUserTermsConsent?: IndividualCustomerCreateRequest.EndUserTermsConsent;
 
   /**
    * Expected number of transactions per month
@@ -1339,6 +1549,36 @@ export interface IndividualCustomerCreateRequest {
   umaAddress?: string;
 }
 
+export namespace IndividualCustomerCreateRequest {
+  /**
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
+   */
+  export interface EndUserTermsConsent {
+    /**
+     * Method the customer used to affirmatively accept an agreement.
+     */
+    acceptanceMethod: CustomersAPI.AgreementAcceptanceMethod;
+
+    /**
+     * Date and time when the customer accepted the End User Terms.
+     */
+    acceptedAt: string;
+
+    /**
+     * IP address of the device the customer used when accepting the terms.
+     */
+    ipAddress: string;
+
+    /**
+     * Version identifier of the accepted Grid End User Terms.
+     */
+    termsVersion: string;
+  }
+}
+
 /**
  * Enhanced-due-diligence (EDD) fields available as optional patchable attributes
  * on an individual customer. Referenced via `allOf` from
@@ -1352,6 +1592,14 @@ export interface IndividualCustomerUpdateRequest {
   customerType: 'INDIVIDUAL';
 
   address?: ExternalAccountsAPI.Address;
+
+  /**
+   * Evidence that the customer accepted Grid agreements, at most one entry per type.
+   * Supplying this records additional acceptances; it never withdraws or replaces
+   * evidence already recorded for other types. Omitting the field leaves recorded
+   * consents unchanged.
+   */
+  agreementConsents?: Array<AgreementConsentRequest>;
 
   /**
    * Bucketed annual income (USD equivalent). Used for enhanced due diligence on
@@ -1387,11 +1635,12 @@ export interface IndividualCustomerUpdateRequest {
   email?: string;
 
   /**
-   * Evidence that the customer accepted the Grid End User Terms. Unregulated
-   * platforms must provide this before initiating customer-scoped transactions;
-   * those transactions fail until consent is recorded.
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
    */
-  endUserTermsConsent?: EndUserTermsConsentRequest;
+  endUserTermsConsent?: IndividualCustomerUpdateRequest.EndUserTermsConsent;
 
   /**
    * Expected number of transactions per month
@@ -1534,6 +1783,36 @@ export interface IndividualCustomerUpdateRequest {
    * updated. This is an optional identifier to route payments to the customer.
    */
   umaAddress?: string;
+}
+
+export namespace IndividualCustomerUpdateRequest {
+  /**
+   * @deprecated Deprecated; send `agreementConsents` instead. Supplying this records
+   * acceptance of the Lightspark End User Terms, equivalent to a single
+   * `agreementConsents` entry of type `LIGHTSPARK_END_USER_TERMS`. Supplying both
+   * fields in one request is rejected.
+   */
+  export interface EndUserTermsConsent {
+    /**
+     * Method the customer used to affirmatively accept an agreement.
+     */
+    acceptanceMethod: CustomersAPI.AgreementAcceptanceMethod;
+
+    /**
+     * Date and time when the customer accepted the End User Terms.
+     */
+    acceptedAt: string;
+
+    /**
+     * IP address of the device the customer used when accepting the terms.
+     */
+    ipAddress: string;
+
+    /**
+     * Version identifier of the accepted Grid End User Terms.
+     */
+    termsVersion: string;
+  }
 }
 
 /**
@@ -1892,6 +2171,12 @@ Customers.Bulk = Bulk;
 
 export declare namespace Customers {
   export {
+    type AgreementAcceptanceMethod as AgreementAcceptanceMethod,
+    type AgreementConsent as AgreementConsent,
+    type AgreementConsentRequest as AgreementConsentRequest,
+    type AgreementDocument as AgreementDocument,
+    type AgreementDocumentListResponse as AgreementDocumentListResponse,
+    type AgreementType as AgreementType,
     type BusinessCustomerCreateRequest as BusinessCustomerCreateRequest,
     type BusinessCustomerUpdateRequest as BusinessCustomerUpdateRequest,
     type Customer as Customer,
@@ -1900,8 +2185,6 @@ export declare namespace Customers {
     type CustomerOneOf as CustomerOneOf,
     type CustomerUpdateRequestOneOf as CustomerUpdateRequestOneOf,
     type EndUserTerms as EndUserTerms,
-    type EndUserTermsConsent as EndUserTermsConsent,
-    type EndUserTermsConsentRequest as EndUserTermsConsentRequest,
     type IndividualCustomerCreateRequest as IndividualCustomerCreateRequest,
     type IndividualCustomerUpdateRequest as IndividualCustomerUpdateRequest,
     type InternalAccountExportRequest as InternalAccountExportRequest,

@@ -65,6 +65,12 @@ export const sdkMethods: SdkMethod[] = [
     httpPath: '/internal-accounts/{id}/export',
   },
   {
+    clientCallName: 'client.customers.listAgreements',
+    fullyQualifiedName: 'customers.listAgreements',
+    httpMethod: 'get',
+    httpPath: '/customers/agreements',
+  },
+  {
     clientCallName: 'client.customers.listInternalAccounts',
     fullyQualifiedName: 'customers.listInternalAccounts',
     httpMethod: 'get',

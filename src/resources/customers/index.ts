@@ -8,6 +8,12 @@ export {
 } from './bulk';
 export {
   Customers,
+  type AgreementAcceptanceMethod,
+  type AgreementConsent,
+  type AgreementConsentRequest,
+  type AgreementDocument,
+  type AgreementDocumentListResponse,
+  type AgreementType,
   type BusinessCustomerCreateRequest,
   type BusinessCustomerUpdateRequest,
   type Customer,
@@ -16,8 +22,6 @@ export {
   type CustomerOneOf,
   type CustomerUpdateRequestOneOf,
   type EndUserTerms,
-  type EndUserTermsConsent,
-  type EndUserTermsConsentRequest,
   type IndividualCustomerCreateRequest,
   type IndividualCustomerUpdateRequest,
   type InternalAccountExportRequest,
