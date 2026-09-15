@@ -351,6 +351,13 @@ export namespace Card {
     supports3dSecurePassword: boolean;
 
     /**
+     * Whether cards in this program can be added to Apple Pay, Google Pay, or Samsung
+     * Pay from your app through `POST /cards/{id}/tokenize`. Manual entry into a
+     * wallet works regardless of this flag.
+     */
+    supportsDigitalWalletTokenization: boolean;
+
+    /**
      * Whether cards in this program can be revealed through `POST /cards/{id}/reveal`.
      */
     supportsPanReveal: boolean;
