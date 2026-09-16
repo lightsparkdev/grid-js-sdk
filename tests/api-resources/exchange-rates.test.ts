@@ -30,7 +30,7 @@ describe('resource exchangeRates', () => {
       client.exchangeRates.list(
         {
           destinationCurrency: ['string'],
-          sendingAmount: 0,
+          sendingAmount: 1,
           sourceCurrency: 'sourceCurrency',
         },
         { path: '/_stainless_unknown_path' },

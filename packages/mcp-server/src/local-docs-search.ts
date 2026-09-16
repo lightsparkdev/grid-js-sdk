@@ -3271,7 +3271,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       php: {
         method: 'exchangeRates->list',
         example:
-          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$exchangeRateListResponse = $client->exchangeRates->list(\n  destinationCurrency: ['string'],\n  sendingAmount: 0,\n  sourceCurrency: 'sourceCurrency',\n);\n\nvar_dump($exchangeRateListResponse);",
+          "<?php\n\nrequire_once dirname(__DIR__) . '/vendor/autoload.php';\n\n$client = new Client(username: 'My Username', password: 'My Password');\n\n$exchangeRateListResponse = $client->exchangeRates->list(\n  destinationCurrency: ['string'],\n  sendingAmount: 1,\n  sourceCurrency: 'sourceCurrency',\n);\n\nvar_dump($exchangeRateListResponse);",
       },
       http: {
         example:
