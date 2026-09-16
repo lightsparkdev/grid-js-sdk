@@ -512,7 +512,8 @@ export interface ExternalAccountCreate {
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
     | Shared.SwiftExternalAccountCreateInfo
-    | ExternalAccountCreate.IlsAccount;
+    | ExternalAccountCreate.IlsAccount
+    | ExternalAccountCreate.TryAccount;
 
   /**
    * The ISO 4217 currency code
@@ -751,6 +752,98 @@ export namespace ExternalAccountCreate {
       taxId?: string;
     }
   }
+
+  export interface TryAccount {
+    accountType: 'TRY_ACCOUNT';
+
+    /**
+     * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+     * returns for this country and currency. Send it exactly as returned; any other
+     * name is rejected.
+     */
+    bankName: string;
+
+    beneficiary: TryAccount.IndividualBeneficiary | TryAccount.BusinessBeneficiary;
+
+    /**
+     * Turkish IBAN (26 characters, starting with TR)
+     */
+    iban: string;
+  }
+
+  export namespace TryAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
+  }
 }
 
 /**
@@ -763,7 +856,8 @@ export type ExternalAccountInfoOneOf =
   | ExternalAccountInfoOneOf.SlvAccount
   | ExternalAccountInfoOneOf.SwiftAccount
   | ExternalAccountInfoOneOf.CnyAccount
-  | ExternalAccountInfoOneOf.IlsAccount;
+  | ExternalAccountInfoOneOf.IlsAccount
+  | ExternalAccountInfoOneOf.TryAccount;
 
 export namespace ExternalAccountInfoOneOf {
   /**
@@ -1018,6 +1112,100 @@ export namespace ExternalAccountInfoOneOf {
        * The country of residence of the beneficiary
        */
       countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
+  }
+
+  export interface TryAccount {
+    accountType: 'TRY_ACCOUNT';
+
+    /**
+     * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+     * returns for this country and currency. Send it exactly as returned; any other
+     * name is rejected.
+     */
+    bankName: string;
+
+    beneficiary: TryAccount.IndividualBeneficiary | TryAccount.BusinessBeneficiary;
+
+    /**
+     * Turkish IBAN (26 characters, starting with TR)
+     */
+    iban: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+  }
+
+  export namespace TryAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      address?: ExternalAccountsAPI.Address;
 
       /**
        * The email of the beneficiary
@@ -1735,7 +1923,8 @@ export interface ExternalAccountCreateParams {
     | Shared.ZarExternalAccountCreateInfo
     | Shared.ZmwExternalAccountCreateInfo
     | Shared.SwiftExternalAccountCreateInfo
-    | ExternalAccountCreateParams.IlsAccount;
+    | ExternalAccountCreateParams.IlsAccount
+    | ExternalAccountCreateParams.TryAccount;
 
   /**
    * The ISO 4217 currency code
@@ -1952,6 +2141,98 @@ export namespace ExternalAccountCreateParams {
        * The country of residence of the beneficiary
        */
       countryOfResidence?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+
+      /**
+       * The company registration number of the business
+       */
+      registrationNumber?: string;
+
+      /**
+       * The tax identification number of the business
+       */
+      taxId?: string;
+    }
+  }
+
+  export interface TryAccount {
+    accountType: 'TRY_ACCOUNT';
+
+    /**
+     * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+     * returns for this country and currency. Send it exactly as returned; any other
+     * name is rejected.
+     */
+    bankName: string;
+
+    beneficiary: TryAccount.IndividualBeneficiary | TryAccount.BusinessBeneficiary;
+
+    /**
+     * Turkish IBAN (26 characters, starting with TR)
+     */
+    iban: string;
+  }
+
+  export namespace TryAccount {
+    export interface IndividualBeneficiary {
+      beneficiaryType: 'INDIVIDUAL';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The full name of the beneficiary
+       */
+      fullName: string;
+
+      address?: ExternalAccountsAPI.Address;
+
+      /**
+       * The birth date of the beneficiary
+       */
+      birthDate?: string;
+
+      /**
+       * The email of the beneficiary
+       */
+      email?: string;
+
+      /**
+       * The nationality of the beneficiary
+       */
+      nationality?: string;
+
+      /**
+       * The phone number of the beneficiary
+       */
+      phoneNumber?: string;
+    }
+
+    export interface BusinessBeneficiary {
+      beneficiaryType: 'BUSINESS';
+
+      /**
+       * The country of residence of the beneficiary
+       */
+      countryOfResidence: string;
+
+      /**
+       * The legal name of the business
+       */
+      legalName: string;
+
+      address?: ExternalAccountsAPI.Address;
 
       /**
        * The email of the beneficiary

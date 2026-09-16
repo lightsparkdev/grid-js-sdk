@@ -826,7 +826,7 @@ export interface EgpExternalAccountCreateInfo {
    */
   bankName: string;
 
-  beneficiary: EgpBeneficiary | ExternalAccountsAPI.BusinessBeneficiary;
+  beneficiary: EgpBeneficiary | EgpExternalAccountCreateInfo.BusinessBeneficiary;
 
   /**
    * Egyptian IBAN (29 characters, starting with EG)
@@ -837,6 +837,44 @@ export interface EgpExternalAccountCreateInfo {
    * The phone number in international format
    */
   phoneNumber?: string;
+}
+
+export namespace EgpExternalAccountCreateInfo {
+  export interface BusinessBeneficiary {
+    address: ExternalAccountsAPI.Address;
+
+    beneficiaryType: 'BUSINESS';
+
+    /**
+     * The legal name of the business
+     */
+    legalName: string;
+
+    /**
+     * The country of residence of the beneficiary
+     */
+    countryOfResidence?: string;
+
+    /**
+     * The email of the beneficiary
+     */
+    email?: string;
+
+    /**
+     * The phone number of the beneficiary
+     */
+    phoneNumber?: string;
+
+    /**
+     * The company registration number of the business
+     */
+    registrationNumber?: string;
+
+    /**
+     * The tax identification number of the business
+     */
+    taxId?: string;
+  }
 }
 
 export type EthereumWalletExternalAccountInfo = unknown;

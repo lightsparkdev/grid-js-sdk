@@ -234,6 +234,7 @@ export interface PaymentInstructions {
     | PaymentInstructions.SwiftAccount
     | PaymentInstructions.CnyAccount
     | PaymentInstructions.IlsAccount
+    | PaymentInstructions.TryAccount
     | PaymentInstructions.BitcoinL1DepositAddress
     | PaymentInstructions.EmbeddedWallet;
 
@@ -401,6 +402,30 @@ export namespace PaymentInstructions {
 
     /**
      * Israeli IBAN (23 characters, starting with IL)
+     */
+    iban: string;
+
+    paymentRails: Array<'BANK_TRANSFER'>;
+
+    /**
+     * Unique reference code that must be included with the payment to properly credit
+     * it
+     */
+    reference: string;
+  }
+
+  export interface TryAccount {
+    accountType: 'TRY_ACCOUNT';
+
+    /**
+     * The name of the bank. Must be one of the `bankName` values `GET /discoveries`
+     * returns for this country and currency. Send it exactly as returned; any other
+     * name is rejected.
+     */
+    bankName: string;
+
+    /**
+     * Turkish IBAN (26 characters, starting with TR)
      */
     iban: string;
 
