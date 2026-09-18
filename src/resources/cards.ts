@@ -406,7 +406,7 @@ export interface CardCreateRequest {
   /**
    * Internal account id that funds this card. The account must belong to the
    * customer and be denominated in a card-eligible currency; otherwise the request
-   * is rejected with `FUNDING_SOURCE_INELIGIBLE`.
+   * is rejected with `INVALID_INPUT`.
    */
   fundingSource: string;
 
@@ -831,7 +831,7 @@ export interface CardIssueParams {
   /**
    * Body param: Internal account id that funds this card. The account must belong to
    * the customer and be denominated in a card-eligible currency; otherwise the
-   * request is rejected with `FUNDING_SOURCE_INELIGIBLE`.
+   * request is rejected with `INVALID_INPUT`.
    */
   fundingSource: string;
 
