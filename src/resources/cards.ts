@@ -295,8 +295,11 @@ export interface Card {
   cardCapabilities?: Card.CardCapabilities;
 
   /**
-   * Currency the card transacts in (ISO 4217 for fiat, tickers for crypto). Derived
-   * from the funding source at issue time.
+   * Currency the card transacts in, fixed at issuance by its card program.
+   * USDB-funded cards transact in USD, with funding converted at 1 USDB = 1 USD.
+   * Spending limits use the smallest unit of the card's currency (USD cents for
+   * USDB-funded cards). Changing the funding source does not change the card's
+   * currency or spending-limit units.
    */
   currency?: string;
 
@@ -412,8 +415,8 @@ export interface CardCreateRequest {
 
   /**
    * Optional card-specific cap on cumulative new spend during one UTC calendar day,
-   * in the smallest unit of the card currency derived from its funding source. Omit
-   * this field for no card-specific daily cap. When the platform config also
+   * in the smallest unit of the card's currency (USD cents for USDB-funded cards).
+   * Omit this field for no card-specific daily cap. When the platform config also
    * supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
    * values. The window resets at 00:00 UTC, and refunds, reversals, and
    * authorization expiries do not restore capacity during the day. Accepted only
@@ -624,8 +627,10 @@ export interface CardTransaction {
 export interface CardUpdateRequest {
   /**
    * Replaces the card's funding source. Must belong to the customer and be
-   * denominated in the card's currency. Cannot be supplied alongside
-   * `status: CLOSED`. To stop a card from spending, set `status: FROZEN` instead.
+   * denominated in a currency supported by the card's program, including USDB for
+   * USD cards. Changing the funding source does not change the card's currency or
+   * spending-limit units. Cannot be supplied alongside `status: CLOSED`. To stop a
+   * card from spending, set `status: FROZEN` instead.
    */
   fundingSource?: string;
 
@@ -704,8 +709,10 @@ export interface CardUpdateRequest {
 export interface CardUpdateParams {
   /**
    * Replaces the card's funding source. Must belong to the customer and be
-   * denominated in the card's currency. Cannot be supplied alongside
-   * `status: CLOSED`. To stop a card from spending, set `status: FROZEN` instead.
+   * denominated in a currency supported by the card's program, including USDB for
+   * USD cards. Changing the funding source does not change the card's currency or
+   * spending-limit units. Cannot be supplied alongside `status: CLOSED`. To stop a
+   * card from spending, set `status: FROZEN` instead.
    */
   fundingSource?: string;
 
@@ -844,11 +851,11 @@ export interface CardIssueParams {
 
   /**
    * Body param: Optional card-specific cap on cumulative new spend during one UTC
-   * calendar day, in the smallest unit of the card currency derived from its funding
-   * source. Omit this field for no card-specific daily cap. When the platform config
-   * also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the lower of the two
-   * values. The window resets at 00:00 UTC, and refunds, reversals, and
-   * authorization expiries do not restore capacity during the day. Accepted only
+   * calendar day, in the smallest unit of the card's currency (USD cents for
+   * USDB-funded cards). Omit this field for no card-specific daily cap. When the
+   * platform config also supplies `cardConfigs.maxSpendPerDay`, Grid enforces the
+   * lower of the two values. The window resets at 00:00 UTC, and refunds, reversals,
+   * and authorization expiries do not restore capacity during the day. Accepted only
    * when the funding-source internal account's
    * `cardCapabilities.supportsSpendLimitsAtIssuance` is true. Spend exactly equal to
    * the effective limit is allowed.
