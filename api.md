@@ -421,7 +421,7 @@ Types:
 
 Methods:
 
-- <code title="post /sandbox/webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> TestWebhookResponse</code>
+- <code title="post /webhooks/test">client.sandbox.webhooks.<a href="./src/resources/sandbox/webhooks.ts">sendTest</a>() -> TestWebhookResponse</code>
 
 ## Cards
 

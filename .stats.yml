@@ -1,4 +1,4 @@
 configured_endpoints: 107
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/lightspark/grid-9c4a80f4dea0821cbd540ffcd510bdd8eddb2702be947a68604c188eff60d929.yml
-openapi_spec_hash: 28a344b919897ff43f30bae3ef359976
-config_hash: 21038a54249d0196b12e279aa363a012
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/lightspark/grid-59667f931e67d4bb1de30a313387ec4068975aafd8f4f723348a6877078dc206.yml
+openapi_spec_hash: f9bccad077b796a2f801dd677e8e5068
+config_hash: 351c3e7010545d834ad2c66671445ebf

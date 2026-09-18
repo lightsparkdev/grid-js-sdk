@@ -296,7 +296,7 @@ export const sdkMethods: SdkMethod[] = [
     clientCallName: 'client.sandbox.webhooks.sendTest',
     fullyQualifiedName: 'sandbox.webhooks.sendTest',
     httpMethod: 'post',
-    httpPath: '/sandbox/webhooks/test',
+    httpPath: '/webhooks/test',
   },
   {
     clientCallName: 'client.sandbox.cards.simulate.authorization',

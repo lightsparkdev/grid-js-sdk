@@ -9,7 +9,8 @@ import { RequestOptions } from '../../internal/request-options';
  */
 export class Webhooks extends APIResource {
   /**
-   * Send a test webhook to the configured endpoint
+   * Deliver a signed test event to the platform's configured webhook endpoint and
+   * return the endpoint's response. Available in sandbox and production.
    *
    * @example
    * ```ts
@@ -18,7 +19,7 @@ export class Webhooks extends APIResource {
    * ```
    */
   sendTest(options?: RequestOptions): APIPromise<TestWebhookResponse> {
-    return this._client.post('/sandbox/webhooks/test', { ...options, __security: { basicAuth: true } });
+    return this._client.post('/webhooks/test', { ...options, __security: { basicAuth: true } });
   }
 }
 

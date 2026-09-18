@@ -2777,15 +2777,16 @@ const EMBEDDED_METHODS: MethodEntry[] = [
   },
   {
     name: 'send_test',
-    endpoint: '/sandbox/webhooks/test',
+    endpoint: '/webhooks/test',
     httpMethod: 'post',
     summary: 'Send a test webhook',
-    description: 'Send a test webhook to the configured endpoint',
+    description:
+      "Deliver a signed test event to the platform's configured webhook endpoint and return the endpoint's response. Available in sandbox and production.",
     stainlessPath: '(resource) sandbox.webhooks > (method) send_test',
     qualified: 'client.sandbox.webhooks.sendTest',
     response: '{ response_status: number; response_body?: string; url?: string; }',
     markdown:
-      "## send_test\n\n`client.sandbox.webhooks.sendTest(): { response_status: number; response_body?: string; url?: string; }`\n\n**post** `/sandbox/webhooks/test`\n\nSend a test webhook to the configured endpoint\n\n### Returns\n\n- `{ response_status: number; response_body?: string; url?: string; }`\n\n  - `response_status: number`\n  - `response_body?: string`\n  - `url?: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst testWebhookResponse = await client.sandbox.webhooks.sendTest();\n\nconsole.log(testWebhookResponse);\n```",
+      "## send_test\n\n`client.sandbox.webhooks.sendTest(): { response_status: number; response_body?: string; url?: string; }`\n\n**post** `/webhooks/test`\n\nDeliver a signed test event to the platform's configured webhook endpoint and return the endpoint's response. Available in sandbox and production.\n\n### Returns\n\n- `{ response_status: number; response_body?: string; url?: string; }`\n\n  - `response_status: number`\n  - `response_body?: string`\n  - `url?: string`\n\n### Example\n\n```typescript\nimport LightsparkGrid from '@lightsparkdev/grid';\n\nconst client = new LightsparkGrid();\n\nconst testWebhookResponse = await client.sandbox.webhooks.sendTest();\n\nconsole.log(testWebhookResponse);\n```",
     perLanguage: {
       typescript: {
         method: 'client.sandbox.webhooks.sendTest',
@@ -2824,7 +2825,7 @@ const EMBEDDED_METHODS: MethodEntry[] = [
       },
       http: {
         example:
-          'curl https://api.lightspark.com/grid/2025-10-13/sandbox/webhooks/test \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
+          'curl https://api.lightspark.com/grid/2025-10-13/webhooks/test \\\n    -X POST \\\n    -u "$GRID_CLIENT_ID:GRID_CLIENT_SECRET"',
       },
     },
   },
