@@ -69,7 +69,12 @@ export interface TransferOutRequest {
 
   /**
    * The purpose of the payment. This may be required when sending to certain
-   * geographies (e.g. India).
+   * geographies (e.g. India). Business payments to China must use one of the
+   * China-specific purposes rather than `GOODS_OR_SERVICES`, because each purpose
+   * requires its own supporting documents. Those purposes are
+   * `EXPORTED_GOODS_PREPAYMENT`, `EXPORTED_GOODS_POSTPAYMENT`, `SERVICE_CHARGES`,
+   * `OFFICE_EXPENSES`, `DELIVERY_FEES`, `TRAVEL`, and `HOTEL_ACCOMMODATION`. The six
+   * China-only values are rejected on other corridors.
    */
   purposeOfPayment?:
     | 'GIFT'
@@ -85,6 +90,12 @@ export interface TransferOutRequest {
     | 'TRAVEL'
     | 'FAMILY_SUPPORT'
     | 'SALARY_PAYMENT'
+    | 'EXPORTED_GOODS_PREPAYMENT'
+    | 'EXPORTED_GOODS_POSTPAYMENT'
+    | 'SERVICE_CHARGES'
+    | 'OFFICE_EXPENSES'
+    | 'DELIVERY_FEES'
+    | 'HOTEL_ACCOMMODATION'
     | 'OTHER';
 
   /**
@@ -158,7 +169,12 @@ export interface TransferOutCreateParams {
 
   /**
    * Body param: The purpose of the payment. This may be required when sending to
-   * certain geographies (e.g. India).
+   * certain geographies (e.g. India). Business payments to China must use one of the
+   * China-specific purposes rather than `GOODS_OR_SERVICES`, because each purpose
+   * requires its own supporting documents. Those purposes are
+   * `EXPORTED_GOODS_PREPAYMENT`, `EXPORTED_GOODS_POSTPAYMENT`, `SERVICE_CHARGES`,
+   * `OFFICE_EXPENSES`, `DELIVERY_FEES`, `TRAVEL`, and `HOTEL_ACCOMMODATION`. The six
+   * China-only values are rejected on other corridors.
    */
   purposeOfPayment?:
     | 'GIFT'
@@ -174,6 +190,12 @@ export interface TransferOutCreateParams {
     | 'TRAVEL'
     | 'FAMILY_SUPPORT'
     | 'SALARY_PAYMENT'
+    | 'EXPORTED_GOODS_PREPAYMENT'
+    | 'EXPORTED_GOODS_POSTPAYMENT'
+    | 'SERVICE_CHARGES'
+    | 'OFFICE_EXPENSES'
+    | 'DELIVERY_FEES'
+    | 'HOTEL_ACCOMMODATION'
     | 'OTHER';
 
   /**

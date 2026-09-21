@@ -269,6 +269,12 @@ export namespace InternalAccount {
       | 'TRAVEL'
       | 'FAMILY_SUPPORT'
       | 'SALARY_PAYMENT'
+      | 'EXPORTED_GOODS_PREPAYMENT'
+      | 'EXPORTED_GOODS_POSTPAYMENT'
+      | 'SERVICE_CHARGES'
+      | 'OFFICE_EXPENSES'
+      | 'DELIVERY_FEES'
+      | 'HOTEL_ACCOMMODATION'
       | 'OTHER';
 
     /**
