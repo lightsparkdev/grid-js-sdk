@@ -84,7 +84,7 @@ export interface MeListInternalAccountsParams extends DefaultPaginationParams {
    * `INTERNAL_CRYPTO` for platform-managed holding accounts, or `RULE_BASED` for the
    * additional account numbers issued with a sweep rule.
    */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED';
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED' | 'BULK_SETTLEMENT';
 }
 
 Me.Transactions = Transactions;

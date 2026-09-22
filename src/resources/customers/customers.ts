@@ -2127,7 +2127,7 @@ export interface CustomerListInternalAccountsParams extends DefaultPaginationPar
    * `INTERNAL_CRYPTO` for the platform-managed holding accounts, or `RULE_BASED` for
    * the additional account numbers issued for a customer.
    */
-  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED';
+  type?: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED' | 'BULK_SETTLEMENT';
 }
 
 export interface CustomerUpdateInternalAccountParams {

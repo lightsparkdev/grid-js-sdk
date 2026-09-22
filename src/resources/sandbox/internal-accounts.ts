@@ -124,8 +124,12 @@ export interface InternalAccount {
    *   with a routing rule attached, so incoming payments can be attributed to a
    *   specific payer and swept automatically. Created with
    *   `POST /internal-accounts`.
+   * - `BULK_SETTLEMENT`: An account for receiving bulk payments (for example, a
+   *   single settlement from a payment processor) that the platform then pays out to
+   *   its customers. Only a platform can hold one, and funds in it can move only to
+   *   the platform's customers.
    */
-  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED';
+  type: 'INTERNAL_FIAT' | 'INTERNAL_CRYPTO' | 'EMBEDDED_WALLET' | 'RULE_BASED' | 'BULK_SETTLEMENT';
 
   /**
    * Timestamp when the internal account was last updated
