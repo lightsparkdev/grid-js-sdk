@@ -1217,7 +1217,8 @@ export interface UsdAccountInfo {
   /**
    * Whether the account is a checking or a savings account. Grid uses this to set
    * the ACH transaction code, so a value that does not match the account causes the
-   * receiving bank to return a notification of change.
+   * receiving bank to return a notification of change. Omitted on accounts created
+   * before the field was required.
    */
   bankAccountType?: 'CHECKING' | 'SAVINGS';
 
