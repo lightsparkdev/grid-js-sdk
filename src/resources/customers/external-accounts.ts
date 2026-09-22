@@ -1932,10 +1932,11 @@ export interface ExternalAccountCreateParams {
   currency: string;
 
   /**
-   * The ID of the customer for whom to create the external account. If not provided,
-   * the external account will be created on behalf of the platform.
+   * The ID of the customer who will own the external account. To create an external
+   * account owned by the platform itself, use `POST /platform/external-accounts`
+   * instead.
    */
-  customerId?: string;
+  customerId: string;
 
   /**
    * Whether to set the external account as the default UMA deposit account. When set
