@@ -1215,8 +1215,9 @@ export interface UsdAccountInfo {
   routingNumber: string;
 
   /**
-   * Whether the account is a checking or a savings account. Optional on every rail;
-   * when omitted, the account is treated as a checking account.
+   * Whether the account is a checking or a savings account. Grid uses this to set
+   * the ACH transaction code, so a value that does not match the account causes the
+   * receiving bank to return a notification of change.
    */
   bankAccountType?: 'CHECKING' | 'SAVINGS';
 

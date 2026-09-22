@@ -17,6 +17,7 @@ describe('resource externalAccounts', () => {
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
+        bankAccountType: 'CHECKING',
         beneficiary: { beneficiaryType: 'INDIVIDUAL', fullName: 'John Doe' },
         routingNumber: '123456789',
       },
@@ -38,6 +39,7 @@ describe('resource externalAccounts', () => {
       accountInfo: {
         accountNumber: '12345678901',
         accountType: 'USD_ACCOUNT',
+        bankAccountType: 'CHECKING',
         beneficiary: {
           beneficiaryType: 'INDIVIDUAL',
           fullName: 'John Doe',
@@ -56,7 +58,6 @@ describe('resource externalAccounts', () => {
           phoneNumber: 'phoneNumber',
         },
         routingNumber: '123456789',
-        bankAccountType: 'CHECKING',
         bankName: 'Chase Bank',
         fiToFiInformation: '/BNF/Invoice 4471',
         intermediaryBankName: 'JPMorgan Chase Bank',
