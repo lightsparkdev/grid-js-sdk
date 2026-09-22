@@ -230,10 +230,7 @@ describe('resource customers', () => {
     await expect(
       client.customers.createKYCLink(
         'customerId',
-        {
-          KycLinkCreateRequest: { redirectUri: 'https://app.example.com/onboarding/completed' },
-          'Idempotency-Key': '<uuid>',
-        },
+        { KycLinkCreateRequest: { redirectUri: 'https://app.example.com/onboarding/completed' } },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(LightsparkGrid.NotFoundError);

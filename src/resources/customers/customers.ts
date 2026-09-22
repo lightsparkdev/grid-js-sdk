@@ -264,8 +264,7 @@ export class Customers extends APIResource {
    * `CUSTOMER.KYB_*` webhooks.
    *
    * Each call returns a fresh link. Previously-issued links are not invalidated, but
-   * they remain single-use and will expire on their own. For request-level retry
-   * safety, include an `Idempotency-Key` header.
+   * they remain single-use and will expire on their own.
    *
    * @example
    * ```ts
@@ -278,14 +277,10 @@ export class Customers extends APIResource {
     params: CustomerCreateKYCLinkParams | null | undefined = undefined,
     options?: RequestOptions,
   ): APIPromise<KYCLinkResponse> {
-    const { KycLinkCreateRequest, 'Idempotency-Key': idempotencyKey } = params ?? {};
+    const { KycLinkCreateRequest } = params ?? {};
     return this._client.post(path`/customers/${customerID}/kyc-link`, {
       body: KycLinkCreateRequest,
       ...options,
-      headers: buildHeaders([
-        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
-        options?.headers,
-      ]),
       __security: { basicAuth: true },
     });
   }
@@ -2080,16 +2075,9 @@ export interface CustomerListParams extends DefaultPaginationParams {
 
 export interface CustomerCreateKYCLinkParams {
   /**
-   * Body param: Request body for generating a hosted KYC link for an existing
-   * customer.
+   * Request body for generating a hosted KYC link for an existing customer.
    */
   KycLinkCreateRequest?: KYCLinkCreateRequest;
-
-  /**
-   * Header param: A unique identifier for the request. If the same key is sent
-   * multiple times, the server will return the same response as the first request.
-   */
-  'Idempotency-Key'?: string;
 }
 
 export interface CustomerExportParams {
