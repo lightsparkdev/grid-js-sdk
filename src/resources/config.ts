@@ -256,6 +256,21 @@ export namespace PlatformConfig {
      * programs are unaffected.
      */
     maxTransactionsPerDay?: number | null;
+
+    /**
+     * HTTPS URL of a stylesheet that styles the card-details iframe returned by
+     * `POST /cards/{id}/reveal`, so the revealed PAN, expiry, and CVV carry your
+     * branding instead of the default. The card processor's page links the stylesheet
+     * and the cardholder's browser fetches it, so it must be reachable over HTTPS
+     * without credentials. Style the `card`, `pan`, `expiry`, and `cvv` ids and the
+     * `pan-separator` class; the rest of the page structure is not a contract. The
+     * stylesheet loads into the page rendering the live card details, so host it
+     * somewhere you would trust with them. `null` restores the default styling. A
+     * `cssUrl` in the body of `POST /cards/{id}/reveal` overrides this for one reveal.
+     * Applies to cards whose `cardCapabilities.supportsPanReveal` is true; cards
+     * revealed through the card issuer's own hosted flow are styled by that issuer.
+     */
+    panRevealCssUrl?: string | null;
   }
 
   /**
@@ -574,6 +589,21 @@ export namespace PlatformConfigUpdateRequest {
      * programs are unaffected.
      */
     maxTransactionsPerDay?: number | null;
+
+    /**
+     * HTTPS URL of a stylesheet that styles the card-details iframe returned by
+     * `POST /cards/{id}/reveal`, so the revealed PAN, expiry, and CVV carry your
+     * branding instead of the default. The card processor's page links the stylesheet
+     * and the cardholder's browser fetches it, so it must be reachable over HTTPS
+     * without credentials. Style the `card`, `pan`, `expiry`, and `cvv` ids and the
+     * `pan-separator` class; the rest of the page structure is not a contract. The
+     * stylesheet loads into the page rendering the live card details, so host it
+     * somewhere you would trust with them. `null` restores the default styling. A
+     * `cssUrl` in the body of `POST /cards/{id}/reveal` overrides this for one reveal.
+     * Applies to cards whose `cardCapabilities.supportsPanReveal` is true; cards
+     * revealed through the card issuer's own hosted flow are styled by that issuer.
+     */
+    panRevealCssUrl?: string | null;
   }
 
   /**
@@ -936,6 +966,21 @@ export namespace ConfigUpdateParams {
      * programs are unaffected.
      */
     maxTransactionsPerDay?: number | null;
+
+    /**
+     * HTTPS URL of a stylesheet that styles the card-details iframe returned by
+     * `POST /cards/{id}/reveal`, so the revealed PAN, expiry, and CVV carry your
+     * branding instead of the default. The card processor's page links the stylesheet
+     * and the cardholder's browser fetches it, so it must be reachable over HTTPS
+     * without credentials. Style the `card`, `pan`, `expiry`, and `cvv` ids and the
+     * `pan-separator` class; the rest of the page structure is not a contract. The
+     * stylesheet loads into the page rendering the live card details, so host it
+     * somewhere you would trust with them. `null` restores the default styling. A
+     * `cssUrl` in the body of `POST /cards/{id}/reveal` overrides this for one reveal.
+     * Applies to cards whose `cardCapabilities.supportsPanReveal` is true; cards
+     * revealed through the card issuer's own hosted flow are styled by that issuer.
+     */
+    panRevealCssUrl?: string | null;
   }
 
   /**
