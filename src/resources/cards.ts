@@ -29,8 +29,8 @@ export class Cards extends APIResource {
 
   /**
    * Update a card's `status`, bound `fundingSource`, and / or
-   * `maxSpendPerTransaction`, `maxSpendPerDay`, or `maxTransactionsPerDay`. At least
-   * one field must be supplied.
+   * `maxSpendPerTransaction`, `maxSpendPerDay`, or `maxTransactionsPerDay`, or set a
+   * new `threeDSecurePassword`. At least one field must be supplied.
    *
    * - `status` transitions are limited to `ACTIVE ⇄ FROZEN` and
    *   `ACTIVE | FROZEN → CLOSED`. `CLOSED` is terminal and irreversible. Any other
@@ -615,11 +615,11 @@ export interface CardTransaction {
 
 /**
  * Update request for `PATCH /cards/{id}`. At least one of `status`,
- * `fundingSource`, `maxSpendPerTransaction`, `maxSpendPerDay`, or
- * `maxTransactionsPerDay` must be supplied. Supplying `status` also requires
- * `substatus` and `reason`, so every card state change carries why it happened.
- * `status` transitions are limited to `ACTIVE ⇄ FROZEN` and
- * `ACTIVE | FROZEN → CLOSED`; any other transition returns
+ * `fundingSource`, `maxSpendPerTransaction`, `maxSpendPerDay`,
+ * `maxTransactionsPerDay`, or `threeDSecurePassword` must be supplied. Supplying
+ * `status` also requires `substatus` and `reason`, so every card state change
+ * carries why it happened. `status` transitions are limited to `ACTIVE ⇄ FROZEN`
+ * and `ACTIVE | FROZEN → CLOSED`; any other transition returns
  * `409 INVALID_STATE_TRANSITION`. `CLOSED` is terminal and irreversible and cannot
  * be combined with `fundingSource`, `maxSpendPerTransaction`, `maxSpendPerDay`, or
  * `maxTransactionsPerDay`.
@@ -704,6 +704,12 @@ export interface CardUpdateRequest {
     | 'EXPIRED'
     | 'UNDELIVERABLE'
     | 'OTHER';
+
+  /**
+   * Sets a new static 3-D Secure password on the card. Send it on its own, and only
+   * when the card's `cardCapabilities.supports3dSecurePassword` is true.
+   */
+  threeDSecurePassword?: string;
 }
 
 export interface CardUpdateParams {
@@ -786,6 +792,12 @@ export interface CardUpdateParams {
     | 'EXPIRED'
     | 'UNDELIVERABLE'
     | 'OTHER';
+
+  /**
+   * Sets a new static 3-D Secure password on the card. Send it on its own, and only
+   * when the card's `cardCapabilities.supports3dSecurePassword` is true.
+   */
+  threeDSecurePassword?: string;
 }
 
 export interface CardListParams extends DefaultPaginationParams {
