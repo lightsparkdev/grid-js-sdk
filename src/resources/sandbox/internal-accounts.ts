@@ -304,6 +304,7 @@ export namespace InternalAccount {
       paymentRail?:
         | 'ACH'
         | 'ACH_COLOMBIA'
+        | 'ACH_SAME_DAY'
         | 'BANK_TRANSFER'
         | 'BRE_B'
         | 'CIPS'

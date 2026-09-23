@@ -126,6 +126,7 @@ export namespace TransferOutRequest {
     paymentRail?:
       | 'ACH'
       | 'ACH_COLOMBIA'
+      | 'ACH_SAME_DAY'
       | 'BANK_TRANSFER'
       | 'BRE_B'
       | 'CIPS'
@@ -232,6 +233,7 @@ export namespace TransferOutCreateParams {
     paymentRail?:
       | 'ACH'
       | 'ACH_COLOMBIA'
+      | 'ACH_SAME_DAY'
       | 'BANK_TRANSFER'
       | 'BRE_B'
       | 'CIPS'

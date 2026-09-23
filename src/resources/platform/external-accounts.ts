@@ -1207,7 +1207,7 @@ export interface UsdAccountInfo {
 
   accountType: 'USD_ACCOUNT';
 
-  paymentRails: Array<'ACH' | 'WIRE' | 'RTP' | 'FEDNOW'>;
+  paymentRails: Array<'ACH' | 'ACH_SAME_DAY' | 'WIRE' | 'RTP' | 'FEDNOW'>;
 
   /**
    * The ABA routing number

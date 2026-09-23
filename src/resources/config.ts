@@ -400,7 +400,8 @@ export namespace PlatformConfig {
    * A fee charged when a transaction uses the specified rail. There can be at most
    * one for a given rail, direction and originator. For example, a config with rail:
    * ACH, direction: OUT, originator: GRID will charge a fee on all outgoing ACH
-   * transactions.
+   * transactions. `ACH` and `ACH_SAME_DAY` are separate rails, so price each one
+   * with its own config.
    */
   export interface RailFeeConfig {
     /**
@@ -432,12 +433,13 @@ export namespace PlatformConfig {
     originator: 'GRID' | 'EXTERNAL';
 
     /**
-     * The rail used in the transaction. `ACH`, `RTP`, `FEDNOW` and `WIRE` are accepted
-     * today; other rails return a `NOT_IMPLEMENTED` error.
+     * The rail used in the transaction. `ACH`, `ACH_SAME_DAY`, `RTP`, `FEDNOW` and
+     * `WIRE` are accepted today; other rails return a `NOT_IMPLEMENTED` error.
      */
     rail:
       | 'ACH'
       | 'ACH_COLOMBIA'
+      | 'ACH_SAME_DAY'
       | 'BANK_TRANSFER'
       | 'BRE_B'
       | 'CIPS'
@@ -717,7 +719,8 @@ export namespace PlatformConfigUpdateRequest {
    * A fee charged when a transaction uses the specified rail. There can be at most
    * one for a given rail, direction and originator. For example, a config with rail:
    * ACH, direction: OUT, originator: GRID will charge a fee on all outgoing ACH
-   * transactions.
+   * transactions. `ACH` and `ACH_SAME_DAY` are separate rails, so price each one
+   * with its own config.
    */
   export interface RailFeeConfig {
     /**
@@ -749,12 +752,13 @@ export namespace PlatformConfigUpdateRequest {
     originator: 'GRID' | 'EXTERNAL';
 
     /**
-     * The rail used in the transaction. `ACH`, `RTP`, `FEDNOW` and `WIRE` are accepted
-     * today; other rails return a `NOT_IMPLEMENTED` error.
+     * The rail used in the transaction. `ACH`, `ACH_SAME_DAY`, `RTP`, `FEDNOW` and
+     * `WIRE` are accepted today; other rails return a `NOT_IMPLEMENTED` error.
      */
     rail:
       | 'ACH'
       | 'ACH_COLOMBIA'
+      | 'ACH_SAME_DAY'
       | 'BANK_TRANSFER'
       | 'BRE_B'
       | 'CIPS'
@@ -1077,7 +1081,8 @@ export namespace ConfigUpdateParams {
    * A fee charged when a transaction uses the specified rail. There can be at most
    * one for a given rail, direction and originator. For example, a config with rail:
    * ACH, direction: OUT, originator: GRID will charge a fee on all outgoing ACH
-   * transactions.
+   * transactions. `ACH` and `ACH_SAME_DAY` are separate rails, so price each one
+   * with its own config.
    */
   export interface RailFeeConfig {
     /**
@@ -1109,12 +1114,13 @@ export namespace ConfigUpdateParams {
     originator: 'GRID' | 'EXTERNAL';
 
     /**
-     * The rail used in the transaction. `ACH`, `RTP`, `FEDNOW` and `WIRE` are accepted
-     * today; other rails return a `NOT_IMPLEMENTED` error.
+     * The rail used in the transaction. `ACH`, `ACH_SAME_DAY`, `RTP`, `FEDNOW` and
+     * `WIRE` are accepted today; other rails return a `NOT_IMPLEMENTED` error.
      */
     rail:
       | 'ACH'
       | 'ACH_COLOMBIA'
+      | 'ACH_SAME_DAY'
       | 'BANK_TRANSFER'
       | 'BRE_B'
       | 'CIPS'
